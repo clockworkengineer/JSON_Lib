@@ -32,11 +32,11 @@ namespace JSONLib
     struct JNode
     {
     public:
-        JNode(JNodeType nodeType = JNodeType::base) : nodeType(nodeType)
+        explicit JNode(JNodeType nodeType = JNodeType::base) : nodeType(nodeType)
         {
         }
-        virtual ~JNode() {}
-        JNode &operator[](std::string key);
+        virtual ~JNode() = default;
+        JNode &operator[](const std::string& key);
         JNode &operator[](int index);
         const JNodeType nodeType;
     };
@@ -47,15 +47,15 @@ namespace JSONLib
     {
     public:
         JNodeObject() : JNode(JNodeType::object) {}
-        bool containsKey(const std::string &key) const
+        [[nodiscard]] bool containsKey(const std::string &key) const
         {
             return (m_value.count(key) > 0);
         }
-        int size() const
+        [[nodiscard]] int size() const
         {
-            return ((int)m_value.size());
+            return (static_cast<int>(m_value.size()));
         }
-        void addEntry(const std::string key, std::unique_ptr<JNode> entry)
+        void addEntry(const std::string& key, std::unique_ptr<JNode> entry)
         {
             m_value[key] = std::move(entry);
             m_keys.push_back(key);
@@ -82,9 +82,9 @@ namespace JSONLib
     {
     public:
         JNodeArray() : JNode(JNodeType::array) {}
-        int size() const
+        [[nodiscard]] int size() const
         {
-            return ((int)m_value.size());
+            return (static_cast<int>(m_value.size()));
         }
         void addEntry(std::unique_ptr<JNode> jNode)
         {
@@ -108,7 +108,7 @@ namespace JSONLib
     struct JNodeNumber : JNode
     {
     public:
-        JNodeNumber(const std::string &value) : JNode(JNodeType::number)
+        explicit JNodeNumber(const std::string &value) : JNode(JNodeType::number)
         {
             this->m_value = value;
         }
@@ -117,14 +117,14 @@ namespace JSONLib
         // but false as the number is not in integer format
         bool getInteger(long long &longValue) const
         {
-            char *end;
+            char *end = nullptr;
             longValue = std::strtoll(m_value.c_str(), &end, 10);
             return (*end == '\0'); // If not all characters used then not success
         }
         // Convert to double returning true on success
         bool getFloatingPoint(double &doubleValue) const
         {
-            char *end;
+            char *end = nullptr;
             doubleValue = std::strtod(m_value.c_str(), &end);
             return (*end == '\0'); // If not all characters used then not success
         }
@@ -142,7 +142,7 @@ namespace JSONLib
     struct JNodeString : JNode
     {
     public:
-        JNodeString(const std::string &value) : JNode(JNodeType::string)
+        explicit JNodeString(const std::string &value) : JNode(JNodeType::string)
         {
             this->m_value = value;
         }
@@ -160,11 +160,11 @@ namespace JSONLib
     struct JNodeBoolean : JNode
     {
     public:
-        JNodeBoolean(bool value) : JNode(JNodeType::boolean)
+        explicit JNodeBoolean(bool value) : JNode(JNodeType::boolean)
         {
             this->m_value = value;
         }
-        bool getBoolean() const
+        [[nodiscard]] bool getBoolean() const
         {
             return (m_value);
         }
@@ -181,7 +181,7 @@ namespace JSONLib
         JNodeNull() : JNode(JNodeType::null)
         {
         }
-        void *getNull()
+        static void *getNull()
         {
             return (nullptr);
         }
@@ -197,7 +197,7 @@ namespace JSONLib
     //
     // Index overloads
     //
-    inline JNode &JNode::operator[](std::string key) // Object
+    inline JNode &JNode::operator[](const std::string& key) // Object
     {
         if (nodeType == JNodeType::object)
         {
@@ -212,7 +212,7 @@ namespace JSONLib
     {
         if (nodeType == JNodeType::array)
         {
-            if ((index >= 0) && (index < ((int)JNodeRef<JNodeArray>(*this).size())))
+            if ((index >= 0) && (index < (JNodeRef<JNodeArray>(*this).size())))
             {
                 return (*((JNodeRef<JNodeArray>(*this).getEntry(index))));
             }

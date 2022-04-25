@@ -12,7 +12,7 @@ namespace JSONLib
     class BufferSource : public ISource
     {
     public:
-        BufferSource(const std::string &sourceBuffer)
+        explicit BufferSource(const std::string &sourceBuffer)
         {
             if (sourceBuffer.empty())
             {
@@ -20,16 +20,15 @@ namespace JSONLib
             }
             m_parseBuffer = sourceBuffer;
         }
-        char current() const override
+        [[nodiscard]] char current() const override
         {
             if (more())
             {
                 return (m_parseBuffer[m_bufferPosition]);
             }
-            else
-            {
-                return (EOF);
-            }
+            
+                            return (EOF);
+           
         }
         void next() override
         {
@@ -39,7 +38,7 @@ namespace JSONLib
             }
             m_bufferPosition++;
         }
-        bool more() const override
+        [[nodiscard]] bool more() const override
         {
             return (m_bufferPosition < m_parseBuffer.size());
         }
@@ -55,7 +54,7 @@ namespace JSONLib
     class FileSource : public ISource
     {
     public:
-        FileSource(const std::string &sourceFileName)
+        explicit FileSource(const std::string &sourceFileName)
         {
             m_source.open(sourceFileName.c_str(), std::ios_base::binary);
             if (!m_source.is_open())
@@ -69,7 +68,7 @@ namespace JSONLib
         }
         void next() override
         {
-            char c;
+            char c = 0;
             m_source.get(c);
         }
         bool more() const override

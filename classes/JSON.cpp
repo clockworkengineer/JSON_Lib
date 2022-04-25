@@ -7,7 +7,7 @@
 // report incorrect JSON syntax but will not be specific about what
 // error has occurred; this is reasoned to add too much overhead to
 // the process of parsing for the requirements of this library
-// (this might change in future versions). For an indepth desciption
+// (this might change in future versions). For an in-depth description
 // of the JSON specification refer to its RFC at web address
 // https://tools.ietf.org/html/rfc8259.
 //
@@ -105,7 +105,7 @@ namespace JSONLib
             source.next();
         }
         // Throw error if not valid integer or floating point
-        char *end;
+        char *end = nullptr;
         std::strtoll(m_workBuffer.c_str(), &end, 10);
         if (*end != '\0')
         {
@@ -127,7 +127,7 @@ namespace JSONLib
         m_workBuffer.clear();
         m_workBuffer += source.current();
         source.next();
-        while (source.more() && std::isalpha(source.current()))
+        while (source.more() && (std::isalpha(source.current()) != 0))
         {
             m_workBuffer += source.current();
             source.next();
@@ -136,7 +136,7 @@ namespace JSONLib
         {
             return (std::make_unique<JNodeBoolean>(true));
         }
-        else if (m_workBuffer == "false")
+        if (m_workBuffer == "false")
         {
             return (std::make_unique<JNodeBoolean>(false));
         }
@@ -152,7 +152,7 @@ namespace JSONLib
         m_workBuffer.clear();
         m_workBuffer += source.current();
         source.next();
-        while (source.more() && std::isalpha(source.current()))
+        while (source.more() && (std::isalpha(source.current()) != 0))
         {
             m_workBuffer += source.current();
             source.next();
@@ -217,7 +217,7 @@ namespace JSONLib
     }
     /// <summary>
     /// Recursively parse JSON source stream producing a JNode structure
-    /// reprentation  of it.
+    /// representation  of it.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
@@ -258,7 +258,7 @@ namespace JSONLib
     /// the destination stream passed in.
     /// </summary>
     /// <param name=jNode>JNode structure to be traversed</param>
-    /// <param name=desination>destination stream for stringified JSON</param>
+    /// <param name=destination>destination stream for stringified JSON</param>
     /// <returns></returns>
     void JSON::stringifyJNodes(JNode *jNode, IDestination &destination)
     {
@@ -280,7 +280,7 @@ namespace JSONLib
         {
             int commaCount = JNodeRef<JNodeObject>(*jNode).size() - 1;
             destination.add("{");
-            for (auto key : JNodeRef<JNodeObject>(*jNode).getKeys())
+            for (const auto& key : JNodeRef<JNodeObject>(*jNode).getKeys())
             {
                 destination.add("\"" + m_jsonTranslator->toEscapeSequences(key) + "\"" + ":");
                 stringifyJNodes(JNodeRef<JNodeObject>(*jNode).getEntry(key), destination);
@@ -368,7 +368,7 @@ namespace JSONLib
     /// Recursively parse JNode structure and building its JSON in destination stream.
     /// </summary>
     /// <param name="jNodeRoot">Root of JNode structure.</param>
-    /// <param name=desination>destination stream for stringified JSON</param>
+    /// <param name=destination>destination stream for stringified JSON</param>
     /// <returns></returns>
     void JSON::stringify(IDestination &destination)
     {

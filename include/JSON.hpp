@@ -4,6 +4,7 @@
 //
 #include <string>
 #include <map>
+#include <utility>
 #include <vector>
 #include <list>
 #include <memory>
@@ -40,8 +41,8 @@ namespace JSONLib
         struct SyntaxError : public std::exception
         {
         public:
-            SyntaxError(const std::string &errorMessage = "JSON syntax error detected.") : errorMessage(errorMessage) {}
-            virtual const char *what() const throw()
+            explicit SyntaxError(std::string errorMessage = "JSON syntax error detected.") : errorMessage(std::move(errorMessage)) {}
+            [[nodiscard]] const char *what() const noexcept override
             {
                 return (errorMessage.c_str());
             }
@@ -55,16 +56,16 @@ namespace JSONLib
         class ITranslator
         {
         public:
-            virtual ~ITranslator() {}
+            virtual ~ITranslator() = default;
             virtual std::string fromEscapeSequences(const std::string &jsonString) = 0;
             virtual std::string toEscapeSequences(const std::string &utf8String) = 0;
 
         protected:
-            bool isValidSurrogateUpper(char16_t c) const
+            [[nodiscard]] static bool isValidSurrogateUpper(char16_t c) 
             {
                 return ((c >= 0xD800) && (c <= 0xDBFF));
             }
-            bool isValidSurrogateLower(char16_t c) const
+            [[nodiscard]] static bool isValidSurrogateLower(char16_t c) 
             {
                 return ((c >= 0xDC00) && (c <= 0xDFFF));
             }
@@ -72,7 +73,7 @@ namespace JSONLib
         // ============
         // CONSTRUCTORS
         // ============
-        JSON(ITranslator *translator = nullptr)
+        explicit JSON(ITranslator *translator = nullptr)
         {
             setTranslator(translator);
         }
@@ -114,6 +115,6 @@ namespace JSONLib
         // =================
         std::string m_workBuffer;
         std::unique_ptr<JNode> m_jNodeRoot;
-        ITranslator *m_jsonTranslator;
+        ITranslator *m_jsonTranslator{};
     };
 } // namespace JSONLib

@@ -13,8 +13,7 @@ namespace JSONLib
     {
     public:
         BufferDestination()
-        {
-        }
+        = default;
         void add(const std::string &bytes) override
         {
             for (auto b : bytes)
@@ -22,7 +21,7 @@ namespace JSONLib
                 m_stringifyBuffer.push_back(b);
             }
         }
-        std::string getBuffer() const
+        [[nodiscard]] std::string getBuffer() const
         {
             return (m_stringifyBuffer);
         }
@@ -32,7 +31,7 @@ namespace JSONLib
     class FileDestination : public IDestination
     {
     public:
-        FileDestination(const std::string &desinationFileName)
+        explicit FileDestination(const std::string &desinationFileName)
         {
             m_destination.open(desinationFileName.c_str(), std::ios_base::binary);
             if (!m_destination.is_open())
