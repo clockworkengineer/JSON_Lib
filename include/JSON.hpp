@@ -3,14 +3,8 @@
 // C++ STL
 //
 #include <string>
-#include <map>
-#include <utility>
 #include <vector>
-#include <list>
 #include <memory>
-#include <fstream>
-#include <codecvt>
-#include <locale>
 #include <stdexcept>
 //
 // Source/Destination interfaces
@@ -88,7 +82,7 @@ namespace JSONLib
         void parse(ISource &&source);
         void stringify(IDestination &destination);
         void stringify(IDestination &&destination);
-        JNode *getRoot();
+        JNode &operator*() { return (*m_jNodeRoot); }
         // ================
         // PUBLIC VARIABLES
         // ================

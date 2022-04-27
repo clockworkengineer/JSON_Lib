@@ -30,5 +30,5 @@
 // ==========================
 extern std::string prefixTestDataPath(const std::string &file);
 extern std::string readJSONFromFile(const std::string &jsonFileName);
-extern void checkObject(JSONLib::JNode *jNode);
-extern void checkArray(JSONLib::JNode *jNode);
+extern void checkObject(JSONLib::JNode &jNode);
+extern void checkArray(JSONLib::JNode &jNode);

@@ -382,12 +382,4 @@ namespace JSONLib
     {
         stringifyJNodes(m_jNodeRoot.get(), destination);
     }
-    /// <summary>
-    /// Return root JNode structure of decoded string.
-    /// </summary>
-    /// <returns>JNode structure root.
-    JNode *JSON::getRoot()
-    {
-        return (m_jNodeRoot.get());
-    }
 } // namespace JSONLib
