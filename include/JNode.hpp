@@ -36,7 +36,7 @@ namespace JSONLib
         {
         }
         virtual ~JNode() = default;
-        JNode &operator[](const std::string& key);
+        JNode &operator[](const std::string &key);
         JNode &operator[](int index);
         const JNodeType nodeType;
     };
@@ -55,7 +55,7 @@ namespace JSONLib
         {
             return (static_cast<int>(m_value.size()));
         }
-        void addEntry(const std::string& key, std::unique_ptr<JNode> entry)
+        void addEntry(const std::string &key, std::unique_ptr<JNode> entry)
         {
             m_value[key] = std::move(entry);
             m_keys.push_back(key);
@@ -189,7 +189,7 @@ namespace JSONLib
     //
     //
     // Convert base JNode reference
-        template <typename T>
+    template <typename T>
     T &JNodeRef(JNode &jNode)
     {
         return (static_cast<T &>(jNode));
@@ -197,7 +197,7 @@ namespace JSONLib
     //
     // Index overloads
     //
-    inline JNode &JNode::operator[](const std::string& key) // Object
+    inline JNode &JNode::operator[](const std::string &key) // Object
     {
         if (nodeType == JNodeType::object)
         {

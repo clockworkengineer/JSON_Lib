@@ -3,7 +3,7 @@
 namespace JSONLib
 {
     //
-    // Interface for reading source stream during Bencode deocoding.
+    // Interface for reading source stream during Bencode decodings.
     //
     class ISource
     {

@@ -87,9 +87,9 @@ TEST_CASE("ISource (File) interface.", "[JSON][Parse][ISource]")
     REQUIRE_THROWS_AS(FileSource(prefixTestDataPath(kNonExistantJSONFile)), std::runtime_error);
     REQUIRE_THROWS_WITH(FileSource(prefixTestDataPath(kNonExistantJSONFile)), "JSON file input stream failed to open or does not exist.");
   }
-  SECTION("Create FileSource with testfile001.json. and positioned on the correct first character", "[JSOND][Parse][ISource]")
+  SECTION("Create FileSource with testfile001.json. and positioned on the correct first character", "[JSON][Parse][ISource]")
   {
-    FileSource source { FileSource(prefixTestDataPath(kSingleJSONFile)) };
+    FileSource source{FileSource(prefixTestDataPath(kSingleJSONFile))};
     REQUIRE_FALSE(!source.more());
     REQUIRE((char)source.current() == '{');
   }
@@ -103,7 +103,7 @@ TEST_CASE("ISource (File) interface.", "[JSON][Parse][ISource]")
 }
 TEST_CASE("ISource (Buffer interface). Contains file testfile001.json.", "[JSON][Parse][ISource]")
 {
-  std::string buffer { readJSONFromFile(prefixTestDataPath(kSingleJSONFile)) };
+  std::string buffer{readJSONFromFile(prefixTestDataPath(kSingleJSONFile))};
   SECTION("Create BufferSource.", "[JSON][Parse][ISource]")
   {
     REQUIRE_NOTHROW(BufferSource(buffer));
@@ -115,20 +115,20 @@ TEST_CASE("ISource (Buffer interface). Contains file testfile001.json.", "[JSON]
   }
   SECTION("Create BufferSource with testfile001.json and that it is positioned on the correct first character", "[JSON][Parse][ISource]")
   {
-    BufferSource source { BufferSource(buffer) };
+    BufferSource source{BufferSource(buffer)};
     REQUIRE_FALSE(!source.more());
     REQUIRE((char)source.current() == '{');
   }
   SECTION("Create BufferSource with testfile001.json and then check moveToNextByte positions to correct next character", "[JSON][Parse][ISource]")
   {
-    BufferSource source { BufferSource(buffer) };
+    BufferSource source{BufferSource(buffer)};
     source.next();
     REQUIRE_FALSE(!source.more());
     REQUIRE((char)source.current() == '\n');
   }
   SECTION("Create BufferSource with testfile001.json move past last character, check it and the bytes moved.", "[JSON][Parse][ISource]")
   {
-    BufferSource source { BufferSource(buffer) };
+    BufferSource source{BufferSource(buffer)};
     long length = 0;
     while (source.more())
     {
@@ -141,22 +141,22 @@ TEST_CASE("ISource (Buffer interface). Contains file testfile001.json.", "[JSON]
 }
 TEST_CASE("IDestination (Buffer interface).", "[JSON][Parse][ISource]")
 {
-  SECTION("Create BufferDesination.", "[JSON][Stringify][IDesination]")
+  SECTION("Create BufferDestination.", "[JSON][Stringify][IDestination]")
   {
     REQUIRE_NOTHROW(BufferDestination());
   }
-  SECTION("Create BufferDestination and get buffer which should be empty.", "[JSON][Stringify][IDesination]")
+  SECTION("Create BufferDestination and get buffer which should be empty.", "[JSON][Stringify][IDestination]")
   {
     BufferDestination buffer;
     REQUIRE_FALSE(!buffer.getBuffer().empty());
   }
-  SECTION("Create BufferDestination and add one character.", "[JSON][Stringify][IDesination]")
+  SECTION("Create BufferDestination and add one character.", "[JSON][Stringify][IDestination]")
   {
     BufferDestination buffer;
     buffer.add("i");
     REQUIRE(buffer.getBuffer().size() == 1);
   }
-  SECTION("Create BufferDestination and add an stringified integer and check result.", "[JSON][Stringify][IDesination]")
+  SECTION("Create BufferDestination and add an stringified integer and check result.", "[JSON][Stringify][IDestination]")
   {
     BufferDestination buffer;
     buffer.add("65767");
@@ -166,37 +166,37 @@ TEST_CASE("IDestination (Buffer interface).", "[JSON][Parse][ISource]")
 }
 TEST_CASE("IDestination (File interface).", "[JSON][Parse][ISource]")
 {
-  SECTION("Create FileDestination.", "[JSON][Stringify][IDesination]")
+  SECTION("Create FileDestination.", "[JSON][Stringify][IDestination]")
   {
     std::filesystem::remove(prefixTestDataPath(kGeneratedJSONFile));
     REQUIRE_NOTHROW(FileDestination(prefixTestDataPath(kGeneratedJSONFile)));
   }
-  SECTION("Create FileDestination when file already exists.", "[JSON][Stringify][IDesination]")
+  SECTION("Create FileDestination when file already exists.", "[JSON][Stringify][IDestination]")
   {
-    FileDestination file { prefixTestDataPath(kGeneratedJSONFile) };
+    FileDestination file{prefixTestDataPath(kGeneratedJSONFile)};
     REQUIRE_NOTHROW(FileDestination(prefixTestDataPath(kGeneratedJSONFile)));
   }
-  SECTION("Create FileDestination and test file exists and should be empty.", "[JSON][Stringify][IDesination]")
+  SECTION("Create FileDestination and test file exists and should be empty.", "[JSON][Stringify][IDestination]")
   {
     std::filesystem::remove(prefixTestDataPath(kGeneratedJSONFile));
-    FileDestination file { prefixTestDataPath(kGeneratedJSONFile) };
-    std::filesystem::path filePath { prefixTestDataPath(kGeneratedJSONFile) };
+    FileDestination file{prefixTestDataPath(kGeneratedJSONFile)};
+    std::filesystem::path filePath{prefixTestDataPath(kGeneratedJSONFile)};
     REQUIRE_FALSE(!std::filesystem::exists(prefixTestDataPath(kGeneratedJSONFile)));
     REQUIRE(std::filesystem::file_size(filePath) == 0);
   }
-  SECTION("Create FileDestination and add one character.", "[JSON][Stringify][IDesination]")
+  SECTION("Create FileDestination and add one character.", "[JSON][Stringify][IDestination]")
   {
     std::filesystem::remove(prefixTestDataPath(kGeneratedJSONFile));
-    FileDestination file { prefixTestDataPath(kGeneratedJSONFile) };
-    std::filesystem::path filePath { prefixTestDataPath(kGeneratedJSONFile) };
+    FileDestination file{prefixTestDataPath(kGeneratedJSONFile)};
+    std::filesystem::path filePath{prefixTestDataPath(kGeneratedJSONFile)};
     file.add("t");
     REQUIRE(std::filesystem::file_size(filePath) == 1);
   }
-  SECTION("Create FileDestination, add an stringified integer and check result.", "[JSON][Stringify][IDesination]")
+  SECTION("Create FileDestination, add an stringified integer and check result.", "[JSON][Stringify][IDestination]")
   {
     std::filesystem::remove(prefixTestDataPath(kGeneratedJSONFile));
-    FileDestination file { prefixTestDataPath(kGeneratedJSONFile) };
-    std::filesystem::path filePath { prefixTestDataPath(kGeneratedJSONFile) };
+    FileDestination file{prefixTestDataPath(kGeneratedJSONFile)};
+    std::filesystem::path filePath{prefixTestDataPath(kGeneratedJSONFile)};
     file.add("65767");
     REQUIRE(std::filesystem::file_size(filePath) == 5);
     REQUIRE(readJSONFromFile(prefixTestDataPath(kGeneratedJSONFile)) == "65767");
@@ -208,7 +208,7 @@ TEST_CASE("Use of JNode indexing operators", "[JSON][JNode][Index]")
   JSON json;
   SECTION("Parse dictionary and check its components using indexing", "[JSON][JNode][Index]")
   {
-    BufferSource jsonSource { "{\"City\":\"Southampton\",\"Population\":500000}" };
+    BufferSource jsonSource{"{\"City\":\"Southampton\",\"Population\":500000}"};
     json.parse(jsonSource);
     checkObject(json.getRoot());
     REQUIRE(JNodeRef<JNodeString>((*json.getRoot())["City"]).getString() == "Southampton");
@@ -216,15 +216,15 @@ TEST_CASE("Use of JNode indexing operators", "[JSON][JNode][Index]")
   }
   SECTION("Parse list and check its components using indexing", "[JSON][JNode][Index]")
   {
-    BufferSource jsonSource { "[777,9000,\"apples\"]" };
+    BufferSource jsonSource{"[777,9000,\"apples\"]"};
     json.parse(jsonSource);
     REQUIRE(JNodeRef<JNodeNumber>((*json.getRoot())[0]).getNumber() == "777");
     REQUIRE(JNodeRef<JNodeNumber>((*json.getRoot())[1]).getNumber() == "9000");
     REQUIRE(JNodeRef<JNodeString>((*json.getRoot())[2]).getString() == "apples");
   }
-  SECTION("Parse list with embedded dictioanry and check its components using indexing", "[JSON][JNode][Index]")
+  SECTION("Parse list with embedded dictionary and check its components using indexing", "[JSON][JNode][Index]")
   {
-    BufferSource jsonSource { "[777,{\"City\":\"Southampton\",\"Population\":500000},\"apples\"]" };
+    BufferSource jsonSource{"[777,{\"City\":\"Southampton\",\"Population\":500000},\"apples\"]"};
     json.parse(jsonSource);
     REQUIRE(JNodeRef<JNodeNumber>((*json.getRoot())[0]).getNumber() == "777");
     REQUIRE(JNodeRef<JNodeString>((*json.getRoot())[1]["City"]).getString() == "Southampton");
@@ -233,14 +233,14 @@ TEST_CASE("Use of JNode indexing operators", "[JSON][JNode][Index]")
   }
   SECTION("Parse dictionary and check an invalid key generates exception", "[JSON][JNode][Index]")
   {
-    BufferSource jsonSource { "{\"City\":\"Southampton\",\"Population\":500000}" };
+    BufferSource jsonSource{"{\"City\":\"Southampton\",\"Population\":500000}"};
     json.parse(jsonSource);
     REQUIRE_THROWS_AS((*json.getRoot())["Cityy"].nodeType == JNodeType::object, std::runtime_error);
     REQUIRE_THROWS_WITH((*json.getRoot())["Cityy"].nodeType == JNodeType::object, "Invalid key used to access object.");
   }
   SECTION("Parse list and check an invalid index generates exception", "[JSON][JNode][Index]")
   {
-    BufferSource jsonSource { "[777,9000,\"apples\"]" };
+    BufferSource jsonSource{"[777,9000,\"apples\"]"};
     json.parse(jsonSource);
     REQUIRE_THROWS_AS((*json.getRoot())[3].nodeType == JNodeType::array, std::runtime_error);
     REQUIRE_THROWS_WITH((*json.getRoot())[3].nodeType == JNodeType::array, "Invalid index used to access array.");
@@ -251,26 +251,26 @@ TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]")
   JSON json;
   SECTION("Integer reference.", "[JSON][JNode][Reference]")
   {
-    BufferSource jsonSource { "45500" };
+    BufferSource jsonSource{"45500"};
     json.parse(jsonSource);
     REQUIRE(JNodeRef<JNodeNumber>((*json.getRoot())).getNumber() == "45500");
   }
   SECTION("String reference.", "[JSON][JNode][Reference]")
   {
-    BufferSource jsonSource { "0123456789" };
+    BufferSource jsonSource{"0123456789"};
     json.parse(jsonSource);
     REQUIRE(JNodeRef<JNodeString>((*json.getRoot())).getString() == "0123456789");
   }
   SECTION("Array reference.", "[JSON][JNode][Reference]")
   {
-    BufferSource jsonSource { "[777,9000,\"apples\"]" };
+    BufferSource jsonSource{"[777,9000,\"apples\"]"};
     json.parse(jsonSource);
     REQUIRE(JNodeRef<JNodeArray>((*json.getRoot())).size() == 3);
     REQUIRE(JNodeRef<JNodeString>((*json.getRoot())[2]).getString() == "apples");
   }
   SECTION("Dictionary reference.", "[JSON][JNode][Reference]")
   {
-    BufferSource jsonSource {"{\"City\":\"Southampton\",\"Population\":500000 }" };
+    BufferSource jsonSource{"{\"City\":\"Southampton\",\"Population\":500000 }"};
     json.parse(jsonSource);
     REQUIRE(JNodeRef<JNodeObject>((*json.getRoot())).size() == 2);
     REQUIRE(JNodeRef<JNodeString>((*json.getRoot())["City"]).getString() == "Southampton");
@@ -282,14 +282,14 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]")
   SECTION("Floating point not converted to Integer", "[JSON][JNode][JNodeNumber]")
   {
     long long longValue;
-    BufferSource jsonSource { "678.8990" };
+    BufferSource jsonSource{"678.8990"};
     json.parse(jsonSource);
     REQUIRE_FALSE(JNodeRef<JNodeNumber>(*json.getRoot()).getInteger(longValue));
   }
   SECTION("Floating point converted to double", "[JSON][JNode][JNodeNumber]")
   {
     double doubleValue;
-    BufferSource jsonSource { "678.8990" };
+    BufferSource jsonSource{"678.8990"};
     json.parse(jsonSource);
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(*json.getRoot()).getFloatingPoint(doubleValue));
     REQUIRE(doubleValue == 678.8990);
@@ -297,7 +297,7 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]")
   SECTION("Integer point converted to Long", "[JSON][JNode][JNodeNumber]")
   {
     long long longValue;
-    BufferSource jsonSource { "78989" };
+    BufferSource jsonSource{"78989"};
     json.parse(jsonSource);
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(*json.getRoot()).getInteger(longValue));
     REQUIRE(longValue == 78989);
@@ -305,25 +305,25 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]")
   SECTION("Integer point not converted to double", "[JSON][JNode][JNodeNumber]")
   {
     double doubleValue;
-    BufferSource jsonSource { "78989" };
+    BufferSource jsonSource{"78989"};
     json.parse(jsonSource);
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(*json.getRoot()).getFloatingPoint(doubleValue));
   }
   SECTION("Check  floating point with exponent", "[JSON][JNode][JNodeNumber][Exception")
   {
-    BufferSource jsonSource { "78.43e-2" };
+    BufferSource jsonSource{"78.43e-2"};
     REQUIRE_NOTHROW(json.parse(jsonSource));
   }
   SECTION("Check floating point with invalid exponent", "[JSON][JNode][JNodeNumber][Exception]")
   {
-    BufferSource jsonSource { "78.e43e-2" };
+    BufferSource jsonSource{"78.e43e-2"};
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSON::SyntaxError);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON syntax error detected.");
   }
   SECTION("Check floating point with multiple decimal points", "[JSON][JNode][JNodeNumber][Exception]")
   {
-    BufferSource jsonSource { "78.5454.545" };
+    BufferSource jsonSource{"78.5454.545"};
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSON::SyntaxError);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON syntax error detected.");
@@ -359,5 +359,23 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
   SECTION("Translate to escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
   {
     REQUIRE(translator.toEscapeSequences(u8"Begin \U0001D11E End") == "Begin \\uD834\\uDD1E End");
+  }
+}
+TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Reference]")
+{
+  JSON json;
+  SECTION("Parse with R-Value reference (Buffer).", "[JSON][JNode][R-Value Reference]")
+  {
+    json.parse(BufferSource{"{\"City\":\"Southampton\",\"Population\":500000 }"});
+    REQUIRE(JNodeRef<JNodeObject>((*json.getRoot())).size() == 2);
+    REQUIRE(JNodeRef<JNodeString>((*json.getRoot())["City"]).getString() == "Southampton");
+  }
+  SECTION("Parse/Stringify both with R-Value reference (File).", "[JSON][JNode][R-Value Reference]")
+  {
+    std::filesystem::remove(prefixTestDataPath(kGeneratedJSONFile));
+    json.parse(FileSource{prefixTestDataPath(kSingleJSONFile)});
+    json.stringify(FileDestination{prefixTestDataPath(kGeneratedJSONFile)});
+    REQUIRE(readJSONFromFile(prefixTestDataPath(kGeneratedJSONFile)) ==
+            json.stripWhiteSpaceBuffer(readJSONFromFile(prefixTestDataPath(kSingleJSONFile))));
   }
 }

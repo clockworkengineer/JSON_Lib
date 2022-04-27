@@ -280,7 +280,7 @@ namespace JSONLib
         {
             int commaCount = JNodeRef<JNodeObject>(*jNode).size() - 1;
             destination.add("{");
-            for (const auto& key : JNodeRef<JNodeObject>(*jNode).getKeys())
+            for (const auto &key : JNodeRef<JNodeObject>(*jNode).getKeys())
             {
                 destination.add("\"" + m_jsonTranslator->toEscapeSequences(key) + "\"" + ":");
                 stringifyJNodes(JNodeRef<JNodeObject>(*jNode).getEntry(key), destination);
@@ -364,6 +364,10 @@ namespace JSONLib
     {
         m_jNodeRoot = parseJNodes(source);
     }
+    void JSON::parse(ISource &&source)
+    {
+        m_jNodeRoot = parseJNodes(source);
+    }
     /// <summary>
     /// Recursively parse JNode structure and building its JSON in destination stream.
     /// </summary>
@@ -371,6 +375,10 @@ namespace JSONLib
     /// <param name=destination>destination stream for stringified JSON</param>
     /// <returns></returns>
     void JSON::stringify(IDestination &destination)
+    {
+        stringifyJNodes(m_jNodeRoot.get(), destination);
+    }
+    void JSON::stringify(IDestination &&destination)
     {
         stringifyJNodes(m_jNodeRoot.get(), destination);
     }

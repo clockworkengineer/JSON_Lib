@@ -61,11 +61,11 @@ namespace JSONLib
             virtual std::string toEscapeSequences(const std::string &utf8String) = 0;
 
         protected:
-            [[nodiscard]] static bool isValidSurrogateUpper(char16_t c) 
+            [[nodiscard]] static bool isValidSurrogateUpper(char16_t c)
             {
                 return ((c >= 0xD800) && (c <= 0xDBFF));
             }
-            [[nodiscard]] static bool isValidSurrogateLower(char16_t c) 
+            [[nodiscard]] static bool isValidSurrogateLower(char16_t c)
             {
                 return ((c >= 0xDC00) && (c <= 0xDFFF));
             }
@@ -85,7 +85,9 @@ namespace JSONLib
         // ==============
         std::string stripWhiteSpaceBuffer(const std::string &jsonBuffer);
         void parse(ISource &source);
+        void parse(ISource &&source);
         void stringify(IDestination &destination);
+        void stringify(IDestination &&destination);
         JNode *getRoot();
         // ================
         // PUBLIC VARIABLES
