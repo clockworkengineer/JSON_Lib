@@ -48,14 +48,14 @@ void checkArray(JNode &jNode)
 { // Array [\"Dog\",1964,true,null]
   REQUIRE(jNode.nodeType == JNodeType::array);
   REQUIRE(JNodeRef<JNodeArray>(jNode).size() == 4);
-  REQUIRE((jNode)[0].nodeType == JNodeType::string);
-  REQUIRE((jNode)[1].nodeType == JNodeType::number);
-  REQUIRE((jNode)[2].nodeType == JNodeType::boolean);
-  REQUIRE((jNode)[3].nodeType == JNodeType::null);
-  REQUIRE(JNodeRef<JNodeString>((jNode)[0]).getString() == "Dog");
-  REQUIRE(JNodeRef<JNodeNumber>((jNode)[1]).getNumber() == "1964");
-  REQUIRE(JNodeRef<JNodeBoolean>((jNode)[2]).getBoolean() == true);
-  REQUIRE(JNodeRef<JNodeNull>((jNode)[3]).getNull() == nullptr);
+  REQUIRE(jNode[0].nodeType == JNodeType::string);
+  REQUIRE(jNode[1].nodeType == JNodeType::number);
+  REQUIRE(jNode[2].nodeType == JNodeType::boolean);
+  REQUIRE(jNode[3].nodeType == JNodeType::null);
+  REQUIRE(JNodeRef<JNodeString>(jNode[0]).getString() == "Dog");
+  REQUIRE(JNodeRef<JNodeNumber>(jNode[1]).getNumber() == "1964");
+  REQUIRE(JNodeRef<JNodeBoolean>(jNode[2]).getBoolean() == true);
+  REQUIRE(JNodeRef<JNodeNull>(jNode[3]).getNull() == nullptr);
 }
 /// <summary>
 /// Verify that an JNodeObject has the correct pasred format.
@@ -68,10 +68,10 @@ void checkObject(JNode &jNode)
   REQUIRE(JNodeRef<JNodeObject>(jNode).size() == 2);
   REQUIRE(JNodeRef<JNodeObject>(jNode).containsKey("City"));
   REQUIRE(JNodeRef<JNodeObject>(jNode).containsKey("Population"));
-  REQUIRE((jNode)["City"].nodeType == JNodeType::string);
-  REQUIRE((jNode)["Population"].nodeType == JNodeType::number);
-  REQUIRE(JNodeRef<JNodeString>((jNode)["City"]).getString() == "Southampton");
-  REQUIRE(JNodeRef<JNodeNumber>((jNode)["Population"]).getNumber() == "500000");
+  REQUIRE(jNode["City"].nodeType == JNodeType::string);
+  REQUIRE(jNode["Population"].nodeType == JNodeType::number);
+  REQUIRE(JNodeRef<JNodeString>(jNode["City"]).getString() == "Southampton");
+  REQUIRE(JNodeRef<JNodeNumber>(jNode["Population"]).getNumber() == "500000");
 }
 // ==========
 // Test cases
@@ -253,26 +253,26 @@ TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]")
   {
     BufferSource jsonSource{"45500"};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<JNodeNumber>((*json)).getNumber() == "45500");
+    REQUIRE(JNodeRef<JNodeNumber>(*json).getNumber() == "45500");
   }
   SECTION("String reference.", "[JSON][JNode][Reference]")
   {
     BufferSource jsonSource{"0123456789"};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<JNodeString>((*json)).getString() == "0123456789");
+    REQUIRE(JNodeRef<JNodeString>(*json).getString() == "0123456789");
   }
   SECTION("Array reference.", "[JSON][JNode][Reference]")
   {
     BufferSource jsonSource{"[777,9000,\"apples\"]"};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<JNodeArray>((*json)).size() == 3);
+    REQUIRE(JNodeRef<JNodeArray>(*json).size() == 3);
     REQUIRE(JNodeRef<JNodeString>((*json)[2]).getString() == "apples");
   }
   SECTION("Dictionary reference.", "[JSON][JNode][Reference]")
   {
     BufferSource jsonSource{"{\"City\":\"Southampton\",\"Population\":500000 }"};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<JNodeObject>((*json)).size() == 2);
+    REQUIRE(JNodeRef<JNodeObject>(*json).size() == 2);
     REQUIRE(JNodeRef<JNodeString>((*json)["City"]).getString() == "Southampton");
   }
 }
@@ -367,7 +367,7 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Ref
   SECTION("Parse with R-Value reference (Buffer).", "[JSON][JNode][R-Value Reference]")
   {
     json.parse(BufferSource{"{\"City\":\"Southampton\",\"Population\":500000 }"});
-    REQUIRE(JNodeRef<JNodeObject>((*json)).size() == 2);
+    REQUIRE(JNodeRef<JNodeObject>(*json).size() == 2);
     REQUIRE(JNodeRef<JNodeString>((*json)["City"]).getString() == "Southampton");
   }
   SECTION("Parse/Stringify both with R-Value reference (File).", "[JSON][JNode][R-Value Reference]")
