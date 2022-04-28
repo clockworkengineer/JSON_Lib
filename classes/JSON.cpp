@@ -276,7 +276,7 @@ namespace JSONLib
         {
             int commaCount = JNodeRef<JNodeObject>(*jNode).size() - 1;
             destination.add("{");
-            for (const auto &key : JNodeRef<JNodeObject>(*jNode).getKeys())
+            for (const auto &[key, jNodePtr] : JNodeRef<JNodeObject>(*jNode).getObject())
             {
                 destination.add("\"" + m_jsonTranslator->toEscapeSequences(key) + "\"" + ":");
                 stringifyJNodes(JNodeRef<JNodeObject>(*jNode).getEntry(key), destination);

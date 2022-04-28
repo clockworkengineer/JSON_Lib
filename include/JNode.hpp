@@ -3,7 +3,6 @@
 // C++ STL
 //
 #include <string>
-#include <map>
 #include <vector>
 #include <list>
 #include <memory>
@@ -31,7 +30,6 @@ namespace JSONLib
     //
     struct JNode
     {
-    public:
         struct Error : public std::exception
         {
         public:
@@ -61,11 +59,17 @@ namespace JSONLib
     //
     struct JNodeObject : JNode
     {
-    public:
+        using Entry = std::pair<std::string, JNodePtr>;
         JNodeObject() : JNode(JNodeType::object) {}
         [[nodiscard]] bool containsKey(const std::string &key) const
         {
-            return (m_value.count(key) > 0);
+            if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const Entry &entry) -> bool
+                                       { return (entry.first == key); });
+                it != m_value.end())
+            {
+                return (true);
+            }
+            return (false);
         }
         [[nodiscard]] int size() const
         {
@@ -73,30 +77,34 @@ namespace JSONLib
         }
         void addEntry(const std::string &key, JNodePtr entry)
         {
-            m_value[key] = std::move(entry);
-            m_keys.push_back(key);
+            if (!containsKey(key))
+            {
+                m_value.emplace_back(key, std::move(entry));
+            }
         }
         JNode *getEntry(const std::string &key)
         {
-            return (m_value[key].get());
+            if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const Entry &entry) -> bool
+                                       { return (entry.first == key); });
+                it != m_value.end())
+            {
+                return (it->second.get());
+            }
+            return (nullptr);
         }
-        std::vector<std::string> &getKeys()
+        std::vector<Entry> &getObject()
         {
-            return (m_keys);
+            return (m_value);
         }
 
-    protected:
-        std::map<std::string, JNodePtr> m_value;
-        // Note: Store keys so when write away keep key order
-        // that they have had in the source form be it file/network/buffer.
-        std::vector<std::string> m_keys;
+    private:
+        std::vector<JNodeObject::Entry> m_value;
     };
     //
     // List JNode.
     //
     struct JNodeArray : JNode
     {
-    public:
         JNodeArray() : JNode(JNodeType::array) {}
         [[nodiscard]] int size() const
         {
@@ -115,7 +123,7 @@ namespace JSONLib
             return (m_value[index].get());
         }
 
-    protected:
+    private:
         std::vector<JNodePtr> m_value;
     };
     //
@@ -123,7 +131,6 @@ namespace JSONLib
     //
     struct JNodeNumber : JNode
     {
-    public:
         explicit JNodeNumber(const std::string &value) : JNode(JNodeType::number)
         {
             this->m_value = value;
@@ -149,7 +156,7 @@ namespace JSONLib
             return (m_value);
         }
 
-    protected:
+    private:
         std::string m_value;
     };
     //
@@ -157,7 +164,6 @@ namespace JSONLib
     //
     struct JNodeString : JNode
     {
-    public:
         explicit JNodeString(const std::string &value) : JNode(JNodeType::string)
         {
             this->m_value = value;
@@ -167,7 +173,7 @@ namespace JSONLib
             return (m_value);
         }
 
-    protected:
+    private:
         std::string m_value;
     };
     //
@@ -175,7 +181,6 @@ namespace JSONLib
     //
     struct JNodeBoolean : JNode
     {
-    public:
         explicit JNodeBoolean(bool value) : JNode(JNodeType::boolean)
         {
             this->m_value = value;
@@ -185,7 +190,7 @@ namespace JSONLib
             return (m_value);
         }
 
-    protected:
+    private:
         bool m_value;
     };
     //
@@ -193,7 +198,6 @@ namespace JSONLib
     //
     struct JNodeNull : JNode
     {
-    public:
         JNodeNull() : JNode(JNodeType::null)
         {
         }

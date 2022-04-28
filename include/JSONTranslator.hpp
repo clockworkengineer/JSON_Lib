@@ -2,6 +2,7 @@
 //
 // C++ STL
 //
+#include <map>
 #include <string>
 #include <codecvt>
 #include <locale>
