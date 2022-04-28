@@ -53,6 +53,10 @@ namespace JSONLib
         const JNodeType nodeType;
     };
     //
+    // Pointer to JNode
+    //
+    using JNodePtr = std::unique_ptr<JNode>;
+    //
     // Dictionary JNode.
     //
     struct JNodeObject : JNode
@@ -67,7 +71,7 @@ namespace JSONLib
         {
             return (static_cast<int>(m_value.size()));
         }
-        void addEntry(const std::string &key, std::unique_ptr<JNode> entry)
+        void addEntry(const std::string &key, JNodePtr entry)
         {
             m_value[key] = std::move(entry);
             m_keys.push_back(key);
@@ -82,7 +86,7 @@ namespace JSONLib
         }
 
     protected:
-        std::map<std::string, std::unique_ptr<JNode>> m_value;
+        std::map<std::string, JNodePtr> m_value;
         // Note: Store keys so when write away keep key order
         // that they have had in the source form be it file/network/buffer.
         std::vector<std::string> m_keys;
@@ -98,11 +102,11 @@ namespace JSONLib
         {
             return (static_cast<int>(m_value.size()));
         }
-        void addEntry(std::unique_ptr<JNode> jNode)
+        void addEntry(JNodePtr jNode)
         {
             m_value.push_back(std::move(jNode));
         }
-        std::vector<std::unique_ptr<JNode>> &getArray()
+        std::vector<JNodePtr> &getArray()
         {
             return (m_value);
         }
@@ -112,7 +116,7 @@ namespace JSONLib
         }
 
     protected:
-        std::vector<std::unique_ptr<JNode>> m_value;
+        std::vector<JNodePtr> m_value;
     };
     //
     // Number JNode.

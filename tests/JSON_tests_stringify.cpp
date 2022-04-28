@@ -151,23 +151,23 @@ TEST_CASE("Stringify to a file and check result.", "[JSON][Stringify][Exceptions
 // //     JSON json;
 // //     SECTION("Stringify passed nullptr", "[JSON][Stringify][Exceptions]")
 // //     {
-// //         REQUIRE_THROWS_AS(json.stringifyToBuffer(std::unique_ptr<JNode>(nullptr)), std::invalid_argument);
-// //         REQUIRE_THROWS_WITH(json.stringifyToBuffer(std::unique_ptr<JNode>(nullptr)), "Nullptr passed as JNode root to be stringified.");
+// //         REQUIRE_THROWS_AS(json.stringifyToBuffer(JNodePtr(nullptr)), std::invalid_argument);
+// //         REQUIRE_THROWS_WITH(json.stringifyToBuffer(JNodePtr(nullptr)), "Nullptr passed as JNode root to be stringified.");
 // //     }
 // //     SECTION("Stringify passed invalid JNode type", "[JSON][Stringify][Exceptions]")
 // //     {
-// //         REQUIRE_THROWS_AS(json.stringifyToBuffer(std::unique_ptr<JNode>(new JNode())), std::runtime_error);
-// //         REQUIRE_THROWS_WITH(json.stringifyToBuffer(std::unique_ptr<JNode>(new JNode())), "Unknown JNode type encountered during stringification.");
+// //         REQUIRE_THROWS_AS(json.stringifyToBuffer(JNodePtr(new JNode())), std::runtime_error);
+// //         REQUIRE_THROWS_WITH(json.stringifyToBuffer(JNodePtr(new JNode())), "Unknown JNode type encountered during stringification.");
 // //     }
 // //     SECTION("Stringify file passed invalid JNode type", "[JSON][Stringify][Exceptions]")
 // //     {
-// //         REQUIRE_THROWS_AS(json.stringifyToFile(std::unique_ptr<JNode>(nullptr), prefixTestDataPath(kGeneratedJSONFile)), std::invalid_argument);
-// //         REQUIRE_THROWS_WITH(json.stringifyToFile(std::unique_ptr<JNode>(nullptr), prefixTestDataPath(kGeneratedJSONFile)), "Nullptr passed as JNode root to be stringified.");
+// //         REQUIRE_THROWS_AS(json.stringifyToFile(JNodePtr(nullptr), prefixTestDataPath(kGeneratedJSONFile)), std::invalid_argument);
+// //         REQUIRE_THROWS_WITH(json.stringifyToFile(JNodePtr(nullptr), prefixTestDataPath(kGeneratedJSONFile)), "Nullptr passed as JNode root to be stringified.");
 // //     }
 // //     SECTION("Stringify file passed empty string for file name", "[JSON][Stringify][Exceptions]")
 // //     {
-// //         REQUIRE_THROWS_AS(json.stringifyToFile(std::unique_ptr<JNode>(new JNode()), ""), std::invalid_argument);
-// //         REQUIRE_THROWS_WITH(json.stringifyToFile(std::unique_ptr<JNode>(new JNode()), ""), "Empty file name passed to be stringified.");
+// //         REQUIRE_THROWS_AS(json.stringifyToFile(JNodePtr(new JNode()), ""), std::invalid_argument);
+// //         REQUIRE_THROWS_WITH(json.stringifyToFile(JNodePtr(new JNode()), ""), "Empty file name passed to be stringified.");
 // //     }
 // // }
 TEST_CASE("JSON object for stringification of a list of example JSON files.", "[JSON][Stringify]")

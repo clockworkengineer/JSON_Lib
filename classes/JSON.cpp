@@ -81,7 +81,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    std::unique_ptr<JNode> JSON::parseString(ISource &source)
+    JNodePtr JSON::parseString(ISource &source)
     {
         return (std::make_unique<JNodeString>(m_jsonTranslator->fromEscapeSequences(extractString(source))));
     }
@@ -90,7 +90,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    std::unique_ptr<JNode> JSON::parseNumber(ISource &source)
+    JNodePtr JSON::parseNumber(ISource &source)
     {
         m_workBuffer.clear();
         m_workBuffer += source.current();
@@ -118,7 +118,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    std::unique_ptr<JNode> JSON::parseBoolean(ISource &source)
+    JNodePtr JSON::parseBoolean(ISource &source)
     {
         m_workBuffer.clear();
         m_workBuffer += source.current();
@@ -143,7 +143,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    std::unique_ptr<JNode> JSON::parseNull(ISource &source)
+    JNodePtr JSON::parseNull(ISource &source)
     {
         m_workBuffer.clear();
         m_workBuffer += source.current();
@@ -164,7 +164,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    std::unique_ptr<JNode> JSON::parseObject(ISource &source)
+    JNodePtr JSON::parseObject(ISource &source)
     {
         JNodeObject object;
         do
@@ -194,7 +194,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    std::unique_ptr<JNode> JSON::parseArray(ISource &source)
+    JNodePtr JSON::parseArray(ISource &source)
     {
         JNodeArray array;
         do
@@ -217,7 +217,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    std::unique_ptr<JNode> JSON::parseJNodes(ISource &source)
+    JNodePtr JSON::parseJNodes(ISource &source)
     {
         source.ignoreWS();
         switch (source.current())
