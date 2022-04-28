@@ -26,15 +26,14 @@ namespace JSONLib
             {
                 return (m_parseBuffer[m_bufferPosition]);
             }
-            
-                            return (EOF);
-           
+
+            return (EOF);
         }
         void next() override
         {
             if (!more())
             {
-                throw std::runtime_error("Parse buffer empty before parse complete.");
+                throw std::runtime_error("Tried to read past and of buffer.");
             }
             m_bufferPosition++;
         }
@@ -68,6 +67,10 @@ namespace JSONLib
         }
         void next() override
         {
+            if (!more())
+            {
+                throw std::runtime_error("Tried to read past end of file.");
+            }
             char c = 0;
             m_source.get(c);
         }
@@ -80,6 +83,7 @@ namespace JSONLib
             m_source.clear();
             m_source.seekg(0, std::ios_base::beg);
         }
+
     private:
         mutable std::ifstream m_source;
     };

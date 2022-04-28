@@ -93,12 +93,22 @@ TEST_CASE("ISource (File) interface.", "[JSON][Parse][ISource]")
     REQUIRE_FALSE(!source.more());
     REQUIRE((char)source.current() == '{');
   }
-  SECTION("Create FileSource with testfile001.json and then check moveToNextByte positions to correct next character", "[JSON][Parse][ISource]")
+  SECTION("Create FileSource with testfile001.json and then check next positions to correct next character", "[JSON][Parse][ISource]")
   {
     FileSource source = FileSource(prefixTestDataPath(kSingleJSONFile));
     source.next();
     REQUIRE_FALSE(!source.more());
     REQUIRE((char)source.current() == '\n');
+  }
+  SECTION("Create FileSource with testfile001.json and then try to read off the end", "[JSON][Parse][ISource]")
+  {
+    FileSource source = FileSource(prefixTestDataPath(kSingleJSONFile));
+    while (source.more())
+    {
+      source.next();
+    }
+    REQUIRE_THROWS_AS(source.next(), std::runtime_error);
+    REQUIRE_THROWS_WITH(source.next(), "Tried to read past end of file.");
   }
 }
 TEST_CASE("ISource (Buffer interface). Contains file testfile001.json.", "[JSON][Parse][ISource]")
@@ -119,7 +129,7 @@ TEST_CASE("ISource (Buffer interface). Contains file testfile001.json.", "[JSON]
     REQUIRE_FALSE(!source.more());
     REQUIRE((char)source.current() == '{');
   }
-  SECTION("Create BufferSource with testfile001.json and then check moveToNextByte positions to correct next character", "[JSON][Parse][ISource]")
+  SECTION("Create BufferSource with testfile001.json and then check next positions to correct next character", "[JSON][Parse][ISource]")
   {
     BufferSource source{BufferSource(buffer)};
     source.next();
@@ -137,6 +147,16 @@ TEST_CASE("ISource (Buffer interface). Contains file testfile001.json.", "[JSON]
     }
     REQUIRE(length == 583);                              // eof
     REQUIRE(source.current() == static_cast<char>(255)); // eof
+  }
+  SECTION("Create BufferSource with testfile001.json and then try to read off the end", "[JSON][Parse][ISource]")
+  {
+    BufferSource source{BufferSource(buffer)};
+    while (source.more())
+    {
+      source.next();
+    }
+    REQUIRE_THROWS_AS(source.next(), std::runtime_error);
+    REQUIRE_THROWS_WITH(source.next(), "Tried to read past and of buffer.");
   }
 }
 TEST_CASE("IDestination (Buffer interface).", "[JSON][Parse][ISource]")
