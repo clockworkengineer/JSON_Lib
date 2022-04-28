@@ -73,7 +73,7 @@ namespace JSONLib
             m_workBuffer += source.current();
             source.next();
         }
-        if (!source.more())
+        if (source.current()!='"')
         {
             throw JSON::SyntaxError();
         }
