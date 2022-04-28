@@ -27,11 +27,7 @@
 //
 // C++ STL
 //
-#include <stdexcept>
-#include <utility>
 #include <set>
-#include <iomanip>
-#include <iostream>
 // =========
 // NAMESPACE
 // =========

@@ -32,6 +32,18 @@ namespace JSONLib
     struct JNode
     {
     public:
+        struct Error : public std::exception
+        {
+        public:
+            explicit Error(std::string errorMessage) : errorMessage(std::move(errorMessage)) {}
+            [[nodiscard]] const char *what() const noexcept override
+            {
+                return (errorMessage.c_str());
+            }
+
+        private:
+            const std::string errorMessage;
+        };
         explicit JNode(JNodeType nodeType = JNodeType::base) : nodeType(nodeType)
         {
         }
@@ -206,7 +218,7 @@ namespace JSONLib
                 return (*(JNodeRef<JNodeObject>(*this).getEntry(key)));
             }
         }
-        throw std::runtime_error("Invalid key used to access object.");
+        throw Error("Invalid key used to access object.");
     }
     inline JNode &JNode::operator[](int index) // Array
     {
@@ -217,7 +229,7 @@ namespace JSONLib
                 return (*((JNodeRef<JNodeArray>(*this).getEntry(index))));
             }
         }
-        throw std::runtime_error("Invalid index used to access array.");
+        throw Error("Invalid index used to access array.");
     }
 
 } // namespace JSONLib

@@ -12,8 +12,7 @@ namespace JSONLib
     class BufferDestination : public IDestination
     {
     public:
-        BufferDestination()
-        = default;
+        BufferDestination() = default;
         void add(const std::string &bytes) override
         {
             for (auto b : bytes)
@@ -25,6 +24,7 @@ namespace JSONLib
         {
             return (m_stringifyBuffer);
         }
+
     private:
         std::string m_stringifyBuffer;
     };
@@ -44,6 +44,7 @@ namespace JSONLib
             m_destination.write(bytes.c_str(), bytes.length());
             m_destination.flush();
         }
+
     private:
         std::ofstream m_destination;
     };

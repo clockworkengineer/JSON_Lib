@@ -82,11 +82,6 @@ TEST_CASE("ISource (File) interface.", "[JSON][Parse][ISource]")
   {
     REQUIRE_NOTHROW(FileSource(prefixTestDataPath(kSingleJSONFile)));
   }
-  SECTION("Create FileSource with non existants file.", "[JSON][Parse][ISource][Exception]")
-  {
-    REQUIRE_THROWS_AS(FileSource(prefixTestDataPath(kNonExistantJSONFile)), std::runtime_error);
-    REQUIRE_THROWS_WITH(FileSource(prefixTestDataPath(kNonExistantJSONFile)), "JSON file input stream failed to open or does not exist.");
-  }
   SECTION("Create FileSource with testfile001.json. and positioned on the correct first character", "[JSON][Parse][ISource]")
   {
     FileSource source{FileSource(prefixTestDataPath(kSingleJSONFile))};
@@ -100,7 +95,12 @@ TEST_CASE("ISource (File) interface.", "[JSON][Parse][ISource]")
     REQUIRE_FALSE(!source.more());
     REQUIRE((char)source.current() == '\n');
   }
-  SECTION("Create FileSource with testfile001.json and then try to read off the end", "[JSON][Parse][ISource]")
+  SECTION("Create FileSource with non existants file.", "[JSON][Parse][ISource][Exception]")
+  {
+    REQUIRE_THROWS_AS(FileSource(prefixTestDataPath(kNonExistantJSONFile)), std::runtime_error);
+    REQUIRE_THROWS_WITH(FileSource(prefixTestDataPath(kNonExistantJSONFile)), "JSON file input stream failed to open or does not exist.");
+  }
+  SECTION("Create FileSource with testfile001.json and then try to read off the end", "[JSON][Parse][ISource][Exception]")
   {
     FileSource source = FileSource(prefixTestDataPath(kSingleJSONFile));
     while (source.more())
@@ -111,17 +111,12 @@ TEST_CASE("ISource (File) interface.", "[JSON][Parse][ISource]")
     REQUIRE_THROWS_WITH(source.next(), "Tried to read past end of file.");
   }
 }
-TEST_CASE("ISource (Buffer interface). Contains file testfile001.json.", "[JSON][Parse][ISource]")
+TEST_CASE("ISource (Buffer) interface. Contains file testfile001.json.", "[JSON][Parse][ISource]")
 {
   std::string buffer{readJSONFromFile(prefixTestDataPath(kSingleJSONFile))};
   SECTION("Create BufferSource.", "[JSON][Parse][ISource]")
   {
     REQUIRE_NOTHROW(BufferSource(buffer));
-  }
-  SECTION("Create BufferSource with empty buffer.", "[JSON][Parse][ISource][Exception]")
-  {
-    REQUIRE_THROWS_AS(BufferSource(""), std::invalid_argument);
-    REQUIRE_THROWS_WITH(BufferSource(""), "Empty source buffer passed to be parsed.");
   }
   SECTION("Create BufferSource with testfile001.json and that it is positioned on the correct first character", "[JSON][Parse][ISource]")
   {
@@ -148,7 +143,12 @@ TEST_CASE("ISource (Buffer interface). Contains file testfile001.json.", "[JSON]
     REQUIRE(length == 583);                              // eof
     REQUIRE(source.current() == static_cast<char>(255)); // eof
   }
-  SECTION("Create BufferSource with testfile001.json and then try to read off the end", "[JSON][Parse][ISource]")
+  SECTION("Create BufferSource with empty buffer.", "[JSON][Parse][ISource][Exception]")
+  {
+    REQUIRE_THROWS_AS(BufferSource(""), std::invalid_argument);
+    REQUIRE_THROWS_WITH(BufferSource(""), "Empty source buffer passed to be parsed.");
+  }
+  SECTION("Create BufferSource with testfile001.json and then try to read off the end", "[JSON][Parse][ISource][Exception]")
   {
     BufferSource source{BufferSource(buffer)};
     while (source.more())
@@ -159,7 +159,7 @@ TEST_CASE("ISource (Buffer interface). Contains file testfile001.json.", "[JSON]
     REQUIRE_THROWS_WITH(source.next(), "Tried to read past and of buffer.");
   }
 }
-TEST_CASE("IDestination (Buffer interface).", "[JSON][Parse][ISource]")
+TEST_CASE("IDestination (Buffer) interface.", "[JSON][Parse][IDestination]")
 {
   SECTION("Create BufferDestination.", "[JSON][Stringify][IDestination]")
   {
@@ -184,7 +184,7 @@ TEST_CASE("IDestination (Buffer interface).", "[JSON][Parse][ISource]")
     REQUIRE(buffer.getBuffer() == ("65767"));
   }
 }
-TEST_CASE("IDestination (File interface).", "[JSON][Parse][ISource]")
+TEST_CASE("IDestination (File) interface.", "[JSON][Parse][IDestination]")
 {
   SECTION("Create FileDestination.", "[JSON][Stringify][IDestination]")
   {
@@ -255,14 +255,14 @@ TEST_CASE("Use of JNode indexing operators", "[JSON][JNode][Index]")
   {
     BufferSource jsonSource{"{\"City\":\"Southampton\",\"Population\":500000}"};
     json.parse(jsonSource);
-    REQUIRE_THROWS_AS((*json)["Cityy"].nodeType == JNodeType::object, std::runtime_error);
+    REQUIRE_THROWS_AS((*json)["Cityy"].nodeType == JNodeType::object, JNode::Error);
     REQUIRE_THROWS_WITH((*json)["Cityy"].nodeType == JNodeType::object, "Invalid key used to access object.");
   }
   SECTION("Parse list and check an invalid index generates exception", "[JSON][JNode][Index]")
   {
     BufferSource jsonSource{"[777,9000,\"apples\"]"};
     json.parse(jsonSource);
-    REQUIRE_THROWS_AS((*json)[3].nodeType == JNodeType::array, std::runtime_error);
+    REQUIRE_THROWS_AS((*json)[3].nodeType == JNodeType::array, JNode::Error);
     REQUIRE_THROWS_WITH((*json)[3].nodeType == JNodeType::array, "Invalid index used to access array.");
   }
 }
