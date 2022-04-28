@@ -101,20 +101,22 @@ namespace JSONLib
         std::vector<JNodeObject::Entry> m_value;
     };
     //
-    // List JNode.
+    // Array JNode.
     //
     struct JNodeArray : JNode
     {
-        JNodeArray() : JNode(JNodeType::array) {}
+        explicit JNodeArray(std::vector<JNodePtr> &value) : JNode(JNodeType::array),  m_value(std::move(value)) 
+        {
+        }
         [[nodiscard]] int size() const
         {
             return (static_cast<int>(m_value.size()));
         }
-        void addEntry(JNodePtr jNode)
-        {
-            m_value.push_back(std::move(jNode));
-        }
-        std::vector<JNodePtr> &getArray()
+        // void addEntry(JNodePtr jNode)
+        // {
+        //     m_value.push_back(std::move(jNode));
+        // }
+        const std::vector<JNodePtr> &getArray()
         {
             return (m_value);
         }
@@ -124,7 +126,7 @@ namespace JSONLib
         }
 
     private:
-        std::vector<JNodePtr> m_value;
+        const std::vector<JNodePtr> m_value;
     };
     //
     // Number JNode.

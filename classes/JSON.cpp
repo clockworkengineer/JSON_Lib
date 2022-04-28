@@ -196,12 +196,12 @@ namespace JSONLib
     /// <returns></returns>
     JNodePtr JSON::parseArray(ISource &source)
     {
-        JNodeArray array;
+        std::vector<JNodePtr> array;
         do
         {
             source.next();
             source.ignoreWS();
-            array.addEntry(parseJNodes(source));
+            array.emplace_back(parseJNodes(source));
             source.ignoreWS();
         } while (source.current() == ',');
         if (source.current() != ']')
@@ -209,7 +209,7 @@ namespace JSONLib
             throw JSON::SyntaxError();
         }
         source.next();
-        return (std::make_unique<JNodeArray>(std::move(array)));
+        return (std::make_unique<JNodeArray>(array));
     }
     /// <summary>
     /// Recursively parse JSON source stream producing a JNode structure
