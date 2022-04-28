@@ -131,9 +131,8 @@ namespace JSONLib
     //
     struct JNodeNumber : JNode
     {
-        explicit JNodeNumber(const std::string &value) : JNode(JNodeType::number)
+        explicit JNodeNumber(const std::string &value) : JNode(JNodeType::number), m_value(value)
         {
-            this->m_value = value;
         }
         // Convert to long returning true on success
         // Note: Can still return a long value for floating point
@@ -151,39 +150,37 @@ namespace JSONLib
             doubleValue = std::strtod(m_value.c_str(), &end);
             return (*end == '\0'); // If not all characters used then not success
         }
-        std::string &getNumber()
+        std::string getNumber() const
         {
             return (m_value);
         }
 
     private:
-        std::string m_value;
+        const std::string m_value;
     };
     //
     // String JNode.
     //
     struct JNodeString : JNode
     {
-        explicit JNodeString(const std::string &value) : JNode(JNodeType::string)
+        explicit JNodeString(const std::string &value) : JNode(JNodeType::string), m_value(value)
         {
-            this->m_value = value;
         }
-        std::string &getString()
+        std::string getString() const
         {
             return (m_value);
         }
 
     private:
-        std::string m_value;
+        const std::string m_value;
     };
     //
     // Boolean JNode.
     //
     struct JNodeBoolean : JNode
     {
-        explicit JNodeBoolean(bool value) : JNode(JNodeType::boolean)
+        explicit JNodeBoolean(bool value) : JNode(JNodeType::boolean), m_value(value)
         {
-            this->m_value = value;
         }
         [[nodiscard]] bool getBoolean() const
         {
@@ -191,7 +188,7 @@ namespace JSONLib
         }
 
     private:
-        bool m_value;
+        const bool m_value;
     };
     //
     // Boolean JNode.
@@ -201,7 +198,7 @@ namespace JSONLib
         JNodeNull() : JNode(JNodeType::null)
         {
         }
-        static void *getNull()
+        void *getNull() const
         {
             return (nullptr);
         }
