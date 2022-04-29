@@ -1,6 +1,4 @@
 # JSONLib
-C++ library to perform JSON parsing/stringification.
-
 Perform JSON  stringify/parse to/from a byte or file. It is also  
 possible to customize this with the ISource and IDestination interfaces 
 if required. Note: At present it will report incorrect JSON syntax 
