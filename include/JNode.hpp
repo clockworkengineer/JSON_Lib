@@ -4,7 +4,6 @@
 //
 #include <string>
 #include <vector>
-#include <list>
 #include <memory>
 #include <stdexcept>
 // =========
@@ -227,7 +226,7 @@ namespace JSONLib
         {
             return (JNodeRef<JNodeArray>(*this)[index]);
         }
-        throw JNode::Error("BNode Error: Node not a list.");
+        throw JNode::Error("JNode Error: Node not a list.");
     }
 
 } // namespace JSONLib

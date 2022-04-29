@@ -7,7 +7,7 @@
 namespace JSONLib
 {
     //
-    // Destination classes for stringification.
+    // Destination classes for JSON stringification.
     //
     class BufferDestination : public IDestination
     {

@@ -14,10 +14,7 @@
 // STL includes
 // ============
 #include <filesystem>
-#include <fstream>
-#include <iterator>
 #include <string>
-#include <algorithm>
 #include <sstream>
 // ===================
 // Unit test constants
@@ -28,7 +25,7 @@
 // ==========================
 // Unit test helper functions
 // ==========================
-extern std::string prefixTestDataPath(const std::string &file);
-extern std::string readJSONFromFile(const std::string &jsonFileName);
-extern void checkObject(JSONLib::JNode &jNode);
-extern void checkArray(JSONLib::JNode &jNode);
+std::string prefixTestDataPath(const std::string &file);
+std::string readJSONFromFile(const std::string &jsonFileName);
+void checkObject(JSONLib::JNode &jNode);
+void checkArray(JSONLib::JNode &jNode);

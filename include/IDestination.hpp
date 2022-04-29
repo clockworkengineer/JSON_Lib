@@ -6,7 +6,7 @@
 namespace JSONLib
 {
     //
-    // Interface for writing destination stream during Bencode encoding.
+    // Interface for writing destination stream during JSON stringification.
     //
     class IDestination
     {

@@ -7,7 +7,7 @@
 namespace JSONLib
 {
     //
-    // Source classes for parsers.
+    // Source classes for JSON parser.
     //
     class BufferSource : public ISource
     {
