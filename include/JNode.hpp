@@ -60,7 +60,7 @@ namespace JSONLib
     struct JNodeObject : JNode
     {
         using Entry = std::pair<std::string, JNodePtr>;
-        JNodeObject() : JNode(JNodeType::object) {}
+        explicit JNodeObject(std::vector<JNodeObject::Entry> &value) : JNode(JNodeType::object), m_value(std::move(value)) {}
         [[nodiscard]] bool containsKey(const std::string &key) const
         {
             if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const Entry &entry) -> bool
@@ -75,13 +75,6 @@ namespace JSONLib
         {
             return (static_cast<int>(m_value.size()));
         }
-        void addEntry(const std::string &key, JNodePtr entry)
-        {
-            if (!containsKey(key))
-            {
-                m_value.emplace_back(key, std::move(entry));
-            }
-        }
         JNode *getEntry(const std::string &key)
         {
             if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const Entry &entry) -> bool
@@ -92,13 +85,13 @@ namespace JSONLib
             }
             return (nullptr);
         }
-        std::vector<Entry> &getObject()
+        const std::vector<Entry> &getObject()
         {
             return (m_value);
         }
 
     private:
-        std::vector<JNodeObject::Entry> m_value;
+        const std::vector<JNodeObject::Entry> m_value;
     };
     //
     // Array JNode.
@@ -112,11 +105,7 @@ namespace JSONLib
         {
             return (static_cast<int>(m_value.size()));
         }
-        // void addEntry(JNodePtr jNode)
-        // {
-        //     m_value.push_back(std::move(jNode));
-        // }
-        const std::vector<JNodePtr> &getArray()
+        const std::vector<JNodePtr> &getArray() const
         {
             return (m_value);
         }

@@ -69,7 +69,7 @@ namespace JSONLib
             m_workBuffer += source.current();
             source.next();
         }
-        if (source.current()!='"')
+        if (source.current() != '"')
         {
             throw JSON::SyntaxError();
         }
@@ -153,11 +153,11 @@ namespace JSONLib
             m_workBuffer += source.current();
             source.next();
         }
-        if (m_workBuffer == "null")
+        if (m_workBuffer != "null")
         {
-            return (std::make_unique<JNodeNull>());
+            throw JSON::SyntaxError();
         }
-        throw JSON::SyntaxError();
+        return (std::make_unique<JNodeNull>());
     }
     /// <summary>
     /// Parse an object from a JSON source stream.
@@ -166,7 +166,7 @@ namespace JSONLib
     /// <returns></returns>
     JNodePtr JSON::parseObject(ISource &source)
     {
-        JNodeObject object;
+        std::vector<JNodeObject::Entry> objects;
         do
         {
             source.next();
@@ -179,7 +179,7 @@ namespace JSONLib
             }
             source.next();
             source.ignoreWS();
-            object.addEntry(key, parseJNodes(source));
+            objects.emplace_back(key, parseJNodes(source));
             source.ignoreWS();
         } while (source.current() == ',');
         if (source.current() != '}')
@@ -187,7 +187,7 @@ namespace JSONLib
             throw JSON::SyntaxError();
         }
         source.next();
-        return (std::make_unique<JNodeObject>(std::move(object)));
+        return (std::make_unique<JNodeObject>(objects));
     }
     /// <summary>
     /// Parse an array from a JSON source stream.
@@ -326,11 +326,11 @@ namespace JSONLib
     // PUBLIC METHODS
     // ==============
     /// <summary>
-    /// Remove all whitespace from a JSON buffer.
+    /// Strip all whitespace from a JSON buffer.
     /// </summary>
     /// <param name="jsonBuffer">Buffer of JSON</param>
     /// <returns>Whitespace free JSON.</returns>
-    std::string JSON::stripWhiteSpaceBuffer(const std::string &jsonBuffer)
+    std::string JSON::strip(const std::string &jsonBuffer)
     {
         BufferSource source(jsonBuffer);
         BufferDestination destination;

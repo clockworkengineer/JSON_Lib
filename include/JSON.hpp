@@ -77,11 +77,11 @@ namespace JSONLib
         // ==============
         // PUBLIC METHODS
         // ==============
-        std::string stripWhiteSpaceBuffer(const std::string &jsonBuffer);
         void parse(ISource &source);
         void parse(ISource &&source);
         void stringify(IDestination &destination);
         void stringify(IDestination &&destination);
+        std::string strip(const std::string &jsonBuffer);
         JNode &operator*() { return (*m_jNodeRoot); }
         // ================
         // PUBLIC VARIABLES
@@ -97,13 +97,13 @@ namespace JSONLib
         // PRIVATE METHODS
         // ===============
         std::string extractString(ISource &source);
-        JNodePtr parseJNodes(ISource &source);
         JNodePtr parseString(ISource &source);
         JNodePtr parseNumber(ISource &source);
         JNodePtr parseBoolean(ISource &source);
         JNodePtr parseNull(ISource &source);
         JNodePtr parseObject(ISource &source);
         JNodePtr parseArray(ISource &source);
+        JNodePtr parseJNodes(ISource &source);
         void stringifyJNodes(JNode *jNode, IDestination &destination);
         void setTranslator(ITranslator *translator);
         // =================

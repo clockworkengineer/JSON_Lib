@@ -396,6 +396,6 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Ref
     json.parse(FileSource{prefixTestDataPath(kSingleJSONFile)});
     json.stringify(FileDestination{prefixTestDataPath(kGeneratedJSONFile)});
     REQUIRE(readJSONFromFile(prefixTestDataPath(kGeneratedJSONFile)) ==
-            json.stripWhiteSpaceBuffer(readJSONFromFile(prefixTestDataPath(kSingleJSONFile))));
+            json.strip(readJSONFromFile(prefixTestDataPath(kSingleJSONFile))));
   }
 }
