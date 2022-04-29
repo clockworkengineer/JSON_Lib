@@ -60,7 +60,10 @@ namespace JSONLib
     struct JNodeObject : JNode
     {
         using Entry = std::pair<std::string, JNodePtr>;
-        explicit JNodeObject(std::vector<JNodeObject::Entry> &value) : JNode(JNodeType::object), m_value(std::move(value)) {}
+        explicit JNodeObject(std::vector<JNodeObject::Entry> &value) : JNode(JNodeType::object),
+                                                                       m_value(std::move(value))
+        {
+        }
         [[nodiscard]] bool containsKey(const std::string &key) const
         {
             if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const Entry &entry) -> bool
@@ -75,15 +78,15 @@ namespace JSONLib
         {
             return (static_cast<int>(m_value.size()));
         }
-        JNode *getEntry(const std::string &key)
+        JNode &operator[](const std::string &key) const 
         {
             if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const Entry &entry) -> bool
                                        { return (entry.first == key); });
                 it != m_value.end())
             {
-                return (it->second.get());
+                return (*it->second);
             }
-            return (nullptr);
+            throw JNode::Error("JNode Error: Invalid key used to access object.");
         }
         const std::vector<Entry> &getObject()
         {
@@ -98,7 +101,8 @@ namespace JSONLib
     //
     struct JNodeArray : JNode
     {
-        explicit JNodeArray(std::vector<JNodePtr> &value) : JNode(JNodeType::array),  m_value(std::move(value)) 
+        explicit JNodeArray(std::vector<JNodePtr> &value) : JNode(JNodeType::array),
+                                                            m_value(std::move(value))
         {
         }
         [[nodiscard]] int size() const
@@ -109,9 +113,13 @@ namespace JSONLib
         {
             return (m_value);
         }
-        JNode *getEntry(int index)
+        JNode &operator[](int index) const
         {
-            return (m_value[index].get());
+            if ((index >= 0) && (index < (static_cast<int>(m_value.size()))))
+            {
+                return (*m_value[index]);
+            }
+            throw JNode::Error("JNode Error: Invalid index used to access array.");
         }
 
     private:
@@ -209,23 +217,17 @@ namespace JSONLib
     {
         if (nodeType == JNodeType::object)
         {
-            if (JNodeRef<JNodeObject>(*this).containsKey(key))
-            {
-                return (*(JNodeRef<JNodeObject>(*this).getEntry(key)));
-            }
+            return (JNodeRef<JNodeObject>(*this)[key]);
         }
-        throw Error("Invalid key used to access object.");
+        throw JNode::Error("JNode Error : Node not an object.");
     }
     inline JNode &JNode::operator[](int index) // Array
     {
         if (nodeType == JNodeType::array)
         {
-            if ((index >= 0) && (index < (JNodeRef<JNodeArray>(*this).size())))
-            {
-                return (*((JNodeRef<JNodeArray>(*this).getEntry(index))));
-            }
+            return (JNodeRef<JNodeArray>(*this)[index]);
         }
-        throw Error("Invalid index used to access array.");
+        throw JNode::Error("BNode Error: Node not a list.");
     }
 
 } // namespace JSONLib

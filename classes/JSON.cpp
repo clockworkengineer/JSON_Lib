@@ -279,7 +279,7 @@ namespace JSONLib
             for (const auto &[key, jNodePtr] : JNodeRef<JNodeObject>(*jNode).getObject())
             {
                 destination.add("\"" + m_jsonTranslator->toEscapeSequences(key) + "\"" + ":");
-                stringifyJNodes(JNodeRef<JNodeObject>(*jNode).getEntry(key), destination);
+                stringifyJNodes(&JNodeRef<JNodeObject>(*jNode)[key], destination);
                 if (commaCount-- > 0)
                 {
                     destination.add(",");
