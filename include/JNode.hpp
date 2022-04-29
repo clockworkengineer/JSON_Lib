@@ -64,7 +64,7 @@ namespace JSONLib
                                                                        m_value(std::move(value))
         {
         }
-        [[nodiscard]] bool containsKey(const std::string &key) const
+        [[nodiscard]] bool contains(const std::string &key) const
         {
             if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const Entry &entry) -> bool
                                        { return (entry.first == key); });
@@ -88,7 +88,7 @@ namespace JSONLib
             }
             throw JNode::Error("JNode Error: Invalid key used to access object.");
         }
-        const std::vector<Entry> &getObject()
+        const std::vector<Entry> &objects()
         {
             return (m_value);
         }
@@ -109,7 +109,7 @@ namespace JSONLib
         {
             return (static_cast<int>(m_value.size()));
         }
-        const std::vector<JNodePtr> &getArray() const
+        const std::vector<JNodePtr> &array() const
         {
             return (m_value);
         }
@@ -136,20 +136,20 @@ namespace JSONLib
         // Convert to long returning true on success
         // Note: Can still return a long value for floating point
         // but false as the number is not in integer format
-        bool getInteger(long long &longValue) const
+        bool integer(long long &longValue) const
         {
             char *end = nullptr;
             longValue = std::strtoll(m_value.c_str(), &end, 10);
             return (*end == '\0'); // If not all characters used then not success
         }
         // Convert to double returning true on success
-        bool getFloatingPoint(double &doubleValue) const
+        bool floatingpoint(double &doubleValue) const
         {
             char *end = nullptr;
             doubleValue = std::strtod(m_value.c_str(), &end);
             return (*end == '\0'); // If not all characters used then not success
         }
-        std::string getNumber() const
+        std::string number() const
         {
             return (m_value);
         }
@@ -165,7 +165,7 @@ namespace JSONLib
         explicit JNodeString(const std::string &value) : JNode(JNodeType::string), m_value(value)
         {
         }
-        std::string getString() const
+        std::string string() const
         {
             return (m_value);
         }
@@ -181,7 +181,7 @@ namespace JSONLib
         explicit JNodeBoolean(bool value) : JNode(JNodeType::boolean), m_value(value)
         {
         }
-        [[nodiscard]] bool getBoolean() const
+        [[nodiscard]] bool boolean() const
         {
             return (m_value);
         }
@@ -197,7 +197,7 @@ namespace JSONLib
         JNodeNull() : JNode(JNodeType::null)
         {
         }
-        void *getNull() const
+        void *null() const
         {
             return (nullptr);
         }

@@ -56,43 +56,43 @@ TEST_CASE("JSON object for parse of simple types and check values.", "[JSON][Par
     {
         BufferSource jsonSource{"\"example string\""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == "example string");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == "example string");
     }
     SECTION("Parse an string (another example string) and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"another example string\""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == "another example string");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == "another example string");
     }
     SECTION("Parse an number (6767) and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"6767"};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeNumber>(*json).getNumber() == "6767");
+        REQUIRE(JNodeRef<JNodeNumber>(*json).number() == "6767");
     }
     SECTION("Parse an number (190000) and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"190000"};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeNumber>(*json).getNumber() == "190000");
+        REQUIRE(JNodeRef<JNodeNumber>(*json).number() == "190000");
     }
     SECTION("Parse an boolean (true) and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"true"};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeBoolean>(*json).getBoolean() == true);
+        REQUIRE(JNodeRef<JNodeBoolean>(*json).boolean() == true);
     }
     SECTION("Parse an boolean (false) and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"false"};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeBoolean>(*json).getBoolean() == false);
+        REQUIRE(JNodeRef<JNodeBoolean>(*json).boolean() == false);
     }
     SECTION("Parse an null and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"null"};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeNull>(*json).getNull() == nullptr);
+        REQUIRE(JNodeRef<JNodeNull>(*json).null() == nullptr);
     }
 }
 TEST_CASE("JSON object for parse of collection types (array,object) ", "[JSON][Parse]")
@@ -120,12 +120,12 @@ TEST_CASE("JSON object for parse of collection types and check values", "[JSON][
         json.parse(jsonSource);
         REQUIRE((*json).nodeType == JNodeType::object);
         REQUIRE(JNodeRef<JNodeObject>(*json).size() == 2);
-        REQUIRE(JNodeRef<JNodeObject>(*json).containsKey("Name"));
-        REQUIRE(JNodeRef<JNodeObject>(*json).containsKey("Age"));
+        REQUIRE(JNodeRef<JNodeObject>(*json).contains("Name"));
+        REQUIRE(JNodeRef<JNodeObject>(*json).contains("Age"));
         REQUIRE(JNodeRef<JNodeString>((*json)["Name"]).nodeType == JNodeType::string);
         REQUIRE(JNodeRef<JNodeNumber>((*json)["Age"]).nodeType == JNodeType::number);
-        REQUIRE(JNodeRef<JNodeString>((*json)["Name"]).getString() == "Robert");
-        REQUIRE(JNodeRef<JNodeNumber>((*json)["Age"]).getNumber() == "15");
+        REQUIRE(JNodeRef<JNodeString>((*json)["Name"]).string() == "Robert");
+        REQUIRE(JNodeRef<JNodeNumber>((*json)["Age"]).number() == "15");
     }
     SECTION("Parse an array [777,9000,\"apples\"] and check its value", "[JSON][Parse]")
     {
@@ -136,9 +136,9 @@ TEST_CASE("JSON object for parse of collection types and check values", "[JSON][
         REQUIRE(JNodeRef<JNodeNumber>((*json)[0]).nodeType == JNodeType::number);
         REQUIRE(JNodeRef<JNodeNumber>((*json)[1]).nodeType == JNodeType::number);
         REQUIRE(JNodeRef<JNodeString>((*json)[2]).nodeType == JNodeType::string);
-        REQUIRE(JNodeRef<JNodeNumber>((*json)[0]).getNumber() == "777");
-        REQUIRE(JNodeRef<JNodeNumber>((*json)[1]).getNumber() == "9000");
-        REQUIRE(JNodeRef<JNodeString>((*json)[2]).getString() == "apples");
+        REQUIRE(JNodeRef<JNodeNumber>((*json)[0]).number() == "777");
+        REQUIRE(JNodeRef<JNodeNumber>((*json)[1]).number() == "9000");
+        REQUIRE(JNodeRef<JNodeString>((*json)[2]).string() == "apples");
     }
     SECTION("Parse object {\"City\":\"Southampton\",\"Population\":500000} and check its value", "[JSON][Parse]")
     {
@@ -313,72 +313,72 @@ TEST_CASE("JSON object for decoding of strings with escape characters.", "[JSON]
     {
         BufferSource jsonSource{"\"Test String \\t \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == "Test String \t ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \t ");
     }
     SECTION("Stringify JSON string with escapes '\\\"' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\\" \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == "Test String \" ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \" ");
     }
     SECTION("Stringify JSON string with escapes '\\\\' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\\\ \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == "Test String \\ ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \\ ");
     }
     SECTION("Stringify JSON string with escapes '\\b' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\b \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == "Test String \b ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \b ");
     }
     SECTION("Stringify JSON string with escapes '\\/' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\/ \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == "Test String / ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String / ");
     }
     SECTION("Stringify JSON string with escapes '\\f' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\f \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == "Test String \f ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \f ");
     }
     SECTION("Stringify JSON string with escapes '\\n' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\n \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == "Test String \n ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \n ");
     }
     SECTION("Stringify JSON string with escapes '\\r' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\r \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == "Test String \r ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \r ");
     }
     SECTION("Stringify JSON string with escapes '\\t' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\t \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == "Test String \t ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \t ");
     }
     SECTION("Stringify JSON string with escapes '\\u0123' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\u0123 \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == u8"Test String \u0123 ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == u8"Test String \u0123 ");
     }
     SECTION("Stringify JSON string with escapes '\\u0123 \\u0456' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\u0123 \\u0456 \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == u8"Test String \u0123 \u0456 ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == u8"Test String \u0123 \u0456 ");
     }
     SECTION("Stringify JSON string with escapes  '\\uD834\\uDD1E' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String  \\uD834\\uDD1E \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).getString() == u8"Test String  \U0001D11E ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == u8"Test String  \U0001D11E ");
     }
 }

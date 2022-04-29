@@ -261,13 +261,13 @@ namespace JSONLib
         switch (jNode->nodeType)
         {
         case JNodeType::number:
-            destination.add(JNodeRef<JNodeNumber>(*jNode).getNumber());
+            destination.add(JNodeRef<JNodeNumber>(*jNode).number());
             break;
         case JNodeType::string:
-            destination.add("\"" + m_jsonTranslator->toEscapeSequences(JNodeRef<JNodeString>(*jNode).getString()) + "\"");
+            destination.add("\"" + m_jsonTranslator->toEscapeSequences(JNodeRef<JNodeString>(*jNode).string()) + "\"");
             break;
         case JNodeType::boolean:
-            destination.add(JNodeRef<JNodeBoolean>(*jNode).getBoolean() ? "true" : "false");
+            destination.add(JNodeRef<JNodeBoolean>(*jNode).boolean() ? "true" : "false");
             break;
         case JNodeType::null:
             destination.add("null");
@@ -276,7 +276,7 @@ namespace JSONLib
         {
             int commaCount = JNodeRef<JNodeObject>(*jNode).size() - 1;
             destination.add("{");
-            for (const auto &[key, jNodePtr] : JNodeRef<JNodeObject>(*jNode).getObject())
+            for (const auto &[key, jNodePtr] : JNodeRef<JNodeObject>(*jNode).objects())
             {
                 destination.add("\"" + m_jsonTranslator->toEscapeSequences(key) + "\"" + ":");
                 stringifyJNodes(&JNodeRef<JNodeObject>(*jNode)[key], destination);
@@ -292,7 +292,7 @@ namespace JSONLib
         {
             int commaCount = JNodeRef<JNodeArray>(*jNode).size() - 1;
             destination.add("[");
-            for (auto &bNodeEntry : JNodeRef<JNodeArray>(*jNode).getArray())
+            for (auto &bNodeEntry : JNodeRef<JNodeArray>(*jNode).array())
             {
                 stringifyJNodes(bNodeEntry.get(), destination);
                 if (commaCount-- > 0)
