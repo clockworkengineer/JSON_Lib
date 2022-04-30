@@ -367,18 +367,18 @@ TEST_CASE("JSON object for decoding of strings with escape characters.", "[JSON]
     {
         BufferSource jsonSource{"\"Test String \\u0123 \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == u8"Test String \u0123 ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == reinterpret_cast<const char *>(u8"Test String \u0123 "));
     }
     SECTION("Stringify JSON string with escapes '\\u0123 \\u0456' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\u0123 \\u0456 \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == u8"Test String \u0123 \u0456 ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == reinterpret_cast<const char *>(u8"Test String \u0123 \u0456 "));
     }
     SECTION("Stringify JSON string with escapes  '\\uD834\\uDD1E' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String  \\uD834\\uDD1E \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == u8"Test String  \U0001D11E ");
+        REQUIRE(JNodeRef<JNodeString>(*json).string() == reinterpret_cast<const char *>(u8"Test String  \U0001D11E "));
     }
 }
