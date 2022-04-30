@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.16.0)
+cmake_minimum_required(VERSION 3.23.1)
 
-project("JSONLib" VERSION 0.1.0 DESCRIPTION "JSON C++ Static Library" LANGUAGES CXX)
+project("JSONLib" VERSION 0.1.0 DESCRIPTION "JSON C++ Library" LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -34,7 +34,7 @@ set (JSON_INCLUDES
 
 # JSON library
 
-add_library(${JSON_LIBRARY_NAME} STATIC ${JSON_SOURCES})
+add_library(${JSON_LIBRARY_NAME} ${JSON_SOURCES})
 target_include_directories(${JSON_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_BINARY_DIR} )
 
 # Add tests
