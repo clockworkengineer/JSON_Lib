@@ -353,7 +353,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
 {
   JSONTranslator translator;
   SECTION("Translate from escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
-  {
+  {                                                                   // Needed to convert const char8_t * to string
     REQUIRE(translator.fromEscapeSequences("Begin \\uD834\\uDD1E End") == reinterpret_cast<const char *>(u8"Begin \U0001D11E End"));
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 \\uDD1E End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
@@ -377,7 +377,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
     REQUIRE_THROWS_WITH(translator.fromEscapeSequences("Begin \\uDD1E End"), "JSON syntax error detected.");
   }
   SECTION("Translate to escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
-  {
+  {                                      // Needed to convert const char8_t * to string                 
     REQUIRE(translator.toEscapeSequences(reinterpret_cast<const char *>(u8"Begin \U0001D11E End")) == "Begin \\uD834\\uDD1E End");
   }
 }
