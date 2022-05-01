@@ -81,7 +81,7 @@ namespace JSONLib
         void parse(ISource &&source);
         void stringify(IDestination &destination);
         void stringify(IDestination &&destination);
-        std::string strip(const std::string &jsonBuffer);
+        void strip(ISource &source, IDestination &destination);
         JNode &operator*() { return (*m_jNodeRoot); }
         // ================
         // PUBLIC VARIABLES

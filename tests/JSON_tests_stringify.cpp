@@ -185,7 +185,7 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.", "[
         BufferDestination jsonDestinaton;
         json.parse(jsonSource);
         json.stringify(jsonDestinaton);
-        REQUIRE(jsonDestinaton.getBuffer() == json.strip(jsonFileBuffer));
+        REQUIRE(jsonDestinaton.getBuffer() == stripWhiteSpace(json,jsonFileBuffer));
     }
     SECTION("Stringify to file and check value", "[JSON][Stringify]")
     {
@@ -195,7 +195,7 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.", "[
         FileDestination jsonDestination{prefixTestDataPath(kGeneratedJSONFile)};
         json.parse(jsonSource);
         json.stringify(jsonDestination);
-        REQUIRE(readJSONFromFile(prefixTestDataPath(kGeneratedJSONFile)) == json.strip(jsonFileBuffer));
+        REQUIRE(readJSONFromFile(prefixTestDataPath(kGeneratedJSONFile)) == stripWhiteSpace(json, jsonFileBuffer));
     }
 }
 TEST_CASE("JSON object for stringification of strings with escape characters.", "[JSON][Stringify]")

@@ -29,3 +29,4 @@ std::string prefixTestDataPath(const std::string &file);
 std::string readJSONFromFile(const std::string &jsonFileName);
 void checkObject(JSONLib::JNode &jNode);
 void checkArray(JSONLib::JNode &jNode);
+std::string stripWhiteSpace(JSONLib::JSON &json, const std::string &jsonBuffer);

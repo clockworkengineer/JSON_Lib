@@ -113,7 +113,7 @@ TEST_CASE("JSON object for parse of collection types (array,object) ", "[JSON][P
 }
 TEST_CASE("JSON object for parse of collection types and check values", "[JSON][Parse]")
 {
-      JSON json;
+    JSON json;
     SECTION("Parse an object {\"name\":\"Robert\",\"Age\":15} and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"{\"Name\":\"Robert\",\"Age\":15}"};
@@ -155,7 +155,7 @@ TEST_CASE("JSON object for parse of collection types and check values", "[JSON][
 }
 TEST_CASE("JSON object for parse checking various whitespace characters are ignored.", "[JSON][Parse]")
 {
-      JSON json;
+    JSON json;
     std::string ws = "";
     SECTION("Parse an array [\"Dog\",1964,true,null] with no whitespace.", "[JSON][Parse]")
     {
@@ -224,7 +224,7 @@ TEST_CASE("JSON object for parse checking various whitespace characters are igno
 }
 TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Parse]")
 {
-      JSON json;
+    JSON json;
     auto testFile = GENERATE(values<std::string>({"./testData/testfile001.json",
                                                   "./testData/testfile002.json",
                                                   "./testData/testfile003.json",
@@ -241,7 +241,7 @@ TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Pars
     }
     SECTION("Parse from file directly", "[JSON][Parse]")
     {
-        FileSource jsonSource {testFile};
+        FileSource jsonSource{testFile};
         REQUIRE_NOTHROW(json.parse(jsonSource));
         jsonSource.reset();
         json.parse(jsonSource);
@@ -250,7 +250,7 @@ TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Pars
 }
 TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]")
 {
-      JSON json;
+    JSON json;
     // Note: The tests for syntax errors is not exhaustive and more may be added over time.
     // JSON json;
     // SECTION("Parse passing a empty string", "[JSON][Parse]")
@@ -308,7 +308,7 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]")
 }
 TEST_CASE("JSON object for decoding of strings with escape characters.", "[JSON][Parse]")
 {
-      JSON json;
+    JSON json;
     SECTION("Stringify JSON string with escapes '\\t' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\t \""};
@@ -366,19 +366,19 @@ TEST_CASE("JSON object for decoding of strings with escape characters.", "[JSON]
     SECTION("Stringify JSON string with escapes '\\u0123' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\u0123 \""};
-        json.parse(jsonSource);                          // Needed to convert const char8_t * to string
+        json.parse(jsonSource); // Needed to convert const char8_t * to string
         REQUIRE(JNodeRef<JNodeString>(*json).string() == reinterpret_cast<const char *>(u8"Test String \u0123 "));
     }
     SECTION("Stringify JSON string with escapes '\\u0123 \\u0456' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\u0123 \\u0456 \""};
-        json.parse(jsonSource);                          // Needed to convert const char8_t * to string
+        json.parse(jsonSource); // Needed to convert const char8_t * to string
         REQUIRE(JNodeRef<JNodeString>(*json).string() == reinterpret_cast<const char *>(u8"Test String \u0123 \u0456 "));
     }
     SECTION("Stringify JSON string with escapes  '\\uD834\\uDD1E' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String  \\uD834\\uDD1E \""};
-        json.parse(jsonSource);                          // Needed to convert const char8_t * to string
+        json.parse(jsonSource); // Needed to convert const char8_t * to string
         REQUIRE(JNodeRef<JNodeString>(*json).string() == reinterpret_cast<const char *>(u8"Test String  \U0001D11E "));
     }
 }

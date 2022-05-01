@@ -11,7 +11,7 @@
 // of the JSON specification refer to its RFC at web address
 // https://tools.ietf.org/html/rfc8259.
 //
-// Dependencies:   C17++ - Language standard features used.
+// Dependencies:   C20++ - Language standard features used.
 //
 // =================
 // CLASS DEFINITIONS
@@ -326,14 +326,13 @@ namespace JSONLib
     // PUBLIC METHODS
     // ==============
     /// <summary>
-    /// Strip all whitespace from a JSON buffer.
+    /// Strip all whitespace from a JSON source .
     /// </summary>
-    /// <param name="jsonBuffer">Buffer of JSON</param>
+    /// <param name="source">Source of JSON</param>
+    /// <param name="destinaton">Destination for stripped JSON</param>
     /// <returns>Whitespace free JSON.</returns>
-    std::string JSON::strip(const std::string &jsonBuffer)
+    void JSON::strip(ISource &source, IDestination &destination)
     {
-        BufferSource source(jsonBuffer);
-        BufferDestination destination;
         while (source.more())
         {
             source.ignoreWS();
@@ -350,7 +349,6 @@ namespace JSONLib
                 }
             }
         }
-        return (destination.getBuffer());
     }
     /// <summary>
     /// Create JNode structure by recursively parsing JSON on the source stream.

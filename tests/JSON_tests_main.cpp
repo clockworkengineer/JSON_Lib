@@ -73,6 +73,19 @@ void checkObject(JNode &jNode)
   REQUIRE(JNodeRef<JNodeString>(jNode["City"]).string() == "Southampton");
   REQUIRE(JNodeRef<JNodeNumber>(jNode["Population"]).number() == "500000");
 }
+/// <summary>
+/// Strip white space from source JSON and place remainder in destination.
+/// </summary>
+/// <param name="json">JSON parser object</param>
+/// <param name="jsonBuffer">Source json</param>
+/// <returns></returns>
+std::string stripWhiteSpace(JSON &json, const std::string &jsonBuffer)
+{
+  BufferSource source(jsonBuffer);
+  BufferDestination destination;
+  json.strip(source, destination);
+  return(destination.getBuffer());
+}
 // ==========
 // Test cases
 // ==========
@@ -353,7 +366,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
 {
   JSONTranslator translator;
   SECTION("Translate from escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
-  {                                                                   // Needed to convert const char8_t * to string
+  { // Needed to convert const char8_t * to string
     REQUIRE(translator.fromEscapeSequences("Begin \\uD834\\uDD1E End") == reinterpret_cast<const char *>(u8"Begin \U0001D11E End"));
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 \\uDD1E End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
@@ -377,7 +390,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
     REQUIRE_THROWS_WITH(translator.fromEscapeSequences("Begin \\uDD1E End"), "JSON syntax error detected.");
   }
   SECTION("Translate to escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
-  {                                      // Needed to convert const char8_t * to string                 
+  { // Needed to convert const char8_t * to string
     REQUIRE(translator.toEscapeSequences(reinterpret_cast<const char *>(u8"Begin \U0001D11E End")) == "Begin \\uD834\\uDD1E End");
   }
 }
@@ -396,6 +409,6 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Ref
     json.parse(FileSource{prefixTestDataPath(kSingleJSONFile)});
     json.stringify(FileDestination{prefixTestDataPath(kGeneratedJSONFile)});
     REQUIRE(readJSONFromFile(prefixTestDataPath(kGeneratedJSONFile)) ==
-            json.strip(readJSONFromFile(prefixTestDataPath(kSingleJSONFile))));
+            stripWhiteSpace(json, (readJSONFromFile(prefixTestDataPath(kSingleJSONFile)))));
   }
 }
