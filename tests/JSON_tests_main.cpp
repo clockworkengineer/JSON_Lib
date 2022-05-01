@@ -84,7 +84,7 @@ std::string stripWhiteSpace(JSON &json, const std::string &jsonBuffer)
   BufferSource source(jsonBuffer);
   BufferDestination destination;
   json.strip(source, destination);
-  return(destination.getBuffer());
+  return (destination.getBuffer());
 }
 // ==========
 // Test cases
@@ -410,5 +410,23 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Ref
     json.stringify(FileDestination{prefixTestDataPath(kGeneratedJSONFile)});
     REQUIRE(readJSONFromFile(prefixTestDataPath(kGeneratedJSONFile)) ==
             stripWhiteSpace(json, (readJSONFromFile(prefixTestDataPath(kSingleJSONFile)))));
+  }
+}
+TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
+{
+  JSON json;
+  auto testFile = GENERATE(values<std::string>({"./testData/testfile001.json",
+                                                "./testData/testfile002.json",
+                                                "./testData/testfile003.json",
+                                                "./testData/testfile004.json",
+                                                "./testData/testfile005.json"}));
+  SECTION("Stripped should be the same as parsed then stringified JSON", "[JSON][Parse][Strip]")
+  {
+    const std::string jsonBuffer{readJSONFromFile(testFile)};
+    BufferSource jsonSource{jsonBuffer};
+    BufferDestination destination;
+    json.parse(jsonSource);
+    json.stringify(destination);
+    REQUIRE(destination.getBuffer() == stripWhiteSpace(json, jsonBuffer));
   }
 }
