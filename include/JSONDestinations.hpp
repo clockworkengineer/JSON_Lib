@@ -20,6 +20,10 @@ namespace JSONLib
                 m_stringifyBuffer.push_back(b);
             }
         }
+        void add(const char ch) override
+        {
+            m_stringifyBuffer.push_back(ch);
+        }
         [[nodiscard]] std::string getBuffer() const
         {
             return (m_stringifyBuffer);
@@ -42,6 +46,11 @@ namespace JSONLib
         void add(const std::string &bytes) override
         {
             m_destination.write(bytes.c_str(), bytes.length());
+            m_destination.flush();
+        }
+        void add(const char ch) override
+        {
+            m_destination.put(ch);
             m_destination.flush();
         }
 

@@ -186,7 +186,7 @@ TEST_CASE("IDestination (Buffer) interface.", "[JSON][Parse][IDestination]")
   SECTION("Create BufferDestination and add one character.", "[JSON][Stringify][IDestination]")
   {
     BufferDestination buffer;
-    buffer.add("i");
+    buffer.add('i');
     REQUIRE(buffer.getBuffer().size() == 1);
   }
   SECTION("Create BufferDestination and add an stringified integer and check result.", "[JSON][Stringify][IDestination]")
@@ -222,7 +222,7 @@ TEST_CASE("IDestination (File) interface.", "[JSON][Parse][IDestination]")
     std::filesystem::remove(prefixTestDataPath(kGeneratedJSONFile));
     FileDestination file{prefixTestDataPath(kGeneratedJSONFile)};
     std::filesystem::path filePath{prefixTestDataPath(kGeneratedJSONFile)};
-    file.add("t");
+    file.add('t');
     REQUIRE(std::filesystem::file_size(filePath) == 1);
   }
   SECTION("Create FileDestination, add an stringified integer and check result.", "[JSON][Stringify][IDestination]")

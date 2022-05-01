@@ -264,7 +264,9 @@ namespace JSONLib
             destination.add(JNodeRef<JNodeNumber>(*jNode).number());
             break;
         case JNodeType::string:
-            destination.add("\"" + m_jsonTranslator->toEscapeSequences(JNodeRef<JNodeString>(*jNode).string()) + "\"");
+            destination.add('"');
+            destination.add(m_jsonTranslator->toEscapeSequences(JNodeRef<JNodeString>(*jNode).string()));
+            destination.add('"');
             break;
         case JNodeType::boolean:
             destination.add(JNodeRef<JNodeBoolean>(*jNode).boolean() ? "true" : "false");
@@ -275,32 +277,34 @@ namespace JSONLib
         case JNodeType::object:
         {
             int commaCount = JNodeRef<JNodeObject>(*jNode).size() - 1;
-            destination.add("{");
+            destination.add('{');
             for (const auto &[key, jNodePtr] : JNodeRef<JNodeObject>(*jNode).objects())
             {
-                destination.add("\"" + m_jsonTranslator->toEscapeSequences(key) + "\"" + ":");
+                destination.add('"');
+                destination.add(m_jsonTranslator->toEscapeSequences(key));
+                destination.add("\":");
                 stringifyJNodes(&JNodeRef<JNodeObject>(*jNode)[key], destination);
                 if (commaCount-- > 0)
                 {
-                    destination.add(",");
+                    destination.add(',');
                 }
             }
-            destination.add("}");
+            destination.add('}');
             break;
         }
         case JNodeType::array:
         {
             int commaCount = JNodeRef<JNodeArray>(*jNode).size() - 1;
-            destination.add("[");
+            destination.add('[');
             for (auto &bNodeEntry : JNodeRef<JNodeArray>(*jNode).array())
             {
                 stringifyJNodes(bNodeEntry.get(), destination);
                 if (commaCount-- > 0)
                 {
-                    destination.add(",");
+                    destination.add(',');
                 }
             }
-            destination.add("]");
+            destination.add(']');
             break;
         }
         default:
@@ -323,7 +327,7 @@ namespace JSONLib
         }
     }
     /// <summary>
-    /// Strip all whitespace from a JSON source .
+    /// Strip all whitespace from a JSON source.
     /// </summary>
     /// <param name="source">Source of JSON</param>
     /// <param name="destinaton">Destination for stripped JSON</param>
@@ -336,11 +340,13 @@ namespace JSONLib
             {
                 if (source.current() == '"')
                 {
-                    destination.add("\"" + extractString(source) + "\"");
+                    destination.add('"');
+                    destination.add(extractString(source));
+                    destination.add('"');
                 }
                 else
                 {
-                    destination.add(std::string(1, source.current()));
+                    destination.add(source.current());
                     source.next();
                 }
             }
