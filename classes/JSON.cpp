@@ -42,7 +42,6 @@ namespace JSONLib
     // ========================
     // PRIVATE STATIC VARIABLES
     // ========================
-    static JSONTranslator defaultTranslator;
     static std::set<char> validNumeric{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', '-', '+', 'E', 'e'};
     // =======================
     // PUBLIC STATIC VARIABLES
@@ -319,11 +318,11 @@ namespace JSONLib
     {
         if (translator == nullptr)
         {
-            m_jsonTranslator = &defaultTranslator;
+            m_jsonTranslator = std::make_unique<JSONTranslator> ();
         }
         else
         {
-            m_jsonTranslator = translator;
+            m_jsonTranslator.reset(translator);
         }
     }
     /// <summary>
