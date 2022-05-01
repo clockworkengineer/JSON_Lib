@@ -322,16 +322,12 @@ namespace JSONLib
             m_jsonTranslator = translator;
         }
     }
-    // ==============
-    // PUBLIC METHODS
-    // ==============
     /// <summary>
     /// Strip all whitespace from a JSON source .
     /// </summary>
     /// <param name="source">Source of JSON</param>
     /// <param name="destinaton">Destination for stripped JSON</param>
-    /// <returns>Whitespace free JSON.</returns>
-    void JSON::strip(ISource &source, IDestination &destination)
+    void JSON::stripAllWhiteSpace(ISource &source, IDestination &destination)
     {
         while (source.more())
         {
@@ -349,6 +345,30 @@ namespace JSONLib
                 }
             }
         }
+    }
+    // ==============
+    // PUBLIC METHODS
+    // ==============
+    /// <summary>
+    /// Strip all whitespace from a JSON source .
+    /// </summary>
+    /// <param name="source">Source of JSON</param>
+    /// <param name="destinaton">Destination for stripped JSON</param>
+    void JSON::strip(ISource &source, IDestination &destination)
+    {
+        stripAllWhiteSpace(source, destination);
+    }
+    void JSON::strip(ISource &source, IDestination &&destination)
+    {
+        stripAllWhiteSpace(source, destination);
+    }
+    void JSON::strip(ISource &&source, IDestination &destination)
+    {
+        stripAllWhiteSpace(source, destination);
+    }
+    void JSON::strip(ISource &&source, IDestination &&destination)
+    {
+        stripAllWhiteSpace(source, destination);
     }
     /// <summary>
     /// Create JNode structure by recursively parsing JSON on the source stream.

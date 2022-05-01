@@ -82,6 +82,9 @@ namespace JSONLib
         void stringify(IDestination &destination);
         void stringify(IDestination &&destination);
         void strip(ISource &source, IDestination &destination);
+        void strip(ISource &source, IDestination &&destination);
+        void strip(ISource &&source, IDestination &destination);
+        void strip(ISource &&source, IDestination &&destination);
         JNode &operator*() { return (*m_jNodeRoot); }
         // ================
         // PUBLIC VARIABLES
@@ -105,6 +108,7 @@ namespace JSONLib
         JNodePtr parseArray(ISource &source);
         JNodePtr parseJNodes(ISource &source);
         void stringifyJNodes(JNode *jNode, IDestination &destination);
+        void stripAllWhiteSpace(ISource &source, IDestination &destination);
         void setTranslator(ITranslator *translator);
         // =================
         // PRIVATE VARIABLES
