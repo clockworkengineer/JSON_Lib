@@ -52,7 +52,7 @@ namespace JSONLib
         // =================
         // PRIVATE VARIABLES
         // =================
-        std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_utf8Toutf16;
+        std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_UTF16;
         std::u16string m_utf16workBuffer;
         std::string m_utf8workBuffer;
         std::map<char, std::u16string> m_fromMap;

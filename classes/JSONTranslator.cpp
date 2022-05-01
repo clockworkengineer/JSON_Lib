@@ -134,7 +134,7 @@ namespace JSONLib
             }
             index++; 
         }
-        return (m_utf8Toutf16.to_bytes(m_utf16workBuffer));
+        return (m_UTF16.to_bytes(m_utf16workBuffer));
     }
     /// <summary>
     /// Convert a string from raw charater values (UTF8) so that it has character
@@ -145,7 +145,7 @@ namespace JSONLib
     std::string JSONTranslator::toEscapeSequences(std::string const &utf8String)
     {
         m_utf8workBuffer.clear();
-        for (char16_t utf16char : m_utf8Toutf16.from_bytes(utf8String))
+        for (char16_t utf16char : m_UTF16.from_bytes(utf8String))
         {
             // Control characters
             if (m_toMap.count(utf16char) > 0)
@@ -155,7 +155,7 @@ namespace JSONLib
             // ASCII
             else if ((utf16char > 0x1F) && (utf16char < 0x80))
             {
-                m_utf8workBuffer += (char)utf16char;
+                m_utf8workBuffer += static_cast<char>(utf16char);
             }
             // UTF8 escaped
             else
