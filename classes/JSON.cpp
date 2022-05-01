@@ -338,15 +338,14 @@ namespace JSONLib
             source.ignoreWS();
             if (source.more())
             {
+                destination.add(source.current());
                 if (source.current() == '"')
                 {
-                    destination.add('"');
                     destination.add(extractString(source));
                     destination.add('"');
                 }
                 else
                 {
-                    destination.add(source.current());
                     source.next();
                 }
             }
