@@ -77,7 +77,7 @@ namespace JSONLib
         {
             return (static_cast<int>(m_value.size()));
         }
-        JNode &operator[](const std::string &key) const 
+        JNode &operator[](const std::string &key) const
         {
             if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const Entry &entry) -> bool
                                        { return (entry.first == key); });
@@ -202,11 +202,53 @@ namespace JSONLib
         }
     };
     //
-    //
     // Convert base JNode reference
+    //
     template <typename T>
     T &JNodeRef(JNode &jNode)
     {
+        if constexpr (std::is_same_v<T, JNodeString>)
+        {
+            if (jNode.nodeType != JNodeType::string)
+            {
+                throw JNode::Error("JNode Error: Node not a string.");
+            }
+        }
+        else if constexpr (std::is_same_v<T, JNodeNumber>)
+        {
+            if (jNode.nodeType != JNodeType::number)
+            {
+                throw JNode::Error("JNode Error: Node not a number.");
+            }
+        }
+        else if constexpr (std::is_same_v<T, JNodeArray>)
+        {
+            if (jNode.nodeType != JNodeType::array)
+            {
+                throw JNode::Error("JNode Error: Node not an array.");
+            }
+        }
+        else if constexpr (std::is_same_v<T, JNodeObject>)
+        {
+            if (jNode.nodeType != JNodeType::object)
+            {
+                throw JNode::Error("JNode Error: Node not an object.");
+            }
+        }
+        else if constexpr (std::is_same_v<T, JNodeBoolean>)
+        {
+            if (jNode.nodeType != JNodeType::boolean)
+            {
+                throw JNode::Error("JNode Error: Node not an boolean.");
+            }
+        }
+        else if constexpr (std::is_same_v<T, JNodeNull>)
+        {
+            if (jNode.nodeType != JNodeType::null)
+            {
+                throw JNode::Error("JNode Error: Node not a null.");
+            }
+        }
         return (static_cast<T &>(jNode));
     }
     //
@@ -214,19 +256,11 @@ namespace JSONLib
     //
     inline JNode &JNode::operator[](const std::string &key) // Object
     {
-        if (nodeType == JNodeType::object)
-        {
-            return (JNodeRef<JNodeObject>(*this)[key]);
-        }
-        throw JNode::Error("JNode Error : Node not an object.");
+        return (JNodeRef<JNodeObject>(*this)[key]);
     }
     inline JNode &JNode::operator[](int index) // Array
     {
-        if (nodeType == JNodeType::array)
-        {
-            return (JNodeRef<JNodeArray>(*this)[index]);
-        }
-        throw JNode::Error("JNode Error: Node not a list.");
+        return (JNodeRef<JNodeArray>(*this)[index]);
     }
 
 } // namespace JSONLib

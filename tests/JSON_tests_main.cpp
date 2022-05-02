@@ -290,7 +290,7 @@ TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]")
   }
   SECTION("String reference.", "[JSON][JNode][Reference]")
   {
-    BufferSource jsonSource{"0123456789"};
+    BufferSource jsonSource{"\"0123456789\""};
     json.parse(jsonSource);
     REQUIRE(JNodeRef<JNodeString>(*json).string() == "0123456789");
   }
