@@ -430,3 +430,12 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
     REQUIRE(destination.getBuffer() == stripWhiteSpace(json, jsonBuffer));
   }
 }
+
+TEST_CASE("Check white space stripping with various scenarios.", "[JSON][Parse][Strip]")
+{
+  JSON json;
+  SECTION("Overlapping file source/destination.", "[JSON][Parse][Strip]")
+  {
+      REQUIRE(false);
+  }
+}

@@ -148,7 +148,7 @@ namespace JSONLib
             doubleValue = std::strtod(m_value.c_str(), &end);
             return (*end == '\0'); // If not all characters used then not success
         }
-        const std::string number() const
+        std::string number() const
         {
             return (m_value);
         }
@@ -164,7 +164,7 @@ namespace JSONLib
         explicit JNodeString(const std::string &value) : JNode(JNodeType::string), m_value(value)
         {
         }
-        const std::string string() const
+        std::string string() const
         {
             return (m_value);
         }
