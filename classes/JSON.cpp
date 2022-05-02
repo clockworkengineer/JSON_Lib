@@ -27,7 +27,6 @@
 //
 // C++ STL
 //
-#include <set>
 // =========
 // NAMESPACE
 // =========
@@ -42,13 +41,22 @@ namespace JSONLib
     // ========================
     // PRIVATE STATIC VARIABLES
     // ========================
-    static std::set<char> validNumeric{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.', '-', '+', 'E', 'e'};
     // =======================
     // PUBLIC STATIC VARIABLES
     // =======================
     // ===============
     // PRIVATE METHODS
     // ===============
+    /// <summary>
+    /// Is a valid numerical character.
+    /// </summary>
+    /// <param name="ch">Numeric character.</param>
+    /// <returns>true if a character use in a number</returns>
+    static bool isValidNumeric(char ch)
+    {
+        // Includes possible sign, decimal point or exponent
+        return (std::isdigit(ch) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
+    }
     /// <summary>
     /// Extract a string from a JSON encoded source stream.
     /// </summary>
@@ -94,7 +102,7 @@ namespace JSONLib
         m_workBuffer.clear();
         m_workBuffer += source.current();
         source.next();
-        while (source.more() && validNumeric.count(source.current()) > 0)
+        while (source.more() && isValidNumeric(source.current()))
         {
             m_workBuffer += source.current();
             source.next();
