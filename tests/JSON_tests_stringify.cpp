@@ -146,14 +146,14 @@ TEST_CASE("Stringify to a file and check result.", "[JSON][Stringify][Exceptions
         REQUIRE(readJSONFromFile(prefixTestDataPath(kGeneratedJSONFile)) == expected);
     }
 }
-// // TEST_CASE("Stringify generated exceptions", "[JSON][Stringify][Exceptions]")
-// // {
-// //     JSON json;
-// //     SECTION("Stringify passed nullptr", "[JSON][Stringify][Exceptions]")
-// //     {
-// //         REQUIRE_THROWS_AS(json.stringifyToBuffer(JNodePtr(nullptr)), std::invalid_argument);
-// //         REQUIRE_THROWS_WITH(json.stringifyToBuffer(JNodePtr(nullptr)), "Nullptr passed as JNode root to be stringified.");
-// //     }
+TEST_CASE("Stringify generated exceptions", "[JSON][Stringify][Exceptions]")
+{
+    JSON json;
+    SECTION("Stringify has no JSON to process", "[JSON][Stringify][Exceptions]")
+    {
+        REQUIRE_THROWS_AS(json.stringify(BufferDestination {}), std::runtime_error);
+        REQUIRE_THROWS_WITH(json.stringify(BufferDestination {}), "No JSON to stringify.");
+    }
 // //     SECTION("Stringify passed invalid JNode type", "[JSON][Stringify][Exceptions]")
 // //     {
 // //         REQUIRE_THROWS_AS(json.stringifyToBuffer(JNodePtr(new JNode())), std::runtime_error);
@@ -169,7 +169,7 @@ TEST_CASE("Stringify to a file and check result.", "[JSON][Stringify][Exceptions
 // //         REQUIRE_THROWS_AS(json.stringifyToFile(JNodePtr(new JNode()), ""), std::invalid_argument);
 // //         REQUIRE_THROWS_WITH(json.stringifyToFile(JNodePtr(new JNode()), ""), "Empty file name passed to be stringified.");
 // //     }
-// // }
+}
 TEST_CASE("JSON object for stringification of a list of example JSON files.", "[JSON][Stringify]")
 {
     JSON json;

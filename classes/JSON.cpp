@@ -318,7 +318,7 @@ namespace JSONLib
     {
         if (translator == nullptr)
         {
-            m_jsonTranslator = std::make_unique<JSONTranslator> ();
+            m_jsonTranslator = std::make_unique<JSONTranslator>();
         }
         else
         {
@@ -394,10 +394,18 @@ namespace JSONLib
     /// <returns></returns>
     void JSON::stringify(IDestination &destination)
     {
+        if (m_jNodeRoot.get() == nullptr)
+        {
+            throw std::runtime_error("No JSON to stringify.");
+        }
         stringifyJNodes(JNodeRef<JNode>(*m_jNodeRoot), destination);
     }
     void JSON::stringify(IDestination &&destination)
     {
+        if (m_jNodeRoot.get() == nullptr)
+        {
+            throw std::runtime_error("No JSON to stringify.");
+        }
         stringifyJNodes(JNodeRef<JNode>(*m_jNodeRoot), destination);
     }
 } // namespace JSONLib
