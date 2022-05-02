@@ -255,34 +255,34 @@ namespace JSONLib
     /// <param name=jNode>JNode structure to be traversed</param>
     /// <param name=destination>destination stream for stringified JSON</param>
     /// <returns></returns>
-    void JSON::stringifyJNodes(JNode *jNode, IDestination &destination)
+    void JSON::stringifyJNodes(JNode &jNode, IDestination &destination)
     {
-        switch (jNode->nodeType)
+        switch (jNode.nodeType)
         {
         case JNodeType::number:
-            destination.add(JNodeRef<JNodeNumber>(*jNode).number());
+            destination.add(JNodeRef<JNodeNumber>(jNode).number());
             break;
         case JNodeType::string:
             destination.add('"');
-            destination.add(m_jsonTranslator->toEscapeSequences(JNodeRef<JNodeString>(*jNode).string()));
+            destination.add(m_jsonTranslator->toEscapeSequences(JNodeRef<JNodeString>(jNode).string()));
             destination.add('"');
             break;
         case JNodeType::boolean:
-            destination.add(JNodeRef<JNodeBoolean>(*jNode).boolean() ? "true" : "false");
+            destination.add(JNodeRef<JNodeBoolean>(jNode).boolean() ? "true" : "false");
             break;
         case JNodeType::null:
             destination.add("null");
             break;
         case JNodeType::object:
         {
-            int commaCount = JNodeRef<JNodeObject>(*jNode).size() - 1;
+            int commaCount = JNodeRef<JNodeObject>(jNode).size() - 1;
             destination.add('{');
-            for (const auto &[key, jNodePtr] : JNodeRef<JNodeObject>(*jNode).objects())
+            for (const auto &[key, jNodePtr] : JNodeRef<JNodeObject>(jNode).objects())
             {
                 destination.add('"');
                 destination.add(m_jsonTranslator->toEscapeSequences(key));
                 destination.add("\":");
-                stringifyJNodes(&JNodeRef<JNodeObject>(*jNode)[key], destination);
+                stringifyJNodes(JNodeRef<JNodeObject>(jNode)[key], destination);
                 if (commaCount-- > 0)
                 {
                     destination.add(',');
@@ -293,11 +293,11 @@ namespace JSONLib
         }
         case JNodeType::array:
         {
-            int commaCount = JNodeRef<JNodeArray>(*jNode).size() - 1;
+            int commaCount = JNodeRef<JNodeArray>(jNode).size() - 1;
             destination.add('[');
-            for (auto &bNodeEntry : JNodeRef<JNodeArray>(*jNode).array())
+            for (auto &bNodeEntry : JNodeRef<JNodeArray>(jNode).array())
             {
-                stringifyJNodes(bNodeEntry.get(), destination);
+                stringifyJNodes(*bNodeEntry.get(), destination);
                 if (commaCount-- > 0)
                 {
                     destination.add(',');
@@ -394,10 +394,10 @@ namespace JSONLib
     /// <returns></returns>
     void JSON::stringify(IDestination &destination)
     {
-        stringifyJNodes(m_jNodeRoot.get(), destination);
+        stringifyJNodes(*m_jNodeRoot.get(), destination);
     }
     void JSON::stringify(IDestination &&destination)
     {
-        stringifyJNodes(m_jNodeRoot.get(), destination);
+        stringifyJNodes(*m_jNodeRoot.get(), destination);
     }
 } // namespace JSONLib

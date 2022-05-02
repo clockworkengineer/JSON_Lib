@@ -107,7 +107,7 @@ namespace JSONLib
         JNodePtr parseObject(ISource &source);
         JNodePtr parseArray(ISource &source);
         JNodePtr parseJNodes(ISource &source);
-        void stringifyJNodes(JNode *jNode, IDestination &destination);
+        void stringifyJNodes(JNode &jNode, IDestination &destination);
         void stripAllWhiteSpace(ISource &source, IDestination &destination);
         void setTranslator(ITranslator *translator);
         // =================
