@@ -297,7 +297,7 @@ namespace JSONLib
             destination.add('[');
             for (auto &bNodeEntry : JNodeRef<JNodeArray>(jNode).array())
             {
-                stringifyJNodes(*bNodeEntry.get(), destination);
+                stringifyJNodes(JNodeRef<JNode>(*bNodeEntry), destination);
                 if (commaCount-- > 0)
                 {
                     destination.add(',');
@@ -394,10 +394,10 @@ namespace JSONLib
     /// <returns></returns>
     void JSON::stringify(IDestination &destination)
     {
-        stringifyJNodes(*m_jNodeRoot.get(), destination);
+        stringifyJNodes(JNodeRef<JNode>(*m_jNodeRoot), destination);
     }
     void JSON::stringify(IDestination &&destination)
     {
-        stringifyJNodes(*m_jNodeRoot.get(), destination);
+        stringifyJNodes(JNodeRef<JNode>(*m_jNodeRoot), destination);
     }
 } // namespace JSONLib
