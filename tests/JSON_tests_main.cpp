@@ -108,7 +108,7 @@ TEST_CASE("ISource (File) interface.", "[JSON][Parse][ISource]")
     REQUIRE_FALSE(!source.more());
     REQUIRE((char)source.current() == '\n');
   }
-  SECTION("Create FileSource with non existants file.", "[JSON][Parse][ISource][Exception]")
+  SECTION("Create FileSource with non existant file.", "[JSON][Parse][ISource][Exception]")
   {
     REQUIRE_THROWS_AS(FileSource(prefixTestDataPath(kNonExistantJSONFile)), std::runtime_error);
     REQUIRE_THROWS_WITH(FileSource(prefixTestDataPath(kNonExistantJSONFile)), "JSON file input stream failed to open or does not exist.");
