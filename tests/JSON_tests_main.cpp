@@ -415,14 +415,14 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Ref
 TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
 {
   JSON json;
-  auto testFile = GENERATE(values<std::string>({"./testData/testfile001.json",
-                                                "./testData/testfile002.json",
-                                                "./testData/testfile003.json",
-                                                "./testData/testfile004.json",
-                                                "./testData/testfile005.json"}));
+  auto testFile = GENERATE(values<std::string>({"testfile001.json",
+                                                "testfile002.json",
+                                                "testfile003.json",
+                                                "testfile004.json",
+                                                "testfile005.json"}));
   SECTION("Stripped should be the same as parsed then stringified JSON", "[JSON][Parse][Strip]")
   {
-    const std::string jsonBuffer{readJSONFromFile(testFile)};
+    const std::string jsonBuffer{readJSONFromFile(prefixTestDataPath(testFile))};
     BufferSource jsonSource{jsonBuffer};
     BufferDestination destination;
     json.parse(jsonSource);

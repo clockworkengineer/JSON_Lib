@@ -173,14 +173,14 @@ TEST_CASE("Stringify generated exceptions", "[JSON][Stringify][Exceptions]")
 TEST_CASE("JSON object for stringification of a list of example JSON files.", "[JSON][Stringify]")
 {
     JSON json;
-    auto testFile = GENERATE(values<std::string>({"./testData/testfile001.json",
-                                                  "./testData/testfile002.json",
-                                                  "./testData/testfile003.json",
-                                                  "./testData/testfile004.json",
-                                                  "./testData/testfile005.json"}));
+    auto testFile = GENERATE(values<std::string>({"testfile001.json",
+                                                  "testfile002.json",
+                                                  "testfile003.json",
+                                                  "testfile004.json",
+                                                  "testfile005.json"}));
     SECTION("Stringify to  buffer and check value", "[JSON][Stringify]")
     {
-        std::string jsonFileBuffer{readJSONFromFile(testFile)};
+        std::string jsonFileBuffer{readJSONFromFile(prefixTestDataPath(testFile))};
         BufferSource jsonSource{jsonFileBuffer};
         BufferDestination jsonDestinaton;
         json.parse(jsonSource);
@@ -190,7 +190,7 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.", "[
     SECTION("Stringify to file and check value", "[JSON][Stringify]")
     {
         std::filesystem::remove(prefixTestDataPath(kGeneratedJSONFile));
-        std::string jsonFileBuffer{readJSONFromFile(testFile)};
+        std::string jsonFileBuffer{readJSONFromFile(prefixTestDataPath(testFile))};
         BufferSource jsonSource{jsonFileBuffer};
         FileDestination jsonDestination{prefixTestDataPath(kGeneratedJSONFile)};
         json.parse(jsonSource);

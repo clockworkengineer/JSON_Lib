@@ -225,15 +225,15 @@ TEST_CASE("JSON object for parse checking various whitespace characters are igno
 TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Parse]")
 {
     JSON json;
-    auto testFile = GENERATE(values<std::string>({"./testData/testfile001.json",
-                                                  "./testData/testfile002.json",
-                                                  "./testData/testfile003.json",
-                                                  "./testData/testfile004.json",
-                                                  "./testData/testfile005.json"}));
+    auto testFile = GENERATE(values<std::string>({"testfile001.json",
+                                                  "testfile002.json",
+                                                  "testfile003.json",
+                                                  "testfile004.json",
+                                                  "testfile005.json"}));
 
     SECTION("Parse from buffer", "[JSON][Parse]")
     {
-        BufferSource jsonSource{readJSONFromFile(testFile)};
+        BufferSource jsonSource{readJSONFromFile(prefixTestDataPath(testFile))};
         REQUIRE_NOTHROW(json.parse(jsonSource));
         jsonSource.reset();
         json.parse(jsonSource);
@@ -241,7 +241,7 @@ TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Pars
     }
     SECTION("Parse from file directly", "[JSON][Parse]")
     {
-        FileSource jsonSource{testFile};
+        FileSource jsonSource{prefixTestDataPath(testFile)};
         REQUIRE_NOTHROW(json.parse(jsonSource));
         jsonSource.reset();
         json.parse(jsonSource);
