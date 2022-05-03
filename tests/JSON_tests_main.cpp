@@ -420,22 +420,27 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
                                                 "testfile003.json",
                                                 "testfile004.json",
                                                 "testfile005.json"}));
-  SECTION("Stripped should be the same as parsed then stringified JSON", "[JSON][Parse][Strip]")
+  SECTION("Stripped (Buffer) should be the same as parsed then stringified JSON", "[JSON][Parse][Strip]")
   {
-    const std::string jsonBuffer{readJSONFromFile(prefixTestDataPath(testFile))};
-    BufferSource jsonSource{jsonBuffer};
-    BufferDestination destination;
+    BufferSource jsonSource{readJSONFromFile(prefixTestDataPath(testFile))};
+    BufferDestination jsonDestination;
     json.parse(jsonSource);
-    json.stringify(destination);
-    REQUIRE(destination.getBuffer() == stripWhiteSpace(json, jsonBuffer));
+    json.stringify(jsonDestination);
+    jsonSource.reset();
+    BufferDestination strippedDestination;
+    json.strip(jsonSource, strippedDestination);
+    REQUIRE(jsonDestination.getBuffer() == strippedDestination.getBuffer());
   }
-}
-
-TEST_CASE("Check white space stripping with various scenarios.", "[JSON][Parse][Strip]")
-{
-  JSON json;
-  SECTION("Overlapping file source/destination.", "[JSON][Parse][Strip]")
+  SECTION("Stripped (File) should be the same as parsed then stringified JSON", "[JSON][Parse][Strip]")
   {
-      REQUIRE(false);
+    std::filesystem::remove(prefixTestDataPath(kGeneratedJSONFile));
+    FileSource jsonSource{prefixTestDataPath(testFile)};
+    BufferDestination jsonDestination;
+    json.parse(jsonSource);
+    json.stringify(jsonDestination);
+    jsonSource.reset();
+    FileDestination strippedDestination{prefixTestDataPath(kGeneratedJSONFile)};
+    json.strip(jsonSource, strippedDestination);
+    REQUIRE(jsonDestination.getBuffer() == readJSONFromFile(prefixTestDataPath(kGeneratedJSONFile)));
   }
 }
