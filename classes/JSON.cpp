@@ -55,7 +55,7 @@ namespace JSONLib
     static bool isValidNumeric(char ch)
     {
         // Includes possible sign, decimal point or exponent
-        return (std::isdigit(ch) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
+        return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
     }
     /// <summary>
     /// Extract a string from a JSON encoded source stream.
