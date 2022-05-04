@@ -48,6 +48,12 @@ TEST_CASE("JSON object for parse of simple types (number,string,boolean,null).",
         json.parse(jsonSource);
         REQUIRE((*json).nodeType == JNodeType::null);
     }
+    SECTION("Parse an empty string", "[JSON][Parse]")
+    {
+        BufferSource jsonSource{"\"\""};
+        json.parse(jsonSource);
+        REQUIRE((*json).nodeType == JNodeType::string);
+    }
 }
 TEST_CASE("JSON object for parse of simple types and check values.", "[JSON][Parse]")
 {
@@ -109,6 +115,33 @@ TEST_CASE("JSON object for parse of collection types (array,object) ", "[JSON][P
         BufferSource jsonSource{"[777,9000,\"apples\"]"};
         json.parse(jsonSource);
         REQUIRE((*json).nodeType == JNodeType::array);
+    }
+    SECTION("Parse an empty array ([]) ", "[JSON][Parse]")
+    {
+        BufferSource jsonSource{"[]"};
+        json.parse(jsonSource);
+        REQUIRE((*json).nodeType == JNodeType::array);
+    }
+    SECTION("Parse an empty object ({}) ", "[JSON][Parse]")
+    {
+        BufferSource jsonSource{"{}"};
+        json.parse(jsonSource);
+        REQUIRE((*json).nodeType == JNodeType::object);
+    }
+    SECTION("Parse an nested empty arrays ([[], [], []]) ", "[JSON][Parse]")
+    {
+        BufferSource jsonSource{"[[], [], []]"};
+        REQUIRE_NOTHROW(json.parse(jsonSource));
+    }
+    SECTION("Parse an nested empty objects ([{}, {}, {}]) ", "[JSON][Parse]")
+    {
+        BufferSource jsonSource{"[[], [], []]"};
+        REQUIRE_NOTHROW(json.parse(jsonSource));
+    }
+    SECTION("Parse an nested empty objects/arrays ([{}, [], {},   [], {}, []]) ", "[JSON][Parse]")
+    {
+        BufferSource jsonSource{"[{}, [], {},   [], {}, []]"};
+        REQUIRE_NOTHROW(json.parse(jsonSource));
     }
 }
 TEST_CASE("JSON object for parse of collection types and check values", "[JSON][Parse]")
@@ -301,6 +334,13 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]")
     SECTION("Parse object with missing closing '}'.", "[JSON][Parse]")
     {
         BufferSource jsonSource{"{  \"one\" : 18987"};
+        REQUIRE_THROWS_AS(json.parse(jsonSource), JSON::SyntaxError);
+        jsonSource.reset();
+        REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON syntax error detected.");
+    }
+    SECTION("Parse an nested objects ({ {} }) ", "[JSON][Parse]")
+    {
+        BufferSource jsonSource{"{{}}"};
         REQUIRE_THROWS_AS(json.parse(jsonSource), JSON::SyntaxError);
         jsonSource.reset();
         REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON syntax error detected.");

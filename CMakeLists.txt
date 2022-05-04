@@ -41,6 +41,10 @@ target_include_directories(${JSON_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/inc
 
 add_subdirectory(tests)
 
+# Add exmaples
+
+add_subdirectory(examples)
+
 # install
 
 install(TARGETS ${JSON_LIBRARY_NAME} DESTINATION lib)

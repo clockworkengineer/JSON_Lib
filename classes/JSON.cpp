@@ -178,15 +178,19 @@ namespace JSONLib
         {
             source.next();
             source.ignoreWS();
-            std::string key = m_jsonTranslator->fromEscapeSequences(extractString(source));
-            source.ignoreWS();
-            if (source.current() != ':')
+            if (source.current() != '}')
             {
-                throw JSON::SyntaxError();
+                std::string key = m_jsonTranslator->fromEscapeSequences(extractString(source));
+                source.ignoreWS();
+                if (source.current() != ':')
+                {
+                    throw JSON::SyntaxError();
+                }
+                source.next();
+                source.ignoreWS();
+
+                objects.emplace_back(key, parseJNodes(source));
             }
-            source.next();
-            source.ignoreWS();
-            objects.emplace_back(key, parseJNodes(source));
             source.ignoreWS();
         } while (source.current() == ',');
         if (source.current() != '}')
@@ -208,7 +212,10 @@ namespace JSONLib
         {
             source.next();
             source.ignoreWS();
-            array.emplace_back(parseJNodes(source));
+            if (source.current() != ']')
+            {
+                array.emplace_back(parseJNodes(source));
+            }
             source.ignoreWS();
         } while (source.current() == ',');
         if (source.current() != ']')
