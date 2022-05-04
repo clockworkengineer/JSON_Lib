@@ -25,4 +25,4 @@ foreach( EXAMPLE_PROGRAM ${EXAMPLE_SOURCES} )
     install(TARGETS ${EXAMPLE_TARGET} DESTINATION bin)
 endforeach( EXAMPLE_PROGRAM ${EXAMPLE_SOURCES} )
 
-add_custom_command(TARGET parse_json_file POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/testData $<CONFIG>/testData)
+add_custom_command(TARGET parse_json_files POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/testData $<CONFIG>/testData)
