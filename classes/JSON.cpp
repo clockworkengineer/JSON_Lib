@@ -18,8 +18,6 @@
 // =================
 #include "JSONConfig.hpp"
 #include "JSON.hpp"
-#include "JSONSources.hpp"
-#include "JSONDestinations.hpp"
 #include "JSONTranslator.hpp"
 // ====================
 // CLASS IMPLEMENTATION
@@ -188,7 +186,6 @@ namespace JSONLib
                 }
                 source.next();
                 source.ignoreWS();
-
                 objects.emplace_back(key, parseJNodes(source));
             }
             source.ignoreWS();
@@ -208,16 +205,20 @@ namespace JSONLib
     JNodePtr JSON::parseArray(ISource &source)
     {
         std::vector<JNodePtr> array;
-        do
+        source.next();
+        source.ignoreWS();
+        if (source.current() != ']')
         {
-            source.next();
+            array.emplace_back(parseJNodes(source));
             source.ignoreWS();
-            if (source.current() != ']')
+            while (source.current() == ',')
             {
+                source.next();
+                source.ignoreWS();
                 array.emplace_back(parseJNodes(source));
+                source.ignoreWS();
             }
-            source.ignoreWS();
-        } while (source.current() == ',');
+        }
         if (source.current() != ']')
         {
             throw JSON::SyntaxError();
