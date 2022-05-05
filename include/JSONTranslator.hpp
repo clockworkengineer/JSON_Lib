@@ -14,7 +14,7 @@ namespace JSONLib
     // ================
     // CLASS DEFINITION
     // ================
-    class JSONTranslator : public JSON::ITranslator
+    class JSONTranslator : public JSONLib::ITranslator
     {
     public:
         // ==========================

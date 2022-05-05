@@ -22,37 +22,37 @@ TEST_CASE("JSON object for parse of simple types (number,string,boolean,null).",
     {
         BufferSource jsonSource{"\"example string\""};
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::string);
+        REQUIRE((json.root()).nodeType == JNodeType::string);
     }
     SECTION("Parse an number (6767)", "[JSON][Parse]")
     {
         BufferSource jsonSource{"6767"};
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::number);
+        REQUIRE((json.root()).nodeType == JNodeType::number);
     }
     SECTION("Parse an boolean (true)", "[JSON][Parse]")
     {
         BufferSource jsonSource{"true"};
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::boolean);
+        REQUIRE((json.root()).nodeType == JNodeType::boolean);
     }
     SECTION("Parse an boolean (false)", "[JSON][Parse]")
     {
         BufferSource jsonSource{"false"};
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::boolean);
+        REQUIRE((json.root()).nodeType == JNodeType::boolean);
     }
     SECTION("Parse an null", "[JSON][Parse]")
     {
         BufferSource jsonSource{"null"};
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::null);
+        REQUIRE((json.root()).nodeType == JNodeType::null);
     }
     SECTION("Parse an empty string", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"\""};
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::string);
+        REQUIRE((json.root()).nodeType == JNodeType::string);
     }
 }
 TEST_CASE("JSON object for parse of simple types and check values.", "[JSON][Parse]")
@@ -62,43 +62,43 @@ TEST_CASE("JSON object for parse of simple types and check values.", "[JSON][Par
     {
         BufferSource jsonSource{"\"example string\""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == "example string");
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == "example string");
     }
     SECTION("Parse an string (another example string) and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"another example string\""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == "another example string");
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == "another example string");
     }
     SECTION("Parse an number (6767) and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"6767"};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeNumber>(*json).number() == "6767");
+        REQUIRE(JNodeRef<JNodeNumber>(json.root()).number() == "6767");
     }
     SECTION("Parse an number (190000) and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"190000"};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeNumber>(*json).number() == "190000");
+        REQUIRE(JNodeRef<JNodeNumber>(json.root()).number() == "190000");
     }
     SECTION("Parse an boolean (true) and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"true"};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeBoolean>(*json).boolean() == true);
+        REQUIRE(JNodeRef<JNodeBoolean>(json.root()).boolean() == true);
     }
     SECTION("Parse an boolean (false) and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"false"};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeBoolean>(*json).boolean() == false);
+        REQUIRE(JNodeRef<JNodeBoolean>(json.root()).boolean() == false);
     }
     SECTION("Parse an null and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"null"};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeNull>(*json).null() == nullptr);
+        REQUIRE(JNodeRef<JNodeNull>(json.root()).null() == nullptr);
     }
 }
 TEST_CASE("JSON object for parse of collection types (array,object) ", "[JSON][Parse]")
@@ -108,25 +108,25 @@ TEST_CASE("JSON object for parse of collection types (array,object) ", "[JSON][P
     {
         BufferSource jsonSource{"{\"name\":\"Robert\",\"Age\":15}"};
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::object);
+        REQUIRE((json.root()).nodeType == JNodeType::object);
     }
     SECTION("Parse an array ([ 777,9000,\"apples\"]) ", "[JSON][Parse]")
     {
         BufferSource jsonSource{"[777,9000,\"apples\"]"};
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::array);
+        REQUIRE((json.root()).nodeType == JNodeType::array);
     }
     SECTION("Parse an empty array ([]) ", "[JSON][Parse]")
     {
         BufferSource jsonSource{"[]"};
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::array);
+        REQUIRE((json.root()).nodeType == JNodeType::array);
     }
     SECTION("Parse an empty object ({}) ", "[JSON][Parse]")
     {
         BufferSource jsonSource{"{}"};
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::object);
+        REQUIRE((json.root()).nodeType == JNodeType::object);
     }
     SECTION("Parse an nested empty arrays ([[], [], []]) ", "[JSON][Parse]")
     {
@@ -151,39 +151,39 @@ TEST_CASE("JSON object for parse of collection types and check values", "[JSON][
     {
         BufferSource jsonSource{"{\"Name\":\"Robert\",\"Age\":15}"};
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::object);
-        REQUIRE(JNodeRef<JNodeObject>(*json).size() == 2);
-        REQUIRE(JNodeRef<JNodeObject>(*json).contains("Name"));
-        REQUIRE(JNodeRef<JNodeObject>(*json).contains("Age"));
-        REQUIRE(JNodeRef<JNodeString>((*json)["Name"]).nodeType == JNodeType::string);
-        REQUIRE(JNodeRef<JNodeNumber>((*json)["Age"]).nodeType == JNodeType::number);
-        REQUIRE(JNodeRef<JNodeString>((*json)["Name"]).string() == "Robert");
-        REQUIRE(JNodeRef<JNodeNumber>((*json)["Age"]).number() == "15");
+        REQUIRE((json.root()).nodeType == JNodeType::object);
+        REQUIRE(JNodeRef<JNodeObject>(json.root()).size() == 2);
+        REQUIRE(JNodeRef<JNodeObject>(json.root()).contains("Name"));
+        REQUIRE(JNodeRef<JNodeObject>(json.root()).contains("Age"));
+        REQUIRE(JNodeRef<JNodeString>((json.root())["Name"]).nodeType == JNodeType::string);
+        REQUIRE(JNodeRef<JNodeNumber>((json.root())["Age"]).nodeType == JNodeType::number);
+        REQUIRE(JNodeRef<JNodeString>((json.root())["Name"]).string() == "Robert");
+        REQUIRE(JNodeRef<JNodeNumber>((json.root())["Age"]).number() == "15");
     }
     SECTION("Parse an array [777,9000,\"apples\"] and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"[777,9000,\"apples\"]"};
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::array);
-        REQUIRE(JNodeRef<JNodeArray>(*json).size() == 3);
-        REQUIRE(JNodeRef<JNodeNumber>((*json)[0]).nodeType == JNodeType::number);
-        REQUIRE(JNodeRef<JNodeNumber>((*json)[1]).nodeType == JNodeType::number);
-        REQUIRE(JNodeRef<JNodeString>((*json)[2]).nodeType == JNodeType::string);
-        REQUIRE(JNodeRef<JNodeNumber>((*json)[0]).number() == "777");
-        REQUIRE(JNodeRef<JNodeNumber>((*json)[1]).number() == "9000");
-        REQUIRE(JNodeRef<JNodeString>((*json)[2]).string() == "apples");
+        REQUIRE((json.root()).nodeType == JNodeType::array);
+        REQUIRE(JNodeRef<JNodeArray>(json.root()).size() == 3);
+        REQUIRE(JNodeRef<JNodeNumber>((json.root())[0]).nodeType == JNodeType::number);
+        REQUIRE(JNodeRef<JNodeNumber>((json.root())[1]).nodeType == JNodeType::number);
+        REQUIRE(JNodeRef<JNodeString>((json.root())[2]).nodeType == JNodeType::string);
+        REQUIRE(JNodeRef<JNodeNumber>((json.root())[0]).number() == "777");
+        REQUIRE(JNodeRef<JNodeNumber>((json.root())[1]).number() == "9000");
+        REQUIRE(JNodeRef<JNodeString>((json.root())[2]).string() == "apples");
     }
     SECTION("Parse object {\"City\":\"Southampton\",\"Population\":500000} and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"{\"City\":\"Southampton\",\"Population\":500000}"};
         json.parse(jsonSource);
-        checkObject(*json);
+        checkObject(json.root());
     }
     SECTION("Parse an array [\"Dog\",1964,true,null ] and check its value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"[\"Dog\",1964,true,null]"};
         json.parse(jsonSource);
-        checkArray(*json);
+        checkArray(json.root());
     }
 }
 TEST_CASE("JSON object for parse checking various whitespace characters are ignored.", "[JSON][Parse]")
@@ -194,65 +194,65 @@ TEST_CASE("JSON object for parse checking various whitespace characters are igno
     {
         BufferSource jsonSource{ws + "[" + ws + "\"Dog\"" + ws + "," + ws + "1964" + ws + "," + ws + "true" + ws + "," + ws + "null" + ws + "]"};
         json.parse(jsonSource);
-        checkArray(*json);
+        checkArray(json.root());
     }
     SECTION("Parse object {\"City\":\"Southampton\",\"Population\":500000} with no whitespace", "[JSON][Parse]")
     {
         BufferSource jsonSource{ws + "{" + ws + "\"City\"" + ws + ":" + ws + "\"Southampton\"" + ws + "," + ws + "\"Population\"" + ws + ":" + ws + "500000" + ws + "}"};
         json.parse(jsonSource);
-        checkObject(*json);
+        checkObject(json.root());
     }
     ws += " ";
     SECTION("Parse an array [\"Dog\",1964,true,null] with whitespace ' '.", "[JSON][Parse]")
     {
         BufferSource jsonSource{ws + "[" + ws + "\"Dog\"" + ws + "," + ws + "1964" + ws + "," + ws + "true" + ws + "," + ws + "null" + ws + "]"};
         json.parse(jsonSource);
-        checkArray(*json);
+        checkArray(json.root());
     }
     SECTION("Parse object {\"City\":\"Southampton\",\"Population\":500000} with whitespace ' '.", "[JSON][Parse]")
     {
         BufferSource jsonSource{ws + "{" + ws + "\"City\"" + ws + ":" + ws + "\"Southampton\"" + ws + "," + ws + "\"Population\"" + ws + ":" + ws + "500000" + ws + "}"};
         json.parse(jsonSource);
-        checkObject(*json);
+        checkObject(json.root());
     }
     ws += "\t";
     SECTION("Parse an array [\"Dog\",1964,true,null] with whitespace ' \\t'.", "[JSON][Parse]")
     {
         BufferSource jsonSource{ws + "[" + ws + "\"Dog\"" + ws + "," + ws + "1964" + ws + "," + ws + "true" + ws + "," + ws + "null" + ws + "]"};
         json.parse(jsonSource);
-        checkArray(*json);
+        checkArray(json.root());
     }
     SECTION("Parse object {\"City\":\"Southampton\",\"Population\":500000} with whitespace ' \\t'.", "[JSON][Parse]")
     {
         BufferSource jsonSource{ws + "{" + ws + "\"City\"" + ws + ":" + ws + "\"Southampton\"" + ws + "," + ws + "\"Population\"" + ws + ":" + ws + "500000" + ws + "}"};
         json.parse(jsonSource);
-        checkObject(*json);
+        checkObject(json.root());
     }
     ws += "\n";
     SECTION("Parse an array [\"Dog\",1964,true,null] with whitespace ' \\t\\n'.", "[JSON][Parse]")
     {
         BufferSource jsonSource{ws + "[" + ws + "\"Dog\"" + ws + "," + ws + "1964" + ws + "," + ws + "true" + ws + "," + ws + "null" + ws + "]"};
         json.parse(jsonSource);
-        checkArray(*json);
+        checkArray(json.root());
     }
     SECTION("Parse object {\"City\":\"Southampton\",\"Population\":500000} whitespace ' \\t\\n'.", "[JSON][Parse]")
     {
         BufferSource jsonSource{ws + "{" + ws + "\"City\"" + ws + ":" + ws + "\"Southampton\"" + ws + "," + ws + "\"Population\"" + ws + ":" + ws + "500000" + ws + "}"};
         json.parse(jsonSource);
-        checkObject(*json);
+        checkObject(json.root());
     }
     ws += "\r";
     SECTION("Parse an array [\"Dog\",1964,true,null] with whitespace ' \\t\\n\\r'.", "[JSON][Parse]")
     {
         BufferSource jsonSource{ws + "[" + ws + "\"Dog\"" + ws + "," + ws + "1964" + ws + "," + ws + "true" + ws + "," + ws + "null" + ws + "]"};
         json.parse(jsonSource);
-        checkArray(*json);
+        checkArray(json.root());
     }
     SECTION("Parse object {\"City\":\"Southampton\",\"Population\":500000} with whitespace ' \\t\\n\\r'.", "[JSON][Parse]")
     {
         BufferSource jsonSource{ws + "{" + ws + "\"City\"" + ws + ":" + ws + "\"Southampton\"" + ws + "," + ws + "\"Population\"" + ws + ":" + ws + "500000" + ws + "}"};
         json.parse(jsonSource);
-        checkObject(*json);
+        checkObject(json.root());
     }
 }
 TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Parse]")
@@ -270,7 +270,7 @@ TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Pars
         REQUIRE_NOTHROW(json.parse(jsonSource));
         jsonSource.reset();
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::object);
+        REQUIRE((json.root()).nodeType == JNodeType::object);
     }
     SECTION("Parse from file directly", "[JSON][Parse]")
     {
@@ -278,7 +278,7 @@ TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Pars
         REQUIRE_NOTHROW(json.parse(jsonSource));
         jsonSource.reset();
         json.parse(jsonSource);
-        REQUIRE((*json).nodeType == JNodeType::object);
+        REQUIRE((json.root()).nodeType == JNodeType::object);
     }
 }
 TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]")
@@ -353,72 +353,72 @@ TEST_CASE("JSON object for decoding of strings with escape characters.", "[JSON]
     {
         BufferSource jsonSource{"\"Test String \\t \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \t ");
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == "Test String \t ");
     }
     SECTION("Stringify JSON string with escapes '\\\"' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\\" \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \" ");
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == "Test String \" ");
     }
     SECTION("Stringify JSON string with escapes '\\\\' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\\\ \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \\ ");
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == "Test String \\ ");
     }
     SECTION("Stringify JSON string with escapes '\\b' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\b \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \b ");
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == "Test String \b ");
     }
     SECTION("Stringify JSON string with escapes '\\/' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\/ \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String / ");
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == "Test String / ");
     }
     SECTION("Stringify JSON string with escapes '\\f' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\f \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \f ");
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == "Test String \f ");
     }
     SECTION("Stringify JSON string with escapes '\\n' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\n \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \n ");
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == "Test String \n ");
     }
     SECTION("Stringify JSON string with escapes '\\r' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\r \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \r ");
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == "Test String \r ");
     }
     SECTION("Stringify JSON string with escapes '\\t' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\t \""};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == "Test String \t ");
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == "Test String \t ");
     }
     SECTION("Stringify JSON string with escapes '\\u0123' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\u0123 \""};
         json.parse(jsonSource); // Needed to convert const char8_t * to string
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == reinterpret_cast<const char *>(u8"Test String \u0123 "));
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == reinterpret_cast<const char *>(u8"Test String \u0123 "));
     }
     SECTION("Stringify JSON string with escapes '\\u0123 \\u0456' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String \\u0123 \\u0456 \""};
         json.parse(jsonSource); // Needed to convert const char8_t * to string
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == reinterpret_cast<const char *>(u8"Test String \u0123 \u0456 "));
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == reinterpret_cast<const char *>(u8"Test String \u0123 \u0456 "));
     }
     SECTION("Stringify JSON string with escapes  '\\uD834\\uDD1E' to buffer and check value", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"Test String  \\uD834\\uDD1E \""};
         json.parse(jsonSource); // Needed to convert const char8_t * to string
-        REQUIRE(JNodeRef<JNodeString>(*json).string() == reinterpret_cast<const char *>(u8"Test String  \U0001D11E "));
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == reinterpret_cast<const char *>(u8"Test String  \U0001D11E "));
     }
 }

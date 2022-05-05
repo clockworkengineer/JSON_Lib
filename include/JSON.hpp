@@ -15,6 +15,10 @@
 // JSON JNodes
 //
 #include "JNode.hpp"
+//
+// JSON translator interface
+//
+#include "ITranslator.hpp"
 // =========
 // NAMESPACE
 // =========
@@ -44,26 +48,6 @@ namespace JSONLib
         private:
             std::string errorMessage;
         };
-        //
-        // JSON translator interface
-        //
-        class ITranslator
-        {
-        public:
-            virtual ~ITranslator() = default;
-            virtual std::string fromEscapeSequences(const std::string &jsonString) = 0;
-            virtual std::string toEscapeSequences(const std::string &utf8String) = 0;
-
-        protected:
-            [[nodiscard]] static bool isValidSurrogateUpper(char16_t c)
-            {
-                return ((c >= 0xD800) && (c <= 0xDBFF));
-            }
-            [[nodiscard]] static bool isValidSurrogateLower(char16_t c)
-            {
-                return ((c >= 0xDC00) && (c <= 0xDFFF));
-            }
-        };
         // ============
         // CONSTRUCTORS
         // ============
@@ -85,7 +69,7 @@ namespace JSONLib
         void strip(ISource &source, IDestination &&destination);
         void strip(ISource &&source, IDestination &destination);
         void strip(ISource &&source, IDestination &&destination);
-        JNode &operator*() { return (*m_jNodeRoot); }
+        JNode &root() { return (*m_jNodeRoot); }
         // ================
         // PUBLIC VARIABLES
         // ================
