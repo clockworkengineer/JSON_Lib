@@ -172,13 +172,25 @@ namespace JSONLib
     JNodePtr JSON::parseObject(ISource &source)
     {
         std::vector<JNodeObject::Entry> objects;
-        do
+        source.next();
+        source.ignoreWS();
+        if (source.current() != '}')
         {
+            std::string key = m_jsonTranslator->fromEscapeSequences(extractString(source));
+            source.ignoreWS();
+            if (source.current() != ':')
+            {
+                throw JSON::SyntaxError();
+            }
             source.next();
             source.ignoreWS();
-            if (source.current() != '}')
+            objects.emplace_back(key, parseJNodes(source));
+            source.ignoreWS();
+            while (source.current() == ',')
             {
-                std::string key = m_jsonTranslator->fromEscapeSequences(extractString(source));
+                source.next();
+                source.ignoreWS();
+                key = m_jsonTranslator->fromEscapeSequences(extractString(source));
                 source.ignoreWS();
                 if (source.current() != ':')
                 {
@@ -187,9 +199,9 @@ namespace JSONLib
                 source.next();
                 source.ignoreWS();
                 objects.emplace_back(key, parseJNodes(source));
+                source.ignoreWS();
             }
-            source.ignoreWS();
-        } while (source.current() == ',');
+        }
         if (source.current() != '}')
         {
             throw JSON::SyntaxError();
