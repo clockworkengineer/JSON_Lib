@@ -82,6 +82,24 @@ namespace JSONLib
         return (m_workBuffer);
     }
     /// <summary>
+    /// Extract a key/value pair from a JSON encoded source stream.
+    /// </summary>
+    /// <param name="source">Source for JSON encoded bytes.</param>
+    /// <param name="objects">Vector of object key/values.</param>
+    void JSON::extractKeyValuePair(ISource &source, std::vector<JNodeObject::Entry> &objects)
+    {
+        std::string key = m_jsonTranslator->fromEscapeSequences(extractString(source));
+        source.ignoreWS();
+        if (source.current() != ':')
+        {
+            throw JSON::SyntaxError();
+        }
+        source.next();
+        source.ignoreWS();
+        objects.emplace_back(key, parseJNodes(source));
+        source.ignoreWS();
+    }
+    /// <summary>
     /// Parse a string from a JSON source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
@@ -176,30 +194,12 @@ namespace JSONLib
         source.ignoreWS();
         if (source.current() != '}')
         {
-            std::string key = m_jsonTranslator->fromEscapeSequences(extractString(source));
-            source.ignoreWS();
-            if (source.current() != ':')
-            {
-                throw JSON::SyntaxError();
-            }
-            source.next();
-            source.ignoreWS();
-            objects.emplace_back(key, parseJNodes(source));
-            source.ignoreWS();
+            extractKeyValuePair(source, objects);
             while (source.current() == ',')
             {
                 source.next();
                 source.ignoreWS();
-                key = m_jsonTranslator->fromEscapeSequences(extractString(source));
-                source.ignoreWS();
-                if (source.current() != ':')
-                {
-                    throw JSON::SyntaxError();
-                }
-                source.next();
-                source.ignoreWS();
-                objects.emplace_back(key, parseJNodes(source));
-                source.ignoreWS();
+                extractKeyValuePair(source, objects);
             }
         }
         if (source.current() != '}')
