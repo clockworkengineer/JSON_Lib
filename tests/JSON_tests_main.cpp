@@ -34,7 +34,7 @@ std::string prefixTestDataPath(const std::string &file)
 std::string readJSONFromFile(const std::string &jsonFileName)
 {
   std::ifstream jsonFile;
-  jsonFile.open(jsonFileName);
+  jsonFile.open(jsonFileName, std::ios_base::binary);
   std::ostringstream jsonFileBuffer;
   jsonFileBuffer << jsonFile.rdbuf();
   return (jsonFileBuffer.str());
@@ -106,7 +106,7 @@ TEST_CASE("ISource (File) interface.", "[JSON][Parse][ISource]")
     FileSource source = FileSource(prefixTestDataPath(kSingleJSONFile));
     source.next();
     REQUIRE_FALSE(!source.more());
-    REQUIRE(static_cast<char>(source.current()) == '\n');
+    REQUIRE(static_cast<char>(source.current()) == '\r');
   }
   SECTION("Create FileSource with non existant file.", "[JSON][Parse][ISource][Exception]")
   {
@@ -142,7 +142,7 @@ TEST_CASE("ISource (Buffer) interface. Contains file testfile001.json.", "[JSON]
     BufferSource source{BufferSource(buffer)};
     source.next();
     REQUIRE_FALSE(!source.more());
-    REQUIRE(static_cast<char>(source.current()) == '\n');
+    REQUIRE(static_cast<char>(source.current()) == '\r');
   }
   SECTION("Create BufferSource with testfile001.json move past last character, check it and the bytes moved.", "[JSON][Parse][ISource]")
   {
@@ -153,7 +153,7 @@ TEST_CASE("ISource (Buffer) interface. Contains file testfile001.json.", "[JSON]
       source.next();
       length++;
     }
-    REQUIRE(length == 583);                              // eof
+    REQUIRE(length == 605);                              // eof
     REQUIRE(source.current() == static_cast<char>(255)); // eof
   }
   SECTION("Create BufferSource with empty buffer.", "[JSON][Parse][ISource][Exception]")
