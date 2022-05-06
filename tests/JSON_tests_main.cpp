@@ -99,14 +99,14 @@ TEST_CASE("ISource (File) interface.", "[JSON][Parse][ISource]")
   {
     FileSource source{FileSource(prefixTestDataPath(kSingleJSONFile))};
     REQUIRE_FALSE(!source.more());
-    REQUIRE((char)source.current() == '{');
+    REQUIRE(static_cast<char>(source.current()) == '{');
   }
   SECTION("Create FileSource with testfile001.json and then check next positions to correct next character", "[JSON][Parse][ISource]")
   {
     FileSource source = FileSource(prefixTestDataPath(kSingleJSONFile));
     source.next();
     REQUIRE_FALSE(!source.more());
-    REQUIRE((char)source.current() == '\n');
+    REQUIRE(static_cast<char>(source.current()) == '\n');
   }
   SECTION("Create FileSource with non existant file.", "[JSON][Parse][ISource][Exception]")
   {
@@ -135,14 +135,14 @@ TEST_CASE("ISource (Buffer) interface. Contains file testfile001.json.", "[JSON]
   {
     BufferSource source{BufferSource(buffer)};
     REQUIRE_FALSE(!source.more());
-    REQUIRE((char)source.current() == '{');
+    REQUIRE(static_cast<char>(source.current()) == '{');
   }
   SECTION("Create BufferSource with testfile001.json and then check next positions to correct next character", "[JSON][Parse][ISource]")
   {
     BufferSource source{BufferSource(buffer)};
     source.next();
     REQUIRE_FALSE(!source.more());
-    REQUIRE((char)source.current() == '\n');
+    REQUIRE(static_cast<char>(source.current()) == '\n');
   }
   SECTION("Create BufferSource with testfile001.json move past last character, check it and the bytes moved.", "[JSON][Parse][ISource]")
   {

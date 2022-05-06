@@ -122,7 +122,7 @@ namespace JSONLib
         // Check that there are no single unpaired UTF-16 surrogates.From wht I see this is
         // meant to be an error but from searching the web I have not found a definitive answer.
         int index = 0;
-        while (index <= ((int)m_utf16workBuffer.size() - 1))
+        while (index <= (static_cast<int>(m_utf16workBuffer.size()) - 1))
         {
             if (isValidSurrogateUpper(m_utf16workBuffer[index]) && isValidSurrogateLower(m_utf16workBuffer[index + 1]))
             {
