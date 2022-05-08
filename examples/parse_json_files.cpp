@@ -18,6 +18,7 @@
 // JSON includes
 //
 #include "JSON.hpp"
+#include "JSONTranslator.hpp"
 #include "JSONSources.hpp"
 #include "JSONDestinations.hpp"
 // =======================

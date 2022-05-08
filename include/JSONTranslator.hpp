@@ -6,6 +6,10 @@
 #include <string>
 #include <codecvt>
 #include <locale>
+//
+// Translator interface
+//
+#include "ITranslator.hpp"
 // =========
 // NAMESPACE
 // =========

@@ -4,26 +4,24 @@
 //
 #include <string>
 #include <vector>
-#include <memory>
 #include <stdexcept>
-//
-// Source/Destination interfaces
-//
-#include "ISource.hpp"
-#include "IDestination.hpp"
 //
 // JSON JNodes
 //
 #include "JNode.hpp"
-//
-// JSON translator interface
-//
-#include "ITranslator.hpp"
 // =========
 // NAMESPACE
 // =========
 namespace JSONLib
 {
+    // ===================================
+    // Forward declarations for interfaces
+    // ===================================
+
+    class ISource;
+    class IDestination;
+    class ITranslator;
+    
     // ================
     // CLASS DEFINITION
     // ================

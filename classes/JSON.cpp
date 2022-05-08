@@ -19,6 +19,11 @@
 #include "JSONConfig.hpp"
 #include "JSON.hpp"
 #include "JSONTranslator.hpp"
+//
+// Source/Destination interfaces
+//
+#include "ISource.hpp"
+#include "IDestination.hpp"
 // ====================
 // CLASS IMPLEMENTATION
 // ====================

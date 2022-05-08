@@ -4,6 +4,13 @@
 //
 #include <fstream>
 #include <string>
+//
+// Source interface
+//
+#include "ISource.hpp"
+// =========
+// NAMESPACE
+// =========
 namespace JSONLib
 {
     //
@@ -12,7 +19,7 @@ namespace JSONLib
     class BufferSource : public ISource
     {
     public:
-        explicit BufferSource(const std::string &sourceBuffer) : m_parseBuffer { sourceBuffer}
+        explicit BufferSource(const std::string &sourceBuffer) : m_parseBuffer{sourceBuffer}
         {
             if (sourceBuffer.empty())
             {

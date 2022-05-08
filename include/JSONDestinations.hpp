@@ -4,6 +4,13 @@
 //
 #include <fstream>
 #include <string>
+//
+// Destination interface
+//
+#include "IDestination.hpp"
+// =========
+// NAMESPACE
+// =========
 namespace JSONLib
 {
     //
