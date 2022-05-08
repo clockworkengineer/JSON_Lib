@@ -30,12 +30,15 @@ set (JSON_INCLUDES
     ./include/JSONSources.hpp
     ./include/JSONDestinations.hpp
     ./include/JSONTranslator.hpp
+    ./include/interface/Isource.hpp
+    ./include/interface/IDestination.hpp
+    ./include/interface/ITranslator.hpp
 )
 
 # JSON library
 
 add_library(${JSON_LIBRARY_NAME} ${JSON_SOURCES})
-target_include_directories(${JSON_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_BINARY_DIR} )
+target_include_directories(${JSON_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/include/interface ${PROJECT_BINARY_DIR} )
 
 # Add tests
 
