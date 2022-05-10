@@ -1,5 +1,8 @@
 #pragma once
 #include <cwctype>
+// =========
+// NAMESPACE
+// =========
 namespace JSONLib
 {
     //

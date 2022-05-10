@@ -8,7 +8,6 @@
 // =================
 // CLASS DEFINITIONS
 // =================
-#include "JSONConfig.hpp"
 #include "JSON.hpp"
 #include "JSONImplementation.hpp"
 #include "JSONTranslator.hpp"
@@ -20,9 +19,7 @@
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
-//
-// C++ STL
-//
+
 // =========
 // NAMESPACE
 // =========
@@ -380,7 +377,7 @@ namespace JSONLib
         }
     }
     /// <summary>
-    /// Strip all whitespace from a JSON source .
+    /// Strip all whitespace from a JSON source.
     /// </summary>
     /// <param name="source">Source of JSON</param>
     /// <param name="destinaton">Destination for stripped JSON</param>

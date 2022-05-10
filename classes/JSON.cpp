@@ -16,16 +16,12 @@
 // =================
 // CLASS DEFINITIONS
 // =================
-#include "JSONConfig.hpp"
 #include "JSON.hpp"
 #include "JSONImplementation.hpp"
 #include "JSONTranslator.hpp"
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
-//
-// C++ STL
-//
 // =========
 // NAMESPACE
 // =========
@@ -49,21 +45,31 @@ namespace JSONLib
     // ==============
     // PUBLIC METHODS
     // ==============
+    /// <summary>
+    /// JSON constructor.
+    /// </summary>
     JSON::JSON(ITranslator *translator)
     {
         m_imp = new (JSONImplementation);
         m_imp->translator(translator);
     }
+        /// <summary>
+    /// JSON destructor.
+    /// </summary>
     JSON::~JSON()
     {
         delete m_imp;
     }
+    /// <summary>
+    /// Get root of translated JSON object tree.
+    /// </summary>
+    /// <returns>Root of JSON object tree</returns>
     JNode &JSON::root()
     {
         return (m_imp->root());
     }
     /// <summary>
-    /// Strip all whitespace from a JSON source .
+    /// Strip all whitespace from a JSON source.
     /// </summary>
     /// <param name="source">Source of JSON</param>
     /// <param name="destinaton">Destination for stripped JSON</param>
@@ -100,7 +106,6 @@ namespace JSONLib
     /// </summary>
     /// <param name="jNodeRoot">Root of JNode structure.</param>
     /// <param name=destination>destination stream for stringified JSON</param>
-    /// <returns></returns>
     void JSON::stringify(IDestination &destination)
     {
         m_imp->stringify(destination);

@@ -1,5 +1,8 @@
 #pragma once
 #include <string>
+// =========
+// NAMESPACE
+// =========
 namespace JSONLib
 {
     //

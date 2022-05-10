@@ -6,6 +6,10 @@
 #include <vector>
 #include <stdexcept>
 //
+// JSON version
+//
+#include "JSONConfig.hpp"
+//
 // JSON JNodes
 //
 #include "JNode.hpp"
