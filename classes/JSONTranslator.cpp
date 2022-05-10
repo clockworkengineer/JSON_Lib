@@ -104,18 +104,18 @@ namespace JSONLib
                         m_utf16workBuffer += static_cast<char16_t>(std::strtol(hexDigits, &end, 16));
                         if (*end != '\0')
                         {
-                            throw JSON::SyntaxError();
+                            throw JSONLib::SyntaxError();
                         }
                         current += 5; // Move paste the \uxxxx
                     }
                     else
                     {
-                        throw JSON::SyntaxError();
+                        throw JSONLib::SyntaxError();
                     }
                 }
                 else
                 {
-                    throw JSON::SyntaxError();
+                    throw JSONLib::SyntaxError();
                 }
             }
         }
@@ -130,7 +130,7 @@ namespace JSONLib
             }
             else if (isValidSurrogateUpper(m_utf16workBuffer[index]) || isValidSurrogateLower(m_utf16workBuffer[index + 1]))
             {
-                throw JSON::SyntaxError();
+                throw JSONLib::SyntaxError();
             }
             index++; 
         }

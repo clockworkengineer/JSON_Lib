@@ -350,14 +350,14 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]")
   SECTION("Check floating point with invalid exponent", "[JSON][JNode][JNodeNumber][Exception]")
   {
     BufferSource jsonSource{"78.e43e-2"};
-    REQUIRE_THROWS_AS(json.parse(jsonSource), JSON::SyntaxError);
+    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::SyntaxError);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON syntax error detected.");
   }
   SECTION("Check floating point with multiple decimal points", "[JSON][JNode][JNodeNumber][Exception]")
   {
     BufferSource jsonSource{"78.5454.545"};
-    REQUIRE_THROWS_AS(json.parse(jsonSource), JSON::SyntaxError);
+    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::SyntaxError);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON syntax error detected.");
   }
@@ -371,22 +371,22 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 \\uDD1E End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.fromEscapeSequences("Begin \\uD834 \\uDD1E End"), JSON::SyntaxError);
+    REQUIRE_THROWS_AS(translator.fromEscapeSequences("Begin \\uD834 \\uDD1E End"), JSONLib::SyntaxError);
     REQUIRE_THROWS_WITH(translator.fromEscapeSequences("Begin \\uD834 \\uDD1E End"), "JSON syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834\\u0045 End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.fromEscapeSequences("Begin \\uD834\\u0045 End"), JSON::SyntaxError);
+    REQUIRE_THROWS_AS(translator.fromEscapeSequences("Begin \\uD834\\u0045 End"), JSONLib::SyntaxError);
     REQUIRE_THROWS_WITH(translator.fromEscapeSequences("Begin \\uD834\\u0045 End"), "JSON syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.fromEscapeSequences("Begin \\uD834 End"), JSON::SyntaxError);
+    REQUIRE_THROWS_AS(translator.fromEscapeSequences("Begin \\uD834 End"), JSONLib::SyntaxError);
     REQUIRE_THROWS_WITH(translator.fromEscapeSequences("Begin \\uD834 End"), "JSON syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uDD1E End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.fromEscapeSequences("Begin \\uDD1E End"), JSON::SyntaxError);
+    REQUIRE_THROWS_AS(translator.fromEscapeSequences("Begin \\uDD1E End"), JSONLib::SyntaxError);
     REQUIRE_THROWS_WITH(translator.fromEscapeSequences("Begin \\uDD1E End"), "JSON syntax error detected.");
   }
   SECTION("Translate to escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")

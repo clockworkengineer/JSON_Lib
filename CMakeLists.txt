@@ -20,12 +20,14 @@ set(JSON_LIBRARY_NAME ${PROJECT_NAME})
 
 set (JSON_SOURCES
     ./classes/JSON.cpp
+    ./classes/JSONImplementation.cpp
     ./classes/JSONTranslator.cpp
 )
 
 set (JSON_INCLUDES
     JSONConfig.hpp
     ./include/JSON.hpp
+    ./include/JSONImplementation.hpp
     ./include/JNode.hpp
     ./include/JSONSources.hpp
     ./include/JSONDestinations.hpp

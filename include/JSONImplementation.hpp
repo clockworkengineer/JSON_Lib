@@ -14,33 +14,18 @@
 // =========
 namespace JSONLib
 {
-    // =================
-    // JSON syntax error
-    // =================
-    struct SyntaxError : public std::exception
-    {
-    public:
-        explicit SyntaxError(std::string errorMessage = "JSON syntax error detected.") : errorMessage(std::move(errorMessage)) {}
-        [[nodiscard]] const char *what() const noexcept override
-        {
-            return (errorMessage.c_str());
-        }
-
-    private:
-        std::string errorMessage;
-    };
     // ===================================
     // Forward declarations for interfaces
     // ===================================
+
     class ISource;
     class IDestination;
     class ITranslator;
-    class JSONImplementation;
 
     // ================
     // CLASS DEFINITION
     // ================
-    class JSON
+    class JSONImplementation
     {
     public:
         // ==========================
@@ -49,23 +34,17 @@ namespace JSONLib
         // ============
         // CONSTRUCTORS
         // ============
-        explicit JSON(ITranslator *translator = nullptr);
         // ==========
         // DESTRUCTOR
         // ==========
-        ~JSON();
         // ==============
         // PUBLIC METHODS
         // ==============
         void parse(ISource &source);
-        void parse(ISource &&source);
         void stringify(IDestination &destination);
-        void stringify(IDestination &&destination);
         void strip(ISource &source, IDestination &destination);
-        void strip(ISource &source, IDestination &&destination);
-        void strip(ISource &&source, IDestination &destination);
-        void strip(ISource &&source, IDestination &&destination);
-        JNode &root();
+        JNode &root() { return (*m_jNodeRoot); }
+        void translator(ITranslator *translator);
         // ================
         // PUBLIC VARIABLES
         // ================
@@ -79,9 +58,23 @@ namespace JSONLib
         // ===============
         // PRIVATE METHODS
         // ===============
+        std::string extractString(ISource &source);
+        void extractKeyValuePair(ISource &source, std::vector<JNodeObject::Entry> &objects);
+        JNodePtr parseString(ISource &source);
+        JNodePtr parseNumber(ISource &source);
+        JNodePtr parseBoolean(ISource &source);
+        JNodePtr parseNull(ISource &source);
+        JNodePtr parseObject(ISource &source);
+        JNodePtr parseArray(ISource &source);
+        JNodePtr parseJNodes(ISource &source);
+        void stringifyJNodes(JNode &jNode, IDestination &destination);
+        void stripAllWhiteSpace(ISource &source, IDestination &destination);
+
         // =================
         // PRIVATE VARIABLES
         // =================
-        JSONImplementation *m_imp;
+        std::string m_workBuffer;
+        JNodePtr m_jNodeRoot;
+        std::unique_ptr<ITranslator> m_jsonTranslator;
     };
 } // namespace JSONLib
