@@ -50,7 +50,7 @@ namespace JSONLib
     /// </summary>
     JSON::JSON(ITranslator *translator)
     {
-        m_implementation = new (JSONImplementation);
+        m_implementation = std::make_unique<JSONImplementation>();
         m_implementation->translator(translator);
     }
     /// <summary>
@@ -58,7 +58,7 @@ namespace JSONLib
     /// </summary>
     JSON::~JSON()
     {
-        delete m_implementation;
+
     }
     /// <summary>
     /// Get root of translated JSON object tree.

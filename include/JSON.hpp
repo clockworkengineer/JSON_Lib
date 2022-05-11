@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <memory>
 //
 // JSON version
 //
@@ -86,6 +87,6 @@ namespace JSONLib
         // =================
         // PRIVATE VARIABLES
         // =================
-        JSONImplementation *m_implementation;
+        std::unique_ptr<JSONImplementation> m_implementation;
     };
 } // namespace JSONLib
