@@ -75,6 +75,6 @@ namespace JSONLib
         // =================
         std::string m_workBuffer;
         JNodePtr m_jNodeRoot;
-        std::unique_ptr<ITranslator> m_jsonTranslator;
+        std::unique_ptr<ITranslator> m_translator;
     };
 } // namespace JSONLib

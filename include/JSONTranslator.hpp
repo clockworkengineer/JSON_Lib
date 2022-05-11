@@ -18,7 +18,7 @@ namespace JSONLib
     // ================
     // CLASS DEFINITION
     // ================
-    class JSONTranslator : public JSONLib::ITranslator
+    class JSONTranslator : public ITranslator
     {
     public:
         // ==========================
@@ -57,8 +57,6 @@ namespace JSONLib
         // PRIVATE VARIABLES
         // =================
         std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_UTF16;
-        std::u16string m_utf16workBuffer;
-        std::string m_utf8workBuffer;
         std::map<char, std::u16string> m_fromMap;
         std::map<char16_t, std::string> m_toMap;
     };

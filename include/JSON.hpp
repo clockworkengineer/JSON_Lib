@@ -86,6 +86,6 @@ namespace JSONLib
         // =================
         // PRIVATE VARIABLES
         // =================
-        JSONImplementation *m_imp;
+        JSONImplementation *m_implementation;
     };
 } // namespace JSONLib

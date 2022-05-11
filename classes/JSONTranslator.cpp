@@ -75,14 +75,14 @@ namespace JSONLib
     /// <returns>String with escapes translated.</returns>
     std::string JSONTranslator::fromEscapeSequences(const std::string &jsonString)
     {
-        m_utf16workBuffer.clear();
+        std::u16string workBuffer;
         auto current = jsonString.begin();
         while (current != jsonString.end())
         {
             // Normal character
             if (*current != '\\')
             {
-                m_utf16workBuffer += *current++;
+                workBuffer += *current++;
             }
             else
             {
@@ -93,14 +93,14 @@ namespace JSONLib
                     // Single character
                     if (m_fromMap.count(*current) > 0)
                     {
-                        m_utf16workBuffer += m_fromMap[*current++];
+                        workBuffer += m_fromMap[*current++];
                     }
                     // UTF16 "\uxxxx" 
                     else if ((*current == 'u') && ((current + 4) < jsonString.end()))
                     {
                         char hexDigits[5] = {current[1], current[2], current[3], current[4], '\0'};
                         char *end;
-                        m_utf16workBuffer += static_cast<char16_t>(std::strtol(hexDigits, &end, 16));
+                        workBuffer += static_cast<char16_t>(std::strtol(hexDigits, &end, 16));
                         if (*end != '\0')
                         {
                             throw JSONLib::SyntaxError();
@@ -118,22 +118,22 @@ namespace JSONLib
                 }
             }
         }
-        // Check that there are no single unpaired UTF-16 surrogates.From wht I see this is
+        // Check that there are no single unpaired UTF-16 surrogates.From what I see this is
         // meant to be an error but from searching the web I have not found a definitive answer.
         int index = 0;
-        while (index <= (static_cast<int>(m_utf16workBuffer.size()) - 1))
+        while (index <= (static_cast<int>(workBuffer.size()) - 1))
         {
-            if (isValidSurrogateUpper(m_utf16workBuffer[index]) && isValidSurrogateLower(m_utf16workBuffer[index + 1]))
+            if (isValidSurrogateUpper(workBuffer[index]) && isValidSurrogateLower(workBuffer[index + 1]))
             {
                 index++;
             }
-            else if (isValidSurrogateUpper(m_utf16workBuffer[index]) || isValidSurrogateLower(m_utf16workBuffer[index + 1]))
+            else if (isValidSurrogateUpper(workBuffer[index]) || isValidSurrogateLower(workBuffer[index + 1]))
             {
                 throw JSONLib::SyntaxError();
             }
             index++; 
         }
-        return (m_UTF16.to_bytes(m_utf16workBuffer));
+        return (m_UTF16.to_bytes(workBuffer));
     }
     /// <summary>
     /// Convert a string from raw charater values (UTF8) so that it has character
@@ -143,30 +143,30 @@ namespace JSONLib
     /// <returns>JSON string with escapes.</returns>
     std::string JSONTranslator::toEscapeSequences(std::string const &utf8String)
     {
-        m_utf8workBuffer.clear();
+        std::string workBuffer;
         for (char16_t utf16char : m_UTF16.from_bytes(utf8String))
         {
             // Control characters
             if (m_toMap.count(utf16char) > 0)
             {
-                m_utf8workBuffer += m_toMap[utf16char];
+                workBuffer += m_toMap[utf16char];
             }
             // ASCII
             else if ((utf16char > 0x1F) && (utf16char < 0x80))
             {
-                m_utf8workBuffer += static_cast<char>(utf16char);
+                workBuffer += static_cast<char>(utf16char);
             }
             // UTF8 escaped
             else
             {
                 static const char *digits = "0123456789ABCDEF";
-                m_utf8workBuffer += "\\u";
-                m_utf8workBuffer += digits[(utf16char >> 12) & 0x0f];
-                m_utf8workBuffer += digits[(utf16char >> 8) & 0x0f];
-                m_utf8workBuffer += digits[(utf16char >> 4) & 0x0f];
-                m_utf8workBuffer += digits[(utf16char)&0x0f];
+                workBuffer += "\\u";
+                workBuffer += digits[(utf16char >> 12) & 0x0f];
+                workBuffer += digits[(utf16char >> 8) & 0x0f];
+                workBuffer += digits[(utf16char >> 4) & 0x0f];
+                workBuffer += digits[(utf16char)&0x0f];
             }
         }
-        return (m_utf8workBuffer);
+        return (workBuffer);
     }
 } // namespace JSONLib

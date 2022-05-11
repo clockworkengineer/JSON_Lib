@@ -19,7 +19,6 @@
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
-
 // =========
 // NAMESPACE
 // =========
@@ -83,7 +82,7 @@ namespace JSONLib
     /// <param name="objects">Vector of object key/values.</param>
     void JSONImplementation::extractKeyValuePair(ISource &source, std::vector<JNodeObject::Entry> &objects)
     {
-        std::string key = m_jsonTranslator->fromEscapeSequences(extractString(source));
+        std::string key = m_translator->fromEscapeSequences(extractString(source));
         source.ignoreWS();
         if (source.current() != ':')
         {
@@ -101,7 +100,7 @@ namespace JSONLib
     /// <returns></returns>
     JNodePtr JSONImplementation::parseString(ISource &source)
     {
-        return (std::make_unique<JNodeString>(m_jsonTranslator->fromEscapeSequences(extractString(source))));
+        return (std::make_unique<JNodeString>(m_translator->fromEscapeSequences(extractString(source))));
     }
     /// <summary>
     /// Parse a number from a JSON source stream.
@@ -287,7 +286,7 @@ namespace JSONLib
             break;
         case JNodeType::string:
             destination.add('"');
-            destination.add(m_jsonTranslator->toEscapeSequences(JNodeRef<JNodeString>(jNode).string()));
+            destination.add(m_translator->toEscapeSequences(JNodeRef<JNodeString>(jNode).string()));
             destination.add('"');
             break;
         case JNodeType::boolean:
@@ -303,7 +302,7 @@ namespace JSONLib
             for (const auto &[key, jNodePtr] : JNodeRef<JNodeObject>(jNode).objects())
             {
                 destination.add('"');
-                destination.add(m_jsonTranslator->toEscapeSequences(key));
+                destination.add(m_translator->toEscapeSequences(key));
                 destination.add("\":");
                 stringifyJNodes(JNodeRef<JNodeObject>(jNode)[key], destination);
                 if (commaCount-- > 0)
@@ -369,11 +368,11 @@ namespace JSONLib
     {
         if (translator == nullptr)
         {
-            m_jsonTranslator = std::make_unique<JSONTranslator>();
+            m_translator = std::make_unique<JSONTranslator>();
         }
         else
         {
-            m_jsonTranslator.reset(translator);
+            m_translator.reset(translator);
         }
     }
     /// <summary>
@@ -393,7 +392,6 @@ namespace JSONLib
     {
         m_jNodeRoot = parseJNodes(source);
     }
-
     /// <summary>
     /// Recursively parse JNode structure and building its JSON in destination stream.
     /// </summary>

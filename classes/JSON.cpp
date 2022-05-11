@@ -18,7 +18,7 @@
 // =================
 #include "JSON.hpp"
 #include "JSONImplementation.hpp"
-#include "JSONTranslator.hpp"
+#include "ITranslator.hpp"
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
@@ -50,15 +50,15 @@ namespace JSONLib
     /// </summary>
     JSON::JSON(ITranslator *translator)
     {
-        m_imp = new (JSONImplementation);
-        m_imp->translator(translator);
+        m_implementation = new (JSONImplementation);
+        m_implementation->translator(translator);
     }
-        /// <summary>
+    /// <summary>
     /// JSON destructor.
     /// </summary>
     JSON::~JSON()
     {
-        delete m_imp;
+        delete m_implementation;
     }
     /// <summary>
     /// Get root of translated JSON object tree.
@@ -66,7 +66,7 @@ namespace JSONLib
     /// <returns>Root of JSON object tree</returns>
     JNode &JSON::root()
     {
-        return (m_imp->root());
+        return (m_implementation->root());
     }
     /// <summary>
     /// Strip all whitespace from a JSON source.
@@ -75,19 +75,19 @@ namespace JSONLib
     /// <param name="destinaton">Destination for stripped JSON</param>
     void JSON::strip(ISource &source, IDestination &destination)
     {
-        m_imp->strip(source, destination);
+        m_implementation->strip(source, destination);
     }
     void JSON::strip(ISource &source, IDestination &&destination)
     {
-        m_imp->strip(source, destination);
+        m_implementation->strip(source, destination);
     }
     void JSON::strip(ISource &&source, IDestination &destination)
     {
-        m_imp->strip(source, destination);
+        m_implementation->strip(source, destination);
     }
     void JSON::strip(ISource &&source, IDestination &&destination)
     {
-        m_imp->strip(source, destination);
+        m_implementation->strip(source, destination);
     }
     /// <summary>
     /// Create JNode structure by recursively parsing JSON on the source stream.
@@ -95,11 +95,11 @@ namespace JSONLib
     /// <param name="source">Source for JSON encoded bytes.
     void JSON::parse(ISource &source)
     {
-        m_imp->parse(source);
+        m_implementation->parse(source);
     }
     void JSON::parse(ISource &&source)
     {
-        m_imp->parse(source);
+        m_implementation->parse(source);
     }
     /// <summary>
     /// Recursively parse JNode structure and building its JSON in destination stream.
@@ -108,10 +108,10 @@ namespace JSONLib
     /// <param name=destination>destination stream for stringified JSON</param>
     void JSON::stringify(IDestination &destination)
     {
-        m_imp->stringify(destination);
+        m_implementation->stringify(destination);
     }
     void JSON::stringify(IDestination &&destination)
     {
-        m_imp->stringify(destination);
+        m_implementation->stringify(destination);
     }
 } // namespace JSONLib
