@@ -56,16 +56,16 @@ namespace JSONLib
     /// <returns>Extracted string</returns>
     std::string JSONImplementation::extractString(ISource &source)
     {
-        m_workBuffer.clear();
+        std::string value;
         source.next();
         while (source.more() && source.current() != '"')
         {
             if (source.current() == '\\')
             {
-                m_workBuffer += source.current();
+                value += source.current();
                 source.next();
             }
-            m_workBuffer += source.current();
+            value += source.current();
             source.next();
         }
         if (source.current() != '"')
@@ -73,7 +73,24 @@ namespace JSONLib
             throw JSONLib::SyntaxError();
         }
         source.next();
-        return (m_workBuffer);
+        return (value);
+    }
+    /// <summary>
+    /// Extract alphabetic value from source stream.
+    /// </summary>
+    /// <param name="source">Source for JSON encoded bytes.</param>
+    /// <returns>String alphabetic value true/false/null</returns>
+    std::string JSONImplementation::extractValue(ISource &source)
+    {
+        std::string value;
+        value += source.current();
+        source.next();
+        while (source.more() && (std::isalpha(source.current()) != 0))
+        {
+            value += source.current();
+            source.next();
+        }
+        return(value);
     }
     /// <summary>
     /// Extract a key/value pair from a JSON encoded source stream.
@@ -109,26 +126,26 @@ namespace JSONLib
     /// <returns></returns>
     JNodePtr JSONImplementation::parseNumber(ISource &source)
     {
-        m_workBuffer.clear();
-        m_workBuffer += source.current();
+        std::string value;
+        value += source.current();
         source.next();
         while (source.more() && isValidNumeric(source.current()))
         {
-            m_workBuffer += source.current();
+            value += source.current();
             source.next();
         }
         // Throw error if not valid integer or floating point
         char *end = nullptr;
-        std::strtoll(m_workBuffer.c_str(), &end, 10);
+        std::strtoll(value.c_str(), &end, 10);
         if (*end != '\0')
         {
-            std::strtod(m_workBuffer.c_str(), &end);
+            std::strtod(value.c_str(), &end);
             if (*end != '\0')
             {
                 throw JSONLib::SyntaxError();
             }
         }
-        return (std::make_unique<JNodeNumber>(m_workBuffer));
+        return (std::make_unique<JNodeNumber>(value));
     }
     /// <summary>
     /// Parse a boolean from a JSON source stream.
@@ -137,19 +154,12 @@ namespace JSONLib
     /// <returns></returns>
     JNodePtr JSONImplementation::parseBoolean(ISource &source)
     {
-        m_workBuffer.clear();
-        m_workBuffer += source.current();
-        source.next();
-        while (source.more() && (std::isalpha(source.current()) != 0))
-        {
-            m_workBuffer += source.current();
-            source.next();
-        }
-        if (m_workBuffer == "true")
+        std::string value = extractValue(source);
+        if (value == "true")
         {
             return (std::make_unique<JNodeBoolean>(true));
         }
-        if (m_workBuffer == "false")
+        if (value == "false")
         {
             return (std::make_unique<JNodeBoolean>(false));
         }
@@ -162,15 +172,7 @@ namespace JSONLib
     /// <returns></returns>
     JNodePtr JSONImplementation::parseNull(ISource &source)
     {
-        m_workBuffer.clear();
-        m_workBuffer += source.current();
-        source.next();
-        while (source.more() && (std::isalpha(source.current()) != 0))
-        {
-            m_workBuffer += source.current();
-            source.next();
-        }
-        if (m_workBuffer != "null")
+        if (extractValue(source) != "null")
         {
             throw JSONLib::SyntaxError();
         }
