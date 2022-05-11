@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16.0)
+cmake_minimum_required(VERSION 3.23.1)
 
 project("JSON Unit Tests" VERSION 0.1.0 DESCRIPTION "JSON C++ Library Catch Unit Tests" LANGUAGES CXX)
 
@@ -24,7 +24,7 @@ set(TEST_SOURCES
     JSON_tests_main.cpp
     JSON_tests_parse.cpp
     JSON_tests_stringify.cpp
-)
+    JSON_tests_helper.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${PROJECT_CURRENT_SOURCE_DIR}/include)
