@@ -18,7 +18,6 @@
 // =================
 #include "JSON.hpp"
 #include "JSONImplementation.hpp"
-#include "ITranslator.hpp"
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
@@ -58,7 +57,6 @@ namespace JSONLib
     /// </summary>
     JSON::~JSON()
     {
-
     }
     /// <summary>
     /// Get root of translated JSON object tree.

@@ -9,19 +9,20 @@
 // JSON JNodes
 //
 #include "JNode.hpp"
+//
+// JSON translator
+//
+#include "JSONTranslator.hpp"
+//
+// Source/Destination interfaces
+//
+#include "ISource.hpp"
+#include "IDestination.hpp"
 // =========
 // NAMESPACE
 // =========
 namespace JSONLib
 {
-    // ===================================
-    // Forward declarations for interfaces
-    // ===================================
-
-    class ISource;
-    class IDestination;
-    class ITranslator;
-
     // ================
     // CLASS DEFINITION
     // ================
@@ -69,7 +70,7 @@ namespace JSONLib
         JNodePtr parseArray(ISource &source);
         JNodePtr parseJNodes(ISource &source);
         void stringifyJNodes(JNode &jNode, IDestination &destination);
-        void stripAllWhiteSpace(ISource &source, IDestination &destination);
+        void stripWhiteSpace(ISource &source, IDestination &destination);
 
         // =================
         // PRIVATE VARIABLES

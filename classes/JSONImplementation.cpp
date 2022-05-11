@@ -10,12 +10,6 @@
 // =================
 #include "JSON.hpp"
 #include "JSONImplementation.hpp"
-#include "JSONTranslator.hpp"
-//
-// Source/Destination interfaces
-//
-#include "ISource.hpp"
-#include "IDestination.hpp"
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
@@ -339,7 +333,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source of JSON</param>
     /// <param name="destinaton">Destination for stripped JSON</param>
-    void JSONImplementation::stripAllWhiteSpace(ISource &source, IDestination &destination)
+    void JSONImplementation::stripWhiteSpace(ISource &source, IDestination &destination)
     {
         while (source.more())
         {
@@ -384,7 +378,7 @@ namespace JSONLib
     /// <param name="destinaton">Destination for stripped JSON</param>
     void JSONImplementation::strip(ISource &source, IDestination &destination)
     {
-        stripAllWhiteSpace(source, destination);
+        stripWhiteSpace(source, destination);
     }
     /// <summary>
     /// Create JNode structure by recursively parsing JSON on the source stream.
