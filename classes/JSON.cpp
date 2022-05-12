@@ -59,14 +59,6 @@ namespace JSONLib
     {
     }
     /// <summary>
-    /// Get root of translated JSON object tree.
-    /// </summary>
-    /// <returns>Root of JSON object tree</returns>
-    JNode &JSON::root()
-    {
-        return (m_implementation->root());
-    }
-    /// <summary>
     /// Strip all whitespace from a JSON source.
     /// </summary>
     /// <param name="source">Source of JSON</param>
@@ -111,5 +103,13 @@ namespace JSONLib
     void JSON::stringify(IDestination &&destination)
     {
         m_implementation->stringify(destination);
+    }
+    /// <summary>
+    /// Get root of translated JSON object tree.
+    /// </summary>
+    /// <returns>Root of JSON object tree</returns>
+    JNode &JSON::root()
+    {
+        return (m_implementation->root());
     }
 } // namespace JSONLib

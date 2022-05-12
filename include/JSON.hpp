@@ -10,10 +10,6 @@
 // JSON version
 //
 #include "JSONConfig.hpp"
-//
-// JSON JNodes
-//
-#include "JNode.hpp"
 // =========
 // NAMESPACE
 // =========
@@ -34,14 +30,14 @@ namespace JSONLib
     private:
         std::string errorMessage;
     };
-    // ===================================
-    // Forward declarations for interfaces
-    // ===================================
+    // ===================================================
+    // Forward declarations for interfaces/classes/structs
+    // ===================================================
     class ISource;
     class IDestination;
     class ITranslator;
     class JSONImplementation;
-
+    struct JNode;
     // ================
     // CLASS DEFINITION
     // ================

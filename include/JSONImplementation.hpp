@@ -6,6 +6,11 @@
 #include <vector>
 #include <stdexcept>
 //
+// Source/Destination interfaces
+//
+#include "ISource.hpp"
+#include "IDestination.hpp"
+//
 // JSON JNodes
 //
 #include "JNode.hpp"
@@ -13,11 +18,6 @@
 // JSON translator
 //
 #include "JSONTranslator.hpp"
-//
-// Source/Destination interfaces
-//
-#include "ISource.hpp"
-#include "IDestination.hpp"
 // =========
 // NAMESPACE
 // =========
@@ -71,7 +71,6 @@ namespace JSONLib
         JNodePtr parseJNodes(ISource &source);
         void stringifyJNodes(JNode &jNode, IDestination &destination);
         void stripWhiteSpace(ISource &source, IDestination &destination);
-
         // =================
         // PRIVATE VARIABLES
         // =================
