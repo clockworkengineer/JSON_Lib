@@ -18,8 +18,8 @@
 // JSON includes
 //
 #include "JSON.hpp"
-#include "JSONSources.hpp"
-#include "JSONDestinations.hpp"
+#include "JSON_Sources.hpp"
+#include "JSON_Destinations.hpp"
 // =======================
 // Bencode class namespace
 // =======================

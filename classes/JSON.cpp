@@ -17,7 +17,7 @@
 // CLASS DEFINITIONS
 // =================
 #include "JSON.hpp"
-#include "JSONImplementation.hpp"
+#include "JSON_Impl.hpp"
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
@@ -49,7 +49,7 @@ namespace JSONLib
     /// </summary>
     JSON::JSON(ITranslator *translator)
     {
-        m_implementation = std::make_unique<JSONImplementation>();
+        m_implementation = std::make_unique<JSON_Impl>();
         m_implementation->translator(translator);
     }
     /// <summary>

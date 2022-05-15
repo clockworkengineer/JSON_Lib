@@ -13,11 +13,11 @@
 //
 // JSON JNodes
 //
-#include "JNode.hpp"
+#include "JSON_Nodes.hpp"
 //
 // JSON translator
 //
-#include "JSONTranslator.hpp"
+#include "JSON_Translator.hpp"
 // =========
 // NAMESPACE
 // =========
@@ -26,7 +26,7 @@ namespace JSONLib
     // ================
     // CLASS DEFINITION
     // ================
-    class JSONImplementation
+    class JSON_Impl
     {
     public:
         // ==========================

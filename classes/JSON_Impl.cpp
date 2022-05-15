@@ -1,5 +1,5 @@
 //
-// Class: JSONImplementation
+// Class: JSON_Impl
 //
 // Description: JSON class implementation
 //
@@ -9,7 +9,7 @@
 // CLASS DEFINITIONS
 // =================
 #include "JSON.hpp"
-#include "JSONImplementation.hpp"
+#include "JSON_Impl.hpp"
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
@@ -48,7 +48,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns>Extracted string</returns>
-    std::string JSONImplementation::extractString(ISource &source)
+    std::string JSON_Impl::extractString(ISource &source)
     {
         std::string value;
         source.next();
@@ -74,7 +74,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns>String alphabetic value true/false/null</returns>
-    std::string JSONImplementation::extractValue(ISource &source)
+    std::string JSON_Impl::extractValue(ISource &source)
     {
         std::string value;
         value += source.current();
@@ -91,7 +91,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <param name="objects">Vector of object key/values.</param>
-    void JSONImplementation::extractKeyValuePair(ISource &source, std::vector<JNodeObject::Entry> &objects)
+    void JSON_Impl::extractKeyValuePair(ISource &source, std::vector<JNodeObject::Entry> &objects)
     {
         std::string key = m_translator->fromEscapeSequences(extractString(source));
         source.ignoreWS();
@@ -109,7 +109,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    JNodePtr JSONImplementation::parseString(ISource &source)
+    JNodePtr JSON_Impl::parseString(ISource &source)
     {
         return (std::make_unique<JNodeString>(m_translator->fromEscapeSequences(extractString(source))));
     }
@@ -118,7 +118,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    JNodePtr JSONImplementation::parseNumber(ISource &source)
+    JNodePtr JSON_Impl::parseNumber(ISource &source)
     {
         std::string value;
         value += source.current();
@@ -146,7 +146,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    JNodePtr JSONImplementation::parseBoolean(ISource &source)
+    JNodePtr JSON_Impl::parseBoolean(ISource &source)
     {
         std::string value = extractValue(source);
         if (value == "true")
@@ -164,7 +164,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    JNodePtr JSONImplementation::parseNull(ISource &source)
+    JNodePtr JSON_Impl::parseNull(ISource &source)
     {
         if (extractValue(source) != "null")
         {
@@ -177,7 +177,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    JNodePtr JSONImplementation::parseObject(ISource &source)
+    JNodePtr JSON_Impl::parseObject(ISource &source)
     {
         std::vector<JNodeObject::Entry> objects;
         source.next();
@@ -204,7 +204,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    JNodePtr JSONImplementation::parseArray(ISource &source)
+    JNodePtr JSON_Impl::parseArray(ISource &source)
     {
         std::vector<JNodePtr> array;
         source.next();
@@ -234,7 +234,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    JNodePtr JSONImplementation::parseJNodes(ISource &source)
+    JNodePtr JSON_Impl::parseJNodes(ISource &source)
     {
         source.ignoreWS();
         switch (source.current())
@@ -273,7 +273,7 @@ namespace JSONLib
     /// <param name=jNode>JNode structure to be traversed</param>
     /// <param name=destination>destination stream for stringified JSON</param>
     /// <returns></returns>
-    void JSONImplementation::stringifyJNodes(JNode &jNode, IDestination &destination)
+    void JSON_Impl::stringifyJNodes(JNode &jNode, IDestination &destination)
     {
         switch (jNode.nodeType)
         {
@@ -333,7 +333,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source of JSON</param>
     /// <param name="destinaton">Destination for stripped JSON</param>
-    void JSONImplementation::stripWhiteSpace(ISource &source, IDestination &destination)
+    void JSON_Impl::stripWhiteSpace(ISource &source, IDestination &destination)
     {
         while (source.more())
         {
@@ -360,11 +360,11 @@ namespace JSONLib
     /// Set translator for JSON strings.
     /// </summary>
     /// <param name=translator>Custom JSON string translator.</param>
-    void JSONImplementation::translator(ITranslator *translator)
+    void JSON_Impl::translator(ITranslator *translator)
     {
         if (translator == nullptr)
         {
-            m_translator = std::make_unique<JSONTranslator>();
+            m_translator = std::make_unique<JSON_Translator>();
         }
         else
         {
@@ -376,7 +376,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source of JSON</param>
     /// <param name="destinaton">Destination for stripped JSON</param>
-    void JSONImplementation::strip(ISource &source, IDestination &destination)
+    void JSON_Impl::strip(ISource &source, IDestination &destination)
     {
         stripWhiteSpace(source, destination);
     }
@@ -384,7 +384,7 @@ namespace JSONLib
     /// Create JNode structure by recursively parsing JSON on the source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.
-    void JSONImplementation::parse(ISource &source)
+    void JSON_Impl::parse(ISource &source)
     {
         m_jNodeRoot = parseJNodes(source);
     }
@@ -394,7 +394,7 @@ namespace JSONLib
     /// <param name="jNodeRoot">Root of JNode structure.</param>
     /// <param name=destination>destination stream for stringified JSON</param>
     /// <returns></returns>
-    void JSONImplementation::stringify(IDestination &destination)
+    void JSON_Impl::stringify(IDestination &destination)
     {
         if (m_jNodeRoot.get() == nullptr)
         {

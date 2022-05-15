@@ -18,7 +18,7 @@ namespace JSONLib
     // ================
     // CLASS DEFINITION
     // ================
-    class JSONTranslator : public ITranslator
+    class JSON_Translator : public ITranslator
     {
     public:
         // ==========================
@@ -27,7 +27,7 @@ namespace JSONLib
         // ============
         // CONSTRUCTORS
         // ============
-        JSONTranslator()
+        JSON_Translator()
         {
             initialiseTranslationMaps();
         }

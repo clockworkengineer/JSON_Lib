@@ -1,5 +1,5 @@
 //
-// Class: JSONTranslator
+// Class: JSON_Translator
 //
 // Description: Translate to/from JSON string escapes within source
 // strings. This is the default translator but is possible to write 
@@ -11,7 +11,7 @@
 // CLASS DEFINITIONS
 // =================
 #include "JSON.hpp"
-#include "JSONTranslator.hpp"
+#include "JSON_Translator.hpp"
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
@@ -39,7 +39,7 @@ namespace JSONLib
     /// Initialise tables used to convert to/from single character
     /// escape sequences within a JSON string.
     /// </summary>
-    void JSONTranslator::initialiseTranslationMaps()
+    void JSON_Translator::initialiseTranslationMaps()
     {
         // From Escape sequence
         m_fromMap['\\'] = u"\\";
@@ -70,7 +70,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="jsonString">JSON string to process.</param>
     /// <returns>String with escapes translated.</returns>
-    std::string JSONTranslator::fromEscapeSequences(const std::string &jsonString)
+    std::string JSON_Translator::fromEscapeSequences(const std::string &jsonString)
     {
         std::u16string workBuffer;
         auto current = jsonString.begin();
@@ -138,7 +138,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="utf8String">String to convert.</param>
     /// <returns>JSON string with escapes.</returns>
-    std::string JSONTranslator::toEscapeSequences(std::string const &utf8String)
+    std::string JSON_Translator::toEscapeSequences(std::string const &utf8String)
     {
         std::string workBuffer;
         for (char16_t utf16char : m_UTF16.from_bytes(utf8String))

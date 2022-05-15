@@ -36,7 +36,7 @@ namespace JSONLib
     class ISource;
     class IDestination;
     class ITranslator;
-    class JSONImplementation;
+    class JSON_Impl;
     struct JNode;
     // ================
     // CLASS DEFINITION
@@ -83,6 +83,6 @@ namespace JSONLib
         // =================
         // PRIVATE VARIABLES
         // =================
-        std::unique_ptr<JSONImplementation> m_implementation;
+        std::unique_ptr<JSON_Impl> m_implementation;
     };
 } // namespace JSONLib

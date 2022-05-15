@@ -7,10 +7,10 @@
 // Class under test includes
 // =========================
 #include "JSON.hpp"
-#include "JNode.hpp"
-#include "JSONSources.hpp"
-#include "JSONDestinations.hpp"
-#include "JSONTranslator.hpp"
+#include "JSON_Nodes.hpp"
+#include "JSON_Sources.hpp"
+#include "JSON_Destinations.hpp"
+#include "JSON_Translator.hpp"
 // ============
 // STL includes
 // ============

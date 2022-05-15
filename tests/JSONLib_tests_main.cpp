@@ -7,7 +7,7 @@
 // ================
 // Test definitions
 // =================
-#include "JSON_tests.hpp"
+#include "JSONLib_tests.hpp"
 // =======================
 // JSON class namespace
 // =======================
@@ -290,7 +290,7 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]")
 }
 TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
 {
-  JSONTranslator translator;
+  JSON_Translator translator;
   SECTION("Translate from escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
   { // Needed to convert const char8_t * to string
     REQUIRE(translator.fromEscapeSequences("Begin \\uD834\\uDD1E End") == reinterpret_cast<const char *>(u8"Begin \U0001D11E End"));

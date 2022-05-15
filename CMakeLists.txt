@@ -12,7 +12,7 @@ elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   add_compile_options(-Wall -Werror -pedantic)
 endif()
 
-configure_file(JSONConfig.h.in JSONConfig.hpp)
+configure_file(JSON_Config.h.in JSON_Config.hpp)
 
 set(JSON_LIBRARY_NAME ${PROJECT_NAME})
 
@@ -20,19 +20,19 @@ set(JSON_LIBRARY_NAME ${PROJECT_NAME})
 
 set (JSON_SOURCES
     ./classes/JSON.cpp
-    ./classes/JSONImplementation.cpp
-    ./classes/JSONTranslator.cpp
+    ./classes/JSON_Impl.cpp
+    ./classes/JSON_Translator.cpp
 )
 
 set (JSON_INCLUDES
-    JSONConfig.hpp
+    JSON_Config.hpp
     ./include/JSON.hpp
-    ./include/JSONImplementation.hpp
-    ./include/JNode.hpp
-    ./include/JSONSources.hpp
-    ./include/JSONDestinations.hpp
-    ./include/JSONTranslator.hpp
-    ./include/interface/Isource.hpp
+    ./include/JSON_Impl.hpp
+    ./include/JSON_Nodes.hpp
+    ./include/JSON_Sources.hpp
+    ./include/JSON_Destinations.hpp
+    ./include/JSON_Translator.hpp
+    ./include/interface/ISource.hpp
     ./include/interface/IDestination.hpp
     ./include/interface/ITranslator.hpp
 )
