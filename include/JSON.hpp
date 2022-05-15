@@ -9,7 +9,7 @@
 //
 // JSON version
 //
-#include "JSONConfig.hpp"
+#include "JSON_Config.hpp"
 // =========
 // NAMESPACE
 // =========

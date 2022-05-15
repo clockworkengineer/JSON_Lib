@@ -6,7 +6,7 @@
 // ================
 // Test definitions
 // =================
-#include "JSONLib_tests.hpp"
+#include "JSONLib_Tests.hpp"
 // =======================
 // JSON class namespace
 // =======================
