@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23.1)
+cmake_minimum_required(VERSION 3.16.3)
 
 project("JSONLib Unit Tests" VERSION 0.1.0 DESCRIPTION "JSON C++ Library Catch Unit Tests" LANGUAGES CXX)
 
@@ -21,10 +21,10 @@ enable_testing()
 set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
 set(TEST_SOURCES
-    JSONLib_tests_main.cpp
-    JSONLib_tests_parse.cpp
-    JSONLib_tests_stringify.cpp
-    JSONLib_tests_helper.cpp)
+    JSONLib_Tests_Main.cpp
+    JSONLib_Tests_Parse.cpp
+    JSONLib_Tests_Stringify.cpp
+    JSONLib_Tests_Helper.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${PROJECT_CURRENT_SOURCE_DIR}/include)
