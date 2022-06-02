@@ -156,18 +156,18 @@ TEST_CASE("Stringify generated exceptions", "[JSON][Stringify][Exceptions]")
     }
 // //     SECTION("Stringify passed invalid JNode type", "[JSON][Stringify][Exceptions]")
 // //     {
-// //         REQUIRE_THROWS_AS(json.stringifyToBuffer(JNodePtr(new JNode())), std::runtime_error);
-// //         REQUIRE_THROWS_WITH(json.stringifyToBuffer(JNodePtr(new JNode())), "Unknown JNode type encountered during stringification.");
+// //         REQUIRE_THROWS_AS(json.stringifyToBuffer(JNode::Ptr(new JNode())), std::runtime_error);
+// //         REQUIRE_THROWS_WITH(json.stringifyToBuffer(JNode::Ptr(new JNode())), "Unknown JNode type encountered during stringification.");
 // //     }
 // //     SECTION("Stringify file passed invalid JNode type", "[JSON][Stringify][Exceptions]")
 // //     {
-// //         REQUIRE_THROWS_AS(json.stringifyToFile(JNodePtr(nullptr), prefixTestDataPath(kGeneratedJSONFile)), std::invalid_argument);
-// //         REQUIRE_THROWS_WITH(json.stringifyToFile(JNodePtr(nullptr), prefixTestDataPath(kGeneratedJSONFile)), "Nullptr passed as JNode root to be stringified.");
+// //         REQUIRE_THROWS_AS(json.stringifyToFile(JNode::Ptr(nullptr), prefixTestDataPath(kGeneratedJSONFile)), std::invalid_argument);
+// //         REQUIRE_THROWS_WITH(json.stringifyToFile(JNode::Ptr(nullptr), prefixTestDataPath(kGeneratedJSONFile)), "Nullptr passed as JNode root to be stringified.");
 // //     }
 // //     SECTION("Stringify file passed empty string for file name", "[JSON][Stringify][Exceptions]")
 // //     {
-// //         REQUIRE_THROWS_AS(json.stringifyToFile(JNodePtr(new JNode()), ""), std::invalid_argument);
-// //         REQUIRE_THROWS_WITH(json.stringifyToFile(JNodePtr(new JNode()), ""), "Empty file name passed to be stringified.");
+// //         REQUIRE_THROWS_AS(json.stringifyToFile(JNode::Ptr(new JNode()), ""), std::invalid_argument);
+// //         REQUIRE_THROWS_WITH(json.stringifyToFile(JNode::Ptr(new JNode()), ""), "Empty file name passed to be stringified.");
 // //     }
 }
 TEST_CASE("JSON object for stringification of a list of example JSON files.", "[JSON][Stringify]")

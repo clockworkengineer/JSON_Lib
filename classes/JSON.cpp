@@ -62,7 +62,7 @@ namespace JSONLib
     /// Strip all whitespace from a JSON source.
     /// </summary>
     /// <param name="source">Source of JSON</param>
-    /// <param name="destinaton">Destination for stripped JSON</param>
+    /// <param name="destination">Destination for stripped JSON</param>
     void JSON::strip(ISource &source, IDestination &destination)
     {
         m_implementation->strip(source, destination);

@@ -61,20 +61,20 @@ namespace JSONLib
         // ===============
         std::string extractString(ISource &source);
         std::string extractValue(ISource &source);
-        void extractKeyValuePair(ISource &source, std::vector<JNodeObject::Entry> &objects);
-        JNodePtr parseString(ISource &source);
-        JNodePtr parseNumber(ISource &source);
-        JNodePtr parseBoolean(ISource &source);
-        JNodePtr parseNull(ISource &source);
-        JNodePtr parseObject(ISource &source);
-        JNodePtr parseArray(ISource &source);
-        JNodePtr parseJNodes(ISource &source);
+        JNodeObject::Entry extractKeyValuePair(ISource &source);
+        JNode::Ptr parseString(ISource &source);
+        JNode::Ptr parseNumber(ISource &source);
+        JNode::Ptr parseBoolean(ISource &source);
+        JNode::Ptr parseNull(ISource &source);
+        JNode::Ptr parseObject(ISource &source);
+        JNode::Ptr parseArray(ISource &source);
+        JNode::Ptr parseJNodes(ISource &source);
         void stringifyJNodes(JNode &jNode, IDestination &destination);
         void stripWhiteSpace(ISource &source, IDestination &destination);
         // =================
         // PRIVATE VARIABLES
         // =================
-        JNodePtr m_jNodeRoot;
+        JNode::Ptr m_jNodeRoot;
         std::unique_ptr<ITranslator> m_translator;
     };
 } // namespace JSONLib

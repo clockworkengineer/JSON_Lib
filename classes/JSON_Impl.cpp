@@ -1,7 +1,7 @@
 //
 // Class: JSON_Impl
 //
-// Description: JSON class implementation
+// Description: JSON class implementation layer.
 //
 // Dependencies:   C20++ - Language standard features used.
 //
@@ -73,25 +73,23 @@ namespace JSONLib
     /// Extract alphabetic value from source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
-    /// <returns>String alphabetic value true/false/null</returns>
+    /// <returns>String alphabetic value "true"/"false"/"null".</returns>
     std::string JSON_Impl::extractValue(ISource &source)
     {
         std::string value;
-        value += source.current();
-        source.next();
         while (source.more() && (std::isalpha(source.current()) != 0))
         {
             value += source.current();
             source.next();
         }
-        return(value);
+        return (value);
     }
     /// <summary>
     /// Extract a key/value pair from a JSON encoded source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
-    /// <param name="objects">Vector of object key/values.</param>
-    void JSON_Impl::extractKeyValuePair(ISource &source, std::vector<JNodeObject::Entry> &objects)
+    /// <returns>Object key/value pair.</returns>
+    JNodeObject::Entry JSON_Impl::extractKeyValuePair(ISource &source)
     {
         std::string key = m_translator->fromEscapeSequences(extractString(source));
         source.ignoreWS();
@@ -100,16 +98,14 @@ namespace JSONLib
             throw JSONLib::SyntaxError();
         }
         source.next();
-        source.ignoreWS();
-        objects.emplace_back(key, parseJNodes(source));
-        source.ignoreWS();
+        return (JNodeObject::Entry { key, parseJNodes(source) });
     }
     /// <summary>
     /// Parse a string from a JSON source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
-    /// <returns></returns>
-    JNodePtr JSON_Impl::parseString(ISource &source)
+    /// <returns>String value.</returns>
+    JNode::Ptr JSON_Impl::parseString(ISource &source)
     {
         return (std::make_unique<JNodeString>(m_translator->fromEscapeSequences(extractString(source))));
     }
@@ -118,11 +114,9 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    JNodePtr JSON_Impl::parseNumber(ISource &source)
+    JNode::Ptr JSON_Impl::parseNumber(ISource &source)
     {
         std::string value;
-        value += source.current();
-        source.next();
         while (source.more() && isValidNumeric(source.current()))
         {
             value += source.current();
@@ -145,8 +139,8 @@ namespace JSONLib
     /// Parse a boolean from a JSON source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
-    /// <returns></returns>
-    JNodePtr JSON_Impl::parseBoolean(ISource &source)
+    /// <returns> Boolean JNode.</returns>
+    JNode::Ptr JSON_Impl::parseBoolean(ISource &source)
     {
         std::string value = extractValue(source);
         if (value == "true")
@@ -163,8 +157,8 @@ namespace JSONLib
     /// Parse a null from a JSON source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
-    /// <returns></returns>
-    JNodePtr JSON_Impl::parseNull(ISource &source)
+    /// <returns>Null JNode.</returns>
+    JNode::Ptr JSON_Impl::parseNull(ISource &source)
     {
         if (extractValue(source) != "null")
         {
@@ -176,20 +170,22 @@ namespace JSONLib
     /// Parse an object from a JSON source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
-    /// <returns></returns>
-    JNodePtr JSON_Impl::parseObject(ISource &source)
+    /// <returns>JNodeObject key/value pairs.</returns>
+    JNode::Ptr JSON_Impl::parseObject(ISource &source)
     {
         std::vector<JNodeObject::Entry> objects;
         source.next();
         source.ignoreWS();
         if (source.current() != '}')
         {
-            extractKeyValuePair(source, objects);
+            objects.emplace_back(extractKeyValuePair(source));
+            source.ignoreWS();
             while (source.current() == ',')
             {
                 source.next();
                 source.ignoreWS();
-                extractKeyValuePair(source, objects);
+                objects.emplace_back(extractKeyValuePair(source));
+                source.ignoreWS();
             }
         }
         if (source.current() != '}')
@@ -203,10 +199,10 @@ namespace JSONLib
     /// Parse an array from a JSON source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
-    /// <returns></returns>
-    JNodePtr JSON_Impl::parseArray(ISource &source)
+    /// <returns>JNodeArray.</returns>
+    JNode::Ptr JSON_Impl::parseArray(ISource &source)
     {
-        std::vector<JNodePtr> array;
+        std::vector<JNode::Ptr> array;
         source.next();
         source.ignoreWS();
         if (source.current() != ']')
@@ -234,7 +230,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns></returns>
-    JNodePtr JSON_Impl::parseJNodes(ISource &source)
+    JNode::Ptr JSON_Impl::parseJNodes(ISource &source)
     {
         source.ignoreWS();
         switch (source.current())
@@ -332,7 +328,7 @@ namespace JSONLib
     /// Strip all whitespace from a JSON source.
     /// </summary>
     /// <param name="source">Source of JSON</param>
-    /// <param name="destinaton">Destination for stripped JSON</param>
+    /// <param name="destination">Destination for stripped JSON</param>
     void JSON_Impl::stripWhiteSpace(ISource &source, IDestination &destination)
     {
         while (source.more())
@@ -375,7 +371,7 @@ namespace JSONLib
     /// Strip all whitespace from a JSON source.
     /// </summary>
     /// <param name="source">Source of JSON</param>
-    /// <param name="destinaton">Destination for stripped JSON</param>
+    /// <param name="destination">Destination for stripped JSON</param>
     void JSON_Impl::strip(ISource &source, IDestination &destination)
     {
         stripWhiteSpace(source, destination);

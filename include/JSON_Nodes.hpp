@@ -17,18 +17,19 @@ namespace JSONLib
     enum class JNodeType
     {
         base = 0,
-        object = 1,
-        array = 2,
-        number = 3,
-        string = 4,
-        boolean = 5,
-        null = 6
+        object,
+        array,
+        number,
+        string,
+        boolean,
+        null
     };
     //
     // Base JNode/
     //
     struct JNode
     {
+        using Ptr = std::unique_ptr<JNode>;
         struct Error : public std::exception
         {
         public:
@@ -47,18 +48,14 @@ namespace JSONLib
         virtual ~JNode() = default;
         JNode &operator[](const std::string &key);
         JNode &operator[](int index);
-        const JNodeType nodeType;
+        JNodeType nodeType;
     };
-    //
-    // Pointer to JNode
-    //
-    using JNodePtr = std::unique_ptr<JNode>;
     //
     // Dictionary JNode.
     //
     struct JNodeObject : JNode
     {
-        using Entry = std::pair<std::string, JNodePtr>;
+        using Entry = std::pair<std::string, JNode::Ptr>;
         explicit JNodeObject(std::vector<JNodeObject::Entry> &value) : JNode(JNodeType::object),
                                                                        m_value(std::move(value))
         {
@@ -93,14 +90,14 @@ namespace JSONLib
         }
 
     private:
-        const std::vector<JNodeObject::Entry> m_value;
+        std::vector<JNodeObject::Entry> m_value;
     };
     //
     // Array JNode.
     //
     struct JNodeArray : JNode
     {
-        explicit JNodeArray(std::vector<JNodePtr> &value) : JNode(JNodeType::array),
+        explicit JNodeArray(std::vector<JNode::Ptr> &value) : JNode(JNodeType::array),
                                                             m_value(std::move(value))
         {
         }
@@ -108,7 +105,7 @@ namespace JSONLib
         {
             return (static_cast<int>(m_value.size()));
         }
-        const std::vector<JNodePtr> &array() const
+        const std::vector<JNode::Ptr> &array() const
         {
             return (m_value);
         }
@@ -122,7 +119,7 @@ namespace JSONLib
         }
 
     private:
-        const std::vector<JNodePtr> m_value;
+        std::vector<JNode::Ptr> m_value;
     };
     //
     // Number JNode.
@@ -154,7 +151,7 @@ namespace JSONLib
         }
 
     private:
-        const std::string m_value;
+        std::string m_value;
     };
     //
     // String JNode.
@@ -170,7 +167,7 @@ namespace JSONLib
         }
 
     private:
-        const std::string m_value;
+        std::string m_value;
     };
     //
     // Boolean JNode.
@@ -186,7 +183,7 @@ namespace JSONLib
         }
 
     private:
-        const bool m_value;
+        bool m_value;
     };
     //
     // Boolean JNode.

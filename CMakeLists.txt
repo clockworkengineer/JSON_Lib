@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16.3)
+cmake_minimum_required(VERSION 3.23.1)
 
 project("JSONLib" VERSION 0.1.0 DESCRIPTION "JSON C++ Library" LANGUAGES CXX)
 
