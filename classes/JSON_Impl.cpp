@@ -97,7 +97,7 @@ namespace JSONLib
     /// <returns>Object key/value pair.</returns>
     JNodeObject::Entry JSON_Impl::extractKeyValuePair(ISource &source)
     {
-        std::string key = m_translator->fromEscapeSequences(extractString(source));
+        std::string key = m_translator->from(extractString(source));
         if (source.current() != ':')
         {
             throw JSONLib::SyntaxError();
@@ -113,7 +113,7 @@ namespace JSONLib
     /// <returns>String value.</returns>
     JNode::Ptr JSON_Impl::parseString(ISource &source)
     {
-        return (std::make_unique<JNodeString>(m_translator->fromEscapeSequences(extractString(source))));
+        return (std::make_unique<JNodeString>(m_translator->from(extractString(source))));
     }
     /// <summary>
     /// Parse a number from a JSON source stream.
@@ -283,7 +283,7 @@ namespace JSONLib
             break;
         case JNodeType::string:
             destination.add('"');
-            destination.add(m_translator->toEscapeSequences(JNodeRef<JNodeString>(jNode).string()));
+            destination.add(m_translator->to(JNodeRef<JNodeString>(jNode).string()));
             destination.add('"');
             break;
         case JNodeType::boolean:
@@ -299,7 +299,7 @@ namespace JSONLib
             for (const auto &[key, jNodePtr] : JNodeRef<JNodeObject>(jNode).objects())
             {
                 destination.add('"');
-                destination.add(m_translator->toEscapeSequences(key));
+                destination.add(m_translator->to(key));
                 destination.add("\":");
                 stringifyJNodes(JNodeRef<JNodeObject>(jNode)[key], destination);
                 if (commaCount-- > 0)

@@ -2,7 +2,7 @@
 // Class: JSON_Translator
 //
 // Description: Translate to/from JSON string escapes within source
-// strings. This is the default translator but is possible to write 
+// strings. This is the default translator but is possible to write
 // a custom one and pass it to the JSON class constructor to be used.
 //
 // Dependencies:   C20++ - Language standard features used.
@@ -29,6 +29,7 @@ namespace JSONLib
     // ========================
     // PRIVATE STATIC VARIABLES
     // ========================
+    static std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_UTF16;
     // =======================
     // PUBLIC STATIC VARIABLES
     // =======================
@@ -36,29 +37,40 @@ namespace JSONLib
     // PRIVATE METHODS
     // ===============
     /// <summary>
+    /// Convert utf8 <-> utf16 strings.
+    /// </summary>
+    static std::u16string utf8_to_utf16(const std::string &utf8)
+    {
+        return (m_UTF16.from_bytes(utf8));
+    }
+    static std::string utf16_to_utf8(const std::u16string &utf16)
+    {
+        return (m_UTF16.to_bytes(utf16));
+    }
+    /// <summary>
     /// Initialise tables used to convert to/from single character
     /// escape sequences within a JSON string.
     /// </summary>
     void JSON_Translator::initialiseTranslationMaps()
     {
         // From Escape sequence
-        m_fromMap['\\'] = u"\\";
-        m_fromMap['t'] = u"\t";
-        m_fromMap['\"'] = u"\"";
-        m_fromMap['/'] = u"/";
-        m_fromMap['b'] = u"\b";
-        m_fromMap['f'] = u"\f";
-        m_fromMap['n'] = u"\n";
-        m_fromMap['r'] = u"\r";
+        m_from['\\'] = u"\\";
+        m_from['t'] = u"\t";
+        m_from['\"'] = u"\"";
+        m_from['/'] = u"/";
+        m_from['b'] = u"\b";
+        m_from['f'] = u"\f";
+        m_from['n'] = u"\n";
+        m_from['r'] = u"\r";
         // To Escape sequence
-        m_toMap['\\'] = "\\\\";
-        m_toMap['\t'] = "\\t";
-        m_toMap['"'] = "\\\"";
-        m_toMap['/'] = "\\/";
-        m_toMap['\b'] = "\\b";
-        m_toMap['\f'] = "\\f";
-        m_toMap['\n'] = "\\n";
-        m_toMap['\r'] = "\\r";
+        m_to['\\'] = "\\\\";
+        m_to['\t'] = "\\t";
+        m_to['"'] = "\\\"";
+        m_to['/'] = "\\/";
+        m_to['\b'] = "\\b";
+        m_to['\f'] = "\\f";
+        m_to['\n'] = "\\n";
+        m_to['\r'] = "\\r";
     }
     // ==============
     // PUBLIC METHODS
@@ -70,7 +82,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="jsonString">JSON string to process.</param>
     /// <returns>String with escapes translated.</returns>
-    std::string JSON_Translator::fromEscapeSequences(const std::string &jsonString)
+    std::string JSON_Translator::from(const std::string &jsonString)
     {
         std::u16string workBuffer;
         auto current = jsonString.begin();
@@ -88,11 +100,11 @@ namespace JSONLib
                 if (current != jsonString.end())
                 {
                     // Single character
-                    if (m_fromMap.count(*current) > 0)
+                    if (m_from.count(*current) > 0)
                     {
-                        workBuffer += m_fromMap[*current++];
+                        workBuffer += m_from[*current++];
                     }
-                    // UTF16 "\uxxxx" 
+                    // UTF16 "\uxxxx"
                     else if ((*current == 'u') && ((current + 4) < jsonString.end()))
                     {
                         char hexDigits[5] = {current[1], current[2], current[3], current[4], '\0'};
@@ -128,9 +140,9 @@ namespace JSONLib
             {
                 throw JSONLib::SyntaxError();
             }
-            index++; 
+            index++;
         }
-        return (m_UTF16.to_bytes(workBuffer));
+        return (utf16_to_utf8(workBuffer));
     }
     /// <summary>
     /// Convert a string from raw charater values (UTF8) so that it has character
@@ -138,15 +150,15 @@ namespace JSONLib
     /// </summary>
     /// <param name="utf8String">String to convert.</param>
     /// <returns>JSON string with escapes.</returns>
-    std::string JSON_Translator::toEscapeSequences(std::string const &utf8String)
+    std::string JSON_Translator::to(std::string const &utf8String)
     {
         std::string workBuffer;
-        for (char16_t utf16char : m_UTF16.from_bytes(utf8String))
+        for (char16_t utf16char : utf8_to_utf16(utf8String))
         {
             // Control characters
-            if (m_toMap.count(utf16char) > 0)
+            if (m_to.count(utf16char) > 0)
             {
-                workBuffer += m_toMap[utf16char];
+                workBuffer += m_to[utf16char];
             }
             // ASCII
             else if ((utf16char > 0x1F) && (utf16char < 0x80))

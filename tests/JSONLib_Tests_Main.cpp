@@ -293,31 +293,31 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
   JSON_Translator translator;
   SECTION("Translate from escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
   { // Needed to convert const char8_t * to string
-    REQUIRE(translator.fromEscapeSequences("Begin \\uD834\\uDD1E End") == reinterpret_cast<const char *>(u8"Begin \U0001D11E End"));
+    REQUIRE(translator.from("Begin \\uD834\\uDD1E End") == reinterpret_cast<const char *>(u8"Begin \U0001D11E End"));
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 \\uDD1E End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.fromEscapeSequences("Begin \\uD834 \\uDD1E End"), JSONLib::SyntaxError);
-    REQUIRE_THROWS_WITH(translator.fromEscapeSequences("Begin \\uD834 \\uDD1E End"), "JSON syntax error detected.");
+    REQUIRE_THROWS_AS(translator.from("Begin \\uD834 \\uDD1E End"), JSONLib::SyntaxError);
+    REQUIRE_THROWS_WITH(translator.from("Begin \\uD834 \\uDD1E End"), "JSON syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834\\u0045 End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.fromEscapeSequences("Begin \\uD834\\u0045 End"), JSONLib::SyntaxError);
-    REQUIRE_THROWS_WITH(translator.fromEscapeSequences("Begin \\uD834\\u0045 End"), "JSON syntax error detected.");
+    REQUIRE_THROWS_AS(translator.from("Begin \\uD834\\u0045 End"), JSONLib::SyntaxError);
+    REQUIRE_THROWS_WITH(translator.from("Begin \\uD834\\u0045 End"), "JSON syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.fromEscapeSequences("Begin \\uD834 End"), JSONLib::SyntaxError);
-    REQUIRE_THROWS_WITH(translator.fromEscapeSequences("Begin \\uD834 End"), "JSON syntax error detected.");
+    REQUIRE_THROWS_AS(translator.from("Begin \\uD834 End"), JSONLib::SyntaxError);
+    REQUIRE_THROWS_WITH(translator.from("Begin \\uD834 End"), "JSON syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uDD1E End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.fromEscapeSequences("Begin \\uDD1E End"), JSONLib::SyntaxError);
-    REQUIRE_THROWS_WITH(translator.fromEscapeSequences("Begin \\uDD1E End"), "JSON syntax error detected.");
+    REQUIRE_THROWS_AS(translator.from("Begin \\uDD1E End"), JSONLib::SyntaxError);
+    REQUIRE_THROWS_WITH(translator.from("Begin \\uDD1E End"), "JSON syntax error detected.");
   }
   SECTION("Translate to escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
   { // Needed to convert const char8_t * to string
-    REQUIRE(translator.toEscapeSequences(reinterpret_cast<const char *>(u8"Begin \U0001D11E End")) == "Begin \\uD834\\uDD1E End");
+    REQUIRE(translator.to(reinterpret_cast<const char *>(u8"Begin \U0001D11E End")) == "Begin \\uD834\\uDD1E End");
   }
 }
 TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Reference]")

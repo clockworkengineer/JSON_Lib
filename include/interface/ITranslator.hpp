@@ -12,8 +12,8 @@ namespace JSONLib
     {
     public:
         virtual ~ITranslator() = default;
-        virtual std::string fromEscapeSequences(const std::string &jsonString) = 0;
-        virtual std::string toEscapeSequences(const std::string &utf8String) = 0;
+        virtual std::string from(const std::string &jsonString) = 0;
+        virtual std::string to(const std::string &utf8String) = 0;
 
     protected:
         [[nodiscard]] static bool isValidSurrogateUpper(char16_t c)

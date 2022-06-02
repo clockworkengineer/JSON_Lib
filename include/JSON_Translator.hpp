@@ -37,8 +37,8 @@ namespace JSONLib
         // ==============
         // PUBLIC METHODS
         // ==============
-        std::string fromEscapeSequences(const std::string &jsonString) override;
-        std::string toEscapeSequences(const std::string &utf8String) override;
+        std::string from(const std::string &jsonString) override;
+        std::string to(const std::string &utf8String) override;
         // ================
         // PUBLIC VARIABLES
         // ================
@@ -56,8 +56,7 @@ namespace JSONLib
         // =================
         // PRIVATE VARIABLES
         // =================
-        std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_UTF16;
-        std::map<char, std::u16string> m_fromMap;
-        std::map<char16_t, std::string> m_toMap;
+        std::map<char, std::u16string> m_from;
+        std::map<char16_t, std::string> m_to;
     };
 } // namespace JSONLib
