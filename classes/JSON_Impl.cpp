@@ -50,8 +50,12 @@ namespace JSONLib
     /// <returns>Extracted string</returns>
     std::string JSON_Impl::extractString(ISource &source)
     {
-        std::string value;
+        if (source.current() != '"')
+        {
+            throw JSONLib::SyntaxError();
+        }
         source.next();
+        std::string value;
         while (source.more() && source.current() != '"')
         {
             if (source.current() == '\\')
@@ -67,6 +71,7 @@ namespace JSONLib
             throw JSONLib::SyntaxError();
         }
         source.next();
+        source.ignoreWS();
         return (value);
     }
     /// <summary>
@@ -82,6 +87,7 @@ namespace JSONLib
             value += source.current();
             source.next();
         }
+        source.ignoreWS();
         return (value);
     }
     /// <summary>
@@ -92,13 +98,13 @@ namespace JSONLib
     JNodeObject::Entry JSON_Impl::extractKeyValuePair(ISource &source)
     {
         std::string key = m_translator->fromEscapeSequences(extractString(source));
-        source.ignoreWS();
         if (source.current() != ':')
         {
             throw JSONLib::SyntaxError();
         }
         source.next();
-        return (JNodeObject::Entry { key, parseJNodes(source) });
+        source.ignoreWS();
+        return (JNodeObject::Entry{key, parseJNodes(source)});
     }
     /// <summary>
     /// Parse a string from a JSON source stream.
@@ -133,6 +139,7 @@ namespace JSONLib
                 throw JSONLib::SyntaxError();
             }
         }
+        source.ignoreWS();
         return (std::make_unique<JNodeNumber>(value));
     }
     /// <summary>
@@ -179,13 +186,11 @@ namespace JSONLib
         if (source.current() != '}')
         {
             objects.emplace_back(extractKeyValuePair(source));
-            source.ignoreWS();
             while (source.current() == ',')
             {
                 source.next();
                 source.ignoreWS();
                 objects.emplace_back(extractKeyValuePair(source));
-                source.ignoreWS();
             }
         }
         if (source.current() != '}')
@@ -193,6 +198,7 @@ namespace JSONLib
             throw JSONLib::SyntaxError();
         }
         source.next();
+        source.ignoreWS();
         return (std::make_unique<JNodeObject>(objects));
     }
     /// <summary>
@@ -208,13 +214,11 @@ namespace JSONLib
         if (source.current() != ']')
         {
             array.emplace_back(parseJNodes(source));
-            source.ignoreWS();
             while (source.current() == ',')
             {
                 source.next();
                 source.ignoreWS();
                 array.emplace_back(parseJNodes(source));
-                source.ignoreWS();
             }
         }
         if (source.current() != ']')
@@ -222,6 +226,7 @@ namespace JSONLib
             throw JSONLib::SyntaxError();
         }
         source.next();
+        source.ignoreWS();
         return (std::make_unique<JNodeArray>(array));
     }
     /// <summary>
