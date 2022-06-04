@@ -20,26 +20,27 @@
 // =========
 namespace JSONLib
 {
-// ===========================
-// PRIVATE TYPES AND CONSTANTS
-// ===========================
-// ==========================
-// PUBLIC TYPES AND CONSTANTS
-// ==========================
-// ========================
-// PRIVATE STATIC VARIABLES
-// ========================
-#if defined(_WIN64)
-#include "Windows.h"
-#else
-    static std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_UTF16;
-#endif
+    // ===========================
+    // PRIVATE TYPES AND CONSTANTS
+    // ===========================
+    // ==========================
+    // PUBLIC TYPES AND CONSTANTS
+    // ==========================
+    // ========================
+    // PRIVATE STATIC VARIABLES
+    // ========================
     // =======================
     // PUBLIC STATIC VARIABLES
     // =======================
     // ===============
     // PRIVATE METHODS
     // ===============
+    // NEED TO SEPARATE OUT LAYER.
+#if defined(_WIN64)
+#include "Windows.h"
+#else
+    static std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_UTF16;
+#endif
     /// <summary>
     /// Convert utf8 <-> utf16 strings.
     /// </summary>
@@ -51,7 +52,7 @@ namespace JSONLib
         MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.length()), &wstr[0], count);
         return (std::u16string{wstr.begin(), wstr.end()});
 #else
-        return(m_UTF16.from_bytes(utf8));
+        return (m_UTF16.from_bytes(utf8));
 #endif
     }
     static std::string utf16_to_utf8(const std::u16string &utf16)
