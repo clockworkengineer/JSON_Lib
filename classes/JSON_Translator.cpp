@@ -35,38 +35,6 @@ namespace JSONLib
     // ===============
     // PRIVATE METHODS
     // ===============
-    // NEED TO SEPARATE OUT LAYER.
-#if defined(_WIN64)
-#include "Windows.h"
-#else
-    static std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_UTF16;
-#endif
-    /// <summary>
-    /// Convert utf8 <-> utf16 strings.
-    /// </summary>
-    static std::u16string utf8_to_utf16(const std::string &utf8)
-    {
-#if defined(_WIN64)
-        int count = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.length()), NULL, 0);
-        std::wstring wstr(count, 0);
-        MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.length()), &wstr[0], count);
-        return (std::u16string{wstr.begin(), wstr.end()});
-#else
-        return (m_UTF16.from_bytes(utf8));
-#endif
-    }
-    static std::string utf16_to_utf8(const std::u16string &utf16)
-    {
-#if defined(_WIN64)
-        std::wstring wstr{utf16.begin(), utf16.end()};
-        int count = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), static_cast<int>(wstr.length()), NULL, 0, NULL, NULL);
-        std::string str(count, 0);
-        WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], count, NULL, NULL);
-        return str;
-#else
-        return (m_UTF16.to_bytes(utf16));
-#endif
-    }
     /// <summary>
     /// Initialise tables used to convert to/from single character
     /// escape sequences within a JSON string.
@@ -162,7 +130,7 @@ namespace JSONLib
             }
             index++;
         }
-        return (utf16_to_utf8(workBuffer));
+        return (m_converter.utf16_to_utf8(workBuffer));
     }
     /// <summary>
     /// Convert a string from raw charater values (UTF8) so that it has character
@@ -173,7 +141,7 @@ namespace JSONLib
     std::string JSON_Translator::to(std::string const &utf8String)
     {
         std::string workBuffer;
-        for (char16_t utf16char : utf8_to_utf16(utf8String))
+        for (char16_t utf16char : m_converter.utf8_to_utf16(utf8String))
         {
             // Control characters
             if (m_to.count(utf16char) > 0)

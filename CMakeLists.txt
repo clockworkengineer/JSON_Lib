@@ -22,6 +22,7 @@ set (JSON_SOURCES
     ./classes/JSON.cpp
     ./classes/JSON_Impl.cpp
     ./classes/JSON_Translator.cpp
+    ./classes/JSON_Converter.cpp
 )
 
 set (JSON_INCLUDES
@@ -32,9 +33,11 @@ set (JSON_INCLUDES
     ./include/JSON_Sources.hpp
     ./include/JSON_Destinations.hpp
     ./include/JSON_Translator.hpp
+    ./include/JSON_Converter.hpp
     ./include/interface/ISource.hpp
     ./include/interface/IDestination.hpp
     ./include/interface/ITranslator.hpp
+    ./include/interface/IConverter.hpp
 )
 
 # JSON library

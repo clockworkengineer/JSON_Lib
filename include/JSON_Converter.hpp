@@ -2,16 +2,10 @@
 //
 // C++ STL
 //
-#include <map>
-#include <string>
-#include <codecvt>
-#include <locale>
 //
 // Translator interface
 //
-#include "ITranslator.hpp"
 #include "IConverter.hpp"
-#include "JSON_Converter.hpp"
 // =========
 // NAMESPACE
 // =========
@@ -20,7 +14,7 @@ namespace JSONLib
     // ================
     // CLASS DEFINITION
     // ================
-    class JSON_Translator : public ITranslator
+    class JSON_Converter : public IConverter
     {
     public:
         // ==========================
@@ -29,18 +23,14 @@ namespace JSONLib
         // ============
         // CONSTRUCTORS
         // ============
-        JSON_Translator()
-        {
-            initialiseTranslationMaps();
-        }
         // ==========
         // DESTRUCTOR
         // ==========
         // ==============
         // PUBLIC METHODS
         // ==============
-        std::string from(const std::string &jsonString) override;
-        std::string to(const std::string &utf8String) override;
+        virtual std::u16string utf8_to_utf16(const std::string &utf8) override;
+        virtual std::string utf16_to_utf8(const std::u16string &utf16) override;
         // ================
         // PUBLIC VARIABLES
         // ================
@@ -54,12 +44,8 @@ namespace JSONLib
         // ===============
         // PRIVATE METHODS
         // ===============
-        void initialiseTranslationMaps();
         // =================
         // PRIVATE VARIABLES
         // =================
-        JSON_Converter m_converter;
-        std::map<char, std::u16string> m_from;
-        std::map<char16_t, std::string> m_to;
     };
 } // namespace JSONLib

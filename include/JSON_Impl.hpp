@@ -18,6 +18,7 @@
 // JSON translator
 //
 #include "JSON_Translator.hpp"
+#include "JSON_Converter.hpp"
 // =========
 // NAMESPACE
 // =========
