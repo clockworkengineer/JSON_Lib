@@ -26,13 +26,12 @@ namespace JSONLib
                 throw std::invalid_argument("Empty source buffer passed to be parsed.");
             }
         }
-        [[nodiscard]] char current() const override
+        [[nodiscard]] Char current() const override
         {
             if (more())
             {
                 return (m_parseBuffer[m_bufferPosition]);
             }
-
             return (EOF);
         }
         void next() override
@@ -51,10 +50,9 @@ namespace JSONLib
         {
             m_bufferPosition = 0;
         }
-
     private:
         std::size_t m_bufferPosition = 0;
-        const std::string m_parseBuffer;
+        const String m_parseBuffer;
     };
     class FileSource : public ISource
     {
@@ -67,7 +65,7 @@ namespace JSONLib
                 throw std::runtime_error("JSON file input stream failed to open or does not exist.");
             }
         }
-        char current() const override
+        Char current() const override
         {
             return (static_cast<char>(m_source.peek()));
         }
@@ -89,7 +87,6 @@ namespace JSONLib
             m_source.clear();
             m_source.seekg(0, std::ios_base::beg);
         }
-
     private:
         mutable std::ifstream m_source;
     };
