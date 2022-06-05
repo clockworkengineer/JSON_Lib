@@ -130,7 +130,7 @@ namespace JSONLib
             }
             index++;
         }
-        return (m_converter.utf16_to_utf8(workBuffer));
+        return (m_converter->utf16_to_utf8(workBuffer));
     }
     /// <summary>
     /// Convert a string from raw charater values (UTF8) so that it has character
@@ -141,7 +141,7 @@ namespace JSONLib
     std::string JSON_Translator::to(std::string const &utf8String)
     {
         std::string workBuffer;
-        for (char16_t utf16char : m_converter.utf8_to_utf16(utf8String))
+        for (char16_t utf16char : m_converter->utf8_to_utf16(utf8String))
         {
             // Control characters
             if (m_to.count(utf16char) > 0)

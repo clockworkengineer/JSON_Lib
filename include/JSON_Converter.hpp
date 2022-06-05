@@ -1,7 +1,13 @@
 #pragma once
 //
-// C++ STL
+// C++ STL/ platform specific
 //
+#if defined(_WIN64)
+#include "Windows.h"
+#else
+#include <codecvt>
+#include <locale>
+#endif
 //
 // Translator interface
 //

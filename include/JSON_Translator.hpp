@@ -4,13 +4,13 @@
 //
 #include <map>
 #include <string>
-#include <codecvt>
-#include <locale>
 //
 // Translator interface
 //
 #include "ITranslator.hpp"
-#include "IConverter.hpp"
+//
+// UTF8/UTF16 converter.
+//
 #include "JSON_Converter.hpp"
 // =========
 // NAMESPACE
@@ -29,9 +29,15 @@ namespace JSONLib
         // ============
         // CONSTRUCTORS
         // ============
-        JSON_Translator()
+        JSON_Translator(IConverter *converter=nullptr)
         {
             initialiseTranslationMaps();
+            if (converter==nullptr) {
+                m_converter = std::make_unique<JSON_Converter>();
+            } else
+            {
+                m_converter.reset(converter);
+            }
         }
         // ==========
         // DESTRUCTOR
@@ -58,7 +64,7 @@ namespace JSONLib
         // =================
         // PRIVATE VARIABLES
         // =================
-        JSON_Converter m_converter;
+        std::unique_ptr<IConverter> m_converter;
         std::map<char, std::u16string> m_from;
         std::map<char16_t, std::string> m_to;
     };
