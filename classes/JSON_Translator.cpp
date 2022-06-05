@@ -12,6 +12,7 @@
 // =================
 #include "JSON.hpp"
 #include "JSON_Translator.hpp"
+#include "JSON_Converter.hpp"
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
@@ -64,9 +65,24 @@ namespace JSONLib
     // PUBLIC METHODS
     // ==============
     /// <summary>
+    /// JSON translator constructor.
+    /// </summary>
+    JSON_Translator::JSON_Translator(IConverter *converter)
+    {
+        initialiseTranslationMaps();
+        if (converter == nullptr)
+        {
+            m_converter = std::make_unique<JSON_Converter>();
+        }
+        else
+        {
+            m_converter.reset(converter);
+        }
+    }
+    /// <summary>
     /// Convert any escape sequences in a string to their correct sequence
     //  of UTF-8 characters. If input string contains any unpaired surrogates
-    //  then this is deemed as a syntax error and an error is duely thrown.
+    //  then this is deemed as a syntax error and an error is duly thrown.
     /// </summary>
     /// <param name="jsonString">JSON string to process.</param>
     /// <returns>String with escapes translated.</returns>
