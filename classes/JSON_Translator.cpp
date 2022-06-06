@@ -45,21 +45,21 @@ namespace JSONLib
         // From Escape sequence
         m_from['\\'] = u"\\";
         m_from['t'] = u"\t";
-        m_from['\"'] = u"\"";
+        m_from['"'] = u"\"";
         m_from['/'] = u"/";
         m_from['b'] = u"\b";
         m_from['f'] = u"\f";
         m_from['n'] = u"\n";
         m_from['r'] = u"\r";
         // To Escape sequence
-        m_to['\\'] = "\\\\";
-        m_to['\t'] = "\\t";
-        m_to['"'] = "\\\"";
-        m_to['/'] = "\\/";
-        m_to['\b'] = "\\b";
-        m_to['\f'] = "\\f";
-        m_to['\n'] = "\\n";
-        m_to['\r'] = "\\r";
+        m_to['\\'] = R"(\\)";
+        m_to['\t'] = R"(\t)";
+        m_to['"'] = R"(\")";
+        m_to['/'] = R"(\/)";
+        m_to['\b'] = R"(\b)";
+        m_to['\f'] = R"(\f)";
+        m_to['\n'] = R"(\n)";
+        m_to['\r'] = R"(\r)";
     }
     // ==============
     // PUBLIC METHODS
@@ -106,7 +106,7 @@ namespace JSONLib
                     // Single character
                     if (m_from.count(*current) > 0)
                     {
-                        workBuffer += m_from[*current++];
+                       workBuffer += m_from[*current++];
                     }
                     // UTF16 "\uxxxx"
                     else if ((*current == 'u') && ((current + 4) < jsonString.end()))

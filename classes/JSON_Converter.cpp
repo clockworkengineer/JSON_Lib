@@ -27,9 +27,6 @@ namespace JSONLib
         // ========================
         // PRIVATE STATIC VARIABLES
         // ========================
-#if !defined(_WIN64)
-        static std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_UTF16;
-#endif
         // =======================
         // PUBLIC STATIC VARIABLES
         // =======================

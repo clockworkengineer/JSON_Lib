@@ -61,8 +61,8 @@ namespace JSONLib
         // PRIVATE METHODS
         // ===============
         std::string extractString(ISource &source);
-        std::string extractValue(ISource &source);
-        JNodeObject::Entry extractKeyValuePair(ISource &source);
+        std::string parseValue(ISource &source);
+        JNodeObject::KeyValuePair parseKeyValuePair(ISource &source);
         JNode::Ptr parseString(ISource &source);
         JNode::Ptr parseNumber(ISource &source);
         JNode::Ptr parseBoolean(ISource &source);

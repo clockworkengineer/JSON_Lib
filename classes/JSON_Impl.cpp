@@ -75,11 +75,11 @@ namespace JSONLib
         return (value);
     }
     /// <summary>
-    /// Extract alphabetic value from source stream.
+    /// Parse alphabetic value from source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns>String alphabetic value "true"/"false"/"null".</returns>
-    std::string JSON_Impl::extractValue(ISource &source)
+    std::string JSON_Impl::parseValue(ISource &source)
     {
         std::string value;
         while (source.more() && (std::isalpha(source.current()) != 0))
@@ -91,11 +91,11 @@ namespace JSONLib
         return (value);
     }
     /// <summary>
-    /// Extract a key/value pair from a JSON encoded source stream.
+    /// Parse a key/value pair from a JSON encoded source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns>Object key/value pair.</returns>
-    JNodeObject::Entry JSON_Impl::extractKeyValuePair(ISource &source)
+    JNodeObject::KeyValuePair JSON_Impl::parseKeyValuePair(ISource &source)
     {
         std::string key = m_translator->from(extractString(source));
         if (source.current() != ':')
@@ -104,7 +104,7 @@ namespace JSONLib
         }
         source.next();
         source.ignoreWS();
-        return (JNodeObject::Entry{key, parseJNodes(source)});
+        return (JNodeObject::KeyValuePair{key, parseJNodes(source)});
     }
     /// <summary>
     /// Parse a string from a JSON source stream.
@@ -149,7 +149,7 @@ namespace JSONLib
     /// <returns> Boolean JNode.</returns>
     JNode::Ptr JSON_Impl::parseBoolean(ISource &source)
     {
-        std::string value = extractValue(source);
+        std::string value = parseValue(source);
         if (value == "true")
         {
             return (std::make_unique<JNodeBoolean>(true));
@@ -167,7 +167,7 @@ namespace JSONLib
     /// <returns>Null JNode.</returns>
     JNode::Ptr JSON_Impl::parseNull(ISource &source)
     {
-        if (extractValue(source) != "null")
+        if (parseValue(source) != "null")
         {
             throw JSONLib::SyntaxError();
         }
@@ -180,17 +180,17 @@ namespace JSONLib
     /// <returns>JNodeObject key/value pairs.</returns>
     JNode::Ptr JSON_Impl::parseObject(ISource &source)
     {
-        std::vector<JNodeObject::Entry> objects;
+        std::vector<JNodeObject::KeyValuePair> objects;
         source.next();
         source.ignoreWS();
         if (source.current() != '}')
         {
-            objects.emplace_back(extractKeyValuePair(source));
+            objects.emplace_back(parseKeyValuePair(source));
             while (source.current() == ',')
             {
                 source.next();
                 source.ignoreWS();
-                objects.emplace_back(extractKeyValuePair(source));
+                objects.emplace_back(parseKeyValuePair(source));
             }
         }
         if (source.current() != '}')

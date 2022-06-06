@@ -55,14 +55,14 @@ namespace JSONLib
     //
     struct JNodeObject : JNode
     {
-        using Entry = std::pair<std::string, JNode::Ptr>;
-        explicit JNodeObject(std::vector<JNodeObject::Entry> &value) : JNode(JNodeType::object),
+        using KeyValuePair = std::pair<std::string, JNode::Ptr>;
+        explicit JNodeObject(std::vector<JNodeObject::KeyValuePair> &value) : JNode(JNodeType::object),
                                                                        m_value(std::move(value))
         {
         }
         [[nodiscard]] bool contains(const std::string &key) const
         {
-            if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const Entry &entry) -> bool
+            if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const KeyValuePair &entry) -> bool
                                        { return (entry.first == key); });
                 it != m_value.end())
             {
@@ -76,7 +76,7 @@ namespace JSONLib
         }
         JNode &operator[](const std::string &key) const
         {
-            if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const Entry &entry) -> bool
+            if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const KeyValuePair &entry) -> bool
                                        { return (entry.first == key); });
                 it != m_value.end())
             {
@@ -84,13 +84,13 @@ namespace JSONLib
             }
             throw JNode::Error("JNode Error: Invalid key used to access object.");
         }
-        const std::vector<Entry> &objects()
+        const std::vector<KeyValuePair> &objects()
         {
             return (m_value);
         }
 
     private:
-        std::vector<JNodeObject::Entry> m_value;
+        std::vector<JNodeObject::KeyValuePair> m_value;
     };
     //
     // Array JNode.
