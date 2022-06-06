@@ -43,14 +43,14 @@ namespace JSONLib
     void JSON_Translator::initialiseTranslationMaps()
     {
         // From Escape sequence
-        m_from['\\'] = u"\\";
-        m_from['t'] = u"\t";
-        m_from['"'] = u"\"";
-        m_from['/'] = u"/";
-        m_from['b'] = u"\b";
-        m_from['f'] = u"\f";
-        m_from['n'] = u"\n";
-        m_from['r'] = u"\r";
+        m_from['\\'] = '\\';
+        m_from['t'] = '\t';
+        m_from['"'] = '\"';
+        m_from['/'] = '/';
+        m_from['b'] = '\b';
+        m_from['f'] = '\f';
+        m_from['n'] = '\n';
+        m_from['r'] = '\r';
         // To Escape sequence
         m_to['\\'] = R"(\\)";
         m_to['\t'] = R"(\t)";
@@ -104,7 +104,7 @@ namespace JSONLib
                 if (current != jsonString.end())
                 {
                     // Single character
-                    if (m_from.count(*current) > 0)
+                    if (m_from.contains(*current))
                     {
                        workBuffer += m_from[*current++];
                     }
@@ -160,7 +160,7 @@ namespace JSONLib
         for (char16_t utf16char : m_converter->utf8_to_utf16(utf8String))
         {
             // Control characters
-            if (m_to.count(utf16char) > 0)
+            if (m_to.contains(utf16char))
             {
                 workBuffer += m_to[utf16char];
             }

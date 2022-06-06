@@ -2,7 +2,7 @@
 //
 // C++ STL
 //
-#include <map>
+#include <unordered_map>
 #include <string>
 //
 // Translator/Converter interfaces
@@ -53,7 +53,7 @@ namespace JSONLib
         // PRIVATE VARIABLES
         // =================
         std::unique_ptr<IConverter> m_converter;
-        std::map<char, std::u16string> m_from;
-        std::map<char16_t, std::string> m_to;
+        std::unordered_map<char, char16_t> m_from;
+        std::unordered_map<char16_t, std::string> m_to;
     };
 } // namespace JSONLib
