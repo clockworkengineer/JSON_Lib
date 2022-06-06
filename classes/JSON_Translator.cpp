@@ -52,14 +52,14 @@ namespace JSONLib
         m_from['n'] = '\n';
         m_from['r'] = '\r';
         // To Escape sequence
-        m_to['\\'] = R"(\\)";
-        m_to['\t'] = R"(\t)";
-        m_to['"'] = R"(\")";
-        m_to['/'] = R"(\/)";
-        m_to['\b'] = R"(\b)";
-        m_to['\f'] = R"(\f)";
-        m_to['\n'] = R"(\n)";
-        m_to['\r'] = R"(\r)";
+        m_to['\\'] = '\\';
+        m_to['\t'] = 't';
+        m_to['"'] = '"';
+        m_to['/'] = '/';
+        m_to['\b'] = 'b';
+        m_to['\f'] = 'f';
+        m_to['\n'] = 'n';
+        m_to['\r'] = 'r';
     }
     // ==============
     // PUBLIC METHODS
@@ -162,6 +162,7 @@ namespace JSONLib
             // Control characters
             if (m_to.contains(utf16char))
             {
+                workBuffer += '\\';
                 workBuffer += m_to[utf16char];
             }
             // ASCII

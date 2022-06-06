@@ -54,6 +54,6 @@ namespace JSONLib
         // =================
         std::unique_ptr<IConverter> m_converter;
         std::unordered_map<char, char16_t> m_from;
-        std::unordered_map<char16_t, std::string> m_to;
+        std::unordered_map<char16_t, char> m_to;
     };
 } // namespace JSONLib
