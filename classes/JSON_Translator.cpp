@@ -36,31 +36,6 @@ namespace JSONLib
     // ===============
     // PRIVATE METHODS
     // ===============
-    /// <summary>
-    /// Initialise tables used to convert to/from single character
-    /// escape sequences within a JSON string.
-    /// </summary>
-    void JSON_Translator::initialiseTranslationMaps()
-    {
-        // From Escape sequence
-        m_from['\\'] = '\\';
-        m_from['t'] = '\t';
-        m_from['"'] = '\"';
-        m_from['/'] = '/';
-        m_from['b'] = '\b';
-        m_from['f'] = '\f';
-        m_from['n'] = '\n';
-        m_from['r'] = '\r';
-        // To Escape sequence
-        m_to['\\'] = '\\';
-        m_to['\t'] = 't';
-        m_to['"'] = '"';
-        m_to['/'] = '/';
-        m_to['\b'] = 'b';
-        m_to['\f'] = 'f';
-        m_to['\n'] = 'n';
-        m_to['\r'] = 'r';
-    }
     // ==============
     // PUBLIC METHODS
     // ==============
@@ -69,7 +44,23 @@ namespace JSONLib
     /// </summary>
     JSON_Translator::JSON_Translator(IConverter *converter)
     {
-        initialiseTranslationMaps();
+        // Initialise tables used to convert to/from single character
+        /// escape sequences within a JSON string.
+        std::vector<std::pair<char, char16_t>> escapeSequences{
+            {'\\', '\\'},
+            {'t', '\t'},
+            {'"', '\"'},
+            {'/', '/'},
+            {'b', '\b'},
+            {'f', '\f'},
+            {'n', '\n'},
+            {'r', '\r'}};
+
+        for (auto &[key, value] : escapeSequences)
+        {
+            m_from[key] = value;
+            m_to[value] = key;
+        }
         if (converter == nullptr)
         {
             m_converter = std::make_unique<JSON_Converter>();
@@ -106,7 +97,7 @@ namespace JSONLib
                     // Single character
                     if (m_from.contains(*current))
                     {
-                       workBuffer += m_from[*current++];
+                        workBuffer += m_from[*current++];
                     }
                     // UTF16 "\uxxxx"
                     else if ((*current == 'u') && ((current + 4) < jsonString.end()))

@@ -4,6 +4,8 @@
 //
 #include <unordered_map>
 #include <string>
+#include <vector>
+#include <utility>
 //
 // Translator/Converter interfaces
 //
@@ -48,7 +50,6 @@ namespace JSONLib
         // ===============
         // PRIVATE METHODS
         // ===============
-        void initialiseTranslationMaps();
         // =================
         // PRIVATE VARIABLES
         // =================
