@@ -45,7 +45,7 @@ namespace JSONLib
     JSON_Translator::JSON_Translator(IConverter *converter)
     {
         // Initialise tables used to convert to/from single character
-        /// escape sequences within a JSON string.
+        // escape sequences within a JSON string.
         std::vector<std::pair<char, char16_t>> escapeSequences{
             {'\\', '\\'},
             {'t', '\t'},
