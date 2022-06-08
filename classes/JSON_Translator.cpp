@@ -102,14 +102,14 @@ namespace JSONLib
                     // UTF16 "\uxxxx"
                     else if ((*current == 'u') && ((current + 4) < jsonString.end()))
                     {
-                        char hexDigits[5] = {current[1], current[2], current[3], current[4], '\0'};
+                        std::array<char, 5> hexDigits = {current[1], current[2], current[3], current[4], '\0'};
                         char *end;
-                        workBuffer += static_cast<char16_t>(std::strtol(hexDigits, &end, 16));
+                        workBuffer += static_cast<char16_t>(std::strtol(hexDigits.data(), &end, 16));
                         if (*end != '\0')
                         {
                             throw JSONLib::SyntaxError();
                         }
-                        current += 5; // Move paste the \uxxxx
+                        current += hexDigits.size(); // Move paste the \uxxxx
                     }
                     else
                     {
@@ -122,20 +122,9 @@ namespace JSONLib
                 }
             }
         }
-        // Check that there are no single unpaired UTF-16 surrogates.From what I see this is
-        // meant to be an error but from searching the web I have not found a definitive answer.
-        int index = 0;
-        while (index <= (static_cast<int>(workBuffer.size()) - 1))
+        if (unpairedSurrogates(workBuffer))
         {
-            if (isValidSurrogateUpper(workBuffer[index]) && isValidSurrogateLower(workBuffer[index + 1]))
-            {
-                index++;
-            }
-            else if (isValidSurrogateUpper(workBuffer[index]) || isValidSurrogateLower(workBuffer[index + 1]))
-            {
-                throw JSONLib::SyntaxError();
-            }
-            index++;
+            throw JSONLib::SyntaxError();
         }
         return (m_converter->utf16_to_utf8(workBuffer));
     }
