@@ -314,7 +314,7 @@ namespace JSONLib
         {
             int commaCount = JNodeRef<JNodeArray>(jNode).size() - 1;
             destination.add('[');
-            for (auto &bNodeEntry : JNodeRef<JNodeArray>(jNode).array())
+            for (const auto &bNodeEntry : JNodeRef<JNodeArray>(jNode).array())
             {
                 stringifyJNodes(JNodeRef<JNode>(*bNodeEntry), destination);
                 if (commaCount-- > 0)

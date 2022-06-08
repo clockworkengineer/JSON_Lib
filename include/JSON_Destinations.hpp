@@ -13,8 +13,11 @@
 // =========
 namespace JSONLib
 {
+    // ===================================
+    // Destination classes for JSON parser
+    // ===================================
     //
-    // Destination classes for JSON stringification.
+    // Buffered character destination
     //
     class BufferDestination : public IDestination
     {
@@ -39,6 +42,9 @@ namespace JSONLib
     private:
         std::string m_stringifyBuffer;
     };
+    //
+    // File character destination
+    //
     class FileDestination : public IDestination
     {
     public:

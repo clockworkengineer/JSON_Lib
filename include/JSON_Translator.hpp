@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <array>
 //
 // Translator/Converter interfaces
 //
