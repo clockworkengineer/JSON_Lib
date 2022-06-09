@@ -26,7 +26,7 @@ namespace JSONLib
     protected:
         // Check that there are no single unpaired UTF-16 surrogates.From what I see this is
         // meant to be an error but from searching the web I have not found a definitive answer.
-        bool unpairedSurrogates(const std::u16string &buffer)
+        bool unpairedSurrogatesInBuffer(const std::u16string &buffer)
         {
             int index = 0;
             while (index <= (static_cast<int>(buffer.size()) - 1))
