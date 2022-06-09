@@ -17,7 +17,7 @@ namespace JSONLib
         // Virtual destructor
         virtual ~IDestination() = default;
         // Add bytes to destination
-        virtual void add(const ISource::String &bytes) = 0;
-        virtual void add(ISource::Char) = 0;
+        virtual void add(const std::string &bytes) = 0;
+        virtual void add(char ch) = 0;
     };
 } // namespace JSONLib

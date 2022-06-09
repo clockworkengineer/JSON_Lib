@@ -22,12 +22,13 @@ namespace JSONLib
     class BufferSource : public ISource
     {
     public:
-        explicit BufferSource(const std::string &sourceBuffer) : m_parseBuffer{sourceBuffer}
+        explicit BufferSource(const std::string &sourceBuffer)
         {
             if (sourceBuffer.empty())
             {
                 throw std::invalid_argument("Empty source buffer passed to be parsed.");
             }
+             m_parseBuffer = m_UTF8.from_bytes(sourceBuffer);
         }
         [[nodiscard]] Char current() const override
         {
@@ -35,7 +36,7 @@ namespace JSONLib
             {
                 return (m_parseBuffer[m_bufferPosition]);
             }
-            return (EOF);
+            return (static_cast<Char>(EOF));
         }
         void next() override
         {
@@ -55,7 +56,7 @@ namespace JSONLib
         }
     private:
         std::size_t m_bufferPosition = 0;
-        const String m_parseBuffer;
+        String m_parseBuffer;
     };
     //
     // File character source
@@ -73,7 +74,7 @@ namespace JSONLib
         }
         Char current() const override
         {
-            return (static_cast<char>(m_source.peek()));
+            return (static_cast<Char>(m_source.peek()));
         }
         void next() override
         {

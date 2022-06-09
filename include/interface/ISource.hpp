@@ -14,8 +14,8 @@ namespace JSONLib
     class ISource
     {
     public:
-        // 8 bit characters internally
-        using String = std::string;
+        // 16 bit characters internally
+        using String = std::u16string;
         using Char = String::value_type;
         // Virtual destructor
         virtual ~ISource() = default;

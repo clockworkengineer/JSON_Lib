@@ -38,7 +38,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="ch">Numeric character.</param>
     /// <returns>true if a character use in a number</returns>
-    static bool isValidNumeric(char ch)
+    static bool isValidNumeric(ISource::Char ch)
     {
         // Includes possible sign, decimal point or exponent
         return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
@@ -55,7 +55,7 @@ namespace JSONLib
             throw JSONLib::SyntaxError();
         }
         source.next();
-        std::string value;
+        ISource::String value;
         while (source.more() && source.current() != '"')
         {
             if (source.current() == '\\')
@@ -72,7 +72,7 @@ namespace JSONLib
         }
         source.next();
         source.ignoreWS();
-        return (value);
+        return (source.to_bytes(value));
     }
     /// <summary>
     /// Parse alphabetic value from source stream.
@@ -81,14 +81,14 @@ namespace JSONLib
     /// <returns>String alphabetic value "true"/"false"/"null".</returns>
     std::string JSON_Impl::parseValue(ISource &source)
     {
-        std::string value;
+        ISource::String value;
         while (source.more() && (std::isalpha(source.current()) != 0))
         {
             value += source.current();
             source.next();
         }
         source.ignoreWS();
-        return (value);
+        return (source.to_bytes(value));
     }
     /// <summary>
     /// Parse a key/value pair from a JSON encoded source stream.
@@ -122,7 +122,7 @@ namespace JSONLib
     /// <returns></returns>
     JNode::Ptr JSON_Impl::parseNumber(ISource &source)
     {
-        std::string value;
+        ISource::String value;
         while (source.more() && isValidNumeric(source.current()))
         {
             value += source.current();
@@ -130,17 +130,17 @@ namespace JSONLib
         }
         // Throw error if not valid integer or floating point
         char *end = nullptr;
-        std::strtoll(value.c_str(), &end, 10);
+        std::strtoll(source.to_bytes(value).c_str(), &end, 10);
         if (*end != '\0')
         {
-            std::strtod(value.c_str(), &end);
+            std::strtod(source.to_bytes(value).c_str(), &end);
             if (*end != '\0')
             {
                 throw JSONLib::SyntaxError();
             }
         }
         source.ignoreWS();
-        return (std::make_unique<JNodeNumber>(value));
+        return (std::make_unique<JNodeNumber>(source.to_bytes(value)));
     }
     /// <summary>
     /// Parse a boolean from a JSON source stream.
@@ -341,7 +341,7 @@ namespace JSONLib
             source.ignoreWS();
             if (source.more())
             {
-                destination.add(source.current());
+                destination.add(source.current_to_bytes());
                 if (source.current() == '"')
                 {
                     destination.add(extractString(source));

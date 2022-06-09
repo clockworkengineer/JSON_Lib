@@ -61,7 +61,7 @@ namespace JSONLib
             m_destination.write(bytes.c_str(), bytes.length());
             m_destination.flush();
         }
-        void add(const ISource::Char ch) override
+        void add(const char ch) override
         {
             m_destination.put(ch);
             m_destination.flush();
