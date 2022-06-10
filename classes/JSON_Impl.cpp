@@ -48,7 +48,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns>Extracted string</returns>
-    std::string JSON_Impl::extractString(ISource &source)
+    ISource::String JSON_Impl::extractString(ISource &source)
     {
         if (source.current() != '"')
         {
@@ -72,14 +72,14 @@ namespace JSONLib
         }
         source.next();
         source.ignoreWS();
-        return (source.to_bytes(value));
+        return (value);
     }
     /// <summary>
     /// Parse alphabetic value from source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns>String alphabetic value "true"/"false"/"null".</returns>
-    std::string JSON_Impl::parseValue(ISource &source)
+    ISource::String JSON_Impl::parseValue(ISource &source)
     {
         ISource::String value;
         while (source.more() && (std::isalpha(source.current()) != 0))
@@ -88,7 +88,7 @@ namespace JSONLib
             source.next();
         }
         source.ignoreWS();
-        return (source.to_bytes(value));
+        return (value);
     }
     /// <summary>
     /// Parse a key/value pair from a JSON encoded source stream.
@@ -97,7 +97,7 @@ namespace JSONLib
     /// <returns>Object key/value pair.</returns>
     JNodeObject::KeyValuePair JSON_Impl::parseKeyValuePair(ISource &source)
     {
-        std::string key = m_translator->from(extractString(source));
+        std::string key = m_translator->from(source.to_bytes(extractString(source)));
         if (source.current() != ':')
         {
             throw JSONLib::SyntaxError();
@@ -113,7 +113,7 @@ namespace JSONLib
     /// <returns>String value.</returns>
     JNode::Ptr JSON_Impl::parseString(ISource &source)
     {
-        return (std::make_unique<JNodeString>(m_translator->from(extractString(source))));
+        return (std::make_unique<JNodeString>(m_translator->from(source.to_bytes(extractString(source)))));
     }
     /// <summary>
     /// Parse a number from a JSON source stream.
@@ -149,7 +149,7 @@ namespace JSONLib
     /// <returns> Boolean JNode.</returns>
     JNode::Ptr JSON_Impl::parseBoolean(ISource &source)
     {
-        std::string value = parseValue(source);
+        std::string value = source.to_bytes(parseValue(source));
         if (value == "true")
         {
             return (std::make_unique<JNodeBoolean>(true));
@@ -167,7 +167,7 @@ namespace JSONLib
     /// <returns>Null JNode.</returns>
     JNode::Ptr JSON_Impl::parseNull(ISource &source)
     {
-        if (parseValue(source) != "null")
+        if (parseValue(source) != u"null")
         {
             throw JSONLib::SyntaxError();
         }
@@ -344,7 +344,7 @@ namespace JSONLib
                 destination.add(source.current_to_bytes());
                 if (source.current() == '"')
                 {
-                    destination.add(extractString(source));
+                    destination.add(source.to_bytes(extractString(source)));
                     destination.add('"');
                 }
                 else
