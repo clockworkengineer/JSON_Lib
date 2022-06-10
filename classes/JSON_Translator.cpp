@@ -43,7 +43,7 @@ namespace JSONLib
     /// <param name="current">Current character position.</param>
     /// <param name="numberOfCharacters">Number of characters left in source string.</param>
     /// <returns>UTF16 character for "\uxxx".</returns>
-    char16_t decodeUTF16(std::string::const_iterator &current, ptrdiff_t numberOfCharacters)
+    char16_t decodeUTF16(ISource::String::const_iterator &current, ptrdiff_t numberOfCharacters)
     {
         if (numberOfCharacters >= 4)
         {
@@ -99,7 +99,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="jsonString">JSON string to process.</param>
     /// <returns>String with escapes translated.</returns>
-    std::string JSON_Translator::from(const std::string &jsonString)
+    std::string JSON_Translator::from(const ISource::String &jsonString)
     {
         std::u16string returnBuffer;
         for (auto current = jsonString.begin(); current != jsonString.end();)

@@ -97,7 +97,7 @@ namespace JSONLib
     /// <returns>Object key/value pair.</returns>
     JNodeObject::KeyValuePair JSON_Impl::parseKeyValuePair(ISource &source)
     {
-        std::string key = m_translator->from(source.to_bytes(extractString(source)));
+        std::string key = m_translator->from(extractString(source));
         if (source.current() != ':')
         {
             throw JSONLib::SyntaxError();
@@ -113,7 +113,7 @@ namespace JSONLib
     /// <returns>String value.</returns>
     JNode::Ptr JSON_Impl::parseString(ISource &source)
     {
-        return (std::make_unique<JNodeString>(m_translator->from(source.to_bytes(extractString(source)))));
+        return (std::make_unique<JNodeString>(m_translator->from(extractString(source))));
     }
     /// <summary>
     /// Parse a number from a JSON source stream.

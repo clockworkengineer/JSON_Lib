@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "ISource.hpp"
 // =========
 // NAMESPACE
 // =========
@@ -12,7 +13,7 @@ namespace JSONLib
     {
     public:
         virtual ~ITranslator() = default;
-        virtual std::string from(const std::string &jsonString) = 0;
+        virtual std::string from(const ISource::String &jsonString) = 0;
         virtual std::string to(const std::string &utf8String) = 0;
 
     protected:

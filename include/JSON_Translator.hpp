@@ -37,7 +37,7 @@ namespace JSONLib
         // ==============
         // PUBLIC METHODS
         // ==============
-        std::string from(const std::string &jsonString) override;
+        std::string from(const ISource::String &jsonString) override;
         std::string to(const std::string &utf8String) override;
         // ================
         // PUBLIC VARIABLES
