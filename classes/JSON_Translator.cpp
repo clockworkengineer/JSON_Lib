@@ -48,7 +48,11 @@ namespace JSONLib
         if (numberOfCharacters >= 4)
         {
             char16_t utf16value{};
-            std::array<char, 5> hexDigits = {current[1], current[2], current[3], current[4], '\0'};
+            // Hex digits will be ascii so can throw away high order byte of char16_t
+            std::array<char, 5> hexDigits{static_cast<char>(current[1]),
+                                          static_cast<char>(current[2]),
+                                          static_cast<char>(current[3]),
+                                          static_cast<char>(current[4]), '\0'};
             char *end;
             utf16value += static_cast<char16_t>(std::strtol(hexDigits.data(), &end, 16));
             if (*end == '\0')
@@ -65,7 +69,7 @@ namespace JSONLib
     /// <summary>
     /// JSON translator constructor.
     /// </summary>
-    JSON_Translator::JSON_Translator(IConverter &converter) : m_converter (converter)
+    JSON_Translator::JSON_Translator(IConverter &converter) : m_converter(converter)
     {
         // Initialise tables used to convert to/from single character
         // escape sequences within a JSON string.
@@ -107,9 +111,10 @@ namespace JSONLib
             if (current != jsonString.end())
             {
                 // Single character
-                if (m_from.contains(*current))
+                if (m_from.contains(static_cast<char>(*current)))
                 {
-                    returnBuffer += m_from[*current++];
+                    returnBuffer += m_from[static_cast<char>(*current)];
+                    current++;
                     continue;
                 }
                 // UTF16 "\uxxxx"
