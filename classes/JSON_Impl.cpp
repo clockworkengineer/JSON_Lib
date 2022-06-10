@@ -363,9 +363,10 @@ namespace JSONLib
     /// <param name=translator>Custom JSON string translator.</param>
     void JSON_Impl::translator(ITranslator *translator)
     {
+        m_converter = std::make_unique<JSON_Converter>();
         if (translator == nullptr)
         {
-            m_translator = std::make_unique<JSON_Translator>();
+            m_translator = std::make_unique<JSON_Translator>(*m_converter);
         }
         else
         {

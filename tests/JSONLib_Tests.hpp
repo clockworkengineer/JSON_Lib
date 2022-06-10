@@ -10,6 +10,7 @@
 #include "JSON_Nodes.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
+#include "JSON_Converter.hpp"
 #include "JSON_Translator.hpp"
 // ============
 // STL includes

@@ -290,7 +290,8 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]")
 }
 TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
 {
-  JSON_Translator translator;
+  JSON_Converter converter;
+  JSON_Translator translator(converter);
   SECTION("Translate from escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
   { // Needed to convert const char8_t * to string
     REQUIRE(translator.from(u"Begin \\uD834\\uDD1E End") == reinterpret_cast<const char *>(u8"Begin \U0001D11E End"));

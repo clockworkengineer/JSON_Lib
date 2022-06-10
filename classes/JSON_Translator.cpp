@@ -65,7 +65,7 @@ namespace JSONLib
     /// <summary>
     /// JSON translator constructor.
     /// </summary>
-    JSON_Translator::JSON_Translator(IConverter *converter)
+    JSON_Translator::JSON_Translator(IConverter &converter) : m_converter (converter)
     {
         // Initialise tables used to convert to/from single character
         // escape sequences within a JSON string.
@@ -82,14 +82,6 @@ namespace JSONLib
         {
             m_from[key] = value;
             m_to[value] = key;
-        }
-        if (converter == nullptr)
-        {
-            m_converter = std::make_unique<JSON_Converter>();
-        }
-        else
-        {
-            m_converter.reset(converter);
         }
     }
     /// <summary>
@@ -133,7 +125,7 @@ namespace JSONLib
         {
             throw JSONLib::SyntaxError();
         }
-        return (m_converter->utf16_to_utf8(returnBuffer));
+        return (m_converter.to_utf8(returnBuffer));
     }
     /// <summary>
     /// Convert a string from raw charater values (UTF8) so that it has character
@@ -144,7 +136,7 @@ namespace JSONLib
     std::string JSON_Translator::to(std::string const &utf8String)
     {
         std::string returnBuffer;
-        for (char16_t utf16char : m_converter->utf8_to_utf16(utf8String))
+        for (char16_t utf16char : m_converter.to_utf16(utf8String))
         {
             // Control characters
             if (m_to.contains(utf16char))

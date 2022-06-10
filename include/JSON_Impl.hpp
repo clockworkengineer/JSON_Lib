@@ -77,5 +77,6 @@ namespace JSONLib
         // =================
         JNode::Ptr m_jNodeRoot;
         std::unique_ptr<ITranslator> m_translator;
+        std::unique_ptr<IConverter> m_converter;
     };
 } // namespace JSONLib

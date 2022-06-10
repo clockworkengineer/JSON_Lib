@@ -35,8 +35,8 @@ namespace JSONLib
         // ==============
         // PUBLIC METHODS
         // ==============
-        virtual std::u16string utf8_to_utf16(const std::string &utf8) override;
-        virtual std::string utf16_to_utf8(const std::u16string &utf16) override;
+        virtual std::u16string to_utf16(const std::string &utf8) override;
+        virtual std::string to_utf8(const std::u16string &utf16) override;
         // ================
         // PUBLIC VARIABLES
         // ================

@@ -39,7 +39,7 @@ namespace JSONLib
         /// <summary>
         /// Convert utf8 <-> utf16 strings.
         /// </summary>
-        std::u16string JSON_Converter::utf8_to_utf16(const std::string &utf8)
+        std::u16string JSON_Converter::to_utf16(const std::string &utf8)
         {
 #if defined(_WIN64)
                 int count = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), static_cast<int>(utf8.length()), NULL, 0);
@@ -50,7 +50,7 @@ namespace JSONLib
                 return (m_UTF16.from_bytes(utf8));
 #endif
         }
-        std::string JSON_Converter::utf16_to_utf8(const std::u16string &utf16)
+        std::string JSON_Converter::to_utf8(const std::u16string &utf16)
         {
 #if defined(_WIN64)
                 std::wstring wstr{utf16.begin(), utf16.end()};

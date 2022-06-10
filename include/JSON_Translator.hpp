@@ -30,7 +30,7 @@ namespace JSONLib
         // ============
         // CONSTRUCTORS
         // ============
-        JSON_Translator(IConverter *converter = nullptr);
+        JSON_Translator(IConverter &converter);
         // ==========
         // DESTRUCTOR
         // ==========
@@ -55,7 +55,7 @@ namespace JSONLib
         // =================
         // PRIVATE VARIABLES
         // =================
-        std::unique_ptr<IConverter> m_converter;
+        IConverter &m_converter;
         std::unordered_map<char, char16_t> m_from;
         std::unordered_map<char16_t, char> m_to;
     };
