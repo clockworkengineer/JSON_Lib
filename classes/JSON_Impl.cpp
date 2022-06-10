@@ -130,17 +130,17 @@ namespace JSONLib
         }
         // Throw error if not valid integer or floating point
         char *end = nullptr;
-        std::strtoll(source.to_bytes(value).c_str(), &end, 10);
+        std::strtoll(m_converter->to_utf8(value).c_str(), &end, 10);
         if (*end != '\0')
         {
-            std::strtod(source.to_bytes(value).c_str(), &end);
+            std::strtod(m_converter->to_utf8(value).c_str(), &end);
             if (*end != '\0')
             {
                 throw JSONLib::SyntaxError();
             }
         }
         source.ignoreWS();
-        return (std::make_unique<JNodeNumber>(source.to_bytes(value)));
+        return (std::make_unique<JNodeNumber>(m_converter->to_utf8(value)));
     }
     /// <summary>
     /// Parse a boolean from a JSON source stream.
@@ -149,7 +149,7 @@ namespace JSONLib
     /// <returns> Boolean JNode.</returns>
     JNode::Ptr JSON_Impl::parseBoolean(ISource &source)
     {
-        std::string value = source.to_bytes(parseValue(source));
+        std::string value = m_converter->to_utf8(parseValue(source));
         if (value == "true")
         {
             return (std::make_unique<JNodeBoolean>(true));
@@ -341,10 +341,10 @@ namespace JSONLib
             source.ignoreWS();
             if (source.more())
             {
-                destination.add(source.current_to_bytes());
+                destination.add(m_converter->to_utf8(ISource::String { source.current() } ));
                 if (source.current() == '"')
                 {
-                    destination.add(source.to_bytes(extractString(source)));
+                    destination.add(m_converter->to_utf8(extractString(source)));
                     destination.add('"');
                 }
                 else
@@ -358,12 +358,24 @@ namespace JSONLib
     // PUBLIC METHODS
     // ==============
     /// <summary>
+    /// JSON_Impl constructor.
+    /// </summary>
+    JSON_Impl::JSON_Impl()
+    {
+        m_converter = std::make_unique<JSON_Converter>();
+    }
+    /// <summary>
+    /// JSON_Impl destructor.
+    /// </summary>
+    JSON_Impl::~JSON_Impl()
+    {
+    }
+    /// <summary>
     /// Set translator for JSON strings.
     /// </summary>
     /// <param name=translator>Custom JSON string translator.</param>
     void JSON_Impl::translator(ITranslator *translator)
     {
-        m_converter = std::make_unique<JSON_Converter>();
         if (translator == nullptr)
         {
             m_translator = std::make_unique<JSON_Translator>(*m_converter);

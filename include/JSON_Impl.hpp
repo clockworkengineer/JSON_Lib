@@ -36,9 +36,11 @@ namespace JSONLib
         // ============
         // CONSTRUCTORS
         // ============
+        JSON_Impl();
         // ==========
         // DESTRUCTOR
         // ==========
+        ~JSON_Impl();
         // ==============
         // PUBLIC METHODS
         // ==============

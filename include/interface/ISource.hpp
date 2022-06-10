@@ -40,29 +40,5 @@ namespace JSONLib
                 next();
             }
         }
-        // Read bytes representing the current character
-        std::string current_to_bytes()
-        {
-            return (m_UTF8.to_bytes(current()));
-        }
-        // Convert to byte string (UTF-8)
-        std::string to_bytes(const String &from)
-        {
-            return (m_UTF8.to_bytes(from));
-        }
-        // Convert to byte string (UTF-8)
-        std::string to_bytes(const Char from)
-        {
-            return (m_UTF8.to_bytes(from));
-        }
-        // Convert from byte string (UTF-8)
-        String from_bytes(const std::string &from)
-        {
-            return (m_UTF8.from_bytes(from));
-        }
-
-    protected:
-        std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_UTF16;
-        std::wstring_convert<std::codecvt_utf8_utf16<Char>, Char> m_UTF8;
     };
 } // namespace JSONLib

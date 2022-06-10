@@ -8,6 +8,10 @@
 // Source interface
 //
 #include "ISource.hpp"
+//
+// JSON converter
+//
+#include "JSON_Converter.hpp"
 // =========
 // NAMESPACE
 // =========
@@ -24,11 +28,12 @@ namespace JSONLib
     public:
         explicit BufferSource(const std::string &sourceBuffer)
         {
+            JSON_Converter converter;
             if (sourceBuffer.empty())
             {
                 throw std::invalid_argument("Empty source buffer passed to be parsed.");
             }
-             m_parseBuffer = m_UTF8.from_bytes(sourceBuffer);
+             m_parseBuffer = converter.to_utf16(sourceBuffer);
         }
         [[nodiscard]] Char current() const override
         {
