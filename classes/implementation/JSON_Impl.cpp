@@ -149,7 +149,7 @@ namespace JSONLib
     /// <returns> Boolean JNode.</returns>
     JNode::Ptr JSON_Impl::parseBoolean(ISource &source)
     {
-        const std::string value { m_converter->to_utf8(parseValue(source))};
+        const std::string value{m_converter->to_utf8(parseValue(source))};
         if (value == "true")
         {
             return (std::make_unique<JNodeBoolean>(true));
@@ -338,20 +338,17 @@ namespace JSONLib
     {
         while (source.more())
         {
-            source.ignoreWS();
-            if (source.more())
+            if (!source.isWS())
             {
                 destination.add(m_converter->to_utf8(ISource::String{source.current()}));
                 if (source.current() == '"')
                 {
                     destination.add(m_converter->to_utf8(extractString(source)));
                     destination.add('"');
-                }
-                else
-                {
-                    source.next();
+                    continue;
                 }
             }
+            source.next();
         }
     }
     // ==============
