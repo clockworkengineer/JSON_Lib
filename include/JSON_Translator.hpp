@@ -56,7 +56,7 @@ namespace JSONLib
         // PRIVATE VARIABLES
         // =================
         IConverter &m_converter;
-        std::unordered_map<char, char16_t> m_from;
-        std::unordered_map<char16_t, char> m_to;
+        std::unordered_map<char, ISource::Char> m_from;
+        std::unordered_map<ISource::Char, char> m_to;
     };
 } // namespace JSONLib

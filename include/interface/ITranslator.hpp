@@ -19,16 +19,16 @@ namespace JSONLib
     protected:
         // Check that there are no single unpaired UTF-16 surrogates.From what I see this is
         // meant to be an error but from searching the web I have not found a definitive answer.
-        bool unpairedSurrogatesInBuffer(const std::u16string &buffer)
+        bool unpairedSurrogatesInBuffer(const ISource::String &utf16Buffer)
         {
             int index = 0;
-            while (index <= (static_cast<int>(buffer.size()) - 1))
+            while (index <= (static_cast<int>(utf16Buffer.size()) - 1))
             {
-                if (isValidSurrogateUpper(buffer[index]) && isValidSurrogateLower(buffer[index + 1]))
+                if (isValidSurrogateUpper(utf16Buffer[index]) && isValidSurrogateLower(utf16Buffer[index + 1]))
                 {
                     index++;
                 }
-                else if (isValidSurrogateUpper(buffer[index]) || isValidSurrogateLower(buffer[index + 1]))
+                else if (isValidSurrogateUpper(utf16Buffer[index]) || isValidSurrogateLower(utf16Buffer[index + 1]))
                 {
                     return (true);
                 }
@@ -38,11 +38,11 @@ namespace JSONLib
         }
 
     private:
-        bool isValidSurrogateUpper(char16_t c)
+        bool isValidSurrogateUpper(ISource::Char c)
         {
             return ((c >= 0xD800) && (c <= 0xDBFF));
         }
-        bool isValidSurrogateLower(char16_t c)
+        bool isValidSurrogateLower(ISource::Char  c)
         {
             return ((c >= 0xDC00) && (c <= 0xDFFF));
         }
