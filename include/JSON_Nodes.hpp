@@ -38,7 +38,6 @@ namespace JSONLib
             {
                 return (errorMessage.c_str());
             }
-
         private:
             const std::string errorMessage;
         };
@@ -88,7 +87,6 @@ namespace JSONLib
         {
             return (m_value);
         }
-
     private:
         std::vector<JNodeObject::KeyValuePair> m_value;
     };
@@ -117,7 +115,6 @@ namespace JSONLib
             }
             throw JNode::Error("JNode Error: Invalid index used to access array.");
         }
-
     private:
         std::vector<JNode::Ptr> m_value;
     };
@@ -149,7 +146,6 @@ namespace JSONLib
         {
             return (m_value);
         }
-
     private:
         std::string m_value;
     };
@@ -165,7 +161,6 @@ namespace JSONLib
         {
             return (m_value);
         }
-
     private:
         std::string m_value;
     };
@@ -181,7 +176,6 @@ namespace JSONLib
         {
             return (m_value);
         }
-
     private:
         bool m_value;
     };
@@ -259,5 +253,4 @@ namespace JSONLib
     {
         return (JNodeRef<JNodeArray>(*this)[index]);
     }
-
 } // namespace JSONLib

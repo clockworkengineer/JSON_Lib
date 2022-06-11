@@ -73,7 +73,7 @@ namespace JSONLib
     {
         // Initialise tables used to convert to/from single character
         // escape sequences within a JSON string.
-        std::vector<std::pair<char, char16_t>> escapeSequences{
+        const std::vector<std::pair<const char, const char16_t>> escapeSequences{
             {'\\', '\\'},
             {'t', '\t'},
             {'"', '\"'},
@@ -82,7 +82,7 @@ namespace JSONLib
             {'f', '\f'},
             {'n', '\n'},
             {'r', '\r'}};
-        for (auto &[key, value] : escapeSequences)
+        for (const auto &[key, value] : escapeSequences)
         {
             m_from[key] = value;
             m_to[value] = key;

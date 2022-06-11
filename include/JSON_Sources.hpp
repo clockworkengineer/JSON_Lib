@@ -33,7 +33,7 @@ namespace JSONLib
             {
                 throw std::invalid_argument("Empty source buffer passed to be parsed.");
             }
-             m_parseBuffer = converter.to_utf16(sourceBuffer);
+            m_parseBuffer = converter.to_utf16(sourceBuffer);
         }
         [[nodiscard]] Char current() const override
         {
@@ -59,6 +59,7 @@ namespace JSONLib
         {
             m_bufferPosition = 0;
         }
+
     private:
         std::size_t m_bufferPosition = 0;
         String m_parseBuffer;
@@ -99,6 +100,7 @@ namespace JSONLib
             m_source.clear();
             m_source.seekg(0, std::ios_base::beg);
         }
+
     private:
         mutable std::ifstream m_source;
     };

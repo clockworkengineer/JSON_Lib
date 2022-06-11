@@ -47,9 +47,8 @@ namespace JSONLib
     /// <summary>
     /// JSON constructor.
     /// </summary>
-    JSON::JSON(ITranslator *translator)
+    JSON::JSON(ITranslator *translator) : m_implementation(std::make_unique<JSON_Impl>())
     {
-        m_implementation = std::make_unique<JSON_Impl>();
         m_implementation->translator(translator);
     }
     /// <summary>

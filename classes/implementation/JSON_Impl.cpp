@@ -38,7 +38,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="ch">Numeric character.</param>
     /// <returns>true if a character use in a number</returns>
-    static bool isValidNumeric(ISource::Char ch)
+    static bool isValidNumeric(const ISource::Char ch)
     {
         // Includes possible sign, decimal point or exponent
         return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
@@ -97,7 +97,7 @@ namespace JSONLib
     /// <returns>Object key/value pair.</returns>
     JNodeObject::KeyValuePair JSON_Impl::parseKeyValuePair(ISource &source)
     {
-        std::string key = m_translator->from(extractString(source));
+        const std::string key{m_translator->from(extractString(source))};
         if (source.current() != ':')
         {
             throw JSONLib::SyntaxError();
@@ -149,7 +149,7 @@ namespace JSONLib
     /// <returns> Boolean JNode.</returns>
     JNode::Ptr JSON_Impl::parseBoolean(ISource &source)
     {
-        std::string value = m_converter->to_utf8(parseValue(source));
+        const std::string value { m_converter->to_utf8(parseValue(source))};
         if (value == "true")
         {
             return (std::make_unique<JNodeBoolean>(true));
@@ -341,7 +341,7 @@ namespace JSONLib
             source.ignoreWS();
             if (source.more())
             {
-                destination.add(m_converter->to_utf8(ISource::String { source.current() } ));
+                destination.add(m_converter->to_utf8(ISource::String{source.current()}));
                 if (source.current() == '"')
                 {
                     destination.add(m_converter->to_utf8(extractString(source)));
@@ -360,9 +360,8 @@ namespace JSONLib
     /// <summary>
     /// JSON_Impl constructor.
     /// </summary>
-    JSON_Impl::JSON_Impl()
+    JSON_Impl::JSON_Impl() : m_converter(std::make_unique<JSON_Converter>())
     {
-        m_converter = std::make_unique<JSON_Converter>();
     }
     /// <summary>
     /// JSON_Impl destructor.

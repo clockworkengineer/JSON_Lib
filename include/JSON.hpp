@@ -83,6 +83,6 @@ namespace JSONLib
         // =================
         // PRIVATE VARIABLES
         // =================
-        std::unique_ptr<JSON_Impl> m_implementation;
+        const std::unique_ptr<JSON_Impl> m_implementation;
     };
 } // namespace JSONLib
