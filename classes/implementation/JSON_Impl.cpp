@@ -38,7 +38,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="ch">Numeric character.</param>
     /// <returns>true if a character use in a number</returns>
-    static bool isValidNumeric(const ISource::Char ch)
+    bool JSON_Impl::isValidNumeric(const ISource::Char ch)
     {
         // Includes possible sign, decimal point or exponent
         return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
@@ -52,7 +52,7 @@ namespace JSONLib
     {
         if (source.current() != '"')
         {
-            throw JSONLib::SyntaxError();
+            throw JSONLib::Error("Syntax error detected.");
         }
         source.next();
         ISource::String value;
@@ -68,7 +68,7 @@ namespace JSONLib
         }
         if (source.current() != '"')
         {
-            throw JSONLib::SyntaxError();
+            throw JSONLib::Error("Syntax error detected.");
         }
         source.next();
         source.ignoreWS();
@@ -100,7 +100,7 @@ namespace JSONLib
         const std::string key{m_translator->from(extractString(source))};
         if (source.current() != ':')
         {
-            throw JSONLib::SyntaxError();
+            throw JSONLib::Error("Syntax error detected.");
         }
         source.next();
         source.ignoreWS();
@@ -130,17 +130,18 @@ namespace JSONLib
         }
         // Throw error if not valid integer or floating point
         char *end = nullptr;
-        std::strtoll(m_converter->to_utf8(value).c_str(), &end, 10);
+        std::string number = m_converter->to_utf8(value);
+        std::strtoll(number.c_str(), &end, 10);
         if (*end != '\0')
         {
-            std::strtod(m_converter->to_utf8(value).c_str(), &end);
+            std::strtod(number.c_str(), &end);
             if (*end != '\0')
             {
-                throw JSONLib::SyntaxError();
+                throw JSONLib::Error("Syntax error detected.");
             }
         }
         source.ignoreWS();
-        return (std::make_unique<JNodeNumber>(m_converter->to_utf8(value)));
+        return (std::make_unique<JNodeNumber>(number));
     }
     /// <summary>
     /// Parse a boolean from a JSON source stream.
@@ -158,7 +159,7 @@ namespace JSONLib
         {
             return (std::make_unique<JNodeBoolean>(false));
         }
-        throw JSONLib::SyntaxError();
+        throw JSONLib::Error("Syntax error detected.");
     }
     /// <summary>
     /// Parse a null from a JSON source stream.
@@ -169,7 +170,7 @@ namespace JSONLib
     {
         if (parseValue(source) != u"null")
         {
-            throw JSONLib::SyntaxError();
+            throw JSONLib::Error("Syntax error detected.");
         }
         return (std::make_unique<JNodeNull>());
     }
@@ -195,7 +196,7 @@ namespace JSONLib
         }
         if (source.current() != '}')
         {
-            throw JSONLib::SyntaxError();
+            throw JSONLib::Error("Syntax error detected.");
         }
         source.next();
         source.ignoreWS();
@@ -223,7 +224,7 @@ namespace JSONLib
         }
         if (source.current() != ']')
         {
-            throw JSONLib::SyntaxError();
+            throw JSONLib::Error("Syntax error detected.");
         }
         source.next();
         source.ignoreWS();
@@ -265,7 +266,7 @@ namespace JSONLib
         case '9':
             return (parseNumber(source));
         }
-        throw JSONLib::SyntaxError();
+        throw JSONLib::Error("Syntax error detected.");
     }
     /// <summary>
     /// Recursively traverse JNode structure encoding it into JSON on

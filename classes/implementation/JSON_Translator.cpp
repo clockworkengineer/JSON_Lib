@@ -30,6 +30,15 @@ namespace JSONLib
     // ========================
     // PRIVATE STATIC VARIABLES
     // ========================
+    static const std::vector<std::pair<const char, const ISource::Char>> m_escapeSequences{
+        {'\\', '\\'},
+        {'t', '\t'},
+        {'"', '\"'},
+        {'/', '/'},
+        {'b', '\b'},
+        {'f', '\f'},
+        {'n', '\n'},
+        {'r', '\r'}};
     // =======================
     // PUBLIC STATIC VARIABLES
     // =======================
@@ -61,7 +70,7 @@ namespace JSONLib
                 return (utf16value);
             }
         }
-        throw JSONLib::SyntaxError();
+        throw JSONLib::Error("Syntax error detected.");
     }
     // ==============
     // PUBLIC METHODS
@@ -73,16 +82,7 @@ namespace JSONLib
     {
         // Initialise tables used to convert to/from single character
         // escape sequences within a JSON string.
-        const std::vector<std::pair<const char, const ISource::Char>> escapeSequences{
-            {'\\', '\\'},
-            {'t', '\t'},
-            {'"', '\"'},
-            {'/', '/'},
-            {'b', '\b'},
-            {'f', '\f'},
-            {'n', '\n'},
-            {'r', '\r'}};
-        for (const auto &[key, value] : escapeSequences)
+        for (const auto &[key, value] : m_escapeSequences)
         {
             m_from[key] = value;
             m_to[value] = key;
@@ -124,11 +124,11 @@ namespace JSONLib
                     continue;
                 }
             }
-            throw JSONLib::SyntaxError();
+            throw JSONLib::Error("Syntax error detected.");
         }
         if (unpairedSurrogatesInBuffer(utf16Buffer))
         {
-            throw JSONLib::SyntaxError();
+            throw JSONLib::Error("Syntax error detected.");
         }
         return (m_converter.to_utf8(utf16Buffer));
     }

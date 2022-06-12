@@ -62,6 +62,7 @@ namespace JSONLib
         // ===============
         // PRIVATE METHODS
         // ===============
+        bool isValidNumeric(const ISource::Char ch);
         ISource::String extractString(ISource &source);
         ISource::String parseValue(ISource &source);
         JNodeObject::KeyValuePair parseKeyValuePair(ISource &source);

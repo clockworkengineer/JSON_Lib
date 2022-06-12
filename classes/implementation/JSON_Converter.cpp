@@ -37,9 +37,9 @@ namespace JSONLib
         /// Windows API for converting between byte and wide characters.
         /// </summary>
 #if defined(_WIN64)
-        int WideCharToBytes(wchar_t *sideString, int wideStringLength, char *bytes = NULL, int length = 0)
+        int WideCharToBytes(wchar_t *wideString, int wideStringLength, char *bytes = NULL, int length = 0)
         {
-                return (WideCharToMultiByte(CP_UTF8, 0, sideString, wideStringLength, bytes, length, NULL, NULL));
+                return (WideCharToMultiByte(CP_UTF8, 0, wideString, wideStringLength, bytes, length, NULL, NULL));
         }
         int BytesToWideChar(const char *bytes, int length, wchar_t *sideString = NULL, int wideStringLength = 0)
         {

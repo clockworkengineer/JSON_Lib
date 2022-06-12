@@ -16,19 +16,18 @@
 namespace JSONLib
 {
     // =================
-    // JSON syntax error
+    // JSON Error
     // =================
-    struct SyntaxError : public std::exception
+    struct Error : public std::exception
     {
     public:
-        explicit SyntaxError(std::string errorMessage = "JSON syntax error detected.") : errorMessage(std::move(errorMessage)) {}
+        explicit Error(std::string message) : errorMessage(std::string("JSON Error: ")+message) {}
         [[nodiscard]] const char *what() const noexcept override
         {
             return (errorMessage.c_str());
         }
-
     private:
-        std::string errorMessage;
+        const std::string errorMessage;
     };
     // ===================================================
     // Forward declarations for interfaces/classes/structs
