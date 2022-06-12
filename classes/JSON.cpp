@@ -1,8 +1,8 @@
 //
 // Class: JSON
 //
-// Description: Class to perform JSON  stringify/parse to/from a byte
-// or file. It is also  possible to customize this with the ISource
+// Description: Perform JSON  stringify/parse to/from a byte or
+// file. It is also  possible to customize this with the ISource
 // and IDestination interfaces if required. Note: At present it will
 // report incorrect JSON syntax but will not be specific about what
 // error has occurred; this is reasoned to add too much overhead to
@@ -91,9 +91,8 @@ namespace JSONLib
         m_implementation->parse(source);
     }
     /// <summary>
-    /// Recursively parse JNode structure and building its JSON in destination stream.
+    /// Recursively parse JNode structure and building its JSON text in destination stream.
     /// </summary>
-    /// <param name="jNodeRoot">Root of JNode structure.</param>
     /// <param name=destination>destination stream for stringified JSON</param>
     void JSON::stringify(IDestination &destination)
     {

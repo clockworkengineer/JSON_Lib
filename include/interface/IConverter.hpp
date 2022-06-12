@@ -6,7 +6,7 @@
 namespace JSONLib
 {
     //
-    // Character utf8 <-> uft16 conversion interface
+    // Interface for utf8 <-> uft16 conversion 
     //
     class IConverter
     {

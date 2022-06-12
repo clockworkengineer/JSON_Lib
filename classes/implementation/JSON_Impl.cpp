@@ -38,10 +38,10 @@ namespace JSONLib
     /// </summary>
     /// <param name="ch">Numeric character.</param>
     /// <returns>true if a character use in a number</returns>
-    bool JSON_Impl::isValidNumeric(ISource::Char ch)
+    bool JSON_Impl::isValidNumeric(ISource::Char c)
     {
         // Includes possible sign, decimal point or exponent
-        return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
+        return ((std::isdigit(c) != 0) || c == '.' || c == '-' || c == '+' || c == 'E' || c == 'e');
     }
     /// <summary>
     /// Extract a string from a JSON encoded source stream.

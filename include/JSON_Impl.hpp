@@ -15,7 +15,7 @@
 //
 #include "JSON_Nodes.hpp"
 //
-// JSON translator
+// JSON translator/converter
 //
 #include "JSON_Translator.hpp"
 #include "JSON_Converter.hpp"
@@ -62,7 +62,7 @@ namespace JSONLib
         // ===============
         // PRIVATE METHODS
         // ===============
-        bool isValidNumeric(ISource::Char ch);
+        bool isValidNumeric(ISource::Char c);
         ISource::String extractString(ISource &source);
         ISource::String parseValue(ISource &source);
         JNodeObject::KeyValuePair parseKeyValuePair(ISource &source);

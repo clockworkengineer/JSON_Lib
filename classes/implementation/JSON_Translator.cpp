@@ -12,7 +12,6 @@
 // =================
 #include "JSON.hpp"
 #include "JSON_Translator.hpp"
-#include "JSON_Converter.hpp"
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
@@ -30,7 +29,7 @@ namespace JSONLib
     // ========================
     // PRIVATE STATIC VARIABLES
     // ========================
-    static const std::vector<std::pair<const char, const ISource::Char>> m_escapeSequences{
+    static const std::vector<std::pair<const char, const ISource::Char>> escapeSequences{
         {'\\', '\\'},
         {'t', '\t'},
         {'"', '\"'},
@@ -82,7 +81,7 @@ namespace JSONLib
     {
         // Initialise tables used to convert to/from single character
         // escape sequences within a JSON string.
-        for (const auto &[key, value] : m_escapeSequences)
+        for (const auto &[key, value] : escapeSequences)
         {
             m_from[key] = value;
             m_to[value] = key;
