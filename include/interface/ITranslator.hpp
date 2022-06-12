@@ -15,7 +15,6 @@ namespace JSONLib
         virtual ~ITranslator() = default;
         virtual std::string from(const ISource::String &jsonString) = 0;
         virtual std::string to(const std::string &utf8String) = 0;
-
     protected:
         // Check that there are no single unpaired UTF-16 surrogates.From what I see this is
         // meant to be an error but from searching the web I have not found a definitive answer.
@@ -36,7 +35,6 @@ namespace JSONLib
             }
             return (false);
         }
-
     private:
         bool isValidSurrogateUpper(ISource::Char c)
         {

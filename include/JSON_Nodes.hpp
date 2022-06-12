@@ -33,11 +33,12 @@ namespace JSONLib
         struct Error : public std::exception
         {
         public:
-            explicit Error(std::string errorMessage) : errorMessage(std::move(errorMessage)) {}
+            explicit Error(std::string errorMessage="") : errorMessage(std::string("JNode Error: ")+errorMessage) {}
             [[nodiscard]] const char *what() const noexcept override
             {
                 return (errorMessage.c_str());
             }
+
         private:
             const std::string errorMessage;
         };
@@ -56,7 +57,7 @@ namespace JSONLib
     {
         using KeyValuePair = std::pair<std::string, JNode::Ptr>;
         explicit JNodeObject(std::vector<JNodeObject::KeyValuePair> &value) : JNode(JNodeType::object),
-                                                                       m_value(std::move(value))
+                                                                              m_value(std::move(value))
         {
         }
         [[nodiscard]] bool contains(const std::string &key) const
@@ -81,12 +82,13 @@ namespace JSONLib
             {
                 return (*it->second);
             }
-            throw JNode::Error("JNode Error: Invalid key used to access object.");
+            throw JNode::Error("Invalid key used to access object.");
         }
-        const std::vector<KeyValuePair> &objects()
+        const std::vector<KeyValuePair> &objects() const
         {
             return (m_value);
         }
+
     private:
         std::vector<JNodeObject::KeyValuePair> m_value;
     };
@@ -96,7 +98,7 @@ namespace JSONLib
     struct JNodeArray : JNode
     {
         explicit JNodeArray(std::vector<JNode::Ptr> &value) : JNode(JNodeType::array),
-                                                            m_value(std::move(value))
+                                                              m_value(std::move(value))
         {
         }
         [[nodiscard]] int size() const
@@ -113,8 +115,9 @@ namespace JSONLib
             {
                 return (*m_value[index]);
             }
-            throw JNode::Error("JNode Error: Invalid index used to access array.");
+            throw JNode::Error("Invalid index used to access array.");
         }
+
     private:
         std::vector<JNode::Ptr> m_value;
     };
@@ -146,6 +149,7 @@ namespace JSONLib
         {
             return (m_value);
         }
+
     private:
         std::string m_value;
     };
@@ -161,6 +165,7 @@ namespace JSONLib
         {
             return (m_value);
         }
+
     private:
         std::string m_value;
     };
@@ -176,6 +181,7 @@ namespace JSONLib
         {
             return (m_value);
         }
+
     private:
         bool m_value;
     };
@@ -202,45 +208,92 @@ namespace JSONLib
         {
             if (jNode.nodeType != JNodeType::string)
             {
-                throw JNode::Error("JNode Error: Node not a string.");
+                throw JNode::Error("Node not a string.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeNumber>)
         {
             if (jNode.nodeType != JNodeType::number)
             {
-                throw JNode::Error("JNode Error: Node not a number.");
+                throw JNode::Error("Node not a number.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeArray>)
         {
             if (jNode.nodeType != JNodeType::array)
             {
-                throw JNode::Error("JNode Error: Node not an array.");
+                throw JNode::Error("Node not an array.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeObject>)
         {
             if (jNode.nodeType != JNodeType::object)
             {
-                throw JNode::Error("JNode Error: Node not an object.");
+                throw JNode::Error("Node not an object.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeBoolean>)
         {
             if (jNode.nodeType != JNodeType::boolean)
             {
-                throw JNode::Error("JNode Error: Node not an boolean.");
+                throw JNode::Error("Node not an boolean.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeNull>)
         {
             if (jNode.nodeType != JNodeType::null)
             {
-                throw JNode::Error("JNode Error: Node not a null.");
+                throw JNode::Error("Node not a null.");
             }
         }
         return (static_cast<T &>(jNode));
+    }
+    template <typename T>
+    const T &JNodeRef(const JNode &jNode)
+    {
+        if constexpr (std::is_same_v<T, JNodeString>)
+        {
+            if (jNode.nodeType != JNodeType::string)
+            {
+                throw JNode::Error("Node not a string.");
+            }
+        }
+        else if constexpr (std::is_same_v<T, JNodeNumber>)
+        {
+            if (jNode.nodeType != JNodeType::number)
+            {
+                throw JNode::Error("Node not a number.");
+            }
+        }
+        else if constexpr (std::is_same_v<T, JNodeArray>)
+        {
+            if (jNode.nodeType != JNodeType::array)
+            {
+                throw JNode::Error("Node not an array.");
+            }
+        }
+        else if constexpr (std::is_same_v<T, JNodeObject>)
+        {
+            if (jNode.nodeType != JNodeType::object)
+            {
+                throw JNode::Error("Node not an object.");
+            }
+        }
+        else if constexpr (std::is_same_v<T, JNodeBoolean>)
+        {
+            if (jNode.nodeType != JNodeType::boolean)
+            {
+                throw JNode::Error("Node not an boolean.");
+            }
+        }
+        else if constexpr (std::is_same_v<T, JNodeNull>)
+        {
+            if (jNode.nodeType != JNodeType::null)
+            {
+                throw JNode::Error("Node not a null.");
+            }
+        }
+        return (static_cast<const T &>(jNode));
     }
     //
     // Index overloads

@@ -38,7 +38,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="ch">Numeric character.</param>
     /// <returns>true if a character use in a number</returns>
-    bool JSON_Impl::isValidNumeric(const ISource::Char ch)
+    bool JSON_Impl::isValidNumeric(ISource::Char ch)
     {
         // Includes possible sign, decimal point or exponent
         return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
@@ -275,7 +275,7 @@ namespace JSONLib
     /// <param name=jNode>JNode structure to be traversed</param>
     /// <param name=destination>destination stream for stringified JSON</param>
     /// <returns></returns>
-    void JSON_Impl::stringifyJNodes(JNode &jNode, IDestination &destination)
+    void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination)
     {
         switch (jNode.nodeType)
         {
@@ -297,7 +297,7 @@ namespace JSONLib
         {
             int commaCount = JNodeRef<JNodeObject>(jNode).size() - 1;
             destination.add('{');
-            for (const auto &[key, jNodePtr] : JNodeRef<JNodeObject>(jNode).objects())
+            for (auto &[key, jNodePtr] : JNodeRef<JNodeObject>(jNode).objects())
             {
                 destination.add('"');
                 destination.add(m_translator->to(key));

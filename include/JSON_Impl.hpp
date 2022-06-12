@@ -62,7 +62,7 @@ namespace JSONLib
         // ===============
         // PRIVATE METHODS
         // ===============
-        bool isValidNumeric(const ISource::Char ch);
+        bool isValidNumeric(ISource::Char ch);
         ISource::String extractString(ISource &source);
         ISource::String parseValue(ISource &source);
         JNodeObject::KeyValuePair parseKeyValuePair(ISource &source);
@@ -73,7 +73,7 @@ namespace JSONLib
         JNode::Ptr parseObject(ISource &source);
         JNode::Ptr parseArray(ISource &source);
         JNode::Ptr parseJNodes(ISource &source);
-        void stringifyJNodes(JNode &jNode, IDestination &destination);
+        void stringifyJNodes(const JNode &jNode, IDestination &destination);
         void stripWhiteSpace(ISource &source, IDestination &destination);
         // =================
         // PRIVATE VARIABLES
