@@ -21,21 +21,22 @@ namespace JSONLib
     struct Error : public std::exception
     {
     public:
-        explicit Error(std::string message) : errorMessage(std::string("JSON Error: ")+message) {}
+        explicit Error(std::string message="") : errorMessage(std::string("JSON Error: ") + message) {}
         [[nodiscard]] const char *what() const noexcept override
         {
             return (errorMessage.c_str());
         }
+
     private:
         const std::string errorMessage;
     };
     // ===================================================
     // Forward declarations for interfaces/classes/structs
     // ===================================================
+    class JSON_Impl;
     class ISource;
     class IDestination;
     class ITranslator;
-    class JSON_Impl;
     struct JNode;
     // ================
     // CLASS DEFINITION
