@@ -7,7 +7,7 @@
 // Class under test includes
 // =========================
 #include "JSON.hpp"
-#include "JSON_Nodes.hpp"
+#include "JSON_Types.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Converter.hpp"

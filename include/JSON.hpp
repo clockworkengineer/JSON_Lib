@@ -10,7 +10,7 @@
 // JSON version, exception
 //
 #include "JSON_Config.hpp"
-#include "JSON_Error.hpp"
+#include "JSON_Types.hpp"
 // =========
 // NAMESPACE
 // =========

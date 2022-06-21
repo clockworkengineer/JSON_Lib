@@ -27,8 +27,7 @@ set (JSON_SOURCES
 set (JSON_INCLUDES
     JSON_Config.hpp
     ./include/JSON.hpp
-    ./include/JSON_Error.hpp
-    ./include/JSON_Nodes.hpp
+    ./include/implementation/JSON_Types.hpp
     ./include/implementation/JSON_Impl.hpp
     ./include/implementation/JSON_Sources.hpp
     ./include/implementation/JSON_Destinations.hpp

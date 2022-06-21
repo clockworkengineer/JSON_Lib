@@ -11,6 +11,15 @@
 // =========
 namespace JSONLib
 {
+    // =========
+    // XML Error
+    // =========
+    struct Error : public std::runtime_error
+    {
+        Error(std::string const &message) : std::runtime_error("JSON Error: " + message)
+        {
+        }
+    };
     // ===========
     // JNode types
     // ===========
@@ -202,7 +211,7 @@ namespace JSONLib
     // JNode base reference converter
     // ==============================
     template <typename T>
-    void CheckJNodeType(auto jNode)
+    void CheckJNodeType(const JNode &jNode)
     {
         if constexpr (std::is_same_v<T, JNodeString>)
         {

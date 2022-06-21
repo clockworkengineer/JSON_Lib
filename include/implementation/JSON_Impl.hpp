@@ -13,7 +13,7 @@
 //
 // JSON JNodes
 //
-#include "JSON_Nodes.hpp"
+#include "JSON_Types.hpp"
 //
 // JSON translator/converter
 //
