@@ -27,13 +27,13 @@ set (JSON_SOURCES
 set (JSON_INCLUDES
     JSON_Config.hpp
     ./include/JSON.hpp
-    ./include/JSON_Impl.hpp
     ./include/JSON_Error.hpp
     ./include/JSON_Nodes.hpp
-    ./include/JSON_Sources.hpp
-    ./include/JSON_Destinations.hpp
-    ./include/JSON_Translator.hpp
-    ./include/JSON_Converter.hpp
+    ./include/implementation/JSON_Impl.hpp
+    ./include/implementation/JSON_Sources.hpp
+    ./include/implementation/JSON_Destinations.hpp
+    ./include/implementation/JSON_Translator.hpp
+    ./include/implementation/JSON_Converter.hpp
     ./include/interface/ISource.hpp
     ./include/interface/IDestination.hpp
     ./include/interface/ITranslator.hpp
@@ -41,8 +41,8 @@ set (JSON_INCLUDES
 
 # JSON library
 
-add_library(${JSON_LIBRARY_NAME} ${JSON_SOURCES})
-target_include_directories(${JSON_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/include/interface ${PROJECT_BINARY_DIR} )
+add_library(${JSON_LIBRARY_NAME} ${JSON_SOURCES} ${JSON_INCLUDES})
+target_include_directories(${JSON_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/include/interface ${PROJECT_SOURCE_DIR}/include/implementation ${PROJECT_BINARY_DIR} )
 
 # Add tests
 

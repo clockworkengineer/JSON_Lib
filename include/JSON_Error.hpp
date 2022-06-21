@@ -3,7 +3,6 @@
 // C++ STL
 //
 #include <string>
-#include <vector>
 #include <stdexcept>
 // =========
 // NAMESPACE
