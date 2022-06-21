@@ -50,7 +50,7 @@ namespace JSONLib
     /// <param name="current">Current character position.</param>
     /// <param name="numberOfCharacters">Number of characters left in source string.</param>
     /// <returns>UTF16 character for "\uxxx".</returns>
-    ISource::Char decodeUTF16(ISource::String::const_iterator &current, ptrdiff_t numberOfCharacters)
+    ISource::Char JSON_Translator::decodeUTF16(ISource::String::const_iterator &current, ptrdiff_t numberOfCharacters)
     {
         if (numberOfCharacters >= 4)
         {
@@ -68,7 +68,7 @@ namespace JSONLib
                 return (utf16value);
             }
         }
-        throw JSONLib::SyntaxError("Syntax error detected.");
+        throw Error("Syntax error detected.");
     }
     // ==============
     // PUBLIC METHODS
@@ -122,11 +122,11 @@ namespace JSONLib
                     continue;
                 }
             }
-            throw JSONLib::SyntaxError("Syntax error detected.");
+            throw Error("Syntax error detected.");
         }
         if (unpairedSurrogatesInBuffer(utf16Buffer))
         {
-            throw JSONLib::SyntaxError("Syntax error detected.");
+            throw Error("Syntax error detected.");
         }
         return (m_converter.to_utf8(utf16Buffer));
     }

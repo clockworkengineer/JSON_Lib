@@ -1,20 +1,16 @@
 #pragma once
-// 
+// =======
 // C++ STL
-//
+// =======
 #include <unordered_map>
 #include <string>
 #include <vector>
 #include <array>
-//
+// ===============================
 // Translator/Converter interfaces
-//
+// ===============================
 #include "ITranslator.hpp"
 #include "IConverter.hpp"
-//
-// JSON Types
-//
-#include "JSON_Types.hpp"
 // =========
 // NAMESPACE
 // =========
@@ -29,13 +25,24 @@ namespace JSONLib
         // ==========================
         // PUBLIC TYPES AND CONSTANTS
         // ==========================
-        // ============
-        // CONSTRUCTORS
-        // ============
+        // =================
+        // JSON Syntax Error
+        // =================
+        struct Error : public std::runtime_error
+        {
+            Error(std::string const &message) : std::runtime_error("JSON Translator Error: " + message)
+            {
+            }
+        };
+        // ======================
+        // CONSTRUCTOR/DESTRUCTOR
+        // ======================
         JSON_Translator(IConverter &converter);
-        // ==========
-        // DESTRUCTOR
-        // ==========
+        JSON_Translator(const JSON_Translator &other) = delete;
+        JSON_Translator &operator=(const JSON_Translator &other) = delete;
+        JSON_Translator(JSON_Translator &&other) = delete;
+        JSON_Translator &operator=(JSON_Translator &&other) = delete;
+        ~JSON_Translator() = default;
         // ==============
         // PUBLIC METHODS
         // ==============
@@ -54,6 +61,7 @@ namespace JSONLib
         // ===============
         // PRIVATE METHODS
         // ===============
+        ISource::Char decodeUTF16(ISource::String::const_iterator &current, ptrdiff_t numberOfCharacters);
         // =================
         // PRIVATE VARIABLES
         // =================

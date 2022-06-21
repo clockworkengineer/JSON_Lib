@@ -298,23 +298,23 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 \\uDD1E End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.from(u"Begin \\uD834 \\uDD1E End"), JSONLib::SyntaxError);
-    REQUIRE_THROWS_WITH(translator.from(u"Begin \\uD834 \\uDD1E End"), "JSON Error: Syntax error detected.");
+    REQUIRE_THROWS_AS(translator.from(u"Begin \\uD834 \\uDD1E End"), JSON_Translator::Error);
+    REQUIRE_THROWS_WITH(translator.from(u"Begin \\uD834 \\uDD1E End"), "JSON Translator Error: Syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834\\u0045 End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.from(u"Begin \\uD834\\u0045 End"), JSONLib::SyntaxError);
-    REQUIRE_THROWS_WITH(translator.from(u"Begin \\uD834\\u0045 End"), "JSON Error: Syntax error detected.");
+    REQUIRE_THROWS_AS(translator.from(u"Begin \\uD834\\u0045 End"), JSON_Translator::Error);
+    REQUIRE_THROWS_WITH(translator.from(u"Begin \\uD834\\u0045 End"), "JSON Translator Error: Syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.from(u"Begin \\uD834 End"), JSONLib::SyntaxError);
-    REQUIRE_THROWS_WITH(translator.from(u"Begin \\uD834 End"), "JSON Error: Syntax error detected.");
+    REQUIRE_THROWS_AS(translator.from(u"Begin \\uD834 End"), JSON_Translator::Error);
+    REQUIRE_THROWS_WITH(translator.from(u"Begin \\uD834 End"), "JSON Translator Error: Syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uDD1E End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.from(u"Begin \\uDD1E End"), JSONLib::SyntaxError);
-    REQUIRE_THROWS_WITH(translator.from(u"Begin \\uDD1E End"), "JSON Error: Syntax error detected.");
+    REQUIRE_THROWS_AS(translator.from(u"Begin \\uDD1E End"), JSON_Translator::Error);
+    REQUIRE_THROWS_WITH(translator.from(u"Begin \\uDD1E End"), "JSON Translator Error: Syntax error detected.");
   }
   SECTION("Translate to escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
   { // Needed to convert const char8_t * to string
