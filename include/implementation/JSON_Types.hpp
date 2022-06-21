@@ -11,12 +11,12 @@
 // =========
 namespace JSONLib
 {
-    // =========
-    // XML Error
-    // =========
-    struct Error : public std::runtime_error
+    // =================
+    // JSON Syntax Error
+    // =================
+    struct SyntaxError : public std::runtime_error
     {
-        Error(std::string const &message) : std::runtime_error("JSON Error: " + message)
+        SyntaxError(std::string const &message) : std::runtime_error("JSON Error: " + message)
         {
         }
     };
@@ -39,17 +39,11 @@ namespace JSONLib
     struct JNode
     {
         using Ptr = std::unique_ptr<JNode>;
-        struct Error : public std::exception
+        struct Error : public std::runtime_error
         {
-        public:
-            explicit Error(std::string errorMessage = "") : errorMessage(std::string("JNode Error: ") + errorMessage) {}
-            [[nodiscard]] const char *what() const noexcept override
+            Error(std::string const &message) : std::runtime_error("JNode Error: " + message)
             {
-                return (errorMessage.c_str());
             }
-
-        private:
-            const std::string errorMessage;
         };
         explicit JNode(JNodeType nodeType = JNodeType::base) : nodeType(nodeType)
         {

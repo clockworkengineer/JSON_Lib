@@ -10,7 +10,6 @@
 // =================
 // CLASS DEFINITIONS
 // =================
-#include "JSON.hpp"
 #include "JSON_Translator.hpp"
 // ====================
 // CLASS IMPLEMENTATION
@@ -69,7 +68,7 @@ namespace JSONLib
                 return (utf16value);
             }
         }
-        throw JSONLib::Error("Syntax error detected.");
+        throw JSONLib::SyntaxError("Syntax error detected.");
     }
     // ==============
     // PUBLIC METHODS
@@ -123,11 +122,11 @@ namespace JSONLib
                     continue;
                 }
             }
-            throw JSONLib::Error("Syntax error detected.");
+            throw JSONLib::SyntaxError("Syntax error detected.");
         }
         if (unpairedSurrogatesInBuffer(utf16Buffer))
         {
-            throw JSONLib::Error("Syntax error detected.");
+            throw JSONLib::SyntaxError("Syntax error detected.");
         }
         return (m_converter.to_utf8(utf16Buffer));
     }

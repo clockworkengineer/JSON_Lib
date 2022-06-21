@@ -1,16 +1,11 @@
 #pragma once
-//
+// =======
 // C++ STL
-//
+// =======
 #include <string>
 #include <vector>
 #include <stdexcept>
 #include <memory>
-//
-// JSON version, exception
-//
-#include "JSON_Config.hpp"
-#include "JSON_Types.hpp"
 // =========
 // NAMESPACE
 // =========
@@ -33,13 +28,14 @@ namespace JSONLib
         // ==========================
         // PUBLIC TYPES AND CONSTANTS
         // ==========================
-        // ============
-        // CONSTRUCTORS
-        // ============
+        // ======================
+        // CONSTRUCTOR/DESTRUCTOR
+        // ======================
         explicit JSON(ITranslator *translator = nullptr);
-        // ==========
-        // DESTRUCTOR
-        // ==========
+        JSON(const JSON &other) = delete;
+        JSON &operator=(const JSON &other) = delete;
+        JSON(JSON &&other) = delete;
+        JSON &operator=(JSON &&other) = delete;
         ~JSON();
         // ==============
         // PUBLIC METHODS

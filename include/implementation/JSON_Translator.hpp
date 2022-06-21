@@ -1,5 +1,5 @@
 #pragma once
-//
+// 
 // C++ STL
 //
 #include <unordered_map>
@@ -11,6 +11,10 @@
 //
 #include "ITranslator.hpp"
 #include "IConverter.hpp"
+//
+// JSON Types
+//
+#include "JSON_Types.hpp"
 // =========
 // NAMESPACE
 // =========

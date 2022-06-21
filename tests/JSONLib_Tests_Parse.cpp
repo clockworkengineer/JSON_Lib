@@ -299,49 +299,49 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]")
     SECTION("Parse missing terminating '\"' in string", "[JSON][Parse]")
     {
         BufferSource jsonSource{"{ \"one\" : \"Apple }"};
-        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::SyntaxError);
         jsonSource.reset();
         REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Syntax error detected.");
     }
     SECTION("Parse number with starting with invalid character", "[JSON][Parse]")
     {
         BufferSource jsonSource{"{ \"one\" : z19034}"};
-        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::SyntaxError);
         jsonSource.reset();
         REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Syntax error detected.");
     }
     SECTION("Parse object with invalid value field (number).", "[JSON][Parse]")
     {
         BufferSource jsonSource{"{ \"one\" : 18987u3 }"};
-        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::SyntaxError);
         jsonSource.reset();
         REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Syntax error detected.");
     }
     SECTION("Parse object with missing value field.", "[JSON][Parse]")
     {
         BufferSource jsonSource{"{ \"one\" : }"};
-        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::SyntaxError);
         jsonSource.reset();
         REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Syntax error detected.");
     }
     SECTION("Parse object with missing key field.", "[JSON][Parse]")
     {
         BufferSource jsonSource{"{  : 89012 }"};
-        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::SyntaxError);
         jsonSource.reset();
         REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Syntax error detected.");
     }
     SECTION("Parse object with missing closing '}'.", "[JSON][Parse]")
     {
         BufferSource jsonSource{"{  \"one\" : 18987"};
-        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::SyntaxError);
         jsonSource.reset();
         REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Syntax error detected.");
     }
     SECTION("Parse an nested objects ({ {} }) ", "[JSON][Parse]")
     {
         BufferSource jsonSource{"{{}}"};
-        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+        REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::SyntaxError);
         jsonSource.reset();
         REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Syntax error detected.");
     }
