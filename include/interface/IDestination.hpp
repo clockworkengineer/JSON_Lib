@@ -14,6 +14,15 @@ namespace JSONLib
     class IDestination
     {
     public:
+        // ==================
+        // IDestination Error
+        // ==================
+        struct Error : public std::runtime_error
+        {
+            Error(std::string const &message) : std::runtime_error("IDestination Error: " + message)
+            {
+            }
+        };
         // ========================
         // Constructors/destructors
         // ========================

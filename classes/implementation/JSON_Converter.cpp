@@ -8,7 +8,6 @@
 // =================
 // CLASS DEFINITIONS
 // =================
-#include "JSON.hpp"
 #include "JSON_Converter.hpp"
 // ====================
 // CLASS IMPLEMENTATION

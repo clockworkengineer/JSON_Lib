@@ -1,12 +1,12 @@
 #pragma once
-//
+// =======
 // C++ STL
-//
+// =======
 #include <fstream>
 #include <string>
-//
+// =====================
 // Destination interface
-//
+// =====================
 #include "IDestination.hpp"
 // =========
 // NAMESPACE
@@ -53,7 +53,7 @@ namespace JSONLib
             m_destination.open(destinationFileName.c_str(), std::ios_base::binary);
             if (!m_destination.is_open())
             {
-                throw std::runtime_error("JSON file output stream failed to open or could not be created.");
+                throw Error("File output stream failed to open or could not be created.");
             }
         }
         void add(const std::string &bytes) override

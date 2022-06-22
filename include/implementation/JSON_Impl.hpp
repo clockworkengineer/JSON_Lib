@@ -1,22 +1,22 @@
 #pragma once
-//
+// =======
 // C++ STL
-//
+// =======
 #include <string>
 #include <vector>
 #include <stdexcept>
-//
+// =============================
 // Source/Destination interfaces
-//
+// =============================
 #include "ISource.hpp"
 #include "IDestination.hpp"
-//
-// JSON JNodes
-//
+// ==========
+// JSON Types
+// ==========
 #include "JSON_Types.hpp"
-//
+// =========================
 // JSON translator/converter
-//
+// =========================
 #include "JSON_Translator.hpp"
 #include "JSON_Converter.hpp"
 // =========
@@ -33,13 +33,14 @@ namespace JSONLib
         // ==========================
         // PUBLIC TYPES AND CONSTANTS
         // ==========================
-        // ============
-        // CONSTRUCTORS
-        // ============
+        // ======================
+        // CONSTRUCTOR/DESTRUCTOR
+        // ======================
         JSON_Impl();
-        // ==========
-        // DESTRUCTOR
-        // ==========
+        JSON_Impl(const JSON_Impl &other) = delete;
+        JSON_Impl &operator=(const JSON_Impl &other) = delete;
+        JSON_Impl(JSON_Impl &&other) = delete;
+        JSON_Impl &operator=(JSON_Impl &&other) = delete;
         ~JSON_Impl();
         // ==============
         // PUBLIC METHODS

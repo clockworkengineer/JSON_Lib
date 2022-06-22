@@ -1,16 +1,16 @@
 #pragma once
-//
+// =======
 // C++ STL
-//
+// =======
 #include <fstream>
 #include <string>
-//
+// ================
 // Source interface
-//
+// ================
 #include "ISource.hpp"
-//
+// ==============
 // JSON converter
-//
+// ==============
 #include "JSON_Converter.hpp"
 // =========
 // NAMESPACE
@@ -20,7 +20,7 @@ namespace JSONLib
     // ==============================
     // Source classes for JSON parser
     // ==============================
-    //
+    // 
     // Buffered character source
     //
     class BufferSource : public ISource
@@ -31,7 +31,7 @@ namespace JSONLib
             JSON_Converter converter;
             if (sourceBuffer.empty())
             {
-                throw std::invalid_argument("Empty source buffer passed to be parsed.");
+                throw Error("Empty source buffer passed to be parsed.");
             }
             m_parseBuffer = converter.to_utf16(sourceBuffer);
         }
@@ -47,7 +47,7 @@ namespace JSONLib
         {
             if (!more())
             {
-                throw std::runtime_error("Tried to read past and of buffer.");
+                throw Error("Tried to read past and of buffer.");
             }
             m_bufferPosition++;
         }
@@ -64,9 +64,9 @@ namespace JSONLib
         std::size_t m_bufferPosition = 0;
         String m_parseBuffer;
     };
-    //
+    // 
     // File character source
-    //
+    // 
     class FileSource : public ISource
     {
     public:
@@ -75,7 +75,7 @@ namespace JSONLib
             m_source.open(sourceFileName.c_str(), std::ios_base::binary);
             if (!m_source.is_open())
             {
-                throw std::runtime_error("JSON file input stream failed to open or does not exist.");
+                throw Error("File input stream failed to open or does not exist.");
             }
         }
         Char current() const override
@@ -86,7 +86,7 @@ namespace JSONLib
         {
             if (!more())
             {
-                throw std::runtime_error("Tried to read past end of file.");
+                throw Error("Tried to read past end of file.");
             }
             char c = 0;
             m_source.get(c);

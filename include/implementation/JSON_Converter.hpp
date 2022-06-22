@@ -1,16 +1,16 @@
 #pragma once
-//
+// ==========================
 // C++ STL/ platform specific
-//
+// ==========================
 #if defined(_WIN64)
 #include "Windows.h"
 #else
 #include <codecvt>
 #include <locale>
 #endif
-//
-// Translator interface
-//
+// ===================
+// Converter interface
+// ===================
 #include "IConverter.hpp"
 // =========
 // NAMESPACE

@@ -36,8 +36,8 @@ TEST_CASE("ISource (File) interface.", "[JSON][Parse][ISource]")
   }
   SECTION("Create FileSource with non existant file.", "[JSON][Parse][ISource][Exception]")
   {
-    REQUIRE_THROWS_AS(FileSource(prefixTestDataPath(kNonExistantJSONFile)), std::runtime_error);
-    REQUIRE_THROWS_WITH(FileSource(prefixTestDataPath(kNonExistantJSONFile)), "JSON file input stream failed to open or does not exist.");
+    REQUIRE_THROWS_AS(FileSource(prefixTestDataPath(kNonExistantJSONFile)), JSONLib::ISource::Error);
+    REQUIRE_THROWS_WITH(FileSource(prefixTestDataPath(kNonExistantJSONFile)), "ISource Error: File input stream failed to open or does not exist.");
   }
   SECTION("Create FileSource with testfile001.json and then try to read off the end", "[JSON][Parse][ISource][Exception]")
   {
@@ -46,8 +46,8 @@ TEST_CASE("ISource (File) interface.", "[JSON][Parse][ISource]")
     {
       source.next();
     }
-    REQUIRE_THROWS_AS(source.next(), std::runtime_error);
-    REQUIRE_THROWS_WITH(source.next(), "Tried to read past end of file.");
+    REQUIRE_THROWS_AS(source.next(), JSONLib::ISource::Error);
+    REQUIRE_THROWS_WITH(source.next(), "ISource Error: Tried to read past end of file.");
   }
 }
 TEST_CASE("ISource (Buffer) interface. Contains file testfile001.json.", "[JSON][Parse][ISource]")
@@ -84,8 +84,8 @@ TEST_CASE("ISource (Buffer) interface. Contains file testfile001.json.", "[JSON]
   }
   SECTION("Create BufferSource with empty buffer.", "[JSON][Parse][ISource][Exception]")
   {
-    REQUIRE_THROWS_AS(BufferSource(""), std::invalid_argument);
-    REQUIRE_THROWS_WITH(BufferSource(""), "Empty source buffer passed to be parsed.");
+    REQUIRE_THROWS_AS(BufferSource(""), JSONLib::ISource::Error);
+    REQUIRE_THROWS_WITH(BufferSource(""), "ISource Error: Empty source buffer passed to be parsed.");
   }
   SECTION("Create BufferSource with testfile001.json and then try to read off the end", "[JSON][Parse][ISource][Exception]")
   {
@@ -94,8 +94,8 @@ TEST_CASE("ISource (Buffer) interface. Contains file testfile001.json.", "[JSON]
     {
       source.next();
     }
-    REQUIRE_THROWS_AS(source.next(), std::runtime_error);
-    REQUIRE_THROWS_WITH(source.next(), "Tried to read past and of buffer.");
+    REQUIRE_THROWS_AS(source.next(), JSONLib::ISource::Error);
+    REQUIRE_THROWS_WITH(source.next(), "ISource Error: Tried to read past and of buffer.");
   }
 }
 TEST_CASE("IDestination (Buffer) interface.", "[JSON][Parse][IDestination]")

@@ -19,6 +19,15 @@ namespace JSONLib
         // ============================
         using String = std::u16string;
         using Char = String::value_type;
+        // =============
+        // ISource Error
+        // =============
+        struct Error : public std::runtime_error
+        {
+            Error(std::string const &message) : std::runtime_error("ISource Error: " + message)
+            {
+            }
+        };
         // ========================
         // Constructors/destructors
         // ========================

@@ -61,7 +61,6 @@ namespace JSONLib
         // ===============
         // PRIVATE METHODS
         // ===============
-        ISource::Char decodeUTF16(ISource::String::const_iterator &current, ptrdiff_t numberOfCharacters);
         // =================
         // PRIVATE VARIABLES
         // =================
