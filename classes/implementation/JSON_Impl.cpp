@@ -75,22 +75,6 @@ namespace JSONLib
         return (value);
     }
     /// <summary>
-    /// Parse alphabetic value from source stream.
-    /// </summary>
-    /// <param name="source">Source for JSON encoded bytes.</param>
-    /// <returns>String alphabetic value "true"/"false"/"null".</returns>
-    ISource::String JSON_Impl::parseValue(ISource &source)
-    {
-        ISource::String value;
-        while (source.more() && (std::isalpha(source.current()) != 0))
-        {
-            value += source.current();
-            source.next();
-        }
-        source.ignoreWS();
-        return (value);
-    }
-    /// <summary>
     /// Parse a key/value pair from a JSON encoded source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
@@ -150,13 +134,14 @@ namespace JSONLib
     /// <returns> Boolean JNode.</returns>
     JNode::Ptr JSON_Impl::parseBoolean(ISource &source)
     {
-        const std::string value{m_converter->to_utf8(parseValue(source))};
-        if (value == "true")
+        if (source.match(u"true"))
         {
+            source.ignoreWS();
             return (std::make_unique<JNodeBoolean>(true));
         }
-        if (value == "false")
+        if (source.match(u"false"))
         {
+            source.ignoreWS();
             return (std::make_unique<JNodeBoolean>(false));
         }
         throw Error("Syntax error detected.");
@@ -168,10 +153,11 @@ namespace JSONLib
     /// <returns>Null JNode.</returns>
     JNode::Ptr JSON_Impl::parseNull(ISource &source)
     {
-        if (parseValue(source) != u"null")
+        if (!source.match(u"null"))
         {
             throw Error("Syntax error detected.");
         }
+        source.ignoreWS();
         return (std::make_unique<JNodeNull>());
     }
     /// <summary>
@@ -315,7 +301,7 @@ namespace JSONLib
         {
             int commaCount = JNodeRef<JNodeArray>(jNode).size() - 1;
             destination.add('[');
-            for (const auto &bNodeEntry : JNodeRef<JNodeArray>(jNode).array())
+            for (auto &bNodeEntry : JNodeRef<JNodeArray>(jNode).array())
             {
                 stringifyJNodes(JNodeRef<JNode>(*bNodeEntry), destination);
                 if (commaCount-- > 0)

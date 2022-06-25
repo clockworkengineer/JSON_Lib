@@ -20,7 +20,7 @@ namespace JSONLib
     // ==============================
     // Source classes for JSON parser
     // ==============================
-    // 
+    //
     // Buffered character source
     //
     class BufferSource : public ISource
@@ -55,6 +55,14 @@ namespace JSONLib
         {
             return (m_bufferPosition < m_parseBuffer.size());
         }
+        void backup(long length) override
+        {
+            m_bufferPosition -= length;
+            if (m_bufferPosition < 0)
+            {
+                m_bufferPosition = 0;
+            }
+        }
         void reset() override
         {
             m_bufferPosition = 0;
@@ -64,9 +72,9 @@ namespace JSONLib
         std::size_t m_bufferPosition = 0;
         String m_parseBuffer;
     };
-    // 
+    //
     // File character source
-    // 
+    //
     class FileSource : public ISource
     {
     public:
@@ -94,6 +102,18 @@ namespace JSONLib
         bool more() const override
         {
             return (m_source.peek() != EOF);
+        }
+        void backup(long length) override
+        {
+            if ((static_cast<long>(m_source.tellg()) - length >= 0) || (current() == (ISource::Char)EOF))
+            {
+                m_source.clear();
+                m_source.seekg(-length, std::ios_base::cur);
+            }
+            else
+            {
+                m_source.seekg(0, std::ios_base::beg);
+            }
         }
         void reset() override
         {

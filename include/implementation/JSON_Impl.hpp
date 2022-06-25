@@ -66,7 +66,6 @@ namespace JSONLib
         // ===============
         bool isValidNumeric(ISource::Char c);
         ISource::String extractString(ISource &source);
-        ISource::String parseValue(ISource &source);
         JNodeObject::KeyValuePair parseKeyValuePair(ISource &source);
         JNode::Ptr parseString(ISource &source);
         JNode::Ptr parseNumber(ISource &source);

@@ -49,6 +49,10 @@ namespace JSONLib
         // Are there still more characters to read ?
         // =========================================
         [[nodiscard]] virtual bool more() const = 0;
+        // ========================
+        // Backup length characters
+        // ========================
+        virtual void backup(long length) = 0;
         // ===================================
         // Reset to beginning of source stream
         // ===================================
@@ -69,6 +73,23 @@ namespace JSONLib
             {
                 next();
             }
+        }
+        // =================================================================
+        // Is current string a match at the current source stream position ?
+        // =================================================================
+        bool match(const String &targetString)
+        {
+            long index = 0;
+            while (more() && current() == targetString[index])
+            {
+                next();
+                if (++index == (long)targetString.length())
+                {
+                    return (true);
+                }
+            }
+            backup(index);
+            return (false);
         }
     };
 } // namespace JSONLib
