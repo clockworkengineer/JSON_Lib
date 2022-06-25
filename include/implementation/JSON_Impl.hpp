@@ -5,18 +5,17 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <format>
 // =============================
 // Source/Destination interfaces
 // =============================
 #include "ISource.hpp"
 #include "IDestination.hpp"
-// ==========
-// JSON Types
-// ==========
+// ====
+// JSON
+// ====
+#include "JSON_Config.hpp"
 #include "JSON_Types.hpp"
-// =========================
-// JSON translator/converter
-// =========================
 #include "JSON_Translator.hpp"
 #include "JSON_Converter.hpp"
 // =========
@@ -45,10 +44,12 @@ namespace JSONLib
         // ==============
         // PUBLIC METHODS
         // ==============
+           std::string version();
         void parse(ISource &source);
         void stringify(IDestination &destination);
         void strip(ISource &source, IDestination &destination);
         JNode &root() { return (*m_jNodeRoot); }
+        const JNode &root() const { return (*m_jNodeRoot); }
         void translator(ITranslator *translator);
         // ================
         // PUBLIC VARIABLES

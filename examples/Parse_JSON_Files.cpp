@@ -14,20 +14,26 @@
 #include <cstdlib>
 #include <iostream>
 #include <filesystem>
+#include <format>
 //
 // JSON includes
 //
 #include "JSON.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
-// =======================
-// Bencode class namespace
-// =======================
+//
+// Logging
+//
+#include "plog/Log.h"
+#include "plog/Initializers/RollingFileInitializer.h"
+// ====================
+// JSON class namespace
+// ====================
 using namespace JSONLib;
 // ========================
 // LOCAL TYPES/DEFINITIONS
 // ========================
-constexpr size_t kMaxFileLengthToDisplay = 16 * 1024;
+static constexpr size_t kMaxFileLengthToDisplay = 16 * 1024;
 // ===============
 // LOCAL FUNCTIONS
 // ===============
@@ -38,8 +44,7 @@ constexpr size_t kMaxFileLengthToDisplay = 16 * 1024;
 /// <returns>Full path to test data file</returns>
 std::string prefixTestDataPath(const std::string &file)
 {
-    std::filesystem::path currentPath = std::filesystem::current_path() / "testData" / file;
-    return (currentPath.string());
+    return ((std::filesystem::current_path() / "testData" / file).string());
 }
 /// <summary>
 /// Parse JSON file and display it reconstituted via stringify.
@@ -49,37 +54,48 @@ void processJSONFile(const std::string &fileName)
 {
     JSON json;
     BufferDestination jsonDestination;
-    std::cout << fileName << "\n";
+    PLOG_INFO << fileName;
     json.parse(FileSource{fileName});
     json.stringify(jsonDestination);
     if (jsonDestination.getBuffer().size() < kMaxFileLengthToDisplay)
     {
-        std::cout << "[" << jsonDestination.getBuffer() << "]\n";
+        PLOG_INFO << "[" << jsonDestination.getBuffer();
     }
-    std::cout << "----------------------------OK\n";
+    PLOG_INFO << "----------------------------OK";
 }
 // ============================
 // ===== MAIN ENTRY POINT =====
 // ============================
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
-    std::vector<std::string> fileList{"testfile001.json",
-                                      "testfile002.json",
-                                      "testfile003.json",
-                                      "testfile004.json",
-                                      "testfile005.json",
-                                      "large-file.json" // Not kept in GitHub as 24Meg in size.
-                                      };
+    std::vector<std::string> fileList{
+        "testfile001.json",
+        "testfile002.json",
+        "testfile003.json",
+        "testfile004.json",
+        "testfile005.json",
+        "large-file.json" // Not kept in GitHub as 24Meg in size.
+    };
+    //
+    // Initialise logging.
+    //
+    plog::init(plog::debug, "Parse_JSON_Files.log");
+    PLOG_INFO << "Parse_JSON_Files started ...";
+    PLOG_INFO << JSON().version();
     //
     // For each json parse it, stringify it and display unless its to large.
     //
-    for (auto &fileName : fileList)
+    for (const auto &fileName : fileList)
     {
         try
         {
-            if (std::string fullFileName = {prefixTestDataPath(fileName)}; std::filesystem::exists(fullFileName))
+            if (const std::string fullFileName{prefixTestDataPath(fileName)}; std::filesystem::exists(fullFileName))
             {
                 processJSONFile(fullFileName);
+            }
+            else
+            {
+                PLOG_INFO << std::format("File {} not present.", fileName);
             }
         }
         catch (std::exception &ex)

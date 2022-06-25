@@ -52,7 +52,7 @@ namespace JSONLib
     {
         if (source.current() != '"')
         {
-            throw JSONLib::SyntaxError("Syntax error detected.");
+            throw JSONLib::Error("Syntax error detected.");
         }
         source.next();
         ISource::String value;
@@ -68,7 +68,7 @@ namespace JSONLib
         }
         if (source.current() != '"')
         {
-            throw JSONLib::SyntaxError("Syntax error detected.");
+            throw JSONLib::Error("Syntax error detected.");
         }
         source.next();
         source.ignoreWS();
@@ -100,7 +100,7 @@ namespace JSONLib
         const std::string key{m_translator->from(extractString(source))};
         if (source.current() != ':')
         {
-            throw JSONLib::SyntaxError("Syntax error detected.");
+            throw JSONLib::Error("Syntax error detected.");
         }
         source.next();
         source.ignoreWS();
@@ -137,7 +137,7 @@ namespace JSONLib
             std::strtod(number.c_str(), &end);
             if (*end != '\0')
             {
-                throw JSONLib::SyntaxError("Syntax error detected.");
+                throw JSONLib::Error("Syntax error detected.");
             }
         }
         source.ignoreWS();
@@ -159,7 +159,7 @@ namespace JSONLib
         {
             return (std::make_unique<JNodeBoolean>(false));
         }
-        throw JSONLib::SyntaxError("Syntax error detected.");
+        throw JSONLib::Error("Syntax error detected.");
     }
     /// <summary>
     /// Parse a null from a JSON source stream.
@@ -170,7 +170,7 @@ namespace JSONLib
     {
         if (parseValue(source) != u"null")
         {
-            throw JSONLib::SyntaxError("Syntax error detected.");
+            throw JSONLib::Error("Syntax error detected.");
         }
         return (std::make_unique<JNodeNull>());
     }
@@ -196,7 +196,7 @@ namespace JSONLib
         }
         if (source.current() != '}')
         {
-            throw JSONLib::SyntaxError("Syntax error detected.");
+            throw JSONLib::Error("Syntax error detected.");
         }
         source.next();
         source.ignoreWS();
@@ -224,7 +224,7 @@ namespace JSONLib
         }
         if (source.current() != ']')
         {
-            throw JSONLib::SyntaxError("Syntax error detected.");
+            throw JSONLib::Error("Syntax error detected.");
         }
         source.next();
         source.ignoreWS();
@@ -266,7 +266,7 @@ namespace JSONLib
         case '9':
             return (parseNumber(source));
         }
-        throw JSONLib::SyntaxError("Syntax error detected.");
+        throw JSONLib::Error("Syntax error detected.");
     }
     /// <summary>
     /// Recursively traverse JNode structure encoding it into JSON on
@@ -366,6 +366,13 @@ namespace JSONLib
     /// </summary>
     JSON_Impl::~JSON_Impl()
     {
+    }
+    /// <summary>
+    ///  Get JSONLib version.
+    /// </summary>
+    std::string JSON_Impl::version()
+    {
+        return (std::format("JSONLib Version {}.{}", JSON_VERSION_MAJOR, JSON_VERSION_MINOR));
     }
     /// <summary>
     /// Set translator for JSON strings.

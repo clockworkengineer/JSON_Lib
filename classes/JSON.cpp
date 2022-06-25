@@ -58,6 +58,13 @@ namespace JSONLib
     {
     }
     /// <summary>
+    /// Get JSONLib version.
+    /// </summary>
+    std::string JSON::version()
+    {
+        return (m_implementation->version());
+    }
+    /// <summary>
     /// Strip all whitespace from a JSON source.
     /// </summary>
     /// <param name="source">Source of JSON</param>
@@ -107,6 +114,10 @@ namespace JSONLib
     /// </summary>
     /// <returns>Root of JSON object tree</returns>
     JNode &JSON::root()
+    {
+        return (m_implementation->root());
+    }
+    const JNode &JSON::root() const
     {
         return (m_implementation->root());
     }

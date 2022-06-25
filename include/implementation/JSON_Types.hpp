@@ -11,12 +11,12 @@
 // =========
 namespace JSONLib
 {
-    // =================
-    // JSON Syntax Error
-    // =================
-    struct SyntaxError : public std::runtime_error
+    // ==========
+    // JSON Error
+    // ==========
+    struct Error : public std::runtime_error
     {
-        SyntaxError(std::string const &message) : std::runtime_error("JSON Error: " + message)
+        Error(std::string const &message) : std::runtime_error("JSON Error: " + message)
         {
         }
     };
@@ -50,7 +50,9 @@ namespace JSONLib
         }
         virtual ~JNode() = default;
         JNode &operator[](const std::string &key);
+        const JNode &operator[](const std::string &key) const;
         JNode &operator[](int index);
+        const JNode &operator[](int index) const;
         JNodeType nodeType;
     };
     // ==========
@@ -77,7 +79,7 @@ namespace JSONLib
         {
             return (static_cast<int>(m_value.size()));
         }
-        JNode &operator[](const std::string &key) const
+        JNode &operator[](const std::string &key)
         {
             if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const KeyValuePair &entry) -> bool
                                        { return (entry.first == key); });
@@ -85,7 +87,21 @@ namespace JSONLib
             {
                 return (*it->second);
             }
-            throw JNode::Error("Invalid key used to access object.");
+            throw Error("Invalid key used to access object.");
+        }
+        const JNode &operator[](const std::string &key) const
+        {
+            if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const KeyValuePair &entry) -> bool
+                                       { return (entry.first == key); });
+                it != m_value.end())
+            {
+                return (*it->second);
+            }
+            throw Error("Invalid key used to access object.");
+        }
+        std::vector<KeyValuePair> &objects()
+        {
+            return (m_value);
         }
         const std::vector<KeyValuePair> &objects() const
         {
@@ -108,17 +124,29 @@ namespace JSONLib
         {
             return (static_cast<int>(m_value.size()));
         }
+        std::vector<JNode::Ptr> &array()
+        {
+            return (m_value);
+        }
         const std::vector<JNode::Ptr> &array() const
         {
             return (m_value);
         }
-        JNode &operator[](int index) const
+        JNode &operator[](int index)
         {
             if ((index >= 0) && (index < (static_cast<int>(m_value.size()))))
             {
                 return (*m_value[index]);
             }
-            throw JNode::Error("Invalid index used to access array.");
+            throw Error("Invalid index used to access array.");
+        }
+        const JNode &operator[](int index) const
+        {
+            if ((index >= 0) && (index < (static_cast<int>(m_value.size()))))
+            {
+                return (*m_value[index]);
+            }
+            throw Error("Invalid index used to access array.");
         }
 
     private:
@@ -148,7 +176,11 @@ namespace JSONLib
             doubleValue = std::strtod(m_value.c_str(), &end);
             return (*end == '\0'); // If not all characters used then not success
         }
-        std::string number() const
+        std::string &number()
+        {
+            return (m_value);
+        }
+        const std::string &number() const
         {
             return (m_value);
         }
@@ -164,7 +196,11 @@ namespace JSONLib
         explicit JNodeString(const std::string &value) : JNode(JNodeType::string), m_value(value)
         {
         }
-        std::string string() const
+        std::string &string()
+        {
+            return (m_value);
+        }
+        const std::string &string() const
         {
             return (m_value);
         }
@@ -205,48 +241,48 @@ namespace JSONLib
     // JNode base reference converter
     // ==============================
     template <typename T>
-    void CheckJNodeType(const JNode &jNode)
+    void CheckJNodeType(auto &jNode)
     {
         if constexpr (std::is_same_v<T, JNodeString>)
         {
             if (jNode.nodeType != JNodeType::string)
             {
-                throw JNode::Error("Node not a string.");
+                throw Error("Node not a string.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeNumber>)
         {
             if (jNode.nodeType != JNodeType::number)
             {
-                throw JNode::Error("Node not a number.");
+                throw Error("Node not a number.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeArray>)
         {
             if (jNode.nodeType != JNodeType::array)
             {
-                throw JNode::Error("Node not an array.");
+                throw Error("Node not an array.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeObject>)
         {
             if (jNode.nodeType != JNodeType::object)
             {
-                throw JNode::Error("Node not an object.");
+                throw Error("Node not an object.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeBoolean>)
         {
             if (jNode.nodeType != JNodeType::boolean)
             {
-                throw JNode::Error("Node not an boolean.");
+                throw Error("Node not an boolean.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeNull>)
         {
             if (jNode.nodeType != JNodeType::null)
             {
-                throw JNode::Error("Node not a null.");
+                throw Error("Node not a null.");
             }
         }
     }
@@ -269,7 +305,15 @@ namespace JSONLib
     {
         return (JNodeRef<JNodeObject>(*this)[key]);
     }
+    inline const JNode &JNode::operator[](const std::string &key) const // Object
+    {
+        return (JNodeRef<const JNodeObject>(*this)[key]);
+    }
     inline JNode &JNode::operator[](int index) // Array
+    {
+        return (JNodeRef<JNodeArray>(*this)[index]);
+    }
+    inline const JNode &JNode::operator[](int index) const // Array
     {
         return (JNodeRef<JNodeArray>(*this)[index]);
     }

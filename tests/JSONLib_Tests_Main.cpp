@@ -276,14 +276,14 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]")
   SECTION("Check floating point with invalid exponent", "[JSON][JNode][JNodeNumber][Exception]")
   {
     BufferSource jsonSource{"78.e43e-2"};
-    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::SyntaxError);
+    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Syntax error detected.");
   }
   SECTION("Check floating point with multiple decimal points", "[JSON][JNode][JNodeNumber][Exception]")
   {
     BufferSource jsonSource{"78.5454.545"};
-    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::SyntaxError);
+    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Syntax error detected.");
   }

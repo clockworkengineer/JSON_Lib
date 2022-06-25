@@ -48,7 +48,9 @@ namespace JSONLib
         void strip(ISource &source, IDestination &&destination);
         void strip(ISource &&source, IDestination &destination);
         void strip(ISource &&source, IDestination &&destination);
+        std::string version();
         JNode &root();
+        const JNode &root() const;
         // ================
         // PUBLIC VARIABLES
         // ================
