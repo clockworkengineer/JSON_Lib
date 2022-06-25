@@ -280,7 +280,7 @@ namespace JSONLib
         switch (jNode.nodeType)
         {
         case JNodeType::number:
-            destination.add(JNodeRef<JNodeNumber>(jNode).number());
+            destination.add(JNodeRef<const JNodeNumber>(jNode).number());
             break;
         case JNodeType::string:
             destination.add('"');

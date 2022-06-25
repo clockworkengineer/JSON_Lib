@@ -15,6 +15,7 @@
 #include <iostream>
 #include <filesystem>
 #include <format>
+#include <chrono>
 //
 // JSON includes
 //
@@ -52,16 +53,33 @@ std::string prefixTestDataPath(const std::string &file)
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName)
 {
+
+    std::cout << std::format("Processing {}\n", fileName);
     JSON json;
     BufferDestination jsonDestination;
     PLOG_INFO << fileName;
+    //
+    // Parse
+    //
+    auto start = std::chrono::high_resolution_clock::now();
     json.parse(FileSource{fileName});
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto parsedTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+    PLOG_INFO << std::format("Took {} microseconds to parse.", parsedTime.count());
+    //
+    // Stringify
+    //
+    start = std::chrono::high_resolution_clock::now();
     json.stringify(jsonDestination);
+    stop = std::chrono::high_resolution_clock::now();
+    auto stringifyTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+    PLOG_INFO << std::format("Took {} microseconds to stringify.", stringifyTime.count());
     if (jsonDestination.getBuffer().size() < kMaxFileLengthToDisplay)
     {
         PLOG_INFO << "[" << jsonDestination.getBuffer();
     }
     PLOG_INFO << "----------------------------OK";
+    std::cout << std::format("Finished {}.\n", fileName);
 }
 // ============================
 // ===== MAIN ENTRY POINT =====
