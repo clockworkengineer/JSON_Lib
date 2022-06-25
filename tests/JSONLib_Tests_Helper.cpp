@@ -45,12 +45,12 @@ std::string readJSONFromFile(const std::string &jsonFileName)
 /// <returns></returns>
 void checkArray(JNode &jNode)
 { // Array [\"Dog\",1964,true,null]
-  REQUIRE(jNode.nodeType == JNodeType::array);
+  REQUIRE(jNode.getNodeType() == JNodeType::array);
   REQUIRE(JNodeRef<JNodeArray>(jNode).size() == 4);
-  REQUIRE(jNode[0].nodeType == JNodeType::string);
-  REQUIRE(jNode[1].nodeType == JNodeType::number);
-  REQUIRE(jNode[2].nodeType == JNodeType::boolean);
-  REQUIRE(jNode[3].nodeType == JNodeType::null);
+  REQUIRE(jNode[0].getNodeType() == JNodeType::string);
+  REQUIRE(jNode[1].getNodeType() == JNodeType::number);
+  REQUIRE(jNode[2].getNodeType() == JNodeType::boolean);
+  REQUIRE(jNode[3].getNodeType() == JNodeType::null);
   REQUIRE(JNodeRef<JNodeString>(jNode[0]).string() == "Dog");
   REQUIRE(JNodeRef<JNodeNumber>(jNode[1]).number() == "1964");
   REQUIRE(JNodeRef<JNodeBoolean>(jNode[2]).boolean() == true);
@@ -63,12 +63,12 @@ void checkArray(JNode &jNode)
 /// <returns></returns>
 void checkObject(JNode &jNode)
 { // {\"City\":\"Southampton\",\"Population\":500000}
-  REQUIRE(jNode.nodeType == JNodeType::object);
+  REQUIRE(jNode.getNodeType() == JNodeType::object);
   REQUIRE(JNodeRef<JNodeObject>(jNode).size() == 2);
   REQUIRE(JNodeRef<JNodeObject>(jNode).contains("City"));
   REQUIRE(JNodeRef<JNodeObject>(jNode).contains("Population"));
-  REQUIRE(jNode["City"].nodeType == JNodeType::string);
-  REQUIRE(jNode["Population"].nodeType == JNodeType::number);
+  REQUIRE(jNode["City"].getNodeType() == JNodeType::string);
+  REQUIRE(jNode["Population"].getNodeType() == JNodeType::number);
   REQUIRE(JNodeRef<JNodeString>(jNode["City"]).string() == "Southampton");
   REQUIRE(JNodeRef<JNodeNumber>(jNode["Population"]).number() == "500000");
 }

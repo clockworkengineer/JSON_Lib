@@ -22,37 +22,37 @@ TEST_CASE("JSON object for parse of simple types (number,string,boolean,null).",
     {
         BufferSource jsonSource{"\"example string\""};
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::string);
+        REQUIRE((json.root()).getNodeType() == JNodeType::string);
     }
     SECTION("Parse an number (6767)", "[JSON][Parse]")
     {
         BufferSource jsonSource{"6767"};
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::number);
+        REQUIRE((json.root()).getNodeType() == JNodeType::number);
     }
     SECTION("Parse an boolean (true)", "[JSON][Parse]")
     {
         BufferSource jsonSource{"true"};
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::boolean);
+        REQUIRE((json.root()).getNodeType() == JNodeType::boolean);
     }
     SECTION("Parse an boolean (false)", "[JSON][Parse]")
     {
         BufferSource jsonSource{"false"};
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::boolean);
+        REQUIRE((json.root()).getNodeType() == JNodeType::boolean);
     }
     SECTION("Parse an null", "[JSON][Parse]")
     {
         BufferSource jsonSource{"null"};
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::null);
+        REQUIRE((json.root()).getNodeType() == JNodeType::null);
     }
     SECTION("Parse an empty string", "[JSON][Parse]")
     {
         BufferSource jsonSource{"\"\""};
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::string);
+        REQUIRE((json.root()).getNodeType() == JNodeType::string);
     }
 }
 TEST_CASE("JSON object for parse of simple types and check values.", "[JSON][Parse]")
@@ -108,25 +108,25 @@ TEST_CASE("JSON object for parse of collection types (array,object) ", "[JSON][P
     {
         BufferSource jsonSource{"{\"name\":\"Robert\",\"Age\":15}"};
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::object);
+        REQUIRE((json.root()).getNodeType() == JNodeType::object);
     }
     SECTION("Parse an array ([ 777,9000,\"apples\"]) ", "[JSON][Parse]")
     {
         BufferSource jsonSource{"[777,9000,\"apples\"]"};
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::array);
+        REQUIRE((json.root()).getNodeType() == JNodeType::array);
     }
     SECTION("Parse an empty array ([]) ", "[JSON][Parse]")
     {
         BufferSource jsonSource{"[]"};
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::array);
+        REQUIRE((json.root()).getNodeType() == JNodeType::array);
     }
     SECTION("Parse an empty object ({}) ", "[JSON][Parse]")
     {
         BufferSource jsonSource{"{}"};
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::object);
+        REQUIRE((json.root()).getNodeType() == JNodeType::object);
     }
     SECTION("Parse an nested empty arrays ([[], [], []]) ", "[JSON][Parse]")
     {
@@ -151,12 +151,12 @@ TEST_CASE("JSON object for parse of collection types and check values", "[JSON][
     {
         BufferSource jsonSource{"{\"Name\":\"Robert\",\"Age\":15}"};
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::object);
+        REQUIRE((json.root()).getNodeType() == JNodeType::object);
         REQUIRE(JNodeRef<JNodeObject>(json.root()).size() == 2);
         REQUIRE(JNodeRef<JNodeObject>(json.root()).contains("Name"));
         REQUIRE(JNodeRef<JNodeObject>(json.root()).contains("Age"));
-        REQUIRE(JNodeRef<JNodeString>((json.root())["Name"]).nodeType == JNodeType::string);
-        REQUIRE(JNodeRef<JNodeNumber>((json.root())["Age"]).nodeType == JNodeType::number);
+        REQUIRE(JNodeRef<JNodeString>((json.root())["Name"]).getNodeType() == JNodeType::string);
+        REQUIRE(JNodeRef<JNodeNumber>((json.root())["Age"]).getNodeType() == JNodeType::number);
         REQUIRE(JNodeRef<JNodeString>((json.root())["Name"]).string() == "Robert");
         REQUIRE(JNodeRef<JNodeNumber>((json.root())["Age"]).number() == "15");
     }
@@ -164,11 +164,11 @@ TEST_CASE("JSON object for parse of collection types and check values", "[JSON][
     {
         BufferSource jsonSource{"[777,9000,\"apples\"]"};
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::array);
+        REQUIRE((json.root()).getNodeType() == JNodeType::array);
         REQUIRE(JNodeRef<JNodeArray>(json.root()).size() == 3);
-        REQUIRE(JNodeRef<JNodeNumber>((json.root())[0]).nodeType == JNodeType::number);
-        REQUIRE(JNodeRef<JNodeNumber>((json.root())[1]).nodeType == JNodeType::number);
-        REQUIRE(JNodeRef<JNodeString>((json.root())[2]).nodeType == JNodeType::string);
+        REQUIRE(JNodeRef<JNodeNumber>((json.root())[0]).getNodeType() == JNodeType::number);
+        REQUIRE(JNodeRef<JNodeNumber>((json.root())[1]).getNodeType() == JNodeType::number);
+        REQUIRE(JNodeRef<JNodeString>((json.root())[2]).getNodeType() == JNodeType::string);
         REQUIRE(JNodeRef<JNodeNumber>((json.root())[0]).number() == "777");
         REQUIRE(JNodeRef<JNodeNumber>((json.root())[1]).number() == "9000");
         REQUIRE(JNodeRef<JNodeString>((json.root())[2]).string() == "apples");
@@ -270,7 +270,7 @@ TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Pars
         REQUIRE_NOTHROW(json.parse(jsonSource));
         jsonSource.reset();
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::object);
+        REQUIRE((json.root()).getNodeType() == JNodeType::object);
     }
     SECTION("Parse from file directly", "[JSON][Parse]")
     {
@@ -278,7 +278,7 @@ TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Pars
         REQUIRE_NOTHROW(json.parse(jsonSource));
         jsonSource.reset();
         json.parse(jsonSource);
-        REQUIRE((json.root()).nodeType == JNodeType::object);
+        REQUIRE((json.root()).getNodeType() == JNodeType::object);
     }
 }
 TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]")

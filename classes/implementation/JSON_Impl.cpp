@@ -52,7 +52,7 @@ namespace JSONLib
     {
         if (source.current() != '"')
         {
-            throw JSONLib::Error("Syntax error detected.");
+            throw Error("Syntax error detected.");
         }
         source.next();
         ISource::String value;
@@ -68,7 +68,7 @@ namespace JSONLib
         }
         if (source.current() != '"')
         {
-            throw JSONLib::Error("Syntax error detected.");
+            throw Error("Syntax error detected.");
         }
         source.next();
         source.ignoreWS();
@@ -100,7 +100,7 @@ namespace JSONLib
         const std::string key{m_translator->from(extractString(source))};
         if (source.current() != ':')
         {
-            throw JSONLib::Error("Syntax error detected.");
+            throw Error("Syntax error detected.");
         }
         source.next();
         source.ignoreWS();
@@ -137,7 +137,7 @@ namespace JSONLib
             std::strtod(number.c_str(), &end);
             if (*end != '\0')
             {
-                throw JSONLib::Error("Syntax error detected.");
+                throw Error("Syntax error detected.");
             }
         }
         source.ignoreWS();
@@ -159,7 +159,7 @@ namespace JSONLib
         {
             return (std::make_unique<JNodeBoolean>(false));
         }
-        throw JSONLib::Error("Syntax error detected.");
+        throw Error("Syntax error detected.");
     }
     /// <summary>
     /// Parse a null from a JSON source stream.
@@ -170,7 +170,7 @@ namespace JSONLib
     {
         if (parseValue(source) != u"null")
         {
-            throw JSONLib::Error("Syntax error detected.");
+            throw Error("Syntax error detected.");
         }
         return (std::make_unique<JNodeNull>());
     }
@@ -196,7 +196,7 @@ namespace JSONLib
         }
         if (source.current() != '}')
         {
-            throw JSONLib::Error("Syntax error detected.");
+            throw Error("Syntax error detected.");
         }
         source.next();
         source.ignoreWS();
@@ -224,7 +224,7 @@ namespace JSONLib
         }
         if (source.current() != ']')
         {
-            throw JSONLib::Error("Syntax error detected.");
+            throw Error("Syntax error detected.");
         }
         source.next();
         source.ignoreWS();
@@ -266,7 +266,7 @@ namespace JSONLib
         case '9':
             return (parseNumber(source));
         }
-        throw JSONLib::Error("Syntax error detected.");
+        throw Error("Syntax error detected.");
     }
     /// <summary>
     /// Recursively traverse JNode structure encoding it into JSON on
@@ -277,7 +277,7 @@ namespace JSONLib
     /// <returns></returns>
     void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination)
     {
-        switch (jNode.nodeType)
+        switch (jNode.getNodeType())
         {
         case JNodeType::number:
             destination.add(JNodeRef<const JNodeNumber>(jNode).number());

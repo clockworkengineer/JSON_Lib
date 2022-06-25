@@ -45,15 +45,21 @@ namespace JSONLib
             {
             }
         };
-        explicit JNode(JNodeType nodeType = JNodeType::base) : nodeType(nodeType)
+        explicit JNode(JNodeType nodeType = JNodeType::base) : m_nodeType(nodeType)
         {
+        }
+        [[nodiscard]] JNodeType getNodeType() const
+        {
+            return (m_nodeType);
         }
         virtual ~JNode() = default;
         JNode &operator[](const std::string &key);
         const JNode &operator[](const std::string &key) const;
         JNode &operator[](int index);
         const JNode &operator[](int index) const;
-        JNodeType nodeType;
+
+    private:
+        JNodeType m_nodeType;
     };
     // ==========
     // Dictionary
@@ -61,15 +67,15 @@ namespace JSONLib
     struct JNodeObject : JNode
     {
         using KeyValuePair = std::pair<std::string, JNode::Ptr>;
-        explicit JNodeObject(std::vector<JNodeObject::KeyValuePair> &value) : JNode(JNodeType::object),
-                                                                              m_value(std::move(value))
+        explicit JNodeObject(std::vector<JNodeObject::KeyValuePair> &objects) : JNode(JNodeType::object),
+                                                                                m_objects(std::move(objects))
         {
         }
         [[nodiscard]] bool contains(const std::string &key) const
         {
-            if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const KeyValuePair &entry) -> bool
+            if (auto it = std::find_if(m_objects.begin(), m_objects.end(), [&key](const KeyValuePair &entry) -> bool
                                        { return (entry.first == key); });
-                it != m_value.end())
+                it != m_objects.end())
             {
                 return (true);
             }
@@ -77,13 +83,13 @@ namespace JSONLib
         }
         [[nodiscard]] int size() const
         {
-            return (static_cast<int>(m_value.size()));
+            return (static_cast<int>(m_objects.size()));
         }
         JNode &operator[](const std::string &key)
         {
-            if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const KeyValuePair &entry) -> bool
+            if (auto it = std::find_if(m_objects.begin(), m_objects.end(), [&key](const KeyValuePair &entry) -> bool
                                        { return (entry.first == key); });
-                it != m_value.end())
+                it != m_objects.end())
             {
                 return (*it->second);
             }
@@ -91,9 +97,9 @@ namespace JSONLib
         }
         const JNode &operator[](const std::string &key) const
         {
-            if (auto it = std::find_if(m_value.begin(), m_value.end(), [&key](const KeyValuePair &entry) -> bool
+            if (auto it = std::find_if(m_objects.begin(), m_objects.end(), [&key](const KeyValuePair &entry) -> bool
                                        { return (entry.first == key); });
-                it != m_value.end())
+                it != m_objects.end())
             {
                 return (*it->second);
             }
@@ -101,63 +107,63 @@ namespace JSONLib
         }
         std::vector<KeyValuePair> &objects()
         {
-            return (m_value);
+            return (m_objects);
         }
         const std::vector<KeyValuePair> &objects() const
         {
-            return (m_value);
+            return (m_objects);
         }
 
     private:
-        std::vector<JNodeObject::KeyValuePair> m_value;
+        std::vector<JNodeObject::KeyValuePair> m_objects;
     };
     // =====
     // Array
     // =====
     struct JNodeArray : JNode
     {
-        explicit JNodeArray(std::vector<JNode::Ptr> &value) : JNode(JNodeType::array),
-                                                              m_value(std::move(value))
+        explicit JNodeArray(std::vector<JNode::Ptr> &array) : JNode(JNodeType::array),
+                                                              m_array(std::move(array))
         {
         }
         [[nodiscard]] int size() const
         {
-            return (static_cast<int>(m_value.size()));
+            return (static_cast<int>(m_array.size()));
         }
         std::vector<JNode::Ptr> &array()
         {
-            return (m_value);
+            return (m_array);
         }
         const std::vector<JNode::Ptr> &array() const
         {
-            return (m_value);
+            return (m_array);
         }
         JNode &operator[](int index)
         {
-            if ((index >= 0) && (index < (static_cast<int>(m_value.size()))))
+            if ((index >= 0) && (index < (static_cast<int>(m_array.size()))))
             {
-                return (*m_value[index]);
+                return (*m_array[index]);
             }
             throw Error("Invalid index used to access array.");
         }
         const JNode &operator[](int index) const
         {
-            if ((index >= 0) && (index < (static_cast<int>(m_value.size()))))
+            if ((index >= 0) && (index < (static_cast<int>(m_array.size()))))
             {
-                return (*m_value[index]);
+                return (*m_array[index]);
             }
             throw Error("Invalid index used to access array.");
         }
 
     private:
-        std::vector<JNode::Ptr> m_value;
+        std::vector<JNode::Ptr> m_array;
     };
     // ======
     // Number
     // ======
     struct JNodeNumber : JNode
     {
-        explicit JNodeNumber(const std::string &value) : JNode(JNodeType::number), m_value(value)
+        explicit JNodeNumber(const std::string &number) : JNode(JNodeType::number), m_number(number)
         {
         }
         // Convert to long returning true on success
@@ -166,63 +172,63 @@ namespace JSONLib
         bool integer(long long &longValue) const
         {
             char *end = nullptr;
-            longValue = std::strtoll(m_value.c_str(), &end, 10);
+            longValue = std::strtoll(m_number.c_str(), &end, 10);
             return (*end == '\0'); // If not all characters used then not success
         }
         // Convert to double returning true on success
         bool floatingpoint(double &doubleValue) const
         {
             char *end = nullptr;
-            doubleValue = std::strtod(m_value.c_str(), &end);
+            doubleValue = std::strtod(m_number.c_str(), &end);
             return (*end == '\0'); // If not all characters used then not success
         }
         std::string &number()
         {
-            return (m_value);
+            return (m_number);
         }
         const std::string &number() const
         {
-            return (m_value);
+            return (m_number);
         }
 
     private:
-        std::string m_value;
+        std::string m_number;
     };
     // ======
     // String
     // ======
     struct JNodeString : JNode
     {
-        explicit JNodeString(const std::string &value) : JNode(JNodeType::string), m_value(value)
+        explicit JNodeString(const std::string &str) : JNode(JNodeType::string), m_string(str)
         {
         }
         std::string &string()
         {
-            return (m_value);
+            return (m_string);
         }
         const std::string &string() const
         {
-            return (m_value);
+            return (m_string);
         }
 
     private:
-        std::string m_value;
+        std::string m_string;
     };
     // =======
     // Boolean
     // =======
     struct JNodeBoolean : JNode
     {
-        explicit JNodeBoolean(bool value) : JNode(JNodeType::boolean), m_value(value)
+        explicit JNodeBoolean(bool boolean) : JNode(JNodeType::boolean), m_boolean(boolean)
         {
         }
         [[nodiscard]] bool boolean() const
         {
-            return (m_value);
+            return (m_boolean);
         }
 
     private:
-        bool m_value;
+        bool m_boolean;
     };
     // ====
     // Null
@@ -245,42 +251,42 @@ namespace JSONLib
     {
         if constexpr (std::is_same_v<T, JNodeString>)
         {
-            if (jNode.nodeType != JNodeType::string)
+            if (jNode.getNodeType() != JNodeType::string)
             {
                 throw Error("Node not a string.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeNumber>)
         {
-            if (jNode.nodeType != JNodeType::number)
+            if (jNode.getNodeType() != JNodeType::number)
             {
                 throw Error("Node not a number.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeArray>)
         {
-            if (jNode.nodeType != JNodeType::array)
+            if (jNode.getNodeType() != JNodeType::array)
             {
                 throw Error("Node not an array.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeObject>)
         {
-            if (jNode.nodeType != JNodeType::object)
+            if (jNode.getNodeType() != JNodeType::object)
             {
                 throw Error("Node not an object.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeBoolean>)
         {
-            if (jNode.nodeType != JNodeType::boolean)
+            if (jNode.getNodeType() != JNodeType::boolean)
             {
                 throw Error("Node not an boolean.");
             }
         }
         else if constexpr (std::is_same_v<T, JNodeNull>)
         {
-            if (jNode.nodeType != JNodeType::null)
+            if (jNode.getNodeType() != JNodeType::null)
             {
                 throw Error("Node not a null.");
             }
