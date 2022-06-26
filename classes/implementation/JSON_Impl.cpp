@@ -114,7 +114,7 @@ namespace JSONLib
         }
         // Throw error if not valid integer or floating point
         char *end = nullptr;
-        std::string number = m_converter->to_utf8(value);
+        std::string number = value;
         std::strtoll(number.c_str(), &end, 10);
         if (*end != '\0')
         {
@@ -134,12 +134,12 @@ namespace JSONLib
     /// <returns> Boolean JNode.</returns>
     JNode::Ptr JSON_Impl::parseBoolean(ISource &source)
     {
-        if (source.match(u"true"))
+        if (source.match("true"))
         {
             source.ignoreWS();
             return (std::make_unique<JNodeBoolean>(true));
         }
-        if (source.match(u"false"))
+        if (source.match("false"))
         {
             source.ignoreWS();
             return (std::make_unique<JNodeBoolean>(false));
@@ -153,7 +153,7 @@ namespace JSONLib
     /// <returns>Null JNode.</returns>
     JNode::Ptr JSON_Impl::parseNull(ISource &source)
     {
-        if (!source.match(u"null"))
+        if (!source.match("null"))
         {
             throw Error("Syntax error detected.");
         }
@@ -327,10 +327,10 @@ namespace JSONLib
         {
             if (!source.isWS())
             {
-                destination.add(m_converter->to_utf8(ISource::String{source.current()}));
+                destination.add(source.current());
                 if (source.current() == '"')
                 {
-                    destination.add(m_converter->to_utf8(extractString(source)));
+                    destination.add(extractString(source));
                     destination.add('"');
                     continue;
                 }

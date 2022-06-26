@@ -50,18 +50,18 @@ namespace JSONLib
     /// <param name="current">Current character position.</param>
     /// <param name="numberOfCharacters">Number of characters left in source string.</param>
     /// <returns>UTF16 character for "\uxxx".</returns>
-    ISource::Char decodeUTF16(ISource::String::const_iterator &current, ptrdiff_t numberOfCharacters)
+    char16_t decodeUTF16(ISource::String::const_iterator &current, ptrdiff_t numberOfCharacters)
     {
         if (numberOfCharacters >= 4)
         {
-            ISource::Char utf16value{};
+            char16_t utf16value{};
             // Hex digits will be ascii so can throw away high order byte of ISource::Char
             std::array<char, 5> hexDigits{static_cast<char>(current[1]),
                                           static_cast<char>(current[2]),
                                           static_cast<char>(current[3]),
                                           static_cast<char>(current[4]), '\0'};
             char *end;
-            utf16value += static_cast<ISource::Char>(std::strtol(hexDigits.data(), &end, 16));
+            utf16value += static_cast<char16_t>(std::strtol(hexDigits.data(), &end, 16));
             if (*end == '\0')
             {
                 current += hexDigits.size();
@@ -95,7 +95,7 @@ namespace JSONLib
     /// <returns>String with escapes translated.</returns>
     std::string JSON_Translator::from(const ISource::String &jsonString)
     {
-        ISource::String utf16Buffer;
+        std::u16string utf16Buffer;
         for (auto current = jsonString.begin(); current != jsonString.end();)
         {
             // Normal character
@@ -139,7 +139,7 @@ namespace JSONLib
     std::string JSON_Translator::to(const std::string &utf8String)
     {
         std::string utf8Buffer;
-        for (ISource::Char utf16Char : m_converter.to_utf16(utf8String))
+        for (char16_t utf16Char : m_converter.to_utf16(utf8String))
         {
             // Control characters
             if (m_to.contains(utf16Char))

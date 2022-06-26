@@ -17,7 +17,7 @@ namespace JSONLib
         // ============================
         // 16 bit characters internally
         // ============================
-        using String = std::u16string;
+        using String = std::string;
         using Char = String::value_type;
         // =============
         // ISource Error

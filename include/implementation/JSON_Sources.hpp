@@ -33,7 +33,7 @@ namespace JSONLib
             {
                 throw Error("Empty source buffer passed to be parsed.");
             }
-            m_parseBuffer = converter.to_utf16(sourceBuffer);
+            m_parseBuffer = sourceBuffer;
         }
         [[nodiscard]] Char current() const override
         {
