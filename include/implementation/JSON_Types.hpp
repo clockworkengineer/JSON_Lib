@@ -192,7 +192,7 @@ namespace JSONLib
             return (*end == '\0'); // If not all characters used then not success
         }
         // Check whether we nave a numeric value
-        bool isNumeric()
+        bool isValidNumber()
         {
             // Throw error if not valid integer or floating point
             char *end = nullptr;
@@ -214,6 +214,11 @@ namespace JSONLib
         const std::string &number() const
         {
             return (m_number);
+        }
+        static bool isValidNumeric(char ch)
+        {
+            // Includes possible sign, decimal point or exponent
+            return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
         }
 
     private:
