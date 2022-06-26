@@ -8,10 +8,6 @@
 // Source interface
 // ================
 #include "ISource.hpp"
-// ==============
-// JSON converter
-// ==============
-#include "JSON_Converter.hpp"
 // =========
 // NAMESPACE
 // =========
@@ -26,22 +22,20 @@ namespace JSONLib
     class BufferSource : public ISource
     {
     public:
-        explicit BufferSource(const std::string &sourceBuffer)
+        explicit BufferSource(const std::string &sourceBuffer) : m_parseBuffer(std::move(sourceBuffer))
         {
-            JSON_Converter converter;
             if (sourceBuffer.empty())
             {
                 throw Error("Empty source buffer passed to be parsed.");
             }
-            m_parseBuffer = sourceBuffer;
         }
-        [[nodiscard]] Char current() const override
+        [[nodiscard]] char current() const override
         {
             if (more())
             {
                 return (m_parseBuffer[m_bufferPosition]);
             }
-            return (static_cast<Char>(EOF));
+            return (EOF);
         }
         void next() override
         {
@@ -70,7 +64,7 @@ namespace JSONLib
 
     private:
         std::size_t m_bufferPosition = 0;
-        String m_parseBuffer;
+        std::string m_parseBuffer;
     };
     //
     // File character source
@@ -86,9 +80,9 @@ namespace JSONLib
                 throw Error("File input stream failed to open or does not exist.");
             }
         }
-        Char current() const override
+        char current() const override
         {
-            return (static_cast<Char>(m_source.peek()));
+            return (static_cast<char>(m_source.peek()));
         }
         void next() override
         {
@@ -105,7 +99,7 @@ namespace JSONLib
         }
         void backup(long length) override
         {
-            if ((static_cast<long>(m_source.tellg()) - length >= 0) || (current() == (ISource::Char)EOF))
+            if ((static_cast<long>(m_source.tellg()) - length >= 0) || (current() == (char)EOF))
             {
                 m_source.clear();
                 m_source.seekg(-length, std::ios_base::cur);

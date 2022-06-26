@@ -38,7 +38,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="ch">Numeric character.</param>
     /// <returns>true if a character use in a number</returns>
-    bool JSON_Impl::isValidNumeric(ISource::Char c)
+    bool JSON_Impl::isValidNumeric(char c)
     {
         // Includes possible sign, decimal point or exponent
         return ((std::isdigit(c) != 0) || c == '.' || c == '-' || c == '+' || c == 'E' || c == 'e');
@@ -48,14 +48,14 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns>Extracted string</returns>
-    ISource::String JSON_Impl::extractString(ISource &source)
+    std::string JSON_Impl::extractString(ISource &source)
     {
         if (source.current() != '"')
         {
             throw Error("Syntax error detected.");
         }
         source.next();
-        ISource::String value;
+        std::string value;
         while (source.more() && source.current() != '"')
         {
             if (source.current() == '\\')
@@ -106,7 +106,7 @@ namespace JSONLib
     /// <returns></returns>
     JNode::Ptr JSON_Impl::parseNumber(ISource &source)
     {
-        ISource::String value;
+        std::string value;
         while (source.more() && isValidNumeric(source.current()))
         {
             value += source.current();

@@ -44,7 +44,7 @@ namespace JSONLib
         // ==============
         // PUBLIC METHODS
         // ==============
-           std::string version();
+        std::string version();
         void parse(ISource &source);
         void stringify(IDestination &destination);
         void strip(ISource &source, IDestination &destination);
@@ -64,8 +64,8 @@ namespace JSONLib
         // ===============
         // PRIVATE METHODS
         // ===============
-        bool isValidNumeric(ISource::Char c);
-        ISource::String extractString(ISource &source);
+        bool isValidNumeric(char c);
+        std::string extractString(ISource &source);
         JNodeObject::KeyValuePair parseKeyValuePair(ISource &source);
         JNode::Ptr parseString(ISource &source);
         JNode::Ptr parseNumber(ISource &source);

@@ -80,7 +80,7 @@ TEST_CASE("ISource (Buffer) interface. Contains file testfile001.json.", "[JSON]
       length++;
     }
     REQUIRE(length == 605);                              // eof
-    REQUIRE(source.current() == static_cast<ISource::Char>(EOF)); // eof
+    REQUIRE(source.current() == static_cast<char>(EOF)); // eof
   }
   SECTION("Create BufferSource with empty buffer.", "[JSON][Parse][ISource][Exception]")
   {

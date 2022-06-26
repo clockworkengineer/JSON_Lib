@@ -32,13 +32,12 @@ namespace JSONLib
         // of UTF-8 characters. If input string contains any unpaired surrogates
         // then this is deemed as a syntax error and an error is duly thrown.
         // =====================================================================
-        virtual std::string from(const ISource::String &jsonString) = 0;
+        virtual std::string from(const std::string &jsonString) = 0;
         // =========================================================================
         // Convert a string from raw charater values (UTF8) so that it has character
         // escapes where applicable for its JSON form.
         // =========================================================================
         virtual std::string to(const std::string &utf8String) = 0;
-
     protected:
         // =====================================================================================
         // Check that there are no single unpaired UTF-16 surrogates.From what I see this is
@@ -61,7 +60,6 @@ namespace JSONLib
             }
             return (false);
         }
-
     private:
         bool isValidSurrogateUpper(char16_t c)
         {

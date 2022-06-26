@@ -14,11 +14,6 @@ namespace JSONLib
     class ISource
     {
     public:
-        // ============================
-        // 16 bit characters internally
-        // ============================
-        using String = std::string;
-        using Char = String::value_type;
         // =============
         // ISource Error
         // =============
@@ -40,7 +35,7 @@ namespace JSONLib
         // =================
         // Current character
         // =================
-        [[nodiscard]] virtual Char current() const = 0;
+        [[nodiscard]] virtual char current() const = 0;
         // ======================
         // Move to next character
         // ======================
@@ -77,7 +72,7 @@ namespace JSONLib
         // =================================================================
         // Is current string a match at the current source stream position ?
         // =================================================================
-        bool match(const String &targetString)
+        bool match(const std::string &targetString)
         {
             long index = 0;
             while (more() && current() == targetString[index])
