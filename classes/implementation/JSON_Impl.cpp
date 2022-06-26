@@ -47,9 +47,11 @@ namespace JSONLib
     /// Extract a string from a JSON encoded source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
+    /// <param name="translate">== true and escapes found then they need translating.</param>
     /// <returns>Extracted string</returns>
-    std::string JSON_Impl::extractString(ISource &source)
+    std::string JSON_Impl::extractString(ISource &source, bool translate)
     {
+        bool translateEscapes = false;
         if (source.current() != '"')
         {
             throw Error("Syntax error detected.");
@@ -62,6 +64,7 @@ namespace JSONLib
             {
                 stringValue += source.current();
                 source.next();
+                translateEscapes = translate;
             }
             stringValue += source.current();
             source.next();
@@ -72,7 +75,16 @@ namespace JSONLib
         }
         source.next();
         source.ignoreWS();
-        return (stringValue);
+        // Need to translate escapes to UTF8
+        if (translateEscapes)
+        {
+            return (m_translator->from(stringValue));
+        }
+        // None so just pass on
+        else
+        {
+            return (stringValue);
+        }
     }
     /// <summary>
     /// Parse a key/value pair from a JSON encoded source stream.
@@ -81,7 +93,7 @@ namespace JSONLib
     /// <returns>Object key/value pair.</returns>
     JNodeObject::KeyValuePair JSON_Impl::parseKeyValuePair(ISource &source)
     {
-        const std::string keyValue{m_translator->from(extractString(source))};
+        const std::string keyValue{extractString(source)};
         if (source.current() != ':')
         {
             throw Error("Syntax error detected.");
@@ -97,7 +109,7 @@ namespace JSONLib
     /// <returns>String value.</returns>
     JNode::Ptr JSON_Impl::parseString(ISource &source)
     {
-        return (std::make_unique<JNodeString>(m_translator->from(extractString(source))));
+        return (std::make_unique<JNodeString>(extractString(source)));
     }
     /// <summary>
     /// Parse a number from a JSON source stream.
@@ -329,7 +341,7 @@ namespace JSONLib
                 destination.add(source.current());
                 if (source.current() == '"')
                 {
-                    destination.add(extractString(source));
+                    destination.add(extractString(source, false));
                     destination.add('"');
                     continue;
                 }
