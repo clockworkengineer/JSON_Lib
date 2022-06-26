@@ -56,7 +56,6 @@ void processJSONFile(const std::string &fileName)
     std::cout << std::format("Processing {}\n", fileName);
     JSON json;
     BufferDestination jsonDestination;
-    PLOG_INFO << fileName;
     //
     // Parse
     //
@@ -64,7 +63,7 @@ void processJSONFile(const std::string &fileName)
     json.parse(FileSource{fileName});
     auto stop = std::chrono::high_resolution_clock::now();
     auto parsedTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    PLOG_INFO << std::format("Took {} microseconds to parse.", parsedTime.count());
+    PLOG_INFO << std::format("Took {} microseconds to parse from file.", parsedTime.count());
     //
     // Stringify
     //
@@ -73,10 +72,6 @@ void processJSONFile(const std::string &fileName)
     stop = std::chrono::high_resolution_clock::now();
     auto stringifyTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
     PLOG_INFO << std::format("Took {} microseconds to stringify.", stringifyTime.count());
-    if (jsonDestination.getBuffer().size() < kMaxFileLengthToDisplay)
-    {
-        PLOG_INFO << "[" << jsonDestination.getBuffer();
-    }
     //
     // Parse from buffer
     //
@@ -86,6 +81,13 @@ void processJSONFile(const std::string &fileName)
     stop = std::chrono::high_resolution_clock::now();
     parsedTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
     PLOG_INFO << std::format("Took {} microseconds to parse from buffer.", parsedTime.count());
+    //
+    // Display contents
+    //
+    if (jsonDestination.getBuffer().size() < kMaxFileLengthToDisplay)
+    {
+        PLOG_INFO << "[" << jsonDestination.getBuffer();
+    }
     PLOG_INFO << "----------------------------OK";
     std::cout << std::format("Finished {}.\n", fileName);
 }
@@ -94,7 +96,7 @@ void processJSONFile(const std::string &fileName)
 // ============================
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
-    std::vector<std::string> fileList{
+    const std::vector<std::string> fileList{
         "testfile001.json",
         "testfile002.json",
         "testfile003.json",
@@ -111,7 +113,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     //
     // For each json parse it, stringify it and display unless its to large.
     //
-    for (const auto &fileName : fileList)
+    for (auto &fileName : fileList)
     {
         try
         {
