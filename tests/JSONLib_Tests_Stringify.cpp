@@ -151,8 +151,8 @@ TEST_CASE("Stringify generated exceptions", "[JSON][Stringify][Exceptions]")
     JSON json;
     SECTION("Stringify has no JSON to process", "[JSON][Stringify][Exceptions]")
     {
-        REQUIRE_THROWS_AS(json.stringify(BufferDestination {}), std::runtime_error);
-        REQUIRE_THROWS_WITH(json.stringify(BufferDestination {}), "No JSON to stringify.");
+        REQUIRE_THROWS_AS(json.stringify(BufferDestination {}), JSONLib::Error);
+        REQUIRE_THROWS_WITH(json.stringify(BufferDestination {}), "JSON Error: No JSON to stringify.");
     }
 // //     SECTION("Stringify passed invalid JNode type", "[JSON][Stringify][Exceptions]")
 // //     {

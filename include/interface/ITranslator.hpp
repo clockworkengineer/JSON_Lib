@@ -3,10 +3,6 @@
 // C++ STL
 // =======
 #include <string>
-// ================
-// Source interface
-// ================
-#include "ISource.hpp"
 // =========
 // NAMESPACE
 // =========

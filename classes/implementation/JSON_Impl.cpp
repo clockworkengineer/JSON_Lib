@@ -55,15 +55,15 @@ namespace JSONLib
             throw Error("Syntax error detected.");
         }
         source.next();
-        std::string value;
+        std::string stringValue;
         while (source.more() && source.current() != '"')
         {
             if (source.current() == '\\')
             {
-                value += source.current();
+                stringValue += source.current();
                 source.next();
             }
-            value += source.current();
+            stringValue += source.current();
             source.next();
         }
         if (source.current() != '"')
@@ -72,7 +72,7 @@ namespace JSONLib
         }
         source.next();
         source.ignoreWS();
-        return (value);
+        return (stringValue);
     }
     /// <summary>
     /// Parse a key/value pair from a JSON encoded source stream.
@@ -81,14 +81,14 @@ namespace JSONLib
     /// <returns>Object key/value pair.</returns>
     JNodeObject::KeyValuePair JSON_Impl::parseKeyValuePair(ISource &source)
     {
-        const std::string key{m_translator->from(extractString(source))};
+        const std::string keyValue{m_translator->from(extractString(source))};
         if (source.current() != ':')
         {
             throw Error("Syntax error detected.");
         }
         source.next();
         source.ignoreWS();
-        return (JNodeObject::KeyValuePair{key, parseJNodes(source)});
+        return (JNodeObject::KeyValuePair{keyValue, parseJNodes(source)});
     }
     /// <summary>
     /// Parse a string from a JSON source stream.
@@ -106,26 +106,25 @@ namespace JSONLib
     /// <returns></returns>
     JNode::Ptr JSON_Impl::parseNumber(ISource &source)
     {
-        std::string value;
+        std::string numberValue;
         while (source.more() && isValidNumeric(source.current()))
         {
-            value += source.current();
+            numberValue += source.current();
             source.next();
         }
         // Throw error if not valid integer or floating point
         char *end = nullptr;
-        std::string number = value;
-        std::strtoll(number.c_str(), &end, 10);
+        std::strtoll(numberValue.c_str(), &end, 10);
         if (*end != '\0')
         {
-            std::strtod(number.c_str(), &end);
+            std::strtod(numberValue.c_str(), &end);
             if (*end != '\0')
             {
                 throw Error("Syntax error detected.");
             }
         }
         source.ignoreWS();
-        return (std::make_unique<JNodeNumber>(number));
+        return (std::make_unique<JNodeNumber>(numberValue));
     }
     /// <summary>
     /// Parse a boolean from a JSON source stream.
@@ -167,17 +166,17 @@ namespace JSONLib
     /// <returns>JNodeObject key/value pairs.</returns>
     JNode::Ptr JSON_Impl::parseObject(ISource &source)
     {
-        std::vector<JNodeObject::KeyValuePair> objects;
+        std::vector<JNodeObject::KeyValuePair> jsonObjects;
         source.next();
         source.ignoreWS();
         if (source.current() != '}')
         {
-            objects.emplace_back(parseKeyValuePair(source));
+            jsonObjects.emplace_back(parseKeyValuePair(source));
             while (source.current() == ',')
             {
                 source.next();
                 source.ignoreWS();
-                objects.emplace_back(parseKeyValuePair(source));
+                jsonObjects.emplace_back(parseKeyValuePair(source));
             }
         }
         if (source.current() != '}')
@@ -186,7 +185,7 @@ namespace JSONLib
         }
         source.next();
         source.ignoreWS();
-        return (std::make_unique<JNodeObject>(objects));
+        return (std::make_unique<JNodeObject>(jsonObjects));
     }
     /// <summary>
     /// Parse an array from a JSON source stream.
@@ -195,17 +194,17 @@ namespace JSONLib
     /// <returns>JNodeArray.</returns>
     JNode::Ptr JSON_Impl::parseArray(ISource &source)
     {
-        std::vector<JNode::Ptr> array;
+        std::vector<JNode::Ptr> jsonArray;
         source.next();
         source.ignoreWS();
         if (source.current() != ']')
         {
-            array.emplace_back(parseJNodes(source));
+            jsonArray.emplace_back(parseJNodes(source));
             while (source.current() == ',')
             {
                 source.next();
                 source.ignoreWS();
-                array.emplace_back(parseJNodes(source));
+                jsonArray.emplace_back(parseJNodes(source));
             }
         }
         if (source.current() != ']')
@@ -214,7 +213,7 @@ namespace JSONLib
         }
         source.next();
         source.ignoreWS();
-        return (std::make_unique<JNodeArray>(array));
+        return (std::make_unique<JNodeArray>(jsonArray));
     }
     /// <summary>
     /// Recursively parse JSON source stream producing a JNode structure
@@ -313,7 +312,7 @@ namespace JSONLib
             break;
         }
         default:
-            throw std::runtime_error("Unknown JNode type encountered during stringification.");
+            throw Error("Unknown JNode type encountered during stringification.");
         }
     }
     /// <summary>
@@ -402,7 +401,7 @@ namespace JSONLib
     {
         if (m_jNodeRoot.get() == nullptr)
         {
-            throw std::runtime_error("No JSON to stringify.");
+            throw Error("No JSON to stringify.");
         }
         stringifyJNodes(JNodeRef<JNode>(*m_jNodeRoot), destination);
     }

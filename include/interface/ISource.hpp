@@ -1,8 +1,6 @@
 #pragma once
 #include <cwctype>
 #include <string>
-#include <codecvt>
-#include <locale>
 // =========
 // NAMESPACE
 // =========
