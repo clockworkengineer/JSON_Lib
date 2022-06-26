@@ -53,7 +53,6 @@ std::string prefixTestDataPath(const std::string &file)
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName)
 {
-
     std::cout << std::format("Processing {}\n", fileName);
     JSON json;
     BufferDestination jsonDestination;
@@ -78,6 +77,15 @@ void processJSONFile(const std::string &fileName)
     {
         PLOG_INFO << "[" << jsonDestination.getBuffer();
     }
+    //
+    // Parse from buffer
+    //
+    BufferSource sourceBuffer{jsonDestination.getBuffer()};
+    start = std::chrono::high_resolution_clock::now();
+    json.parse(sourceBuffer);
+    stop = std::chrono::high_resolution_clock::now();
+    parsedTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+    PLOG_INFO << std::format("Took {} microseconds to parse from buffer.", parsedTime.count());
     PLOG_INFO << "----------------------------OK";
     std::cout << std::format("Finished {}.\n", fileName);
 }
