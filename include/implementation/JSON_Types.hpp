@@ -67,6 +67,9 @@ namespace JSONLib
     struct JNodeObject : JNode
     {
         using KeyValuePair = std::pair<std::string, JNode::Ptr>;
+        JNodeObject() : JNode(JNodeType::object)
+        {
+        }
         explicit JNodeObject(std::vector<JNodeObject::KeyValuePair> &objects) : JNode(JNodeType::object),
                                                                                 m_objects(std::move(objects))
         {
@@ -122,6 +125,9 @@ namespace JSONLib
     // =====
     struct JNodeArray : JNode
     {
+        JNodeArray() : JNode(JNodeType::array)
+        {
+        }
         explicit JNodeArray(std::vector<JNode::Ptr> &array) : JNode(JNodeType::array),
                                                               m_array(std::move(array))
         {
@@ -163,6 +169,9 @@ namespace JSONLib
     // ======
     struct JNodeNumber : JNode
     {
+        JNodeNumber() : JNode(JNodeType::number)
+        {
+        }
         explicit JNodeNumber(const std::string &number) : JNode(JNodeType::number), m_number(number)
         {
         }
@@ -182,6 +191,22 @@ namespace JSONLib
             doubleValue = std::strtod(m_number.c_str(), &end);
             return (*end == '\0'); // If not all characters used then not success
         }
+        // Check whether we nave a numeric value
+        bool isNumeric()
+        {
+            // Throw error if not valid integer or floating point
+            char *end = nullptr;
+            std::strtoll(m_number.c_str(), &end, 10);
+            if (*end != '\0')
+            {
+                std::strtod(m_number.c_str(), &end);
+                if (*end != '\0')
+                {
+                    return (false);
+                }
+            }
+            return (true);
+        }
         std::string &number()
         {
             return (m_number);
@@ -199,6 +224,9 @@ namespace JSONLib
     // ======
     struct JNodeString : JNode
     {
+        JNodeString() : JNode(JNodeType::string)
+        {
+        }
         explicit JNodeString(const std::string &str) : JNode(JNodeType::string), m_string(str)
         {
         }

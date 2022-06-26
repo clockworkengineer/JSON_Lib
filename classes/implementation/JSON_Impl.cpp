@@ -38,10 +38,10 @@ namespace JSONLib
     /// </summary>
     /// <param name="ch">Numeric character.</param>
     /// <returns>true if a character use in a number</returns>
-    bool JSON_Impl::isValidNumeric(char c)
+    bool JSON_Impl::isValidNumeric(char ch)
     {
         // Includes possible sign, decimal point or exponent
-        return ((std::isdigit(c) != 0) || c == '.' || c == '-' || c == '+' || c == 'E' || c == 'e');
+        return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
     }
     /// <summary>
     /// Extract a string from a JSON encoded source stream.
@@ -118,25 +118,18 @@ namespace JSONLib
     /// <returns></returns>
     JNode::Ptr JSON_Impl::parseNumber(ISource &source)
     {
-        std::string numberValue;
+        JNodeNumber jNodeNumber;
         while (source.more() && isValidNumeric(source.current()))
         {
-            numberValue += source.current();
+            jNodeNumber.number() += source.current();
             source.next();
         }
-        // Throw error if not valid integer or floating point
-        char *end = nullptr;
-        std::strtoll(numberValue.c_str(), &end, 10);
-        if (*end != '\0')
+        if (!jNodeNumber.isNumeric())
         {
-            std::strtod(numberValue.c_str(), &end);
-            if (*end != '\0')
-            {
-                throw Error("Syntax error detected.");
-            }
+            throw Error("Syntax error detected.");
         }
         source.ignoreWS();
-        return (std::make_unique<JNodeNumber>(numberValue));
+        return (std::make_unique<JNodeNumber>(std::move(jNodeNumber)));
     }
     /// <summary>
     /// Parse a boolean from a JSON source stream.
@@ -178,17 +171,18 @@ namespace JSONLib
     /// <returns>JNodeObject key/value pairs.</returns>
     JNode::Ptr JSON_Impl::parseObject(ISource &source)
     {
-        std::vector<JNodeObject::KeyValuePair> jsonObjects;
+        // std::vector<JNodeObject::KeyValuePair> jsonObjects;
+        JNodeObject jNodeObject;
         source.next();
         source.ignoreWS();
         if (source.current() != '}')
         {
-            jsonObjects.emplace_back(parseKeyValuePair(source));
+            jNodeObject.objects().emplace_back(parseKeyValuePair(source));
             while (source.current() == ',')
             {
                 source.next();
                 source.ignoreWS();
-                jsonObjects.emplace_back(parseKeyValuePair(source));
+                jNodeObject.objects().emplace_back(parseKeyValuePair(source));
             }
         }
         if (source.current() != '}')
@@ -197,7 +191,7 @@ namespace JSONLib
         }
         source.next();
         source.ignoreWS();
-        return (std::make_unique<JNodeObject>(jsonObjects));
+        return (std::make_unique<JNodeObject>(std::move(jNodeObject)));
     }
     /// <summary>
     /// Parse an array from a JSON source stream.
@@ -206,17 +200,18 @@ namespace JSONLib
     /// <returns>JNodeArray.</returns>
     JNode::Ptr JSON_Impl::parseArray(ISource &source)
     {
-        std::vector<JNode::Ptr> jsonArray;
+        // std::vector<JNode::Ptr> jsonArray;
+        JNodeArray jNodeArray;
         source.next();
         source.ignoreWS();
         if (source.current() != ']')
         {
-            jsonArray.emplace_back(parseJNodes(source));
+            jNodeArray.array().emplace_back(parseJNodes(source));
             while (source.current() == ',')
             {
                 source.next();
                 source.ignoreWS();
-                jsonArray.emplace_back(parseJNodes(source));
+                jNodeArray.array().emplace_back(parseJNodes(source));
             }
         }
         if (source.current() != ']')
@@ -225,7 +220,7 @@ namespace JSONLib
         }
         source.next();
         source.ignoreWS();
-        return (std::make_unique<JNodeArray>(jsonArray));
+        return (std::make_unique<JNodeArray>(std::move(jNodeArray)));
     }
     /// <summary>
     /// Recursively parse JSON source stream producing a JNode structure
