@@ -171,7 +171,6 @@ namespace JSONLib
     /// <returns>JNodeObject key/value pairs.</returns>
     JNode::Ptr JSON_Impl::parseObject(ISource &source)
     {
-        // std::vector<JNodeObject::KeyValuePair> jsonObjects;
         JNodeObject jNodeObject;
         source.next();
         source.ignoreWS();
@@ -200,7 +199,6 @@ namespace JSONLib
     /// <returns>JNodeArray.</returns>
     JNode::Ptr JSON_Impl::parseArray(ISource &source)
     {
-        // std::vector<JNode::Ptr> jsonArray;
         JNodeArray jNodeArray;
         source.next();
         source.ignoreWS();
@@ -364,7 +362,7 @@ namespace JSONLib
     /// </summary>
     std::string JSON_Impl::version()
     {
-        return (std::format("JSONLib Version {}.{}", JSON_VERSION_MAJOR, JSON_VERSION_MINOR));
+        return (std::format("JSONLib Version {}.{}.{}", JSON_VERSION_MAJOR, JSON_VERSION_MINOR, JSON_VERSION_PATCH));
     }
     /// <summary>
     /// Set translator for JSON strings.
