@@ -8,23 +8,23 @@
 // =============
 // INCLUDE FILES
 // =============
-//
+// =======
 // C++ STL
-//
+// =======
 #include <cstdlib>
 #include <iostream>
 #include <filesystem>
 #include <format>
 #include <chrono>
-//
-// JSON includes
-//
+// ====
+// JSON
+// ====
 #include "JSON.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
-//
+// =======
 // Logging
-//
+// =======
 #include "plog/Log.h"
 #include "plog/Initializers/RollingFileInitializer.h"
 // ====================
@@ -123,7 +123,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
             }
             else
             {
-                PLOG_INFO << std::format("File {} not present.", fileName);
+                PLOG_INFO << std::format("File {} not present.", fullFileName);
             }
         }
         catch (std::exception &ex)
