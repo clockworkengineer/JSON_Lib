@@ -17,6 +17,7 @@ namespace JSONLib
     class JSON_Impl;
     class ISource;
     class IDestination;
+    class IConverter;
     class ITranslator;
     struct JNode;
     // ================
@@ -31,7 +32,7 @@ namespace JSONLib
         // ======================
         // CONSTRUCTOR/DESTRUCTOR
         // ======================
-        explicit JSON(ITranslator *translator = nullptr);
+        explicit JSON(ITranslator *translator = nullptr, IConverter *converter = nullptr);
         JSON(const JSON &other) = delete;
         JSON &operator=(const JSON &other) = delete;
         JSON(JSON &&other) = delete;

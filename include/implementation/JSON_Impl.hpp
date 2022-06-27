@@ -51,6 +51,7 @@ namespace JSONLib
         JNode &root() { return (*m_jNodeRoot); }
         const JNode &root() const { return (*m_jNodeRoot); }
         void translator(ITranslator *translator);
+        void converter(IConverter *converter);
         // ================
         // PUBLIC VARIABLES
         // ================

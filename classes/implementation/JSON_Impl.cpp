@@ -338,8 +338,9 @@ namespace JSONLib
     /// <summary>
     /// JSON_Impl constructor.
     /// </summary>
-    JSON_Impl::JSON_Impl() : m_converter(std::make_unique<JSON_Converter>())
+    JSON_Impl::JSON_Impl()
     {
+        m_converter = std::make_unique<JSON_Converter>();
     }
     /// <summary>
     /// JSON_Impl destructor.
@@ -367,6 +368,21 @@ namespace JSONLib
         else
         {
             m_translator.reset(translator);
+        }
+    }
+    /// <summary>
+    /// Set converter for JSON strings.
+    /// </summary>
+    /// <param name=conv>Custom JSON string translator.</param>
+    void JSON_Impl::converter(IConverter *converter)
+    {
+        if (converter == nullptr)
+        {
+            m_converter = std::make_unique<JSON_Converter>();
+        }
+        else
+        {
+            m_converter.reset(converter);
         }
     }
     /// <summary>
