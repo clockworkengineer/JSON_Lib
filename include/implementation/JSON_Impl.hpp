@@ -45,13 +45,11 @@ namespace JSONLib
         // PUBLIC METHODS
         // ==============
         std::string version();
-        void parse(ISource &source);
-        void stringify(IDestination &destination);
+        JNode::Ptr parse(ISource &source);
+        void stringify(JNode &jNodeRoot, IDestination &destination);
         void strip(ISource &source, IDestination &destination);
-        JNode &root() { return (*m_jNodeRoot); }
-        const JNode &root() const { return (*m_jNodeRoot); }
-        void translator(ITranslator *translator);
-        void converter(IConverter *converter);
+        static void translator(ITranslator *translator);
+        static void converter(IConverter *converter);
         // ================
         // PUBLIC VARIABLES
         // ================
@@ -65,22 +63,21 @@ namespace JSONLib
         // ===============
         // PRIVATE METHODS
         // ===============
-        std::string extractString(ISource &source, bool translate = true);
-        JNodeObject::KeyValuePair parseKeyValuePair(ISource &source);
-        JNode::Ptr parseString(ISource &source);
-        JNode::Ptr parseNumber(ISource &source);
-        JNode::Ptr parseBoolean(ISource &source);
-        JNode::Ptr parseNull(ISource &source);
-        JNode::Ptr parseObject(ISource &source);
-        JNode::Ptr parseArray(ISource &source);
-        JNode::Ptr parseJNodes(ISource &source);
-        void stringifyJNodes(const JNode &jNode, IDestination &destination);
-        void stripWhiteSpace(ISource &source, IDestination &destination);
+        static std::string extractString(ISource &source, bool translate = true);
+        static JNodeObject::KeyValuePair parseKeyValuePair(ISource &source);
+        static JNode::Ptr parseString(ISource &source);
+        static JNode::Ptr parseNumber(ISource &source);
+        static JNode::Ptr parseBoolean(ISource &source);
+        static JNode::Ptr parseNull(ISource &source);
+        static JNode::Ptr parseObject(ISource &source);
+        static JNode::Ptr parseArray(ISource &source);
+        static JNode::Ptr parseJNodes(ISource &source);
+        static void stringifyJNodes(const JNode &jNode, IDestination &destination);
+        static void stripWhiteSpace(ISource &source, IDestination &destination);
         // =================
         // PRIVATE VARIABLES
         // =================
-        JNode::Ptr m_jNodeRoot;
-        std::unique_ptr<ITranslator> m_translator;
-        std::unique_ptr<IConverter> m_converter;
+        inline static std::unique_ptr<ITranslator> m_translator;
+        inline static std::unique_ptr<IConverter> m_converter;
     };
 } // namespace JSONLib

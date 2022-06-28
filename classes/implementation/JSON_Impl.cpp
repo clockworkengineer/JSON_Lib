@@ -398,9 +398,9 @@ namespace JSONLib
     /// Create JNode structure by recursively parsing JSON on the source stream.
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.
-    void JSON_Impl::parse(ISource &source)
+    JNode::Ptr JSON_Impl::parse(ISource &source)
     {
-        m_jNodeRoot = parseJNodes(source);
+        return(parseJNodes(source));
     }
     /// <summary>
     /// Recursively parse JNode structure and building its JSON in destination stream.
@@ -408,12 +408,8 @@ namespace JSONLib
     /// <param name="jNodeRoot">Root of JNode structure.</param>
     /// <param name=destination>destination stream for stringified JSON</param>
     /// <returns></returns>
-    void JSON_Impl::stringify(IDestination &destination)
+    void JSON_Impl::stringify(JNode &jNodeRoot, IDestination &destination)
     {
-        if (m_jNodeRoot.get() == nullptr)
-        {
-            throw Error("No JSON to stringify.");
-        }
-        stringifyJNodes(JNodeRef<JNode>(*m_jNodeRoot), destination);
+        stringifyJNodes(jNodeRoot, destination);
     }
 } // namespace JSONLib

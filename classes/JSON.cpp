@@ -35,6 +35,7 @@ namespace JSONLib
     // ========================
     // PRIVATE STATIC VARIABLES
     // ========================
+    const std::unique_ptr<JSON_Impl> JSON::m_implementation{std::make_unique<JSON_Impl>()};
     // =======================
     // PUBLIC STATIC VARIABLES
     // =======================
@@ -47,7 +48,7 @@ namespace JSONLib
     /// <summary>
     /// JSON constructor.
     /// </summary>
-    JSON::JSON(ITranslator *translator, IConverter *converter) : m_implementation(std::make_unique<JSON_Impl>())
+    JSON::JSON(ITranslator *translator, IConverter *converter)
     {
         m_implementation->converter(converter);
         m_implementation->translator(translator);
@@ -92,11 +93,11 @@ namespace JSONLib
     /// <param name="source">Source for JSON encoded bytes.
     void JSON::parse(ISource &source)
     {
-        m_implementation->parse(source);
+        m_jNodeRoot = m_implementation->parse(source);
     }
     void JSON::parse(ISource &&source)
     {
-        m_implementation->parse(source);
+        m_jNodeRoot = m_implementation->parse(source);
     }
     /// <summary>
     /// Recursively parse JNode structure and building its JSON text in destination stream.
@@ -104,22 +105,18 @@ namespace JSONLib
     /// <param name=destination>destination stream for stringified JSON</param>
     void JSON::stringify(IDestination &destination)
     {
-        m_implementation->stringify(destination);
+        if (m_jNodeRoot.get() == nullptr)
+        {
+            throw Error("No JSON to stringify.");
+        }
+        m_implementation->stringify(JNodeRef<JNode>(*m_jNodeRoot), destination);
     }
     void JSON::stringify(IDestination &&destination)
     {
-        m_implementation->stringify(destination);
-    }
-    /// <summary>
-    /// Get root of translated JSON object tree.
-    /// </summary>
-    /// <returns>Root of JSON object tree</returns>
-    JNode &JSON::root()
-    {
-        return (m_implementation->root());
-    }
-    const JNode &JSON::root() const
-    {
-        return (m_implementation->root());
+        if (m_jNodeRoot.get() == nullptr)
+        {
+            throw Error("No JSON to stringify.");
+        }
+        m_implementation->stringify(JNodeRef<JNode>(*m_jNodeRoot), destination);
     }
 } // namespace JSONLib

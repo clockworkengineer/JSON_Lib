@@ -41,6 +41,7 @@ namespace JSONLib
         // ==============
         // PUBLIC METHODS
         // ==============
+        std::string version();
         void parse(ISource &source);
         void parse(ISource &&source);
         void stringify(IDestination &destination);
@@ -49,9 +50,8 @@ namespace JSONLib
         void strip(ISource &source, IDestination &&destination);
         void strip(ISource &&source, IDestination &destination);
         void strip(ISource &&source, IDestination &&destination);
-        std::string version();
-        JNode &root();
-        const JNode &root() const;
+        JNode &root() { return (*m_jNodeRoot); }
+        const JNode &root() const { return (*m_jNodeRoot); }
         // ================
         // PUBLIC VARIABLES
         // ================
@@ -68,6 +68,8 @@ namespace JSONLib
         // =================
         // PRIVATE VARIABLES
         // =================
-        const std::unique_ptr<JSON_Impl> m_implementation;
+        // JSON implementation
+        static const std::unique_ptr<JSON_Impl> m_implementation;
+        std::unique_ptr<JNode> m_jNodeRoot;
     };
 } // namespace JSONLib
