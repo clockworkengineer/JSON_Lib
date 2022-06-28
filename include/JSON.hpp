@@ -59,9 +59,6 @@ namespace JSONLib
         // ===========================
         // PRIVATE TYPES AND CONSTANTS
         // ===========================
-        // ===========================================
-        // DISABLED CONSTRUCTORS/DESTRUCTORS/OPERATORS
-        // ===========================================
         // ===============
         // PRIVATE METHODS
         // ===============

@@ -44,10 +44,10 @@ namespace JSONLib
         // ==============
         // PUBLIC METHODS
         // ==============
-        std::string version();
-        JNode::Ptr parse(ISource &source);
-        void stringify(const JNode &jNodeRoot, IDestination &destination);
-        void strip(ISource &source, IDestination &destination);
+        static std::string version();
+        static JNode::Ptr parse(ISource &source);
+        static void stringify(const JNode &jNodeRoot, IDestination &destination);
+        static void strip(ISource &source, IDestination &destination);
         static void translator(ITranslator *translator);
         static void converter(IConverter *converter);
         // ================
@@ -57,9 +57,6 @@ namespace JSONLib
         // ===========================
         // PRIVATE TYPES AND CONSTANTS
         // ===========================
-        // ===========================================
-        // DISABLED CONSTRUCTORS/DESTRUCTORS/OPERATORS
-        // ===========================================
         // ===============
         // PRIVATE METHODS
         // ===============

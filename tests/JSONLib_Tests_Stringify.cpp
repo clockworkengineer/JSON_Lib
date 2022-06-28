@@ -22,64 +22,64 @@ TEST_CASE("JSON object for stringification of simple types and check values", "[
     {
         std::string expected{"\"Test string.\""};
         BufferSource jsonSource{expected};
-        BufferDestination jsonDestinaton;
+        BufferDestination jsonDestination;
         json.parse(jsonSource);
-        json.stringify(jsonDestinaton);
-        REQUIRE(jsonDestinaton.getBuffer() == expected);
+        json.stringify(jsonDestination);
+        REQUIRE(jsonDestination.getBuffer() == expected);
     }
     SECTION("Stringify a string (Test another string) and check its value", "[JSON][Stringify]")
     {
         std::string expected{"\"Test another string.\""};
         BufferSource jsonSource{expected};
-        BufferDestination jsonDestinaton;
+        BufferDestination jsonDestination;
         json.parse(jsonSource);
-        json.stringify(jsonDestinaton);
-        REQUIRE(jsonDestinaton.getBuffer() == expected);
+        json.stringify(jsonDestination);
+        REQUIRE(jsonDestination.getBuffer() == expected);
     }
     SECTION("Stringify a boolean (true) and check its value", "[JSON][Stringify]")
     {
         std::string expected{"true"};
         BufferSource jsonSource{expected};
-        BufferDestination jsonDestinaton;
+        BufferDestination jsonDestination;
         json.parse(jsonSource);
-        json.stringify(jsonDestinaton);
-        REQUIRE(jsonDestinaton.getBuffer() == expected);
+        json.stringify(jsonDestination);
+        REQUIRE(jsonDestination.getBuffer() == expected);
     }
     SECTION("Stringify a boolean (false) and check its value", "[JSON][Stringify]")
     {
         std::string expected{"false"};
         BufferSource jsonSource{expected};
-        BufferDestination jsonDestinaton;
+        BufferDestination jsonDestination;
         json.parse(jsonSource);
-        json.stringify(jsonDestinaton);
-        REQUIRE(jsonDestinaton.getBuffer() == expected);
+        json.stringify(jsonDestination);
+        REQUIRE(jsonDestination.getBuffer() == expected);
     }
     SECTION("Stringify a number (98345) and check its value", "[JSON][Stringify]")
     {
         std::string expected{"98345"};
         BufferSource jsonSource{expected};
-        BufferDestination jsonDestinaton;
+        BufferDestination jsonDestination;
         json.parse(jsonSource);
-        json.stringify(jsonDestinaton);
-        REQUIRE(jsonDestinaton.getBuffer() == expected);
+        json.stringify(jsonDestination);
+        REQUIRE(jsonDestination.getBuffer() == expected);
     }
     SECTION("Stringify a number (250000) and check its value", "[JSON][Stringify]")
     {
         std::string expected{"250000"};
         BufferSource jsonSource{expected};
-        BufferDestination jsonDestinaton;
+        BufferDestination jsonDestination;
         json.parse(jsonSource);
-        json.stringify(jsonDestinaton);
-        REQUIRE(jsonDestinaton.getBuffer() == expected);
+        json.stringify(jsonDestination);
+        REQUIRE(jsonDestination.getBuffer() == expected);
     }
     SECTION("Stringify a null and check its value", "[JSON][Stringify]")
     {
         std::string expected{"null"};
         BufferSource jsonSource{expected};
-        BufferDestination jsonDestinaton;
+        BufferDestination jsonDestination;
         json.parse(jsonSource);
-        json.stringify(jsonDestinaton);
-        REQUIRE(jsonDestinaton.getBuffer() == expected);
+        json.stringify(jsonDestination);
+        REQUIRE(jsonDestination.getBuffer() == expected);
     }
 }
 TEST_CASE("JSON object for stringification of collection types and check values.", "[JSON][Stringify]")
@@ -89,37 +89,37 @@ TEST_CASE("JSON object for stringification of collection types and check values.
     {
         std::string expected{"{\"Age\":77,\"Name\":\"Rob\"}"};
         BufferSource jsonSource{expected};
-        BufferDestination jsonDestinaton;
+        BufferDestination jsonDestination;
         json.parse(jsonSource);
-        json.stringify(jsonDestinaton);
-        REQUIRE(jsonDestinaton.getBuffer() == expected);
+        json.stringify(jsonDestination);
+        REQUIRE(jsonDestination.getBuffer() == expected);
     }
     SECTION("Stringify an array ([999,\"Time\",null,true] and check its value", "[JSON][Stringify]")
     {
         std::string expected{"[999,\"Time\",null,true]"};
         BufferSource jsonSource{expected};
-        BufferDestination jsonDestinaton;
+        BufferDestination jsonDestination;
         json.parse(jsonSource);
-        json.stringify(jsonDestinaton);
-        REQUIRE(jsonDestinaton.getBuffer() == expected);
+        json.stringify(jsonDestination);
+        REQUIRE(jsonDestination.getBuffer() == expected);
     }
     SECTION("Stringify an object ({\"City\":\"London\",\"Population\":8000000}) and check its value", "[JSON][Stringify]")
     {
         std::string expected{"{\"City\":\"London\",\"Population\":8000000}"};
         BufferSource jsonSource{expected};
-        BufferDestination jsonDestinaton;
+        BufferDestination jsonDestination;
         json.parse(jsonSource);
-        json.stringify(jsonDestinaton);
-        REQUIRE(jsonDestinaton.getBuffer() == expected);
+        json.stringify(jsonDestination);
+        REQUIRE(jsonDestination.getBuffer() == expected);
     }
     SECTION("Stringify an array ([true,\"Out of time\",789043e13,true]) and check its value", "[JSON][Stringify]")
     {
         std::string expected{"[true,\"Out of time\",789043e13,true]"};
         BufferSource jsonSource{expected};
-        BufferDestination jsonDestinaton;
+        BufferDestination jsonDestination;
         json.parse(jsonSource);
-        json.stringify(jsonDestinaton);
-        REQUIRE(jsonDestinaton.getBuffer() == expected);
+        json.stringify(jsonDestination);
+        REQUIRE(jsonDestination.getBuffer() == expected);
     }
 }
 TEST_CASE("Stringify to a file and check result.", "[JSON][Stringify][Exceptions]")
@@ -182,10 +182,10 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.", "[
     {
         std::string jsonFileBuffer{readJSONFromFile(prefixTestDataPath(testFile))};
         BufferSource jsonSource{jsonFileBuffer};
-        BufferDestination jsonDestinaton;
+        BufferDestination jsonDestination;
         json.parse(jsonSource);
-        json.stringify(jsonDestinaton);
-        REQUIRE(jsonDestinaton.getBuffer() == stripWhiteSpace(json,jsonFileBuffer));
+        json.stringify(jsonDestination);
+        REQUIRE(jsonDestination.getBuffer() == stripWhiteSpace(json,jsonFileBuffer));
     }
     SECTION("Stringify to file and check value", "[JSON][Stringify]")
     {

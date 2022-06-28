@@ -39,7 +39,7 @@ std::string readJSONFromFile(const std::string &jsonFileName)
   return (jsonFileBuffer.str());
 }
 /// <summary>
-/// Verify that an JNodeArray has the correct pasred format.
+/// Verify that an JNodeArray has the correct parsed format.
 /// </summary>
 /// <param name="jNode">Pointer to JNNodeArray</param>
 /// <returns></returns>
@@ -57,7 +57,7 @@ void checkArray(JNode &jNode)
   REQUIRE(JNodeRef<JNodeNull>(jNode[3]).null() == nullptr);
 }
 /// <summary>
-/// Verify that an JNodeObject has the correct pasred format.
+/// Verify that an JNodeObject has the correct parsed format.
 /// </summary>
 /// <param name="jNode">Pointer to JNodeObject</param>
 /// <returns></returns>
