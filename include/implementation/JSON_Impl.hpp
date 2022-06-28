@@ -35,18 +35,18 @@ namespace JSONLib
         // ======================
         // CONSTRUCTOR/DESTRUCTOR
         // ======================
-        JSON_Impl();
+        JSON_Impl() = default;
         JSON_Impl(const JSON_Impl &other) = delete;
         JSON_Impl &operator=(const JSON_Impl &other) = delete;
         JSON_Impl(JSON_Impl &&other) = delete;
         JSON_Impl &operator=(JSON_Impl &&other) = delete;
-        ~JSON_Impl();
+        ~JSON_Impl() = default;
         // ==============
         // PUBLIC METHODS
         // ==============
         std::string version();
         JNode::Ptr parse(ISource &source);
-        void stringify(JNode &jNodeRoot, IDestination &destination);
+        void stringify(const JNode &jNodeRoot, IDestination &destination);
         void strip(ISource &source, IDestination &destination);
         static void translator(ITranslator *translator);
         static void converter(IConverter *converter);

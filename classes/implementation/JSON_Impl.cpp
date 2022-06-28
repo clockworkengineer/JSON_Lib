@@ -336,19 +336,6 @@ namespace JSONLib
     // PUBLIC METHODS
     // ==============
     /// <summary>
-    /// JSON_Impl constructor.
-    /// </summary>
-    JSON_Impl::JSON_Impl()
-    {
-        m_converter = std::make_unique<JSON_Converter>();
-    }
-    /// <summary>
-    /// JSON_Impl destructor.
-    /// </summary>
-    JSON_Impl::~JSON_Impl()
-    {
-    }
-    /// <summary>
     ///  Get JSONLib version.
     /// </summary>
     std::string JSON_Impl::version()
@@ -408,7 +395,7 @@ namespace JSONLib
     /// <param name="jNodeRoot">Root of JNode structure.</param>
     /// <param name=destination>destination stream for stringified JSON</param>
     /// <returns></returns>
-    void JSON_Impl::stringify(JNode &jNodeRoot, IDestination &destination)
+    void JSON_Impl::stringify(const JNode &jNodeRoot, IDestination &destination)
     {
         stringifyJNodes(jNodeRoot, destination);
     }

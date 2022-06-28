@@ -194,7 +194,6 @@ namespace JSONLib
         // Check whether we nave a numeric value
         bool isValidNumber()
         {
-            // Throw error if not valid integer or floating point
             char *end = nullptr;
             std::strtoll(m_number.c_str(), &end, 10);
             if (*end != '\0')
