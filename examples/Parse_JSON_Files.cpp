@@ -1,7 +1,9 @@
 //
 // Program: Parse_JSON_Files
 //
-// Description:
+// Description: Read a number pf JSON files and parse from the file, stringify
+// it back into text form and then parse the buffer created; timing each step in
+// turn for each file.
 //
 // Dependencies: C20++, JSONLib.
 //

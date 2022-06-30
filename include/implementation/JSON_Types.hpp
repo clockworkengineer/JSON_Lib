@@ -52,12 +52,13 @@ namespace JSONLib
         {
             return (m_nodeType);
         }
-        virtual ~JNode() = default;
+        // No JNode is deleted through its base class so omit and save space 
+        // from virtual function table.
+        //virtual ~JNode() = default;
         JNode &operator[](const std::string &key);
         const JNode &operator[](const std::string &key) const;
         JNode &operator[](int index);
         const JNode &operator[](int index) const;
-
     private:
         JNodeType m_nodeType;
     };
@@ -116,7 +117,6 @@ namespace JSONLib
         {
             return (m_objects);
         }
-
     private:
         std::vector<JNodeObject::KeyValuePair> m_objects;
     };
@@ -160,7 +160,6 @@ namespace JSONLib
             }
             throw Error("Invalid index used to access array.");
         }
-
     private:
         std::vector<JNode::Ptr> m_array;
     };
@@ -219,7 +218,6 @@ namespace JSONLib
             // Includes possible sign, decimal point or exponent
             return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
         }
-
     private:
         std::string m_number;
     };
@@ -242,7 +240,6 @@ namespace JSONLib
         {
             return (m_string);
         }
-
     private:
         std::string m_string;
     };
@@ -258,7 +255,6 @@ namespace JSONLib
         {
             return (m_boolean);
         }
-
     private:
         bool m_boolean;
     };
