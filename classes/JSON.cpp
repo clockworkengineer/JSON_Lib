@@ -35,7 +35,6 @@ namespace JSONLib
     // ========================
     // PRIVATE STATIC VARIABLES
     // ========================
-    const std::unique_ptr<JSON_Impl> JSON::m_implementation{std::make_unique<JSON_Impl>()};
     // =======================
     // PUBLIC STATIC VARIABLES
     // =======================
@@ -48,7 +47,7 @@ namespace JSONLib
     /// <summary>
     /// JSON constructor.
     /// </summary>
-    JSON::JSON(ITranslator *translator, IConverter *converter)
+    JSON::JSON(ITranslator *translator, IConverter *converter) : m_implementation (std::make_unique<JSON_Impl>())
     {
         m_implementation->converter(converter);
         m_implementation->translator(translator);
@@ -105,7 +104,7 @@ namespace JSONLib
     /// <param name=destination>destination stream for stringified JSON</param>
     void JSON::stringify(IDestination &destination)
     {
-        if (m_jNodeRoot.get() == nullptr)
+        if (m_jNodeRoot == nullptr)
         {
             throw Error("No JSON to stringify.");
         }
@@ -113,7 +112,7 @@ namespace JSONLib
     }
     void JSON::stringify(IDestination &&destination)
     {
-        if (m_jNodeRoot.get() == nullptr)
+        if (m_jNodeRoot == nullptr)
         {
             throw Error("No JSON to stringify.");
         }

@@ -8,11 +8,19 @@
 // =========
 namespace JSONLib
 {
+    // ========================
+    // Unicode surrogate ranges
+    // ========================
+    constexpr char16_t kHighSurrogatesBegin{ 0xD800 };
+    constexpr char16_t kHighSurrogatesEnd  { 0xDBFF };
+    constexpr char16_t kLowSurrogatesBegin{ 0xDC00 };
+    constexpr char16_t kLowSurrogatesEnd{ 0xDFFF };
     // =========================
     // JSON translator interface
     // =========================
     class ITranslator
     {
+
     public:
         // ========================
         // Constructors/destructors
@@ -57,13 +65,14 @@ namespace JSONLib
             return (false);
         }
     private:
+
         bool isValidSurrogateUpper(char16_t c)
         {
-            return ((c >= 0xD800) && (c <= 0xDBFF));
+            return ((c >= static_cast<char16_t>(kHighSurrogatesBegin)) && (c <= static_cast < char16_t>(kHighSurrogatesEnd)));
         }
         bool isValidSurrogateLower(char16_t c)
         {
-            return ((c >= 0xDC00) && (c <= 0xDFFF));
+            return ((c >= static_cast < char16_t>(kLowSurrogatesBegin)) && (c <= static_cast < char16_t>(kLowSurrogatesEnd)));
         }
     };
 } // namespace JSONLib

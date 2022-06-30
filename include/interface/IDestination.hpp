@@ -19,7 +19,7 @@ namespace JSONLib
         // ==================
         struct Error : public std::runtime_error
         {
-            Error(std::string const &message) : std::runtime_error("IDestination Error: " + message)
+            explicit Error(std::string const &message) : std::runtime_error("IDestination Error: " + message)
             {
             }
         };

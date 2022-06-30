@@ -51,7 +51,7 @@ namespace JSONLib
         void strip(ISource &&source, IDestination &destination);
         void strip(ISource &&source, IDestination &&destination);
         JNode &root() { return (*m_jNodeRoot); }
-        const JNode &root() const { return (*m_jNodeRoot); }
+        [[nodiscard]] const JNode &root() const { return (*m_jNodeRoot); }
         // ================
         // PUBLIC VARIABLES
         // ================
@@ -68,6 +68,6 @@ namespace JSONLib
         // Root of JSON tree
         std::unique_ptr<JNode> m_jNodeRoot;
         // JSON implementation
-        static const std::unique_ptr<JSON_Impl> m_implementation;
+        const std::unique_ptr<JSON_Impl> m_implementation;
     };
 } // namespace JSONLib

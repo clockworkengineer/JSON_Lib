@@ -31,19 +31,19 @@ namespace JSONLib
         // ==========
         struct Error : public std::runtime_error
         {
-            Error(std::string const &message) : std::runtime_error("JSON Translator Error: " + message)
+            explicit Error(std::string const &message) : std::runtime_error("JSON Translator Error: " + message)
             {
             }
         };
         // ======================
         // CONSTRUCTOR/DESTRUCTOR
         // ======================
-        JSON_Translator(IConverter &converter);
+        explicit JSON_Translator(IConverter &converter);
         JSON_Translator(const JSON_Translator &other) = delete;
         JSON_Translator &operator=(const JSON_Translator &other) = delete;
         JSON_Translator(JSON_Translator &&other) = delete;
         JSON_Translator &operator=(JSON_Translator &&other) = delete;
-        ~JSON_Translator() = default;
+        ~JSON_Translator() override = default;
         // ==============
         // PUBLIC METHODS
         // ==============

@@ -109,7 +109,7 @@ namespace JSONLib
     JNode::Ptr JSON_Impl::parseNumber(ISource &source)
     {
         JNodeNumber jNodeNumber;
-        while (source.more() && JNodeNumber::isValidNumeric(source.current()))
+        while (source.more() && jNodeNumber.isValidNumeric(source.current()))
         {
             jNodeNumber.number() += source.current();
             source.next();

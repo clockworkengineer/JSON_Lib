@@ -3,6 +3,7 @@
 // C++ STL
 // =======
 #include <string>
+#include <utility>
 #include <vector>
 #include <memory>
 #include <stdexcept>
@@ -16,7 +17,7 @@ namespace JSONLib
     // ==========
     struct Error : public std::runtime_error
     {
-        Error(std::string const &message) : std::runtime_error("JSON Error: " + message)
+        explicit Error(std::string const &message) : std::runtime_error("JSON Error: " + message)
         {
         }
     };
@@ -41,7 +42,7 @@ namespace JSONLib
         using Ptr = std::unique_ptr<JNode>;
         struct Error : public std::runtime_error
         {
-            Error(std::string const &message) : std::runtime_error("JNode Error: " + message)
+            explicit Error(std::string const &message) : std::runtime_error("JNode Error: " + message)
             {
             }
         };
@@ -113,7 +114,7 @@ namespace JSONLib
         {
             return (m_objects);
         }
-        const std::vector<KeyValuePair> &objects() const
+        [[nodiscard]] const std::vector<KeyValuePair> &objects() const
         {
             return (m_objects);
         }
@@ -140,7 +141,7 @@ namespace JSONLib
         {
             return (m_array);
         }
-        const std::vector<JNode::Ptr> &array() const
+        [[nodiscard]] const std::vector<JNode::Ptr> &array() const
         {
             return (m_array);
         }
@@ -171,49 +172,45 @@ namespace JSONLib
         JNodeNumber() : JNode(JNodeType::number)
         {
         }
-        explicit JNodeNumber(const std::string &number) : JNode(JNodeType::number), m_number(number)
+        explicit JNodeNumber(std::string number) : JNode(JNodeType::number), m_number(std::move(number))
         {
         }
         // Convert to long returning true on success
         // Note: Can still return a long value for floating point
         // but false as the number is not in integer format
-        bool integer(long long &longValue) const
+        [[nodiscard]] bool integer(long long &longValue) const
         {
             char *end = nullptr;
             longValue = std::strtoll(m_number.c_str(), &end, 10);
             return (*end == '\0'); // If not all characters used then not success
         }
         // Convert to double returning true on success
-        bool floatingpoint(double &doubleValue) const
+        [[nodiscard]] bool floatingpoint(double &doubleValue) const
         {
             char *end = nullptr;
             doubleValue = std::strtod(m_number.c_str(), &end);
             return (*end == '\0'); // If not all characters used then not success
         }
         // Check whether we nave a numeric value
-        bool isValidNumber()
+        [[nodiscard]] bool isValidNumber() const
         {
-            char *end = nullptr;
-            std::strtoll(m_number.c_str(), &end, 10);
-            if (*end != '\0')
-            {
-                std::strtod(m_number.c_str(), &end);
-                if (*end != '\0')
-                {
-                    return (false);
-                }
+            if ([[maybe_unused]] long long longValue{}; integer(longValue)) {
+                return(true);
             }
-            return (true);
+            if ([[maybe_unused]] double doubleValue{}; floatingpoint(doubleValue)) {
+                return(true);
+            }
+            return (false);
         }
-        std::string &number()
+        [[nodiscard]] std::string &number()
         {
             return (m_number);
         }
-        const std::string &number() const
+        [[nodiscard]] const std::string &number() const
         {
             return (m_number);
         }
-        static bool isValidNumeric(char ch)
+        [[nodiscard]] bool isValidNumeric(char ch)
         {
             // Includes possible sign, decimal point or exponent
             return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
@@ -229,14 +226,14 @@ namespace JSONLib
         JNodeString() : JNode(JNodeType::string)
         {
         }
-        explicit JNodeString(const std::string &str) : JNode(JNodeType::string), m_string(str)
+        explicit JNodeString(std::string str) : JNode(JNodeType::string), m_string(std::move(str))
         {
         }
         std::string &string()
         {
             return (m_string);
         }
-        const std::string &string() const
+        [[nodiscard]] const std::string &string() const
         {
             return (m_string);
         }
@@ -266,7 +263,7 @@ namespace JSONLib
         JNodeNull() : JNode(JNodeType::null)
         {
         }
-        void *null() const
+        [[nodiscard]] void *null() const
         {
             return (nullptr);
         }
