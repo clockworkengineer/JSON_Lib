@@ -61,7 +61,7 @@ std::string prefixTestDataPath(const std::string &file)
     return ((std::filesystem::current_path() / "testData" / file).string());
 }
 /// <summary>
-/// Output JNode tree details
+/// Output JNode tree details.
 /// </summary>
 /// <param name="jNodeDetails">result of JNode tree analysis</param>
 void outputAnalysis(const JNodeDetails &jNodeDetails)
@@ -83,11 +83,11 @@ void outputAnalysis(const JNodeDetails &jNodeDetails)
     PLOG_INFO << std::format("----------------------------------------------------");
 }
 /// <summary>
-/// Recursively analyzes JNode tree details
+/// Recursively analyzes JNode tree details.
 /// </summary>
 /// <param name="jNode">Current JNode</param>
 /// <param name="jNodeDetails">Result of JNode tree analysis</param>
-void analyzeJNodes(const JNode &jNode, JNodeDetails &jNodeDetails)
+void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails)
 {
     jNodeDetails.totalNodes++;
     switch (jNode.getNodeType())
@@ -113,8 +113,8 @@ void analyzeJNodes(const JNode &jNode, JNodeDetails &jNodeDetails)
         jNodeDetails.sizeInBytes += sizeof(JNodeObject);
         for (auto &[key, jNodePtr] : JNodeRef<JNodeObject>(jNode).objects())
         {
+            analyzeJNode(JNodeRef<JNodeObject>(jNode)[key], jNodeDetails);
             jNodeDetails.unique_keys.insert(key);
-            analyzeJNodes(JNodeRef<JNodeObject>(jNode)[key], jNodeDetails);
             jNodeDetails.sizeInBytes += key.size();
             jNodeDetails.sizeInBytes += sizeof(JNodeObject::KeyValuePair);
             jNodeDetails.totalKeys++;
@@ -126,7 +126,7 @@ void analyzeJNodes(const JNode &jNode, JNodeDetails &jNodeDetails)
         jNodeDetails.sizeInBytes += sizeof(JNodeArray);
         for (auto &bNodeEntry : JNodeRef<JNodeArray>(jNode).array())
         {
-            analyzeJNodes(JNodeRef<JNode>(*bNodeEntry), jNodeDetails);
+            analyzeJNode(JNodeRef<JNode>(*bNodeEntry), jNodeDetails);
             jNodeDetails.sizeInBytes += sizeof(JNode::Ptr);
         }
         break;
@@ -134,6 +134,17 @@ void analyzeJNodes(const JNode &jNode, JNodeDetails &jNodeDetails)
     default:
         throw Error("Unknown JNode type encountered during stringification.");
     }
+}
+/// <summary>
+/// Analyzes JNode tree and output its details.
+/// </summary>
+/// <param name="jNode">Current JNode</param>
+/// <param name="jNodeDetails">Root of JNode</param>
+void analyzeJNodeTree(const JNode &jNodeRoot)
+{
+    JNodeDetails jNodeDetails;
+    analyzeJNode(jNodeRoot, jNodeDetails);
+    outputAnalysis(jNodeDetails);
 }
 /// <summary>
 /// Parse JSON file and analyze its JNode Tree.
@@ -144,10 +155,8 @@ void processJSONFile(const std::string &fileName)
     std::cout << std::format("Analyzing {}\n", fileName);
     PLOG_INFO << std::format("Analyzing {}", fileName);
     JSON json;
-    JNodeDetails jNodeDetails;
     json.parse(FileSource{fileName});
-    analyzeJNodes(json.root(), jNodeDetails);
-    outputAnalysis(jNodeDetails);
+    analyzeJNodeTree(json.root());
     PLOG_INFO << std::format("Finished {}.", fileName);
     std::cout << std::format("Finished {}.\n", fileName);
 }
@@ -162,7 +171,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
         "testfile003.json",
         "testfile004.json",
         "testfile005.json",
-        "large-file.json" // Not kept in GitHub as 24Meg in size.
+        // "large-file.json" // Not kept in GitHub as 24Meg in size.
     };
     //
     // Initialise logging.
