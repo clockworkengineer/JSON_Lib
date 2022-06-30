@@ -17,7 +17,7 @@ namespace JSONLib
     // ==========
     struct Error : public std::runtime_error
     {
-        explicit Error(std::string const &message) : std::runtime_error("JSON Error: " + message)
+        explicit Error(const std::string &message) : std::runtime_error("JSON Error: " + message)
         {
         }
     };
@@ -42,7 +42,7 @@ namespace JSONLib
         using Ptr = std::unique_ptr<JNode>;
         struct Error : public std::runtime_error
         {
-            explicit Error(std::string const &message) : std::runtime_error("JNode Error: " + message)
+            explicit Error(const std::string &message) : std::runtime_error("JNode Error: " + message)
             {
             }
         };
@@ -53,13 +53,14 @@ namespace JSONLib
         {
             return (m_nodeType);
         }
-        // No JNode is deleted through its base class so omit and save space 
+        // No JNode is deleted through its base class so omit and save space
         // from virtual function table.
-        //virtual ~JNode() = default;
+        // virtual ~JNode() = default;
         JNode &operator[](const std::string &key);
         const JNode &operator[](const std::string &key) const;
         JNode &operator[](int index);
         const JNode &operator[](int index) const;
+
     private:
         JNodeType m_nodeType;
     };
@@ -118,6 +119,7 @@ namespace JSONLib
         {
             return (m_objects);
         }
+
     private:
         std::vector<JNodeObject::KeyValuePair> m_objects;
     };
@@ -161,6 +163,7 @@ namespace JSONLib
             }
             throw Error("Invalid index used to access array.");
         }
+
     private:
         std::vector<JNode::Ptr> m_array;
     };
@@ -194,11 +197,13 @@ namespace JSONLib
         // Check whether we nave a numeric value
         [[nodiscard]] bool isValidNumber() const
         {
-            if ([[maybe_unused]] long long longValue{}; integer(longValue)) {
-                return(true);
+            if ([[maybe_unused]] long long longValue{}; integer(longValue))
+            {
+                return (true);
             }
-            if ([[maybe_unused]] double doubleValue{}; floatingpoint(doubleValue)) {
-                return(true);
+            if ([[maybe_unused]] double doubleValue{}; floatingpoint(doubleValue))
+            {
+                return (true);
             }
             return (false);
         }
@@ -215,6 +220,7 @@ namespace JSONLib
             // Includes possible sign, decimal point or exponent
             return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
         }
+
     private:
         std::string m_number;
     };
@@ -237,6 +243,7 @@ namespace JSONLib
         {
             return (m_string);
         }
+
     private:
         std::string m_string;
     };
@@ -252,6 +259,7 @@ namespace JSONLib
         {
             return (m_boolean);
         }
+
     private:
         bool m_boolean;
     };

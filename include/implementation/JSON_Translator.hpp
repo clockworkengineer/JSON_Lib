@@ -31,7 +31,7 @@ namespace JSONLib
         // ==========
         struct Error : public std::runtime_error
         {
-            explicit Error(std::string const &message) : std::runtime_error("JSON Translator Error: " + message)
+            explicit Error(const std::string &message) : std::runtime_error("JSON Translator Error: " + message)
             {
             }
         };
@@ -63,7 +63,7 @@ namespace JSONLib
         // PRIVATE VARIABLES
         // =================
         IConverter &m_converter;
-        inline static std::unordered_map<char, char16_t> m_from;
-        inline static std::unordered_map<char16_t, char> m_to;
+        std::unordered_map<char, char16_t> m_from;
+        std::unordered_map<char16_t, char> m_to;
     };
 } // namespace JSONLib
