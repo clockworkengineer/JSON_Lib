@@ -81,7 +81,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="source">Source for JSON encoded bytes.</param>
     /// <returns>Object key/value pair.</returns>
-    JNodeObject::KeyValuePair JSON_Impl::parseKeyValuePair(ISource &source)
+    JNodeObject::Entry JSON_Impl::parseKeyValuePair(ISource &source)
     {
         const std::string keyValue{extractString(source)};
         if (source.current() != ':')
@@ -90,7 +90,7 @@ namespace JSONLib
         }
         source.next();
         source.ignoreWS();
-        return (JNodeObject::KeyValuePair{keyValue, parseJNodes(source)});
+        return (JNodeObject::Entry{keyValue, parseJNodes(source)});
     }
     /// <summary>
     /// Parse a string from a JSON source stream.

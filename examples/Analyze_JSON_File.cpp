@@ -116,7 +116,7 @@ void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails)
             analyzeJNode(JNodeRef<JNodeObject>(jNode)[key], jNodeDetails);
             jNodeDetails.unique_keys.insert(key);
             jNodeDetails.sizeInBytes += key.size();
-            jNodeDetails.sizeInBytes += sizeof(JNodeObject::KeyValuePair);
+            jNodeDetails.sizeInBytes += sizeof(JNodeObject::Entry);
             jNodeDetails.totalKeys++;
         }
         break;
