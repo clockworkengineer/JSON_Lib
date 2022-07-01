@@ -56,6 +56,7 @@ std::string prefixTestDataPath(const std::string &file)
 void processJSONFile(const std::string &fileName)
 {
     std::cout << std::format("Processing {}\n", fileName);
+    PLOG_INFO << std::format("Processing {}", fileName);
     JSON json;
     BufferDestination jsonDestination;
     //
@@ -92,6 +93,7 @@ void processJSONFile(const std::string &fileName)
     }
     PLOG_INFO << "----------------------------OK";
     std::cout << std::format("Finished {}.\n", fileName);
+    PLOG_INFO << std::format("Finished {}.", fileName);
 }
 // ============================
 // ===== MAIN ENTRY POINT =====
