@@ -340,7 +340,9 @@ namespace JSONLib
     /// </summary>
     std::string JSON_Impl::version()
     {
-        return (std::format("JSONLib Version {}.{}.{}", JSON_VERSION_MAJOR, JSON_VERSION_MINOR, JSON_VERSION_PATCH));
+        std::stringstream versionString;
+        versionString << "JSONLib Version  " << JSON_VERSION_MAJOR << "." << JSON_VERSION_MINOR << "." << JSON_VERSION_PATCH;
+        return(versionString.str());
     }
     /// <summary>
     /// Set translator for JSON strings.
