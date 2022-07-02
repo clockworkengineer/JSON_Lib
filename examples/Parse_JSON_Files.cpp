@@ -16,7 +16,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <filesystem>
-#include <format>
 #include <chrono>
 // ====
 // JSON
@@ -55,8 +54,8 @@ std::string prefixTestDataPath(const std::string &file)
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName)
 {
-    std::cout << std::format("Processing {}\n", fileName);
-    PLOG_INFO << std::format("Processing {}", fileName);
+    std::cout << "Processing " << fileName << "\n";
+    PLOG_INFO << "Processing " << fileName;
     JSON json;
     BufferDestination jsonDestination;
     //
@@ -66,7 +65,7 @@ void processJSONFile(const std::string &fileName)
     json.parse(FileSource{fileName});
     auto stop = std::chrono::high_resolution_clock::now();
     auto parsedTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    PLOG_INFO << std::format("Took {} microseconds to parse from file.", parsedTime.count());
+    PLOG_INFO << "Took " << parsedTime.count() << " microseconds to parse from file.";
     //
     // Stringify
     //
@@ -74,7 +73,7 @@ void processJSONFile(const std::string &fileName)
     json.stringify(jsonDestination);
     stop = std::chrono::high_resolution_clock::now();
     auto stringifyTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    PLOG_INFO << std::format("Took {} microseconds to stringify.", stringifyTime.count());
+    PLOG_INFO << "Took " << stringifyTime.count() << " microseconds to stringify.";
     //
     // Parse from buffer
     //
@@ -83,7 +82,7 @@ void processJSONFile(const std::string &fileName)
     json.parse(sourceBuffer);
     stop = std::chrono::high_resolution_clock::now();
     parsedTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    PLOG_INFO << std::format("Took {} microseconds to parse from buffer.", parsedTime.count());
+    PLOG_INFO << "Took " << parsedTime.count() << " microseconds to parse from buffer.";
     //
     // Display contents
     //
@@ -92,8 +91,8 @@ void processJSONFile(const std::string &fileName)
         PLOG_INFO << "[" << jsonDestination.getBuffer();
     }
     PLOG_INFO << "----------------------------OK";
-    std::cout << std::format("Finished {}.\n", fileName);
-    PLOG_INFO << std::format("Finished {}.", fileName);
+    std::cout << "Finished " << fileName<< ".\n";
+    PLOG_INFO << "Finished " << fileName<< ".";
 }
 // ============================
 // ===== MAIN ENTRY POINT =====
@@ -127,7 +126,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
             }
             else
             {
-                PLOG_INFO << std::format("File {} not present.", fullFileName);
+                PLOG_INFO << "File " << fullFileName << " not present.";
             }
         }
         catch (std::exception &ex)

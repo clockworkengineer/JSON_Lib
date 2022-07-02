@@ -14,7 +14,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <filesystem>
-#include <format>
 #include <chrono>
 #include <set>
 // ====
@@ -70,25 +69,25 @@ std::string prefixTestDataPath(const std::string &file)
 /// <param name="jNodeDetails">result of JNode tree analysis</param>
 void outputAnalysis(const JNodeDetails &jNodeDetails)
 {
-    PLOG_INFO << std::format("--------------------JNode Sizes---------------------");
-    PLOG_INFO << std::format("JNodeObject size {} in bytes.", sizeof(JNodeObject));
-    PLOG_INFO << std::format("JNodeArray size {} in bytes.", sizeof(JNodeArray));
-    PLOG_INFO << std::format("JNodeNumber size {} in bytes.", sizeof(JNodeNumber));
-    PLOG_INFO << std::format("JNodeString size {} in bytes.", sizeof(JNodeString));
-    PLOG_INFO << std::format("JNodeBoolean size {} in bytes.", sizeof(JNodeBoolean));
-    PLOG_INFO << std::format("JNodeNull size {} in bytes.", sizeof(JNodeNull));
-    PLOG_INFO << std::format("------------------JNode Tree Stats------------------");
-    PLOG_INFO << std::format("JNode Tree contains {} nodes.", jNodeDetails.totalNodes);
-    PLOG_INFO << std::format("JNode Tree size {} in bytes.", jNodeDetails.sizeInBytes);
-    PLOG_INFO << std::format("JNode Tree total {} keys.", jNodeDetails.totalKeys);
-    PLOG_INFO << std::format("JNode Tree contains {} unique keys.", jNodeDetails.unique_keys.size());
-    PLOG_INFO << std::format("JNode Tree total {} strings.", jNodeDetails.totalStrings);
-    PLOG_INFO << std::format("JNode Tree contains {} unique strings.", jNodeDetails.unique_strings.size());
-    PLOG_INFO << std::format("JNode Tree contains {} arrays.", jNodeDetails.totalArrays);
-    PLOG_INFO << std::format("JNode Tree max array size {}.", jNodeDetails.maxArraySize);
-    PLOG_INFO << std::format("JNode Tree contains {} objects.", jNodeDetails.totalObjects);
-    PLOG_INFO << std::format("JNode Tree max object size {}.", jNodeDetails.maxObjectSize);
-    PLOG_INFO << std::format("----------------------------------------------------");
+    PLOG_INFO << "--------------------JNode Sizes---------------------";
+    PLOG_INFO << "JNodeObject size "<< sizeof(JNodeObject) << "in bytes.";
+    PLOG_INFO << "JNodeArray size "<< sizeof(JNodeArray) << " in bytes.";
+    PLOG_INFO << "JNodeNumber size "<< sizeof(JNodeNumber) << " in bytes.";
+    PLOG_INFO << "JNodeString size "<< sizeof(JNodeString) << " in bytes.";
+    PLOG_INFO << "JNodeBoolean size "<< sizeof(JNodeBoolean) << " in bytes.";
+    PLOG_INFO << "JNodeNull size "<< sizeof(JNodeNull) << " in bytes.";
+    PLOG_INFO << "------------------JNode Tree Stats------------------";
+    PLOG_INFO << "JNode Tree contains "<<jNodeDetails.totalNodes << " nodes.";
+    PLOG_INFO << "JNode Tree size "<< jNodeDetails.sizeInBytes << " in bytes.";
+    PLOG_INFO << "JNode Tree total "<< jNodeDetails.totalKeys << " keys.";
+    PLOG_INFO << "JNode Tree contains "<< jNodeDetails.unique_keys.size()<< " unique keys.";
+    PLOG_INFO << "JNode Tree total "<< jNodeDetails.totalStrings << " strings.";
+    PLOG_INFO << "JNode Tree contains "<<jNodeDetails.unique_strings.size() << " unique strings.";
+    PLOG_INFO << "JNode Tree contains "<< jNodeDetails.totalArrays << " arrays.";
+    PLOG_INFO << "JNode Tree max array size "<<jNodeDetails.maxArraySize << ".";
+    PLOG_INFO << "JNode Tree contains "<< jNodeDetails.totalObjects << " objects.";
+    PLOG_INFO << "JNode Tree max object size "<< jNodeDetails.maxObjectSize<< ".";
+    PLOG_INFO << "----------------------------------------------------";
 }
 /// <summary>
 /// Recursively analyzes JNode tree.
@@ -164,13 +163,13 @@ void analyzeJNodeTree(const JNode &jNodeRoot)
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName)
 {
-    std::cout << std::format("Analyzing {}\n", fileName);
-    PLOG_INFO << std::format("Analyzing {}", fileName);
+    std::cout << "Analyzing "<< fileName << "\n";
+    PLOG_INFO << "Analyzing "<< fileName;
     JSON json;
     json.parse(FileSource{fileName});
     analyzeJNodeTree(json.root());
-    PLOG_INFO << std::format("Finished {}.", fileName);
-    std::cout << std::format("Finished {}.\n", fileName);
+    PLOG_INFO << "Finished "<< fileName << ".";
+    std::cout << "Finished " << fileName << ".\n";
 }
 // ============================
 // ===== MAIN ENTRY POINT =====
@@ -204,7 +203,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
             }
             else
             {
-                PLOG_INFO << std::format("File {} not present.", fullFileName);
+                PLOG_INFO << "File "<< fullFileName << " not present.";
             }
         }
         catch (std::exception &ex)
