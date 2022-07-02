@@ -37,16 +37,20 @@ using namespace JSONLib;
 // LOCAL TYPES/DEFINITIONS
 // ========================
 //
-// JNode Note Tree Details
+// JNode Tree Details
 //
 struct JNodeDetails
 {
     int64_t totalNodes{};
-    int64_t sizeInBytes{};
+    size_t sizeInBytes{};
     int64_t totalKeys{};
     std::set<std::string> unique_keys{};
     int64_t totalStrings{};
     std::set<std::string> unique_strings{};
+    size_t maxArraySize{};
+    int64_t totalArrays{};
+    size_t maxObjectSize{};
+    int64_t totalObjects{};
 };
 // ===============
 // LOCAL FUNCTIONS
@@ -76,14 +80,18 @@ void outputAnalysis(const JNodeDetails &jNodeDetails)
     PLOG_INFO << std::format("------------------JNode Tree Stats------------------");
     PLOG_INFO << std::format("JNode Tree contains {} nodes.", jNodeDetails.totalNodes);
     PLOG_INFO << std::format("JNode Tree size {} in bytes.", jNodeDetails.sizeInBytes);
-    PLOG_INFO << std::format("JNode total {} keys.", jNodeDetails.totalKeys);
-    PLOG_INFO << std::format("JNode contains {} unique keys.", jNodeDetails.unique_keys.size());
-    PLOG_INFO << std::format("JNode total {} strings.", jNodeDetails.totalStrings);
-    PLOG_INFO << std::format("JNode contains {} unique strings.", jNodeDetails.unique_strings.size());
+    PLOG_INFO << std::format("JNode Tree total {} keys.", jNodeDetails.totalKeys);
+    PLOG_INFO << std::format("JNode Tree contains {} unique keys.", jNodeDetails.unique_keys.size());
+    PLOG_INFO << std::format("JNode Tree total {} strings.", jNodeDetails.totalStrings);
+    PLOG_INFO << std::format("JNode Tree contains {} unique strings.", jNodeDetails.unique_strings.size());
+    PLOG_INFO << std::format("JNode Tree contains {} arrays.", jNodeDetails.totalArrays);
+    PLOG_INFO << std::format("JNode Tree max array size {}.", jNodeDetails.maxArraySize);
+    PLOG_INFO << std::format("JNode Tree contains {} objects.", jNodeDetails.totalObjects);
+    PLOG_INFO << std::format("JNode Tree max object size {}.", jNodeDetails.maxObjectSize);
     PLOG_INFO << std::format("----------------------------------------------------");
 }
 /// <summary>
-/// Recursively analyzes JNode tree details.
+/// Recursively analyzes JNode tree.
 /// </summary>
 /// <param name="jNode">Current JNode</param>
 /// <param name="jNodeDetails">Result of JNode tree analysis</param>
@@ -111,6 +119,8 @@ void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails)
     case JNodeType::object:
     {
         jNodeDetails.sizeInBytes += sizeof(JNodeObject);
+        jNodeDetails.totalObjects++;
+        jNodeDetails.maxObjectSize = std::max(JNodeRef<JNodeObject>(jNode).objects().size(), jNodeDetails.maxObjectSize);
         for (auto &[key, jNodePtr] : JNodeRef<JNodeObject>(jNode).objects())
         {
             analyzeJNode(JNodeRef<JNodeObject>(jNode)[key], jNodeDetails);
@@ -124,6 +134,8 @@ void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails)
     case JNodeType::array:
     {
         jNodeDetails.sizeInBytes += sizeof(JNodeArray);
+        jNodeDetails.totalArrays++;
+        jNodeDetails.maxArraySize = std::max(JNodeRef<JNodeArray>(jNode).array().size(), jNodeDetails.maxArraySize);
         for (auto &bNodeEntry : JNodeRef<JNodeArray>(jNode).array())
         {
             analyzeJNode(JNodeRef<JNode>(*bNodeEntry), jNodeDetails);
@@ -136,7 +148,7 @@ void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails)
     }
 }
 /// <summary>
-/// Analyzes JNode tree and output its details.
+/// Analyzes JNode tree and outputs its details.
 /// </summary>
 /// <param name="jNode">Current JNode</param>
 /// <param name="jNodeDetails">Root of JNode</param>
@@ -171,7 +183,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
         "testfile003.json",
         "testfile004.json",
         "testfile005.json",
-        // "large-file.json" // Not kept in GitHub as 24Meg in size.
+        "large-file.json" // Not kept in GitHub as 24Meg in size.
     };
     //
     // Initialise logging.
