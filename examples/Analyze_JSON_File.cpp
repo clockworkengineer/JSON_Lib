@@ -1,9 +1,10 @@
 //
 // Program: Analyze_JSON_File
 //
-// Description:
+// Description: For a JSON file parse it then analyze its JNode tree
+// and produce a output report of the analysis.
 //
-// Dependencies: C20++, JSONLib.
+// Dependencies: C20++, PLOG, JSONLib.
 //
 // =============
 // INCLUDE FILES

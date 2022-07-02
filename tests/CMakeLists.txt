@@ -22,6 +22,8 @@ set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
 set(TEST_SOURCES
     JSONLib_Tests_Main.cpp
+    JSONLib_Tests_ISource.cpp
+    JSONLib_Tests_IDestination.cpp
     JSONLib_Tests_Parse.cpp
     JSONLib_Tests_Stringify.cpp
     JSONLib_Tests_Helper.cpp)
