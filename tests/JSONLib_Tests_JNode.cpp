@@ -109,7 +109,7 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]")
   }
   SECTION("Floating point converted to double", "[JSON][JNode][JNodeNumber]")
   {
-    double doubleValue;
+    long double doubleValue;
     BufferSource jsonSource{"678.8990"};
     json.parse(jsonSource);
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).floatingpoint(doubleValue));
@@ -125,7 +125,7 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]")
   }
   SECTION("Integer point not converted to double", "[JSON][JNode][JNodeNumber]")
   {
-    double doubleValue;
+    long double doubleValue;
     BufferSource jsonSource{"78989"};
     json.parse(jsonSource);
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).floatingpoint(doubleValue));

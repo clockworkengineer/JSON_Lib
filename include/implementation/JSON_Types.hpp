@@ -7,6 +7,7 @@
 #include <vector>
 #include <memory>
 #include <stdexcept>
+#include <limits>
 // =========
 // NAMESPACE
 // =========
@@ -21,6 +22,11 @@ namespace JSONLib
         {
         }
     };
+    // ======================================
+    // Numeric values max width in characters
+    // ======================================
+    static constexpr int kLongLongWidth = std::numeric_limits<long long>::digits10 + 2;
+    static constexpr int kLongDoubleWidth = std::numeric_limits<long double>::digits10 + 2;
     // ===========
     // JNode types
     // ===========
@@ -177,7 +183,7 @@ namespace JSONLib
         explicit JNodeNumber(std::string number) : JNode(JNodeType::number), m_number(std::move(number))
         {
         }
-        // Convert to long returning true on success
+        // Convert to long long returning true on success
         // Note: Can still return a long value for floating point
         // but false as the number is not in integer format
         [[nodiscard]] bool integer(long long &longValue) const
@@ -186,8 +192,8 @@ namespace JSONLib
             longValue = std::strtoll(m_number.c_str(), &end, 10);
             return (*end == '\0'); // If not all characters used then not success
         }
-        // Convert to double returning true on success
-        [[nodiscard]] bool floatingpoint(double &doubleValue) const
+        // Convert to long double returning true on success
+        [[nodiscard]] bool floatingpoint(long double &doubleValue) const
         {
             char *end = nullptr;
             doubleValue = std::strtod(m_number.c_str(), &end);
@@ -200,7 +206,7 @@ namespace JSONLib
             {
                 return (true);
             }
-            if ([[maybe_unused]] double doubleValue{}; floatingpoint(doubleValue))
+            if ([[maybe_unused]] long double doubleValue{}; floatingpoint(doubleValue))
             {
                 return (true);
             }

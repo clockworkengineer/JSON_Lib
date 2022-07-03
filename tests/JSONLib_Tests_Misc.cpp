@@ -15,6 +15,9 @@ using namespace JSONLib;
 // ==========
 // Test cases
 // ==========
+// ===============
+// JSON Translator
+// ===============
 TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
 {
   JSON_Converter converter;
@@ -46,10 +49,13 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
   }
   SECTION("Translate to escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
   {
-    std::u8string actual { u8"Begin \U0001D11E End" };
+    std::u8string actual{u8"Begin \U0001D11E End"};
     REQUIRE(translator.to({actual.begin(), actual.end()}) == "Begin \\uD834\\uDD1E End");
   }
 }
+// ========================
+// R-Value Reference API(s)
+// ========================
 TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Reference]")
 {
   JSON json;
@@ -61,13 +67,17 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Ref
   }
   SECTION("Parse/Stringify both with R-Value reference (File).", "[JSON][JNode][R-Value Reference]")
   {
-    std::filesystem::remove(prefixTestDataPath(kGeneratedJSONFile));
-    json.parse(FileSource{prefixTestDataPath(kSingleJSONFile)});
-    json.stringify(FileDestination{prefixTestDataPath(kGeneratedJSONFile)});
-    REQUIRE(readFromFile(prefixTestDataPath(kGeneratedJSONFile)) ==
-            stripWhiteSpace(json, (readFromFile(prefixTestDataPath(kSingleJSONFile)))));
+    const std::string testFileName{prefixTestDataPath(kSingleJSONFile)};
+    const std::string generatedFileName{prefixTestDataPath(kGeneratedJSONFile)};
+    std::filesystem::remove(generatedFileName);
+    json.parse(FileSource{testFileName});
+    json.stringify(FileDestination{generatedFileName});
+    REQUIRE(readFromFile(generatedFileName) == stripWhiteSpace(json, (readFromFile(testFileName))));
   }
 }
+// =====================
+// Strip JSON Whitespace
+// =====================
 TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
 {
   JSON json;
@@ -89,14 +99,15 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
   }
   SECTION("Stripped (File) should be the same as parsed then stringified JSON", "[JSON][Parse][Strip]")
   {
-    std::filesystem::remove(prefixTestDataPath(kGeneratedJSONFile));
+    const std::string generatedFileName{prefixTestDataPath(kGeneratedJSONFile)};
+    std::filesystem::remove(generatedFileName);
     FileSource jsonSource{prefixTestDataPath(testFile)};
     BufferDestination jsonDestination;
     json.parse(jsonSource);
     json.stringify(jsonDestination);
     jsonSource.reset();
-    FileDestination strippedDestination{prefixTestDataPath(kGeneratedJSONFile)};
+    FileDestination strippedDestination{generatedFileName};
     json.strip(jsonSource, strippedDestination);
-    REQUIRE(jsonDestination.getBuffer() == readFromFile(prefixTestDataPath(kGeneratedJSONFile)));
+    REQUIRE(jsonDestination.getBuffer() == readFromFile(generatedFileName));
   }
 }

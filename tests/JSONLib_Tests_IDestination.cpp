@@ -16,7 +16,7 @@ using namespace JSONLib;
 // Test cases
 // ==========
 // =================
-// DestinationBuffer
+// BufferDestination
 // =================
 TEST_CASE("IDestination (Buffer) interface.", "[JSON][Stringify][IDestination]")
 {
@@ -44,7 +44,7 @@ TEST_CASE("IDestination (Buffer) interface.", "[JSON][Stringify][IDestination]")
   }
 }
 // ===============
-// DestinationFile
+// FileDestination
 // ===============
 TEST_CASE("IDestination (File) interface.", "[JSON][Parse][IDestination]")
 {
