@@ -1,7 +1,7 @@
 //
 // Unit Tests: JSON
 //
-// Description: Miscellaneous unit tests for JSON class 
+// Description: Miscellaneous unit tests for JSON class
 // using the Catch2 test framework.
 //
 // ================
@@ -20,8 +20,9 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
   JSON_Converter converter;
   JSON_Translator translator(converter);
   SECTION("Translate from escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
-  { // Needed to convert const char8_t * to string
-    REQUIRE(translator.from("Begin \\uD834\\uDD1E End") == reinterpret_cast<const char *>(u8"Begin \U0001D11E End"));
+  {
+    std::u8string expected{u8"Begin \U0001D11E End"};
+    REQUIRE(translator.from("Begin \\uD834\\uDD1E End") == std::string{expected.begin(), expected.end()});
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 \\uDD1E End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
@@ -44,8 +45,9 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
     REQUIRE_THROWS_WITH(translator.from("Begin \\uDD1E End"), "JSON Translator Error: Syntax error detected.");
   }
   SECTION("Translate to escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
-  { // Needed to convert const char8_t * to string
-    REQUIRE(translator.to(reinterpret_cast<const char *>(u8"Begin \U0001D11E End")) == "Begin \\uD834\\uDD1E End");
+  {
+    std::u8string actual { u8"Begin \U0001D11E End" };
+    REQUIRE(translator.to({actual.begin(), actual.end()}) == "Begin \\uD834\\uDD1E End");
   }
 }
 TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Reference]")
