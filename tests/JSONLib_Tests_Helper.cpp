@@ -7,9 +7,9 @@
 // Test definitions
 // =================
 #include "JSONLib_Tests.hpp"
-// =======================
-// JSON class namespace
-// =======================
+// ======================
+// JSON library namespace
+// ======================
 using namespace JSONLib;
 // ==========================
 // Unit test helper functions
@@ -21,7 +21,7 @@ using namespace JSONLib;
 /// <returns>Full path to test data file</returns>
 std::string prefixTestDataPath(const std::string &file)
 {
-  std::filesystem::path currentPath = std::filesystem::current_path() / "testData" / file;
+  const std::filesystem::path currentPath = std::filesystem::current_path() / "testData" / file;
   return (currentPath.string());
 }
 /// <summary>
@@ -30,7 +30,7 @@ std::string prefixTestDataPath(const std::string &file)
 /// </summary>
 /// <param name="jsonFileName">JSON file name</param>
 /// <returns></returns>
-std::string readBufferFromFile(const std::string &jsonFileName)
+std::string readFromFile(const std::string &jsonFileName)
 {
   std::ifstream jsonFile;
   jsonFile.open(jsonFileName, std::ios_base::binary);
@@ -43,7 +43,7 @@ std::string readBufferFromFile(const std::string &jsonFileName)
 /// </summary>
 /// <param name="jNode">Pointer to JNNodeArray</param>
 /// <returns></returns>
-void checkArray(JNode &jNode)
+void checkArray(const JNode &jNode)
 { // Array [\"Dog\",1964,true,null]
   REQUIRE(jNode.getNodeType() == JNodeType::array);
   REQUIRE(JNodeRef<JNodeArray>(jNode).size() == 4);
@@ -61,7 +61,7 @@ void checkArray(JNode &jNode)
 /// </summary>
 /// <param name="jNode">Pointer to JNodeObject</param>
 /// <returns></returns>
-void checkObject(JNode &jNode)
+void checkObject(const JNode &jNode)
 { // {\"City\":\"Southampton\",\"Population\":500000}
   REQUIRE(jNode.getNodeType() == JNodeType::object);
   REQUIRE(JNodeRef<JNodeObject>(jNode).size() == 2);

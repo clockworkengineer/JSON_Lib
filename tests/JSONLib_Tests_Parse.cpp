@@ -8,9 +8,9 @@
 // Test definitions
 // =================
 #include "JSONLib_Tests.hpp"
-// =======================
-// JSON class namespace
-// =======================
+// ======================
+// JSON library namespace
+// ======================
 using namespace JSONLib;
 // ==========
 // Test cases
@@ -266,7 +266,7 @@ TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Pars
 
     SECTION("Parse from buffer", "[JSON][Parse]")
     {
-        BufferSource jsonSource{readBufferFromFile(prefixTestDataPath(testFile))};
+        BufferSource jsonSource{readFromFile(prefixTestDataPath(testFile))};
         REQUIRE_NOTHROW(json.parse(jsonSource));
         jsonSource.reset();
         json.parse(jsonSource);

@@ -8,9 +8,9 @@
 // Test definitions
 // =================
 #include "JSONLib_Tests.hpp"
-// =======================
-// JSON class namespace
-// =======================
+// ======================
+// JSON library namespace
+// ======================
 using namespace JSONLib;
 // ==========
 // Test cases
@@ -133,7 +133,7 @@ TEST_CASE("Stringify to a file and check result.", "[JSON][Stringify][Exceptions
         FileDestination jsonDestination{prefixTestDataPath(kGeneratedJSONFile)};
         json.parse(jsonSource);
         json.stringify(jsonDestination);
-        REQUIRE(readBufferFromFile(prefixTestDataPath(kGeneratedJSONFile)) == expected);
+        REQUIRE(readFromFile(prefixTestDataPath(kGeneratedJSONFile)) == expected);
     }
     SECTION("Stringify array to file and check value", "[JSON][Stringify]")
     {
@@ -143,7 +143,7 @@ TEST_CASE("Stringify to a file and check result.", "[JSON][Stringify][Exceptions
         FileDestination jsonDestination{prefixTestDataPath(kGeneratedJSONFile)};
         json.parse(jsonSource);
         json.stringify(jsonDestination);
-        REQUIRE(readBufferFromFile(prefixTestDataPath(kGeneratedJSONFile)) == expected);
+        REQUIRE(readFromFile(prefixTestDataPath(kGeneratedJSONFile)) == expected);
     }
 }
 TEST_CASE("Stringify generated exceptions", "[JSON][Stringify][Exceptions]")
@@ -165,7 +165,7 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.", "[
                                                   "testfile005.json"}));
     SECTION("Stringify to  buffer and check value", "[JSON][Stringify]")
     {
-        std::string jsonFileBuffer{readBufferFromFile(prefixTestDataPath(testFile))};
+        std::string jsonFileBuffer{readFromFile(prefixTestDataPath(testFile))};
         BufferSource jsonSource{jsonFileBuffer};
         BufferDestination jsonDestination;
         json.parse(jsonSource);
@@ -175,12 +175,12 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.", "[
     SECTION("Stringify to file and check value", "[JSON][Stringify]")
     {
         std::filesystem::remove(prefixTestDataPath(kGeneratedJSONFile));
-        std::string jsonFileBuffer{readBufferFromFile(prefixTestDataPath(testFile))};
+        std::string jsonFileBuffer{readFromFile(prefixTestDataPath(testFile))};
         BufferSource jsonSource{jsonFileBuffer};
         FileDestination jsonDestination{prefixTestDataPath(kGeneratedJSONFile)};
         json.parse(jsonSource);
         json.stringify(jsonDestination);
-        REQUIRE(readBufferFromFile(prefixTestDataPath(kGeneratedJSONFile)) == stripWhiteSpace(json, jsonFileBuffer));
+        REQUIRE(readFromFile(prefixTestDataPath(kGeneratedJSONFile)) == stripWhiteSpace(json, jsonFileBuffer));
     }
 }
 TEST_CASE("JSON object for stringification of strings with escape characters.", "[JSON][Stringify]")

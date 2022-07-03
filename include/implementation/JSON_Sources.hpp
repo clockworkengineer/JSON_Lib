@@ -61,7 +61,10 @@ namespace JSONLib
         {
             m_bufferPosition = 0;
         }
-
+        [[nodiscard]] std::size_t position() const override
+        {
+            return (m_bufferPosition);
+        }
     private:
         std::size_t m_bufferPosition = 0;
         std::string m_parseBuffer;
@@ -114,7 +117,10 @@ namespace JSONLib
             m_source.clear();
             m_source.seekg(0, std::ios_base::beg);
         }
-
+        std::size_t position() const override
+        {
+            return (static_cast<std::size_t>(m_source.tellg()));
+        }
     private:
         mutable std::ifstream m_source;
     };

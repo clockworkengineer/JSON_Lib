@@ -50,6 +50,10 @@ namespace JSONLib
         // Reset to beginning of source stream
         // ===================================
         virtual void reset() = 0;
+        // ===============================================
+        // Current character position within source stream
+        // ===============================================
+        [[nodiscard]] virtual std::size_t position() const = 0;
         // =====================================
         // Is the current character whitespace ?
         // =====================================

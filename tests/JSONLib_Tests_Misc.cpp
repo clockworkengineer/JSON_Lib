@@ -8,9 +8,9 @@
 // Test definitions
 // =================
 #include "JSONLib_Tests.hpp"
-// =======================
-// JSON class namespace
-// =======================
+// ======================
+// JSON library namespace
+// ======================
 using namespace JSONLib;
 // ==========
 // Test cases
@@ -64,8 +64,8 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Ref
     std::filesystem::remove(prefixTestDataPath(kGeneratedJSONFile));
     json.parse(FileSource{prefixTestDataPath(kSingleJSONFile)});
     json.stringify(FileDestination{prefixTestDataPath(kGeneratedJSONFile)});
-    REQUIRE(readBufferFromFile(prefixTestDataPath(kGeneratedJSONFile)) ==
-            stripWhiteSpace(json, (readBufferFromFile(prefixTestDataPath(kSingleJSONFile)))));
+    REQUIRE(readFromFile(prefixTestDataPath(kGeneratedJSONFile)) ==
+            stripWhiteSpace(json, (readFromFile(prefixTestDataPath(kSingleJSONFile)))));
   }
 }
 TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
@@ -78,7 +78,7 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
                                                 "testfile005.json"}));
   SECTION("Stripped (Buffer) should be the same as parsed then stringified JSON", "[JSON][Parse][Strip]")
   {
-    BufferSource jsonSource{readBufferFromFile(prefixTestDataPath(testFile))};
+    BufferSource jsonSource{readFromFile(prefixTestDataPath(testFile))};
     BufferDestination jsonDestination;
     json.parse(jsonSource);
     json.stringify(jsonDestination);
@@ -97,6 +97,6 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
     jsonSource.reset();
     FileDestination strippedDestination{prefixTestDataPath(kGeneratedJSONFile)};
     json.strip(jsonSource, strippedDestination);
-    REQUIRE(jsonDestination.getBuffer() == readBufferFromFile(prefixTestDataPath(kGeneratedJSONFile)));
+    REQUIRE(jsonDestination.getBuffer() == readFromFile(prefixTestDataPath(kGeneratedJSONFile)));
   }
 }

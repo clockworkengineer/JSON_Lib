@@ -8,13 +8,16 @@
 // Test definitions
 // =================
 #include "JSONLib_Tests.hpp"
-// =======================
-// JSON class namespace
-// =======================
+// ======================
+// JSON library namespace
+// ======================
 using namespace JSONLib;
 // ==========
 // Test cases
 // ==========
+// ==============
+// JNode Indexing
+// ==============
 TEST_CASE("Use of JNode indexing operators", "[JSON][JNode][Index]")
 {
   JSON json;
@@ -58,6 +61,9 @@ TEST_CASE("Use of JNode indexing operators", "[JSON][JNode][Index]")
     REQUIRE_THROWS_WITH((json.root())[3].getNodeType() == JNodeType::array, "JNode Error: Invalid index used to access array.");
   }
 }
+// =========================
+// JNode Reference functions
+// =========================
 TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]")
 {
   JSON json;
@@ -88,6 +94,9 @@ TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]")
     REQUIRE(JNodeRef<JNodeString>((json.root())["City"]).string() == "Southampton");
   }
 }
+// =======================
+// JNode Number Conversion
+// =======================
 TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]")
 {
   JSON json;
