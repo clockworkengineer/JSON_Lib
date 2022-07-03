@@ -266,7 +266,7 @@ TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Pars
 
     SECTION("Parse from buffer", "[JSON][Parse]")
     {
-        BufferSource jsonSource{readJSONFromFile(prefixTestDataPath(testFile))};
+        BufferSource jsonSource{readBufferFromFile(prefixTestDataPath(testFile))};
         REQUIRE_NOTHROW(json.parse(jsonSource));
         jsonSource.reset();
         json.parse(jsonSource);
@@ -284,18 +284,6 @@ TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Pars
 TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]")
 {
     JSON json;
-    // Note: The tests for syntax errors is not exhaustive and more may be added over time.
-    // JSON json;
-    // SECTION("Parse passing a empty string", "[JSON][Parse]")
-    // {
-    //     REQUIRE_THROWS_AS(json.parseBuffer(""), std::invalid_argument);
-    //     REQUIRE_THROWS_WITH(json.parseBuffer(""), "Empty string passed to be parsed.");
-    // }
-    // SECTION("Parse file passing a empty file name", "[JSON][Parse]")
-    // {
-    //     REQUIRE_THROWS_AS(json.parseFile(""), std::invalid_argument);
-    //     REQUIRE_THROWS_WITH(json.parseFile(""), "Empty file name passed to be parsed.");
-    // }
     SECTION("Parse missing terminating '\"' in string", "[JSON][Parse]")
     {
         BufferSource jsonSource{"{ \"one\" : \"Apple }"};

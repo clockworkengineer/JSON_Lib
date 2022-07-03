@@ -30,7 +30,7 @@ std::string prefixTestDataPath(const std::string &file)
 /// </summary>
 /// <param name="jsonFileName">JSON file name</param>
 /// <returns></returns>
-std::string readJSONFromFile(const std::string &jsonFileName)
+std::string readBufferFromFile(const std::string &jsonFileName)
 {
   std::ifstream jsonFile;
   jsonFile.open(jsonFileName, std::ios_base::binary);

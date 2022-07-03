@@ -75,6 +75,6 @@ TEST_CASE("IDestination (File) interface.", "[JSON][Parse][IDestination]")
     std::filesystem::path filePath{prefixTestDataPath(kGeneratedJSONFile)};
     file.add("65767");
     REQUIRE(std::filesystem::file_size(filePath) == 5);
-    REQUIRE(readJSONFromFile(prefixTestDataPath(kGeneratedJSONFile)) == "65767");
+    REQUIRE(readBufferFromFile(prefixTestDataPath(kGeneratedJSONFile)) == "65767");
   }
 }

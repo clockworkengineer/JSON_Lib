@@ -133,7 +133,7 @@ TEST_CASE("Stringify to a file and check result.", "[JSON][Stringify][Exceptions
         FileDestination jsonDestination{prefixTestDataPath(kGeneratedJSONFile)};
         json.parse(jsonSource);
         json.stringify(jsonDestination);
-        REQUIRE(readJSONFromFile(prefixTestDataPath(kGeneratedJSONFile)) == expected);
+        REQUIRE(readBufferFromFile(prefixTestDataPath(kGeneratedJSONFile)) == expected);
     }
     SECTION("Stringify array to file and check value", "[JSON][Stringify]")
     {
@@ -143,7 +143,7 @@ TEST_CASE("Stringify to a file and check result.", "[JSON][Stringify][Exceptions
         FileDestination jsonDestination{prefixTestDataPath(kGeneratedJSONFile)};
         json.parse(jsonSource);
         json.stringify(jsonDestination);
-        REQUIRE(readJSONFromFile(prefixTestDataPath(kGeneratedJSONFile)) == expected);
+        REQUIRE(readBufferFromFile(prefixTestDataPath(kGeneratedJSONFile)) == expected);
     }
 }
 TEST_CASE("Stringify generated exceptions", "[JSON][Stringify][Exceptions]")
@@ -154,21 +154,6 @@ TEST_CASE("Stringify generated exceptions", "[JSON][Stringify][Exceptions]")
         REQUIRE_THROWS_AS(json.stringify(BufferDestination {}), JSONLib::Error);
         REQUIRE_THROWS_WITH(json.stringify(BufferDestination {}), "JSON Error: No JSON to stringify.");
     }
-// //     SECTION("Stringify passed invalid JNode type", "[JSON][Stringify][Exceptions]")
-// //     {
-// //         REQUIRE_THROWS_AS(json.stringifyToBuffer(JNode::Ptr(new JNode())), std::runtime_error);
-// //         REQUIRE_THROWS_WITH(json.stringifyToBuffer(JNode::Ptr(new JNode())), "Unknown JNode type encountered during stringification.");
-// //     }
-// //     SECTION("Stringify file passed invalid JNode type", "[JSON][Stringify][Exceptions]")
-// //     {
-// //         REQUIRE_THROWS_AS(json.stringifyToFile(JNode::Ptr(nullptr), prefixTestDataPath(kGeneratedJSONFile)), std::invalid_argument);
-// //         REQUIRE_THROWS_WITH(json.stringifyToFile(JNode::Ptr(nullptr), prefixTestDataPath(kGeneratedJSONFile)), "Nullptr passed as JNode root to be stringified.");
-// //     }
-// //     SECTION("Stringify file passed empty string for file name", "[JSON][Stringify][Exceptions]")
-// //     {
-// //         REQUIRE_THROWS_AS(json.stringifyToFile(JNode::Ptr(new JNode()), ""), std::invalid_argument);
-// //         REQUIRE_THROWS_WITH(json.stringifyToFile(JNode::Ptr(new JNode()), ""), "Empty file name passed to be stringified.");
-// //     }
 }
 TEST_CASE("JSON object for stringification of a list of example JSON files.", "[JSON][Stringify]")
 {
@@ -180,7 +165,7 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.", "[
                                                   "testfile005.json"}));
     SECTION("Stringify to  buffer and check value", "[JSON][Stringify]")
     {
-        std::string jsonFileBuffer{readJSONFromFile(prefixTestDataPath(testFile))};
+        std::string jsonFileBuffer{readBufferFromFile(prefixTestDataPath(testFile))};
         BufferSource jsonSource{jsonFileBuffer};
         BufferDestination jsonDestination;
         json.parse(jsonSource);
@@ -190,12 +175,12 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.", "[
     SECTION("Stringify to file and check value", "[JSON][Stringify]")
     {
         std::filesystem::remove(prefixTestDataPath(kGeneratedJSONFile));
-        std::string jsonFileBuffer{readJSONFromFile(prefixTestDataPath(testFile))};
+        std::string jsonFileBuffer{readBufferFromFile(prefixTestDataPath(testFile))};
         BufferSource jsonSource{jsonFileBuffer};
         FileDestination jsonDestination{prefixTestDataPath(kGeneratedJSONFile)};
         json.parse(jsonSource);
         json.stringify(jsonDestination);
-        REQUIRE(readJSONFromFile(prefixTestDataPath(kGeneratedJSONFile)) == stripWhiteSpace(json, jsonFileBuffer));
+        REQUIRE(readBufferFromFile(prefixTestDataPath(kGeneratedJSONFile)) == stripWhiteSpace(json, jsonFileBuffer));
     }
 }
 TEST_CASE("JSON object for stringification of strings with escape characters.", "[JSON][Stringify]")

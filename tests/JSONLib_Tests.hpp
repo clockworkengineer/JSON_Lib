@@ -1,34 +1,34 @@
 #pragma once
-// ======================
-// Test framework include
-// ======================
+// =====================
+// Catch2 Test framework
+// =====================
 #include "catch2/catch.hpp"
-// =========================
-// Class under test includes
-// =========================
+// ====
+// JSON
+// ====
 #include "JSON.hpp"
 #include "JSON_Types.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Converter.hpp"
 #include "JSON_Translator.hpp"
-// ============
-// STL includes
-// ============
+// =======
+// C++ STL
+// =======
 #include <filesystem>
 #include <string>
 #include <sstream>
 // ===================
 // Unit test constants
 // ===================
-#define kGeneratedJSONFile "generated.json"
-#define kSingleJSONFile "testfile001.json"
-#define kNonExistantJSONFile "doesntexist.json"
+inline static const char *kGeneratedJSONFile = "generated.json";
+inline static const char *kSingleJSONFile = "testfile001.json" ;
+inline static const char *kNonExistantJSONFile = "doesntexist.json";
 // ==========================
 // Unit test helper functions
 // ==========================
 std::string prefixTestDataPath(const std::string &file);
-std::string readJSONFromFile(const std::string &jsonFileName);
+std::string readBufferFromFile(const std::string &jsonFileName);
 void checkObject(JSONLib::JNode &jNode);
 void checkArray(JSONLib::JNode &jNode);
 std::string stripWhiteSpace(JSONLib::JSON &json, const std::string &jsonBuffer);

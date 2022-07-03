@@ -21,11 +21,12 @@ enable_testing()
 set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
 set(TEST_SOURCES
-    JSONLib_Tests_Main.cpp
+    JSONLib_Tests_JNode.cpp
     JSONLib_Tests_ISource.cpp
     JSONLib_Tests_IDestination.cpp
     JSONLib_Tests_Parse.cpp
     JSONLib_Tests_Stringify.cpp
+    JSONLib_Tests_Misc.cpp
     JSONLib_Tests_Helper.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})

@@ -36,7 +36,7 @@ TEST_CASE("ISource (File) interface.", "[JSON][Parse][ISource]")
   }
   SECTION("Create FileSource with non existant file.", "[JSON][Parse][ISource][Exception]")
   {
-    REQUIRE_THROWS_AS(FileSource(prefixTestDataPath(kNonExistantJSONFile)), JSONLib::ISource::Error);
+    REQUIRE_THROWS_AS(FileSource(prefixTestDataPath(kNonExistantJSONFile)), ISource::Error);
     REQUIRE_THROWS_WITH(FileSource(prefixTestDataPath(kNonExistantJSONFile)), "ISource Error: File input stream failed to open or does not exist.");
   }
   SECTION("Create FileSource with testfile001.json and then try to read off the end", "[JSON][Parse][ISource][Exception]")
@@ -46,13 +46,13 @@ TEST_CASE("ISource (File) interface.", "[JSON][Parse][ISource]")
     {
       source.next();
     }
-    REQUIRE_THROWS_AS(source.next(), JSONLib::ISource::Error);
+    REQUIRE_THROWS_AS(source.next(), ISource::Error);
     REQUIRE_THROWS_WITH(source.next(), "ISource Error: Tried to read past end of file.");
   }
 }
 TEST_CASE("ISource (Buffer) interface. Contains file testfile001.json.", "[JSON][Parse][ISource]")
 {
-  std::string buffer{readJSONFromFile(prefixTestDataPath(kSingleJSONFile))};
+  std::string buffer{readBufferFromFile(prefixTestDataPath(kSingleJSONFile))};
   SECTION("Create BufferSource.", "[JSON][Parse][ISource]")
   {
     REQUIRE_NOTHROW(BufferSource(buffer));
@@ -84,7 +84,7 @@ TEST_CASE("ISource (Buffer) interface. Contains file testfile001.json.", "[JSON]
   }
   SECTION("Create BufferSource with empty buffer.", "[JSON][Parse][ISource][Exception]")
   {
-    REQUIRE_THROWS_AS(BufferSource(""), JSONLib::ISource::Error);
+    REQUIRE_THROWS_AS(BufferSource(""), ISource::Error);
     REQUIRE_THROWS_WITH(BufferSource(""), "ISource Error: Empty source buffer passed to be parsed.");
   }
   SECTION("Create BufferSource with testfile001.json and then try to read off the end", "[JSON][Parse][ISource][Exception]")
@@ -94,7 +94,7 @@ TEST_CASE("ISource (Buffer) interface. Contains file testfile001.json.", "[JSON]
     {
       source.next();
     }
-    REQUIRE_THROWS_AS(source.next(), JSONLib::ISource::Error);
+    REQUIRE_THROWS_AS(source.next(), ISource::Error);
     REQUIRE_THROWS_WITH(source.next(), "ISource Error: Tried to read past and of buffer.");
   }
 }
