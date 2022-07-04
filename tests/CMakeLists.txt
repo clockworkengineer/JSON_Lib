@@ -25,7 +25,8 @@ set(TEST_SOURCES
     JSONLib_Tests_JNode.cpp
     JSONLib_Tests_ISource.cpp
     JSONLib_Tests_IDestination.cpp
-    JSONLib_Tests_Parse.cpp
+    JSONLib_Tests_Parse_Escapes.cpp
+    JSONLib_Tests_Parse_Misc.cpp
     JSONLib_Tests_Parse_Simple.cpp
     JSONLib_Tests_Parse_Collection.cpp
     JSONLib_Tests_Parse_Whitespace.cpp
