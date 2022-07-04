@@ -51,7 +51,9 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.", "[
                                                   "testfile002.json",
                                                   "testfile003.json",
                                                   "testfile004.json",
-                                                  "testfile005.json"}));
+                                                  "testfile005.json",
+                                                  "testfile006.json",
+                                                  "testfile007.json"}));
     SECTION("Stringify to  buffer and check value", "[JSON][Stringify][Buffer]")
     {
         const std::string jsonFileBuffer{readFromFile(prefixTestDataPath(testFile))};

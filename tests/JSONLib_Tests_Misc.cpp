@@ -85,7 +85,10 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
                                                 "testfile002.json",
                                                 "testfile003.json",
                                                 "testfile004.json",
-                                                "testfile005.json"}));
+                                                "testfile005.json",
+                                                "testfile006.json",
+                                                "testfile007.json",
+                                                }));
   SECTION("Stripped (Buffer) should be the same as parsed then stringified JSON", "[JSON][Parse][Strip]")
   {
     BufferSource jsonSource{readFromFile(prefixTestDataPath(testFile))};

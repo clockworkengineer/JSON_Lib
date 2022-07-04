@@ -25,7 +25,9 @@ TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Pars
                                                   "testfile002.json",
                                                   "testfile003.json",
                                                   "testfile004.json",
-                                                  "testfile005.json"}));
+                                                  "testfile005.json",
+                                                  "testfile006.json",
+                                                  "testfile007.json"}));
 
     SECTION("Parse from buffer", "[JSON][Parse][Examples][Buffer]")
     {

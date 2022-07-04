@@ -1,7 +1,7 @@
 //
 // Unit Tests: JSON
 //
-// Description: JSON stringification of escaped character 
+// Description: JSON stringification of escaped character
 // unit tests for JSON class using the Catch2 test framework.
 //
 // ================
@@ -22,6 +22,15 @@ using namespace JSONLib;
 TEST_CASE("JSON object for stringification of strings with escape characters.", "[JSON][Stringify][Escapes]")
 {
     JSON json;
+    SECTION("Stringify JSON string with escapes '/' to buffer and check value", "[JSON][Stringify][Escapes]")
+    {
+        const std::string expected{"\"Test String / \\t \""};
+        BufferDestination jsonDestination;
+        json.parse(BufferSource{expected});
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == "Test String / \t ");
+        json.stringify(jsonDestination);
+        REQUIRE(jsonDestination.getBuffer() == expected);
+    }
     SECTION("Stringify JSON string with escapes '\\t' to buffer and check value", "[JSON][Stringify][Escapes]")
     {
         const std::string expected{"\"Test String \\t \""};
@@ -104,7 +113,7 @@ TEST_CASE("JSON object for stringification of strings with escape characters.", 
     }
     SECTION("Stringify JSON string with escapes '\\u0123 \\u0456' to buffer and check value", "[JSON][Stringify][Escapes]")
     {
-        const std::string expected{"\"Test String \\u0123 \\u0456 \""}; 
+        const std::string expected{"\"Test String \\u0123 \\u0456 \""};
         BufferDestination jsonDestination;
         json.parse(BufferSource{expected});
         json.stringify(jsonDestination);
