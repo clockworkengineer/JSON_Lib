@@ -24,7 +24,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
   JSON_Translator translator(converter);
   SECTION("Translate from escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
   {
-    std::u8string expected{u8"Begin \U0001D11E End"};
+    const std::u8string expected{u8"Begin \U0001D11E End"};
     REQUIRE(translator.from("Begin \\uD834\\uDD1E End") == std::string{expected.begin(), expected.end()});
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 \\uDD1E End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")

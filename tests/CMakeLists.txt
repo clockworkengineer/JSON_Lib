@@ -31,7 +31,11 @@ set(TEST_SOURCES
     JSONLib_Tests_Parse_Collection.cpp
     JSONLib_Tests_Parse_Whitespace.cpp
     JSONLib_Tests_Parse_Exceptions.cpp
-    JSONLib_Tests_Stringify.cpp
+    JSONLib_Tests_Stringify_Misc.cpp
+    JSONLib_Tests_Stringify_Escapes.cpp
+    JSONLib_Tests_Stringify_Simple.cpp
+    JSONLib_Tests_Stringify_Collection.cpp
+    JSONLib_Tests_Stringify_Exceptions.cpp
     JSONLib_Tests_Misc.cpp
     JSONLib_Tests_Helper.cpp)
 
