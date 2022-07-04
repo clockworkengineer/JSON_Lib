@@ -4,12 +4,13 @@ project("JSONLib Unit Tests" VERSION 0.1.0 DESCRIPTION "JSON C++ Library Catch U
 
 # Get Catch2 from repository
 
-include(FetchContent)
+Include(FetchContent)
 
 FetchContent_Declare(
-    Catch2
-    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG        v2.13.4
+  Catch2
+  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+  # GIT_TAG        v3.0.1 # or a later release
+  GIT_TAG        v2.13.4
 )
 
 FetchContent_MakeAvailable(Catch2)
@@ -25,6 +26,10 @@ set(TEST_SOURCES
     JSONLib_Tests_ISource.cpp
     JSONLib_Tests_IDestination.cpp
     JSONLib_Tests_Parse.cpp
+    JSONLib_Tests_Parse_Simple.cpp
+    JSONLib_Tests_Parse_Collection.cpp
+    JSONLib_Tests_Parse_Whitespace.cpp
+    JSONLib_Tests_Parse_Exceptions.cpp
     JSONLib_Tests_Stringify.cpp
     JSONLib_Tests_Misc.cpp
     JSONLib_Tests_Helper.cpp)
