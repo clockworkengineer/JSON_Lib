@@ -8,6 +8,7 @@
 #include <memory>
 #include <stdexcept>
 #include <limits>
+#include <array>
 // =========
 // NAMESPACE
 // =========
@@ -180,23 +181,20 @@ namespace JSONLib
         JNodeNumber() : JNode(JNodeType::number)
         {
         }
-        explicit JNodeNumber(std::string number) : JNode(JNodeType::number), m_number(std::move(number))
-        {
-        }
         // Convert to long long returning true on success
         // Note: Can still return a long value for floating point
         // but false as the number is not in integer format
         [[nodiscard]] bool integer(long long &longValue) const
         {
             char *end = nullptr;
-            longValue = std::strtoll(m_number.c_str(), &end, 10);
+            longValue = std::strtoll(&m_number[0], &end, 10);
             return (*end == '\0'); // If not all characters used then not success
         }
         // Convert to long double returning true on success
         [[nodiscard]] bool floatingpoint(long double &doubleValue) const
         {
             char *end = nullptr;
-            doubleValue = std::strtod(m_number.c_str(), &end);
+            doubleValue = std::strtod(&m_number[0], &end);
             return (*end == '\0'); // If not all characters used then not success
         }
         // Check whether we nave a numeric value
@@ -212,13 +210,17 @@ namespace JSONLib
             }
             return (false);
         }
-        [[nodiscard]] std::string &number()
+        [[nodiscard]] std::array<char, kLongLongWidth> &number()
         {
             return (m_number);
         }
-        [[nodiscard]] const std::string &number() const
+        [[nodiscard]] const std::array<char, kLongLongWidth> &number() const
         {
             return (m_number);
+        }
+        [[nodiscard]] std::string toString() const
+        {
+            return (std::string{m_number.begin(), m_number.begin() + std::strlen(&m_number[0])});
         }
         [[nodiscard]] bool isValidNumeric(char ch)
         {
@@ -227,7 +229,7 @@ namespace JSONLib
         }
 
     private:
-        std::string m_number;
+        std::array<char, kLongLongWidth> m_number{};
     };
     // ======
     // String
@@ -248,6 +250,10 @@ namespace JSONLib
         {
             return (m_string);
         }
+        [[nodiscard]] std::string toString() const
+        {
+            return (m_string);
+        }
 
     private:
         std::string m_string;
@@ -264,6 +270,10 @@ namespace JSONLib
         {
             return (m_boolean);
         }
+        [[nodiscard]] std::string toString() const
+        {
+            return (m_boolean ? "true" : "false");
+        }
 
     private:
         bool m_boolean;
@@ -279,6 +289,10 @@ namespace JSONLib
         [[nodiscard]] void *null() const
         {
             return (nullptr);
+        }
+        [[nodiscard]] std::string toString() const
+        {
+            return ("null");
         }
     };
     // ==============================

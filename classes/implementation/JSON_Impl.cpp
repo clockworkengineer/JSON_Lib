@@ -109,10 +109,12 @@ namespace JSONLib
     JNode::Ptr JSON_Impl::parseNumber(ISource &source)
     {
         JNodeNumber jNodeNumber;
-        while (source.more() && jNodeNumber.isValidNumeric(source.current()))
+        for (int digits=0; source.more() && jNodeNumber.isValidNumeric(source.current()); source.next())
         {
-            jNodeNumber.number() += source.current();
-            source.next();
+            jNodeNumber.number()[digits++] = source.current();
+            if (digits==kLongLongWidth) {
+                 throw Error("Syntax error detected.");
+            }
         }
         if (!jNodeNumber.isValidNumber())
         {
@@ -260,7 +262,7 @@ namespace JSONLib
         switch (jNode.getNodeType())
         {
         case JNodeType::number:
-            destination.add(JNodeRef<const JNodeNumber>(jNode).number());
+            destination.add(JNodeRef<const JNodeNumber>(jNode).toString());
             break;
         case JNodeType::string:
             destination.add('"');

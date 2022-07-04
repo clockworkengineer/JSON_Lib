@@ -27,23 +27,23 @@ TEST_CASE("Use of JNode indexing operators", "[JSON][JNode][Index]")
     json.parse(jsonSource);
     checkObject(json.root());
     REQUIRE(JNodeRef<JNodeString>((json.root())["City"]).string() == "Southampton");
-    REQUIRE(JNodeRef<JNodeNumber>((json.root())["Population"]).number() == "500000");
+    REQUIRE(JNodeRef<JNodeNumber>((json.root())["Population"]).toString() == "500000");
   }
   SECTION("Parse list and check its components using indexing", "[JSON][JNode][Index]")
   {
     BufferSource jsonSource{"[777,9000,\"apples\"]"};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<JNodeNumber>((json.root())[0]).number() == "777");
-    REQUIRE(JNodeRef<JNodeNumber>((json.root())[1]).number() == "9000");
+    REQUIRE(JNodeRef<JNodeNumber>((json.root())[0]).toString() == "777");
+    REQUIRE(JNodeRef<JNodeNumber>((json.root())[1]).toString() == "9000");
     REQUIRE(JNodeRef<JNodeString>((json.root())[2]).string() == "apples");
   }
   SECTION("Parse list with embedded dictionary and check its components using indexing", "[JSON][JNode][Index]")
   {
     BufferSource jsonSource{"[777,{\"City\":\"Southampton\",\"Population\":500000},\"apples\"]"};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<JNodeNumber>((json.root())[0]).number() == "777");
+    REQUIRE(JNodeRef<JNodeNumber>((json.root())[0]).toString() == "777");
     REQUIRE(JNodeRef<JNodeString>((json.root())[1]["City"]).string() == "Southampton");
-    REQUIRE(JNodeRef<JNodeNumber>((json.root())[1]["Population"]).number() == "500000");
+    REQUIRE(JNodeRef<JNodeNumber>((json.root())[1]["Population"]).toString() == "500000");
     REQUIRE(JNodeRef<JNodeString>((json.root())[2]).string() == "apples");
   }
   SECTION("Parse dictionary and check an invalid key generates exception", "[JSON][JNode][Index]")
@@ -71,7 +71,7 @@ TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]")
   {
     BufferSource jsonSource{"45500"};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number() == "45500");
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).toString() == "45500");
   }
   SECTION("String reference.", "[JSON][JNode][Reference]")
   {

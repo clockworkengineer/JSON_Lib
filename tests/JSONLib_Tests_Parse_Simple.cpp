@@ -80,13 +80,13 @@ TEST_CASE("JSON object for parse of simple types and check values.", "[JSON][Par
     {
         BufferSource jsonSource{"6767"};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeNumber>(json.root()).number() == "6767");
+        REQUIRE(JNodeRef<JNodeNumber>(json.root()).toString() == "6767");
     }
     SECTION("Parse an number (190000) and check its value", "[JSON][Parse][Simple][Validate]")
     {
         BufferSource jsonSource{"190000"};
         json.parse(jsonSource);
-        REQUIRE(JNodeRef<JNodeNumber>(json.root()).number() == "190000");
+        REQUIRE(JNodeRef<JNodeNumber>(json.root()).toString() == "190000");
     }
     SECTION("Parse an boolean (true) and check its value", "[JSON][Parse][Simple][Validate]")
     {
