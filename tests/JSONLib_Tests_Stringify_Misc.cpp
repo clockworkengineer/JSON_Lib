@@ -1,7 +1,7 @@
 //
 // Unit Tests: JSON
 //
-// Description: JSON stringification miscellaneous unit 
+// Description: JSON stringification miscellaneous unit
 // tests for JSON class using the Catch2 test framework.
 //
 // ================
@@ -47,13 +47,7 @@ TEST_CASE("Stringify to a file and check result.", "[JSON][Stringify][File][Vali
 TEST_CASE("JSON object for stringification of a list of example JSON files.", "[JSON][Stringify]")
 {
     JSON json;
-    auto testFile = GENERATE(values<std::string>({"testfile001.json",
-                                                  "testfile002.json",
-                                                  "testfile003.json",
-                                                  "testfile004.json",
-                                                  "testfile005.json",
-                                                  "testfile006.json",
-                                                  "testfile007.json"}));
+    TEST_FILE_LIST(testFile);
     SECTION("Stringify to  buffer and check value", "[JSON][Stringify][Buffer]")
     {
         const std::string jsonFileBuffer{readFromFile(prefixTestDataPath(testFile))};
@@ -65,8 +59,8 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.", "[
     }
     SECTION("Stringify to file and check value", "[JSON][Stringify][File]")
     {
-        const std::string testFileName {prefixTestDataPath(testFile)};
-        const std::string generatedFileName {prefixTestDataPath(kGeneratedJSONFile)};
+        const std::string testFileName{prefixTestDataPath(testFile)};
+        const std::string generatedFileName{prefixTestDataPath(kGeneratedJSONFile)};
         std::filesystem::remove(generatedFileName);
         std::string jsonFileBuffer{readFromFile(testFileName)};
         BufferSource jsonSource{jsonFileBuffer};

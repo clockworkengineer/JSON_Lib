@@ -21,14 +21,8 @@ using namespace JSONLib;
 TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Parse][Examples]")
 {
     JSON json;
-    auto testFile = GENERATE(values<std::string>({"testfile001.json",
-                                                  "testfile002.json",
-                                                  "testfile003.json",
-                                                  "testfile004.json",
-                                                  "testfile005.json",
-                                                  "testfile006.json",
-                                                  "testfile007.json"}));
 
+    TEST_FILE_LIST(testFile);
     SECTION("Parse from buffer", "[JSON][Parse][Examples][Buffer]")
     {
         BufferSource jsonSource{readFromFile(prefixTestDataPath(testFile))};

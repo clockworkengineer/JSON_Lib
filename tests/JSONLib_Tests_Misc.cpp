@@ -85,15 +85,7 @@ TEST_CASE("Check whitespace stripping with escape characters.", "[JSON][Parse][S
     json.strip(jsonSource, strippedDestination);
     REQUIRE(strippedDestination.getBuffer() == "[\"fffgh / \\n\\t p w \\u1234 \"]");
   }
-  auto testFile = GENERATE(values<std::string>({
-      "testfile001.json",
-      "testfile002.json",
-      "testfile003.json",
-      "testfile004.json",
-      "testfile005.json",
-      "testfile006.json",
-      "testfile007.json",
-  }));
+  TEST_FILE_LIST(testFile);
   SECTION("Stripped (File) should be the same as parsed then stringified JSON", "[JSON][Parse][Strip]")
   {
     const std::string generatedFileName{prefixTestDataPath(kGeneratedJSONFile)};
@@ -114,15 +106,7 @@ TEST_CASE("Check whitespace stripping with escape characters.", "[JSON][Parse][S
 TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
 {
   JSON json;
-  auto testFile = GENERATE(values<std::string>({
-      "testfile001.json",
-      "testfile002.json",
-      "testfile003.json",
-      "testfile004.json",
-      "testfile005.json",
-      "testfile006.json",
-      "testfile007.json",
-  }));
+  TEST_FILE_LIST(testFile);
   SECTION("Stripped (Buffer) should be the same as parsed then stringified JSON", "[JSON][Parse][Strip]")
   {
     BufferSource jsonSource{readFromFile(prefixTestDataPath(testFile))};
