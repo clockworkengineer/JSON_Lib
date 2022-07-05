@@ -52,20 +52,13 @@ namespace JSONLib
         {
             if (source.current() == '\\')
             {
-                if (translate)
+                stringValue += '\\';
+                source.next();
+                if (!translate && !m_translator->validEscape(source.current()))
                 {
-                    stringValue += '\\';
-                    source.next();
-                    translateEscapes = translate;
+                    stringValue.pop_back();
                 }
-                else
-                {
-                    source.next();
-                    if (m_translator->validEscape(source.current()))
-                    {
-                        stringValue += '\\';
-                    }
-                }
+                translateEscapes = translate;
             }
             stringValue += source.current();
             source.next();
