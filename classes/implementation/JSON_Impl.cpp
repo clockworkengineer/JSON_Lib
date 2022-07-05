@@ -41,6 +41,8 @@ namespace JSONLib
     /// <returns>Extracted string</returns>
     std::string JSON_Impl::extractString(ISource &source, bool translate)
     {
+        std::set<char> validEscapes {'\"','\\','t','b','f','n','r','u'};
+
         bool translateEscapes = false;
         if (source.current() != '"')
         {
@@ -52,9 +54,20 @@ namespace JSONLib
         {
             if (source.current() == '\\')
             {
-                stringValue += source.current();
-                source.next();
-                translateEscapes = translate;
+                if (translate)
+                {
+                    stringValue += source.current();
+                    source.next();
+                    translateEscapes = translate;
+                }
+                else
+                {
+                    source.next();
+                    if (validEscapes.contains(source.current()))
+                    {
+                        stringValue += '\\';
+                    }
+                }
             }
             stringValue += source.current();
             source.next();
@@ -109,11 +122,12 @@ namespace JSONLib
     JNode::Ptr JSON_Impl::parseNumber(ISource &source)
     {
         JNodeNumber jNodeNumber;
-        for (int digits=0; source.more() && jNodeNumber.isValidNumeric(source.current()); source.next())
+        for (int digits = 0; source.more() && jNodeNumber.isValidNumeric(source.current()); source.next())
         {
             jNodeNumber.number()[digits++] = source.current();
-            if (digits==kLongLongWidth) {
-                 throw Error("Syntax error detected.");
+            if (digits == kLongLongWidth)
+            {
+                throw Error("Syntax error detected.");
             }
         }
         if (!jNodeNumber.isValidNumber())
@@ -344,7 +358,7 @@ namespace JSONLib
     {
         std::stringstream versionString;
         versionString << "JSONLib Version  " << JSON_VERSION_MAJOR << "." << JSON_VERSION_MINOR << "." << JSON_VERSION_PATCH;
-        return(versionString.str());
+        return (versionString.str());
     }
     /// <summary>
     /// Set translator for JSON strings.
@@ -391,7 +405,7 @@ namespace JSONLib
     /// <param name="source">Source for JSON encoded bytes.
     JNode::Ptr JSON_Impl::parse(ISource &source)
     {
-        return(parseJNodes(source));
+        return (parseJNodes(source));
     }
     /// <summary>
     /// Recursively parse JNode structure and building its JSON in destination stream.

@@ -65,11 +65,12 @@ TEST_CASE("JSON object for stringification of strings with escape characters.", 
     }
     SECTION("Stringify JSON string with escapes '\\/' to buffer and check value", "[JSON][Stringify][Escapes]")
     {
+        // Escaped normal ascii is not re-scaped for stringification
         const std::string expected{"\"Test String \\/ \""};
         BufferDestination jsonDestination;
         json.parse(BufferSource{expected});
         json.stringify(jsonDestination);
-        REQUIRE(jsonDestination.getBuffer() == expected);
+        REQUIRE(jsonDestination.getBuffer() == "\"Test String / \"");
     }
     SECTION("Stringify JSON string with escapes '\\f' to buffer and check value", "[JSON][Stringify][Escapes]")
     {

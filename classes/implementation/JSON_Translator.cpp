@@ -32,7 +32,7 @@ namespace JSONLib
         {'\\', '\\'},
         {'t', '\t'},
         {'"', '\"'},
-        {'/', '/'},
+        // {'/', '/'},
         {'b', '\b'},
         {'f', '\f'},
         {'n', '\n'},
@@ -115,6 +115,12 @@ namespace JSONLib
                     current++;
                     continue;
                 }
+                if ((*current != 'u') && (*current > 0x1F) && (*current < 0x80))
+                    {
+                        utf16Buffer += *current;
+                        current++;
+                        continue;
+                    }
                 // UTF16 "\uxxxx"
                 if (*current == 'u')
                 {

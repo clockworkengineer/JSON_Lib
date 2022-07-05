@@ -75,20 +75,54 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Ref
     REQUIRE(readFromFile(generatedFileName) == stripWhiteSpace(json, (readFromFile(testFileName))));
   }
 }
+TEST_CASE("Check whitespace stripping with escape characters.", "[JSON][Parse][Strip]")
+{
+  JSON json;
+  SECTION("Strip JSON with escaped ascii characters.", "[JSON][Parse][Strip]")
+  {
+    BufferSource jsonSource{"   [  \"fffgh \\/ \\n\\t \\p \\w \\u1234 \"  ]       "};
+    BufferDestination strippedDestination;
+    json.strip(jsonSource, strippedDestination);
+    REQUIRE(strippedDestination.getBuffer() == "[\"fffgh / \\n\\t p w \\u1234 \"]");
+  }
+  auto testFile = GENERATE(values<std::string>({
+      "testfile001.json",
+      "testfile002.json",
+      "testfile003.json",
+      "testfile004.json",
+      "testfile005.json",
+      "testfile006.json",
+      "testfile007.json",
+  }));
+  SECTION("Stripped (File) should be the same as parsed then stringified JSON", "[JSON][Parse][Strip]")
+  {
+    const std::string generatedFileName{prefixTestDataPath(kGeneratedJSONFile)};
+    std::filesystem::remove(generatedFileName);
+    FileSource jsonSource{prefixTestDataPath(testFile)};
+    BufferDestination jsonDestination;
+    json.parse(jsonSource);
+    json.stringify(jsonDestination);
+    jsonSource.reset();
+    FileDestination strippedDestination{generatedFileName};
+    json.strip(jsonSource, strippedDestination);
+    REQUIRE(jsonDestination.getBuffer() == readFromFile(generatedFileName));
+  }
+}
 // =====================
 // Strip JSON Whitespace
 // =====================
 TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
 {
   JSON json;
-  auto testFile = GENERATE(values<std::string>({"testfile001.json",
-                                                "testfile002.json",
-                                                "testfile003.json",
-                                                "testfile004.json",
-                                                "testfile005.json",
-                                                "testfile006.json",
-                                                "testfile007.json",
-                                                }));
+  auto testFile = GENERATE(values<std::string>({
+      "testfile001.json",
+      "testfile002.json",
+      "testfile003.json",
+      "testfile004.json",
+      "testfile005.json",
+      "testfile006.json",
+      "testfile007.json",
+  }));
   SECTION("Stripped (Buffer) should be the same as parsed then stringified JSON", "[JSON][Parse][Strip]")
   {
     BufferSource jsonSource{readFromFile(prefixTestDataPath(testFile))};
