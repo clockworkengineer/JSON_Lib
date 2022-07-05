@@ -1,5 +1,4 @@
 #pragma once
-#include <cwctype>
 #include <string>
 // =========
 // NAMESPACE
@@ -59,7 +58,7 @@ namespace JSONLib
         // =====================================
         [[nodiscard]] bool isWS() const
         {
-            return (std::iswspace(static_cast<wint_t>(current()))) != 0;
+            return(current()==' '||current()=='\t'||current()=='\n'||current()=='\r');
         }
         // ==================================
         // Ignore whitespace on source stream
