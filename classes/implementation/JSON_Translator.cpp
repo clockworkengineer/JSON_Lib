@@ -32,7 +32,6 @@ namespace JSONLib
         {'\\', '\\'},
         {'t', '\t'},
         {'"', '\"'},
-        // {'/', '/'},
         {'b', '\b'},
         {'f', '\f'},
         {'n', '\n'},
@@ -87,6 +86,19 @@ namespace JSONLib
         }
     }
     /// <summary>
+    /// Check whether character is avalid escaped character or is just
+    /// normal escaped ASCII character. Only a few characters are valid
+    /// escaped characters such as '\t' or '\"' but normal ASCII characters
+    /// may still be can still have a '\' prefix and be escaped though not
+    /// proper escaped sense.
+    /// </summary>
+    /// <param name="escape">Escaped character.</param>
+    /// <returns>==true then character is a valid escape character.</returns>
+    bool JSON_Translator::validEscape(char escape)
+    {
+        return (m_from.contains(escape) || (escape == 'u'));
+    }
+    /// <summary>
     /// Convert any escape sequences in a string to their correct sequence
     //  of UTF-8 characters. If input string contains any unpaired surrogates
     //  then this is deemed as a syntax error and an error is duly thrown.
@@ -115,16 +127,17 @@ namespace JSONLib
                     current++;
                     continue;
                 }
-                if ((*current != 'u') && (*current > 0x1F) && (*current < 0x80))
-                    {
-                        utf16Buffer += *current;
-                        current++;
-                        continue;
-                    }
                 // UTF16 "\uxxxx"
                 if (*current == 'u')
                 {
                     utf16Buffer += decodeUTF16(current, std::distance(current, jsonString.end()));
+                    continue;
+                }
+                // Escaped ASCII
+                if ((*current > 0x1F) && (*current < 0x80))
+                {
+                    utf16Buffer += *current;
+                    current++;
                     continue;
                 }
             }

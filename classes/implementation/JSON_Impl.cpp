@@ -41,8 +41,6 @@ namespace JSONLib
     /// <returns>Extracted string</returns>
     std::string JSON_Impl::extractString(ISource &source, bool translate)
     {
-        std::set<char> validEscapes {'\"','\\','t','b','f','n','r','u'};
-
         bool translateEscapes = false;
         if (source.current() != '"')
         {
@@ -56,14 +54,14 @@ namespace JSONLib
             {
                 if (translate)
                 {
-                    stringValue += source.current();
+                    stringValue += '\\';
                     source.next();
                     translateEscapes = translate;
                 }
                 else
                 {
                     source.next();
-                    if (validEscapes.contains(source.current()))
+                    if (m_translator->validEscape(source.current()))
                     {
                         stringValue += '\\';
                     }

@@ -49,6 +49,7 @@ namespace JSONLib
         // ==============
         std::string from(const std::string &jsonString) override;
         std::string to(const std::string &utf8String) override;
+        bool validEscape(char escape) override;
         // ================
         // PUBLIC VARIABLES
         // ================

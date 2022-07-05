@@ -11,16 +11,15 @@ namespace JSONLib
     // ========================
     // Unicode surrogate ranges
     // ========================
-    constexpr char16_t kHighSurrogatesBegin{ 0xD800 };
-    constexpr char16_t kHighSurrogatesEnd  { 0xDBFF };
-    constexpr char16_t kLowSurrogatesBegin{ 0xDC00 };
-    constexpr char16_t kLowSurrogatesEnd{ 0xDFFF };
+    constexpr char16_t kHighSurrogatesBegin{0xD800};
+    constexpr char16_t kHighSurrogatesEnd{0xDBFF};
+    constexpr char16_t kLowSurrogatesBegin{0xDC00};
+    constexpr char16_t kLowSurrogatesEnd{0xDFFF};
     // =========================
     // JSON translator interface
     // =========================
     class ITranslator
     {
-
     public:
         // ========================
         // Constructors/destructors
@@ -42,6 +41,10 @@ namespace JSONLib
         // escapes where applicable for its JSON form.
         // =========================================================================
         virtual std::string to(const std::string &utf8String) = 0;
+        // =======================================================
+        // Return true if a character is a valid escaped character
+        // =======================================================
+        virtual bool validEscape(char escape) = 0;
     protected:
         // =====================================================================================
         // Check that there are no single unpaired UTF-16 surrogates.From what I see this is
@@ -65,14 +68,13 @@ namespace JSONLib
             return (false);
         }
     private:
-
         bool isValidSurrogateUpper(char16_t c)
         {
-            return ((c >= static_cast<char16_t>(kHighSurrogatesBegin)) && (c <= static_cast < char16_t>(kHighSurrogatesEnd)));
+            return ((c >= static_cast<char16_t>(kHighSurrogatesBegin)) && (c <= static_cast<char16_t>(kHighSurrogatesEnd)));
         }
         bool isValidSurrogateLower(char16_t c)
         {
-            return ((c >= static_cast < char16_t>(kLowSurrogatesBegin)) && (c <= static_cast < char16_t>(kLowSurrogatesEnd)));
+            return ((c >= static_cast<char16_t>(kLowSurrogatesBegin)) && (c <= static_cast<char16_t>(kLowSurrogatesEnd)));
         }
     };
 } // namespace JSONLib
