@@ -33,6 +33,7 @@ namespace JSONLib
         // CONSTRUCTOR/DESTRUCTOR
         // ======================
         explicit JSON(ITranslator *translator = nullptr, IConverter *converter = nullptr);
+        explicit JSON(const std::string &jsonString);
         JSON(const JSON &other) = delete;
         JSON &operator=(const JSON &other) = delete;
         JSON(JSON &&other) = delete;

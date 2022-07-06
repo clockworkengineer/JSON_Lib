@@ -399,6 +399,15 @@ namespace JSONLib
         return (parseJNodes(source));
     }
     /// <summary>
+    /// Create JNode structure by recursively parsing JSON on the source stream.
+    /// </summary>
+    /// <param name="jsonString">JSON string.
+    JNode::Ptr JSON_Impl::parse(const std::string &jsonString)
+    {
+        BufferSource source{jsonString};
+        return (parse(source));
+    }
+    /// <summary>
     /// Recursively parse JNode structure and building its JSON in destination stream.
     /// </summary>
     /// <param name="jNodeRoot">Root of JNode structure.</param>

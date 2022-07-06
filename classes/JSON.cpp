@@ -47,10 +47,20 @@ namespace JSONLib
     /// <summary>
     /// JSON constructor.
     /// </summary>
-    JSON::JSON(ITranslator *translator, IConverter *converter) : m_jsonImplementation (std::make_unique<JSON_Impl>())
+    /// <param name="translator">Pointer to translator interface</param>
+    /// <param name="converter">Pointer to converter interface</param>
+    JSON::JSON(ITranslator *translator, IConverter *converter) : m_jsonImplementation(std::make_unique<JSON_Impl>())
     {
         m_jsonImplementation->converter(converter);
         m_jsonImplementation->translator(translator);
+    }
+    /// <summary>
+    /// JSON constructor.
+    /// </summary>
+    /// <param name="jsonString">JSON string</param>
+    JSON::JSON(const std::string &jsonString) : JSON()
+    {
+        m_jNodeRoot = m_jsonImplementation->parse(jsonString);
     }
     /// <summary>
     /// JSON destructor.

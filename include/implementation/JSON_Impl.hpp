@@ -19,6 +19,7 @@
 #include "JSON_Types.hpp"
 #include "JSON_Translator.hpp"
 #include "JSON_Converter.hpp"
+#include "JSON_Sources.hpp"
 // =========
 // NAMESPACE
 // =========
@@ -47,6 +48,7 @@ namespace JSONLib
         // ==============
         std::string version();
         JNode::Ptr parse(ISource &source);
+        JNode::Ptr parse(const std::string &jsonString);
         void stringify(const JNode &jNodeRoot, IDestination &destination);
         void strip(ISource &source, IDestination &destination);
         void translator(ITranslator *translator);
