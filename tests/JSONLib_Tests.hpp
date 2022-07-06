@@ -47,4 +47,6 @@ std::string stripWhiteSpace(JSONLib::JSON &json, const std::string &jsonBuffer);
                                  "testfile009.json",                    \
                                  "testfile010.json",                    \
                                  "testfile011.json",                    \
+                                 "testfile012.json",                    \
+                                 "testfile013.json",                    \
                              }))

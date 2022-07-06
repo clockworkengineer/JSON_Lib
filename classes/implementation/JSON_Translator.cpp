@@ -125,23 +125,23 @@ namespace JSONLib
                 {
                     utf16Buffer += m_from[static_cast<char>(*current)];
                     current++;
-                    continue;
                 }
                 // UTF16 "\uxxxx"
-                if (*current == 'u')
+                else if (*current == 'u')
                 {
                     utf16Buffer += decodeUTF16(current, std::distance(current, jsonString.end()));
-                    continue;
                 }
                 // Escaped ASCII
-                if ((*current > 0x1F) && (*current < 0x80))
+                else if ((*current > 0x1F) && (*current < 0x80))
                 {
                     utf16Buffer += *current;
                     current++;
-                    continue;
                 }
             }
-            throw Error("Syntax error detected.");
+            else
+            {
+                throw Error("Syntax error detected.");
+            }
         }
         if (unpairedSurrogatesInBuffer(utf16Buffer))
         {
