@@ -21,7 +21,7 @@ using namespace JSONLib;
 /// <returns>Full path to test data file</returns>
 std::string prefixTestDataPath(const std::string &file)
 {
-  const std::filesystem::path currentPath = std::filesystem::current_path() / "testData" / file;
+  const std::filesystem::path currentPath = std::filesystem::current_path() / "files" / file;
   return (currentPath.string());
 }
 /// <summary>

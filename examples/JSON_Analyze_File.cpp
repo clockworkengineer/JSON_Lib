@@ -1,5 +1,5 @@
 //
-// Program: Analyze_JSON_File
+// Program: JSON_Analyze_File
 //
 // Description: For a JSON file parse it then analyze its JNode tree
 // and produce a output report of the analysis.
@@ -62,7 +62,7 @@ struct JNodeDetails
 /// <returns>Full path to test data file</returns>
 std::string prefixTestDataPath(const std::string &file)
 {
-    return ((std::filesystem::current_path() / "testData" / file).string());
+    return ((std::filesystem::current_path() / "files" / file).string());
 }
 /// <summary>
 /// Output JNode tree details.

@@ -1,7 +1,7 @@
 //
-// Program: Parse_JSON_Files
+// Program: JSON_Parse_File
 //
-// Description: Read a number pf JSON files and parse from the file, stringify
+// Description: Read a number of JSON files and parse from the file, stringify
 // it back into text form and then parse the buffer created; timing each step in
 // turn for each file.
 //
@@ -46,7 +46,7 @@ static constexpr size_t kMaxFileLengthToDisplay = 16 * 1024;
 /// <returns>Full path to test data file</returns>
 std::string prefixTestDataPath(const std::string &file)
 {
-    return ((std::filesystem::current_path() / "testData" / file).string());
+    return ((std::filesystem::current_path() / "files" / file).string());
 }
 /// <summary>
 /// Parse JSON file and display it reconstituted via stringify.
