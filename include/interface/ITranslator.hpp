@@ -35,12 +35,12 @@ namespace JSONLib
         // of UTF-8 characters. If input string contains any unpaired surrogates
         // then this is deemed as a syntax error and an error is duly thrown.
         // =====================================================================
-        virtual std::string from(const std::string &jsonString) = 0;
+        virtual std::string fromJSON(const std::string &jsonString) = 0;
         // =========================================================================
         // Convert a string from raw charater values (UTF8) so that it has character
         // escapes where applicable for its JSON form.
         // =========================================================================
-        virtual std::string to(const std::string &utf8String) = 0;
+        virtual std::string toJSON(const std::string &utf8String) = 0;
         // =======================================================
         // Return true if a character is a valid escaped character
         // =======================================================

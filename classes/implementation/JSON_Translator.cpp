@@ -81,8 +81,8 @@ namespace JSONLib
         // escape sequences within a JSON string.
         for (const auto &[key, value] : escapeSequences)
         {
-            m_from[key] = value;
-            m_to[value] = key;
+            m_fromEscape[key] = value;
+            m_toEscape[value] = key;
         }
     }
     /// <summary>
@@ -96,7 +96,7 @@ namespace JSONLib
     /// <returns>==true then character is a valid escape character.</returns>
     bool JSON_Translator::validEscape(char escape)
     {
-        return (m_from.contains(escape) || (escape == 'u'));
+        return (m_fromEscape.contains(escape) || (escape == 'u'));
     }
     /// <summary>
     /// Convert any escape sequences in a string to their correct sequence
@@ -105,7 +105,7 @@ namespace JSONLib
     /// </summary>
     /// <param name="jsonString">JSON string to process.</param>
     /// <returns>String with escapes translated.</returns>
-    std::string JSON_Translator::from(const std::string &jsonString)
+    std::string JSON_Translator::fromJSON(const std::string &jsonString)
     {
         std::u16string utf16Buffer;
         for (auto current = jsonString.begin(); current != jsonString.end();)
@@ -121,9 +121,9 @@ namespace JSONLib
             if (current != jsonString.end())
             {
                 // Single character
-                if (m_from.contains(static_cast<char>(*current)))
+                if (m_fromEscape.contains(static_cast<char>(*current)))
                 {
-                    utf16Buffer += m_from[static_cast<char>(*current)];
+                    utf16Buffer += m_fromEscape[static_cast<char>(*current)];
                     current++;
                 }
                 // UTF16 "\uxxxx"
@@ -147,7 +147,7 @@ namespace JSONLib
         {
             throw Error("Syntax error detected.");
         }
-        return (m_converter.to_utf8(utf16Buffer));
+        return (m_converter.toUtf8(utf16Buffer));
     }
     /// <summary>
     /// Convert a string from raw charater values (UTF8) so that it has character
@@ -155,16 +155,16 @@ namespace JSONLib
     /// </summary>
     /// <param name="utf8String">String to convert.</param>
     /// <returns>JSON string with escapes.</returns>
-    std::string JSON_Translator::to(const std::string &utf8String)
+    std::string JSON_Translator::toJSON(const std::string &utf8String)
     {
         std::string utf8Buffer;
-        for (char16_t utf16Char : m_converter.to_utf16(utf8String))
+        for (char16_t utf16Char : m_converter.toUtf16(utf8String))
         {
             // Control characters
-            if (m_to.contains(utf16Char))
+            if (m_toEscape.contains(utf16Char))
             {
                 utf8Buffer += '\\';
-                utf8Buffer += m_to[utf16Char];
+                utf8Buffer += m_toEscape[utf16Char];
             }
             // ASCII
             else if ((utf16Char > 0x1F) && (utf16Char < 0x80))

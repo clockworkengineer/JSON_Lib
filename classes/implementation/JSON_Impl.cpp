@@ -72,7 +72,7 @@ namespace JSONLib
         // Need to translate escapes to UTF8
         if (translateEscapes)
         {
-            return (m_translator->from(stringValue));
+            return (m_translator->fromJSON(stringValue));
         }
         // None so just pass on
         else
@@ -271,7 +271,7 @@ namespace JSONLib
             break;
         case JNodeType::string:
             destination.add('"');
-            destination.add(m_translator->to(JNodeRef<JNodeString>(jNode).string()));
+            destination.add(m_translator->toJSON(JNodeRef<JNodeString>(jNode).string()));
             destination.add('"');
             break;
         case JNodeType::boolean:
@@ -287,7 +287,7 @@ namespace JSONLib
             for (auto &[key, jNodePtr] : JNodeRef<JNodeObject>(jNode).objects())
             {
                 destination.add('"');
-                destination.add(m_translator->to(key));
+                destination.add(m_translator->toJSON(key));
                 destination.add("\":");
                 stringifyJNodes(JNodeRef<JNodeObject>(jNode)[key], destination);
                 if (commaCount-- > 0)

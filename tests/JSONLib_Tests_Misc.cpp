@@ -25,32 +25,32 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]")
   SECTION("Translate from escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
   {
     const std::u8string expected{u8"Begin \U0001D11E End"};
-    REQUIRE(translator.from("Begin \\uD834\\uDD1E End") == std::string{expected.begin(), expected.end()});
+    REQUIRE(translator.fromJSON("Begin \\uD834\\uDD1E End") == std::string{expected.begin(), expected.end()});
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 \\uDD1E End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.from("Begin \\uD834 \\uDD1E End"), JSON_Translator::Error);
-    REQUIRE_THROWS_WITH(translator.from("Begin \\uD834 \\uDD1E End"), "JSON Translator Error: Syntax error detected.");
+    REQUIRE_THROWS_AS(translator.fromJSON("Begin \\uD834 \\uDD1E End"), JSON_Translator::Error);
+    REQUIRE_THROWS_WITH(translator.fromJSON("Begin \\uD834 \\uDD1E End"), "JSON Translator Error: Syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834\\u0045 End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.from("Begin \\uD834\\u0045 End"), JSON_Translator::Error);
-    REQUIRE_THROWS_WITH(translator.from("Begin \\uD834\\u0045 End"), "JSON Translator Error: Syntax error detected.");
+    REQUIRE_THROWS_AS(translator.fromJSON("Begin \\uD834\\u0045 End"), JSON_Translator::Error);
+    REQUIRE_THROWS_WITH(translator.fromJSON("Begin \\uD834\\u0045 End"), "JSON Translator Error: Syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.from("Begin \\uD834 End"), JSON_Translator::Error);
-    REQUIRE_THROWS_WITH(translator.from("Begin \\uD834 End"), "JSON Translator Error: Syntax error detected.");
+    REQUIRE_THROWS_AS(translator.fromJSON("Begin \\uD834 End"), JSON_Translator::Error);
+    REQUIRE_THROWS_WITH(translator.fromJSON("Begin \\uD834 End"), "JSON Translator Error: Syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uDD1E End' in error then expect exception", "[JSON][DefaultTranslator][Exception]")
   {
-    REQUIRE_THROWS_AS(translator.from("Begin \\uDD1E End"), JSON_Translator::Error);
-    REQUIRE_THROWS_WITH(translator.from("Begin \\uDD1E End"), "JSON Translator Error: Syntax error detected.");
+    REQUIRE_THROWS_AS(translator.fromJSON("Begin \\uDD1E End"), JSON_Translator::Error);
+    REQUIRE_THROWS_WITH(translator.fromJSON("Begin \\uDD1E End"), "JSON Translator Error: Syntax error detected.");
   }
   SECTION("Translate to escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value", "[JSON][DefaultTranslator]")
   {
     std::u8string actual{u8"Begin \U0001D11E End"};
-    REQUIRE(translator.to({actual.begin(), actual.end()}) == "Begin \\uD834\\uDD1E End");
+    REQUIRE(translator.toJSON({actual.begin(), actual.end()}) == "Begin \\uD834\\uDD1E End");
   }
 }
 // ========================

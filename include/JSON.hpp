@@ -68,6 +68,6 @@ namespace JSONLib
         // Root of JSON tree
         std::unique_ptr<JNode> m_jNodeRoot;
         // JSON implementation
-        const std::unique_ptr<JSON_Impl> m_implementation;
+        const std::unique_ptr<JSON_Impl> m_jsonImplementation;
     };
 } // namespace JSONLib

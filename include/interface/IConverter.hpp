@@ -26,10 +26,10 @@ namespace JSONLib
         // ==================
         // From utf8 to utf16
         // ==================
-        virtual std::u16string to_utf16(const std::string &utf8) = 0;
+        virtual std::u16string toUtf16(const std::string &utf8) = 0;
         // ==================
         // From utf16 to utf8
         // ==================
-        virtual std::string to_utf8(const std::u16string &utf16) = 0;
+        virtual std::string toUtf8(const std::u16string &utf16) = 0;
     };
 } // namespace JSONLib

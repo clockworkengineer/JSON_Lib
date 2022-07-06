@@ -86,12 +86,12 @@ namespace JSONLib
         {
         }
         explicit JNodeObject(std::vector<JNodeObject::Entry> &objects) : JNode(JNodeType::object),
-                                                                         m_objects(std::move(objects))
+                                                                         m_jsonObjects(std::move(objects))
         {
         }
         [[nodiscard]] bool contains(const std::string &key) const
         {
-            if (auto entry = findEntry(key, m_objects); entry != m_objects.end())
+            if (auto entry = findEntry(key, m_jsonObjects); entry != m_jsonObjects.end())
             {
                 return (true);
             }
@@ -99,11 +99,11 @@ namespace JSONLib
         }
         [[nodiscard]] int size() const
         {
-            return (static_cast<int>(m_objects.size()));
+            return (static_cast<int>(m_jsonObjects.size()));
         }
         JNode &operator[](const std::string &key)
         {
-            if (auto entry = findEntry(key, m_objects); entry != m_objects.end())
+            if (auto entry = findEntry(key, m_jsonObjects); entry != m_jsonObjects.end())
             {
                 return (*entry->second);
             }
@@ -111,7 +111,7 @@ namespace JSONLib
         }
         const JNode &operator[](const std::string &key) const
         {
-            if (auto entry = findEntry(key, m_objects); entry != m_objects.end())
+            if (auto entry = findEntry(key, m_jsonObjects); entry != m_jsonObjects.end())
             {
                 return (*entry->second);
             }
@@ -119,15 +119,15 @@ namespace JSONLib
         }
         std::vector<Entry> &objects()
         {
-            return (m_objects);
+            return (m_jsonObjects);
         }
         [[nodiscard]] const std::vector<Entry> &objects() const
         {
-            return (m_objects);
+            return (m_jsonObjects);
         }
 
     private:
-        std::vector<JNodeObject::Entry> m_objects;
+        std::vector<JNodeObject::Entry> m_jsonObjects;
     };
     // =====
     // Array
@@ -138,40 +138,40 @@ namespace JSONLib
         {
         }
         explicit JNodeArray(std::vector<JNode::Ptr> &array) : JNode(JNodeType::array),
-                                                              m_array(std::move(array))
+                                                              m_jsonArray(std::move(array))
         {
         }
         [[nodiscard]] int size() const
         {
-            return (static_cast<int>(m_array.size()));
+            return (static_cast<int>(m_jsonArray.size()));
         }
         std::vector<JNode::Ptr> &array()
         {
-            return (m_array);
+            return (m_jsonArray);
         }
         [[nodiscard]] const std::vector<JNode::Ptr> &array() const
         {
-            return (m_array);
+            return (m_jsonArray);
         }
         JNode &operator[](int index)
         {
-            if ((index >= 0) && (index < (static_cast<int>(m_array.size()))))
+            if ((index >= 0) && (index < (static_cast<int>(m_jsonArray.size()))))
             {
-                return (*m_array[index]);
+                return (*m_jsonArray[index]);
             }
             throw Error("Invalid index used to access array.");
         }
         const JNode &operator[](int index) const
         {
-            if ((index >= 0) && (index < (static_cast<int>(m_array.size()))))
+            if ((index >= 0) && (index < (static_cast<int>(m_jsonArray.size()))))
             {
-                return (*m_array[index]);
+                return (*m_jsonArray[index]);
             }
             throw Error("Invalid index used to access array.");
         }
 
     private:
-        std::vector<JNode::Ptr> m_array;
+        std::vector<JNode::Ptr> m_jsonArray;
     };
     // ======
     // Number
@@ -187,14 +187,14 @@ namespace JSONLib
         [[nodiscard]] bool integer(long long &longValue) const
         {
             char *end = nullptr;
-            longValue = std::strtoll(&m_number[0], &end, 10);
+            longValue = std::strtoll(&m_jsonNumber[0], &end, 10);
             return (*end == '\0'); // If not all characters used then not success
         }
         // Convert to long double returning true on success
         [[nodiscard]] bool floatingpoint(long double &doubleValue) const
         {
             char *end = nullptr;
-            doubleValue = std::strtod(&m_number[0], &end);
+            doubleValue = std::strtod(&m_jsonNumber[0], &end);
             return (*end == '\0'); // If not all characters used then not success
         }
         // Check whether we nave a numeric value
@@ -212,15 +212,15 @@ namespace JSONLib
         }
         [[nodiscard]] std::array<char, kLongLongWidth> &number()
         {
-            return (m_number);
+            return (m_jsonNumber);
         }
         [[nodiscard]] const std::array<char, kLongLongWidth> &number() const
         {
-            return (m_number);
+            return (m_jsonNumber);
         }
         [[nodiscard]] std::string toString() const
         {
-            return (std::string{m_number.begin(), m_number.begin() + std::strlen(&m_number[0])});
+            return (std::string{m_jsonNumber.begin(), m_jsonNumber.begin() + std::strlen(&m_jsonNumber[0])});
         }
         [[nodiscard]] bool isValidNumeric(char ch)
         {
@@ -229,7 +229,7 @@ namespace JSONLib
         }
 
     private:
-        std::array<char, kLongLongWidth> m_number{};
+        std::array<char, kLongLongWidth> m_jsonNumber{};
     };
     // ======
     // String
@@ -239,44 +239,44 @@ namespace JSONLib
         JNodeString() : JNode(JNodeType::string)
         {
         }
-        explicit JNodeString(std::string str) : JNode(JNodeType::string), m_string(std::move(str))
+        explicit JNodeString(std::string str) : JNode(JNodeType::string), m_jsonString(std::move(str))
         {
         }
         std::string &string()
         {
-            return (m_string);
+            return (m_jsonString);
         }
         [[nodiscard]] const std::string &string() const
         {
-            return (m_string);
+            return (m_jsonString);
         }
         [[nodiscard]] std::string toString() const
         {
-            return (m_string);
+            return (m_jsonString);
         }
 
     private:
-        std::string m_string;
+        std::string m_jsonString;
     };
     // =======
     // Boolean
     // =======
     struct JNodeBoolean : JNode
     {
-        explicit JNodeBoolean(bool boolean) : JNode(JNodeType::boolean), m_boolean(boolean)
+        explicit JNodeBoolean(bool boolean) : JNode(JNodeType::boolean), m_jsonBoolean(boolean)
         {
         }
         [[nodiscard]] bool boolean() const
         {
-            return (m_boolean);
+            return (m_jsonBoolean);
         }
         [[nodiscard]] std::string toString() const
         {
-            return (m_boolean ? "true" : "false");
+            return (m_jsonBoolean ? "true" : "false");
         }
 
     private:
-        bool m_boolean;
+        bool m_jsonBoolean;
     };
     // ====
     // Null

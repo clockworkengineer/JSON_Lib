@@ -47,8 +47,8 @@ namespace JSONLib
         // ==============
         // PUBLIC METHODS
         // ==============
-        std::string from(const std::string &jsonString) override;
-        std::string to(const std::string &utf8String) override;
+        std::string fromJSON(const std::string &jsonString) override;
+        std::string toJSON(const std::string &utf8String) override;
         bool validEscape(char escape) override;
         // ================
         // PUBLIC VARIABLES
@@ -64,7 +64,7 @@ namespace JSONLib
         // PRIVATE VARIABLES
         // =================
         IConverter &m_converter;
-        std::unordered_map<char, char16_t> m_from;
-        std::unordered_map<char16_t, char> m_to;
+        std::unordered_map<char, char16_t> m_fromEscape;
+        std::unordered_map<char16_t, char> m_toEscape;
     };
 } // namespace JSONLib
