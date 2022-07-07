@@ -48,7 +48,7 @@ namespace JSONLib
         }
         catch ([[maybe_unused]] JNode::Error &error)
         {
-            JNodeRef<JNodeObject>(*m_jNodeRoot).objects().emplace_back(JNodeObject::Entry{key, std::make_unique<JNode>()});
+            JNodeRef<JNodeObject>(*m_jNodeRoot).objects().emplace_back(JNodeObjectEntry{key, std::make_unique<JNode>()});
             return (*JNodeRef<JNodeObject>(*m_jNodeRoot).objects().back().second);
         }
     }
