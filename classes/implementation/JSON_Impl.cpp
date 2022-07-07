@@ -103,7 +103,7 @@ namespace JSONLib
     /// <returns>String value.</returns>
     JNode::Ptr JSON_Impl::parseString(ISource &source)
     {
-        return (std::make_unique<JNodeString>(extractString(source)));
+        return (makeJNodeString(extractString(source)));
     }
     /// <summary>
     /// Parse a number from a JSON source stream.
@@ -112,21 +112,21 @@ namespace JSONLib
     /// <returns></returns>
     JNode::Ptr JSON_Impl::parseNumber(ISource &source)
     {
-        JNodeNumber jNodeNumber;
-        for (int digits = 0; source.more() && jNodeNumber.isValidNumeric(source.current()); source.next())
+        JNodeNumberData jsonNumber;
+        for (int digits = 0; source.more() && jsonNumber.isValidNumeric(source.current()); source.next())
         {
-            jNodeNumber.number()[digits++] = source.current();
+            jsonNumber.number()[digits++] = source.current();
             if (digits == kLongLongWidth)
             {
                 throw Error("Syntax error detected.");
             }
         }
-        if (!jNodeNumber.isValidNumber())
+        if (!jsonNumber.isValidNumber())
         {
             throw Error("Syntax error detected.");
         }
         source.ignoreWS();
-        return (std::make_unique<JNodeNumber>(std::move(jNodeNumber)));
+        return (makeJNodeNumber(jsonNumber.number()));
     }
     /// <summary>
     /// Parse a boolean from a JSON source stream.
@@ -138,12 +138,12 @@ namespace JSONLib
         if (source.match("true"))
         {
             source.ignoreWS();
-            return (std::make_unique<JNodeBoolean>(true));
+            return (makeJNodeBoolean(true));
         }
         if (source.match("false"))
         {
             source.ignoreWS();
-            return (std::make_unique<JNodeBoolean>(false));
+            return (makeJNodeBoolean(false));
         }
         throw Error("Syntax error detected.");
     }
@@ -159,7 +159,7 @@ namespace JSONLib
             throw Error("Syntax error detected.");
         }
         source.ignoreWS();
-        return (std::make_unique<JNodeNull>());
+        return (makeJNodeNull());
     }
     /// <summary>
     /// Parse an object from a JSON source stream.
@@ -168,17 +168,17 @@ namespace JSONLib
     /// <returns>JNodeObject key/value pairs.</returns>
     JNode::Ptr JSON_Impl::parseObject(ISource &source)
     {
-        JNodeObject jNodeObject;
+        std::vector<JNodeObjectEntry> objects;
         source.next();
         source.ignoreWS();
         if (source.current() != '}')
         {
-            jNodeObject.objects().emplace_back(parseKeyValuePair(source));
+            objects.emplace_back(parseKeyValuePair(source));
             while (source.current() == ',')
             {
                 source.next();
                 source.ignoreWS();
-                jNodeObject.objects().emplace_back(parseKeyValuePair(source));
+                objects.emplace_back(parseKeyValuePair(source));
             }
         }
         if (source.current() != '}')
@@ -187,7 +187,7 @@ namespace JSONLib
         }
         source.next();
         source.ignoreWS();
-        return (std::make_unique<JNodeObject>(std::move(jNodeObject)));
+        return (makeJNodeObject(objects));
     }
     /// <summary>
     /// Parse an array from a JSON source stream.
@@ -196,17 +196,17 @@ namespace JSONLib
     /// <returns>JNodeArray.</returns>
     JNode::Ptr JSON_Impl::parseArray(ISource &source)
     {
-        JNodeArray jNodeArray;
+        std::vector<JNode::Ptr> array;
         source.next();
         source.ignoreWS();
         if (source.current() != ']')
         {
-            jNodeArray.array().emplace_back(parseJNodes(source));
+            array.emplace_back(parseJNodes(source));
             while (source.current() == ',')
             {
                 source.next();
                 source.ignoreWS();
-                jNodeArray.array().emplace_back(parseJNodes(source));
+                array.emplace_back(parseJNodes(source));
             }
         }
         if (source.current() != ']')
@@ -215,7 +215,7 @@ namespace JSONLib
         }
         source.next();
         source.ignoreWS();
-        return (std::make_unique<JNodeArray>(std::move(jNodeArray)));
+        return (makeJNodeArray(array));
     }
     /// <summary>
     /// Recursively parse JSON source stream producing a JNode structure
@@ -267,29 +267,29 @@ namespace JSONLib
         switch (jNode.getNodeType())
         {
         case JNodeType::number:
-            destination.add(JNodeRef<const JNodeNumber>(jNode).toString());
+            destination.add(JNodeDataRef<const JNodeNumberData>(jNode).toString());
             break;
         case JNodeType::string:
             destination.add('"');
-            destination.add(m_translator->toJSON(JNodeRef<JNodeString>(jNode).string()));
+            destination.add(m_translator->toJSON(JNodeDataRef<JNodeStringData>(jNode).string()));
             destination.add('"');
             break;
         case JNodeType::boolean:
-            destination.add(JNodeRef<JNodeBoolean>(jNode).boolean() ? "true" : "false");
+            destination.add(JNodeDataRef<JNodeBooleanData>(jNode).boolean() ? "true" : "false");
             break;
         case JNodeType::null:
             destination.add("null");
             break;
         case JNodeType::object:
         {
-            int commaCount = JNodeRef<JNodeObject>(jNode).size() - 1;
+            int commaCount = JNodeDataRef<JNodeObjectData>(jNode).size() - 1;
             destination.add('{');
-            for (auto &[key, jNodePtr] : JNodeRef<JNodeObject>(jNode).objects())
+            for (auto &[key, jNodePtr] : JNodeDataRef<JNodeObjectData>(jNode).objects())
             {
                 destination.add('"');
                 destination.add(m_translator->toJSON(key));
                 destination.add("\":");
-                stringifyJNodes(JNodeRef<JNodeObject>(jNode)[key], destination);
+                stringifyJNodes(JNodeDataRef<JNodeObjectData>(jNode)[key], destination);
                 if (commaCount-- > 0)
                 {
                     destination.add(',');
@@ -300,11 +300,11 @@ namespace JSONLib
         }
         case JNodeType::array:
         {
-            int commaCount = JNodeRef<JNodeArray>(jNode).size() - 1;
+            int commaCount = JNodeDataRef<JNodeArrayData>(jNode).size() - 1;
             destination.add('[');
-            for (auto &bNodeEntry : JNodeRef<JNodeArray>(jNode).array())
+            for (auto &bNodeEntry : JNodeDataRef<JNodeArrayData>(jNode).array())
             {
-                stringifyJNodes(JNodeRef<JNode>(*bNodeEntry), destination);
+                stringifyJNodes(*bNodeEntry, destination);
                 if (commaCount-- > 0)
                 {
                     destination.add(',');

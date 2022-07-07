@@ -118,7 +118,7 @@ namespace JSONLib
         {
             throw Error("No JSON to stringify.");
         }
-        m_jsonImplementation->stringify(JNodeRef<JNode>(*m_jNodeRoot), destination);
+        m_jsonImplementation->stringify(*m_jNodeRoot, destination);
     }
     void JSON::stringify(IDestination &&destination)
     {
@@ -126,6 +126,6 @@ namespace JSONLib
         {
             throw Error("No JSON to stringify.");
         }
-        m_jsonImplementation->stringify(JNodeRef<JNode>(*m_jNodeRoot), destination);
+        m_jsonImplementation->stringify(*m_jNodeRoot, destination);
     }
 } // namespace JSONLib

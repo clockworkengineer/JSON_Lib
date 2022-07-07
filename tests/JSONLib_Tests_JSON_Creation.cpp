@@ -30,7 +30,7 @@ TEST_CASE("JSON object creation api.", "[JSON][Create]")
         const JSON json{R"({ "pi" : 3.141 })"};
         REQUIRE(json.root().getNodeType() == JNodeType::object);
         REQUIRE(json.root()["pi"].getNodeType() == JNodeType::number);
-        REQUIRE(JNodeRef<JNodeNumber>(json.root()["pi"]).toString() == "3.141");
+        REQUIRE(JNodeDataRef<JNodeNumberData>(json.root()["pi"]).toString() == "3.141");
     }
     // SECTION("Initialise root JSON object with one entry containing a number.", "[JSON][Create][Number]")
     // {
