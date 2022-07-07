@@ -20,6 +20,7 @@ namespace JSONLib
     class IConverter;
     class ITranslator;
     struct JNode;
+    struct JNodePtr;
     // ================
     // CLASS DEFINITION
     // ================
@@ -53,6 +54,10 @@ namespace JSONLib
         void strip(ISource &&source, IDestination &&destination);
         [[nodiscard]] JNode &root() { return (*m_jNodeRoot); }
         [[nodiscard]] const JNode &root() const { return (*m_jNodeRoot); }
+        // JNode &operator[](const std::string &key);
+        // const JNode &operator[](const std::string &key) const;
+        // JNode &operator[](int index);
+        // const JNode &operator[](int index) const;
         // ================
         // PUBLIC VARIABLES
         // ================
@@ -71,4 +76,5 @@ namespace JSONLib
         // JSON implementation
         const std::unique_ptr<JSON_Impl> m_jsonImplementation;
     };
+
 } // namespace JSONLib

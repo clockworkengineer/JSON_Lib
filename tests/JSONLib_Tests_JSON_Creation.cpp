@@ -25,11 +25,17 @@ TEST_CASE("JSON object creation api.", "[JSON][Create]")
     {
         REQUIRE_NOTHROW(JSON{R"({ "pi" : 3.141 })"});
     }
-    SECTION("Initialise JSON with JSON passed to constructor and validate.", "[JSON][Create][Constructor][Validate")
+    SECTION("Initialise JSON with JSON string passed to constructor and validate.", "[JSON][Create][Constructor][Validate]")
     {
         const JSON json{R"({ "pi" : 3.141 })"};
         REQUIRE(json.root().getNodeType() == JNodeType::object);
         REQUIRE(json.root()["pi"].getNodeType() == JNodeType::number);
         REQUIRE(JNodeRef<JNodeNumber>(json.root()["pi"]).toString() == "3.141");
     }
+    // SECTION("Initialise root JSON object with one entry containing a number.", "[JSON][Create][Number]")
+    // {
+    //     JSON json;
+    //     //json["pi"] = 3.141;
+    //     REQUIRE(json["pi"].getNodeType() == JNodeType::base);
+    // }
 }
