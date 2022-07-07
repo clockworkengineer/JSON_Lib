@@ -76,12 +76,11 @@ namespace JSONLib
     // ==========
     struct JNodeObject : JNode
     {
-        using Entry = std::pair<std::string, JNode::Ptr>;
-        static auto findEntry(const std::string &key, const std::vector<Entry> &objects)
+        struct Entry
         {
-            return (std::find_if(objects.begin(), objects.end(), [&key](const Entry &entry) -> bool
-                                 { return (entry.first == key); }));
-        }
+            std::string key;
+            JNode::Ptr value;
+        };
         JNodeObject() : JNode(JNodeType::object)
         {
         }
@@ -89,13 +88,25 @@ namespace JSONLib
                                                                          m_jsonObjects(std::move(objects))
         {
         }
+        [[nodiscard]] auto find(const std::string &key) const
+        {
+            auto entry = std::find_if(m_jsonObjects.begin(), m_jsonObjects.end(), [&key](const Entry &entry) -> bool
+                                      { return (entry.key == key); });
+            if (entry == m_jsonObjects.end())
+            {
+                throw Error("Invalid key used to access object.");
+            }
+            return (entry);
+        }
         [[nodiscard]] bool contains(const std::string &key) const
         {
-            if (auto entry = findEntry(key, m_jsonObjects); entry != m_jsonObjects.end())
+            auto entry = std::find_if(m_jsonObjects.begin(), m_jsonObjects.end(), [&key](const Entry &entry) -> bool
+                                      { return (entry.key == key); });
+            if (entry == m_jsonObjects.end())
             {
-                return (true);
+                return (false);
             }
-            return (false);
+            return (true);
         }
         [[nodiscard]] int size() const
         {
@@ -103,19 +114,11 @@ namespace JSONLib
         }
         JNode &operator[](const std::string &key)
         {
-            if (auto entry = findEntry(key, m_jsonObjects); entry != m_jsonObjects.end())
-            {
-                return (*entry->second);
-            }
-            throw Error("Invalid key used to access object.");
+            return (*(find(key)->value));
         }
         const JNode &operator[](const std::string &key) const
         {
-            if (auto entry = findEntry(key, m_jsonObjects); entry != m_jsonObjects.end())
-            {
-                return (*entry->second);
-            }
-            throw Error("Invalid key used to access object.");
+            return (*(find(key)->value));
         }
         std::vector<Entry> &objects()
         {
@@ -129,6 +132,7 @@ namespace JSONLib
     private:
         std::vector<JNodeObject::Entry> m_jsonObjects;
     };
+    using JNodeObjectEntry = JNodeObject::Entry;
     // =====
     // Array
     // =====
