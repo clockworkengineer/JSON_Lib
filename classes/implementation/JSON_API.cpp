@@ -42,14 +42,14 @@ namespace JSONLib
         {
             if (m_jNodeRoot == nullptr)
             {
-                m_jNodeRoot = std::make_unique<JNodeObject>();
+                m_jNodeRoot = m_jsonImplementation->parse("{}");
             }
             return ((*m_jNodeRoot)[key]);
         }
         catch ([[maybe_unused]] JNode::Error &error)
         {
-            JNodeRef<JNodeObject>(*m_jNodeRoot).objects().emplace_back(JNodeObjectEntry{key, std::make_unique<JNode>()});
-            return (*JNodeRef<JNodeObject>(*m_jNodeRoot).objects().back().second);
+            JNodeDataRef<JNodeObjectData>(*m_jNodeRoot).objects().emplace_back(JNodeObjectEntry{key, makeJNodeNull()});
+            return (*JNodeDataRef<JNodeObjectData>(*m_jNodeRoot).objects().back().value);
         }
     }
     const JNode &JSON::operator[](const std::string &key) const // Object

@@ -21,6 +21,7 @@ set(JSON_LIBRARY_NAME ${PROJECT_NAME})
 set (JSON_SOURCES
     ./classes/JSON.cpp
     ./classes/implementation/JSON_Impl.cpp
+    ./classes/implementation/JSON_API.cpp
     ./classes/implementation/JSON_Translator.cpp
     ./classes/implementation/JSON_Converter.cpp)
 
