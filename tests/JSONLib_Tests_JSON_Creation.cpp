@@ -39,11 +39,18 @@ TEST_CASE("JSON object creation api.", "[JSON][Create]")
         REQUIRE(json["pi"].getNodeType() == JNodeType::number);
         REQUIRE(JNodeDataRef<JNodeNumberData>(json.root()["pi"]).toString() == "3.141");
     }
-    SECTION("Initialise root JSON object with one entry containing a string.", "[JSON][Create][Number]")
+    SECTION("Initialise root JSON object with one entry containing a string.", "[JSON][Create][String]")
     {
         JSON json;
         json["name"] = "robert";
         REQUIRE(json["name"].getNodeType() == JNodeType::string);
         REQUIRE(JNodeDataRef<JNodeStringData>(json.root()["name"]).toString() == "robert");
+    }
+    SECTION("Initialise root JSON object with one entry containing a boolean.", "[JSON][Create][Boolean]")
+    {
+        JSON json;
+        json["flag"] = true;
+        REQUIRE(json["flag"].getNodeType() == JNodeType::boolean);
+        REQUIRE(JNodeDataRef<JNodeBooleanData>(json.root()["flag"]).toString() == "true");
     }
 }

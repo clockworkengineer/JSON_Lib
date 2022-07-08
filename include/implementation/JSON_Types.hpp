@@ -74,7 +74,9 @@ namespace JSONLib
         JNode &operator=(int other);
         JNode &operator=(long other);
         JNode &operator=(long long other);
-        JNode &operator=(const std::string &other);
+        JNode &operator=(const char *cstring);
+        JNode &operator=(const std::string &string);
+        JNode &operator=(bool boolean);
 
         JNode &operator[](const std::string &key);
 
@@ -426,9 +428,9 @@ namespace JSONLib
     {
         return (JNodeDataRef<JNodeArrayData>(*this)[index]);
     }
-    // ============
-    // Assigment operators
-    // ============
+    // ====================
+    // Assignment operators
+    // ====================
     inline JNode &JNode::operator=(float other)
     {
         std::string stringValue{std::to_string(other)};
@@ -480,9 +482,20 @@ namespace JSONLib
         m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{number}));
         return (*this);
     }
-    inline JNode &JNode::operator=(const std::string &other)
+    inline JNode &JNode::operator=(const char *cstring)
     {
-        m_jNodeData = std::make_unique<JNodeStringData>(std::move(JNodeStringData{other}));
+        std::string string{cstring};
+        m_jNodeData = std::make_unique<JNodeStringData>(std::move(JNodeStringData{string}));
+        return (*this);
+    }
+    inline JNode &JNode::operator=(const std::string &string)
+    {
+        m_jNodeData = std::make_unique<JNodeStringData>(std::move(JNodeStringData{string}));
+        return (*this);
+    }
+    inline JNode &JNode::operator=(bool boolean)
+    {
+        m_jNodeData = std::make_unique<JNodeBooleanData>(std::move(JNodeBooleanData{boolean}));
         return (*this);
     }
 } // namespace JSONLib
