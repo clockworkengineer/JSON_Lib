@@ -66,16 +66,27 @@ namespace JSONLib
             {
             }
         };
+
         explicit JNode() {}
-        [[nodiscard]] JNodeType getNodeType() const
-        {
-            return (m_jNodeData->getNodeType());
-        }
         JNode &operator[](const std::string &key);
         const JNode &operator[](const std::string &key) const;
         JNode &operator[](int index);
         const JNode &operator[](int index) const;
-        // private:
+        [[nodiscard]] JNodeType getNodeType() const
+        {
+            return (m_jNodeData->getNodeType());
+        }
+
+        std::unique_ptr<JNodeData> &getJNodeData()
+        {
+            return (m_jNodeData);
+        }
+        const std::unique_ptr<JNodeData> &getJNodeData() const
+        {
+            return (m_jNodeData);
+        }
+
+    private:
         std::unique_ptr<JNodeData> m_jNodeData;
     };
     struct JNodeObjectEntry
@@ -294,37 +305,37 @@ namespace JSONLib
     inline std::unique_ptr<JNode> makeJNodeObject(std::vector<JNodeObjectEntry> &objects)
     {
         JNode jNode;
-        jNode.m_jNodeData = std::make_unique<JNodeObjectData>(std::move(JNodeObjectData{objects}));
+        jNode.getJNodeData() = std::make_unique<JNodeObjectData>(std::move(JNodeObjectData{objects}));
         return (std::make_unique<JNode>(std::move(jNode)));
     }
     inline std::unique_ptr<JNode> makeJNodeArray(std::vector<JNode::Ptr> &array)
     {
         JNode jNode;
-        jNode.m_jNodeData = std::make_unique<JNodeArrayData>(std::move(JNodeArrayData{array}));
+        jNode.getJNodeData() = std::make_unique<JNodeArrayData>(std::move(JNodeArrayData{array}));
         return (std::make_unique<JNode>(std::move(jNode)));
     }
     inline std::unique_ptr<JNode> makeJNodeNumber(std::array<char, kLongLongWidth> &number)
     {
         JNode jNode;
-        jNode.m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{number}));
+        jNode.getJNodeData() = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{number}));
         return (std::make_unique<JNode>(std::move(jNode)));
     }
     inline std::unique_ptr<JNode> makeJNodeString(const std::string &string)
     {
         JNode jNode;
-        jNode.m_jNodeData = std::make_unique<JNodeStringData>(std::move(JNodeStringData{string}));
+        jNode.getJNodeData() = std::make_unique<JNodeStringData>(std::move(JNodeStringData{string}));
         return (std::make_unique<JNode>(std::move(jNode)));
     }
     inline std::unique_ptr<JNode> makeJNodeBoolean(bool boolean)
     {
         JNode jNode;
-        jNode.m_jNodeData = std::make_unique<JNodeBooleanData>(std::move(JNodeBooleanData{boolean}));
+        jNode.getJNodeData() = std::make_unique<JNodeBooleanData>(std::move(JNodeBooleanData{boolean}));
         return (std::make_unique<JNode>(std::move(jNode)));
     }
     inline std::unique_ptr<JNode> makeJNodeNull()
     {
         JNode jNode;
-        jNode.m_jNodeData = std::make_unique<JNodeNullData>(std::move(JNodeNullData()));
+        jNode.getJNodeData() = std::make_unique<JNodeNullData>(std::move(JNodeNullData()));
         return (std::make_unique<JNode>(std::move(jNode)));
     }
     // ==============================
@@ -379,14 +390,14 @@ namespace JSONLib
     template <typename T>
     T &JNodeDataRef(JNode &jNode)
     {
-        CheckJNodeDataType<T>(*jNode.m_jNodeData);
-        return (static_cast<T &>(*jNode.m_jNodeData));
+        CheckJNodeDataType<T>(*jNode.getJNodeData());
+        return (static_cast<T &>(*jNode.getJNodeData()));
     }
     template <typename T>
     const T &JNodeDataRef(const JNode &jNode)
     {
-        CheckJNodeDataType<T>(*jNode.m_jNodeData);
-        return (static_cast<const T &>(*jNode.m_jNodeData));
+        CheckJNodeDataType<T>(*jNode.getJNodeData());
+        return (static_cast<const T &>(*jNode.getJNodeData()));
     }
     // ===============
     // Index overloads
