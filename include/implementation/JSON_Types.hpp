@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <limits>
 #include <array>
+#include <cstring>
 // =========
 // NAMESPACE
 // =========
@@ -66,9 +67,17 @@ namespace JSONLib
             {
             }
         };
-
         explicit JNode() {}
+        JNode &operator=(float other);
+        JNode &operator=(double other);
+        JNode &operator=(long double other);
+        JNode &operator=(int other);
+        JNode &operator=(long other);
+        JNode &operator=(long long other);
+        JNode &operator=(const std::string &other);
+
         JNode &operator[](const std::string &key);
+
         const JNode &operator[](const std::string &key) const;
         JNode &operator[](int index);
         const JNode &operator[](int index) const;
@@ -76,7 +85,6 @@ namespace JSONLib
         {
             return (m_jNodeData->getNodeType());
         }
-
         std::unique_ptr<JNodeData> &getJNodeData()
         {
             return (m_jNodeData);
@@ -417,5 +425,64 @@ namespace JSONLib
     inline const JNode &JNode::operator[](int index) const // Array
     {
         return (JNodeDataRef<JNodeArrayData>(*this)[index]);
+    }
+    // ============
+    // Assigment operators
+    // ============
+    inline JNode &JNode::operator=(float other)
+    {
+        std::string stringValue{std::to_string(other)};
+        stringValue.erase(stringValue.find_last_not_of('0') + 1, std::string::npos);
+        std::array<char, kLongLongWidth> number{};
+        std::memcpy(&number[0], stringValue.c_str(), stringValue.size());
+        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{number}));
+        return (*this);
+    }
+    inline JNode &JNode::operator=(double other)
+    {
+        std::string stringValue{std::to_string(other)};
+        stringValue.erase(stringValue.find_last_not_of('0') + 1, std::string::npos);
+        std::array<char, kLongLongWidth> number{};
+        std::memcpy(&number[0], stringValue.c_str(), stringValue.size());
+        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{number}));
+        return (*this);
+    }
+    inline JNode &JNode::operator=(long double other)
+    {
+        std::string stringValue{std::to_string(other)};
+        stringValue.erase(stringValue.find_last_not_of('0') + 1, std::string::npos);
+        std::array<char, kLongLongWidth> number{};
+        std::memcpy(&number[0], stringValue.c_str(), stringValue.size());
+        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{number}));
+        return (*this);
+    }
+    inline JNode &JNode::operator=(int other)
+    {
+        std::string stringValue{std::to_string(other)};
+        std::array<char, kLongLongWidth> number{};
+        std::memcpy(&number[0], stringValue.c_str(), stringValue.size());
+        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{number}));
+        return (*this);
+    }
+    inline JNode &JNode::operator=(long other)
+    {
+        std::string stringValue{std::to_string(other)};
+        std::array<char, kLongLongWidth> number{};
+        std::memcpy(&number[0], stringValue.c_str(), stringValue.size());
+        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{number}));
+        return (*this);
+    }
+    inline JNode &JNode::operator=(long long other)
+    {
+        std::string stringValue{std::to_string(other)};
+        std::array<char, kLongLongWidth> number{};
+        std::memcpy(&number[0], stringValue.c_str(), stringValue.size());
+        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{number}));
+        return (*this);
+    }
+    inline JNode &JNode::operator=(const std::string &other)
+    {
+        m_jNodeData = std::make_unique<JNodeStringData>(std::move(JNodeStringData{other}));
+        return (*this);
     }
 } // namespace JSONLib
