@@ -95,6 +95,13 @@ TEST_CASE("JSON object creation api.", "[JSON][Create][Object]")
         REQUIRE(json["flag"].getNodeType() == JNodeType::boolean);
         REQUIRE(JNodeDataRef<JNodeBooleanData>(json.root()["flag"]).toString() == "true");
     }
+    SECTION("Initialise root JSON object with one entry containing a null.", "[JSON][Create][Object][null]")
+    {
+        JSON json;
+        json["nothing"] = nullptr;
+        REQUIRE(json["nothing"].getNodeType() == JNodeType::null);
+        REQUIRE(JNodeDataRef<JNodeNullData>(json.root()["nothing"]).toString() == "null");
+    }
 }
 TEST_CASE("JSON object array api.", "[JSON][Create][Array]")
 {
@@ -181,5 +188,27 @@ TEST_CASE("JSON object array api.", "[JSON][Create][Array]")
         REQUIRE(json[10].getNodeType() == JNodeType::number);
         REQUIRE(JNodeDataRef<JNodeNumberData>(json.root()[10]).toString() == "300");
         REQUIRE(JNodeDataRef<JNodeArrayData>(json.root()).array().size() == 11);
+    }
+    SECTION("Initialise root JSON array with one entry containing a null.", "[JSON][Create][Array][null]")
+    {
+        JSON json;
+        json[0] = nullptr;
+        REQUIRE(json[0].getNodeType() == JNodeType::null);
+        REQUIRE(JNodeDataRef<JNodeNullData>(json.root()[0]).toString() == "null");
+    }
+}
+TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]")
+{
+    SECTION("Example 1.", "[JSON][Create][Complex]")
+    {
+        JSON json;
+        json["pi"] = 3.141;
+        json["happy"] = true;
+        json["name"] = "Niels";
+        json["nothing"] = nullptr;
+      //  json["answer"]["everything"] = 42;
+        BufferDestination jsonDestination;
+        REQUIRE_NOTHROW(json.stringify(jsonDestination));
+        REQUIRE(jsonDestination.getBuffer() == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null})");
     }
 }

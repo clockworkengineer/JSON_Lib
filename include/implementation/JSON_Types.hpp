@@ -29,7 +29,6 @@ namespace JSONLib
     // ======================================
     static constexpr int kLongLongWidth = std::numeric_limits<long long>::digits10 + 2;
     static constexpr int kLongDoubleWidth = std::numeric_limits<long double>::digits10 + 2;
-
     // ===========
     // JNode types
     // ===========
@@ -93,6 +92,7 @@ namespace JSONLib
         JNode &operator=(const char *cString);
         JNode &operator=(const std::string &string);
         JNode &operator=(bool boolean);
+        JNode &operator=(std::nullptr_t null);
         //
         // Indexing operators
         //
@@ -544,6 +544,11 @@ namespace JSONLib
     inline JNode &JNode::operator=(bool boolean)
     {
         m_jNodeData = std::make_unique<JNodeBooleanData>(std::move(JNodeBooleanData{boolean}));
+        return (*this);
+    }
+    inline JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null)
+    {
+        m_jNodeData = std::make_unique<JNodeNullData>(std::move(JNodeNullData()));
         return (*this);
     }
 } // namespace JSONLib
