@@ -368,13 +368,6 @@ namespace JSONLib
     // ==============
     // JNode Creation
     // ==============
-    // inline std::unique_ptr<JNode> makeJNodeObject()
-    // {
-    //     JNode jNode;
-    //     std::vector<JNodeObjectEntry> objects;
-    //     jNode.getJNodeData() = std::make_unique<JNodeObjectData>(JNodeObjectData{objects});
-    //     return (std::make_unique<JNode>(std::move(jNode)));
-    // }
     inline std::unique_ptr<JNode> makeJNodeObject(std::vector<JNodeObjectEntry> &objects)
     {
         JNode jNode;
