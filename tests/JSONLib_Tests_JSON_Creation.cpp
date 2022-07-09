@@ -199,16 +199,27 @@ TEST_CASE("JSON object array api.", "[JSON][Create][Array]")
 }
 TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]")
 {
-    SECTION("Example 1.", "[JSON][Create][Complex]")
+    SECTION("A Single level object.", "[JSON][Create][Complex]")
     {
         JSON json;
         json["pi"] = 3.141;
         json["happy"] = true;
         json["name"] = "Niels";
         json["nothing"] = nullptr;
-      //  json["answer"]["everything"] = 42;
         BufferDestination jsonDestination;
         REQUIRE_NOTHROW(json.stringify(jsonDestination));
         REQUIRE(jsonDestination.getBuffer() == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null})");
+    }
+
+    SECTION("A single level array.", "[JSON][Create][Complex]")
+    {
+        JSON json;
+        json[0] = 3.141;
+        json[1] = true;
+        json[2] = "Niels";
+        json[3] = nullptr;
+        BufferDestination jsonDestination;
+        REQUIRE_NOTHROW(json.stringify(jsonDestination));
+        REQUIRE(jsonDestination.getBuffer() == R"([3.141,true,"Niels",null])");
     }
 }
