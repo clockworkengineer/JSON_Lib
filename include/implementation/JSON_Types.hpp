@@ -98,8 +98,8 @@ namespace JSONLib
         //
         JNode &operator[](const std::string &key);
         const JNode &operator[](const std::string &key) const;
-        JNode &operator[](int index);
-        const JNode &operator[](int index) const;
+        JNode &operator[](std::size_t index);
+        const JNode &operator[](std::size_t index) const;
         //
         // Get JNode type
         //
@@ -211,7 +211,7 @@ namespace JSONLib
         {
             return (m_jsonArray);
         }
-        JNode &operator[](int index)
+        JNode &operator[](std::size_t index)
         {
             if ((index >= 0) && (index < (static_cast<int>(m_jsonArray.size()))))
             {
@@ -219,7 +219,7 @@ namespace JSONLib
             }
             throw JNode::Error("Invalid index used to access array.");
         }
-        const JNode &operator[](int index) const
+        const JNode &operator[](std::size_t index) const
         {
             if ((index >= 0) && (index < (static_cast<int>(m_jsonArray.size()))))
             {
@@ -468,11 +468,11 @@ namespace JSONLib
     //
     // Array
     //
-    inline JNode &JNode::operator[](int index)
+    inline JNode &JNode::operator[](std::size_t index)
     {
         return (JNodeDataRef<JNodeArrayData>(*this)[index]);
     }
-    inline const JNode &JNode::operator[](int index) const
+    inline const JNode &JNode::operator[](std::size_t index) const
     {
         return (JNodeDataRef<JNodeArrayData>(*this)[index]);
     }

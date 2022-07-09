@@ -56,8 +56,8 @@ namespace JSONLib
         [[nodiscard]] const JNode &root() const { return (*m_jNodeRoot); }
         JNode &operator[](const std::string &key);
         const JNode &operator[](const std::string &key) const;
-        // JNode &operator[](int index);
-        // const JNode &operator[](int index) const;
+        JNode &operator[](std::size_t index);
+        const JNode &operator[](std::size_t index) const;
         // ================
         // PUBLIC VARIABLES
         // ================
