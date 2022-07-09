@@ -40,7 +40,8 @@ namespace JSONLib
         number,
         string,
         boolean,
-        null
+        null,
+        hole
     };
     // ============
     // JNode Number
@@ -351,9 +352,29 @@ namespace JSONLib
             return ("null");
         }
     };
+    //
+    // Hole
+    //
+    struct JNodeHoleData : JNodeData
+    {
+        JNodeHoleData() : JNodeData(JNodeType::hole)
+        {
+        }
+        [[nodiscard]] std::string toString() const
+        {
+            return ("hole");
+        }
+    };
     // ==============
     // JNode Creation
     // ==============
+    // inline std::unique_ptr<JNode> makeJNodeObject()
+    // {
+    //     JNode jNode;
+    //     std::vector<JNodeObjectEntry> objects;
+    //     jNode.getJNodeData() = std::make_unique<JNodeObjectData>(JNodeObjectData{objects});
+    //     return (std::make_unique<JNode>(std::move(jNode)));
+    // }
     inline std::unique_ptr<JNode> makeJNodeObject(std::vector<JNodeObjectEntry> &objects)
     {
         JNode jNode;
@@ -388,6 +409,12 @@ namespace JSONLib
     {
         JNode jNode;
         jNode.getJNodeData() = std::make_unique<JNodeNullData>(JNodeNullData());
+        return (std::make_unique<JNode>(std::move(jNode)));
+    }
+    inline std::unique_ptr<JNode> makeJNodeHole()
+    {
+        JNode jNode;
+        jNode.getJNodeData() = std::make_unique<JNodeHoleData>(JNodeHoleData());
         return (std::make_unique<JNode>(std::move(jNode)));
     }
     // ==============================
@@ -459,6 +486,13 @@ namespace JSONLib
     //
     inline JNode &JNode::operator[](const std::string &key)
     {
+        if (this->getNodeType() == JNodeType::hole)
+        {
+            std::vector<JNodeObjectEntry> objects;
+            this->m_jNodeData = std::make_unique<JNodeObjectData>(JNodeObjectData{objects});
+            JNodeDataRef<JNodeObjectData>(*this).objects().emplace_back(JNodeObjectEntry{key, makeJNodeHole()});
+            return (*JNodeDataRef<JNodeObjectData>(*this).objects().back().value);
+        }
         return (JNodeDataRef<JNodeObjectData>(*this)[key]);
     }
     inline const JNode &JNode::operator[](const std::string &key) const

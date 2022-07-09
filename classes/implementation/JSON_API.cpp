@@ -51,7 +51,7 @@ namespace JSONLib
         }
         catch ([[maybe_unused]] JNode::Error &error)
         {
-            JNodeDataRef<JNodeObjectData>(*m_jNodeRoot).objects().emplace_back(JNodeObjectEntry{key, makeJNodeNull()});
+            JNodeDataRef<JNodeObjectData>(*m_jNodeRoot).objects().emplace_back(JNodeObjectEntry{key, makeJNodeHole()});
             return (*JNodeDataRef<JNodeObjectData>(*m_jNodeRoot).objects().back().value);
         }
     }

@@ -210,7 +210,6 @@ TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]")
         REQUIRE_NOTHROW(json.stringify(jsonDestination));
         REQUIRE(jsonDestination.getBuffer() == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null})");
     }
-
     SECTION("A single level array.", "[JSON][Create][Complex]")
     {
         JSON json;
@@ -221,5 +220,17 @@ TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]")
         BufferDestination jsonDestination;
         REQUIRE_NOTHROW(json.stringify(jsonDestination));
         REQUIRE(jsonDestination.getBuffer() == R"([3.141,true,"Niels",null])");
+    }
+    SECTION("A two level object.", "[JSON][Create][Complex]")
+    {
+        JSON json;
+        json["pi"] = 3.141;
+        json["happy"] = true;
+        json["name"] = "Niels";
+        json["nothing"] = nullptr;
+        json["answer"]["everything"] = 42;
+        BufferDestination jsonDestination;
+        REQUIRE_NOTHROW(json.stringify(jsonDestination));
+        REQUIRE(jsonDestination.getBuffer() == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42}})");
     }
 }
