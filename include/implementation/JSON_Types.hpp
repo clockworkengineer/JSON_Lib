@@ -58,7 +58,6 @@ namespace JSONLib
         {
             return (m_nodeType);
         }
-
     private:
         JNodeType m_nodeType;
     };
@@ -113,7 +112,6 @@ namespace JSONLib
         {
             return (m_jNodeData);
         }
-
     private:
         std::unique_ptr<JNodeData> m_jNodeData;
     };
@@ -181,7 +179,6 @@ namespace JSONLib
         {
             return (m_jsonObjects);
         }
-
     private:
         static ObjectEntryList::const_iterator findKey(const std::string &key,
                                                                      const ObjectEntryList &objects)
@@ -236,7 +233,6 @@ namespace JSONLib
             }
             throw JNode::Error("Invalid index used to access array.");
         }
-
     private:
         std::vector<JNode::Ptr> m_jsonArray;
     };
@@ -304,7 +300,6 @@ namespace JSONLib
         {
             return (std::string{m_jsonNumber.begin(), m_jsonNumber.begin() + std::strlen(&m_jsonNumber[0])});
         }
-
     private:
         JNodeNumber m_jsonNumber{};
     };
@@ -334,7 +329,6 @@ namespace JSONLib
         {
             return (m_jsonString);
         }
-
     private:
         std::string m_jsonString;
     };
@@ -359,7 +353,6 @@ namespace JSONLib
         {
             return (m_jsonBoolean ? "true" : "false");
         }
-
     private:
         bool m_jsonBoolean;
     };
@@ -519,7 +512,16 @@ namespace JSONLib
     // Array
     inline JNode &JNode::operator[](std::size_t index)
     {
-        return (JNodeDataRef<JNodeArrayData>(*this)[index]);
+        try 
+        {
+            return(*JNodeDataRef<JNodeArrayData>(*this).array().at(index));
+        }
+        catch ([[maybe_unused]] const std::out_of_range &error)
+        {
+            JNodeDataRef<JNodeArrayData>(*this).array().resize(index+1);
+            JNodeDataRef<JNodeArrayData>(*this).array()[index] = std::move(makeJNodeNull());
+            return (*JNodeDataRef<JNodeArrayData>(*this).array()[index]);
+        }
     }
     inline const JNode &JNode::operator[](std::size_t index) const
     {

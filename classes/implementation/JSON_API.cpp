@@ -59,4 +59,28 @@ namespace JSONLib
     {
         return ((*m_jNodeRoot)[key]);
     }
+    //
+    // Array
+    //
+    JNode &JSON::operator[](std::size_t index)
+    {
+        try
+        {
+            if (m_jNodeRoot == nullptr)
+            {
+                m_jNodeRoot = m_jsonImplementation->parse("[]");
+            }
+            return ((*m_jNodeRoot)[index]);
+        }
+        catch ([[maybe_unused]] JNode::Error &error)
+        {
+            JNodeDataRef<JNodeArrayData>(*m_jNodeRoot).array().resize(index+1);
+            JNodeDataRef<JNodeArrayData>(*m_jNodeRoot).array()[index] = std::move(makeJNodeNull());
+            return (*JNodeDataRef<JNodeArrayData>(*m_jNodeRoot).array()[index]);
+        }
+    }
+    const JNode &JSON::operator[](std::size_t index) const
+    {
+        return ((*m_jNodeRoot)[index]);
+    }
 } // namespace JSONLib
