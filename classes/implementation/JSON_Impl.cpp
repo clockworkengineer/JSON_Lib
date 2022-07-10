@@ -168,7 +168,7 @@ namespace JSONLib
     /// <returns>JNodeObject key/value pairs.</returns>
     JNode::Ptr JSON_Impl::parseObject(ISource &source)
     {
-        std::vector<JNodeObjectEntry> objects;
+        JNodeObjectData::ObjectEntryList objects;
         source.next();
         source.ignoreWS();
         if (source.current() != '}')
