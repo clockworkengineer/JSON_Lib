@@ -21,11 +21,11 @@ using namespace JSONLib;
 // =======================
 TEST_CASE("JSON object creation api.", "[JSON][Create][Object]")
 {
-    SECTION("Initialise JSON with JSON passed to constructor.", "[JSON][Create][Constructor]")
+    SECTION("Initialise JSON with JSON object  passed to constructor.", "[JSON][Create][Constructor]")
     {
         REQUIRE_NOTHROW(JSON{R"({ "pi" : 3.141 })"});
     }
-    SECTION("Initialise JSON with JSON string passed to constructor and validate.", "[JSON][Create][Constructor][Validate]")
+    SECTION("Initialise JSON with JSON object  passed to constructor and validate.", "[JSON][Create][Constructor][Validate]")
     {
         const JSON json{R"({ "pi" : 3.141 })"};
         REQUIRE(json.root().getNodeType() == JNodeType::object);
@@ -103,99 +103,29 @@ TEST_CASE("JSON object creation api.", "[JSON][Create][Object]")
         REQUIRE(JNodeDataRef<JNodeNullData>(json.root()["nothing"]).toString() == "null");
     }
 }
-TEST_CASE("JSON object array api.", "[JSON][Create][Array]")
+TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
 {
-    SECTION("Initialise JSON with JSON object passed to constructor.", "[JSON][Create][Array][Constructor]")
+    SECTION("Initialise JSON with JSON array  passed to constructor.", "[JSON][Create][Constructor]")
     {
-        REQUIRE_NOTHROW(JSON{R"(["pi", 3.141 ])"});
+        REQUIRE_NOTHROW(JSON{R"([ "pi", 3.141 ])"});
     }
-    SECTION("Initialise JSON with JSON array  passed to constructor and validate.", "[JSON][Create][Constructor][Validate]")
+    SECTION("Initialise JSON with JSON array passed to constructor and validate.", "[JSON][Create][Constructor][Validate]")
     {
-        const JSON json{R"(["pi", 3.141 ])"};
+        const JSON json{R"([ "pi", 3.141 ])"};
         REQUIRE(json.root().getNodeType() == JNodeType::array);
         REQUIRE(json.root()[0].getNodeType() == JNodeType::string);
-        REQUIRE(JNodeDataRef<JNodeStringData>(json.root()[0]).toString() == "pi");
         REQUIRE(json.root()[1].getNodeType() == JNodeType::number);
+        REQUIRE(JNodeDataRef<JNodeStringData>(json.root()[0]).toString() == "pi");
         REQUIRE(JNodeDataRef<JNodeNumberData>(json.root()[1]).toString() == "3.141");
     }
-    SECTION("Initialise root JSON array with one entry containing a integer.", "[JSON][Create][Array][Number]")
-    {
-        JSON json;
-        json[0] = 300;
-        REQUIRE(json[0].getNodeType() == JNodeType::number);
-        REQUIRE(JNodeDataRef<JNodeNumberData>(json.root()[0]).toString() == "300");
-    }
-    SECTION("Initialise root JSON array with one entry containing a long.", "[JSON][Create][Array][Number]")
-    {
-        JSON json;
-        json[0] = 30000l;
-        REQUIRE(json[0].getNodeType() == JNodeType::number);
-        REQUIRE(JNodeDataRef<JNodeNumberData>(json.root()[0]).toString() == "30000");
-    }
-    SECTION("Initialise root JSON array with one entry containing a long long .", "[JSON][Create][Array][Number]")
-    {
-        JSON json;
-        json[0] = 30000000ll;
-        REQUIRE(json[0].getNodeType() == JNodeType::number);
-        REQUIRE(JNodeDataRef<JNodeNumberData>(json.root()[0]).toString() == "30000000");
-    }
-    SECTION("Initialise root JSON array with one entry containing a float.", "[JSON][Create][Array][Number]")
-    {
-        JSON json;
-        json[0] = 3.141f;
-        REQUIRE(json[0].getNodeType() == JNodeType::number);
-        REQUIRE(JNodeDataRef<JNodeNumberData>(json.root()[0]).toString() == "3.141");
-    }
-    SECTION("Initialise root JSON array with one entry containing a double.", "[JSON][Create][Array][Number]")
-    {
-        JSON json;
-        json[0] = 3.141;
-        REQUIRE(json[0].getNodeType() == JNodeType::number);
-        REQUIRE(JNodeDataRef<JNodeNumberData>(json.root()[0]).toString() == "3.141");
-    }
-    SECTION("Initialise root JSON array with one entry containing a long double.", "[JSON][Create][Array][Number]")
-    {
-        JSON json;
-        json[0] = 3.141L;
-        REQUIRE(json[0].getNodeType() == JNodeType::number);
-        REQUIRE(JNodeDataRef<JNodeNumberData>(json.root()[0]).toString() == "3.141");
-    }
-    SECTION("Initialise root JSON array with one entry containing a const char *.", "[JSON][Create][Array][String]")
-    {
-        JSON json;
-        json[0] = "robert";
-        REQUIRE(json[0].getNodeType() == JNodeType::string);
-        REQUIRE(JNodeDataRef<JNodeStringData>(json.root()[0]).toString() == "robert");
-    }
-    SECTION("Initialise root JSON array with one entry containing a std::string.", "[JSON][Create][Array][String]")
-    {
-        JSON json;
-        json[0] = std::string{"robert"};
-        REQUIRE(json[0].getNodeType() == JNodeType::string);
-        REQUIRE(JNodeDataRef<JNodeStringData>(json.root()[0]).toString() == "robert");
-    }
-    SECTION("Initialise root JSON array with one entry containing a boolean.", "[JSON][Create][Array][Boolean]")
-    {
-        JSON json;
-        json[0] = true;
-        REQUIRE(json[0].getNodeType() == JNodeType::boolean);
-        REQUIRE(JNodeDataRef<JNodeBooleanData>(json.root()[0]).toString() == "true");
-    }
-    SECTION("Check array resize for out range index.", "[JSON][Create][Array][Expansion]")
-    {
-        JSON json;
-        json[10] = 300;
-        REQUIRE(json[10].getNodeType() == JNodeType::number);
-        REQUIRE(JNodeDataRef<JNodeNumberData>(json.root()[10]).toString() == "300");
-        REQUIRE(JNodeDataRef<JNodeArrayData>(json.root()).array().size() == 11);
-    }
-    SECTION("Initialise root JSON array with one entry containing a null.", "[JSON][Create][Array][null]")
-    {
-        JSON json;
-        json[0] = nullptr;
-        REQUIRE(json[0].getNodeType() == JNodeType::null);
-        REQUIRE(JNodeDataRef<JNodeNullData>(json.root()[0]).toString() == "null");
-    }
+    // SECTION("Add an array to an object.", "[JSON][Create][Array]")
+    // {
+    //     JSON json;
+    //     json["list"] = {1,2,3};
+    //     BufferDestination jsonDestination;
+    //     REQUIRE_NOTHROW(json.stringify(jsonDestination));
+    //     REQUIRE(jsonDestination.getBuffer() == R"()");
+    // }
 }
 TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]")
 {
@@ -209,17 +139,6 @@ TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]")
         BufferDestination jsonDestination;
         REQUIRE_NOTHROW(json.stringify(jsonDestination));
         REQUIRE(jsonDestination.getBuffer() == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null})");
-    }
-    SECTION("A single level array.", "[JSON][Create][Complex]")
-    {
-        JSON json;
-        json[0] = 3.141;
-        json[1] = true;
-        json[2] = "Niels";
-        json[3] = nullptr;
-        BufferDestination jsonDestination;
-        REQUIRE_NOTHROW(json.stringify(jsonDestination));
-        REQUIRE(jsonDestination.getBuffer() == R"([3.141,true,"Niels",null])");
     }
     SECTION("A two level object.", "[JSON][Create][Complex]")
     {
