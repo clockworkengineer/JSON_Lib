@@ -102,6 +102,23 @@ TEST_CASE("JSON object creation api.", "[JSON][Create][Object]")
         REQUIRE(json["nothing"].getNodeType() == JNodeType::null);
         REQUIRE(JNodeDataRef<JNodeNullData>(json.root()["nothing"]).toString() == "null");
     }
+    SECTION("Create two level object and null at base.", "[JSON][Create][Object][null]")
+    {
+        JSON json;
+        json["nothing"]["extra"] = nullptr;
+        REQUIRE(json["nothing"]["extra"].getNodeType() == JNodeType::null);
+        REQUIRE(JNodeDataRef<JNodeNullData>(json.root()["nothing"]["extra"]).toString() == "null");
+    }
+    SECTION("Create three level object and null at base and stringify.", "[JSON][Create][Object][null]")
+    {
+        JSON json;
+        json["nothing"]["extra"]["more"] = nullptr;
+        REQUIRE(json["nothing"]["extra"]["more"].getNodeType() == JNodeType::null);
+        REQUIRE(JNodeDataRef<JNodeNullData>(json.root()["nothing"]["extra"]["more"]).toString() == "null");
+        BufferDestination destinationBuffer;
+        REQUIRE_NOTHROW(json.stringify(destinationBuffer));
+        REQUIRE(destinationBuffer.getBuffer() == R"({"nothing":{"extra":{"more":null}}})");
+    }
 }
 TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
 {

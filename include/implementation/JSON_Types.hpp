@@ -514,13 +514,13 @@ namespace JSONLib
     {
         try 
         {
-            return(*JNodeDataRef<JNodeArrayData>(*this).array().at(index));
+            return(JNodeDataRef<JNodeArrayData>(*this)[index]);
         }
-        catch ([[maybe_unused]] const std::out_of_range &error)
+        catch ([[maybe_unused]] const JNode::Error &error)
         {
             JNodeDataRef<JNodeArrayData>(*this).array().resize(index+1);
             JNodeDataRef<JNodeArrayData>(*this).array()[index] = std::move(makeJNodeNull());
-            return (*JNodeDataRef<JNodeArrayData>(*this).array()[index]);
+            return (JNodeDataRef<JNodeArrayData>(*this)[index]);
         }
     }
     inline const JNode &JNode::operator[](std::size_t index) const
