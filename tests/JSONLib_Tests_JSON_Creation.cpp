@@ -250,20 +250,15 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
         REQUIRE(json[5][4].getNodeType() == JNodeType::string);
         REQUIRE(json[5][5].getNodeType() == JNodeType::string);
         REQUIRE(JNodeDataRef<JNodeArrayData>(json[5]).array().size() == 6);
-        // REQUIRE(JNodeDataRef<JNodeNumberData>(json[5][0]).toString() == "1.0");
-        // REQUIRE(JNodeDataRef<JNodeNumberData>(json[5][1]).toString() == "2.0");
-        // REQUIRE(JNodeDataRef<JNodeNumberData>(json[5][2]).toString() == "3");
-        // REQUIRE(JNodeDataRef<JNodeNumberData>(json[5][3]).toString() == "4.333");
+        REQUIRE(JNodeDataRef<JNodeNumberData>(json[5][0]).toString() == "1.");
+        REQUIRE(JNodeDataRef<JNodeNumberData>(json[5][1]).toString() == "2.");
+        REQUIRE(JNodeDataRef<JNodeNumberData>(json[5][2]).toString() == "3");
+        REQUIRE(JNodeDataRef<JNodeNumberData>(json[5][3]).toString() == "4.333");
         REQUIRE(JNodeDataRef<JNodeStringData>(json[5][4]).toString() == "5.0");
         REQUIRE(JNodeDataRef<JNodeStringData>(json[5][5]).toString() == "test test test test");
-        // REQUIRE(json[5][1].getNodeType() == JNodeType::number);
-        // REQUIRE(JNodeDataRef<JNodeStringData>(json.root()[5]).toString() == "test");
-        // json[3] = 15;
-        // REQUIRE(json[3].getNodeType() == JNodeType::number);
-        // REQUIRE(JNodeDataRef<JNodeNumberData>(json.root()[3]).toString() == "15");
-        // BufferDestination jsonDestination;
-        // REQUIRE_NOTHROW(json.stringify(jsonDestination));
-        // REQUIRE(jsonDestination.getBuffer() == R"([null,null,null,15,null,"test"])");
+        BufferDestination jsonDestination;
+        REQUIRE_NOTHROW(json.stringify(jsonDestination));
+        REQUIRE(jsonDestination.getBuffer() == R"([null,null,null,null,null,[1.,2.,3,4.333,"5.0","test test test test"]])");
     }
 }
 TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]")

@@ -451,11 +451,11 @@ namespace JSONLib
         {
             if (const int *pint = std::get_if<int>(&entry))
             {
-                JNodeNumber jNodeNumber;
+                JNodeNumber jNodeNumber{};
                 std::string number{std::to_string(*pint)};
-                std::memcpy(&jNodeNumber[0], number.c_str(), number.size());
+                std::memcpy(&jNodeNumber[0], number.c_str(), number.size()+1);
                 std::cout << "int = " << *pint << "\n";
-                array.array().push_back(makeJNodeNumber(jNodeNumber));
+                array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const long *plong = std::get_if<long>(&entry))
             {
@@ -472,11 +472,11 @@ namespace JSONLib
             else if (const double *pdouble = std::get_if<double>(&entry))
             {
                 std::cout << "double = " << *pdouble << "\n";
-                JNodeNumber jNodeNumber;
+                JNodeNumber jNodeNumber{};
                 std::string number{std::to_string(*pdouble)};
                 number.erase(number.find_last_not_of('0') + 1, std::string::npos);
                 std::memcpy(&jNodeNumber[0], number.c_str(), number.size());
-                array.array().push_back(makeJNodeNumber(jNodeNumber));
+                array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const long double *plongdouble = std::get_if<long double>(&entry))
             {
@@ -485,7 +485,7 @@ namespace JSONLib
             else if (const std::string *pstring = std::get_if<std::string>(&entry))
             {
                 std::cout << "string = " << *pstring << "\n";
-                array.array().push_back(makeJNodeString(*pstring));
+                array.array().emplace_back(makeJNodeString(*pstring));
             }
         }
         m_jNodeData = std::make_unique<JNodeArrayData>(std::move(array));
