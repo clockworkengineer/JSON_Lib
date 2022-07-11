@@ -225,6 +225,19 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
         REQUIRE_NOTHROW(json.stringify(jsonDestination));
         REQUIRE(jsonDestination.getBuffer() == R"([null,null,null,null,null,"test"])");
     }
+    SECTION("Create array with free spaces add an number at the base and stringify.", "[JSON][Create][Array][null]")
+    {
+        JSON json;
+        json[5] = "test";
+        REQUIRE(json[5].getNodeType() == JNodeType::string);
+        REQUIRE(JNodeDataRef<JNodeStringData>(json.root()[5]).toString() == "test");
+        json[3] = 15;
+        REQUIRE(json[3].getNodeType() == JNodeType::number);
+        REQUIRE(JNodeDataRef<JNodeNumberData>(json.root()[3]).toString() == "15");
+        BufferDestination jsonDestination;
+        REQUIRE_NOTHROW(json.stringify(jsonDestination));
+        REQUIRE(jsonDestination.getBuffer() == R"([null,null,null,15,null,"test"])");
+    }
 }
 TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]")
 {
@@ -250,5 +263,17 @@ TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]")
         BufferDestination jsonDestination;
         REQUIRE_NOTHROW(json.stringify(jsonDestination));
         REQUIRE(jsonDestination.getBuffer() == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42}})");
+    }
+    SECTION("A three level object.", "[JSON][Create][Complex]")
+    {
+        JSON json;
+        json["pi"] = 3.141;
+        json["happy"] = true;
+        json["name"][5] = "Niels";
+        json["nothing"] = nullptr;
+        json["answer"]["everything"][5] = 42;
+        BufferDestination jsonDestination;
+        REQUIRE_NOTHROW(json.stringify(jsonDestination));
+        REQUIRE(jsonDestination.getBuffer() == R"({"pi":3.141,"happy":true,"name":[null,null,null,null,null,"Niels"],"nothing":null,"answer":{"everything":[null,null,null,null,null,42]}})");
     }
 }
