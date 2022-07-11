@@ -238,7 +238,6 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
         REQUIRE_NOTHROW(json.stringify(jsonDestination));
         REQUIRE(jsonDestination.getBuffer() == R"([null,null,null,15,null,"test"])");
     }
-
     SECTION("Create array with initializer list assignment.", "[JSON][Create][Array][initializer]")
     {
         JSON json;

@@ -115,8 +115,8 @@ namespace JSONLib
         JNodeNumberData jsonNumber;
         for (int digits = 0; source.more() && jsonNumber.isValidNumeric(source.current()); source.next())
         {
-            jsonNumber.number()[digits++] = source.current();
-            if (digits == kLongLongWidth)
+            jsonNumber.number().value[digits++] = source.current();
+            if (digits == JNodeNumber::kLongLongWidth)
             {
                 throw Error("Syntax error detected.");
             }
