@@ -81,7 +81,7 @@ namespace JSONLib
         };
         // Constructors/Destructors
         JNode(std::unique_ptr<JNodeData> jNodeData) : m_jNodeData(std::move(jNodeData)) {}
-        JNode(std::initializer_list<std::variant<int, long, long long, float, double, long double, std::string>> list);
+        JNode(std::initializer_list<std::variant<int, long, long long, float, double, long double, bool, std::string>> list);
         JNode(const JNode &other) = delete;
         JNode &operator=(const JNode &other) = delete;
         JNode(JNode &&other) = default;
@@ -444,30 +444,43 @@ namespace JSONLib
     //
     // JNode Constructors
     //
-    inline JNode::JNode(std::initializer_list<std::variant<int, long, long long, float, double, long double, std::string>> list)
+    inline JNode::JNode(std::initializer_list<std::variant<int, long, long long, float, double, long double, bool, std::string>> list)
     {
         JNodeArrayData array;
         for (auto &entry : list)
         {
             if (const int *pint = std::get_if<int>(&entry))
             {
+                std::cout << "int = " << *pint << "\n";
                 JNodeNumber jNodeNumber{};
                 std::string number{std::to_string(*pint)};
-                std::memcpy(&jNodeNumber[0], number.c_str(), number.size()+1);
-                std::cout << "int = " << *pint << "\n";
+                std::memcpy(&jNodeNumber[0], number.c_str(), number.size() + 1);
                 array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const long *plong = std::get_if<long>(&entry))
             {
                 std::cout << "long = " << *plong << "\n";
+                JNodeNumber jNodeNumber{};
+                std::string number{std::to_string(*plong)};
+                std::memcpy(&jNodeNumber[0], number.c_str(), number.size() + 1);
+                array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const long long *plonglong = std::get_if<long long>(&entry))
             {
                 std::cout << "long long = " << *plonglong << "\n";
+                JNodeNumber jNodeNumber{};
+                std::string number{std::to_string(*plonglong)};
+                std::memcpy(&jNodeNumber[0], number.c_str(), number.size() + 1);
+                array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const float *pfloat = std::get_if<float>(&entry))
             {
                 std::cout << "float = " << pfloat << "\n";
+                JNodeNumber jNodeNumber{};
+                std::string number{std::to_string(*pfloat)};
+                number.erase(number.find_last_not_of('0') + 1, std::string::npos);
+                std::memcpy(&jNodeNumber[0], number.c_str(), number.size());
+                array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const double *pdouble = std::get_if<double>(&entry))
             {
@@ -481,11 +494,21 @@ namespace JSONLib
             else if (const long double *plongdouble = std::get_if<long double>(&entry))
             {
                 std::cout << "long double = " << *plongdouble << "\n";
+                JNodeNumber jNodeNumber{};
+                std::string number{std::to_string(*plongdouble)};
+                number.erase(number.find_last_not_of('0') + 1, std::string::npos);
+                std::memcpy(&jNodeNumber[0], number.c_str(), number.size());
+                array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const std::string *pstring = std::get_if<std::string>(&entry))
             {
                 std::cout << "string = " << *pstring << "\n";
                 array.array().emplace_back(makeJNodeString(*pstring));
+            }
+            else if (const bool *pboolean = std::get_if<bool>(&entry))
+            {
+                std::cout << "boolean = " << *pboolean << "\n";
+                array.array().emplace_back(makeJNodeBoolean(*pboolean));
             }
         }
         m_jNodeData = std::make_unique<JNodeArrayData>(std::move(array));
