@@ -215,6 +215,16 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
         REQUIRE_NOTHROW(json.stringify(jsonDestination));
         REQUIRE(jsonDestination.getBuffer() == R"([[null]])");
     }
+    SECTION("Create array with free spaces string at the base and stringify.", "[JSON][Create][Array][null]")
+    {
+        JSON json;
+        json[5] = "test";
+        REQUIRE(json[5].getNodeType() == JNodeType::string);
+        REQUIRE(JNodeDataRef<JNodeStringData>(json.root()[5]).toString() == "test");
+        BufferDestination jsonDestination;
+        REQUIRE_NOTHROW(json.stringify(jsonDestination));
+        REQUIRE(jsonDestination.getBuffer() == R"([null,null,null,null,null,"test"])");
+    }
 }
 TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]")
 {

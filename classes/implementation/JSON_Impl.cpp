@@ -271,14 +271,17 @@ namespace JSONLib
             break;
         case JNodeType::string:
             destination.add('"');
-            destination.add(m_translator->toJSON(JNodeDataRef<JNodeStringData>(jNode).string()));
+            destination.add(m_translator->toJSON(JNodeDataRef<JNodeStringData>(jNode).toString()));
             destination.add('"');
             break;
         case JNodeType::boolean:
-            destination.add(JNodeDataRef<JNodeBooleanData>(jNode).boolean() ? "true" : "false");
+            destination.add(JNodeDataRef<JNodeBooleanData>(jNode).toString());
             break;
         case JNodeType::null:
-            destination.add("null");
+            destination.add(JNodeDataRef<JNodeNullData>(jNode).toString());
+            break;
+        case JNodeType::hole:
+            destination.add(JNodeDataRef<JNodeHoleData>(jNode).toString());
             break;
         case JNodeType::object:
         {

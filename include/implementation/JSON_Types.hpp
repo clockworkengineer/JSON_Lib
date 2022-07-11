@@ -396,7 +396,7 @@ namespace JSONLib
         ~JNodeHoleData() = default;
         [[nodiscard]] std::string toString() const
         {
-            return ("hole");
+            return ("null");
         }
     };
     // ==============
@@ -532,6 +532,11 @@ namespace JSONLib
 
             JNodeDataRef<JNodeArrayData>(*this).array().resize(index + 1);
             JNodeDataRef<JNodeArrayData>(*this).array()[index] = std::move(makeJNodeHole());
+            for (auto &entry : JNodeDataRef<JNodeArrayData>(*this).array()) {
+                if (entry.get()==nullptr) {
+                    entry = std::move(makeJNodeHole());
+                }
+            }
             return (JNodeDataRef<JNodeArrayData>(*this)[index]);
         }
     }
