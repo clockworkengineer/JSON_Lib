@@ -46,6 +46,45 @@ namespace JSONLib
     // ============
     struct JNodeNumber
     {
+        JNodeNumber() = default;
+        explicit JNodeNumber(int integer)
+        {
+            std::string number{std::to_string(integer)};
+            std::memcpy(&value[0], number.c_str(), number.size() + 1);
+        }
+        explicit JNodeNumber(long integer)
+        {
+            std::string number{std::to_string(integer)};
+            std::memcpy(&value[0], number.c_str(), number.size() + 1);
+        }
+        explicit JNodeNumber(long long integer)
+        {
+            std::string number{std::to_string(integer)};
+            std::memcpy(&value[0], number.c_str(), number.size() + 1);
+        }
+        explicit JNodeNumber(float floatingPoint)
+        {
+            std::string number{std::to_string(floatingPoint)};
+            number.erase(number.find_last_not_of('0') + 1, std::string::npos);
+            std::memcpy(&value[0], number.c_str(), number.size() + 1);
+        }
+        explicit JNodeNumber(double floatingPoint)
+        {
+            std::string number{std::to_string(floatingPoint)};
+            number.erase(number.find_last_not_of('0') + 1, std::string::npos);
+            std::memcpy(&value[0], number.c_str(), number.size() + 1);
+        }
+        explicit JNodeNumber(long double floatingPoint)
+        {
+            std::string number{std::to_string(floatingPoint)};
+            number.erase(number.find_last_not_of('0') + 1, std::string::npos);
+            std::memcpy(&value[0], number.c_str(), number.size() + 1);
+        }
+        JNodeNumber(const JNodeNumber &other) = default;
+        JNodeNumber &operator=(const JNodeNumber &other) = default;
+        JNodeNumber(JNodeNumber &&other) = default;
+        JNodeNumber &operator=(JNodeNumber &&other) = default;
+        ~JNodeNumber() = default;
         // Numeric values max width in characters
         static constexpr int kLongLongWidth = std::numeric_limits<long long>::digits10 + 2;
         static constexpr int kLongDoubleWidth = std::numeric_limits<long double>::digits10 + 2;
@@ -454,47 +493,32 @@ namespace JSONLib
         {
             if (const int *pint = std::get_if<int>(&entry))
             {
-                JNodeNumber jNodeNumber{};
-                std::string number{std::to_string(*pint)};
-                std::memcpy(&jNodeNumber.value[0], number.c_str(), number.size() + 1);
+                JNodeNumber jNodeNumber{*pint};
                 array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const long *plong = std::get_if<long>(&entry))
             {
-                JNodeNumber jNodeNumber{};
-                std::string number{std::to_string(*plong)};
-                std::memcpy(&jNodeNumber.value[0], number.c_str(), number.size() + 1);
+                JNodeNumber jNodeNumber{*plong};
                 array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const long long *plonglong = std::get_if<long long>(&entry))
             {
-                JNodeNumber jNodeNumber{};
-                std::string number{std::to_string(*plonglong)};
-                std::memcpy(&jNodeNumber.value[0], number.c_str(), number.size() + 1);
+                JNodeNumber jNodeNumber{*plonglong};
                 array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const float *pfloat = std::get_if<float>(&entry))
             {
-                JNodeNumber jNodeNumber{};
-                std::string number{std::to_string(*pfloat)};
-                number.erase(number.find_last_not_of('0') + 1, std::string::npos);
-                std::memcpy(&jNodeNumber.value[0], number.c_str(), number.size());
+                JNodeNumber jNodeNumber{*pfloat};
                 array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const double *pdouble = std::get_if<double>(&entry))
             {
-                JNodeNumber jNodeNumber{};
-                std::string number{std::to_string(*pdouble)};
-                number.erase(number.find_last_not_of('0') + 1, std::string::npos);
-                std::memcpy(&jNodeNumber.value[0], number.c_str(), number.size());
+                JNodeNumber jNodeNumber{*pdouble};
                 array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const long double *plongdouble = std::get_if<long double>(&entry))
             {
-                JNodeNumber jNodeNumber{};
-                std::string number{std::to_string(*plongdouble)};
-                number.erase(number.find_last_not_of('0') + 1, std::string::npos);
-                std::memcpy(&jNodeNumber.value[0], number.c_str(), number.size());
+                JNodeNumber jNodeNumber{*plongdouble};
                 array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const std::string *pstring = std::get_if<std::string>(&entry))
