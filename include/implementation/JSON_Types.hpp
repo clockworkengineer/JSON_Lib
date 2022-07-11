@@ -123,7 +123,7 @@ namespace JSONLib
         };
         // Constructors/Destructors
         JNode(std::unique_ptr<JNodeData> jNodeData) : m_jNodeData(std::move(jNodeData)) {}
-        JNode(std::initializer_list<std::variant<int, long, long long, float, double, long double, bool, std::string>> list);
+        JNode(std::initializer_list<std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t>> list);
         JNode(const JNode &other) = delete;
         JNode &operator=(const JNode &other) = delete;
         JNode(JNode &&other) = default;
@@ -291,10 +291,6 @@ namespace JSONLib
     {
         // Constructors/Destructors
         JNodeNumberData() : JNodeData(JNodeType::number) {}
-        explicit JNodeNumberData(const std::string &number) : JNodeData(JNodeType::number)
-        {
-            std::memcpy(&m_jsonNumber.value[0], number.c_str(), number.size());
-        }
         explicit JNodeNumberData(JNodeNumber &number) : JNodeData(JNodeType::number), m_jsonNumber(std::move(number)) {}
         JNodeNumberData(const JNodeNumberData &other) = delete;
         JNodeNumberData &operator=(const JNodeNumberData &other) = delete;
@@ -486,7 +482,7 @@ namespace JSONLib
     //
     // JNode Constructors
     //
-    inline JNode::JNode(std::initializer_list<std::variant<int, long, long long, float, double, long double, bool, std::string>> list)
+    inline JNode::JNode(std::initializer_list<std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t>> list)
     {
         JNodeArrayData array;
         for (auto &entry : list)
@@ -528,6 +524,10 @@ namespace JSONLib
             else if (const bool *pboolean = std::get_if<bool>(&entry))
             {
                 array.array().emplace_back(makeJNodeBoolean(*pboolean));
+            }
+            else if (const std::nullptr_t *pnull = std::get_if<std::nullptr_t>(&entry))
+            {
+                array.array().emplace_back(makeJNodeNull());
             }
         }
         m_jNodeData = std::make_unique<JNodeArrayData>(std::move(array));
@@ -645,38 +645,38 @@ namespace JSONLib
     // ====================
     inline JNode &JNode::operator=(float floatingPoint)
     {
-        std::string stringValue{std::to_string(floatingPoint)};
-        stringValue.erase(stringValue.find_last_not_of('0') + 1, std::string::npos);
-        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{stringValue}));
+        JNodeNumber jNodeNumber{floatingPoint};
+        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{jNodeNumber}));
         return (*this);
     }
     inline JNode &JNode::operator=(double floatingPoint)
     {
-        std::string stringValue{std::to_string(floatingPoint)};
-        stringValue.erase(stringValue.find_last_not_of('0') + 1, std::string::npos);
-        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{stringValue}));
+        JNodeNumber jNodeNumber{floatingPoint};
+        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{jNodeNumber}));
         return (*this);
     }
     inline JNode &JNode::operator=(long double floatingPoint)
     {
-        std::string stringValue{std::to_string(floatingPoint)};
-        stringValue.erase(stringValue.find_last_not_of('0') + 1, std::string::npos);
-        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{stringValue}));
+        JNodeNumber jNodeNumber{floatingPoint};
+        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{jNodeNumber}));
         return (*this);
     }
     inline JNode &JNode::operator=(int integer)
     {
-        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{std::to_string(integer)}));
+        JNodeNumber jNodeNumber{integer};
+        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{jNodeNumber}));
         return (*this);
     }
     inline JNode &JNode::operator=(long integer)
     {
-        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{std::to_string(integer)}));
+        JNodeNumber jNodeNumber{integer};
+        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{jNodeNumber}));
         return (*this);
     }
     inline JNode &JNode::operator=(long long integer)
     {
-        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{std::to_string(integer)}));
+        JNodeNumber jNodeNumber{integer};
+        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{jNodeNumber}));
         return (*this);
     }
     inline JNode &JNode::operator=(const char *cString)
