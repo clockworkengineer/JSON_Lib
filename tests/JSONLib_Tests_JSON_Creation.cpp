@@ -205,13 +205,16 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
         REQUIRE(json[0].getNodeType() == JNodeType::null);
         REQUIRE(JNodeDataRef<JNodeNullData>(json.root()[0]).toString() == "null");
     }
-    // SECTION("Create two level array with null at the base.", "[JSON][Create][Array][null]")
-    // {
-    //     JSON json;
-    //     json[0][0] = nullptr;
-    //     REQUIRE(json[0][0].getNodeType() == JNodeType::null);
-    //     REQUIRE(JNodeDataRef<JNodeNullData>(json.root()[0][0]).toString() == "null");
-    // }
+    SECTION("Create two level array with null at the base and stringify.", "[JSON][Create][Array][null]")
+    {
+        JSON json;
+        json[0][0] = nullptr;
+        REQUIRE(json[0][0].getNodeType() == JNodeType::null);
+        REQUIRE(JNodeDataRef<JNodeNullData>(json.root()[0][0]).toString() == "null");
+        BufferDestination jsonDestination;
+        REQUIRE_NOTHROW(json.stringify(jsonDestination));
+        REQUIRE(jsonDestination.getBuffer() == R"([[null]])");
+    }
 }
 TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]")
 {

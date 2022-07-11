@@ -58,6 +58,7 @@ namespace JSONLib
         {
             return (m_nodeType);
         }
+
     private:
         JNodeType m_nodeType;
     };
@@ -112,6 +113,7 @@ namespace JSONLib
         {
             return (m_jNodeData);
         }
+
     private:
         std::unique_ptr<JNodeData> m_jNodeData;
     };
@@ -179,9 +181,10 @@ namespace JSONLib
         {
             return (m_jsonObjects);
         }
+
     private:
         static ObjectEntryList::const_iterator findKey(const std::string &key,
-                                                                     const ObjectEntryList &objects)
+                                                       const ObjectEntryList &objects)
         {
             auto entry = std::find_if(objects.begin(), objects.end(), [&key](const JNodeObjectEntry &entry) -> bool
                                       { return (entry.key == key); });
@@ -233,6 +236,7 @@ namespace JSONLib
             }
             throw JNode::Error("Invalid index used to access array.");
         }
+
     private:
         std::vector<JNode::Ptr> m_jsonArray;
     };
@@ -300,6 +304,7 @@ namespace JSONLib
         {
             return (std::string{m_jsonNumber.begin(), m_jsonNumber.begin() + std::strlen(&m_jsonNumber[0])});
         }
+
     private:
         JNodeNumber m_jsonNumber{};
     };
@@ -329,6 +334,7 @@ namespace JSONLib
         {
             return (m_jsonString);
         }
+
     private:
         std::string m_jsonString;
     };
@@ -353,6 +359,7 @@ namespace JSONLib
         {
             return (m_jsonBoolean ? "true" : "false");
         }
+
     private:
         bool m_jsonBoolean;
     };
@@ -512,14 +519,19 @@ namespace JSONLib
     // Array
     inline JNode &JNode::operator[](std::size_t index)
     {
-        try 
+        try
         {
-            return(JNodeDataRef<JNodeArrayData>(*this)[index]);
+            if (this->getNodeType() == JNodeType::hole)
+            {
+                this->m_jNodeData = std::make_unique<JNodeArrayData>();
+            }
+            return (JNodeDataRef<JNodeArrayData>(*this)[index]);
         }
         catch ([[maybe_unused]] const JNode::Error &error)
         {
-            JNodeDataRef<JNodeArrayData>(*this).array().resize(index+1);
-            JNodeDataRef<JNodeArrayData>(*this).array()[index] = std::move(makeJNodeNull());
+
+            JNodeDataRef<JNodeArrayData>(*this).array().resize(index + 1);
+            JNodeDataRef<JNodeArrayData>(*this).array()[index] = std::move(makeJNodeHole());
             return (JNodeDataRef<JNodeArrayData>(*this)[index]);
         }
     }
