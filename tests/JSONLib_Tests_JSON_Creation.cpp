@@ -301,4 +301,18 @@ TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]")
         REQUIRE_NOTHROW(json.stringify(jsonDestination));
         REQUIRE(jsonDestination.getBuffer() == R"({"pi":3.141,"happy":true,"name":[null,null,null,null,null,"Niels"],"nothing":null,"answer":{"everything":[null,null,null,null,null,42]}})");
     }
+    SECTION("Object with sub array/object create using initializer list.", "[JSON][Create][Complex]")
+    {
+        JSON json;
+        json["pi"] = 3.141;
+        json["happy"] = true;
+        json["name"] = "Niels";
+        json["nothing"] = nullptr;
+        json["answer"]["everything"] = 42;
+        json["list"] = {1, 0, 2};
+   //     json["object"] = {{"currency", "USD"}, {"value", 42.99}};
+        BufferDestination jsonDestination;
+        REQUIRE_NOTHROW(json.stringify(jsonDestination));
+        REQUIRE(jsonDestination.getBuffer() == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2]})");
+    }
 }

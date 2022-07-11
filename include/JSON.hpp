@@ -52,7 +52,7 @@ namespace JSONLib
         void strip(ISource &source, IDestination &&destination);
         void strip(ISource &&source, IDestination &destination);
         void strip(ISource &&source, IDestination &&destination);
-        [[nodiscard]] JNode &root() { return (*m_jNodeRoot); }
+       // [[nodiscard]] JNode &root() { return (*m_jNodeRoot); }
         [[nodiscard]] const JNode &root() const { return (*m_jNodeRoot); }
         JNode &operator[](const std::string &key);
         const JNode &operator[](const std::string &key) const;

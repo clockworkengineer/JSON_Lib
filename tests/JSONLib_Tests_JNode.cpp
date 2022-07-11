@@ -53,13 +53,13 @@ TEST_CASE("Use of JNode indexing operators", "[JSON][JNode][Index]")
     REQUIRE_THROWS_AS((json.root())["Cityy"].getNodeType() == JNodeType::object, JNode::Error);
     REQUIRE_THROWS_WITH((json.root())["Cityy"].getNodeType() == JNodeType::object, "JNode Error: Invalid key used to access object.");
   }
-  // SECTION("Parse list and check an invalid index generates exception", "[JSON][JNode][Index]")
-  // {
-  //   BufferSource jsonSource{"[777,9000,\"apples\"]"};
-  //   json.parse(jsonSource);
-  //   REQUIRE_THROWS_AS((json.root())[3].getNodeType() == JNodeType::array, JNode::Error);
-  //   REQUIRE_THROWS_WITH((json.root())[3].getNodeType() == JNodeType::array, "JNode Error: Invalid index used to access array.");
-  // }
+  SECTION("Parse list and check an invalid index generates exception", "[JSON][JNode][Index]")
+  {
+    BufferSource jsonSource{"[777,9000,\"apples\"]"};
+    json.parse(jsonSource);
+    REQUIRE_THROWS_AS((json.root())[3].getNodeType() == JNodeType::array, JNode::Error);
+    REQUIRE_THROWS_WITH((json.root())[3].getNodeType() == JNodeType::array, "JNode Error: Invalid index used to access array.");
+  }
 }
 // =========================
 // JNode Reference functions
