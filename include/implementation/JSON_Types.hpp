@@ -461,41 +461,34 @@ namespace JSONLib
     // ==============
     inline std::unique_ptr<JNode> makeJNodeObject(JNodeObject::ObjectEntryList &objects)
     {
-        JNode jNode{std::make_unique<JNodeObject>(JNodeObject{objects})};
-        return (std::make_unique<JNode>(std::move(jNode)));
+        return (std::make_unique<JNode>(JNode {std::make_unique<JNodeObject>(JNodeObject{objects})}));
     }
     inline std::unique_ptr<JNode> makeJNodeArray(std::vector<JNode::Ptr> &array)
     {
-        JNode jNode{std::make_unique<JNodeArray>(JNodeArray{array})};
-        return (std::make_unique<JNode>(std::move(jNode)));
+        return (std::make_unique<JNode>(JNode{std::make_unique<JNodeArray>(JNodeArray{array})}));
     }
     inline std::unique_ptr<JNode> makeJNodeNumber(JNodeNumeric &number)
     {
-        JNode jNode{std::make_unique<JNodeNumber>(JNodeNumber{number})};
-        return (std::make_unique<JNode>(std::move(jNode)));
+        return (std::make_unique<JNode>(JNode{std::make_unique<JNodeNumber>(JNodeNumber{number})}));
     }
     inline std::unique_ptr<JNode> makeJNodeString(const std::string &string)
     {
-        JNode jNode{std::make_unique<JNodeString>(JNodeString{string})};
-        return (std::make_unique<JNode>(std::move(jNode)));
+        return (std::make_unique<JNode>(JNode{std::make_unique<JNodeString>(JNodeString{string})}));
     }
     inline std::unique_ptr<JNode> makeJNodeBoolean(bool boolean)
     {
-        JNode jNode{std::make_unique<JNodeBoolean>(JNodeBoolean{boolean})};
-        return (std::make_unique<JNode>(std::move(jNode)));
+        return (std::make_unique<JNode>(JNode{std::make_unique<JNodeBoolean>(JNodeBoolean{boolean})}));
     }
     inline std::unique_ptr<JNode> makeJNodeNull()
     {
-        JNode jNode{std::make_unique<JNodeNull>(JNodeNull())};
-        return (std::make_unique<JNode>(std::move(jNode)));
+        return (std::make_unique<JNode>(JNode{std::make_unique<JNodeNull>(JNodeNull())}));
     }
     inline std::unique_ptr<JNode> makeJNodeHole()
     {
-        JNode jNode{std::make_unique<JNodeHole>(JNodeHole())};
-        return (std::make_unique<JNode>(std::move(jNode)));
+        return (std::make_unique<JNode>(JNode{std::make_unique<JNodeHole>(JNodeHole())}));
     }
     // ==================
-    // JNode Constructors
+    // JNode constructors
     // ==================
     inline JNode::JNode(std::initializer_list<std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t>> list)
     {
