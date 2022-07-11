@@ -66,18 +66,24 @@ namespace JSONLib
         {
             std::string number{std::to_string(floatingPoint)};
             number.erase(number.find_last_not_of('0') + 1, std::string::npos);
+            if (number.back() == '.')
+                number += '0';
             std::memcpy(&value[0], number.c_str(), number.size() + 1);
         }
         explicit JNodeNumber(double floatingPoint)
         {
             std::string number{std::to_string(floatingPoint)};
             number.erase(number.find_last_not_of('0') + 1, std::string::npos);
+            if (number.back() == '.')
+                number += '0';
             std::memcpy(&value[0], number.c_str(), number.size() + 1);
         }
         explicit JNodeNumber(long double floatingPoint)
         {
             std::string number{std::to_string(floatingPoint)};
             number.erase(number.find_last_not_of('0') + 1, std::string::npos);
+            if (number.back() == '.')
+                number += '0';
             std::memcpy(&value[0], number.c_str(), number.size() + 1);
         }
         JNodeNumber(const JNodeNumber &other) = default;
