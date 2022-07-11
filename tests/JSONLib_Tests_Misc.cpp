@@ -62,8 +62,8 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Ref
   SECTION("Parse with R-Value reference (Buffer).", "[JSON][JNode][R-Value Reference]")
   {
     json.parse(BufferSource{"{\"City\":\"Southampton\",\"Population\":500000 }"});
-    REQUIRE(JNodeDataRef<JNodeObjectData>(json.root()).size() == 2);
-    REQUIRE(JNodeDataRef<JNodeStringData>((json.root())["City"]).string() == "Southampton");
+    REQUIRE(JNodeRef<JNodeObject>(json.root()).size() == 2);
+    REQUIRE(JNodeRef<JNodeString>((json.root())["City"]).string() == "Southampton");
   }
   SECTION("Parse/Stringify both with R-Value reference (File).", "[JSON][JNode][R-Value Reference]")
   {

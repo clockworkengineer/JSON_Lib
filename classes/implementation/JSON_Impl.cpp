@@ -112,11 +112,11 @@ namespace JSONLib
     /// <returns></returns>
     JNode::Ptr JSON_Impl::parseNumber(ISource &source)
     {
-        JNodeNumberData jsonNumber;
+        JNodeNumber jsonNumber;
         for (int digits = 0; source.more() && jsonNumber.isValidNumeric(source.current()); source.next())
         {
             jsonNumber.number().value[digits++] = source.current();
-            if (digits == JNodeNumber::kLongLongWidth)
+            if (digits == JNodeNumeric::kLongLongWidth)
             {
                 throw Error("Syntax error detected.");
             }
@@ -168,7 +168,7 @@ namespace JSONLib
     /// <returns>JNodeObject key/value pairs.</returns>
     JNode::Ptr JSON_Impl::parseObject(ISource &source)
     {
-        JNodeObjectData::ObjectEntryList objects;
+        JNodeObject::ObjectEntryList objects;
         source.next();
         source.ignoreWS();
         if (source.current() != '}')
@@ -267,32 +267,32 @@ namespace JSONLib
         switch (jNode.getNodeType())
         {
         case JNodeType::number:
-            destination.add(JNodeDataRef<const JNodeNumberData>(jNode).toString());
+            destination.add(JNodeRef<const JNodeNumber>(jNode).toString());
             break;
         case JNodeType::string:
             destination.add('"');
-            destination.add(m_translator->toJSON(JNodeDataRef<JNodeStringData>(jNode).toString()));
+            destination.add(m_translator->toJSON(JNodeRef<JNodeString>(jNode).toString()));
             destination.add('"');
             break;
         case JNodeType::boolean:
-            destination.add(JNodeDataRef<JNodeBooleanData>(jNode).toString());
+            destination.add(JNodeRef<JNodeBoolean>(jNode).toString());
             break;
         case JNodeType::null:
-            destination.add(JNodeDataRef<JNodeNullData>(jNode).toString());
+            destination.add(JNodeRef<JNodeNull>(jNode).toString());
             break;
         case JNodeType::hole:
-            destination.add(JNodeDataRef<JNodeHoleData>(jNode).toString());
+            destination.add(JNodeRef<JNodeHole>(jNode).toString());
             break;
         case JNodeType::object:
         {
-            int commaCount = JNodeDataRef<JNodeObjectData>(jNode).size() - 1;
+            int commaCount = JNodeRef<JNodeObject>(jNode).size() - 1;
             destination.add('{');
-            for (auto &[key, jNodePtr] : JNodeDataRef<JNodeObjectData>(jNode).objects())
+            for (auto &[key, jNodePtr] : JNodeRef<JNodeObject>(jNode).objects())
             {
                 destination.add('"');
                 destination.add(m_translator->toJSON(key));
                 destination.add("\":");
-                stringifyJNodes(JNodeDataRef<JNodeObjectData>(jNode)[key], destination);
+                stringifyJNodes(JNodeRef<JNodeObject>(jNode)[key], destination);
                 if (commaCount-- > 0)
                 {
                     destination.add(',');
@@ -303,9 +303,9 @@ namespace JSONLib
         }
         case JNodeType::array:
         {
-            int commaCount = JNodeDataRef<JNodeArrayData>(jNode).size() - 1;
+            std::size_t commaCount = JNodeRef<JNodeArray>(jNode).size() - 1;
             destination.add('[');
-            for (auto &bNodeEntry : JNodeDataRef<JNodeArrayData>(jNode).array())
+            for (auto &bNodeEntry : JNodeRef<JNodeArray>(jNode).array())
             {
                 stringifyJNodes(*bNodeEntry, destination);
                 if (commaCount-- > 0)

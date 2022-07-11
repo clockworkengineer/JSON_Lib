@@ -51,8 +51,8 @@ namespace JSONLib
         }
         catch ([[maybe_unused]] JNode::Error &error)
         {
-            JNodeDataRef<JNodeObjectData>(*m_jNodeRoot).objects().emplace_back(JNodeObjectEntry{key, makeJNodeHole()});
-            return (*JNodeDataRef<JNodeObjectData>(*m_jNodeRoot).objects().back().value);
+            JNodeRef<JNodeObject>(*m_jNodeRoot).objects().emplace_back(JNodeObjectEntry{key, makeJNodeHole()});
+            return (*JNodeRef<JNodeObject>(*m_jNodeRoot).objects().back().value);
         }
     }
     const JNode &JSON::operator[](const std::string &key) const // Object
@@ -74,9 +74,9 @@ namespace JSONLib
         }
         catch ([[maybe_unused]] JNode::Error &error)
         {
-            JNodeDataRef<JNodeArrayData>(*m_jNodeRoot).array().resize(index+1);
-            JNodeDataRef<JNodeArrayData>(*m_jNodeRoot).array()[index] = std::move(makeJNodeNull());
-            return (*JNodeDataRef<JNodeArrayData>(*m_jNodeRoot).array()[index]);
+            JNodeRef<JNodeArray>(*m_jNodeRoot).array().resize(index+1);
+            JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index] = std::move(makeJNodeNull());
+            return (*JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index]);
         }
     }
     const JNode &JSON::operator[](std::size_t index) const

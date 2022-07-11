@@ -27,7 +27,7 @@ TEST_CASE("JSON object for stringification of strings with escape characters.", 
         const std::string expected{"\"Test String / \\t \""};
         BufferDestination jsonDestination;
         json.parse(BufferSource{expected});
-        REQUIRE(JNodeDataRef<JNodeStringData>(json.root()).string() == "Test String / \t ");
+        REQUIRE(JNodeRef<JNodeString>(json.root()).string() == "Test String / \t ");
         json.stringify(jsonDestination);
         REQUIRE(jsonDestination.getBuffer() == expected);
     }

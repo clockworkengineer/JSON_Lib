@@ -44,25 +44,25 @@ namespace JSONLib
     // ============
     // JNode Number
     // ============
-    struct JNodeNumber
+    struct JNodeNumeric
     {
-        JNodeNumber() = default;
-        explicit JNodeNumber(int integer)
+        JNodeNumeric() = default;
+        explicit JNodeNumeric(int integer)
         {
             std::string number{std::to_string(integer)};
             std::memcpy(&value[0], number.c_str(), number.size() + 1);
         }
-        explicit JNodeNumber(long integer)
+        explicit JNodeNumeric(long integer)
         {
             std::string number{std::to_string(integer)};
             std::memcpy(&value[0], number.c_str(), number.size() + 1);
         }
-        explicit JNodeNumber(long long integer)
+        explicit JNodeNumeric(long long integer)
         {
             std::string number{std::to_string(integer)};
             std::memcpy(&value[0], number.c_str(), number.size() + 1);
         }
-        explicit JNodeNumber(float floatingPoint)
+        explicit JNodeNumeric(float floatingPoint)
         {
             std::string number{std::to_string(floatingPoint)};
             number.erase(number.find_last_not_of('0') + 1, std::string::npos);
@@ -70,7 +70,7 @@ namespace JSONLib
                 number += '0';
             std::memcpy(&value[0], number.c_str(), number.size() + 1);
         }
-        explicit JNodeNumber(double floatingPoint)
+        explicit JNodeNumeric(double floatingPoint)
         {
             std::string number{std::to_string(floatingPoint)};
             number.erase(number.find_last_not_of('0') + 1, std::string::npos);
@@ -78,7 +78,7 @@ namespace JSONLib
                 number += '0';
             std::memcpy(&value[0], number.c_str(), number.size() + 1);
         }
-        explicit JNodeNumber(long double floatingPoint)
+        explicit JNodeNumeric(long double floatingPoint)
         {
             std::string number{std::to_string(floatingPoint)};
             number.erase(number.find_last_not_of('0') + 1, std::string::npos);
@@ -86,11 +86,11 @@ namespace JSONLib
                 number += '0';
             std::memcpy(&value[0], number.c_str(), number.size() + 1);
         }
-        JNodeNumber(const JNodeNumber &other) = default;
-        JNodeNumber &operator=(const JNodeNumber &other) = default;
-        JNodeNumber(JNodeNumber &&other) = default;
-        JNodeNumber &operator=(JNodeNumber &&other) = default;
-        ~JNodeNumber() = default;
+        JNodeNumeric(const JNodeNumeric &other) = default;
+        JNodeNumeric &operator=(const JNodeNumeric &other) = default;
+        JNodeNumeric(JNodeNumeric &&other) = default;
+        JNodeNumeric &operator=(JNodeNumeric &&other) = default;
+        ~JNodeNumeric() = default;
         // Numeric values max width in characters
         static constexpr int kLongLongWidth = std::numeric_limits<long long>::digits10 + 2;
         static constexpr int kLongDoubleWidth = std::numeric_limits<long double>::digits10 + 2;
@@ -100,15 +100,20 @@ namespace JSONLib
     // ==============
     // JNodeData Base
     // ==============
-    struct JNodeData
+    struct JNodeBase
     {
-        explicit JNodeData(JNodeType nodeType = JNodeType::base) : m_nodeType(nodeType)
+        explicit JNodeBase(JNodeType nodeType = JNodeType::base) : m_nodeType(nodeType)
         {
         }
         [[nodiscard]] JNodeType getNodeType() const
         {
             return (m_nodeType);
         }
+        JNodeBase(const JNodeBase &other) = delete;
+        JNodeBase &operator=(JNodeBase &other) = delete;
+        JNodeBase(JNodeBase &&other) = default;
+        JNodeBase &operator=(JNodeBase &&other) = default;
+        ~JNodeBase() = default;
 
     private:
         JNodeType m_nodeType;
@@ -128,7 +133,7 @@ namespace JSONLib
             }
         };
         // Constructors/Destructors
-        JNode(std::unique_ptr<JNodeData> jNodeData) : m_jNodeData(std::move(jNodeData)) {}
+        JNode(std::unique_ptr<JNodeBase> jNodeData) : m_jNodeData(std::move(jNodeData)) {}
         JNode(std::initializer_list<std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t>> list);
         JNode(const JNode &other) = delete;
         JNode &operator=(const JNode &other) = delete;
@@ -157,17 +162,17 @@ namespace JSONLib
             return (m_jNodeData->getNodeType());
         }
         // Get reference to JNodeData
-        std::unique_ptr<JNodeData> &getJNodeData()
+        std::unique_ptr<JNodeBase> &getJNodeData()
         {
             return (m_jNodeData);
         }
-        const std::unique_ptr<JNodeData> &getJNodeData() const
+        const std::unique_ptr<JNodeBase> &getJNodeData() const
         {
             return (m_jNodeData);
         }
 
     private:
-        std::unique_ptr<JNodeData> m_jNodeData;
+        std::unique_ptr<JNodeBase> m_jNodeData;
     };
     // ==================
     // JNode Object Entry
@@ -181,17 +186,29 @@ namespace JSONLib
     // JNode Data
     // ==========
     // Object
-    struct JNodeObjectData : JNodeData
+    struct JNodeObject : JNodeBase
     {
         using ObjectEntryList = std::vector<JNodeObjectEntry>;
         // Constructors/Destructors
-        JNodeObjectData() : JNodeData(JNodeType::object) {}
-        JNodeObjectData(ObjectEntryList &objects) : JNodeData(JNodeType::object), m_jsonObjects(std::move(objects)) {}
-        JNodeObjectData(const JNodeObjectData &other) = delete;
-        JNodeObjectData &operator=(const JNodeObjectData &other) = delete;
-        JNodeObjectData(JNodeObjectData &&other) = default;
-        JNodeObjectData &operator=(JNodeObjectData &&other) = default;
-        ~JNodeObjectData() = default;
+        JNodeObject() : JNodeBase(JNodeType::object) {}
+        JNodeObject(ObjectEntryList &objects) : JNodeBase(JNodeType::object), m_jsonObjects(std::move(objects)) {}
+        JNodeObject(const JNodeObject &other) = delete;
+        JNodeObject &operator=(const JNodeObject &other) = delete;
+        JNodeObject(JNodeObject &&other) = default;
+        JNodeObject &operator=(JNodeObject &&other) = default;
+        ~JNodeObject() = default;
+        // Search for a given entry given a key and object list
+        static auto findKey(const std::string &key,
+                            const ObjectEntryList &objects)
+        {
+            auto entry = std::find_if(objects.begin(), objects.end(), [&key](const JNodeObjectEntry &entry) -> bool
+                                      { return (entry.key == key); });
+            if (entry == objects.end())
+            {
+                throw JNode::Error("Invalid key used to access object.");
+            }
+            return (entry);
+        }
         // Find a given object entry given its key
         [[nodiscard]] auto find(const std::string &key) const
         {
@@ -235,35 +252,26 @@ namespace JSONLib
         }
 
     private:
-        static ObjectEntryList::const_iterator findKey(const std::string &key,
-                                                       const ObjectEntryList &objects)
-        {
-            auto entry = std::find_if(objects.begin(), objects.end(), [&key](const JNodeObjectEntry &entry) -> bool
-                                      { return (entry.key == key); });
-            if (entry == objects.end())
-            {
-                throw JNode::Error("Invalid key used to access object.");
-            }
-            return (entry);
-        }
         ObjectEntryList m_jsonObjects;
     };
     // Array
-    struct JNodeArrayData : JNodeData
+    struct JNodeArray : JNodeBase
     {
         // Constructors/Destructors
-        JNodeArrayData() : JNodeData(JNodeType::array) {}
-        JNodeArrayData(std::vector<JNode::Ptr> &array) : JNodeData(JNodeType::array),
+        JNodeArray() : JNodeBase(JNodeType::array) {}
+        JNodeArray(std::vector<JNode::Ptr> &array) : JNodeBase(JNodeType::array),
                                                          m_jsonArray(std::move(array)) {}
-        JNodeArrayData(const JNodeArrayData &other) = delete;
-        JNodeArrayData &operator=(const JNodeArrayData &other) = delete;
-        JNodeArrayData(JNodeArrayData &&other) = default;
-        JNodeArrayData &operator=(JNodeArrayData &&other) = default;
-        ~JNodeArrayData() = default;
-        [[nodiscard]] int size() const
+        JNodeArray(const JNodeArray &other) = delete;
+        JNodeArray &operator=(const JNodeArray &other) = delete;
+        JNodeArray(JNodeArray &&other) = default;
+        JNodeArray &operator=(JNodeArray &&other) = default;
+        ~JNodeArray() = default;
+        // Return the size of array
+        [[nodiscard]] std::size_t size() const
         {
-            return (static_cast<int>(m_jsonArray.size()));
+            return (m_jsonArray.size());
         }
+        // Return reference to array base
         std::vector<JNode::Ptr> &array()
         {
             return (m_jsonArray);
@@ -272,6 +280,7 @@ namespace JSONLib
         {
             return (m_jsonArray);
         }
+        // Array indexing operators
         JNode &operator[](std::size_t index)
         {
             if ((index >= 0) && (index < (static_cast<int>(m_jsonArray.size()))))
@@ -293,16 +302,16 @@ namespace JSONLib
         std::vector<JNode::Ptr> m_jsonArray;
     };
     // Number
-    struct JNodeNumberData : JNodeData
+    struct JNodeNumber : JNodeBase
     {
         // Constructors/Destructors
-        JNodeNumberData() : JNodeData(JNodeType::number) {}
-        explicit JNodeNumberData(JNodeNumber &number) : JNodeData(JNodeType::number), m_jsonNumber(std::move(number)) {}
-        JNodeNumberData(const JNodeNumberData &other) = delete;
-        JNodeNumberData &operator=(const JNodeNumberData &other) = delete;
-        JNodeNumberData(JNodeNumberData &&other) = default;
-        JNodeNumberData &operator=(JNodeNumberData &&other) = default;
-        ~JNodeNumberData() = default;
+        JNodeNumber() : JNodeBase(JNodeType::number) {}
+        explicit JNodeNumber(JNodeNumeric &number) : JNodeBase(JNodeType::number), m_jsonNumber(std::move(number)) {}
+        JNodeNumber(const JNodeNumber &other) = delete;
+        JNodeNumber &operator=(const JNodeNumber &other) = delete;
+        JNodeNumber(JNodeNumber &&other) = default;
+        JNodeNumber &operator=(JNodeNumber &&other) = default;
+        ~JNodeNumber() = default;
         // Is character a valid numeric character ?
         bool isValidNumeric(char ch) const
         {
@@ -339,11 +348,11 @@ namespace JSONLib
             return (false);
         }
         // Return reference to number character array
-        [[nodiscard]] JNodeNumber &number()
+        [[nodiscard]] JNodeNumeric &number()
         {
             return (m_jsonNumber);
         }
-        [[nodiscard]] const JNodeNumber &number() const
+        [[nodiscard]] const JNodeNumeric &number() const
         {
             return (m_jsonNumber);
         }
@@ -354,20 +363,20 @@ namespace JSONLib
         }
 
     private:
-        JNodeNumber m_jsonNumber{};
+        JNodeNumeric m_jsonNumber{};
     };
     // String
-    struct JNodeStringData : JNodeData
+    struct JNodeString : JNodeBase
     {
         // Constructors/Destructors
-        JNodeStringData() : JNodeData(JNodeType::string) {}
-        JNodeStringData(const std::string &string) : JNodeData(JNodeType::string),
+        JNodeString() : JNodeBase(JNodeType::string) {}
+        JNodeString(const std::string &string) : JNodeBase(JNodeType::string),
                                                      m_jsonString(std::move(string)) {}
-        JNodeStringData(const JNodeStringData &other) = delete;
-        JNodeStringData &operator=(const JNodeStringData &other) = delete;
-        JNodeStringData(JNodeStringData &&other) = default;
-        JNodeStringData &operator=(JNodeStringData &&other) = default;
-        ~JNodeStringData() = default;
+        JNodeString(const JNodeString &other) = delete;
+        JNodeString &operator=(const JNodeString &other) = delete;
+        JNodeString(JNodeString &&other) = default;
+        JNodeString &operator=(JNodeString &&other) = default;
+        ~JNodeString() = default;
         // Return reference to string
         std::string &string()
         {
@@ -387,16 +396,16 @@ namespace JSONLib
         std::string m_jsonString;
     };
     // Boolean
-    struct JNodeBooleanData : JNodeData
+    struct JNodeBoolean : JNodeBase
     {
         // Constructors/Destructors
-        JNodeBooleanData() : JNodeData(JNodeType::boolean) {}
-        JNodeBooleanData(bool boolean) : JNodeData(JNodeType::boolean), m_jsonBoolean(boolean) {}
-        JNodeBooleanData(const JNodeBooleanData &other) = delete;
-        JNodeBooleanData &operator=(const JNodeBooleanData &other) = delete;
-        JNodeBooleanData(JNodeBooleanData &&other) = default;
-        JNodeBooleanData &operator=(JNodeBooleanData &&other) = default;
-        ~JNodeBooleanData() = default;
+        JNodeBoolean() : JNodeBase(JNodeType::boolean) {}
+        JNodeBoolean(bool boolean) : JNodeBase(JNodeType::boolean), m_jsonBoolean(boolean) {}
+        JNodeBoolean(const JNodeBoolean &other) = delete;
+        JNodeBoolean &operator=(const JNodeBoolean &other) = delete;
+        JNodeBoolean(JNodeBoolean &&other) = default;
+        JNodeBoolean &operator=(JNodeBoolean &&other) = default;
+        ~JNodeBoolean() = default;
         // Return boolean value
         [[nodiscard]] bool boolean() const
         {
@@ -412,15 +421,15 @@ namespace JSONLib
         bool m_jsonBoolean;
     };
     // Null
-    struct JNodeNullData : JNodeData
+    struct JNodeNull : JNodeBase
     {
         // Constructors/Destructors
-        JNodeNullData() : JNodeData(JNodeType::null) {}
-        JNodeNullData(const JNodeNullData &other) = delete;
-        JNodeNullData &operator=(const JNodeNullData &other) = delete;
-        JNodeNullData(JNodeNullData &&other) = default;
-        JNodeNullData &operator=(JNodeNullData &&other) = default;
-        ~JNodeNullData() = default;
+        JNodeNull() : JNodeBase(JNodeType::null) {}
+        JNodeNull(const JNodeNull &other) = delete;
+        JNodeNull &operator=(const JNodeNull &other) = delete;
+        JNodeNull(JNodeNull &&other) = default;
+        JNodeNull &operator=(JNodeNull &&other) = default;
+        ~JNodeNull() = default;
         // Return null value
         [[nodiscard]] void *null() const
         {
@@ -433,15 +442,15 @@ namespace JSONLib
         }
     };
     // Hole
-    struct JNodeHoleData : JNodeData
+    struct JNodeHole : JNodeBase
     {
         // Constructors/Destructors
-        JNodeHoleData() : JNodeData(JNodeType::hole) {}
-        JNodeHoleData(const JNodeHoleData &other) = delete;
-        JNodeHoleData &operator=(const JNodeHoleData &other) = delete;
-        JNodeHoleData(JNodeHoleData &&other) = default;
-        JNodeHoleData &operator=(JNodeHoleData &&other) = default;
-        ~JNodeHoleData() = default;
+        JNodeHole() : JNodeBase(JNodeType::hole) {}
+        JNodeHole(const JNodeHole &other) = delete;
+        JNodeHole &operator=(const JNodeHole &other) = delete;
+        JNodeHole(JNodeHole &&other) = default;
+        JNodeHole &operator=(JNodeHole &&other) = default;
+        ~JNodeHole() = default;
         [[nodiscard]] std::string toString() const
         {
             return ("null");
@@ -450,39 +459,39 @@ namespace JSONLib
     // ==============
     // JNode Creation
     // ==============
-    inline std::unique_ptr<JNode> makeJNodeObject(JNodeObjectData::ObjectEntryList &objects)
+    inline std::unique_ptr<JNode> makeJNodeObject(JNodeObject::ObjectEntryList &objects)
     {
-        JNode jNode{std::make_unique<JNodeObjectData>(JNodeObjectData{objects})};
+        JNode jNode{std::make_unique<JNodeObject>(JNodeObject{objects})};
         return (std::make_unique<JNode>(std::move(jNode)));
     }
     inline std::unique_ptr<JNode> makeJNodeArray(std::vector<JNode::Ptr> &array)
     {
-        JNode jNode{std::make_unique<JNodeArrayData>(JNodeArrayData{array})};
+        JNode jNode{std::make_unique<JNodeArray>(JNodeArray{array})};
         return (std::make_unique<JNode>(std::move(jNode)));
     }
-    inline std::unique_ptr<JNode> makeJNodeNumber(JNodeNumber &number)
+    inline std::unique_ptr<JNode> makeJNodeNumber(JNodeNumeric &number)
     {
-        JNode jNode{std::make_unique<JNodeNumberData>(JNodeNumberData{number})};
+        JNode jNode{std::make_unique<JNodeNumber>(JNodeNumber{number})};
         return (std::make_unique<JNode>(std::move(jNode)));
     }
     inline std::unique_ptr<JNode> makeJNodeString(const std::string &string)
     {
-        JNode jNode{std::make_unique<JNodeStringData>(JNodeStringData{string})};
+        JNode jNode{std::make_unique<JNodeString>(JNodeString{string})};
         return (std::make_unique<JNode>(std::move(jNode)));
     }
     inline std::unique_ptr<JNode> makeJNodeBoolean(bool boolean)
     {
-        JNode jNode{std::make_unique<JNodeBooleanData>(JNodeBooleanData{boolean})};
+        JNode jNode{std::make_unique<JNodeBoolean>(JNodeBoolean{boolean})};
         return (std::make_unique<JNode>(std::move(jNode)));
     }
     inline std::unique_ptr<JNode> makeJNodeNull()
     {
-        JNode jNode{std::make_unique<JNodeNullData>(JNodeNullData())};
+        JNode jNode{std::make_unique<JNodeNull>(JNodeNull())};
         return (std::make_unique<JNode>(std::move(jNode)));
     }
     inline std::unique_ptr<JNode> makeJNodeHole()
     {
-        JNode jNode{std::make_unique<JNodeHoleData>(JNodeHoleData())};
+        JNode jNode{std::make_unique<JNodeHole>(JNodeHole())};
         return (std::make_unique<JNode>(std::move(jNode)));
     }
     //
@@ -490,37 +499,37 @@ namespace JSONLib
     //
     inline JNode::JNode(std::initializer_list<std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t>> list)
     {
-        JNodeArrayData array;
+        JNodeArray array;
         for (auto &entry : list)
         {
             if (const int *pint = std::get_if<int>(&entry))
             {
-                JNodeNumber jNodeNumber{*pint};
+                JNodeNumeric jNodeNumber{*pint};
                 array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const long *plong = std::get_if<long>(&entry))
             {
-                JNodeNumber jNodeNumber{*plong};
+                JNodeNumeric jNodeNumber{*plong};
                 array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const long long *plonglong = std::get_if<long long>(&entry))
             {
-                JNodeNumber jNodeNumber{*plonglong};
+                JNodeNumeric jNodeNumber{*plonglong};
                 array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const float *pfloat = std::get_if<float>(&entry))
             {
-                JNodeNumber jNodeNumber{*pfloat};
+                JNodeNumeric jNodeNumber{*pfloat};
                 array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const double *pdouble = std::get_if<double>(&entry))
             {
-                JNodeNumber jNodeNumber{*pdouble};
+                JNodeNumeric jNodeNumber{*pdouble};
                 array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const long double *plongdouble = std::get_if<long double>(&entry))
             {
-                JNodeNumber jNodeNumber{*plongdouble};
+                JNodeNumeric jNodeNumber{*plongdouble};
                 array.array().emplace_back(makeJNodeNumber(jNodeNumber));
             }
             else if (const std::string *pstring = std::get_if<std::string>(&entry))
@@ -536,50 +545,50 @@ namespace JSONLib
                 array.array().emplace_back(makeJNodeNull());
             }
         }
-        m_jNodeData = std::make_unique<JNodeArrayData>(std::move(array));
+        m_jNodeData = std::make_unique<JNodeArray>(std::move(array));
     }
     // ==============================
     // JNode base reference converter
     // ==============================
     template <typename T>
-    void CheckJNodeDataType(const JNodeData &jNodeData)
+    void CheckJNodeType(const JNodeBase &jNodeData)
     {
-        if constexpr (std::is_same_v<T, JNodeStringData>)
+        if constexpr (std::is_same_v<T, JNodeString>)
         {
             if (jNodeData.getNodeType() != JNodeType::string)
             {
                 throw JNode::Error("Node not a string.");
             }
         }
-        else if constexpr (std::is_same_v<T, JNodeNumberData>)
+        else if constexpr (std::is_same_v<T, JNodeNumber>)
         {
             if (jNodeData.getNodeType() != JNodeType::number)
             {
                 throw JNode::Error("Node not a number.");
             }
         }
-        else if constexpr (std::is_same_v<T, JNodeArrayData>)
+        else if constexpr (std::is_same_v<T, JNodeArray>)
         {
             if (jNodeData.getNodeType() != JNodeType::array)
             {
                 throw JNode::Error("Node not an array.");
             }
         }
-        else if constexpr (std::is_same_v<T, JNodeObjectData>)
+        else if constexpr (std::is_same_v<T, JNodeObject>)
         {
             if (jNodeData.getNodeType() != JNodeType::object)
             {
                 throw JNode::Error("Node not an object.");
             }
         }
-        else if constexpr (std::is_same_v<T, JNodeBooleanData>)
+        else if constexpr (std::is_same_v<T, JNodeBoolean>)
         {
             if (jNodeData.getNodeType() != JNodeType::boolean)
             {
                 throw JNode::Error("Node not an boolean.");
             }
         }
-        else if constexpr (std::is_same_v<T, JNodeNullData>)
+        else if constexpr (std::is_same_v<T, JNodeNull>)
         {
             if (jNodeData.getNodeType() != JNodeType::null)
             {
@@ -588,15 +597,15 @@ namespace JSONLib
         }
     }
     template <typename T>
-    T &JNodeDataRef(JNode &jNode)
+    T &JNodeRef(JNode &jNode)
     {
-        CheckJNodeDataType<T>(*jNode.getJNodeData());
+        CheckJNodeType<T>(*jNode.getJNodeData());
         return (static_cast<T &>(*jNode.getJNodeData()));
     }
     template <typename T>
-    const T &JNodeDataRef(const JNode &jNode)
+    const T &JNodeRef(const JNode &jNode)
     {
-        CheckJNodeDataType<T>(*jNode.getJNodeData());
+        CheckJNodeType<T>(*jNode.getJNodeData());
         return (static_cast<const T &>(*jNode.getJNodeData()));
     }
     // ===============
@@ -607,15 +616,15 @@ namespace JSONLib
     {
         if (this->getNodeType() == JNodeType::hole)
         {
-            this->m_jNodeData = std::make_unique<JNodeObjectData>();
-            JNodeDataRef<JNodeObjectData>(*this).objects().emplace_back(JNodeObjectEntry{key, makeJNodeHole()});
-            return (*JNodeDataRef<JNodeObjectData>(*this).objects().back().value);
+            this->m_jNodeData = std::make_unique<JNodeObject>();
+            JNodeRef<JNodeObject>(*this).objects().emplace_back(JNodeObjectEntry{key, makeJNodeHole()});
+            return (*JNodeRef<JNodeObject>(*this).objects().back().value);
         }
-        return (JNodeDataRef<JNodeObjectData>(*this)[key]);
+        return (JNodeRef<JNodeObject>(*this)[key]);
     }
     inline const JNode &JNode::operator[](const std::string &key) const
     {
-        return (JNodeDataRef<const JNodeObjectData>(*this)[key]);
+        return (JNodeRef<const JNodeObject>(*this)[key]);
     }
     // Array
     inline JNode &JNode::operator[](std::size_t index)
@@ -624,85 +633,85 @@ namespace JSONLib
         {
             if (this->getNodeType() == JNodeType::hole)
             {
-                this->m_jNodeData = std::make_unique<JNodeArrayData>();
+                this->m_jNodeData = std::make_unique<JNodeArray>();
             }
-            return (JNodeDataRef<JNodeArrayData>(*this)[index]);
+            return (JNodeRef<JNodeArray>(*this)[index]);
         }
         catch ([[maybe_unused]] const JNode::Error &error)
         {
-            JNodeDataRef<JNodeArrayData>(*this).array().resize(index + 1);
-            JNodeDataRef<JNodeArrayData>(*this).array()[index] = std::move(makeJNodeHole());
-            for (auto &entry : JNodeDataRef<JNodeArrayData>(*this).array())
+            JNodeRef<JNodeArray>(*this).array().resize(index + 1);
+            JNodeRef<JNodeArray>(*this).array()[index] = std::move(makeJNodeHole());
+            for (auto &entry : JNodeRef<JNodeArray>(*this).array())
             {
                 if (entry.get() == nullptr)
                 {
                     entry = std::move(makeJNodeHole());
                 }
             }
-            return (JNodeDataRef<JNodeArrayData>(*this)[index]);
+            return (JNodeRef<JNodeArray>(*this)[index]);
         }
     }
     inline const JNode &JNode::operator[](std::size_t index) const
     {
-        return (JNodeDataRef<JNodeArrayData>(*this)[index]);
+        return (JNodeRef<JNodeArray>(*this)[index]);
     }
     // ====================
     // Assignment operators
     // ====================
     inline JNode &JNode::operator=(float floatingPoint)
     {
-        JNodeNumber jNodeNumber{floatingPoint};
-        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{jNodeNumber}));
+        JNodeNumeric jNodeNumber{floatingPoint};
+        m_jNodeData = std::make_unique<JNodeNumber>(std::move(JNodeNumber{jNodeNumber}));
         return (*this);
     }
     inline JNode &JNode::operator=(double floatingPoint)
     {
-        JNodeNumber jNodeNumber{floatingPoint};
-        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{jNodeNumber}));
+        JNodeNumeric jNodeNumber{floatingPoint};
+        m_jNodeData = std::make_unique<JNodeNumber>(std::move(JNodeNumber{jNodeNumber}));
         return (*this);
     }
     inline JNode &JNode::operator=(long double floatingPoint)
     {
-        JNodeNumber jNodeNumber{floatingPoint};
-        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{jNodeNumber}));
+        JNodeNumeric jNodeNumber{floatingPoint};
+        m_jNodeData = std::make_unique<JNodeNumber>(std::move(JNodeNumber{jNodeNumber}));
         return (*this);
     }
     inline JNode &JNode::operator=(int integer)
     {
-        JNodeNumber jNodeNumber{integer};
-        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{jNodeNumber}));
+        JNodeNumeric jNodeNumber{integer};
+        m_jNodeData = std::make_unique<JNodeNumber>(std::move(JNodeNumber{jNodeNumber}));
         return (*this);
     }
     inline JNode &JNode::operator=(long integer)
     {
-        JNodeNumber jNodeNumber{integer};
-        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{jNodeNumber}));
+        JNodeNumeric jNodeNumber{integer};
+        m_jNodeData = std::make_unique<JNodeNumber>(std::move(JNodeNumber{jNodeNumber}));
         return (*this);
     }
     inline JNode &JNode::operator=(long long integer)
     {
-        JNodeNumber jNodeNumber{integer};
-        m_jNodeData = std::make_unique<JNodeNumberData>(std::move(JNodeNumberData{jNodeNumber}));
+        JNodeNumeric jNodeNumber{integer};
+        m_jNodeData = std::make_unique<JNodeNumber>(std::move(JNodeNumber{jNodeNumber}));
         return (*this);
     }
     inline JNode &JNode::operator=(const char *cString)
     {
-        m_jNodeData = std::make_unique<JNodeStringData>(std::move(JNodeStringData{cString}));
+        m_jNodeData = std::make_unique<JNodeString>(std::move(JNodeString{cString}));
         return (*this);
     }
     inline JNode &JNode::operator=(const std::string &string)
     {
-        m_jNodeData = std::make_unique<JNodeStringData>(std::move(JNodeStringData{string}));
+        m_jNodeData = std::make_unique<JNodeString>(std::move(JNodeString{string}));
         return (*this);
     }
     inline JNode &JNode::operator=(bool boolean)
     {
-        m_jNodeData = std::make_unique<JNodeBooleanData>(std::move(JNodeBooleanData{boolean}));
+        m_jNodeData = std::make_unique<JNodeBoolean>(std::move(JNodeBoolean{boolean}));
         return (*this);
     }
     inline JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null)
     {
-        m_jNodeData = std::make_unique<JNodeNullData>(std::move(JNodeNullData()));
+        m_jNodeData = std::make_unique<JNodeNull>(std::move(JNodeNull()));
         return (*this);
     }
 } // namespace JSONLib

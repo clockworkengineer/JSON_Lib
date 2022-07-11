@@ -71,12 +71,12 @@ std::string prefixTestDataPath(const std::string &file)
 void outputAnalysis(const JNodeDetails &jNodeDetails)
 {
     PLOG_INFO << "--------------------JNode Sizes---------------------";
-    PLOG_INFO << "JNodeObjectData size "<< sizeof(JNodeObjectData) << "in bytes.";
-    PLOG_INFO << "JNodeArrayData size "<< sizeof(JNodeArrayData) << " in bytes.";
-    PLOG_INFO << "JNodeNumberData size "<< sizeof(JNodeNumberData) << " in bytes.";
-    PLOG_INFO << "JNodeStringData size "<< sizeof(JNodeStringData) << " in bytes.";
-    PLOG_INFO << "JNodeBooleanData size "<< sizeof(JNodeBooleanData) << " in bytes.";
-    PLOG_INFO << "JNodeNullData size "<< sizeof(JNodeNullData) << " in bytes.";
+    PLOG_INFO << "JNodeObjectData size "<< sizeof(JNodeObject) << "in bytes.";
+    PLOG_INFO << "JNodeArrayData size "<< sizeof(JNodeArray) << " in bytes.";
+    PLOG_INFO << "JNodeNumberData size "<< sizeof(JNodeNumber) << " in bytes.";
+    PLOG_INFO << "JNodeStringData size "<< sizeof(JNodeString) << " in bytes.";
+    PLOG_INFO << "JNodeBooleanData size "<< sizeof(JNodeBoolean) << " in bytes.";
+    PLOG_INFO << "JNodeNullData size "<< sizeof(JNodeNull) << " in bytes.";
     PLOG_INFO << "------------------JNode Tree Stats------------------";
     PLOG_INFO << "JNode Tree contains "<<jNodeDetails.totalNodes << " nodes.";
     PLOG_INFO << "JNode Tree size "<< jNodeDetails.sizeInBytes << " in bytes.";
@@ -101,29 +101,29 @@ void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails)
     switch (jNode.getNodeType())
     {
     case JNodeType::number:
-        jNodeDetails.sizeInBytes += sizeof(JNodeNumberData);
-        jNodeDetails.sizeInBytes += JNodeDataRef<JNodeNumberData>(jNode).number().value.size();
+        jNodeDetails.sizeInBytes += sizeof(JNodeNumber);
+    //    jNodeDetails.sizeInBytes += JNodeDataRef<JNodeNumberData>(jNode).number().value.size();
         break;
     case JNodeType::string:
-        jNodeDetails.sizeInBytes += sizeof(JNodeStringData);
-        jNodeDetails.sizeInBytes += JNodeDataRef<JNodeStringData>(jNode).string().size();
-        jNodeDetails.unique_strings.insert(JNodeDataRef<JNodeStringData>(jNode).string());
+        jNodeDetails.sizeInBytes += sizeof(JNodeString);
+        jNodeDetails.sizeInBytes += JNodeRef<JNodeString>(jNode).string().size();
+        jNodeDetails.unique_strings.insert(JNodeRef<JNodeString>(jNode).string());
         jNodeDetails.totalStrings++;
         break;
     case JNodeType::boolean:
-        jNodeDetails.sizeInBytes += sizeof(JNodeBooleanData);
+        jNodeDetails.sizeInBytes += sizeof(JNodeBoolean);
         break;
     case JNodeType::null:
-        jNodeDetails.sizeInBytes += sizeof(JNodeNullData);
+        jNodeDetails.sizeInBytes += sizeof(JNodeNull);
         break;
     case JNodeType::object:
     {
-        jNodeDetails.sizeInBytes += sizeof(JNodeObjectData);
+        jNodeDetails.sizeInBytes += sizeof(JNodeObject);
         jNodeDetails.totalObjects++;
-        jNodeDetails.maxObjectSize = std::max(JNodeDataRef<JNodeObjectData>(jNode).objects().size(), jNodeDetails.maxObjectSize);
-        for (auto &[key, jNodePtr] : JNodeDataRef<JNodeObjectData>(jNode).objects())
+        jNodeDetails.maxObjectSize = std::max(JNodeRef<JNodeObject>(jNode).objects().size(), jNodeDetails.maxObjectSize);
+        for (auto &[key, jNodePtr] : JNodeRef<JNodeObject>(jNode).objects())
         {
-            analyzeJNode(JNodeDataRef<JNodeObjectData>(jNode)[key], jNodeDetails);
+            analyzeJNode(JNodeRef<JNodeObject>(jNode)[key], jNodeDetails);
             jNodeDetails.unique_keys.insert(key);
             jNodeDetails.sizeInBytes += key.size();
             jNodeDetails.sizeInBytes += sizeof(JNodeObjectEntry);
@@ -133,10 +133,10 @@ void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails)
     }
     case JNodeType::array:
     {
-        jNodeDetails.sizeInBytes += sizeof(JNodeArrayData);
+        jNodeDetails.sizeInBytes += sizeof(JNodeArray);
         jNodeDetails.totalArrays++;
-        jNodeDetails.maxArraySize = std::max(JNodeDataRef<JNodeArrayData>(jNode).array().size(), jNodeDetails.maxArraySize);
-        for (auto &bNodeEntry : JNodeDataRef<JNodeArrayData>(jNode).array())
+        jNodeDetails.maxArraySize = std::max(JNodeRef<JNodeArray>(jNode).size(), jNodeDetails.maxArraySize);
+        for (auto &bNodeEntry : JNodeRef<JNodeArray>(jNode).array())
         {
             analyzeJNode(*bNodeEntry, jNodeDetails);
             jNodeDetails.sizeInBytes += sizeof(JNode::Ptr);
