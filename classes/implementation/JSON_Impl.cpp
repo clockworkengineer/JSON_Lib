@@ -149,7 +149,7 @@ JNode::Ptr JSON_Impl::parseNull(ISource &source) {
 /// <param name="source">Source for JSON encoded bytes.</param>
 /// <returns>JNodeObject key/value pairs.</returns>
 JNode::Ptr JSON_Impl::parseObject(ISource &source) {
-  JNodeObject::ObjectEntryList objects;
+  JNodeObject::ObjectList objects;
   source.next();
   source.ignoreWS();
   if (source.current() != '}') {

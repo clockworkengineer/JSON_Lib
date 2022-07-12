@@ -122,7 +122,7 @@ struct JNode {
   // Constructors/Destructors
   explicit JNode(std::unique_ptr<JNodeData> jNodeData)
       : m_jNodeData(std::move(jNodeData)) {}
-  JNode(std::initializer_list<
+  JNode(const std::initializer_list<
         std::variant<int, long, long long, float, double, long double, bool,
                      std::string, std::nullptr_t>>
             list);
@@ -172,10 +172,10 @@ struct JNodeObjectEntry {
 // ===================
 // Object
 struct JNodeObject : JNodeData {
-  using ObjectEntryList = std::vector<JNodeObjectEntry>;
+  using ObjectList = std::vector<JNodeObjectEntry>;
   // Constructors/Destructors
   JNodeObject() : JNodeData(JNodeType::object) {}
-  explicit JNodeObject(ObjectEntryList &objects)
+  explicit JNodeObject(ObjectList &objects)
       : JNodeData(JNodeType::object), m_jsonObjects(std::move(objects)) {}
   JNodeObject(const JNodeObject &other) = delete;
   JNodeObject &operator=(const JNodeObject &other) = delete;
@@ -183,7 +183,7 @@ struct JNodeObject : JNodeData {
   JNodeObject &operator=(JNodeObject &&other) = default;
   ~JNodeObject() = default;
   // Search for a given entry given a key and object list
-  static auto findKey(const std::string &key, const ObjectEntryList &objects) {
+  static auto findKey(const std::string &key, const ObjectList &objects) {
     auto entry = std::find_if(objects.begin(), objects.end(),
                               [&key](const JNodeObjectEntry &entry) -> bool {
                                 return (entry.key == key);
@@ -218,19 +218,20 @@ struct JNodeObject : JNodeData {
     return (*(findKey(key, m_jsonObjects)->value));
   }
   // Return reference to base of object entries
-  ObjectEntryList &objects() { return (m_jsonObjects); }
-  [[nodiscard]] const ObjectEntryList &objects() const {
+  ObjectList &objects() { return (m_jsonObjects); }
+  [[nodiscard]] const ObjectList &objects() const {
     return (m_jsonObjects);
   }
 
 private:
-  ObjectEntryList m_jsonObjects;
+  ObjectList m_jsonObjects;
 };
 // Array
 struct JNodeArray : JNodeData {
+  using ArrayList = std::vector<JNode::Ptr>;
   // Constructors/Destructors
   JNodeArray() : JNodeData(JNodeType::array) {}
-  explicit JNodeArray(std::vector<JNode::Ptr> &array)
+  explicit JNodeArray(ArrayList &array)
       : JNodeData(JNodeType::array), m_jsonArray(std::move(array)) {}
   JNodeArray(const JNodeArray &other) = delete;
   JNodeArray &operator=(const JNodeArray &other) = delete;
@@ -240,8 +241,8 @@ struct JNodeArray : JNodeData {
   // Return the size of array
   [[nodiscard]] std::size_t size() const { return (m_jsonArray.size()); }
   // Return reference to array base
-  std::vector<JNode::Ptr> &array() { return (m_jsonArray); }
-  [[nodiscard]] const std::vector<JNode::Ptr> &array() const {
+  ArrayList &array() { return (m_jsonArray); }
+  [[nodiscard]] const ArrayList &array() const {
     return (m_jsonArray);
   }
   // Array indexing operators
@@ -259,7 +260,7 @@ struct JNodeArray : JNodeData {
   }
 
 private:
-  std::vector<JNode::Ptr> m_jsonArray;
+  ArrayList m_jsonArray;
 };
 // Number
 struct JNodeNumber : JNodeData {
@@ -387,15 +388,15 @@ struct JNodeHole : JNodeData {
 // JNode Creation
 // ==============
 inline std::unique_ptr<JNode>
-makeJNodeObject(JNodeObject::ObjectEntryList &objects) {
+makeJNodeObject(JNodeObject::ObjectList &objects) {
   return (std::make_unique<JNode>(
       JNode{std::make_unique<JNodeObject>(JNodeObject{objects})}));
 }
-inline std::unique_ptr<JNode> makeJNodeArray(std::vector<JNode::Ptr> &array) {
+inline std::unique_ptr<JNode> makeJNodeArray(JNodeArray::ArrayList &array) {
   return (std::make_unique<JNode>(
       JNode{std::make_unique<JNodeArray>(JNodeArray{array})}));
 }
-inline std::unique_ptr<JNode> makeJNodeNumber(JNodeNumeric &number) {
+inline std::unique_ptr<JNode> makeJNodeNumber(const JNodeNumeric &number) {
   return (std::make_unique<JNode>(
       JNode{std::make_unique<JNodeNumber>(JNodeNumber{number})}));
 }
@@ -419,14 +420,14 @@ inline std::unique_ptr<JNode> makeJNodeHole() {
 // JNode constructors
 // ==================
 inline JNode::JNode(
-    std::initializer_list<
+    const std::initializer_list<
         std::variant<int, long, long long, float, double, long double, bool,
                      std::string, std::nullptr_t>>
         list) {
   JNodeArray array;
   for (const auto &entry : list) {
     if (const int *pint = std::get_if<int>(&entry)) {
-      JNodeNumeric jNodeNumber{*pint};
+      JNodeNumeric jNodeNumber{*pint}; 
       array.array().emplace_back(makeJNodeNumber(jNodeNumber));
     } else if (const long *plong = std::get_if<long>(&entry)) {
       JNodeNumeric jNodeNumber{*plong};
@@ -532,7 +533,7 @@ inline const JNode &JNode::operator[](std::size_t index) const {
 }
 // ==========================
 // JNode assignment operators
-// ==========================JNodeNumeric
+// ==========================
 inline JNode &JNode::operator=(float floatingPoint) {
   m_jNodeData = std::make_unique<JNodeNumber>(JNodeNumber{JNodeNumeric{floatingPoint}});
   return (*this);
