@@ -19,9 +19,9 @@ using namespace JSONLib;
 /// </summary>
 /// <param name="name">Test data file name</param>
 /// <returns>Full path to test data file</returns>
-std::string prefixTestDataPath(const std::string &file)
-{
-  const std::filesystem::path currentPath = std::filesystem::current_path() / "files" / file;
+std::string prefixTestDataPath(const std::string &file) {
+  const std::filesystem::path currentPath =
+      std::filesystem::current_path() / "files" / file;
   return (currentPath.string());
 }
 /// <summary>
@@ -30,8 +30,7 @@ std::string prefixTestDataPath(const std::string &file)
 /// </summary>
 /// <param name="jsonFileName">JSON file name</param>
 /// <returns></returns>
-std::string readFromFile(const std::string &jsonFileName)
-{
+std::string readFromFile(const std::string &jsonFileName) {
   std::ifstream jsonFile;
   jsonFile.open(jsonFileName, std::ios_base::binary);
   std::ostringstream jsonFileBuffer;
@@ -43,8 +42,7 @@ std::string readFromFile(const std::string &jsonFileName)
 /// </summary>
 /// <param name="jNode">Pointer to JNNodeArray</param>
 /// <returns></returns>
-void checkArray(const JNode &jNode)
-{ // Array [\"Dog\",1964,true,null]
+void checkArray(const JNode &jNode) { // Array [\"Dog\",1964,true,null]
   REQUIRE(jNode.getNodeType() == JNodeType::array);
   REQUIRE(JNodeRef<JNodeArray>(jNode).size() == 4);
   REQUIRE(jNode[0].getNodeType() == JNodeType::string);
@@ -61,8 +59,8 @@ void checkArray(const JNode &jNode)
 /// </summary>
 /// <param name="jNode">Pointer to JNodeObjectData</param>
 /// <returns></returns>
-void checkObject(const JNode &jNode)
-{ // {\"City\":\"Southampton\",\"Population\":500000}
+void checkObject(
+    const JNode &jNode) { // {\"City\":\"Southampton\",\"Population\":500000}
   REQUIRE(jNode.getNodeType() == JNodeType::object);
   REQUIRE(JNodeRef<JNodeObject>(jNode).size() == 2);
   REQUIRE(JNodeRef<JNodeObject>(jNode).contains("City"));
@@ -78,8 +76,7 @@ void checkObject(const JNode &jNode)
 /// <param name="json">JSON parser object</param>
 /// <param name="jsonBuffer">Source json</param>
 /// <returns></returns>
-std::string stripWhiteSpace(JSON &json, const std::string &jsonBuffer)
-{
+std::string stripWhiteSpace(JSON &json, const std::string &jsonBuffer) {
   BufferSource source(jsonBuffer);
   BufferDestination destination;
   json.strip(source, destination);

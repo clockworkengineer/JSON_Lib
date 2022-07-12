@@ -16,71 +16,62 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib
+namespace JSONLib {
+// ===========================
+// PRIVATE TYPES AND CONSTANTS
+// ===========================
+// ==========================
+// PUBLIC TYPES AND CONSTANTS
+// ==========================
+// ========================
+// PRIVATE STATIC VARIABLES
+// ========================
+// =======================
+// PUBLIC STATIC VARIABLES
+// =======================
+// ===============
+// PRIVATE METHODS
+// ===============
+// ==============
+// PUBLIC METHODS
+// ==============
+//
+// Object
+//
+JNode &JSON::operator[](const std::string &key) {
+  try {
+    if (m_jNodeRoot == nullptr) {
+      m_jNodeRoot = m_jsonImplementation->parse("{}");
+    }
+    return ((*m_jNodeRoot)[key]);
+  } catch ([[maybe_unused]] JNode::Error &error) {
+    JNodeRef<JNodeObject>(*m_jNodeRoot)
+        .objects()
+        .emplace_back(JNodeObjectEntry{key, makeJNodeHole()});
+    return (*JNodeRef<JNodeObject>(*m_jNodeRoot).objects().back().value);
+  }
+}
+const JNode &JSON::operator[](const std::string &key) const // Object
 {
-    // ===========================
-    // PRIVATE TYPES AND CONSTANTS
-    // ===========================
-    // ==========================
-    // PUBLIC TYPES AND CONSTANTS
-    // ==========================
-    // ========================
-    // PRIVATE STATIC VARIABLES
-    // ========================
-    // =======================
-    // PUBLIC STATIC VARIABLES
-    // =======================
-    // ===============
-    // PRIVATE METHODS
-    // ===============
-    // ==============
-    // PUBLIC METHODS
-    // ==============
-    //
-    // Object
-    //
-    JNode &JSON::operator[](const std::string &key)
-    {
-        try
-        {
-            if (m_jNodeRoot == nullptr)
-            {
-                m_jNodeRoot = m_jsonImplementation->parse("{}");
-            }
-            return ((*m_jNodeRoot)[key]);
-        }
-        catch ([[maybe_unused]] JNode::Error &error)
-        {
-            JNodeRef<JNodeObject>(*m_jNodeRoot).objects().emplace_back(JNodeObjectEntry{key, makeJNodeHole()});
-            return (*JNodeRef<JNodeObject>(*m_jNodeRoot).objects().back().value);
-        }
+  return ((*m_jNodeRoot)[key]);
+}
+//
+// Array
+//
+JNode &JSON::operator[](std::size_t index) {
+  try {
+    if (m_jNodeRoot == nullptr) {
+      m_jNodeRoot = m_jsonImplementation->parse("[]");
     }
-    const JNode &JSON::operator[](const std::string &key) const // Object
-    {
-        return ((*m_jNodeRoot)[key]);
-    }
-    //
-    // Array
-    //
-    JNode &JSON::operator[](std::size_t index)
-    {
-        try
-        {
-            if (m_jNodeRoot == nullptr)
-            {
-                m_jNodeRoot = m_jsonImplementation->parse("[]");
-            }
-            return ((*m_jNodeRoot)[index]);
-        }
-        catch ([[maybe_unused]] JNode::Error &error)
-        {
-            JNodeRef<JNodeArray>(*m_jNodeRoot).array().resize(index+1);
-            JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index] = std::move(makeJNodeNull());
-            return (*JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index]);
-        }
-    }
-    const JNode &JSON::operator[](std::size_t index) const
-    {
-        return ((*m_jNodeRoot)[index]);
-    }
+    return ((*m_jNodeRoot)[index]);
+  } catch ([[maybe_unused]] JNode::Error &error) {
+    JNodeRef<JNodeArray>(*m_jNodeRoot).array().resize(index + 1);
+    JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index] =
+        std::move(makeJNodeNull());
+    return (*JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index]);
+  }
+}
+const JNode &JSON::operator[](std::size_t index) const {
+  return ((*m_jNodeRoot)[index]);
+}
 } // namespace JSONLib

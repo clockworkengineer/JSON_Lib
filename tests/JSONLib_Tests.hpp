@@ -7,17 +7,19 @@
 // JSON
 // ====
 #include "JSON.hpp"
-#include "JSON_Types.hpp"
-#include "JSON_Sources.hpp"
-#include "JSON_Destinations.hpp"
 #include "JSON_Converter.hpp"
+#include "JSON_Destinations.hpp"
+#include "JSON_Sources.hpp"
 #include "JSON_Translator.hpp"
+#include "JSON_Types.hpp"
+
 // =======
 // C++ STL
 // =======
 #include <filesystem>
-#include <string>
 #include <sstream>
+#include <string>
+
 // ===================
 // Unit test constants
 // ===================
@@ -35,18 +37,19 @@ std::string stripWhiteSpace(JSONLib::JSON &json, const std::string &jsonBuffer);
 // ================
 // Test files macro
 // ================
-#define TEST_FILE_LIST(file) auto file = GENERATE(values<std::string>({ \
-                                 "testfile001.json",                    \
-                                 "testfile002.json",                    \
-                                 "testfile003.json",                    \
-                                 "testfile004.json",                    \
-                                 "testfile005.json",                    \
-                                 "testfile006.json",                    \
-                                 "testfile007.json",                    \
-                                 "testfile008.json",                    \
-                                 "testfile009.json",                    \
-                                 "testfile010.json",                    \
-                                 "testfile011.json",                    \
-                                 "testfile012.json",                    \
-                                 "testfile013.json",                    \
-                             }))
+#define TEST_FILE_LIST(file)                                                   \
+  auto file = GENERATE(values<std::string>({                                   \
+      "testfile001.json",                                                      \
+      "testfile002.json",                                                      \
+      "testfile003.json",                                                      \
+      "testfile004.json",                                                      \
+      "testfile005.json",                                                      \
+      "testfile006.json",                                                      \
+      "testfile007.json",                                                      \
+      "testfile008.json",                                                      \
+      "testfile009.json",                                                      \
+      "testfile010.json",                                                      \
+      "testfile011.json",                                                      \
+      "testfile012.json",                                                      \
+      "testfile013.json",                                                      \
+  }))

@@ -15,40 +15,40 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib
-{
-    // ================
-    // CLASS DEFINITION
-    // ================
-    class JSON_Converter : public IConverter
-    {
-    public:
-        // ==========================
-        // PUBLIC TYPES AND CONSTANTS
-        // ==========================
-        // ======================
-        // CONSTRUCTOR/DESTRUCTOR
-        // ======================
-        // ==============
-        // PUBLIC METHODS
-        // ==============
-        std::u16string toUtf16(const std::string &utf8) override;
-        std::string toUtf8(const std::u16string &utf16) override;
-        // ================
-        // PUBLIC VARIABLES
-        // ================
-    private:
-        // ===========================
-        // PRIVATE TYPES AND CONSTANTS
-        // ===========================
-        // ===============
-        // PRIVATE METHODS
-        // ===============
-        // =================
-        // PRIVATE VARIABLES
-        // =================
+namespace JSONLib {
+// ================
+// CLASS DEFINITION
+// ================
+class JSON_Converter : public IConverter {
+public:
+  // ==========================
+  // PUBLIC TYPES AND CONSTANTS
+  // ==========================
+  // ======================
+  // CONSTRUCTOR/DESTRUCTOR
+  // ======================
+  // ==============
+  // PUBLIC METHODS
+  // ==============
+  std::u16string toUtf16(const std::string &utf8) override;
+  std::string toUtf8(const std::u16string &utf16) override;
+  // ================
+  // PUBLIC VARIABLES
+  // ================
+private:
+  // ===========================
+  // PRIVATE TYPES AND CONSTANTS
+  // ===========================
+  // ===============
+  // PRIVATE METHODS
+  // ===============
+  // =================
+  // PRIVATE VARIABLES
+  // =================
 #if !defined(_WIN64)
-        inline static std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_UTF16;
+  inline static std::wstring_convert<std::codecvt_utf8_utf16<char16_t>,
+                                     char16_t>
+      m_UTF16;
 #endif
-    };
+};
 } // namespace JSONLib
