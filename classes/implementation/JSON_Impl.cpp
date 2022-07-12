@@ -92,7 +92,7 @@ JNodeObjectEntry JSON_Impl::parseKeyValuePair(ISource &source) {
 /// <param name="source">Source for JSON encoded bytes.</param>
 /// <returns>String value.</returns>
 JNode::Ptr JSON_Impl::parseString(ISource &source) {
-  return (makeJNodeString(extractString(source)));
+  return (makeString(extractString(source)));
 }
 /// <summary>
 /// Parse a number from a JSON source stream.
@@ -113,7 +113,7 @@ JNode::Ptr JSON_Impl::parseNumber(ISource &source) {
     throw Error("Syntax error detected.");
   }
   source.ignoreWS();
-  return (makeJNodeNumber(jsonNumber.number()));
+  return (makeNumber(jsonNumber.number()));
 }
 /// <summary>
 /// Parse a boolean from a JSON source stream.
@@ -123,11 +123,11 @@ JNode::Ptr JSON_Impl::parseNumber(ISource &source) {
 JNode::Ptr JSON_Impl::parseBoolean(ISource &source) {
   if (source.match("true")) {
     source.ignoreWS();
-    return (makeJNodeBoolean(true));
+    return (makeBoolean(true));
   }
   if (source.match("false")) {
     source.ignoreWS();
-    return (makeJNodeBoolean(false));
+    return (makeBoolean(false));
   }
   throw Error("Syntax error detected.");
 }
@@ -141,7 +141,7 @@ JNode::Ptr JSON_Impl::parseNull(ISource &source) {
     throw Error("Syntax error detected.");
   }
   source.ignoreWS();
-  return (makeJNodeNull());
+  return (makeNull());
 }
 /// <summary>
 /// Parse an object from a JSON source stream.
@@ -165,7 +165,7 @@ JNode::Ptr JSON_Impl::parseObject(ISource &source) {
   }
   source.next();
   source.ignoreWS();
-  return (makeJNodeObject(objects));
+  return (makeObject(objects));
 }
 /// <summary>
 /// Parse an array from a JSON source stream.
@@ -173,7 +173,7 @@ JNode::Ptr JSON_Impl::parseObject(ISource &source) {
 /// <param name="source">Source for JSON encoded bytes.</param>
 /// <returns>JNodeArray.</returns>
 JNode::Ptr JSON_Impl::parseArray(ISource &source) {
-  std::vector<JNode::Ptr> array;
+  JNodeArray::ArrayList array;
   source.next();
   source.ignoreWS();
   if (source.current() != ']') {
@@ -189,7 +189,7 @@ JNode::Ptr JSON_Impl::parseArray(ISource &source) {
   }
   source.next();
   source.ignoreWS();
-  return (makeJNodeArray(array));
+  return (makeArray(array));
 }
 /// <summary>
 /// Recursively parse JSON source stream producing a JNode structure

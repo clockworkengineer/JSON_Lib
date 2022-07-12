@@ -47,7 +47,7 @@ JNode &JSON::operator[](const std::string &key) {
   } catch ([[maybe_unused]] JNode::Error &error) {
     JNodeRef<JNodeObject>(*m_jNodeRoot)
         .objects()
-        .emplace_back(JNodeObjectEntry{key, makeJNodeHole()});
+        .emplace_back(JNodeObjectEntry{key, makeHole()});
     return (*JNodeRef<JNodeObject>(*m_jNodeRoot).objects().back().value);
   }
 }
@@ -67,7 +67,7 @@ JNode &JSON::operator[](std::size_t index) {
   } catch ([[maybe_unused]] JNode::Error &error) {
     JNodeRef<JNodeArray>(*m_jNodeRoot).array().resize(index + 1);
     JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index] =
-        std::move(makeJNodeNull());
+        std::move(makeNull());
     return (*JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index]);
   }
 }
