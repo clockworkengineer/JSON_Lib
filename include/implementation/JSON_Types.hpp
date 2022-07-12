@@ -424,37 +424,31 @@ inline JNode::JNode(
         std::variant<int, long, long long, float, double, long double, bool,
                      std::string, std::nullptr_t>>
         list) {
-  JNodeArray array;
+  JNodeArray jNodeArray;
   for (const auto &entry : list) {
     if (const int *pint = std::get_if<int>(&entry)) {
-      JNodeNumeric jNodeNumber{*pint}; 
-      array.array().emplace_back(makeJNodeNumber(jNodeNumber));
+      jNodeArray.array().emplace_back(makeJNodeNumber(JNodeNumeric{*pint}));
     } else if (const long *plong = std::get_if<long>(&entry)) {
-      JNodeNumeric jNodeNumber{*plong};
-      array.array().emplace_back(makeJNodeNumber(jNodeNumber));
+      jNodeArray.array().emplace_back(makeJNodeNumber(JNodeNumeric{*plong}));
     } else if (const long long *plonglong = std::get_if<long long>(&entry)) {
-      JNodeNumeric jNodeNumber{*plonglong};
-      array.array().emplace_back(makeJNodeNumber(jNodeNumber));
+      jNodeArray.array().emplace_back(makeJNodeNumber(JNodeNumeric{*plonglong}));
     } else if (const float *pfloat = std::get_if<float>(&entry)) {
-      JNodeNumeric jNodeNumber{*pfloat};
-      array.array().emplace_back(makeJNodeNumber(jNodeNumber));
+      jNodeArray.array().emplace_back(makeJNodeNumber(JNodeNumeric{*pfloat}));
     } else if (const double *pdouble = std::get_if<double>(&entry)) {
-      JNodeNumeric jNodeNumber{*pdouble};
-      array.array().emplace_back(makeJNodeNumber(jNodeNumber));
+      jNodeArray.array().emplace_back(makeJNodeNumber(JNodeNumeric{*pdouble}));
     } else if (const long double *plongdouble =
                    std::get_if<long double>(&entry)) {
-      JNodeNumeric jNodeNumber{*plongdouble};
-      array.array().emplace_back(makeJNodeNumber(jNodeNumber));
+      jNodeArray.array().emplace_back(makeJNodeNumber(JNodeNumeric{*plongdouble}));
     } else if (const std::string *pstring = std::get_if<std::string>(&entry)) {
-      array.array().emplace_back(makeJNodeString(*pstring));
+      jNodeArray.array().emplace_back(makeJNodeString(*pstring));
     } else if (const bool *pboolean = std::get_if<bool>(&entry)) {
-      array.array().emplace_back(makeJNodeBoolean(*pboolean));
+      jNodeArray.array().emplace_back(makeJNodeBoolean(*pboolean));
     } else if (const std::nullptr_t *pnull =
                    std::get_if<std::nullptr_t>(&entry)) {
-      array.array().emplace_back(makeJNodeNull());
+      jNodeArray.array().emplace_back(makeJNodeNull());
     }
   }
-  m_jNodeData = std::make_unique<JNodeArray>(std::move(array));
+  m_jNodeData = std::make_unique<JNodeArray>(std::move(jNodeArray));
 }
 // ==============================
 // JNode base reference converter
