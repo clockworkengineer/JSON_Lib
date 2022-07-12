@@ -99,8 +99,8 @@ struct JNodeData {
   explicit JNodeData(JNodeType nodeType = JNodeType::base)
       : m_nodeType(nodeType) {}
   [[nodiscard]] JNodeType getNodeType() const { return (m_nodeType); }
-  JNodeData(const JNodeData &other) = delete;
-  JNodeData &operator=(JNodeData &other) = delete;
+  JNodeData(const JNodeData &other) = default;
+  JNodeData &operator=(const JNodeData &other) = default;
   JNodeData(JNodeData &&other) = default;
   JNodeData &operator=(JNodeData &&other) = default;
   ~JNodeData() = default;
@@ -158,7 +158,7 @@ struct JNode {
   }
 
 private:
-  std::unique_ptr<JNodeData> m_jNodeData;
+  std::unique_ptr<JNodeData>  m_jNodeData;
 };
 // ==================
 // JNode Object Entry
@@ -267,8 +267,8 @@ struct JNodeNumber : JNodeData {
   JNodeNumber() : JNodeData(JNodeType::number) {}
   explicit JNodeNumber(const JNodeNumeric &number)
       : JNodeData(JNodeType::number), m_jsonNumber(number) {}
-  JNodeNumber(const JNodeNumber &other) = delete;
-  JNodeNumber &operator=(const JNodeNumber &other) = delete;
+  JNodeNumber(const JNodeNumber &other) = default;
+  JNodeNumber &operator=(const JNodeNumber &other) = default;
   JNodeNumber(JNodeNumber &&other) = default;
   JNodeNumber &operator=(JNodeNumber &&other) = default;
   ~JNodeNumber() = default;
@@ -323,8 +323,8 @@ struct JNodeString : JNodeData {
   JNodeString() : JNodeData(JNodeType::string) {}
   explicit JNodeString(std::string str)
       : JNodeData(JNodeType::string), m_jsonString(std::move(str)) {}
-  JNodeString(const JNodeString &other) = delete;
-  JNodeString &operator=(const JNodeString &other) = delete;
+  JNodeString(const JNodeString &other) = default;
+  JNodeString &operator=(const JNodeString &other) = default;
   JNodeString(JNodeString &&other) = default;
   JNodeString &operator=(JNodeString &&other) = default;
   ~JNodeString() = default;
@@ -343,8 +343,8 @@ struct JNodeBoolean : JNodeData {
   JNodeBoolean() : JNodeData(JNodeType::boolean) {}
   explicit JNodeBoolean(bool boolean)
       : JNodeData(JNodeType::boolean), m_jsonBoolean(boolean) {}
-  JNodeBoolean(const JNodeBoolean &other) = delete;
-  JNodeBoolean &operator=(const JNodeBoolean &other) = delete;
+  JNodeBoolean(const JNodeBoolean &other) = default;
+  JNodeBoolean &operator=(const JNodeBoolean &other) = default;
   JNodeBoolean(JNodeBoolean &&other) = default;
   JNodeBoolean &operator=(JNodeBoolean &&other) = default;
   ~JNodeBoolean() = default;
@@ -362,8 +362,8 @@ private:
 struct JNodeNull : JNodeData {
   // Constructors/Destructors
   JNodeNull() : JNodeData(JNodeType::null) {}
-  JNodeNull(const JNodeNull &other) = delete;
-  JNodeNull &operator=(const JNodeNull &other) = delete;
+  JNodeNull(const JNodeNull &other) = default;
+  JNodeNull &operator=(const JNodeNull &other) = default;
   JNodeNull(JNodeNull &&other) = default;
   JNodeNull &operator=(JNodeNull &&other) = default;
   ~JNodeNull() = default;
@@ -376,8 +376,8 @@ struct JNodeNull : JNodeData {
 struct JNodeHole : JNodeData {
   // Constructors/Destructors
   JNodeHole() : JNodeData(JNodeType::hole) {}
-  JNodeHole(const JNodeHole &other) = delete;
-  JNodeHole &operator=(const JNodeHole &other) = delete;
+  JNodeHole(const JNodeHole &other) = default;
+  JNodeHole &operator=(const JNodeHole &other) = default;
   JNodeHole(JNodeHole &&other) = default;
   JNodeHole &operator=(JNodeHole &&other) = default;
   ~JNodeHole() = default;
