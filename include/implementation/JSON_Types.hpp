@@ -265,7 +265,7 @@ private:
 struct JNodeNumber : JNodeData {
   // Constructors/Destructors
   JNodeNumber() : JNodeData(JNodeType::number) {}
-  explicit JNodeNumber(JNodeNumeric &number)
+  explicit JNodeNumber(const JNodeNumeric &number)
       : JNodeData(JNodeType::number), m_jsonNumber(number) {}
   JNodeNumber(const JNodeNumber &other) = delete;
   JNodeNumber &operator=(const JNodeNumber &other) = delete;
@@ -532,35 +532,29 @@ inline const JNode &JNode::operator[](std::size_t index) const {
 }
 // ==========================
 // JNode assignment operators
-// ==========================
+// ==========================JNodeNumeric
 inline JNode &JNode::operator=(float floatingPoint) {
-  JNodeNumeric jNodeNumber{floatingPoint};
-  m_jNodeData = std::make_unique<JNodeNumber>(JNodeNumber{jNodeNumber});
+  m_jNodeData = std::make_unique<JNodeNumber>(JNodeNumber{JNodeNumeric{floatingPoint}});
   return (*this);
 }
 inline JNode &JNode::operator=(double floatingPoint) {
-  JNodeNumeric jNodeNumber{floatingPoint};
-  m_jNodeData = std::make_unique<JNodeNumber>(JNodeNumber{jNodeNumber});
+  m_jNodeData = std::make_unique<JNodeNumber>(JNodeNumber{JNodeNumeric{floatingPoint}});
   return (*this);
 }
 inline JNode &JNode::operator=(long double floatingPoint) {
-  JNodeNumeric jNodeNumber{floatingPoint};
-  m_jNodeData = std::make_unique<JNodeNumber>(JNodeNumber{jNodeNumber});
+  m_jNodeData = std::make_unique<JNodeNumber>(JNodeNumber{JNodeNumeric{floatingPoint}});
   return (*this);
 }
 inline JNode &JNode::operator=(int integer) {
-  JNodeNumeric jNodeNumber{integer};
-  m_jNodeData = std::make_unique<JNodeNumber>(JNodeNumber{jNodeNumber});
+  m_jNodeData = std::make_unique<JNodeNumber>(JNodeNumber{JNodeNumeric{integer}});
   return (*this);
 }
 inline JNode &JNode::operator=(long integer) {
-  JNodeNumeric jNodeNumber{integer};
-  m_jNodeData = std::make_unique<JNodeNumber>(JNodeNumber{jNodeNumber});
+  m_jNodeData = std::make_unique<JNodeNumber>(JNodeNumber{JNodeNumeric{integer}});
   return (*this);
 }
 inline JNode &JNode::operator=(long long integer) {
-  JNodeNumeric jNodeNumber{integer};
-  m_jNodeData = std::make_unique<JNodeNumber>(JNodeNumber{jNodeNumber});
+  m_jNodeData = std::make_unique<JNodeNumber>(JNodeNumber{JNodeNumeric{integer}});
   return (*this);
 }
 inline JNode &JNode::operator=(const char *cString) {
