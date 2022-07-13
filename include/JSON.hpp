@@ -6,7 +6,6 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-
 // =========
 // NAMESPACE
 // =========
@@ -76,5 +75,4 @@ private:
   // JSON implementation
   const std::unique_ptr<JSON_Impl> m_jsonImplementation;
 };
-
 } // namespace JSONLib

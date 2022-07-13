@@ -113,6 +113,9 @@ private:
 struct JNode {
   // Pointer to JNode
   using Ptr = std::unique_ptr<JNode>;
+  using InternalTypes =
+      std::variant<int, long, long long, float, double, long double, bool,
+                   std::string, std::nullptr_t>;
   // JNode Error
   struct Error : public std::runtime_error {
     explicit Error(const std::string &message)
@@ -121,10 +124,9 @@ struct JNode {
   // Constructors/Destructors
   explicit JNode(std::unique_ptr<JNodeData> jNodeData)
       : m_jNodeData(std::move(jNodeData)) {}
-  JNode(const std::initializer_list<
-        std::variant<int, long, long long, float, double, long double, bool,
-                     std::string, std::nullptr_t>>
-            list);
+  JNode(const std::initializer_list<InternalTypes> &list);
+  JNode(
+      const std::initializer_list<std::pair<std::string, InternalTypes>> &list);
   JNode(const JNode &other) = delete;
   JNode &operator=(const JNode &other) = delete;
   JNode(JNode &&other) = default;
@@ -317,8 +319,8 @@ private:
 struct JNodeString : JNodeData {
   // Constructors/Destructors
   JNodeString() : JNodeData(JNodeType::string) {}
-  explicit JNodeString(std::string str)
-      : JNodeData(JNodeType::string), m_jsonString(std::move(str)) {}
+  explicit JNodeString(std::string string)
+      : JNodeData(JNodeType::string), m_jsonString(std::move(string)) {}
   JNodeString(const JNodeString &other) = default;
   JNodeString &operator=(const JNodeString &other) = default;
   JNodeString(JNodeString &&other) = default;
@@ -413,11 +415,7 @@ inline std::unique_ptr<JNode> makeHole() {
 // ==================
 // JNode constructors
 // ==================
-inline JNode::JNode(
-    const std::initializer_list<
-        std::variant<int, long, long long, float, double, long double, bool,
-                     std::string, std::nullptr_t>>
-        list) {
+inline JNode::JNode(const std::initializer_list<InternalTypes> &list) {
   JNodeArray jNodeArray;
   for (const auto &entry : list) {
     if (const int *pint = std::get_if<int>(&entry)) {
@@ -443,6 +441,40 @@ inline JNode::JNode(
     }
   }
   m_jNodeData = std::make_unique<JNodeArray>(std::move(jNodeArray));
+}
+inline JNode::JNode([[maybe_unused]] const std::initializer_list<
+                    std::pair<std::string, InternalTypes>> &list) {
+  JNodeObject::ObjectList jObjectList;
+  JNodeObjectEntry jNodeObjectEntry;
+  for (const auto &entry : list) {
+    jNodeObjectEntry.key = entry.first;
+    if (const int *pint = std::get_if<int>(&entry.second)) {
+      jNodeObjectEntry.value = makeNumber(JNodeNumeric{*pint});
+    } else if (const long *plong = std::get_if<long>(&entry.second)) {
+      jNodeObjectEntry.value = makeNumber(JNodeNumeric{*plong});
+    } else if (const long long *plonglong =
+                   std::get_if<long long>(&entry.second)) {
+      jNodeObjectEntry.value = makeNumber(JNodeNumeric{*plonglong});
+    } else if (const float *pfloat = std::get_if<float>(&entry.second)) {
+      jNodeObjectEntry.value = makeNumber(JNodeNumeric{*pfloat});
+    } else if (const double *pdouble = std::get_if<double>(&entry.second)) {
+      jNodeObjectEntry.value = makeNumber(JNodeNumeric{*pdouble});
+    } else if (const long double *plongdouble =
+                   std::get_if<long double>(&entry.second)) {
+      jNodeObjectEntry.value = makeNumber(JNodeNumeric{*plongdouble});
+    } else if (const std::string *pstring =
+                   std::get_if<std::string>(&entry.second)) {
+      jNodeObjectEntry.value = makeString(*pstring);
+    } else if (const bool *pboolean = std::get_if<bool>(&entry.second)) {
+      jNodeObjectEntry.value = makeBoolean(*pboolean);
+    } else if (const std::nullptr_t *pnull =
+                   std::get_if<std::nullptr_t>(&entry.second)) {
+      jNodeObjectEntry.value = makeNull();
+    }
+     jObjectList.emplace_back(std::move(jNodeObjectEntry));
+  }
+  // m_jNodeData = std::make_unique<JNodeObject>(std::move(jObjectList));
+  std::swap(*this, *makeObject(jObjectList));
 }
 // ==============================
 // JNode base reference converter

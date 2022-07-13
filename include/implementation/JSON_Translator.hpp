@@ -7,13 +7,11 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-
 // ===============================
 // Translator/Converter interfaces
 // ===============================
 #include "IConverter.hpp"
 #include "ITranslator.hpp"
-
 // =========
 // NAMESPACE
 // =========

@@ -7,13 +7,11 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-
 // =============================
 // Source/Destination interfaces
 // =============================
 #include "IDestination.hpp"
 #include "ISource.hpp"
-
 // ====
 // JSON
 // ====
@@ -22,7 +20,6 @@
 #include "JSON_Sources.hpp"
 #include "JSON_Translator.hpp"
 #include "JSON_Types.hpp"
-
 // =========
 // NAMESPACE
 // =========
