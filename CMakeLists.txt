@@ -22,6 +22,7 @@ set (JSON_SOURCES
     ./classes/JSON.cpp
     ./classes/implementation/JSON_Impl.cpp
     ./classes/implementation/JSON_API.cpp
+    ./classes/implementation/JSON_JNode.cpp
     ./classes/implementation/JSON_Translator.cpp
     ./classes/implementation/JSON_Converter.cpp)
 
@@ -29,6 +30,11 @@ set (JSON_INCLUDES
     JSON_Config.hpp
     ./include/JSON.hpp
     ./include/implementation/JSON_Types.hpp
+    ./include/implementation/JSON_Error.hpp
+    ./include/implementation/JSON_JNodeNumeric.hpp
+    ./include/implementation/JSON_JNode.hpp
+    ./include/implementation/JSON_JNodeData.hpp
+    ./include/implementation/JSON_JNodeCreation.hpp
     ./include/implementation/JSON_Impl.hpp
     ./include/implementation/JSON_Sources.hpp
     ./include/implementation/JSON_Destinations.hpp
