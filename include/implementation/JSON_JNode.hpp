@@ -66,11 +66,12 @@ struct JNode {
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
   // Get JNode type
-  JNodeType getNodeType() const;
+  [[nodiscard]]JNodeType getNodeType() const;
   // Get reference to JNodeData
-  std::unique_ptr<JNodeData> &getJNodeData();
-  const std::unique_ptr<JNodeData> &getJNodeData() const;
+  [[nodiscard]]std::unique_ptr<JNodeData> &getJNodeData();
+  [[nodiscard]]const std::unique_ptr<JNodeData> &getJNodeData() const;
+
 private:
   std::unique_ptr<JNodeData> m_jNodeData;
 };
-}
+} // namespace JSONLib

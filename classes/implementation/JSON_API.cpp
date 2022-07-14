@@ -1,7 +1,7 @@
 //
 // Class: JSON_API
 //
-// Description:
+// Description: JSON creation api functionality.
 //
 // Dependencies:   C20++ - Language standard features used.
 //
@@ -35,9 +35,9 @@ namespace JSONLib {
 // ==============
 // PUBLIC METHODS
 // ==============
-//
+// ======
 // Object
-//
+// ======
 JNode &JSON::operator[](const std::string &key) {
   try {
     if (m_jNodeRoot == nullptr) {
@@ -55,9 +55,9 @@ const JNode &JSON::operator[](const std::string &key) const // Object
 {
   return ((*m_jNodeRoot)[key]);
 }
-//
+// =====
 // Array
-//
+// =====
 JNode &JSON::operator[](std::size_t index) {
   try {
     if (m_jNodeRoot == nullptr) {

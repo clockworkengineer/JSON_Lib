@@ -8,12 +8,9 @@
 // NAMESPACE
 // =========
 namespace JSONLib {
-// ==========
-// JSON Error
-// ==========
-// ============
-// JNode Number
-// ============
+// ==============
+// JNode Numberic
+// ==============
 struct JNodeNumeric {
   JNodeNumeric() = default;
   explicit JNodeNumeric(int integer) {

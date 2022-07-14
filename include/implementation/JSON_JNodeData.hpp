@@ -23,9 +23,9 @@ struct JNodeData {
 private:
   JNodeType m_nodeType;
 };
-// ===================
-// JNode Data Variants
-// ===================
+// ===============
+// JNode  Variants
+// ===============
 // ==================
 // JNode Object Entry
 // ==================
@@ -33,7 +33,9 @@ struct JNodeObjectEntry {
   std::string key;
   JNode::Ptr value;
 };
+// ======
 // Object
+// ======
 struct JNodeObject : JNodeData {
   using ObjectList = std::vector<JNodeObjectEntry>;
   // Constructors/Destructors
@@ -86,7 +88,9 @@ struct JNodeObject : JNodeData {
 private:
   ObjectList m_jsonObjects;
 };
+// =====
 // Array
+// =====
 struct JNodeArray : JNodeData {
   using ArrayList = std::vector<JNode::Ptr>;
   // Constructors/Destructors
@@ -119,7 +123,9 @@ struct JNodeArray : JNodeData {
 private:
   ArrayList m_jsonArray;
 };
+// ======
 // Number
+// ======
 struct JNodeNumber : JNodeData {
   // Constructors/Destructors
   JNodeNumber() : JNodeData(JNodeType::number) {}
@@ -174,7 +180,9 @@ struct JNodeNumber : JNodeData {
 private:
   JNodeNumeric m_jsonNumber{};
 };
+// ======
 // String
+// ======
 struct JNodeString : JNodeData {
   // Constructors/Destructors
   JNodeString() : JNodeData(JNodeType::string) {}
@@ -193,7 +201,9 @@ struct JNodeString : JNodeData {
 private:
   std::string m_jsonString;
 };
+// =======
 // Boolean
+// =======
 struct JNodeBoolean : JNodeData {
   // Constructors/Destructors
   JNodeBoolean() : JNodeData(JNodeType::boolean) {}
@@ -213,7 +223,9 @@ struct JNodeBoolean : JNodeData {
 private:
   bool m_jsonBoolean{};
 };
+// ====
 // Null
+// ====
 struct JNodeNull : JNodeData {
   // Constructors/Destructors
   JNodeNull() : JNodeData(JNodeType::null) {}
@@ -227,7 +239,9 @@ struct JNodeNull : JNodeData {
   // Return string representation of null value
   [[nodiscard]] std::string toString() const { return ("null"); }
 };
+// ====
 // Hole
+// ====
 struct JNodeHole : JNodeData {
   // Constructors/Destructors
   JNodeHole() : JNodeData(JNodeType::hole) {}

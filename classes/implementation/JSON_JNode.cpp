@@ -1,7 +1,7 @@
 //
-// Class: JSON_Impl
+// Class: JSON_JNode
 //
-// Description: JSON class implementation layer.
+// Description: JNode class functionality.
 //
 // Dependencies:   C20++ - Language standard features used.
 //
@@ -35,15 +35,6 @@ namespace JSONLib {
 // ==============
 // PUBLIC METHODS
 // ==============
-// Get JNode type
-[[nodiscard]] JNodeType JNode::getNodeType() const {
-  return (m_jNodeData->getNodeType());
-}
-// Get reference to JNodeData
-std::unique_ptr<JNodeData> &JNode::getJNodeData() { return (m_jNodeData); }
-[[nodiscard]] const std::unique_ptr<JNodeData> &JNode::getJNodeData() const {
-  return (m_jNodeData);
-}
 // ==================
 // JNode constructors
 // ==================
@@ -110,7 +101,9 @@ JNode::JNode([[maybe_unused]] const std::initializer_list<
 // =====================
 // JNode index overloads
 // =====================
+//
 // Object
+//
 JNode &JNode::operator[](const std::string &key) {
   if (this->getNodeType() == JNodeType::hole) {
     this->m_jNodeData = std::make_unique<JNodeObject>();
@@ -123,7 +116,9 @@ JNode &JNode::operator[](const std::string &key) {
 const JNode &JNode::operator[](const std::string &key) const {
   return (JNodeRef<const JNodeObject>(*this)[key]);
 }
+//
 // Array
+//
 JNode &JNode::operator[](std::size_t index) {
   try {
     if (this->getNodeType() == JNodeType::hole) {
@@ -186,5 +181,16 @@ JNode &JNode::operator=(bool boolean) {
 JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null) {
   std::swap(*this, *makeNull());
   return (*this);
+}
+// ==============
+// Get JNode type
+// ==============
+JNodeType JNode::getNodeType() const { return (m_jNodeData->getNodeType()); }
+// ==========================
+// Get reference to JNodeData
+// ==========================
+std::unique_ptr<JNodeData> &JNode::getJNodeData() { return (m_jNodeData); }
+const std::unique_ptr<JNodeData> &JNode::getJNodeData() const {
+  return (m_jNodeData);
 }
 } // namespace JSONLib
