@@ -11,15 +11,15 @@ namespace JSONLib {
 // ==========
 // JNode Data
 // ==========
-struct JNodeData {
-  explicit JNodeData(JNodeType nodeType = JNodeType::base)
+struct JNodeVariant {
+  explicit JNodeVariant(JNodeType nodeType = JNodeType::base)
       : m_nodeType(nodeType) {}
   [[nodiscard]] JNodeType getNodeType() const { return (m_nodeType); }
-  JNodeData(const JNodeData &other) = default;
-  JNodeData &operator=(const JNodeData &other) = default;
-  JNodeData(JNodeData &&other) = default;
-  JNodeData &operator=(JNodeData &&other) = default;
-  ~JNodeData() = default;
+  JNodeVariant(const JNodeVariant &other) = default;
+  JNodeVariant &operator=(const JNodeVariant &other) = default;
+  JNodeVariant(JNodeVariant &&other) = default;
+  JNodeVariant &operator=(JNodeVariant &&other) = default;
+  ~JNodeVariant() = default;
 private:
   JNodeType m_nodeType;
 };
@@ -36,12 +36,12 @@ struct JNodeObjectEntry {
 // ======
 // Object
 // ======
-struct JNodeObject : JNodeData {
+struct JNodeObject : JNodeVariant {
   using ObjectList = std::vector<JNodeObjectEntry>;
   // Constructors/Destructors
-  JNodeObject() : JNodeData(JNodeType::object) {}
+  JNodeObject() : JNodeVariant(JNodeType::object) {}
   explicit JNodeObject(ObjectList &objects)
-      : JNodeData(JNodeType::object), m_jsonObjects(std::move(objects)) {}
+      : JNodeVariant(JNodeType::object), m_jsonObjects(std::move(objects)) {}
   JNodeObject(const JNodeObject &other) = delete;
   JNodeObject &operator=(const JNodeObject &other) = delete;
   JNodeObject(JNodeObject &&other) = default;
@@ -91,12 +91,12 @@ private:
 // =====
 // Array
 // =====
-struct JNodeArray : JNodeData {
+struct JNodeArray : JNodeVariant {
   using ArrayList = std::vector<JNode::Ptr>;
   // Constructors/Destructors
-  JNodeArray() : JNodeData(JNodeType::array) {}
+  JNodeArray() : JNodeVariant(JNodeType::array) {}
   explicit JNodeArray(ArrayList &array)
-      : JNodeData(JNodeType::array), m_jsonArray(std::move(array)) {}
+      : JNodeVariant(JNodeType::array), m_jsonArray(std::move(array)) {}
   JNodeArray(const JNodeArray &other) = delete;
   JNodeArray &operator=(const JNodeArray &other) = delete;
   JNodeArray(JNodeArray &&other) = default;
@@ -126,11 +126,11 @@ private:
 // ======
 // Number
 // ======
-struct JNodeNumber : JNodeData {
+struct JNodeNumber : JNodeVariant {
   // Constructors/Destructors
-  JNodeNumber() : JNodeData(JNodeType::number) {}
+  JNodeNumber() : JNodeVariant(JNodeType::number) {}
   explicit JNodeNumber(const JNodeNumeric &number)
-      : JNodeData(JNodeType::number), m_jsonNumber(number) {}
+      : JNodeVariant(JNodeType::number), m_jsonNumber(number) {}
   JNodeNumber(const JNodeNumber &other) = default;
   JNodeNumber &operator=(const JNodeNumber &other) = default;
   JNodeNumber(JNodeNumber &&other) = default;
@@ -183,11 +183,11 @@ private:
 // ======
 // String
 // ======
-struct JNodeString : JNodeData {
+struct JNodeString : JNodeVariant {
   // Constructors/Destructors
-  JNodeString() : JNodeData(JNodeType::string) {}
+  JNodeString() : JNodeVariant(JNodeType::string) {}
   explicit JNodeString(std::string string)
-      : JNodeData(JNodeType::string), m_jsonString(std::move(string)) {}
+      : JNodeVariant(JNodeType::string), m_jsonString(std::move(string)) {}
   JNodeString(const JNodeString &other) = default;
   JNodeString &operator=(const JNodeString &other) = default;
   JNodeString(JNodeString &&other) = default;
@@ -204,11 +204,11 @@ private:
 // =======
 // Boolean
 // =======
-struct JNodeBoolean : JNodeData {
+struct JNodeBoolean : JNodeVariant {
   // Constructors/Destructors
-  JNodeBoolean() : JNodeData(JNodeType::boolean) {}
+  JNodeBoolean() : JNodeVariant(JNodeType::boolean) {}
   explicit JNodeBoolean(bool boolean)
-      : JNodeData(JNodeType::boolean), m_jsonBoolean(boolean) {}
+      : JNodeVariant(JNodeType::boolean), m_jsonBoolean(boolean) {}
   JNodeBoolean(const JNodeBoolean &other) = default;
   JNodeBoolean &operator=(const JNodeBoolean &other) = default;
   JNodeBoolean(JNodeBoolean &&other) = default;
@@ -226,9 +226,9 @@ private:
 // ====
 // Null
 // ====
-struct JNodeNull : JNodeData {
+struct JNodeNull : JNodeVariant {
   // Constructors/Destructors
-  JNodeNull() : JNodeData(JNodeType::null) {}
+  JNodeNull() : JNodeVariant(JNodeType::null) {}
   JNodeNull(const JNodeNull &other) = default;
   JNodeNull &operator=(const JNodeNull &other) = default;
   JNodeNull(JNodeNull &&other) = default;
@@ -242,9 +242,9 @@ struct JNodeNull : JNodeData {
 // ====
 // Hole
 // ====
-struct JNodeHole : JNodeData {
+struct JNodeHole : JNodeVariant {
   // Constructors/Destructors
-  JNodeHole() : JNodeData(JNodeType::hole) {}
+  JNodeHole() : JNodeVariant(JNodeType::hole) {}
   JNodeHole(const JNodeHole &other) = default;
   JNodeHole &operator=(const JNodeHole &other) = default;
   JNodeHole(JNodeHole &&other) = default;
@@ -255,39 +255,39 @@ struct JNodeHole : JNodeData {
 // ==============================
 // JNode base reference converter
 // ==============================
-template <typename T> void CheckJNodeType(const JNodeData &jNodeData) {
+template <typename T> void CheckJNodeType(const JNodeVariant &jNodeVariant) {
   if constexpr (std::is_same_v<T, JNodeString>) {
-    if (jNodeData.getNodeType() != JNodeType::string) {
+    if (jNodeVariant.getNodeType() != JNodeType::string) {
       throw JNode::Error("Node not a string.");
     }
   } else if constexpr (std::is_same_v<T, JNodeNumber>) {
-    if (jNodeData.getNodeType() != JNodeType::number) {
+    if (jNodeVariant.getNodeType() != JNodeType::number) {
       throw JNode::Error("Node not a number.");
     }
   } else if constexpr (std::is_same_v<T, JNodeArray>) {
-    if (jNodeData.getNodeType() != JNodeType::array) {
+    if (jNodeVariant.getNodeType() != JNodeType::array) {
       throw JNode::Error("Node not an array.");
     }
   } else if constexpr (std::is_same_v<T, JNodeObject>) {
-    if (jNodeData.getNodeType() != JNodeType::object) {
+    if (jNodeVariant.getNodeType() != JNodeType::object) {
       throw JNode::Error("Node not an object.");
     }
   } else if constexpr (std::is_same_v<T, JNodeBoolean>) {
-    if (jNodeData.getNodeType() != JNodeType::boolean) {
+    if (jNodeVariant.getNodeType() != JNodeType::boolean) {
       throw JNode::Error("Node not an boolean.");
     }
   } else if constexpr (std::is_same_v<T, JNodeNull>) {
-    if (jNodeData.getNodeType() != JNodeType::null) {
+    if (jNodeVariant.getNodeType() != JNodeType::null) {
       throw JNode::Error("Node not a null.");
     }
   }
 }
 template <typename T> T &JNodeRef(JNode &jNode) {
-  CheckJNodeType<T>(*jNode.getJNodeData());
-  return (static_cast<T &>(*jNode.getJNodeData()));
+  CheckJNodeType<T>(*jNode.getJNodeVariant());
+  return (static_cast<T &>(*jNode.getJNodeVariant()));
 }
 template <typename T> const T &JNodeRef(const JNode &jNode) {
-  CheckJNodeType<T>(*jNode.getJNodeData());
-  return (static_cast<const T &>(*jNode.getJNodeData()));
+  CheckJNodeType<T>(*jNode.getJNodeVariant());
+  return (static_cast<const T &>(*jNode.getJNodeVariant()));
 }
 }

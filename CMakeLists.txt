@@ -33,7 +33,7 @@ set (JSON_INCLUDES
     ./include/implementation/JSON_Error.hpp
     ./include/implementation/JSON_JNodeNumeric.hpp
     ./include/implementation/JSON_JNode.hpp
-    ./include/implementation/JSON_JNodeData.hpp
+    ./include/implementation/JSON_JNodeVariant.hpp
     ./include/implementation/JSON_JNodeCreation.hpp
     ./include/implementation/JSON_Impl.hpp
     ./include/implementation/JSON_Sources.hpp

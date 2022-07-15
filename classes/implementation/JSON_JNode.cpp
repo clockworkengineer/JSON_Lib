@@ -63,7 +63,7 @@ JNode::JNode(const std::initializer_list<InternalTypes> &list) {
       jNodeArray.array().emplace_back(makeNull());
     }
   }
-  m_jNodeData = std::make_unique<JNodeArray>(std::move(jNodeArray));
+  m_jNodeVariant = std::make_unique<JNodeArray>(std::move(jNodeArray));
 }
 JNode::JNode([[maybe_unused]] const std::initializer_list<
              std::pair<std::string, InternalTypes>> &list) {
@@ -106,7 +106,7 @@ JNode::JNode([[maybe_unused]] const std::initializer_list<
 //
 JNode &JNode::operator[](const std::string &key) {
   if (this->getNodeType() == JNodeType::hole) {
-    this->m_jNodeData = std::make_unique<JNodeObject>();
+    this->m_jNodeVariant = std::make_unique<JNodeObject>();
     JNodeRef<JNodeObject>(*this).objects().emplace_back(
         JNodeObjectEntry{key, makeHole()});
     return (*JNodeRef<JNodeObject>(*this).objects().back().value);
@@ -122,7 +122,7 @@ const JNode &JNode::operator[](const std::string &key) const {
 JNode &JNode::operator[](std::size_t index) {
   try {
     if (this->getNodeType() == JNodeType::hole) {
-      this->m_jNodeData = std::make_unique<JNodeArray>();
+      this->m_jNodeVariant = std::make_unique<JNodeArray>();
     }
     return (JNodeRef<JNodeArray>(*this)[index]);
   } catch ([[maybe_unused]] const JNode::Error &error) {
@@ -185,12 +185,12 @@ JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null) {
 // ==============
 // Get JNode type
 // ==============
-JNodeType JNode::getNodeType() const { return (m_jNodeData->getNodeType()); }
+JNodeType JNode::getNodeType() const { return (m_jNodeVariant->getNodeType()); }
 // ==========================
 // Get reference to JNodeData
 // ==========================
-std::unique_ptr<JNodeData> &JNode::getJNodeData() { return (m_jNodeData); }
-const std::unique_ptr<JNodeData> &JNode::getJNodeData() const {
-  return (m_jNodeData);
+std::unique_ptr<JNodeVariant> &JNode::getJNodeVariant() { return (m_jNodeVariant); }
+const std::unique_ptr<JNodeVariant> &JNode::getJNodeVariant() const {
+  return (m_jNodeVariant);
 }
 } // namespace JSONLib
