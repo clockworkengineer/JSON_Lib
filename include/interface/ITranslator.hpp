@@ -45,11 +45,11 @@ public:
   virtual bool validEscape(char escape) = 0;
 
 protected:
-  // =====================================================================================
+  // ==========================================================================
   // Check that there are no single unpaired UTF-16 surrogates.From what I see
   // this is meant to be an error but from searching the web I have not found a
   // definitive answer.
-  //======================================================================================
+  //===========================================================================
   bool unpairedSurrogatesInBuffer(const std::u16string &utf16Buffer) {
     int index = 0;
     while (index <= (static_cast<int>(utf16Buffer.size()) - 1)) {
@@ -66,10 +66,16 @@ protected:
   }
 
 private:
+  // ======================================================
+  // Return true if a character is a valid upper surrogate.
+  // ======================================================
   bool isValidSurrogateUpper(char16_t c) {
     return ((c >= static_cast<char16_t>(kHighSurrogatesBegin)) &&
             (c <= static_cast<char16_t>(kHighSurrogatesEnd)));
   }
+  // ======================================================
+  // Return true if a character is a valid lower surrogate.
+  // ======================================================
   bool isValidSurrogateLower(char16_t c) {
     return ((c >= static_cast<char16_t>(kLowSurrogatesBegin)) &&
             (c <= static_cast<char16_t>(kLowSurrogatesEnd)));

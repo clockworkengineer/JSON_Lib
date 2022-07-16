@@ -1,7 +1,9 @@
 //
-// Class: JSON_JNode
+// Class: JNode
 //
-// Description: JNode class functionality.
+// Description: JNode struct is used to hold the parsed JSON and model its
+// structure by arranging the JNodes in a tree; this can then be traversed to 
+// reform the JSON during stringification.
 //
 // Dependencies:   C20++ - Language standard features used.
 //
@@ -65,10 +67,10 @@ JNode::JNode(const std::initializer_list<InternalTypes> &list) {
   }
   m_jNodeVariant = std::make_unique<JNodeArray>(std::move(jNodeArray));
 }
-JNode::JNode([[maybe_unused]] const std::initializer_list<
+JNode::JNode(const std::initializer_list<
              std::pair<std::string, InternalTypes>> &list) {
   JNodeObject::ObjectList jObjectList;
-  JNodeObjectEntry jNodeObjectEntry;
+  JNodeObject::ObjectEntry jNodeObjectEntry;
   for (const auto &entry : list) {
     jNodeObjectEntry.key = entry.first;
     if (const int *pint = std::get_if<int>(&entry.second)) {
@@ -99,16 +101,16 @@ JNode::JNode([[maybe_unused]] const std::initializer_list<
   std::swap(*this, *makeObject(jObjectList));
 }
 // =====================
-// JNode index overloads
+// JNode index overloads 
 // =====================
-//
+// ======
 // Object
-//
+// ======
 JNode &JNode::operator[](const std::string &key) {
   if (this->getNodeType() == JNodeType::hole) {
     this->m_jNodeVariant = std::make_unique<JNodeObject>();
     JNodeRef<JNodeObject>(*this).objects().emplace_back(
-        JNodeObjectEntry{key, makeHole()});
+        JNodeObject::ObjectEntry{key, makeHole()});
     return (*JNodeRef<JNodeObject>(*this).objects().back().value);
   }
   return (JNodeRef<JNodeObject>(*this)[key]);
@@ -116,9 +118,9 @@ JNode &JNode::operator[](const std::string &key) {
 const JNode &JNode::operator[](const std::string &key) const {
   return (JNodeRef<const JNodeObject>(*this)[key]);
 }
-//
+// =====
 // Array
-//
+// =====
 JNode &JNode::operator[](std::size_t index) {
   try {
     if (this->getNodeType() == JNodeType::hole) {
@@ -186,9 +188,9 @@ JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null) {
 // Get JNode type
 // ==============
 JNodeType JNode::getNodeType() const { return (m_jNodeVariant->getNodeType()); }
-// ==========================
-// Get reference to JNodeData
-// ==========================
+// =============================
+// Get reference to JNodeVariant
+// =============================
 std::unique_ptr<JNodeVariant> &JNode::getJNodeVariant() { return (m_jNodeVariant); }
 const std::unique_ptr<JNodeVariant> &JNode::getJNodeVariant() const {
   return (m_jNodeVariant);

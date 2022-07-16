@@ -67,7 +67,7 @@ char16_t decodeUTF16(std::string::const_iterator &current,
 /// <summary>
 /// JSON translator constructor.
 /// </summary>
-JSON_Translator::JSON_Translator(IConverter &converter)
+JSON_Translator::JSON_Translator(const IConverter &converter)
     : m_converter(converter) {
   // Initialise tables used to convert to/from single character
   // escape sequences within a JSON string.

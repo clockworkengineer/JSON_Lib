@@ -62,7 +62,7 @@ private:
   // PRIVATE METHODS
   // ===============
   static std::string extractString(ISource &source, bool translate = true);
-  static JNodeObjectEntry parseKeyValuePair(ISource &source);
+  static JNodeObject::ObjectEntry parseKeyValuePair(ISource &source);
   static JNode::Ptr parseString(ISource &source);
   static JNode::Ptr parseNumber(ISource &source);
   static JNode::Ptr parseBoolean(ISource &source);
@@ -75,7 +75,9 @@ private:
   // =================
   // PRIVATE VARIABLES
   // =================
+  // Pointer to JSON translator interface
   inline static std::unique_ptr<ITranslator> m_translator;
+  // Pointer to character conversion interface
   inline static std::unique_ptr<IConverter> m_converter;
 };
 } // namespace JSONLib

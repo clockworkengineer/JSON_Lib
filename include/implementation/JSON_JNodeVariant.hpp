@@ -8,36 +8,37 @@
 // NAMESPACE
 // =========
 namespace JSONLib {
-// ==========
-// JNode Data
-// ==========
+// ===============
+// JNode  Variants
+// ===============
+// ====
+// Base
+// ====
 struct JNodeVariant {
   explicit JNodeVariant(JNodeType nodeType = JNodeType::base)
       : m_nodeType(nodeType) {}
   [[nodiscard]] JNodeType getNodeType() const { return (m_nodeType); }
-  JNodeVariant(const JNodeVariant &other) = default;
-  JNodeVariant &operator=(const JNodeVariant &other) = default;
+  JNodeVariant(const JNodeVariant &other) = delete;
+  JNodeVariant &operator=(const JNodeVariant &other) = delete;
   JNodeVariant(JNodeVariant &&other) = default;
   JNodeVariant &operator=(JNodeVariant &&other) = default;
   ~JNodeVariant() = default;
+
 private:
   JNodeType m_nodeType;
 };
-// ===============
-// JNode  Variants
-// ===============
-// ==================
-// JNode Object Entry
-// ==================
-struct JNodeObjectEntry {
-  std::string key;
-  JNode::Ptr value;
-};
+
 // ======
 // Object
 // ======
 struct JNodeObject : JNodeVariant {
-  using ObjectList = std::vector<JNodeObjectEntry>;
+  // Object entry
+  struct ObjectEntry {
+    std::string key;
+    JNode::Ptr value;
+  };
+  // Object entry list
+  using ObjectList = std::vector<JNodeObject::ObjectEntry>;
   // Constructors/Destructors
   JNodeObject() : JNodeVariant(JNodeType::object) {}
   explicit JNodeObject(ObjectList &objects)
@@ -49,10 +50,11 @@ struct JNodeObject : JNodeVariant {
   ~JNodeObject() = default;
   // Search for a given entry given a key and object list
   static auto findKey(const std::string &key, const ObjectList &objects) {
-    auto entry = std::find_if(objects.begin(), objects.end(),
-                              [&key](const JNodeObjectEntry &entry) -> bool {
-                                return (entry.key == key);
-                              });
+    auto entry =
+        std::find_if(objects.begin(), objects.end(),
+                     [&key](const JNodeObject::ObjectEntry &entry) -> bool {
+                       return (entry.key == key);
+                     });
     if (entry == objects.end()) {
       throw JNode::Error("Invalid key used to access object.");
     }
@@ -85,6 +87,7 @@ struct JNodeObject : JNodeVariant {
   // Return reference to base of object entries
   ObjectList &objects() { return (m_jsonObjects); }
   [[nodiscard]] const ObjectList &objects() const { return (m_jsonObjects); }
+
 private:
   ObjectList m_jsonObjects;
 };
@@ -92,6 +95,7 @@ private:
 // Array
 // =====
 struct JNodeArray : JNodeVariant {
+  // Array entry list
   using ArrayList = std::vector<JNode::Ptr>;
   // Constructors/Destructors
   JNodeArray() : JNodeVariant(JNodeType::array) {}
@@ -120,6 +124,7 @@ struct JNodeArray : JNodeVariant {
     }
     throw JNode::Error("Invalid index used to access array.");
   }
+
 private:
   ArrayList m_jsonArray;
 };
@@ -131,8 +136,8 @@ struct JNodeNumber : JNodeVariant {
   JNodeNumber() : JNodeVariant(JNodeType::number) {}
   explicit JNodeNumber(const JNodeNumeric &number)
       : JNodeVariant(JNodeType::number), m_jsonNumber(number) {}
-  JNodeNumber(const JNodeNumber &other) = default;
-  JNodeNumber &operator=(const JNodeNumber &other) = default;
+  JNodeNumber(const JNodeNumber &other) = delete;
+  JNodeNumber &operator=(const JNodeNumber &other) = delete;
   JNodeNumber(JNodeNumber &&other) = default;
   JNodeNumber &operator=(JNodeNumber &&other) = default;
   ~JNodeNumber() = default;
@@ -177,6 +182,7 @@ struct JNodeNumber : JNodeVariant {
         m_jsonNumber.value.begin() +
             static_cast<std::ptrdiff_t>(std::strlen(&m_jsonNumber.value[0]))});
   }
+
 private:
   JNodeNumeric m_jsonNumber{};
 };
@@ -188,8 +194,8 @@ struct JNodeString : JNodeVariant {
   JNodeString() : JNodeVariant(JNodeType::string) {}
   explicit JNodeString(std::string string)
       : JNodeVariant(JNodeType::string), m_jsonString(std::move(string)) {}
-  JNodeString(const JNodeString &other) = default;
-  JNodeString &operator=(const JNodeString &other) = default;
+  JNodeString(const JNodeString &other) = delete;
+  JNodeString &operator=(const JNodeString &other) = delete;
   JNodeString(JNodeString &&other) = default;
   JNodeString &operator=(JNodeString &&other) = default;
   ~JNodeString() = default;
@@ -198,6 +204,7 @@ struct JNodeString : JNodeVariant {
   [[nodiscard]] const std::string &string() const { return (m_jsonString); }
   // Convert string representation to a string
   [[nodiscard]] std::string toString() const { return (m_jsonString); }
+
 private:
   std::string m_jsonString;
 };
@@ -209,8 +216,8 @@ struct JNodeBoolean : JNodeVariant {
   JNodeBoolean() : JNodeVariant(JNodeType::boolean) {}
   explicit JNodeBoolean(bool boolean)
       : JNodeVariant(JNodeType::boolean), m_jsonBoolean(boolean) {}
-  JNodeBoolean(const JNodeBoolean &other) = default;
-  JNodeBoolean &operator=(const JNodeBoolean &other) = default;
+  JNodeBoolean(const JNodeBoolean &other) = delete;
+  JNodeBoolean &operator=(const JNodeBoolean &other) = delete;
   JNodeBoolean(JNodeBoolean &&other) = default;
   JNodeBoolean &operator=(JNodeBoolean &&other) = default;
   ~JNodeBoolean() = default;
@@ -220,6 +227,7 @@ struct JNodeBoolean : JNodeVariant {
   [[nodiscard]] std::string toString() const {
     return (m_jsonBoolean ? "true" : "false");
   }
+
 private:
   bool m_jsonBoolean{};
 };
@@ -229,8 +237,8 @@ private:
 struct JNodeNull : JNodeVariant {
   // Constructors/Destructors
   JNodeNull() : JNodeVariant(JNodeType::null) {}
-  JNodeNull(const JNodeNull &other) = default;
-  JNodeNull &operator=(const JNodeNull &other) = default;
+  JNodeNull(const JNodeNull &other) = delete;
+  JNodeNull &operator=(const JNodeNull &other) = delete;
   JNodeNull(JNodeNull &&other) = default;
   JNodeNull &operator=(JNodeNull &&other) = default;
   ~JNodeNull() = default;
@@ -245,16 +253,16 @@ struct JNodeNull : JNodeVariant {
 struct JNodeHole : JNodeVariant {
   // Constructors/Destructors
   JNodeHole() : JNodeVariant(JNodeType::hole) {}
-  JNodeHole(const JNodeHole &other) = default;
-  JNodeHole &operator=(const JNodeHole &other) = default;
+  JNodeHole(const JNodeHole &other) = delete;
+  JNodeHole &operator=(const JNodeHole &other) = delete;
   JNodeHole(JNodeHole &&other) = default;
   JNodeHole &operator=(JNodeHole &&other) = default;
   ~JNodeHole() = default;
   [[nodiscard]] std::string toString() const { return ("null"); }
 };
-// ==============================
-// JNode base reference converter
-// ==============================
+// =========================
+// JNode reference converter
+// =========================
 template <typename T> void CheckJNodeType(const JNodeVariant &jNodeVariant) {
   if constexpr (std::is_same_v<T, JNodeString>) {
     if (jNodeVariant.getNodeType() != JNodeType::string) {
@@ -290,4 +298,4 @@ template <typename T> const T &JNodeRef(const JNode &jNode) {
   CheckJNodeType<T>(*jNode.getJNodeVariant());
   return (static_cast<const T &>(*jNode.getJNodeVariant()));
 }
-}
+} // namespace JSONLib

@@ -1,4 +1,7 @@
 #pragma once
+// =====================
+// JSON core definitions
+// =====================
 #include "JSON_Error.hpp"
 #include "JSON_JNodeNumeric.hpp"
 #include "JSON_JNode.hpp"

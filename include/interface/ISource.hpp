@@ -33,9 +33,9 @@ public:
   // Move to next character
   // ======================
   virtual void next() = 0;
-  // =========================================
-  // Are there still more characters to read ?
-  // =========================================
+  // =======================================
+  // Are there still more characters to read
+  // ========================================
   [[nodiscard]] virtual bool more() const = 0;
   // ========================
   // Backup length characters
@@ -49,9 +49,9 @@ public:
   // Current character position within source stream
   // ===============================================
   [[nodiscard]] virtual std::size_t position() const = 0;
-  // =====================================
-  // Is the current character whitespace ?
-  // =====================================
+  // ===================================
+  // Is the current character whitespace
+  // ===================================
   [[nodiscard]] bool isWS() const {
     return (current() == ' ' || current() == '\t' || current() == '\n' ||
             current() == '\r');
@@ -64,10 +64,10 @@ public:
       next();
     }
   }
-  // =================================================================
-  // Is current string a match at the current source stream position ?
-  // =================================================================
-  bool match(const std::string &targetString) {
+  // ===============================================================
+  // Is current string a match at the current source stream position
+  // ===============================================================
+  [[nodiscard]] bool match(const std::string &targetString) {
     long index = 0;
     while (more() && current() == targetString[index]) {
       next();

@@ -8,10 +8,11 @@
 // NAMESPACE
 // =========
 namespace JSONLib {
-// ==============
-// JNode Numberic
-// ==============
+// =============
+// JNode Numeric
+// =============
 struct JNodeNumeric {
+  // Constructors/Destructors
   JNodeNumeric() = default;
   explicit JNodeNumeric(int integer) {
     std::string number{std::to_string(integer)};
@@ -59,7 +60,7 @@ struct JNodeNumeric {
       std::numeric_limits<long long>::digits10 + 2;
   static constexpr int kLongDoubleWidth =
       std::numeric_limits<long double>::digits10 + 2;
-  // Numbers stored in fix length array
+  // Numbers stored in fixed length array
   std::array<char, kLongLongWidth> value{};
 };
 } // namespace JSONLib

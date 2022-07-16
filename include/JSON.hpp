@@ -19,7 +19,6 @@ class IDestination;
 class IConverter;
 class ITranslator;
 struct JNode;
-struct JNodePtr;
 // ================
 // CLASS DEFINITION
 // ================

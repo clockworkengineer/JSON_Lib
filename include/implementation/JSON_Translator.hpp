@@ -24,9 +24,9 @@ public:
   // ==========================
   // PUBLIC TYPES AND CONSTANTS
   // ==========================
-  // ==========
-  // JSON Error
-  // ==========
+  // =====================
+  // JSON translator error
+  // =====================
   struct Error : public std::runtime_error {
     explicit Error(const std::string &message)
         : std::runtime_error("JSON Translator Error: " + message) {}
@@ -34,7 +34,7 @@ public:
   // ======================
   // CONSTRUCTOR/DESTRUCTOR
   // ======================
-  explicit JSON_Translator(IConverter &converter);
+  explicit JSON_Translator(const IConverter &converter);
   JSON_Translator(const JSON_Translator &other) = delete;
   JSON_Translator &operator=(const JSON_Translator &other) = delete;
   JSON_Translator(JSON_Translator &&other) = delete;
@@ -59,7 +59,9 @@ private:
   // =================
   // PRIVATE VARIABLES
   // =================
-  IConverter &m_converter;
+  // Character converter
+  const IConverter &m_converter;
+  // To/From escape sequence lookup maps
   std::unordered_map<char, char16_t> m_fromEscape;
   std::unordered_map<char16_t, char> m_toEscape;
 };

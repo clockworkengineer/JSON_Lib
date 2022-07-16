@@ -30,6 +30,7 @@ struct JNodeVariant;
 struct JNode {
   // Pointer to JNode
   using Ptr = std::unique_ptr<JNode>;
+  // Possible JSON node value types
   using InternalTypes =
       std::variant<int, long, long long, float, double, long double, bool,
                    std::string, std::nullptr_t>;
@@ -66,10 +67,10 @@ struct JNode {
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
   // Get JNode type
-  [[nodiscard]]JNodeType getNodeType() const;
+  [[nodiscard]] JNodeType getNodeType() const;
   // Get reference to JNodeVariant
-  [[nodiscard]]std::unique_ptr<JNodeVariant> &getJNodeVariant();
-  [[nodiscard]]const std::unique_ptr<JNodeVariant> &getJNodeVariant() const;
+  [[nodiscard]] std::unique_ptr<JNodeVariant> &getJNodeVariant();
+  [[nodiscard]] const std::unique_ptr<JNodeVariant> &getJNodeVariant() const;
 
 private:
   std::unique_ptr<JNodeVariant> m_jNodeVariant;

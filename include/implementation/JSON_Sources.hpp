@@ -16,9 +16,9 @@ namespace JSONLib
     // ==============================
     // Source classes for JSON parser
     // ==============================
-    //
-    // Buffered character source
-    //
+    // ========
+    // Buffered
+    // ========
     class BufferSource : public ISource
     {
     public:
@@ -69,9 +69,9 @@ namespace JSONLib
         std::size_t m_bufferPosition = 0;
         std::string m_parseBuffer;
     };
-    //
-    // File character source
-    //
+    // ====
+    // File
+    // ====
     class FileSource : public ISource
     {
     public:

@@ -31,28 +31,13 @@ namespace JSONLib {
 // ===============
 // PRIVATE METHODS
 // ===============
-/// <summary>
-/// Windows API for converting between byte and wide characters.
-/// </summary>
-#if defined(_WIN64)
-int WideCharToBytes(wchar_t *wideString, int wideStringLength,
-                    char *bytes = NULL, int length = 0) {
-  return (WideCharToMultiByte(CP_UTF8, 0, wideString, wideStringLength, bytes,
-                              length, NULL, NULL));
-}
-int BytesToWideChar(const char *bytes, int length, wchar_t *sideString = NULL,
-                    int wideStringLength = 0) {
-  return (MultiByteToWideChar(CP_UTF8, 0, bytes, length, sideString,
-                              wideStringLength));
-}
-#endif
 // ==============
 // PUBLIC METHODS
 // ==============
 /// <summary>
 /// Convert utf8 <-> utf16 strings.
 /// </summary>
-std::u16string JSON_Converter::toUtf16(const std::string &utf8) {
+std::u16string JSON_Converter::toUtf16(const std::string &utf8) const {
 #if defined(_WIN64)
   std::wstring wideString(
       BytesToWideChar(utf8.c_str(), static_cast<int>(utf8.length())), 0);
@@ -63,7 +48,7 @@ std::u16string JSON_Converter::toUtf16(const std::string &utf8) {
   return (m_UTF16.from_bytes(utf8));
 #endif
 }
-std::string JSON_Converter::toUtf8(const std::u16string &utf16) {
+std::string JSON_Converter::toUtf8(const std::u16string &utf16) const {
 #if defined(_WIN64)
   std::wstring wideString{utf16.begin(), utf16.end()};
   std::string bytes(

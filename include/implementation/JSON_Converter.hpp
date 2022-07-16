@@ -30,8 +30,8 @@ public:
   // ==============
   // PUBLIC METHODS
   // ==============
-  std::u16string toUtf16(const std::string &utf8) override;
-  std::string toUtf8(const std::u16string &utf16) override;
+  std::u16string toUtf16(const std::string &utf8) const override;
+  std::string toUtf8(const std::u16string &utf16) const override;
   // ================
   // PUBLIC VARIABLES
   // ================
@@ -51,4 +51,20 @@ private:
       m_UTF16;
 #endif
 };
+// ============================================================
+// Windows API for converting between byte and wide characters.
+// ============================================================
+#if defined(_WIN64)
+inline int WideCharToBytes(wchar_t *wideString, int wideStringLength,
+                           char *bytes = NULL, int length = 0) {
+  return (WideCharToMultiByte(CP_UTF8, 0, wideString, wideStringLength, bytes,
+                              length, NULL, NULL));
+}
+inline int BytesToWideChar(const char *bytes, int length,
+                           wchar_t *sideString = NULL,
+                           int wideStringLength = 0) {
+  return (MultiByteToWideChar(CP_UTF8, 0, bytes, length, sideString,
+                              wideStringLength));
+}
+#endif
 } // namespace JSONLib
