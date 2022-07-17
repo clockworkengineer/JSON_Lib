@@ -50,7 +50,19 @@ struct JNodeNumeric {
     return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' ||
             ch == 'E' || ch == 'e');
   }
-  // Is number a long/long long/double/long double ?
+  // Is number a int/long/long long/float/double/long double ?
+  [[nodiscard]] bool isInt() const {
+    try {
+      std::size_t end;
+      [[maybe_unused]] auto integer = std::stoi(value.c_str(), &end, 10);
+      if (end != value.size()) {
+        return (false);
+      }
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
   [[nodiscard]] bool isLong() const {
     try {
       char *end;
@@ -68,6 +80,18 @@ struct JNodeNumeric {
       char *end;
       std::strtoll(value.c_str(), &end, 10);
       if (*end != '\0') {
+        return (false);
+      }
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
+  [[nodiscard]] bool isFloat() const {
+    try {
+      std::size_t end;
+      [[maybe_unused]] auto fp = std::stof(value.c_str(), &end);
+      if (end != value.size()) {
         return (false);
       }
     } catch ([[maybe_unused]] const std::exception &e) {
@@ -99,15 +123,21 @@ struct JNodeNumeric {
     }
     return (true);
   }
-  // Convert to long/long long.Note: Can still return a long value
+  // Convert to int/long/long long.Note: Can still return a long value
   // for floating point.
+  [[nodiscard]] int getInt() const {
+    return (std::stoi(value.c_str(), nullptr, 10));
+  }
   [[nodiscard]] long getLong() const {
     return (std::strtol(value.c_str(), nullptr, 10));
   }
   [[nodiscard]] long long getLongLong() const {
     return (std::strtoll(value.c_str(), nullptr, 10));
   }
-  // Convert to double/long double.
+  // Convert to float/double/long double.
+  [[nodiscard]] float getFloat() const {
+    return (std::stof(value.c_str(), nullptr));
+  }
   [[nodiscard]] double getDouble() const {
     return (std::strtod(value.c_str(), nullptr));
   }
@@ -116,7 +146,7 @@ struct JNodeNumeric {
   }
   // Check whether we nave a numeric value
   [[nodiscard]] bool isValidNumber() const {
-    return (isLong() || isLongLong() || isDouble() || isLongDouble());
+    return (isInt() || isLong() || isLongLong() || isFloat() || isDouble() || isLongDouble());
   }
   // Get string representation of numeric
   [[nodiscard]] std::string getString() const { return (value); }

@@ -106,6 +106,12 @@ TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]") {
 // =======================
 TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
   JSON json;
+  SECTION("Floating point converted to int", "[JSON][JNode][JNodeNumber]") {
+    BufferSource jsonSource{"6788888.8990"};
+    json.parse(jsonSource);
+    REQUIRE_FALSE(JNodeRef<JNodeNumber>(json.root()).number().isInt());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getInt() == 6788888);
+  }
   SECTION("Floating point converted to long", "[JSON][JNode][JNodeNumber]") {
     BufferSource jsonSource{"6788888.8990"};
     json.parse(jsonSource);
@@ -119,6 +125,16 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
     REQUIRE_FALSE(JNodeRef<JNodeNumber>(json.root()).number().isLongLong());
     REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLong() == 6788888);
   }
+  SECTION("Floating point converted to float", "[JSON][JNode][JNodeNumber]") {
+    // auto compare = [](float a, float b, float epsilon =
+    // std::numeric_limits<float>::epsilon()){ return (std::fabs(a - b) <=
+    // epsilon); };
+    BufferSource jsonSource{"678.8990"};
+    json.parse(jsonSource);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isFloat());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getFloat() ==
+            static_cast<float>(678.8990));
+  }
   SECTION("Floating point converted to double", "[JSON][JNode][JNodeNumber]") {
     BufferSource jsonSource{"678.8990"};
     json.parse(jsonSource);
@@ -130,8 +146,15 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
           "[JSON][JNode][JNodeNumber]") {
     BufferSource jsonSource{"678.8990"};
     json.parse(jsonSource);
-        REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isLongDouble());
-    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLongDouble() == 678.8990);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isLongDouble());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLongDouble() ==
+            678.8990);
+  }
+  SECTION("Integer converted to int", "[JSON][JNode][JNodeNumber]") {
+    BufferSource jsonSource{"78989"};
+    json.parse(jsonSource);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isInt());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getInt() == 78989);
   }
   SECTION("Integer converted to long", "[JSON][JNode][JNodeNumber]") {
     BufferSource jsonSource{"78989"};
@@ -145,6 +168,12 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isLongLong());
     REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLongLong() == 78989);
   }
+  SECTION("Integer converted to float", "[JSON][JNode][JNodeNumber]") {
+    BufferSource jsonSource{"78989"};
+    json.parse(jsonSource);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isFloat());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getFloat() == 78989.0);
+  }
   SECTION("Integer converted to double", "[JSON][JNode][JNodeNumber]") {
     BufferSource jsonSource{"78989"};
     json.parse(jsonSource);
@@ -154,8 +183,9 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
   SECTION("Integer converted to long double", "[JSON][JNode][JNodeNumber]") {
     BufferSource jsonSource{"78989"};
     json.parse(jsonSource);
-            REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isLongDouble());
-    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLongDouble() == 78989.0);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isLongDouble());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLongDouble() ==
+            78989.0);
   }
   SECTION("Check  floating point with exponent",
           "[JSON][JNode][JNodeNumber][Exception") {
