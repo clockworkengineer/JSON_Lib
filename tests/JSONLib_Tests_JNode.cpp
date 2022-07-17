@@ -107,74 +107,55 @@ TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]") {
 TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
   JSON json;
   SECTION("Floating point converted to long", "[JSON][JNode][JNodeNumber]") {
-    long longValue;
     BufferSource jsonSource{"6788888.8990"};
     json.parse(jsonSource);
-    REQUIRE_FALSE(
-        JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
-    REQUIRE(longValue == 6788888);
+    REQUIRE_FALSE(JNodeRef<JNodeNumber>(json.root()).number().isLong());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLong() == 6788888);
   }
   SECTION("Floating point converted to long long",
           "[JSON][JNode][JNodeNumber]") {
-    long long longlongValue;
     BufferSource jsonSource{"6788888.8990"};
     json.parse(jsonSource);
-    REQUIRE_FALSE(
-        JNodeRef<JNodeNumber>(json.root()).number().integer(longlongValue));
-    REQUIRE(longlongValue == 6788888);
+    REQUIRE_FALSE(JNodeRef<JNodeNumber>(json.root()).number().isLongLong());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLong() == 6788888);
   }
   SECTION("Floating point converted to double", "[JSON][JNode][JNodeNumber]") {
-    double doubleValue;
     BufferSource jsonSource{"678.8990"};
     json.parse(jsonSource);
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root())
-                       .number()
-                       .floatingpoint(doubleValue));
-    REQUIRE(doubleValue == 678.8990);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isDouble());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getDouble() ==
+            678.8990);
   }
   SECTION("Floating point converted to long double",
           "[JSON][JNode][JNodeNumber]") {
-    long double longDoubleValue;
     BufferSource jsonSource{"678.8990"};
     json.parse(jsonSource);
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root())
-                       .number()
-                       .floatingpoint(longDoubleValue));
-    REQUIRE(longDoubleValue == 678.8990);
+        REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isLongDouble());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLongDouble() == 678.8990);
   }
   SECTION("Integer converted to long", "[JSON][JNode][JNodeNumber]") {
-    long longValue;
     BufferSource jsonSource{"78989"};
     json.parse(jsonSource);
-    REQUIRE_FALSE(
-        !JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
-    REQUIRE(longValue == 78989);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isLong());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLong() == 78989);
   }
   SECTION("Integer converted to long long", "[JSON][JNode][JNodeNumber]") {
-    long long longLongValue;
     BufferSource jsonSource{"78989"};
     json.parse(jsonSource);
-    REQUIRE_FALSE(
-        !JNodeRef<JNodeNumber>(json.root()).number().integer(longLongValue));
-    REQUIRE(longLongValue == 78989);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isLongLong());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLongLong() == 78989);
   }
   SECTION("Integer converted to double", "[JSON][JNode][JNodeNumber]") {
-    double doubleValue;
     BufferSource jsonSource{"78989"};
     json.parse(jsonSource);
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root())
-                       .number()
-                       .floatingpoint(doubleValue));
-    REQUIRE(doubleValue == 78989.0);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isDouble());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getDouble() == 78989.0);
   }
   SECTION("Integer converted to long double", "[JSON][JNode][JNodeNumber]") {
-    long double longDoubleValue;
     BufferSource jsonSource{"78989"};
     json.parse(jsonSource);
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root())
-                       .number()
-                       .floatingpoint(longDoubleValue));
-    REQUIRE(longDoubleValue == 78989.0);
+            REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isLongDouble());
+    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLongDouble() == 78989.0);
   }
   SECTION("Check  floating point with exponent",
           "[JSON][JNode][JNodeNumber][Exception") {

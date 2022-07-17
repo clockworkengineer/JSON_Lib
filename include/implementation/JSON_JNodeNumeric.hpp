@@ -43,6 +43,7 @@ struct JNodeNumeric {
   JNodeNumeric(JNodeNumeric &&other) = default;
   JNodeNumeric &operator=(JNodeNumeric &&other) = default;
   ~JNodeNumeric() = default;
+  // Is number a long/long long/double/long double ?
   [[nodiscard]] bool isLong() const {
     try {
       char *end;
@@ -79,7 +80,7 @@ struct JNodeNumeric {
     }
     return (true);
   }
-    [[nodiscard]] bool isLongDouble() const {
+  [[nodiscard]] bool isLongDouble() const {
     try {
       char *end;
       std::strtold(value.c_str(), &end);
@@ -97,61 +98,24 @@ struct JNodeNumeric {
     return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' ||
             ch == 'E' || ch == 'e');
   }
-  // Convert to long/long long returning true on success
-  // Note: Can still return a long value for floating point
-  // but false as the number is not in integer format
-  [[nodiscard]] bool integer(long &integerValue) const {
-    try {
-      char *end;
-      integerValue = std::strtol(value.c_str(), &end, 10);
-      if (*end != '\0') {
-        return (false);
-      }
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    return (true);
+  // Convert to long/long long.Note: Can still return a long value
+  // for floating point.
+  [[nodiscard]] long getLong() const {
+    return (std::strtol(value.c_str(), nullptr, 10));
   }
-  [[nodiscard]] bool integer(long long &integerValue) const {
-    try {
-      char *end;
-      integerValue = std::strtoll(value.c_str(), &end, 10);
-      if (*end != '\0') {
-        return (false);
-      }
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    return (true);
+  [[nodiscard]] long long getLongLong() const {
+    return (std::strtoll(value.c_str(), nullptr, 10));
   }
-  // Convert to double/long double returning true on success
-  [[nodiscard]] bool floatingpoint(double &doubleValue) const {
-    try {
-      char *end;
-      doubleValue = std::strtod(value.c_str(), &end);
-      if (*end != '\0') {
-        return (false);
-      }
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    return (true);
+  // Convert to double/long double.
+  [[nodiscard]] double getDouble() const {
+    return (std::strtod(value.c_str(), nullptr));
   }
-  [[nodiscard]] bool floatingpoint(long double &doubleValue) const {
-    try {
-      char *end;
-      doubleValue = std::strtold(value.c_str(), &end);
-      if (*end != '\0') {
-        return (false);
-      }
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    return (true);
+  [[nodiscard]] long double getLongDouble() const {
+      return(std::strtold(value.c_str(), nullptr));
   }
   // Check whether we nave a numeric value
   [[nodiscard]] bool isValidNumber() const {
-    return(isLong()||isLongLong()||isDouble()||isLongDouble());
+    return (isLong() || isLongLong() || isDouble() || isLongDouble());
   }
   std::string value{};
 };

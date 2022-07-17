@@ -141,7 +141,7 @@ struct JNodeNumber : JNodeVariant {
   JNodeNumber(JNodeNumber &&other) = default;
   JNodeNumber &operator=(JNodeNumber &&other) = default;
   ~JNodeNumber() = default;
-  // Return reference to number character array
+  // Return reference to number string
   [[nodiscard]] JNodeNumeric &number() { return (m_jsonNumber); }
   [[nodiscard]] const JNodeNumeric &number() const { return (m_jsonNumber); }
   // Convert number to string
