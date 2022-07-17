@@ -55,6 +55,59 @@ struct JNodeNumeric {
   JNodeNumeric(JNodeNumeric &&other) = default;
   JNodeNumeric &operator=(JNodeNumeric &&other) = default;
   ~JNodeNumeric() = default;
+  // Convert to long/long long returning true on success
+  // Note: Can still return a long value for floating point
+  // but false as the number is not in integer format
+  [[nodiscard]] bool integer(long &integerValue) const {
+    try {
+      integerValue = std::stol(&value[0], nullptr);
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
+  [[nodiscard]] bool integer(long long &integerValue) const {
+    try {
+      integerValue = std::stoll(&value[0], nullptr);
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
+  // Convert to double/long double returning true on success
+  [[nodiscard]] bool floatingpoint(double &doubleValue) const {
+    try {
+      doubleValue = std::strtod(&value[0], nullptr);
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
+  [[nodiscard]] bool floatingpoint(long double &doubleValue) const {
+    try {
+      doubleValue = std::strtold(&value[0], nullptr);
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
+  // Check whether we nave a numeric value
+  [[nodiscard]] bool isValidNumber() const {
+    if ([[maybe_unused]] long longValue{}; integer(longValue)) {
+      return (true);
+    }
+    if ([[maybe_unused]] long long longValue{}; integer(longValue)) {
+      return (true);
+    }
+    if ([[maybe_unused]] double doubleValue{}; floatingpoint(doubleValue)) {
+      return (true);
+    }
+    if ([[maybe_unused]] long double doubleValue{};
+        floatingpoint(doubleValue)) {
+      return (true);
+    }
+    return (false);
+  }
   // Numeric values max width in characters
   static constexpr int kLongLongWidth =
       std::numeric_limits<long long>::digits10 + 2;

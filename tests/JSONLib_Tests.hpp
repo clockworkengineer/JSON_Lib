@@ -19,7 +19,8 @@
 #include <filesystem>
 #include <sstream>
 #include <string>
-
+#include <climits>
+#include <limits>
 // ===================
 // Unit test constants
 // ===================

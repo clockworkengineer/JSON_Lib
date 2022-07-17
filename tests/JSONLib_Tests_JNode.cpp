@@ -104,47 +104,85 @@ TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]") {
 // =======================
 // JNode Number Conversion
 // =======================
-TEST_CASE("Check JNodeNumberData number conversion",
-          "[JSON][JNode][JNodeNumberData]") {
+TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
   JSON json;
-  SECTION("Floating point not converted to Integer",
-          "[JSON][JNode][JNodeNumberData]") {
-    long long longValue;
-    BufferSource jsonSource{"678.8990"};
-    json.parse(jsonSource);
-    REQUIRE_FALSE(JNodeRef<JNodeNumber>(json.root()).integer(longValue));
-  }
-  SECTION("Floating point converted to double",
-          "[JSON][JNode][JNodeNumberData]") {
-    long double doubleValue;
-    BufferSource jsonSource{"678.8990"};
+  SECTION("Floating point converted to long", "[JSON][JNode][JNodeNumber]") {
+    long longValue;
+    BufferSource jsonSource{"6788888.8990"};
     json.parse(jsonSource);
     REQUIRE_FALSE(
-        !JNodeRef<JNodeNumber>(json.root()).floatingpoint(doubleValue));
+        !JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
+    REQUIRE(longValue == 6788888);
+  }
+  SECTION("Floating point converted to long long",
+          "[JSON][JNode][JNodeNumber]") {
+    long long longlongValue;
+    BufferSource jsonSource{"6788888.8990"};
+    json.parse(jsonSource);
+    REQUIRE_FALSE(
+        !JNodeRef<JNodeNumber>(json.root()).number().integer(longlongValue));
+    REQUIRE(longlongValue == 6788888);
+  }
+  SECTION("Floating point converted to double", "[JSON][JNode][JNodeNumber]") {
+    double doubleValue;
+    BufferSource jsonSource{"678.8990"};
+    json.parse(jsonSource);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root())
+                       .number()
+                       .floatingpoint(doubleValue));
     REQUIRE(doubleValue == 678.8990);
   }
-  SECTION("Integer point converted to Long", "[JSON][JNode][JNodeNumberData]") {
-    long long longValue;
-    BufferSource jsonSource{"78989"};
+  SECTION("Floating point converted to long double",
+          "[JSON][JNode][JNodeNumber]") {
+    long double longDoubleValue;
+    BufferSource jsonSource{"678.8990"};
     json.parse(jsonSource);
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).integer(longValue));
-    REQUIRE(longValue == 78989);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root())
+                       .number()
+                       .floatingpoint(longDoubleValue));
+    REQUIRE(longDoubleValue == 678.8990);
   }
-  SECTION("Integer point not converted to double",
-          "[JSON][JNode][JNodeNumberData]") {
-    long double doubleValue;
+  SECTION("Integer converted to long", "[JSON][JNode][JNodeNumber]") {
+    long longValue;
     BufferSource jsonSource{"78989"};
     json.parse(jsonSource);
     REQUIRE_FALSE(
-        !JNodeRef<JNodeNumber>(json.root()).floatingpoint(doubleValue));
+        !JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
+    REQUIRE(longValue == 78989);
+  }
+  SECTION("Integer converted to long long", "[JSON][JNode][JNodeNumber]") {
+    long long longLongValue;
+    BufferSource jsonSource{"78989"};
+    json.parse(jsonSource);
+    REQUIRE_FALSE(
+        !JNodeRef<JNodeNumber>(json.root()).number().integer(longLongValue));
+    REQUIRE(longLongValue == 78989);
+  }
+  SECTION("Integer converted to double", "[JSON][JNode][JNodeNumber]") {
+    double doubleValue;
+    BufferSource jsonSource{"78989"};
+    json.parse(jsonSource);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root())
+                       .number()
+                       .floatingpoint(doubleValue));
+    REQUIRE(doubleValue == 78989.0);
+  }
+  SECTION("Integer converted to long double", "[JSON][JNode][JNodeNumber]") {
+    long double longDoubleValue;
+    BufferSource jsonSource{"78989"};
+    json.parse(jsonSource);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root())
+                       .number()
+                       .floatingpoint(longDoubleValue));
+    REQUIRE(longDoubleValue == 78989.0);
   }
   SECTION("Check  floating point with exponent",
-          "[JSON][JNode][JNodeNumberData][Exception") {
+          "[JSON][JNode][JNodeNumber][Exception") {
     BufferSource jsonSource{"78.43e-2"};
     REQUIRE_NOTHROW(json.parse(jsonSource));
   }
   SECTION("Check floating point with invalid exponent",
-          "[JSON][JNode][JNodeNumberData][Exception]") {
+          "[JSON][JNode][JNodeNumber][Exception]") {
     BufferSource jsonSource{"78.e43e-2"};
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
@@ -152,11 +190,41 @@ TEST_CASE("Check JNodeNumberData number conversion",
                         "JSON Error: Syntax error detected.");
   }
   SECTION("Check floating point with multiple decimal points",
-          "[JSON][JNode][JNodeNumberData][Exception]") {
+          "[JSON][JNode][JNodeNumber][Exception]") {
     BufferSource jsonSource{"78.5454.545"};
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource),
                         "JSON Error: Syntax error detected.");
   }
+}
+TEST_CASE("Check JNodeNumber min/max conversion",
+          "[JSON][JNode][JNodeNumber]") {
+  JSON json;
+  SECTION("Number to large to fit into long returns false.",
+          "[JSON][JNode][JNodeNumber]") {
+    long longValue;
+    json.parse(BufferSource{std::to_string(LONG_MAX)});
+    REQUIRE_FALSE(
+        !JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
+    json.parse(
+        BufferSource{std::to_string(static_cast<long long>(LONG_MAX) + 1)});
+    REQUIRE_FALSE(
+        JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
+  }
+  SECTION("Number to small to fit into long returns false.",
+          "[JSON][JNode][JNodeNumber]") {
+    long longValue;
+    json.parse(BufferSource{std::to_string(LONG_MIN)});
+    REQUIRE_FALSE(
+        !JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
+    json.parse(
+        BufferSource{std::to_string(static_cast<long long>(LONG_MIN) - 1)});
+    REQUIRE_FALSE(
+        JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
+  }
+  SECTION("Number to large to fit into double returns false.",
+          "[JSON][JNode][JNodeNumber]") {}
+  SECTION("Number to small to fit into double returns false.",
+          "[JSON][JNode][JNodeNumber]") {}
 }

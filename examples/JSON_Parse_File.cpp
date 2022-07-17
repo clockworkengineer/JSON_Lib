@@ -112,8 +112,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   //
   // Initialise logging.
   //
-  plog::init(plog::debug, "Parse_JSON_Files.log");
-  PLOG_INFO << "Parse_JSON_Files started ...";
+  plog::init(plog::debug, "JSON_Parse_Files.log");
+  PLOG_INFO << "JSON_Parse_Files started ...";
   PLOG_INFO << JSON().version();
   //
   // For each json parse it, stringify it and display unless its to large.

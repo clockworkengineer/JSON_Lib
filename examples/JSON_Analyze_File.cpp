@@ -104,8 +104,6 @@ void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails) {
   switch (jNode.getNodeType()) {
   case JNodeType::number:
     jNodeDetails.sizeInBytes += sizeof(JNodeNumber);
-    //    jNodeDetails.sizeInBytes +=
-    //    JNodeDataRef<JNodeNumberData>(jNode).number().value.size();
     break;
   case JNodeType::string:
     jNodeDetails.sizeInBytes += sizeof(JNodeString);
@@ -184,8 +182,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   //
   // Initialise logging.
   //
-  plog::init(plog::debug, "Analyze_JSON_File.log");
-  PLOG_INFO << "Analyze_JSON_File started ...";
+  plog::init(plog::debug, "JSON_Analyze_File.log");
+  PLOG_INFO << "JSON_Analyze_File started ...";
   PLOG_INFO << JSON().version();
   //
   // Analyze JSON file and display its details.

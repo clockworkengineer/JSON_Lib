@@ -147,31 +147,6 @@ struct JNodeNumber : JNodeVariant {
     return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' ||
             ch == 'E' || ch == 'e');
   }
-  // Convert to long long returning true on success
-  // Note: Can still return a long value for floating point
-  // but false as the number is not in integer format
-  [[nodiscard]] bool integer(long long &longValue) const {
-    char *end = nullptr;
-    longValue = std::strtoll(&m_jsonNumber.value[0], &end, 10);
-    return (*end == '\0'); // If not all characters used then not success
-  }
-  // Convert to long double returning true on success
-  [[nodiscard]] bool floatingpoint(long double &doubleValue) const {
-    char *end = nullptr;
-    doubleValue = std::strtod(&m_jsonNumber.value[0], &end);
-    return (*end == '\0'); // If not all characters used then not success
-  }
-  // Check whether we nave a numeric value
-  [[nodiscard]] bool isValidNumber() const {
-    if ([[maybe_unused]] long long longValue{}; integer(longValue)) {
-      return (true);
-    }
-    if ([[maybe_unused]] long double doubleValue{};
-        floatingpoint(doubleValue)) {
-      return (true);
-    }
-    return (false);
-  }
   // Return reference to number character array
   [[nodiscard]] JNodeNumeric &number() { return (m_jsonNumber); }
   [[nodiscard]] const JNodeNumeric &number() const { return (m_jsonNumber); }

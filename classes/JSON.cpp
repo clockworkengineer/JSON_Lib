@@ -44,7 +44,7 @@ namespace JSONLib {
 // PUBLIC METHODS
 // ==============
 /// <summary>
-/// JSON constructor. Pass any custom convert or translator here.
+/// JSON constructor. Pass any custom converter or translator here.
 /// </summary>
 /// <param name="translator">Pointer to translator interface.</param>
 /// <param name="converter">Pointer to converter interface.</param>
