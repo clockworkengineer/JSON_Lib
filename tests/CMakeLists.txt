@@ -23,6 +23,7 @@ set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
 set(TEST_SOURCES
     JSONLib_Tests_JNode.cpp
+    JSONLib_Tests_JNodeNumber.cpp
     JSONLib_Tests_ISource.cpp
     JSONLib_Tests_IDestination.cpp
     JSONLib_Tests_Parse_Escapes.cpp
