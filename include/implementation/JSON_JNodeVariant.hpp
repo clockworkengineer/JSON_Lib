@@ -141,21 +141,12 @@ struct JNodeNumber : JNodeVariant {
   JNodeNumber(JNodeNumber &&other) = default;
   JNodeNumber &operator=(JNodeNumber &&other) = default;
   ~JNodeNumber() = default;
-  // Is character a valid numeric character ?
-  [[nodiscard]] bool isValidNumeric(char ch) const {
-    // Includes possible sign, decimal point or exponent
-    return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' ||
-            ch == 'E' || ch == 'e');
-  }
   // Return reference to number character array
   [[nodiscard]] JNodeNumeric &number() { return (m_jsonNumber); }
   [[nodiscard]] const JNodeNumeric &number() const { return (m_jsonNumber); }
   // Convert number to string
   [[nodiscard]] std::string toString() const {
-    return (std::string{
-        m_jsonNumber.value.begin(),
-        m_jsonNumber.value.begin() +
-            static_cast<std::ptrdiff_t>(std::strlen(&m_jsonNumber.value[0]))});
+    return (m_jsonNumber.value);
   }
 
 private:

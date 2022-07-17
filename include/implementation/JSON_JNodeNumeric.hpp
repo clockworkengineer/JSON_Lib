@@ -14,53 +14,51 @@ namespace JSONLib {
 struct JNodeNumeric {
   // Constructors/Destructors
   JNodeNumeric() = default;
-  explicit JNodeNumeric(int integer) {
-    std::string number{std::to_string(integer)};
-    std::memcpy(&value[0], number.c_str(), number.size() + 1);
-  }
-  explicit JNodeNumeric(long integer) {
-    std::string number{std::to_string(integer)};
-    std::memcpy(&value[0], number.c_str(), number.size() + 1);
-  }
-  explicit JNodeNumeric(long long integer) {
-    std::string number{std::to_string(integer)};
-    std::memcpy(&value[0], number.c_str(), number.size() + 1);
-  }
+  explicit JNodeNumeric(int integer) { value = std::to_string(integer); }
+  explicit JNodeNumeric(long integer) { value = std::to_string(integer); }
+  explicit JNodeNumeric(long long integer) { value = std::to_string(integer); }
   explicit JNodeNumeric(float floatingPoint) {
-    std::string number{std::to_string(floatingPoint)};
-    number.erase(number.find_last_not_of('0') + 1, std::string::npos);
-    if (number.back() == '.') {
-      number += '0';
+    value = std::to_string(floatingPoint);
+    value.erase(value.find_last_not_of('0') + 1, std::string::npos);
+    if (value.back() == '.') {
+      value += '0';
     }
-    std::memcpy(&value[0], number.c_str(), number.size() + 1);
   }
   explicit JNodeNumeric(double floatingPoint) {
-    std::string number{std::to_string(floatingPoint)};
-    number.erase(number.find_last_not_of('0') + 1, std::string::npos);
-    if (number.back() == '.') {
-      number += '0';
+    value = std::to_string(floatingPoint);
+    value.erase(value.find_last_not_of('0') + 1, std::string::npos);
+    if (value.back() == '.') {
+      value += '0';
     }
-    std::memcpy(&value[0], number.c_str(), number.size() + 1);
   }
   explicit JNodeNumeric(long double floatingPoint) {
-    std::string number{std::to_string(floatingPoint)};
-    number.erase(number.find_last_not_of('0') + 1, std::string::npos);
-    if (number.back() == '.') {
-      number += '0';
+    value = std::to_string(floatingPoint);
+    value.erase(value.find_last_not_of('0') + 1, std::string::npos);
+    if (value.back() == '.') {
+      value += '0';
     }
-    std::memcpy(&value[0], number.c_str(), number.size() + 1);
   }
   JNodeNumeric(const JNodeNumeric &other) = default;
   JNodeNumeric &operator=(const JNodeNumeric &other) = default;
   JNodeNumeric(JNodeNumeric &&other) = default;
   JNodeNumeric &operator=(JNodeNumeric &&other) = default;
   ~JNodeNumeric() = default;
+  // Is character a valid numeric character ?
+  [[nodiscard]] bool isValidNumericChar(char ch) const {
+    // Includes possible sign, decimal point or exponent
+    return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' ||
+            ch == 'E' || ch == 'e');
+  }
   // Convert to long/long long returning true on success
   // Note: Can still return a long value for floating point
   // but false as the number is not in integer format
   [[nodiscard]] bool integer(long &integerValue) const {
     try {
-      integerValue = std::stol(&value[0], nullptr);
+      char *end;
+      integerValue = std::strtol(value.c_str(), &end, 10);
+      if (*end != '\0') {
+        return (false);
+      }
     } catch ([[maybe_unused]] const std::exception &e) {
       return (false);
     }
@@ -68,7 +66,11 @@ struct JNodeNumeric {
   }
   [[nodiscard]] bool integer(long long &integerValue) const {
     try {
-      integerValue = std::stoll(&value[0], nullptr);
+      char *end;
+      integerValue = std::strtoll(value.c_str(), &end, 10);
+      if (*end != '\0') {
+        return (false);
+      }
     } catch ([[maybe_unused]] const std::exception &e) {
       return (false);
     }
@@ -77,7 +79,11 @@ struct JNodeNumeric {
   // Convert to double/long double returning true on success
   [[nodiscard]] bool floatingpoint(double &doubleValue) const {
     try {
-      doubleValue = std::strtod(&value[0], nullptr);
+      char *end;
+      doubleValue = std::strtod(value.c_str(), &end);
+      if (*end != '\0') {
+        return (false);
+      }
     } catch ([[maybe_unused]] const std::exception &e) {
       return (false);
     }
@@ -85,7 +91,11 @@ struct JNodeNumeric {
   }
   [[nodiscard]] bool floatingpoint(long double &doubleValue) const {
     try {
-      doubleValue = std::strtold(&value[0], nullptr);
+      char *end;
+      doubleValue = std::strtold(value.c_str(), &end);
+      if (*end != '\0') {
+        return (false);
+      }
     } catch ([[maybe_unused]] const std::exception &e) {
       return (false);
     }
@@ -108,12 +118,6 @@ struct JNodeNumeric {
     }
     return (false);
   }
-  // Numeric values max width in characters
-  static constexpr int kLongLongWidth =
-      std::numeric_limits<long long>::digits10 + 2;
-  static constexpr int kLongDoubleWidth =
-      std::numeric_limits<long double>::digits10 + 2;
-  // Numbers stored in fixed length array
-  std::array<char, kLongLongWidth> value{};
+  std::string value{};
 };
 } // namespace JSONLib

@@ -111,7 +111,7 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
     BufferSource jsonSource{"6788888.8990"};
     json.parse(jsonSource);
     REQUIRE_FALSE(
-        !JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
+        JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
     REQUIRE(longValue == 6788888);
   }
   SECTION("Floating point converted to long long",
@@ -120,7 +120,7 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
     BufferSource jsonSource{"6788888.8990"};
     json.parse(jsonSource);
     REQUIRE_FALSE(
-        !JNodeRef<JNodeNumber>(json.root()).number().integer(longlongValue));
+        JNodeRef<JNodeNumber>(json.root()).number().integer(longlongValue));
     REQUIRE(longlongValue == 6788888);
   }
   SECTION("Floating point converted to double", "[JSON][JNode][JNodeNumber]") {
@@ -197,34 +197,4 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
     REQUIRE_THROWS_WITH(json.parse(jsonSource),
                         "JSON Error: Syntax error detected.");
   }
-}
-TEST_CASE("Check JNodeNumber min/max conversion",
-          "[JSON][JNode][JNodeNumber]") {
-  JSON json;
-  SECTION("Number to large to fit into long returns false.",
-          "[JSON][JNode][JNodeNumber]") {
-    long longValue;
-    json.parse(BufferSource{std::to_string(LONG_MAX)});
-    REQUIRE_FALSE(
-        !JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
-    json.parse(
-        BufferSource{std::to_string(static_cast<long long>(LONG_MAX) + 1)});
-    REQUIRE_FALSE(
-        JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
-  }
-  SECTION("Number to small to fit into long returns false.",
-          "[JSON][JNode][JNodeNumber]") {
-    long longValue;
-    json.parse(BufferSource{std::to_string(LONG_MIN)});
-    REQUIRE_FALSE(
-        !JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
-    json.parse(
-        BufferSource{std::to_string(static_cast<long long>(LONG_MIN) - 1)});
-    REQUIRE_FALSE(
-        JNodeRef<JNodeNumber>(json.root()).number().integer(longValue));
-  }
-  SECTION("Number to large to fit into double returns false.",
-          "[JSON][JNode][JNodeNumber]") {}
-  SECTION("Number to small to fit into double returns false.",
-          "[JSON][JNode][JNodeNumber]") {}
 }
