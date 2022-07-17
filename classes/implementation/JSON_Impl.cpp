@@ -100,16 +100,17 @@ JNode::Ptr JSON_Impl::parseString(ISource &source) {
 /// <param name="source">Source of JSON encoded bytes.</param>
 /// <returns></returns>
 JNode::Ptr JSON_Impl::parseNumber(ISource &source) {
-  JNodeNumeric number;
-  for (; source.more() && number.isValidNumericChar(source.current());
+  std::string number;
+  for (; source.more() && JNodeNumeric::isValidNumericChar(source.current());
        source.next()) {
-    number.value += source.current();
+    number += source.current();
   }
-  if (!number.isValidNumber()) {
+  JNodeNumeric JNodeNumeric { number};
+  if (!JNodeNumeric.isValidNumber()) {
     throw Error("Syntax error detected.");
   }
   source.ignoreWS();
-  return (makeNumber(number));
+  return (makeNumber(JNodeNumeric));
 }
 /// <summary>
 /// Parse a boolean from a JSON source stream.

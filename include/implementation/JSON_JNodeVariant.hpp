@@ -8,9 +8,9 @@
 // NAMESPACE
 // =========
 namespace JSONLib {
-// ===============
-// JNode  Variants
-// ===============
+// ==============
+// JNode variants
+// ==============
 // ====
 // Base
 // ====
@@ -146,7 +146,7 @@ struct JNodeNumber : JNodeVariant {
   [[nodiscard]] const JNodeNumeric &number() const { return (m_jsonNumber); }
   // Convert number to string
   [[nodiscard]] std::string toString() const {
-    return (m_jsonNumber.value);
+    return (m_jsonNumber.getString());
   }
 
 private:

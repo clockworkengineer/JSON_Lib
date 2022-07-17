@@ -14,6 +14,7 @@ namespace JSONLib {
 struct JNodeNumeric {
   // Constructors/Destructors
   JNodeNumeric() = default;
+  explicit JNodeNumeric(const std::string &number) : value(number) {}
   explicit JNodeNumeric(int integer) { value = std::to_string(integer); }
   explicit JNodeNumeric(long integer) { value = std::to_string(integer); }
   explicit JNodeNumeric(long long integer) { value = std::to_string(integer); }
@@ -43,6 +44,12 @@ struct JNodeNumeric {
   JNodeNumeric(JNodeNumeric &&other) = default;
   JNodeNumeric &operator=(JNodeNumeric &&other) = default;
   ~JNodeNumeric() = default;
+  // Is character a valid numeric character ?
+  // Includes possible sign, decimal point or exponent
+  [[nodiscard]] static bool isValidNumericChar(char ch) {
+    return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' ||
+            ch == 'E' || ch == 'e');
+  }
   // Is number a long/long long/double/long double ?
   [[nodiscard]] bool isLong() const {
     try {
@@ -92,12 +99,6 @@ struct JNodeNumeric {
     }
     return (true);
   }
-  // Is character a valid numeric character ?
-  [[nodiscard]] bool isValidNumericChar(char ch) const {
-    // Includes possible sign, decimal point or exponent
-    return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' ||
-            ch == 'E' || ch == 'e');
-  }
   // Convert to long/long long.Note: Can still return a long value
   // for floating point.
   [[nodiscard]] long getLong() const {
@@ -111,12 +112,16 @@ struct JNodeNumeric {
     return (std::strtod(value.c_str(), nullptr));
   }
   [[nodiscard]] long double getLongDouble() const {
-      return(std::strtold(value.c_str(), nullptr));
+    return (std::strtold(value.c_str(), nullptr));
   }
   // Check whether we nave a numeric value
   [[nodiscard]] bool isValidNumber() const {
     return (isLong() || isLongLong() || isDouble() || isLongDouble());
   }
+  // Get string representation of numeric
+  [[nodiscard]] std::string getString() const { return (value); }
+
+private:
   std::string value{};
 };
 } // namespace JSONLib
