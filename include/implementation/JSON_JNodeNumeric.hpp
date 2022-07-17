@@ -43,6 +43,54 @@ struct JNodeNumeric {
   JNodeNumeric(JNodeNumeric &&other) = default;
   JNodeNumeric &operator=(JNodeNumeric &&other) = default;
   ~JNodeNumeric() = default;
+  [[nodiscard]] bool isLong() const {
+    try {
+      char *end;
+      std::strtol(value.c_str(), &end, 10);
+      if (*end != '\0') {
+        return (false);
+      }
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
+  [[nodiscard]] bool isLongLong() const {
+    try {
+      char *end;
+      std::strtoll(value.c_str(), &end, 10);
+      if (*end != '\0') {
+        return (false);
+      }
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
+  [[nodiscard]] bool isDouble() const {
+    try {
+      char *end;
+      std::strtod(value.c_str(), &end);
+      if (*end != '\0') {
+        return (false);
+      }
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
+    [[nodiscard]] bool isLongDouble() const {
+    try {
+      char *end;
+      std::strtold(value.c_str(), &end);
+      if (*end != '\0') {
+        return (false);
+      }
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
   // Is character a valid numeric character ?
   [[nodiscard]] bool isValidNumericChar(char ch) const {
     // Includes possible sign, decimal point or exponent
@@ -103,20 +151,7 @@ struct JNodeNumeric {
   }
   // Check whether we nave a numeric value
   [[nodiscard]] bool isValidNumber() const {
-    if ([[maybe_unused]] long longValue{}; integer(longValue)) {
-      return (true);
-    }
-    if ([[maybe_unused]] long long longValue{}; integer(longValue)) {
-      return (true);
-    }
-    if ([[maybe_unused]] double doubleValue{}; floatingpoint(doubleValue)) {
-      return (true);
-    }
-    if ([[maybe_unused]] long double doubleValue{};
-        floatingpoint(doubleValue)) {
-      return (true);
-    }
-    return (false);
+    return(isLong()||isLongLong()||isDouble()||isLongDouble());
   }
   std::string value{};
 };
