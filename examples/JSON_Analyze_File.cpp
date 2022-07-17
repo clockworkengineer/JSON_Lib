@@ -71,7 +71,7 @@ std::string prefixTestDataPath(const std::string &file) {
 /// <param name="jNodeDetails">result of JNode tree analysis</param>
 void outputAnalysis(const JNodeDetails &jNodeDetails) {
   PLOG_INFO << "--------------------JNode Sizes---------------------";
-  PLOG_INFO << "JNodeObjectData size " << sizeof(JNodeObject) << "in bytes.";
+  PLOG_INFO << "JNodeObjectData size " << sizeof(JNodeObject) << " in bytes.";
   PLOG_INFO << "JNodeArrayData size " << sizeof(JNodeArray) << " in bytes.";
   PLOG_INFO << "JNodeNumberData size " << sizeof(JNodeNumber) << " in bytes.";
   PLOG_INFO << "JNodeStringData size " << sizeof(JNodeString) << " in bytes.";
@@ -104,6 +104,8 @@ void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails) {
   switch (jNode.getNodeType()) {
   case JNodeType::number:
     jNodeDetails.sizeInBytes += sizeof(JNodeNumber);
+    jNodeDetails.sizeInBytes +=
+        JNodeRef<JNodeNumber>(jNode).number().value.size();
     break;
   case JNodeType::string:
     jNodeDetails.sizeInBytes += sizeof(JNodeString);
