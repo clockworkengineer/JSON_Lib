@@ -4,6 +4,8 @@
 // =======
 #include <sstream>
 #include <string>
+#include <iostream>
+#include <iomanip>
 // =========
 // NAMESPACE
 // =========
@@ -15,14 +17,11 @@ template <typename T>
 concept Integer = std::is_integral<T>::value;
 template <typename T>
 concept Float = std::is_floating_point<T>::value;
-
 // =============
 // JNode Numeric
 // =============
 struct JNodeNumeric {
-  // ====================
   // Shortened type names
-  // ====================
   using llong = long long;
   using ldouble = long double;
   // Number to string
@@ -38,8 +37,8 @@ struct JNodeNumeric {
     if (floatString.find(".") == std::string::npos) {
       floatString.push_back('.');
     }
-    floatString.erase(floatString.find_last_not_of('0') + 1, std::string::npos);
-    if (floatString.back() == '.') {
+    floatString.erase(floatString.find_last_not_of('0') + 1,
+    std::string::npos); if (floatString.back() == '.') {
       floatString += '0';
     }
     return floatString;
@@ -265,7 +264,6 @@ struct JNodeNumeric {
     }
     throw Error("Could not convert unknown type.");
   }
-
 private:
   Type m_type;
   Numbers m_values;
