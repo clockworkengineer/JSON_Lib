@@ -2,11 +2,18 @@
 // =======
 // C++ STL
 // =======
+#include <sstream>
 #include <string>
+
 // =========
 // NAMESPACE
 // =========
 namespace JSONLib {
+template <typename T> std::string numericToString(const T &t) {
+  std::ostringstream os;
+  os << t;
+  return os.str();
+}
 // =============
 // JNode Numeric
 // =============
@@ -20,43 +27,42 @@ struct JNodeNumeric {
     tDouble,
     tLongDouble
   };
+  // Numeric union
+  union Numbers {
+    int m_integer;
+    long m_long;
+    long long m_longlong;
+    float m_float;
+    double m_double;
+    long double m_longdouble;
+  };
   // Constructors/Destructors
   JNodeNumeric() = default;
-  explicit JNodeNumeric(const std::string &number) : m_value(number) {}
+  explicit JNodeNumeric(const std::string &number) {
+    [[maybe_unused]] auto valid = setValidNumber(number);
+  }
   explicit JNodeNumeric(int integer) {
-    m_value = std::to_string(integer);
+    m_values.m_integer = integer;
     m_type = NumberType::tInt;
   }
   explicit JNodeNumeric(long integer) {
-    m_value = std::to_string(integer);
+    m_values.m_long = integer;
     m_type = NumberType::tLong;
   }
   explicit JNodeNumeric(long long integer) {
-    m_value = std::to_string(integer);
+    m_values.m_longlong = integer;
     m_type = NumberType::tLongLong;
   }
   explicit JNodeNumeric(float floatingPoint) {
-    m_value = std::to_string(floatingPoint);
-    m_value.erase(m_value.find_last_not_of('0') + 1, std::string::npos);
-    if (m_value.back() == '.') {
-      m_value += '0';
-    }
+    m_values.m_float = floatingPoint;
     m_type = NumberType::tFloat;
   }
   explicit JNodeNumeric(double floatingPoint) {
-    m_value = std::to_string(floatingPoint);
-    m_value.erase(m_value.find_last_not_of('0') + 1, std::string::npos);
-    if (m_value.back() == '.') {
-      m_value += '0';
-    }
+    m_values.m_double = floatingPoint;
     m_type = NumberType::tDouble;
   }
   explicit JNodeNumeric(long double floatingPoint) {
-    m_value = std::to_string(floatingPoint);
-    m_value.erase(m_value.find_last_not_of('0') + 1, std::string::npos);
-    if (m_value.back() == '.') {
-      m_value += '0';
-    }
+    m_values.m_longdouble = floatingPoint;
     m_type = NumberType::tLongDouble;
   }
   JNodeNumeric(const JNodeNumeric &other) = default;
@@ -71,11 +77,124 @@ struct JNodeNumeric {
             ch == 'E' || ch == 'e');
   }
   // Is number a int/long/long long/float/double/long double ?
-  [[nodiscard]] bool isInt() const {
+  [[nodiscard]] bool isInt() const { return (m_type == NumberType::tInt); }
+  [[nodiscard]] bool isLong() const { return (m_type == NumberType::tLong); }
+  [[nodiscard]] bool isLongLong() const {
+    return (m_type == NumberType::tLongLong);
+  }
+  [[nodiscard]] bool isFloat() const { return (m_type == NumberType::tFloat); }
+  [[nodiscard]] bool isDouble() const {
+    return (m_type == NumberType::tDouble);
+  }
+  [[nodiscard]] bool isLongDouble() const {
+    return (m_type == NumberType::tLongDouble);
+  }
+  // Return numbers value int/long/long long/float/double/long double.
+  // Note: Can still return a long value for floating point.
+  [[nodiscard]] int getInt() const {
+
+    if (m_type == NumberType::tInt) {
+      return (static_cast<int>(m_values.m_integer));
+    } else if (m_type == NumberType::tLong) {
+      return (static_cast<int>(m_values.m_long));
+    } else if (m_type == NumberType::tLongLong) {
+      return (static_cast<int>(m_values.m_longlong));
+    } else if (m_type == NumberType::tFloat) {
+      return (static_cast<int>(m_values.m_float));
+    } else if (m_type == NumberType::tDouble) {
+      return (static_cast<int>(m_values.m_double));
+    } else if (m_type == NumberType::tLongDouble) {
+      return (static_cast<int>(m_values.m_double));
+    }
+    return (m_values.m_integer);
+  }
+  [[nodiscard]] long getLong() const {
+    if (m_type == NumberType::tInt) {
+      return (static_cast<long>(m_values.m_integer));
+    } else if (m_type == NumberType::tLong) {
+      return (static_cast<long>(m_values.m_long));
+    } else if (m_type == NumberType::tLongLong) {
+      return (static_cast<long>(m_values.m_longlong));
+    } else if (m_type == NumberType::tFloat) {
+      return (static_cast<long>(m_values.m_float));
+    } else if (m_type == NumberType::tDouble) {
+      return (static_cast<long>(m_values.m_double));
+    } else if (m_type == NumberType::tLongDouble) {
+      return (static_cast<long>(m_values.m_double));
+    }
+    return (m_values.m_long);
+  }
+  [[nodiscard]] long long getLongLong() const {
+    if (m_type == NumberType::tInt) {
+      return (static_cast<long long>(m_values.m_integer));
+    } else if (m_type == NumberType::tLong) {
+      return (static_cast<long long>(m_values.m_long));
+    } else if (m_type == NumberType::tLongLong) {
+      return (static_cast<long long>(m_values.m_longlong));
+    } else if (m_type == NumberType::tFloat) {
+      return (static_cast<long long>(m_values.m_float));
+    } else if (m_type == NumberType::tDouble) {
+      return (static_cast<long long>(m_values.m_double));
+    } else if (m_type == NumberType::tLongDouble) {
+      return (static_cast<long long>(m_values.m_double));
+    }
+    return (m_values.m_longlong);
+  }
+  [[nodiscard]] float getFloat() const {
+    if (m_type == NumberType::tInt) {
+      return (static_cast<float>(m_values.m_integer));
+    } else if (m_type == NumberType::tLong) {
+      return (static_cast<float>(m_values.m_long));
+    } else if (m_type == NumberType::tLongLong) {
+      return (static_cast<float>(m_values.m_longlong));
+    } else if (m_type == NumberType::tFloat) {
+      return (static_cast<float>(m_values.m_float));
+    } else if (m_type == NumberType::tDouble) {
+      return (static_cast<float>(m_values.m_double));
+    } else if (m_type == NumberType::tLongDouble) {
+      return (static_cast<float>(m_values.m_double));
+    }
+    return (m_values.m_float);
+  }
+  [[nodiscard]] double getDouble() const {
+    if (m_type == NumberType::tInt) {
+      return (static_cast<double>(m_values.m_integer));
+    } else if (m_type == NumberType::tLong) {
+      return (static_cast<double>(m_values.m_long));
+    } else if (m_type == NumberType::tLongLong) {
+      return (static_cast<double>(m_values.m_longlong));
+    } else if (m_type == NumberType::tFloat) {
+      return (static_cast<double>(m_values.m_float));
+    } else if (m_type == NumberType::tDouble) {
+      return (static_cast<double>(m_values.m_double));
+    } else if (m_type == NumberType::tLongDouble) {
+      return (static_cast<double>(m_values.m_double));
+    }
+    return (m_values.m_double);
+  }
+  [[nodiscard]] long double getLongDouble() const {
+    if (m_type == NumberType::tInt) {
+      return (static_cast<long double>(m_values.m_integer));
+    } else if (m_type == NumberType::tLong) {
+      return (static_cast<long double>(m_values.m_long));
+    } else if (m_type == NumberType::tLongLong) {
+      return (static_cast<long double>(m_values.m_longlong));
+    } else if (m_type == NumberType::tFloat) {
+      return (static_cast<long double>(m_values.m_float));
+    } else if (m_type == NumberType::tDouble) {
+      return (static_cast<long double>(m_values.m_double));
+    } else if (m_type == NumberType::tLongDouble) {
+      return (static_cast<long double>(m_values.m_double));
+    }
+    return (m_values.m_longdouble);
+  }
+  // Set numbers value to int/long/long long/float/double/long double
+  // returning true if the value is set.
+  [[nodiscard]] bool setInt(const std::string &number) {
     try {
       std::size_t end;
-      [[maybe_unused]] auto integer = std::stoi(m_value.c_str(), &end, 10);
-      if (end != m_value.size()) {
+      m_values.m_integer = std::stoi(number.c_str(), &end, 10);
+      if (end != number.size()) {
         return (false);
       }
     } catch ([[maybe_unused]] const std::exception &e) {
@@ -84,10 +203,10 @@ struct JNodeNumeric {
     m_type = NumberType::tInt;
     return (true);
   }
-  [[nodiscard]] bool isLong() const {
+  [[nodiscard]] bool setLong(const std::string &number) {
     try {
       char *end;
-      std::strtol(m_value.c_str(), &end, 10);
+      m_values.m_long = std::strtol(number.c_str(), &end, 10);
       if (*end != '\0') {
         return (false);
       }
@@ -97,10 +216,10 @@ struct JNodeNumeric {
     m_type = NumberType::tLong;
     return (true);
   }
-  [[nodiscard]] bool isLongLong() const {
+  [[nodiscard]] bool setLongLong(const std::string &number) {
     try {
       char *end;
-      std::strtoll(m_value.c_str(), &end, 10);
+      m_values.m_longlong = std::strtoll(number.c_str(), &end, 10);
       if (*end != '\0') {
         return (false);
       }
@@ -110,11 +229,11 @@ struct JNodeNumeric {
     m_type = NumberType::tLongLong;
     return (true);
   }
-  [[nodiscard]] bool isFloat() const {
+  [[nodiscard]] bool setFloat(const std::string &number) {
     try {
       std::size_t end;
-      [[maybe_unused]] auto fp = std::stof(m_value.c_str(), &end);
-      if (end != m_value.size()) {
+      m_values.m_float = std::stof(number.c_str(), &end);
+      if (end != number.size()) {
         return (false);
       }
     } catch ([[maybe_unused]] const std::exception &e) {
@@ -123,10 +242,10 @@ struct JNodeNumeric {
     m_type = NumberType::tFloat;
     return (true);
   }
-  [[nodiscard]] bool isDouble() const {
+  [[nodiscard]] bool setDouble(const std::string &number) {
     try {
       char *end;
-      std::strtod(m_value.c_str(), &end);
+      m_values.m_double = std::strtod(number.c_str(), &end);
       if (*end != '\0') {
         return (false);
       }
@@ -136,10 +255,10 @@ struct JNodeNumeric {
     m_type = NumberType::tDouble;
     return (true);
   }
-  [[nodiscard]] bool isLongDouble() const {
+  [[nodiscard]] bool setLongDouble(const std::string &number) {
     try {
       char *end;
-      std::strtold(m_value.c_str(), &end);
+      m_values.m_longdouble = std::strtold(number.c_str(), &end);
       if (*end != '\0') {
         return (false);
       }
@@ -149,37 +268,77 @@ struct JNodeNumeric {
     m_type = NumberType::tLongDouble;
     return (true);
   }
-  // Convert to int/long/long long.Note: Can still return a long value
-  // for floating point.
-  [[nodiscard]] int getInt() const {
-    return (std::stoi(m_value.c_str(), nullptr, 10));
-  }
-  [[nodiscard]] long getLong() const {
-    return (std::strtol(m_value.c_str(), nullptr, 10));
-  }
-  [[nodiscard]] long long getLongLong() const {
-    return (std::strtoll(m_value.c_str(), nullptr, 10));
-  }
-  // Convert to float/double/long double.
-  [[nodiscard]] float getFloat() const {
-    return (std::stof(m_value.c_str(), nullptr));
-  }
-  [[nodiscard]] double getDouble() const {
-    return (std::strtod(m_value.c_str(), nullptr));
-  }
-  [[nodiscard]] long double getLongDouble() const {
-    return (std::strtold(m_value.c_str(), nullptr));
-  }
-  // Check whether we nave a numeric value
-  [[nodiscard]] bool isValidNumber() const {
-    return (isInt() || isLong() || isLongLong() || isFloat() || isDouble() ||
-            isLongDouble());
+  // Set numeric value
+  [[nodiscard]] bool setValidNumber(const std::string &number) {
+    if (setInt(number)) {
+      return (true);
+    }
+    if (setLong(number)) {
+      return (true);
+    }
+    if (setLongLong(number)) {
+      return (true);
+    }
+    if (setFloat(number)) {
+      return (true);
+    }
+    if (setDouble(number)) {
+      return (true);
+    }
+    if (setLongDouble(number)) {
+      return (true);
+    }
+    return (false);
   }
   // Get string representation of numeric
-  [[nodiscard]] std::string getString() const { return (m_value); }
+  [[nodiscard]] std::string getString() const {
+    std::string toString;
+    switch (m_type) {
+    case NumberType::tInt:
+      toString = numericToString(m_values.m_integer);
+      break;
+    case NumberType::tLong:
+      toString = numericToString(m_values.m_long);
+      break;
+    case NumberType::tLongLong:
+      toString = numericToString(m_values.m_longlong);
+      break;
+    case NumberType::tFloat:
+      toString = numericToString(m_values.m_float);
+      if (toString.find(".") == std::string::npos) {
+        toString.push_back('.');
+      }
+      toString.erase(toString.find_last_not_of('0') + 1, std::string::npos);
+      if (toString.back() == '.') {
+        toString += '0';
+      }
+      break;
+    case NumberType::tDouble:
+      toString = numericToString(m_values.m_double);
+      if (toString.find(".") == std::string::npos) {
+        toString.push_back('.');
+      }
+      toString.erase(toString.find_last_not_of('0') + 1, std::string::npos);
+      if (toString.back() == '.') {
+        toString += '0';
+      }
+      break;
+    case NumberType::tLongDouble:
+      toString = numericToString(m_values.m_longdouble);
+      if (toString.find(".") == std::string::npos) {
+        toString.push_back('.');
+      }
+      toString.erase(toString.find_last_not_of('0') + 1, std::string::npos);
+      if (toString.back() == '.') {
+        toString += '0';
+      }
+      break;
+    }
+    return (toString);
+  }
 
 private:
-  mutable NumberType m_type;
-  std::string m_value{};
+   NumberType m_type;
+  Numbers m_values;
 };
 } // namespace JSONLib

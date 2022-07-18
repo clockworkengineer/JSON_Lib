@@ -16,11 +16,13 @@
 // =======
 // C++ STL
 // =======
+#include <climits>
 #include <filesystem>
+#include <limits>
 #include <sstream>
 #include <string>
-#include <climits>
-#include <limits>
+#include <iostream>
+
 // ===================
 // Unit test constants
 // ===================
@@ -51,6 +53,10 @@ std::string stripWhiteSpace(JSONLib::JSON &json, const std::string &jsonBuffer);
       "testfile009.json",                                                      \
       "testfile010.json",                                                      \
       "testfile011.json",                                                      \
-      "testfile012.json",                                                      \
-      "testfile013.json",                                                      \
+      "testfile012.json"                                                      \
   }))
+//      "testfile013.json",                                                      \
+// FLoating point comparison (accurate to within an epsilon)
+template <typename T> bool equalFloatingPoint(T a, T b, double epsilon) {
+  return (std::fabs(a - b) <= epsilon);
+};

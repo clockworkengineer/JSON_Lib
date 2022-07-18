@@ -105,12 +105,12 @@ JNode::Ptr JSON_Impl::parseNumber(ISource &source) {
        source.next()) {
     number += source.current();
   }
-  JNodeNumeric JNodeNumeric { number};
-  if (!JNodeNumeric.isValidNumber()) {
+  JNodeNumeric jNodeNumeric { number};
+  if (!jNodeNumeric.setValidNumber(number)) {
     throw Error("Syntax error detected.");
   }
   source.ignoreWS();
-  return (makeNumber(JNodeNumeric));
+  return (makeNumber(jNodeNumeric));
 }
 /// <summary>
 /// Parse a boolean from a JSON source stream.

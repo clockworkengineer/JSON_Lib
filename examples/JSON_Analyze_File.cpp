@@ -104,8 +104,6 @@ void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails) {
   switch (jNode.getNodeType()) {
   case JNodeType::number:
     jNodeDetails.sizeInBytes += sizeof(JNodeNumber);
-    jNodeDetails.sizeInBytes +=
-        JNodeRef<JNodeNumber>(jNode).number().getString().size();
     break;
   case JNodeType::string:
     jNodeDetails.sizeInBytes += sizeof(JNodeString);

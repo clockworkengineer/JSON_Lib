@@ -48,10 +48,10 @@ TEST_CASE(
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Stringify an array ([true,\"Out of time\",789043e13,true]) and "
+  SECTION("Stringify an array ([true,\"Out of time\",7.89043e+18,true]) and "
           "check its value",
           "[JSON][Stringify]") {
-    const std::string expected{"[true,\"Out of time\",789043e13,true]"};
+    const std::string expected{"[true,\"Out of time\",7.89043e+18,true]"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
