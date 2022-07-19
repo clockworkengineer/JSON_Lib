@@ -363,7 +363,6 @@ JNode::Ptr JSON_Impl::parse(const std::string &jsonString) {
 /// <param name=destination>Destination stream for stringified JSON.</param>
 /// <returns></returns>
 void JSON_Impl::stringify(const JNode &jNodeRoot, IDestination &destination) {
-  destination.clear();
   stringifyJNodes(jNodeRoot, destination);
 }
 } // namespace JSONLib

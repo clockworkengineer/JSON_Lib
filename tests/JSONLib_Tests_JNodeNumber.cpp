@@ -156,7 +156,28 @@ TEST_CASE("Simple JSON arithmetic.", "[JSON][JNode][JNodeNumber]") {
         JNodeRef<JNodeNumber>(array[1]).number().getLong() + 1));
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[2]).number().setLLong(
         JNodeRef<JNodeNumber>(array[2]).number().getLLong() + 1));
+    destinationBuffer.clear();
     json.stringify(destinationBuffer);
     REQUIRE(destinationBuffer.getBuffer() == R"({"root":[2,2,2,1.0,1.0,1.0]})");
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[0]).number().setInt(
+        JNodeRef<JNodeNumber>(array[0]).number().getInt() + 10));
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[1]).number().setLong(
+        JNodeRef<JNodeNumber>(array[1]).number().getLong() + 10));
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[2]).number().setLLong(
+        JNodeRef<JNodeNumber>(array[2]).number().getLLong() + 10));
+    destinationBuffer.clear();
+    json.stringify(destinationBuffer);
+    REQUIRE(destinationBuffer.getBuffer() ==
+            R"({"root":[12,12,12,1.0,1.0,1.0]})");
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[3]).number().setFloat(
+        JNodeRef<JNodeNumber>(array[3]).number().getFloat() + 10.0f));
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[4]).number().setDouble(
+        JNodeRef<JNodeNumber>(array[4]).number().getDouble() + 10.0));
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[5]).number().setLDouble(
+        JNodeRef<JNodeNumber>(array[5]).number().getLDouble() + 10.0));
+    destinationBuffer.clear();
+    json.stringify(destinationBuffer);
+    REQUIRE(destinationBuffer.getBuffer() ==
+            R"({"root":[12,12,12,11.0,11.0,11.0]})");
   }
 }
