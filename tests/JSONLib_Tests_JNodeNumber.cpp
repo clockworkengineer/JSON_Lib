@@ -15,7 +15,6 @@ using namespace JSONLib;
 // ==========
 // Test cases
 // ==========
-
 // ===========
 // JNodeNumber
 // ===========
@@ -45,7 +44,6 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
     REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLong() == 6788889);
   }
   SECTION("Floating point converted to float", "[JSON][JNode][JNodeNumber]") {
-
     BufferSource jsonSource{"678.8990"};
     json.parse(jsonSource);
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isFloat());
@@ -134,5 +132,31 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource),
                         "JSON Error: Syntax error detected.");
+  }
+}
+
+TEST_CASE("Simple JSON arithmetic.", "[JSON][JNode][JNodeNumber]") {
+  JSON json;
+  SECTION("Simple arithmetic add one to a number",
+          "[JSON][JNode][JNodeNumber][Addition][int]") {
+    json["root"] = {1, 1l, 1ll, 1.0f, 1.0, 1.0L};
+    BufferDestination destinationBuffer;
+    json.stringify(destinationBuffer);
+    REQUIRE(destinationBuffer.getBuffer() == R"({"root":[1,1,1,1.0,1.0,1.0]})");
+    auto &array = JNodeRef<JNodeArray>(json["root"]);
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[0]).number().isInt());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[1]).number().isLong());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[2]).number().isLLong());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[3]).number().isFloat());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[4]).number().isDouble());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[5]).number().isLDouble());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[0]).number().setInt(
+        JNodeRef<JNodeNumber>(array[0]).number().getInt() + 1));
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[1]).number().setLong(
+        JNodeRef<JNodeNumber>(array[1]).number().getLong() + 1));
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[2]).number().setLLong(
+        JNodeRef<JNodeNumber>(array[2]).number().getLLong() + 1));
+    json.stringify(destinationBuffer);
+    REQUIRE(destinationBuffer.getBuffer() == R"({"root":[2,2,2,1.0,1.0,1.0]})");
   }
 }

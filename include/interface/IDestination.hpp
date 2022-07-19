@@ -36,5 +36,9 @@ public:
   // Add character to destination
   // ============================
   virtual void add(char ch) = 0;
+  // ============================
+  // Clear the curent destination
+  // ===========================
+  virtual void clear() = 0;
 };
 } // namespace JSONLib
