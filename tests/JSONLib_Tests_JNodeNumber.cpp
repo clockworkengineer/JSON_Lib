@@ -157,7 +157,7 @@ TEST_CASE("Check numeric api for all supported number types.",
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][5]).number().isLDouble());
   }
   SECTION("Simple arithmetic add one to a number",
-          "[JSON][JNode][JNodeNumber][Addition][int]") {
+          "[JSON][JNode][JNodeNumber][Get/Set]") {
     json["root"] = {1, 1l, 1ll, 1.0f, 1.0, 1.0L};
     BufferDestination destinationBuffer;
     json.stringify(destinationBuffer);
@@ -200,5 +200,30 @@ TEST_CASE("Check numeric api for all supported number types.",
     destinationBuffer.clear();
     json.stringify(destinationBuffer);
     REQUIRE(destinationBuffer.getBuffer() == R"({"root":[2,2,2,2.0,2.0,2.0]})");
+  }
+  SECTION("Change types and values.", "[JSON][JNode][JNodeNumber][Reset]") {
+    json["root"] = {1, 1l, 1ll, 1.0f, 1.0, 1.0L};
+    BufferDestination destinationBuffer;
+    json.stringify(destinationBuffer);
+    REQUIRE(destinationBuffer.getBuffer() == R"({"root":[1,1,1,1.0,1.0,1.0]})");
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][0]).number().isInt());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][1]).number().isLong());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][2]).number().isLLong());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][3]).number().isFloat());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][4]).number().isDouble());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][5]).number().isLDouble());
+    json["root"][2] = 3.0;
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][2]).number().isDouble());
+    destinationBuffer.clear();
+    json.stringify(destinationBuffer);
+    REQUIRE(destinationBuffer.getBuffer() ==
+            R"({"root":[1,1,3.0,1.0,1.0,1.0]})");
+    REQUIRE_FALSE(
+        !JNodeRef<JNodeNumber>(json["root"][5]).number().setLLong(445ll));
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][5]).number().isLLong());
+    destinationBuffer.clear();
+    json.stringify(destinationBuffer);
+    REQUIRE(destinationBuffer.getBuffer() ==
+            R"({"root":[1,1,3.0,1.0,1.0,445]})");
   }
 }
