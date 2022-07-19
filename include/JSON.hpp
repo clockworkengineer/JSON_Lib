@@ -50,8 +50,8 @@ public:
   void strip(ISource &source, IDestination &&destination);
   void strip(ISource &&source, IDestination &destination);
   void strip(ISource &&source, IDestination &&destination);
-  // [[nodiscard]] JNode &root() { return (*m_jNodeRoot); }
-  [[nodiscard]] const JNode &root() const { return (*m_jNodeRoot); }
+ // [[nodiscard]] JNode &root();
+  [[nodiscard]] const JNode &root() const;
   JNode &operator[](const std::string &key);
   const JNode &operator[](const std::string &key) const;
   JNode &operator[](std::size_t index);
@@ -69,8 +69,6 @@ private:
   // =================
   // PRIVATE VARIABLES
   // =================
-  // Root of JSON tree
-  std::unique_ptr<JNode> m_jNodeRoot;
   // JSON implementation
   const std::unique_ptr<JSON_Impl> m_jsonImplementation;
 };

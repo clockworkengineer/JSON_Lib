@@ -58,7 +58,7 @@ JSON::JSON(ITranslator *translator, IConverter *converter)
 /// </summary>
 /// <param name="jsonString">JSON string.</param>
 JSON::JSON(const std::string &jsonString) : JSON() {
-  m_jNodeRoot = m_jsonImplementation->parse(jsonString);
+  m_jsonImplementation->parse(jsonString);
 }
 /// <summary>
 /// JSON destructor.
@@ -89,68 +89,41 @@ void JSON::strip(ISource &&source, IDestination &&destination) {
 /// Create JNode structure by recursively parsing JSON on the source stream.
 /// </summary>
 /// <param name="source">Source for JSON encoded bytes.
-void JSON::parse(ISource &source) {
-  m_jNodeRoot = m_jsonImplementation->parse(source);
-}
-void JSON::parse(ISource &&source) {
-  m_jNodeRoot = m_jsonImplementation->parse(source);
-}
+void JSON::parse(ISource &source) { m_jsonImplementation->parse(source); }
+void JSON::parse(ISource &&source) { m_jsonImplementation->parse(source); }
 /// <summary>
 /// Recursively parse JNode structure and building its JSON text in destination
 /// stream.
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 void JSON::stringify(IDestination &destination) {
-  if (m_jNodeRoot == nullptr) {
-    throw Error("No JSON to stringify.");
-  }
-  m_jsonImplementation->stringify(*m_jNodeRoot, destination);
+  m_jsonImplementation->stringify(destination);
 }
 void JSON::stringify(IDestination &&destination) {
-  if (m_jNodeRoot == nullptr) {
-    throw Error("No JSON to stringify.");
-  }
-  m_jsonImplementation->stringify(*m_jNodeRoot, destination);
+  m_jsonImplementation->stringify(destination);
 }
 /// <summary>
 /// Return object entry for the passed in key.
 /// </summary>
 /// <param name=destination>Object entry (JNode) key.</param>
 JNode &JSON::operator[](const std::string &key) {
-  try {
-    if (m_jNodeRoot == nullptr) {
-      m_jNodeRoot = m_jsonImplementation->parse("{}");
-    }
-    return ((*m_jNodeRoot)[key]);
-  } catch ([[maybe_unused]] JNode::Error &error) {
-    JNodeRef<JNodeObject>(*m_jNodeRoot)
-        .objects()
-        .emplace_back(JNodeObject::ObjectEntry{key, makeHole()});
-    return (*JNodeRef<JNodeObject>(*m_jNodeRoot).objects().back().value);
-  }
+
+  return ((*m_jsonImplementation)[key]);
 }
 const JNode &JSON::operator[](const std::string &key) const // Object
 {
-  return ((*m_jNodeRoot)[key]);
+  return ((*m_jsonImplementation)[key]);
 }
 /// <summary>
 /// Return array entry for the passed in index.
 /// </summary>
 /// <param name=destination>Array entry (JNode)index.</param>
 JNode &JSON::operator[](std::size_t index) {
-  try {
-    if (m_jNodeRoot == nullptr) {
-      m_jNodeRoot = m_jsonImplementation->parse("[]");
-    }
-    return ((*m_jNodeRoot)[index]);
-  } catch ([[maybe_unused]] JNode::Error &error) {
-    JNodeRef<JNodeArray>(*m_jNodeRoot).array().resize(index + 1);
-    JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index] =
-        std::move(makeNull());
-    return (*JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index]);
-  }
+  return ((*m_jsonImplementation)[index]);
 }
 const JNode &JSON::operator[](std::size_t index) const {
-  return ((*m_jNodeRoot)[index]);
+  return ((*m_jsonImplementation)[index]);
 }
+//JNode &JSON::root() { return (m_jsonImplementation->root()); }
+const JNode &JSON::root() const { return (m_jsonImplementation->root()); }
 } // namespace JSONLib

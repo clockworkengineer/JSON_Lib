@@ -105,7 +105,7 @@ JNode::Ptr JSON_Impl::parseNumber(ISource &source) {
        source.next()) {
     number += source.current();
   }
-  JNodeNumeric jNodeNumeric { number};
+  JNodeNumeric jNodeNumeric{number};
   if (!jNodeNumeric.setValidNumber(number)) {
     throw Error("Syntax error detected.");
   }
@@ -346,14 +346,14 @@ void JSON_Impl::strip(ISource &source, IDestination &destination) {
 /// Create JNode structure by recursively parsing JSON on the source stream.
 /// </summary>
 /// <param name="source">Source of JSON encoded bytes.
-JNode::Ptr JSON_Impl::parse(ISource &source) { return (parseJNodes(source)); }
+void JSON_Impl::parse(ISource &source) { m_jNodeRoot = parseJNodes(source); }
 /// <summary>
 /// Create JNode structure by recursively parsing JSON on the source stream.
 /// </summary>
 /// <param name="jsonString">JSON string.
-JNode::Ptr JSON_Impl::parse(const std::string &jsonString) {
+void JSON_Impl::parse(const std::string &jsonString) {
   BufferSource source{jsonString};
-  return (parse(source));
+  parse(source);
 }
 /// <summary>
 /// Recursively parse JNode structure and building its JSON in destination
@@ -362,7 +362,51 @@ JNode::Ptr JSON_Impl::parse(const std::string &jsonString) {
 /// <param name="jNodeRoot">Root of JNode structure.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 /// <returns></returns>
-void JSON_Impl::stringify(const JNode &jNodeRoot, IDestination &destination) {
-  stringifyJNodes(jNodeRoot, destination);
+void JSON_Impl::stringify(IDestination &destination) {
+  if (m_jNodeRoot == nullptr) {
+    throw Error("No JSON to stringify.");
+  }
+  stringifyJNodes(*m_jNodeRoot, destination);
+}
+// <summary>
+/// Return object entry for the passed in key.
+/// </summary>
+/// <param name=destination>Object entry (JNode) key.</param>
+JNode &JSON_Impl::operator[](const std::string &key) {
+  try {
+    if (m_jNodeRoot == nullptr) {
+      parse("{}");
+    }
+    return ((*m_jNodeRoot)[key]);
+  } catch ([[maybe_unused]] JNode::Error &error) {
+    JNodeRef<JNodeObject>(*m_jNodeRoot)
+        .objects()
+        .emplace_back(JNodeObject::ObjectEntry{key, makeHole()});
+    return (*JNodeRef<JNodeObject>(*m_jNodeRoot).objects().back().value);
+  }
+}
+const JNode &JSON_Impl::operator[](const std::string &key) const // Object
+{
+  return ((*m_jNodeRoot)[key]);
+}
+/// <summary>
+/// Return array entry for the passed in index.
+/// </summary>
+/// <param name=destination>Array entry (JNode)index.</param>
+JNode &JSON_Impl::operator[](std::size_t index) {
+  try {
+    if (m_jNodeRoot == nullptr) {
+      parse("[]");
+    }
+    return ((*m_jNodeRoot)[index]);
+  } catch ([[maybe_unused]] JNode::Error &error) {
+    JNodeRef<JNodeArray>(*m_jNodeRoot).array().resize(index + 1);
+    JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index] =
+        std::move(makeNull());
+    return (*JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index]);
+  }
+}
+const JNode &JSON_Impl::operator[](std::size_t index) const {
+  return ((*m_jNodeRoot)[index]);
 }
 } // namespace JSONLib

@@ -45,12 +45,18 @@ public:
   // PUBLIC METHODS
   // ==============
   std::string version();
-  JNode::Ptr parse(ISource &source);
-  JNode::Ptr parse(const std::string &jsonString);
-  void stringify(const JNode &jNodeRoot, IDestination &destination);
+  void parse(ISource &source);
+  void parse(const std::string &jsonString);
+  void stringify(IDestination &destination);
   void strip(ISource &source, IDestination &destination);
   void translator(ITranslator *translator);
   void converter(IConverter *converter);
+  [[nodiscard]] JNode &root() { return (*m_jNodeRoot); }
+  [[nodiscard]] const JNode &root() const { return (*m_jNodeRoot); }
+  JNode &operator[](const std::string &key);
+  const JNode &operator[](const std::string &key) const;
+  JNode &operator[](std::size_t index);
+  const JNode &operator[](std::size_t index) const;
   // ================
   // PUBLIC VARIABLES
   // ================
@@ -75,6 +81,8 @@ private:
   // =================
   // PRIVATE VARIABLES
   // =================
+  // Root of JSON tree
+  std::unique_ptr<JNode> m_jNodeRoot;
   // Pointer to JSON translator interface
   inline static std::unique_ptr<ITranslator> m_translator;
   // Pointer to character conversion interface
