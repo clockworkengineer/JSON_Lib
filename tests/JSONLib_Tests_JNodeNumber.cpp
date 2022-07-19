@@ -48,8 +48,8 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
     json.parse(jsonSource);
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isFloat());
     REQUIRE_FALSE(!equalFloatingPoint(
-        JNodeRef<JNodeNumber>(json.root()).number().getFloat(),
-        static_cast<float>(678.8990), 0.0001));
+        JNodeRef<JNodeNumber>(json.root()).number().getFloat(), 678.8990f,
+        0.0001));
   }
   SECTION("Floating point converted to double", "[JSON][JNode][JNodeNumber]") {
     BufferSource jsonSource{"678.8990"};
@@ -57,8 +57,8 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isFloat());
     REQUIRE_FALSE(JNodeRef<JNodeNumber>(json.root()).number().isDouble());
     REQUIRE_FALSE(!equalFloatingPoint(
-        JNodeRef<JNodeNumber>(json.root()).number().getDouble(),
-        static_cast<double>(678.8990), 0.0001));
+        JNodeRef<JNodeNumber>(json.root()).number().getDouble(), 678.8990,
+        0.0001));
   }
   SECTION("Floating point converted to long double",
           "[JSON][JNode][JNodeNumber]") {
@@ -67,8 +67,8 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isFloat());
     REQUIRE_FALSE(JNodeRef<JNodeNumber>(json.root()).number().isLDouble());
     REQUIRE_FALSE(!equalFloatingPoint(
-        JNodeRef<JNodeNumber>(json.root()).number().getLDouble(),
-        static_cast<long double>(678.899), 0.001));
+        JNodeRef<JNodeNumber>(json.root()).number().getLDouble(), 678.899L,
+        0.0001));
   }
   SECTION("Integer converted to int", "[JSON][JNode][JNodeNumber]") {
     BufferSource jsonSource{"78989"};
@@ -95,22 +95,27 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
     json.parse(jsonSource);
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isInt());
     REQUIRE_FALSE(JNodeRef<JNodeNumber>(json.root()).number().isFloat());
-    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getFloat() == 78989.0);
+    REQUIRE_FALSE(!equalFloatingPoint(
+        JNodeRef<JNodeNumber>(json.root()).number().getFloat(), 78989.0f,
+        0.0001));
   }
   SECTION("Integer converted to double", "[JSON][JNode][JNodeNumber]") {
     BufferSource jsonSource{"78989"};
     json.parse(jsonSource);
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isInt());
     REQUIRE_FALSE(JNodeRef<JNodeNumber>(json.root()).number().isDouble());
-    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getDouble() == 78989.0);
+    REQUIRE_FALSE(!equalFloatingPoint(
+        JNodeRef<JNodeNumber>(json.root()).number().getDouble(), 78989.0,
+        0.0001));
   }
   SECTION("Integer converted to long double", "[JSON][JNode][JNodeNumber]") {
     BufferSource jsonSource{"78989"};
     json.parse(jsonSource);
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json.root()).number().isInt());
     REQUIRE_FALSE(JNodeRef<JNodeNumber>(json.root()).number().isLDouble());
-    REQUIRE(JNodeRef<JNodeNumber>(json.root()).number().getLDouble() ==
-            78989.0);
+    REQUIRE_FALSE(!equalFloatingPoint(
+        JNodeRef<JNodeNumber>(json.root()).number().getLDouble(), 78989.0L,
+        0.0001));
   }
   SECTION("Check  floating point with exponent",
           "[JSON][JNode][JNodeNumber][Exception") {
@@ -135,49 +140,65 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
   }
 }
 
-TEST_CASE("Simple JSON arithmetic.", "[JSON][JNode][JNodeNumber]") {
+TEST_CASE("Check numeric api for all supported number types.",
+          "[JSON][JNode][JNodeNumber]") {
   JSON json;
+  SECTION("Check numbers are the correct type.",
+          "[JSON][JNode][JNodeNumber][Addition][int]") {
+    json["root"] = {1, 1l, 1ll, 1.0f, 1.0, 1.0L};
+    BufferDestination destinationBuffer;
+    json.stringify(destinationBuffer);
+    REQUIRE(destinationBuffer.getBuffer() == R"({"root":[1,1,1,1.0,1.0,1.0]})");
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][0]).number().isInt());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][1]).number().isLong());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][2]).number().isLLong());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][3]).number().isFloat());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][4]).number().isDouble());
+    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][5]).number().isLDouble());
+  }
   SECTION("Simple arithmetic add one to a number",
           "[JSON][JNode][JNodeNumber][Addition][int]") {
     json["root"] = {1, 1l, 1ll, 1.0f, 1.0, 1.0L};
     BufferDestination destinationBuffer;
     json.stringify(destinationBuffer);
     REQUIRE(destinationBuffer.getBuffer() == R"({"root":[1,1,1,1.0,1.0,1.0]})");
-    auto &array = JNodeRef<JNodeArray>(json["root"]);
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[0]).number().isInt());
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[1]).number().isLong());
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[2]).number().isLLong());
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[3]).number().isFloat());
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[4]).number().isDouble());
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[5]).number().isLDouble());
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[0]).number().setInt(
-        JNodeRef<JNodeNumber>(array[0]).number().getInt() + 1));
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[1]).number().setLong(
-        JNodeRef<JNodeNumber>(array[1]).number().getLong() + 1));
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[2]).number().setLLong(
-        JNodeRef<JNodeNumber>(array[2]).number().getLLong() + 1));
+    REQUIRE_FALSE(
+        !JNodeRef<JNodeNumber>(json["root"][0])
+             .number()
+             .setInt(JNodeRef<JNodeNumber>(json["root"][0]).number().getInt() +
+                     1));
+    REQUIRE_FALSE(
+        !JNodeRef<JNodeNumber>(json["root"][1])
+             .number()
+             .setLong(
+                 JNodeRef<JNodeNumber>(json["root"][1]).number().getLong() +
+                 1));
+    REQUIRE_FALSE(
+        !JNodeRef<JNodeNumber>(json["root"][2])
+             .number()
+             .setLLong(
+                 JNodeRef<JNodeNumber>(json["root"][2]).number().getLLong() +
+                 1));
+    REQUIRE_FALSE(
+        !JNodeRef<JNodeNumber>(json["root"][3])
+             .number()
+             .setFloat(
+                 JNodeRef<JNodeNumber>(json["root"][3]).number().getFloat() +
+                 1.0f));
+    REQUIRE_FALSE(
+        !JNodeRef<JNodeNumber>(json["root"][4])
+             .number()
+             .setDouble(
+                 JNodeRef<JNodeNumber>(json["root"][4]).number().getDouble() +
+                 1.0));
+    REQUIRE_FALSE(
+        !JNodeRef<JNodeNumber>(json["root"][5])
+             .number()
+             .setLDouble(
+                 JNodeRef<JNodeNumber>(json["root"][5]).number().getLDouble() +
+                 1.0));
     destinationBuffer.clear();
     json.stringify(destinationBuffer);
-    REQUIRE(destinationBuffer.getBuffer() == R"({"root":[2,2,2,1.0,1.0,1.0]})");
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[0]).number().setInt(
-        JNodeRef<JNodeNumber>(array[0]).number().getInt() + 10));
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[1]).number().setLong(
-        JNodeRef<JNodeNumber>(array[1]).number().getLong() + 10));
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[2]).number().setLLong(
-        JNodeRef<JNodeNumber>(array[2]).number().getLLong() + 10));
-    destinationBuffer.clear();
-    json.stringify(destinationBuffer);
-    REQUIRE(destinationBuffer.getBuffer() ==
-            R"({"root":[12,12,12,1.0,1.0,1.0]})");
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[3]).number().setFloat(
-        JNodeRef<JNodeNumber>(array[3]).number().getFloat() + 10.0f));
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[4]).number().setDouble(
-        JNodeRef<JNodeNumber>(array[4]).number().getDouble() + 10.0));
-    REQUIRE_FALSE(!JNodeRef<JNodeNumber>(array[5]).number().setLDouble(
-        JNodeRef<JNodeNumber>(array[5]).number().getLDouble() + 10.0));
-    destinationBuffer.clear();
-    json.stringify(destinationBuffer);
-    REQUIRE(destinationBuffer.getBuffer() ==
-            R"({"root":[12,12,12,11.0,11.0,11.0]})");
+    REQUIRE(destinationBuffer.getBuffer() == R"({"root":[2,2,2,2.0,2.0,2.0]})");
   }
 }
