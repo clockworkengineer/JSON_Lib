@@ -9,7 +9,8 @@
 // the process of parsing for the requirements of this library
 // (this might change in future versions). For an in-depth description
 // of the JSON specification refer to its RFC at web address
-// https://tools.ietf.org/html/rfc8259.
+// https://tools.ietf.org/html/rfc8259 and grammar at web page 
+// https://www.json.org/json-en.html.
 //
 // Dependencies:   C20++ - Language standard features used.
 //
@@ -73,7 +74,7 @@ std::string JSON::version() const { return (m_jsonImplementation->version()); }
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <param name="destination">Destination for stripped JSON.</param>
-void JSON::strip(ISource &source, IDestination &destination) const{
+void JSON::strip(ISource &source, IDestination &destination) const {
   m_jsonImplementation->strip(source, destination);
 }
 void JSON::strip(ISource &source, IDestination &&destination) const {
@@ -86,14 +87,15 @@ void JSON::strip(ISource &&source, IDestination &&destination) const {
   m_jsonImplementation->strip(source, destination);
 }
 /// <summary>
-/// Create JNode structure by recursively parsing JSON on the source stream.
+/// Create JNode structure by parsing JSON on the source stream.
 /// </summary>
-/// <param name="source">Source for JSON encoded bytes.
+/// <param name="source">Source for JSON encoded bytes.</param>
 void JSON::parse(ISource &source) const { m_jsonImplementation->parse(source); }
-void JSON::parse(ISource &&source) const { m_jsonImplementation->parse(source); }
+void JSON::parse(ISource &&source) const {
+  m_jsonImplementation->parse(source);
+}
 /// <summary>
-/// Recursively parse JNode structure and building its JSON text in destination
-/// stream.
+/// Traverse JNode structure and build its JSON text in destination stream.
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 void JSON::stringify(IDestination &destination) const {
@@ -117,13 +119,17 @@ const JNode &JSON::operator[](const std::string &key) const // Object
 /// <summary>
 /// Return array entry for the passed in index.
 /// </summary>
-/// <param name=destination>Array entry (JNode)index.</param>
+/// <param name=destination>Array entry (JNode) index.</param>
 JNode &JSON::operator[](std::size_t index) {
   return ((*m_jsonImplementation)[index]);
 }
 const JNode &JSON::operator[](std::size_t index) const {
   return ((*m_jsonImplementation)[index]);
 }
+/// <summary>
+/// Return root of JSON tree.
+/// </summary>
+/// <returns>Root of JSON tree,</returns>
 JNode &JSON::root() { return (m_jsonImplementation->root()); }
 const JNode &JSON::root() const { return (m_jsonImplementation->root()); }
 } // namespace JSONLib

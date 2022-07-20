@@ -57,7 +57,7 @@ std::string prefixTestDataPath(const std::string &file) {
 void processJSONFile(const std::string &fileName) {
   std::cout << "Processing " << fileName << "\n";
   PLOG_INFO << "Processing " << fileName;
-  JSON json;
+  const JSON json;
   BufferDestination jsonDestination;
   //
   // Parse

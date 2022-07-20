@@ -19,8 +19,8 @@ using namespace JSONLib;
 // JNodeNumber
 // ===========
 TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
-  JSON json;
-  // Note:: That floating point -> integer will round up
+  const JSON json;
+  // Note:: That floating point -> integer will be rounded up/down
   SECTION("Floating point converted to int", "[JSON][JNode][JNodeNumber]") {
     BufferSource jsonSource{"6788888.8990"};
     json.parse(jsonSource);
@@ -140,11 +140,11 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]") {
   }
 }
 
-TEST_CASE("Check numeric api for all supported number types.",
-          "[JSON][JNode][JNodeNumber]") {
+TEST_CASE("Check JNodeNumeric api for all supported number types.",
+          "[JSON][JNode][JNodeNumeric]") {
   JSON json;
   SECTION("Check numbers are the correct type.",
-          "[JSON][JNode][JNodeNumber][Addition][int]") {
+          "[JSON][JNode][JNodeNumeric][Addition]") {
     json["root"] = {1, 1l, 1ll, 1.0f, 1.0, 1.0L};
     BufferDestination destinationBuffer;
     json.stringify(destinationBuffer);
@@ -157,7 +157,7 @@ TEST_CASE("Check numeric api for all supported number types.",
     REQUIRE_FALSE(!JNodeRef<JNodeNumber>(json["root"][5]).number().isLDouble());
   }
   SECTION("Simple arithmetic add one to a number",
-          "[JSON][JNode][JNodeNumber][Get/Set]") {
+          "[JSON][JNode][JNodeNumeric][Get/Set]") {
     json["root"] = {1, 1l, 1ll, 1.0f, 1.0, 1.0L};
     BufferDestination destinationBuffer;
     json.stringify(destinationBuffer);
@@ -201,7 +201,7 @@ TEST_CASE("Check numeric api for all supported number types.",
     json.stringify(destinationBuffer);
     REQUIRE(destinationBuffer.getBuffer() == R"({"root":[2,2,2,2.0,2.0,2.0]})");
   }
-  SECTION("Change types and values.", "[JSON][JNode][JNodeNumber][Reset]") {
+  SECTION("Change types and values.", "[JSON][JNode][JNodeNumeric][Reset]") {
     json["root"] = {1, 1l, 1ll, 1.0f, 1.0, 1.0L};
     BufferDestination destinationBuffer;
     json.stringify(destinationBuffer);

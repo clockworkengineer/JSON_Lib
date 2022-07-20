@@ -164,7 +164,7 @@ void analyzeJNodeTree(const JNode &jNodeRoot) {
 void processJSONFile(const std::string &fileName) {
   std::cout << "Analyzing " << fileName << "\n";
   PLOG_INFO << "Analyzing " << fileName;
-  JSON json;
+  const JSON json;
   json.parse(FileSource{fileName});
   analyzeJNodeTree(json.root());
   PLOG_INFO << "Finished " << fileName << ".";

@@ -1,7 +1,9 @@
 //
 // Class: JSON_Impl
 //
-// Description: JSON class implementation layer.
+// Description: JSON class implementation layer that implementations recursive
+// traversing to produce a JSON tree (parse) and also reconstitute the tree back 
+// into raw JSON text (stringify).
 //
 // Dependencies:   C20++ - Language standard features used.
 //
@@ -36,9 +38,10 @@ namespace JSONLib {
 /// <summary>
 /// Extract a string from a JSON encoded source stream.
 /// </summary>
-/// <param name="source">Source of JSON encoded bytes.</param>
+/// <param name="source">Source of JSON.</param>
 /// <param name="translate">== true and escapes found then they need
-/// translating.</param> <returns>Extracted string</returns>
+/// translating.</param>
+/// <returns>Extracted string</returns>
 std::string JSON_Impl::extractString(ISource &source, bool translate) {
   bool translateEscapes = false;
   if (source.current() != '"') {
@@ -75,7 +78,7 @@ std::string JSON_Impl::extractString(ISource &source, bool translate) {
 /// <summary>
 /// Parse a key/value pair from a JSON encoded source stream.
 /// </summary>
-/// <param name="source">Source of JSON encoded bytes.</param>
+/// <param name="source">Source of JSON.</param>
 /// <returns>Object key/value pair.</returns>
 JNodeObject::ObjectEntry JSON_Impl::parseKeyValuePair(ISource &source) {
   const std::string keyValue{extractString(source)};
@@ -89,16 +92,16 @@ JNodeObject::ObjectEntry JSON_Impl::parseKeyValuePair(ISource &source) {
 /// <summary>
 /// Parse a string from a JSON source stream.
 /// </summary>
-/// <param name="source">Source of JSON encoded bytes.</param>
-/// <returns>String value.</returns>
+/// <param name="source">Source of JSON.</param>
+/// <returns>String JNode.</returns>
 JNode::Ptr JSON_Impl::parseString(ISource &source) {
   return (makeString(extractString(source)));
 }
 /// <summary>
 /// Parse a number from a JSON source stream.
 /// </summary>
-/// <param name="source">Source of JSON encoded bytes.</param>
-/// <returns></returns>
+/// <param name="source">Source of JSON.</param>
+/// <returns>Number JNode.</returns>
 JNode::Ptr JSON_Impl::parseNumber(ISource &source) {
   std::string number;
   for (; source.more() && JNodeNumeric::isValidNumericChar(source.current());
@@ -115,8 +118,8 @@ JNode::Ptr JSON_Impl::parseNumber(ISource &source) {
 /// <summary>
 /// Parse a boolean from a JSON source stream.
 /// </summary>
-/// <param name="source">Source of JSON encoded bytes.</param>
-/// <returns> Boolean JNode.</returns>
+/// <param name="source">Source of JSON.</param>
+/// <returns>Boolean JNode.</returns>
 JNode::Ptr JSON_Impl::parseBoolean(ISource &source) {
   if (source.match("true")) {
     source.ignoreWS();
@@ -131,7 +134,7 @@ JNode::Ptr JSON_Impl::parseBoolean(ISource &source) {
 /// <summary>
 /// Parse a null from a JSON source stream.
 /// </summary>
-/// <param name="source">Source of JSON encoded bytes.</param>
+/// <param name="source">Source of JSON.</param>
 /// <returns>Null JNode.</returns>
 JNode::Ptr JSON_Impl::parseNull(ISource &source) {
   if (!source.match("null")) {
@@ -143,8 +146,8 @@ JNode::Ptr JSON_Impl::parseNull(ISource &source) {
 /// <summary>
 /// Parse an object from a JSON source stream.
 /// </summary>
-/// <param name="source">Source of JSON encoded bytes.</param>
-/// <returns>JNodeObject key/value pairs.</returns>
+/// <param name="source">Source of JSON.</param>
+/// <returns>Object JNode (key/value pairs).</returns>
 JNode::Ptr JSON_Impl::parseObject(ISource &source) {
   JNodeObject::ObjectList objects;
   source.next();
@@ -167,8 +170,8 @@ JNode::Ptr JSON_Impl::parseObject(ISource &source) {
 /// <summary>
 /// Parse an array from a JSON source stream.
 /// </summary>
-/// <param name="source">Source of JSON encoded bytes.</param>
-/// <returns>JNodeArray.</returns>
+/// <param name="source">Source of JSON.</param>
+/// <returns>Array JNode.</returns>
 JNode::Ptr JSON_Impl::parseArray(ISource &source) {
   JNodeArray::ArrayList array;
   source.next();
@@ -192,8 +195,8 @@ JNode::Ptr JSON_Impl::parseArray(ISource &source) {
 /// Recursively parse JSON source stream producing a JNode structure
 /// representation  of it.
 /// </summary>
-/// <param name="source">Source of JSON encoded bytes.</param>
-/// <returns></returns>
+/// <param name="source">Source of JSON.</param>
+/// <returns>Pointer to JNode.</returns>
 JNode::Ptr JSON_Impl::parseJNodes(ISource &source) {
   source.ignoreWS();
   switch (source.current()) {
@@ -230,7 +233,6 @@ JNode::Ptr JSON_Impl::parseJNodes(ISource &source) {
 /// </summary>
 /// <param name=jNode>JNode structure to be traversed.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
-/// <returns></returns>
 void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination) {
   switch (jNode.getNodeType()) {
   case JNodeType::number:
@@ -345,12 +347,12 @@ void JSON_Impl::strip(ISource &source, IDestination &destination) {
 /// <summary>
 /// Create JNode structure by recursively parsing JSON on the source stream.
 /// </summary>
-/// <param name="source">Source of JSON encoded bytes.
+/// <param name="source">Source of JSON.</param>
 void JSON_Impl::parse(ISource &source) { m_jNodeRoot = parseJNodes(source); }
 /// <summary>
-/// Create JNode structure by recursively parsing JSON on the source stream.
+/// Create JNode structure by recursively parsing JSON string passed.
 /// </summary>
-/// <param name="jsonString">JSON string.
+/// <param name="jsonString">JSON string.</param>
 void JSON_Impl::parse(const std::string &jsonString) {
   BufferSource source{jsonString};
   parse(source);
@@ -359,7 +361,6 @@ void JSON_Impl::parse(const std::string &jsonString) {
 /// Recursively parse JNode structure and building its JSON in destination
 /// stream.
 /// </summary>
-/// <param name="jNodeRoot">Root of JNode structure.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 /// <returns></returns>
 void JSON_Impl::stringify(IDestination &destination) {
@@ -368,10 +369,10 @@ void JSON_Impl::stringify(IDestination &destination) {
   }
   stringifyJNodes(*m_jNodeRoot, destination);
 }
-// <summary>
+/// <summary>
 /// Return object entry for the passed in key.
 /// </summary>
-/// <param name=destination>Object entry (JNode) key.</param>
+/// <param name=key>Object entry (JNode) key.</param>
 JNode &JSON_Impl::operator[](const std::string &key) {
   try {
     if (m_jNodeRoot == nullptr) {
@@ -392,7 +393,7 @@ const JNode &JSON_Impl::operator[](const std::string &key) const // Object
 /// <summary>
 /// Return array entry for the passed in index.
 /// </summary>
-/// <param name=destination>Array entry (JNode)index.</param>
+/// <param name=index>Array entry (JNode) index.</param>
 JNode &JSON_Impl::operator[](std::size_t index) {
   try {
     if (m_jNodeRoot == nullptr) {
@@ -401,8 +402,7 @@ JNode &JSON_Impl::operator[](std::size_t index) {
     return ((*m_jNodeRoot)[index]);
   } catch ([[maybe_unused]] JNode::Error &error) {
     JNodeRef<JNodeArray>(*m_jNodeRoot).array().resize(index + 1);
-    JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index] =
-        std::move(makeNull());
+    JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index] = std::move(makeNull());
     return (*JNodeRef<JNodeArray>(*m_jNodeRoot).array()[index]);
   }
 }

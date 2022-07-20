@@ -19,24 +19,24 @@ using namespace JSONLib;
 // BufferDestination
 // =================
 TEST_CASE("IDestination (Buffer) interface.",
-          "[JSON][Stringify][IDestination]") {
-  SECTION("Create BufferDestination.", "[JSON][Stringify][IDestination]") {
+          "[JSON][IDestination][Buffer]") {
+  SECTION("Create BufferDestination.", "[JSON][IDestination][Buffer]") {
     REQUIRE_NOTHROW(BufferDestination());
   }
   SECTION("Create BufferDestination and get buffer which should be empty.",
-          "[JSON][Stringify][IDestination]") {
+          "[JSON][IDestination][Buffer]") {
     BufferDestination buffer;
     REQUIRE_FALSE(!buffer.getBuffer().empty());
   }
   SECTION("Create BufferDestination and add one character.",
-          "[JSON][Stringify][IDestination]") {
+          "[JSON][IDestination][Buffer]") {
     BufferDestination buffer;
     buffer.add('i');
     REQUIRE(buffer.getBuffer().size() == 1);
   }
   SECTION("Create BufferDestination and add an stringified integer and check "
           "result.",
-          "[JSON][Stringify][IDestination]") {
+          "[JSON][IDestination][Buffer]") {
     BufferDestination buffer;
     buffer.add("65767");
     REQUIRE(buffer.getBuffer().size() == 5);
@@ -45,7 +45,7 @@ TEST_CASE("IDestination (Buffer) interface.",
   SECTION("Create BufferDestination, add to it, clear buffer and then add to "
           "it again and check."
           "result.",
-          "[JSON][Stringify][IDestination]") {
+          "[JSON][IDestination][Buffer]") {
     BufferDestination buffer;
     buffer.add("65767");
     REQUIRE(buffer.getBuffer().size() == 5);
@@ -59,19 +59,19 @@ TEST_CASE("IDestination (Buffer) interface.",
 // ===============
 // FileDestination
 // ===============
-TEST_CASE("IDestination (File) interface.", "[JSON][Parse][IDestination]") {
+TEST_CASE("IDestination (File) interface.", "[JSON][IDestination][File]") {
   const std::string testFileName{prefixTestDataPath(kGeneratedJSONFile)};
-  SECTION("Create FileDestination.", "[JSON][Stringify][IDestination]") {
+  SECTION("Create FileDestination.", "[JSON][IDestination][File]") {
     std::filesystem::remove(testFileName);
     REQUIRE_NOTHROW(FileDestination(testFileName));
   }
   SECTION("Create FileDestination when file already exists.",
-          "[JSON][Stringify][IDestination]") {
+          "[JSON][IDestination][File]") {
     FileDestination file{testFileName};
     REQUIRE_NOTHROW(FileDestination(testFileName));
   }
   SECTION("Create FileDestination and test file exists and should be empty.",
-          "[JSON][Stringify][IDestination]") {
+          "[JSON][IDestination][File]") {
     std::filesystem::remove(testFileName);
     FileDestination file{testFileName};
     std::filesystem::path filePath{testFileName};
@@ -79,7 +79,7 @@ TEST_CASE("IDestination (File) interface.", "[JSON][Parse][IDestination]") {
     REQUIRE(std::filesystem::file_size(filePath) == 0);
   }
   SECTION("Create FileDestination and add one character.",
-          "[JSON][Stringify][IDestination]") {
+          "[JSON][IDestination][File]") {
     std::filesystem::remove(testFileName);
     FileDestination file{testFileName};
     std::filesystem::path filePath{testFileName};
@@ -88,7 +88,7 @@ TEST_CASE("IDestination (File) interface.", "[JSON][Parse][IDestination]") {
   }
   SECTION(
       "Create FileDestination, add an stringified integer and check result.",
-      "[JSON][Stringify][IDestination]") {
+      "[JSON][IDestination][File]") {
     std::filesystem::remove(testFileName);
     FileDestination file{testFileName};
     std::filesystem::path filePath{testFileName};
@@ -99,7 +99,7 @@ TEST_CASE("IDestination (File) interface.", "[JSON][Parse][IDestination]") {
     SECTION("Create FileDestination, add to it, clear buffer and then add to "
           "it again and check."
           "result.",
-          "[JSON][Stringify][IDestination]") {
+          "[JSON][IDestination][File]") {
     std::filesystem::remove(testFileName);
     FileDestination file{testFileName};
     std::filesystem::path filePath{testFileName};
