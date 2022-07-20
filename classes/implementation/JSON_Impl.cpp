@@ -2,7 +2,7 @@
 // Class: JSON_Impl
 //
 // Description: JSON class implementation layer that implementations recursive
-// traversing to produce a JSON tree (parse) and also reconstitute the tree back 
+// traversing to produce a JSON tree (parse) and also reconstitute the tree back
 // into raw JSON text (stringify).
 //
 // Dependencies:   C20++ - Language standard features used.
@@ -65,7 +65,6 @@ std::string JSON_Impl::extractString(ISource &source, bool translate) {
     throw Error("Syntax error detected.");
   }
   source.next();
-  source.ignoreWS();
   // Need to translate escapes to UTF8
   if (translateEscapes) {
     return (m_translator->fromJSON(stringValue));
@@ -81,12 +80,13 @@ std::string JSON_Impl::extractString(ISource &source, bool translate) {
 /// <param name="source">Source of JSON.</param>
 /// <returns>Object key/value pair.</returns>
 JNodeObject::ObjectEntry JSON_Impl::parseKeyValuePair(ISource &source) {
+  source.ignoreWS();
   const std::string keyValue{extractString(source)};
+  source.ignoreWS();
   if (source.current() != ':') {
     throw Error("Syntax error detected.");
   }
   source.next();
-  source.ignoreWS();
   return (JNodeObject::ObjectEntry{keyValue, parseJNodes(source)});
 }
 /// <summary>
@@ -112,7 +112,6 @@ JNode::Ptr JSON_Impl::parseNumber(ISource &source) {
   if (!jNodeNumeric.setValidNumber(number)) {
     throw Error("Syntax error detected.");
   }
-  source.ignoreWS();
   return (makeNumber(jNodeNumeric));
 }
 /// <summary>
@@ -122,11 +121,9 @@ JNode::Ptr JSON_Impl::parseNumber(ISource &source) {
 /// <returns>Boolean JNode.</returns>
 JNode::Ptr JSON_Impl::parseBoolean(ISource &source) {
   if (source.match("true")) {
-    source.ignoreWS();
     return (makeBoolean(true));
   }
   if (source.match("false")) {
-    source.ignoreWS();
     return (makeBoolean(false));
   }
   throw Error("Syntax error detected.");
@@ -140,7 +137,6 @@ JNode::Ptr JSON_Impl::parseNull(ISource &source) {
   if (!source.match("null")) {
     throw Error("Syntax error detected.");
   }
-  source.ignoreWS();
   return (makeNull());
 }
 /// <summary>
@@ -156,7 +152,6 @@ JNode::Ptr JSON_Impl::parseObject(ISource &source) {
     objects.emplace_back(parseKeyValuePair(source));
     while (source.current() == ',') {
       source.next();
-      source.ignoreWS();
       objects.emplace_back(parseKeyValuePair(source));
     }
   }
@@ -164,7 +159,6 @@ JNode::Ptr JSON_Impl::parseObject(ISource &source) {
     throw Error("Syntax error detected.");
   }
   source.next();
-  source.ignoreWS();
   return (makeObject(objects));
 }
 /// <summary>
@@ -180,7 +174,6 @@ JNode::Ptr JSON_Impl::parseArray(ISource &source) {
     array.emplace_back(parseJNodes(source));
     while (source.current() == ',') {
       source.next();
-      source.ignoreWS();
       array.emplace_back(parseJNodes(source));
     }
   }
@@ -188,7 +181,6 @@ JNode::Ptr JSON_Impl::parseArray(ISource &source) {
     throw Error("Syntax error detected.");
   }
   source.next();
-  source.ignoreWS();
   return (makeArray(array));
 }
 /// <summary>
@@ -198,19 +190,25 @@ JNode::Ptr JSON_Impl::parseArray(ISource &source) {
 /// <param name="source">Source of JSON.</param>
 /// <returns>Pointer to JNode.</returns>
 JNode::Ptr JSON_Impl::parseJNodes(ISource &source) {
+  JNode::Ptr jNode;
   source.ignoreWS();
   switch (source.current()) {
+  case '{':
+    jNode = parseObject(source);
+    break;
+  case '[':
+    jNode = parseArray(source);
+    break;
   case '"':
-    return (parseString(source));
+    jNode = parseString(source);
+    break;
   case 't':
   case 'f':
-    return (parseBoolean(source));
+    jNode = parseBoolean(source);
+    break;
   case 'n':
-    return (parseNull(source));
-  case '{':
-    return (parseObject(source));
-  case '[':
-    return (parseArray(source));
+    jNode = parseNull(source);
+    break;
   case '-':
   case '+':
   case '0':
@@ -223,9 +221,13 @@ JNode::Ptr JSON_Impl::parseJNodes(ISource &source) {
   case '7':
   case '8':
   case '9':
-    return (parseNumber(source));
+    jNode = parseNumber(source);
+    break;
+  default:
+    throw Error("Syntax error detected.");
   }
-  throw Error("Syntax error detected.");
+  source.ignoreWS();
+  return (jNode);
 }
 /// <summary>
 /// Recursively traverse JNode structure encoding it into JSON on
