@@ -21,7 +21,7 @@ using namespace JSONLib;
 TEST_CASE(
     "JSON object for stringification of collection types and check values.",
     "[JSON][Stringify]") {
-  JSON json;
+  const JSON json;
   SECTION(
       "Stringify an object ({\"Age\":77,\"Name\":\"Rob\"}) and check its value",
       "[JSON][Stringify]") {

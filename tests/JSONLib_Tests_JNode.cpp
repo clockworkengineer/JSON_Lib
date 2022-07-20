@@ -19,7 +19,7 @@ using namespace JSONLib;
 // JNode Indexing
 // ==============
 TEST_CASE("Use of JNode indexing operators", "[JSON][JNode][Index]") {
-  JSON json;
+  const JSON json;
   SECTION("Parse dictionary and check its components using indexing",
           "[JSON][JNode][Index]") {
     BufferSource jsonSource{"{\"City\":\"Southampton\",\"Population\":500000}"};
@@ -75,7 +75,7 @@ TEST_CASE("Use of JNode indexing operators", "[JSON][JNode][Index]") {
 // JNode Reference functions
 // =========================
 TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]") {
-  JSON json;
+  const JSON json;
   SECTION("Integer reference.", "[JSON][JNode][Reference]") {
     BufferSource jsonSource{"45500"};
     json.parse(jsonSource);

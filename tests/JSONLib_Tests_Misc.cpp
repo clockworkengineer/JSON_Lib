@@ -73,7 +73,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]") {
 // ========================
 TEST_CASE("Check R-Value reference parse/stringify.",
           "[JSON][JNode][R-Value Reference]") {
-  JSON json;
+  const JSON json;
   SECTION("Parse with R-Value reference (Buffer).",
           "[JSON][JNode][R-Value Reference]") {
     json.parse(
@@ -95,7 +95,7 @@ TEST_CASE("Check R-Value reference parse/stringify.",
 }
 TEST_CASE("Check whitespace stripping with escape characters.",
           "[JSON][Parse][Strip]") {
-  JSON json;
+  const JSON json;
   SECTION("Strip JSON with escaped ascii characters.", "[JSON][Parse][Strip]") {
     BufferSource jsonSource{
         "   [  \"fffgh \\/ \\n\\t \\p \\w \\u1234 \"  ]       "};
@@ -123,7 +123,7 @@ TEST_CASE("Check whitespace stripping with escape characters.",
 // Strip JSON Whitespace
 // =====================
 TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]") {
-  JSON json;
+  const JSON json;
   TEST_FILE_LIST(testFile);
   SECTION(
       "Stripped (Buffer) should be the same as parsed then stringified JSON",

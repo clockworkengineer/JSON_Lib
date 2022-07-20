@@ -76,7 +76,7 @@ void checkObject(
 /// <param name="json">JSON parser object</param>
 /// <param name="jsonBuffer">Source json</param>
 /// <returns></returns>
-std::string stripWhiteSpace(JSON &json, const std::string &jsonBuffer) {
+std::string stripWhiteSpace(const JSON &json, const std::string &jsonBuffer) {
   BufferSource source(jsonBuffer);
   BufferDestination destination;
   json.strip(source, destination);

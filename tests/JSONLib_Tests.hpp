@@ -36,7 +36,7 @@ std::string prefixTestDataPath(const std::string &file);
 std::string readFromFile(const std::string &jsonFileName);
 void checkObject(const JSONLib::JNode &jNode);
 void checkArray(const JSONLib::JNode &jNode);
-std::string stripWhiteSpace(JSONLib::JSON &json, const std::string &jsonBuffer);
+std::string stripWhiteSpace(const JSONLib::JSON &json, const std::string &jsonBuffer);
 // ================
 // Test files macro
 // ================

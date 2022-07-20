@@ -19,7 +19,7 @@ using namespace JSONLib;
 // Parser Generated Exceptions
 // ===========================
 TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]") {
-  JSON json;
+  const JSON json;
   SECTION("Parse missing terminating '\"' in string",
           "[JSON][Parse][Exceptions]") {
     BufferSource jsonSource{"{ \"one\" : \"Apple }"};

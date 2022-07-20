@@ -42,15 +42,24 @@ public:
   // PUBLIC METHODS
   // ==============
   [[nodiscard]] std::string version();
+  [[nodiscard]] std::string version() const;
   void parse(ISource &source);
   void parse(ISource &&source);
+  void parse(ISource &source) const;
+  void parse(ISource &&source) const;
   void stringify(IDestination &destination);
   void stringify(IDestination &&destination);
+  void stringify(IDestination &destination) const;
+  void stringify(IDestination &&destination) const;
   void strip(ISource &source, IDestination &destination);
   void strip(ISource &source, IDestination &&destination);
   void strip(ISource &&source, IDestination &destination);
   void strip(ISource &&source, IDestination &&destination);
- // [[nodiscard]] JNode &root();
+  void strip(ISource &source, IDestination &destination) const;
+  void strip(ISource &source, IDestination &&destination) const;
+  void strip(ISource &&source, IDestination &destination) const;
+  void strip(ISource &&source, IDestination &&destination) const;
+  [[nodiscard]] JNode &root();
   [[nodiscard]] const JNode &root() const;
   JNode &operator[](const std::string &key);
   const JNode &operator[](const std::string &key) const;

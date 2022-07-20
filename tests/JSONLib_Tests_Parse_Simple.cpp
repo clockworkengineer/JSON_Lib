@@ -20,7 +20,7 @@ using namespace JSONLib;
 // =======================
 TEST_CASE("JSON object for parse of simple types (number,string,boolean,null).",
           "[JSON][Parse][Simple]") {
-  JSON json;
+  const JSON json;
   SECTION("Parse an string (example string)", "[JSON][Parse][Simple]") {
     BufferSource jsonSource{"\"example string\""};
     json.parse(jsonSource);
@@ -57,7 +57,7 @@ TEST_CASE("JSON object for parse of simple types (number,string,boolean,null).",
 // ====================================
 TEST_CASE("JSON object for parse of simple types and check values.",
           "[JSON][Parse][Simple][Validate]") {
-  JSON json;
+  const JSON json;
   SECTION("Parse an string (example string) and check its value",
           "[JSON][Parse][Simple][Validate]") {
     BufferSource jsonSource{"\"example string\""};

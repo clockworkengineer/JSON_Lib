@@ -20,7 +20,7 @@ using namespace JSONLib;
 // ================================================
 TEST_CASE("Stringify to a file and check result.",
           "[JSON][Stringify][File][Validate]") {
-  JSON json;
+  const JSON json;
   const std::string generatedFileName{prefixTestDataPath(kGeneratedJSONFile)};
   SECTION("Stringify object to file and check value",
           "[JSON][Stringify][File][Validate]") {
@@ -46,7 +46,7 @@ TEST_CASE("Stringify to a file and check result.",
 // =================================
 TEST_CASE("JSON object for stringification of a list of example JSON files.",
           "[JSON][Stringify]") {
-  JSON json;
+  const JSON json;
   TEST_FILE_LIST(testFile);
   SECTION("Stringify to  buffer and check value", "[JSON][Stringify][Buffer]") {
     const std::string jsonFileBuffer{

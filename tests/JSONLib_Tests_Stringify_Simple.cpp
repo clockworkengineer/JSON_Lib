@@ -20,7 +20,7 @@ using namespace JSONLib;
 // ==============================================
 TEST_CASE("JSON object for stringification of simple types and check values",
           "[JSON][Stringify][Simple][Validate]") {
-  JSON json;
+  const JSON json;
   SECTION("Stringify a string (Test string) and check its value",
           "[JSON][Stringify][Simple][Validate]") {
     const std::string expected{"\"Test string.\""};

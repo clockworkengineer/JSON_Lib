@@ -85,12 +85,26 @@ void JSON::strip(ISource &&source, IDestination &destination) {
 void JSON::strip(ISource &&source, IDestination &&destination) {
   m_jsonImplementation->strip(source, destination);
 }
+void JSON::strip(ISource &source, IDestination &destination) const{
+  m_jsonImplementation->strip(source, destination);
+}
+void JSON::strip(ISource &source, IDestination &&destination) const {
+  m_jsonImplementation->strip(source, destination);
+}
+void JSON::strip(ISource &&source, IDestination &destination) const {
+  m_jsonImplementation->strip(source, destination);
+}
+void JSON::strip(ISource &&source, IDestination &&destination) const {
+  m_jsonImplementation->strip(source, destination);
+}
 /// <summary>
 /// Create JNode structure by recursively parsing JSON on the source stream.
 /// </summary>
 /// <param name="source">Source for JSON encoded bytes.
 void JSON::parse(ISource &source) { m_jsonImplementation->parse(source); }
 void JSON::parse(ISource &&source) { m_jsonImplementation->parse(source); }
+void JSON::parse(ISource &source) const { m_jsonImplementation->parse(source); }
+void JSON::parse(ISource &&source) const { m_jsonImplementation->parse(source); }
 /// <summary>
 /// Recursively parse JNode structure and building its JSON text in destination
 /// stream.
@@ -100,6 +114,12 @@ void JSON::stringify(IDestination &destination) {
   m_jsonImplementation->stringify(destination);
 }
 void JSON::stringify(IDestination &&destination) {
+  m_jsonImplementation->stringify(destination);
+}
+void JSON::stringify(IDestination &destination) const {
+  m_jsonImplementation->stringify(destination);
+}
+void JSON::stringify(IDestination &&destination) const {
   m_jsonImplementation->stringify(destination);
 }
 /// <summary>
@@ -124,6 +144,6 @@ JNode &JSON::operator[](std::size_t index) {
 const JNode &JSON::operator[](std::size_t index) const {
   return ((*m_jsonImplementation)[index]);
 }
-//JNode &JSON::root() { return (m_jsonImplementation->root()); }
+JNode &JSON::root() { return (m_jsonImplementation->root()); }
 const JNode &JSON::root() const { return (m_jsonImplementation->root()); }
 } // namespace JSONLib

@@ -20,7 +20,7 @@ using namespace JSONLib;
 // ===========================
 TEST_CASE("JSON object for parse of collection types (array,object) ",
           "[JSON][Parse][Collection]") {
-  JSON json;
+  const JSON json;
   SECTION("Parse an object ({\"name\":\"Robert\",\"Age\":15})",
           "[JSON][Parse][Collection]") {
     BufferSource jsonSource{"{\"name\":\"Robert\",\"Age\":15}"};
@@ -64,7 +64,7 @@ TEST_CASE("JSON object for parse of collection types (array,object) ",
 // ========================================
 TEST_CASE("JSON object for parse of collection types and check values",
           "[JSON][Parse][Collection][validate]") {
-  JSON json;
+  const JSON json;
   SECTION(
       "Parse an object {\"name\":\"Robert\",\"Age\":15} and check its value",
       "[JSON][Parse][Collection][validate]") {

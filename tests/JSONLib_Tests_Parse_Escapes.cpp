@@ -20,7 +20,7 @@ using namespace JSONLib;
 // =================================
 TEST_CASE("JSON object for decoding of strings with escape characters.",
           "[JSON][Parse][Escapes]") {
-  JSON json;
+  const JSON json;
   SECTION("Stringify JSON string with escapes '\\t' to buffer and check value",
           "[JSON][Parse][Escapes]") {
     BufferSource jsonSource{"\"Test String \\t \""};
