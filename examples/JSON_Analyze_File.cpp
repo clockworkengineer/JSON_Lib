@@ -71,12 +71,13 @@ std::string prefixTestDataPath(const std::string &file) {
 /// <param name="jNodeDetails">result of JNode tree analysis</param>
 void outputAnalysis(const JNodeDetails &jNodeDetails) {
   PLOG_INFO << "--------------------JNode Sizes---------------------";
-  PLOG_INFO << "JNodeObjectData size " << sizeof(JNodeObject) << " in bytes.";
-  PLOG_INFO << "JNodeArrayData size " << sizeof(JNodeArray) << " in bytes.";
-  PLOG_INFO << "JNodeNumberData size " << sizeof(JNodeNumber) << " in bytes.";
-  PLOG_INFO << "JNodeStringData size " << sizeof(JNodeString) << " in bytes.";
-  PLOG_INFO << "JNodeBooleanData size " << sizeof(JNodeBoolean) << " in bytes.";
-  PLOG_INFO << "JNodeNullData size " << sizeof(JNodeNull) << " in bytes.";
+  PLOG_INFO << "JNodeObject size " << sizeof(JNodeObject) << " in bytes.";
+  PLOG_INFO << "JNodeArray size " << sizeof(JNodeArray) << " in bytes.";
+  PLOG_INFO << "JNodeNumeric size " << sizeof(JNodeNumeric) << " in bytes.";
+  PLOG_INFO << "JNodeNumber size " << sizeof(JNodeNumber) << " in bytes.";
+  PLOG_INFO << "JNodeString size " << sizeof(JNodeString) << " in bytes.";
+  PLOG_INFO << "JNodeBoolean size " << sizeof(JNodeBoolean) << " in bytes.";
+  PLOG_INFO << "JNodeNull size " << sizeof(JNodeNull) << " in bytes.";
   PLOG_INFO << "------------------JNode Tree Stats------------------";
   PLOG_INFO << "JNode Tree contains " << jNodeDetails.totalNodes << " nodes.";
   PLOG_INFO << "JNode Tree size " << jNodeDetails.sizeInBytes << " in bytes.";

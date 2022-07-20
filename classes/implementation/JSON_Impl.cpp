@@ -330,7 +330,7 @@ void JSON_Impl::translator(ITranslator *translator) {
 /// <summary>
 /// Set converter for JSON strings.
 /// </summary>
-/// <param name=conv>Custom JSON string translator.</param>
+/// <param name=converter>Custom JSON string translator.</param>
 void JSON_Impl::converter(IConverter *converter) {
   if (converter == nullptr) {
     m_converter = std::make_unique<JSON_Converter>();
@@ -364,7 +364,6 @@ void JSON_Impl::parse(const std::string &jsonString) {
 /// stream.
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
-/// <returns></returns>
 void JSON_Impl::stringify(IDestination &destination) {
   if (m_jNodeRoot == nullptr) {
     throw Error("No JSON to stringify.");
