@@ -42,6 +42,19 @@ TEST_CASE("IDestination (Buffer) interface.",
     REQUIRE(buffer.getBuffer().size() == 5);
     REQUIRE(buffer.getBuffer() == ("65767"));
   }
+  SECTION("Create BufferDestination, add to it, clear buffer and then add to "
+          "it again and check."
+          "result.",
+          "[JSON][Stringify][IDestination]") {
+    BufferDestination buffer;
+    buffer.add("65767");
+    REQUIRE(buffer.getBuffer().size() == 5);
+    REQUIRE(buffer.getBuffer() == ("65767"));
+    buffer.clear();
+    buffer.add("65767");
+    REQUIRE(buffer.getBuffer().size() == 5);
+    REQUIRE(buffer.getBuffer() == ("65767"));
+  }
 }
 // ===============
 // FileDestination
@@ -82,5 +95,20 @@ TEST_CASE("IDestination (File) interface.", "[JSON][Parse][IDestination]") {
     file.add("65767");
     REQUIRE(std::filesystem::file_size(filePath) == 5);
     REQUIRE(readFromFile(testFileName) == "65767");
+  }
+    SECTION("Create FileDestination, add to it, clear buffer and then add to "
+          "it again and check."
+          "result.",
+          "[JSON][Stringify][IDestination]") {
+    std::filesystem::remove(testFileName);
+    FileDestination file{testFileName};
+    std::filesystem::path filePath{testFileName};
+    file.add("65767");
+    REQUIRE(std::filesystem::file_size(filePath) == 5);
+    REQUIRE(readFromFile(testFileName) == ("65767"));
+    file.clear();
+    file.add("65767");
+    REQUIRE(std::filesystem::file_size(filePath) == 5);
+    REQUIRE(readFromFile(testFileName) == ("65767"));
   }
 }

@@ -67,24 +67,12 @@ JSON::~JSON() {}
 /// <summary>
 /// Get JSONLib version.
 /// </summary>
-std::string JSON::version() { return (m_jsonImplementation->version()); }
+std::string JSON::version() const { return (m_jsonImplementation->version()); }
 /// <summary>
 /// Strip all whitespace from a JSON source.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <param name="destination">Destination for stripped JSON.</param>
-void JSON::strip(ISource &source, IDestination &destination) {
-  m_jsonImplementation->strip(source, destination);
-}
-void JSON::strip(ISource &source, IDestination &&destination) {
-  m_jsonImplementation->strip(source, destination);
-}
-void JSON::strip(ISource &&source, IDestination &destination) {
-  m_jsonImplementation->strip(source, destination);
-}
-void JSON::strip(ISource &&source, IDestination &&destination) {
-  m_jsonImplementation->strip(source, destination);
-}
 void JSON::strip(ISource &source, IDestination &destination) const{
   m_jsonImplementation->strip(source, destination);
 }
@@ -101,8 +89,6 @@ void JSON::strip(ISource &&source, IDestination &&destination) const {
 /// Create JNode structure by recursively parsing JSON on the source stream.
 /// </summary>
 /// <param name="source">Source for JSON encoded bytes.
-void JSON::parse(ISource &source) { m_jsonImplementation->parse(source); }
-void JSON::parse(ISource &&source) { m_jsonImplementation->parse(source); }
 void JSON::parse(ISource &source) const { m_jsonImplementation->parse(source); }
 void JSON::parse(ISource &&source) const { m_jsonImplementation->parse(source); }
 /// <summary>
@@ -110,12 +96,6 @@ void JSON::parse(ISource &&source) const { m_jsonImplementation->parse(source); 
 /// stream.
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
-void JSON::stringify(IDestination &destination) {
-  m_jsonImplementation->stringify(destination);
-}
-void JSON::stringify(IDestination &&destination) {
-  m_jsonImplementation->stringify(destination);
-}
 void JSON::stringify(IDestination &destination) const {
   m_jsonImplementation->stringify(destination);
 }
