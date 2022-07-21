@@ -17,9 +17,9 @@ namespace JSONLib {
 // ==============================
 // Source classes for JSON parser
 // ==============================
-// ========
-// Buffered
-// ========
+// ======
+// Buffer
+// ======
 class BufferSource : public ISource {
 public:
   explicit BufferSource(const std::string &sourceBuffer)

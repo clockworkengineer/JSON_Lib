@@ -2,7 +2,7 @@
 // Unit Tests: JSON
 //
 // Description: ISource inteface unit tests for JSON class using the
-// Catch2 test framework. At present the only suppoted source streams
+// Catch2 test framework. At present the only supported source streams
 // are buffer and file.
 //
 // ================
@@ -16,15 +16,27 @@ using namespace JSONLib;
 // ==========
 // Test cases
 // ==========
-// ============
-// BufferSource
-// ============
+// ======
+// Buffer
+// ======
 TEST_CASE("ISource (Buffer) interface (uses file testfile001.json).",
           "[JSON][ISource][Buffer]") {
   const std::string testFileName{prefixTestDataPath(kSingleJSONFile)};
   const std::string buffer{readFromFile(testFileName)};
   SECTION("Create BufferSource.", "[JSON][ISource][Buffer]") {
     REQUIRE_NOTHROW(BufferSource(buffer));
+  }
+  SECTION("Check that BufferSource position() works correctly.",
+          "[JSON][ISource][Buffer]") {
+    BufferSource source{"[true  , \"Out of time\",  7.89043e+18, true]"};
+    while (source.more() && !source.match("time")) {
+      source.next();
+    }
+    REQUIRE(source.position() == 21);
+    while (source.more()) {
+      source.next();
+    }
+    REQUIRE(source.position() == 43);
   }
   SECTION("Create BufferSource and that it is positioned "
           "on the correct first character",
@@ -132,13 +144,28 @@ TEST_CASE("ISource (Buffer) interface (uses file testfile001.json).",
                         "ISource Error: Tried to read past and of buffer.");
   }
 }
-// ==========
-// FileSource
-// ==========
+// ====
+// File
+// ====
 TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]") {
   const std::string testFileName{prefixTestDataPath(kSingleJSONFile)};
   SECTION("Create FileSource with testfile001.json.", "[JSON][ISource][File]") {
     REQUIRE_NOTHROW(FileSource(testFileName));
+  }
+  SECTION("Check that File position() works correctly.",
+          "[JSON][ISource][File]") {
+    std::filesystem::remove(kGeneratedJSONFile);
+    writeToFile(kGeneratedJSONFile,
+                "[true  , \"Out of time\",  7.89043e+18, true]");
+    FileSource source{kGeneratedJSONFile};
+    while (source.more() && !source.match("time")) {
+      source.next();
+    }
+    REQUIRE(source.position() == 21);
+    while (source.more()) {
+      source.next();
+    }
+    REQUIRE(source.position() == 43);
   }
   SECTION("Create FileSource and check positioned on the "
           "correct first character",

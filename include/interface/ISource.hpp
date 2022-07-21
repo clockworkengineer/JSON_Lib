@@ -71,7 +71,7 @@ public:
     long index = 0;
     while (more() && current() == targetString[index]) {
       next();
-      if (++index == (long)targetString.length()) {
+      if (++index == static_cast<long>(targetString.length())) {
         return (true);
       }
     }

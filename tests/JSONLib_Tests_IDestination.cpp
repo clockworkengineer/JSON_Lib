@@ -2,7 +2,8 @@
 // Unit Tests: JSON
 //
 // Description: IDestination inteface unit tests for JSON class using
-// the Catch2 test framework.
+// the Catch2 test framework. At present the only supported destination
+// streams are buffer and file.
 //
 // ================
 // Test definitions
@@ -15,9 +16,9 @@ using namespace JSONLib;
 // ==========
 // Test cases
 // ==========
-// =================
-// BufferDestination
-// =================
+// ======
+// Buffer
+// ======
 TEST_CASE("IDestination (Buffer) interface.",
           "[JSON][IDestination][Buffer]") {
   SECTION("Create BufferDestination.", "[JSON][IDestination][Buffer]") {
@@ -56,9 +57,9 @@ TEST_CASE("IDestination (Buffer) interface.",
     REQUIRE(buffer.getBuffer() == ("65767"));
   }
 }
-// ===============
-// FileDestination
-// ===============
+// ====
+// File
+// ====
 TEST_CASE("IDestination (File) interface.", "[JSON][IDestination][File]") {
   const std::string testFileName{prefixTestDataPath(kGeneratedJSONFile)};
   SECTION("Create FileDestination.", "[JSON][IDestination][File]") {

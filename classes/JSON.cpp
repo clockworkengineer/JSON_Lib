@@ -9,7 +9,7 @@
 // the process of parsing for the requirements of this library
 // (this might change in future versions). For an in-depth description
 // of the JSON specification refer to its RFC at web address
-// https://tools.ietf.org/html/rfc8259 and grammar at web page 
+// https://tools.ietf.org/html/rfc8259 and JSON grammar at web page 
 // https://www.json.org/json-en.html.
 //
 // Dependencies:   C20++ - Language standard features used.

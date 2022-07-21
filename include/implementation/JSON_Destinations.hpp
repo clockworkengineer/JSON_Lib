@@ -15,9 +15,9 @@ namespace JSONLib {
 // ===================================
 // Destination classes for JSON parser
 // ===================================
-// ========
-// Buffered
-// ========
+// ======
+// Buffer
+// ======
 class BufferDestination : public IDestination {
 public:
   BufferDestination() = default;
