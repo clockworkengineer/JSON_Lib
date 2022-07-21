@@ -329,7 +329,24 @@ TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]") {
     json["object"] = {{"currency", "USD"}, {"value", 42.99}};
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
-    REQUIRE(jsonDestination.getBuffer() ==
-            R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2],"object":{"currency":"USD","value":42.99}})");
+    REQUIRE(
+        jsonDestination.getBuffer() ==
+        R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2],"object":{"currency":"USD","value":42.99}})");
   }
+  // Currently not supported but on TODO.
+  // SECTION("Object creation completely using a nested initializer list.",
+  //         "[JSON][Create][Complex][Initializer") {
+  //   JSON json = {{"pi", 3.141},
+  //                {"happy", true},
+  //                {"name", "Niels"},
+  //                {"nothing", nullptr},
+  //                {"answer", {{"everything", 42}}},
+  //                {"list", {1, 0, 2}},
+  //                {"object", {{"currency", "USD"}, {"value", 42.99}}}};
+  //   BufferDestination jsonDestination;
+  //   REQUIRE_NOTHROW(json.stringify(jsonDestination));
+  //   REQUIRE(
+  //       jsonDestination.getBuffer() ==
+  //       R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2],"object":{"currency":"USD","value":42.99}})");
+  // }
 }
