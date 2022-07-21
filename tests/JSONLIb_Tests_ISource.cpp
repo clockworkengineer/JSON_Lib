@@ -97,6 +97,22 @@ TEST_CASE("ISource (Buffer) interface (uses file testfile001.json).",
     REQUIRE_FALSE(!source.match("[true")); // Match
     REQUIRE(source.position() == 5);       // new position
   }
+  SECTION("Check that BufferSource backup works and doesn't go negative.",
+          "[XML][Parse][BufferSource]") {
+    BufferSource source{"[true  , \"Out of time\",  7.89043e+18, true]"};
+    REQUIRE_FALSE(!source.match("[true  , \"Out "));
+    REQUIRE(source.current() == 'o');
+    source.backup(4);
+    REQUIRE(source.current() == 'O');
+    source.backup(12);
+    REQUIRE(source.current() == '[');
+    while (source.more()) {
+      source.next();
+    }
+    REQUIRE(source.current() == static_cast<char>(EOF));
+    source.backup(1);
+    REQUIRE(source.current() == ']');
+  }
   SECTION("Create BufferSource with empty buffer.",
           "[JSON][ISource][Buffer][Exception]") {
     REQUIRE_THROWS_AS(BufferSource(""), ISource::Error);
@@ -202,6 +218,25 @@ TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]") {
     REQUIRE_FALSE(source.match("[trap"));  // Not there
     REQUIRE_FALSE(!source.match("[true")); // Match
     REQUIRE(source.position() == 5);       // new position
+  }
+  SECTION("Check that FileSource backup works and doesn't go negative.",
+          "[XML][Parse][File]") {
+    std::filesystem::remove(kGeneratedJSONFile);
+    writeToFile(kGeneratedJSONFile,
+                "[true  , \"Out of time\",  7.89043e+18, true]");
+    FileSource source{kGeneratedJSONFile};
+    REQUIRE_FALSE(!source.match("[true  , \"Out "));
+    REQUIRE(source.current() == 'o');
+    source.backup(4);
+    REQUIRE(source.current() == 'O');
+    source.backup(12);
+    REQUIRE(source.current() == '[');
+    while (source.more()) {
+      source.next();
+    }
+    REQUIRE(source.current() == static_cast<char>(EOF));
+    source.backup(1);
+    REQUIRE(source.current() == ']');
   }
   SECTION("Create FileSource with non existant file.",
           "[JSON][ISource][File][Exception]") {

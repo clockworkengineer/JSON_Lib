@@ -2,9 +2,10 @@
 // =======
 // C++ STL
 // =======
+#include <filesystem>
 #include <fstream>
 #include <string>
-#include <filesystem>
+
 // ================
 // Source interface
 // ================
@@ -42,10 +43,11 @@ public:
   [[nodiscard]] bool more() const override {
     return (m_bufferPosition < m_parseBuffer.size());
   }
-  void backup(long length) override {
-    m_bufferPosition -= length;
-    if (m_bufferPosition < 0) {
+  void backup(unsigned long length) override {
+    if (length >= m_bufferPosition) {
       m_bufferPosition = 0;
+    } else {
+      m_bufferPosition -= length;
     }
   }
   void reset() override { m_bufferPosition = 0; }
@@ -62,7 +64,8 @@ private:
 // ====
 class FileSource : public ISource {
 public:
-  explicit FileSource(const std::string &sourceFileName) : m_sourceFileName(sourceFileName) {
+  explicit FileSource(const std::string &sourceFileName)
+      : m_sourceFileName(sourceFileName) {
     m_source.open(sourceFileName.c_str(), std::ios_base::binary);
     if (!m_source.is_open()) {
       throw Error("File input stream failed to open or does not exist.");
@@ -77,11 +80,11 @@ public:
     m_source.get(c);
   }
   bool more() const override { return (m_source.peek() != EOF); }
-  void backup(long length) override {
-    if ((static_cast<long>(m_source.tellg()) - length >= 0) ||
+  void backup(unsigned long length) override {
+    if ((length <= m_source.tellg()) ||
         (current() == (char)EOF)) {
       m_source.clear();
-      m_source.seekg(-length, std::ios_base::cur);
+      m_source.seekg(-static_cast<long>(length), std::ios_base::cur);
     } else {
       m_source.seekg(0, std::ios_base::beg);
     }

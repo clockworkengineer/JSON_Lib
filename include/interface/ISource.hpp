@@ -40,7 +40,7 @@ public:
   // ========================
   // Backup length characters
   // ========================
-  virtual void backup(long length) = 0;
+  virtual void backup(unsigned long length) = 0;
   // ===================================
   // Reset to beginning of source stream
   // ===================================
