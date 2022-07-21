@@ -32,8 +32,9 @@ inline static const char *kNonExistantJSONFile = "doesntexist.json";
 // ==========================
 // Unit test helper functions
 // ==========================
-std::string prefixTestDataPath(const std::string &file);
+std::string prefixTestDataPath(const std::string &jsonFileName);
 std::string readFromFile(const std::string &jsonFileName);
+void writeToFile(const std::string &jsonFileName, const std::string &jsonString);
 void checkObject(const JSONLib::JNode &jNode);
 void checkArray(const JSONLib::JNode &jNode);
 std::string stripWhiteSpace(const JSONLib::JSON &json, const std::string &jsonBuffer);

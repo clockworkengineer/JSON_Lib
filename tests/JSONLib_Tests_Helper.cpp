@@ -17,11 +17,11 @@ using namespace JSONLib;
 /// <summary>
 /// Prefix path to test data file name.
 /// </summary>
-/// <param name="name">Test data file name</param>
+/// <param name="jsonFileName">Test JSON data file name</param>
 /// <returns>Full path to test data file</returns>
-std::string prefixTestDataPath(const std::string &file) {
+std::string prefixTestDataPath(const std::string &jsonFileName) {
   const std::filesystem::path currentPath =
-      std::filesystem::current_path() / "files" / file;
+      std::filesystem::current_path() / "files" / jsonFileName;
   return (currentPath.string());
 }
 /// <summary>
@@ -29,13 +29,27 @@ std::string prefixTestDataPath(const std::string &file) {
 /// the buffer.
 /// </summary>
 /// <param name="jsonFileName">JSON file name</param>
-/// <returns></returns>
+/// <returns>JSON string.</returns>
 std::string readFromFile(const std::string &jsonFileName) {
   std::ifstream jsonFile;
   jsonFile.open(jsonFileName, std::ios_base::binary);
   std::ostringstream jsonFileBuffer;
   jsonFileBuffer << jsonFile.rdbuf();
   return (jsonFileBuffer.str());
+}
+/// <summary>
+/// Create an JSON file and write JSON.
+/// </summary>
+/// <param name="jsonFileName">JSON file name</param>
+/// <param name="jsonString">JSON string</param>
+/// <returns></returns>
+void writeToFile(const std::string &jsonFileName, const std::string &jsonString)
+{
+  std::remove(jsonFileName.c_str());
+  std::ofstream jsonFile;
+  jsonFile.open(jsonFileName, std::ios::binary);
+  jsonFile << jsonString;
+  jsonFile.close();
 }
 /// <summary>
 /// Verify that an JNodeArrayData has the correct parsed format.
