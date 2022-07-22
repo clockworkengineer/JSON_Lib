@@ -2,7 +2,7 @@
 // Class: JNode
 //
 // Description: JNode struct is used to hold the parsed JSON and model its
-// structure by arranging the JNodes in a tree; this can then be traversed to 
+// structure by arranging the JNodes in a tree; this can then be traversed to
 // reform the JSON during stringification.
 //
 // Dependencies:   C20++ - Language standard features used.
@@ -40,9 +40,9 @@ namespace JSONLib {
 // ==================
 // JNode constructors
 // ==================
-JNode::JNode(const std::initializer_list<InternalTypes> &list) {
+JNode::JNode(const std::initializer_list<InternalTypes> &array) {
   JNodeArray jNodeArray;
-  for (const auto &entry : list) {
+  for (const auto &entry : array) {
     if (const int *pint = std::get_if<int>(&entry)) {
       jNodeArray.array().emplace_back(makeNumber(JNodeNumeric{*pint}));
     } else if (const long *plong = std::get_if<long>(&entry)) {
@@ -67,11 +67,11 @@ JNode::JNode(const std::initializer_list<InternalTypes> &list) {
   }
   m_jNodeVariant = std::make_unique<JNodeArray>(std::move(jNodeArray));
 }
-JNode::JNode(const std::initializer_list<
-             std::pair<std::string, InternalTypes>> &list) {
+JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
+                 &object) {
   JNodeObject::ObjectList jObjectList;
   JNodeObject::ObjectEntry jNodeObjectEntry;
-  for (const auto &entry : list) {
+  for (const auto &entry : object) {
     jNodeObjectEntry.key = entry.first;
     if (const int *pint = std::get_if<int>(&entry.second)) {
       jNodeObjectEntry.value = makeNumber(JNodeNumeric{*pint});
@@ -101,7 +101,7 @@ JNode::JNode(const std::initializer_list<
   std::swap(*this, *makeObject(jObjectList));
 }
 // =====================
-// JNode index overloads 
+// JNode index overloads
 // =====================
 // ======
 // Object
@@ -191,7 +191,9 @@ JNodeType JNode::getNodeType() const { return (m_jNodeVariant->getNodeType()); }
 // =============================
 // Get reference to JNodeVariant
 // =============================
-std::unique_ptr<JNodeVariant> &JNode::getJNodeVariant() { return (m_jNodeVariant); }
+std::unique_ptr<JNodeVariant> &JNode::getJNodeVariant() {
+  return (m_jNodeVariant);
+}
 const std::unique_ptr<JNodeVariant> &JNode::getJNodeVariant() const {
   return (m_jNodeVariant);
 }
