@@ -42,9 +42,9 @@ struct JNode {
   // Constructors/Destructors
   explicit JNode(std::unique_ptr<JNodeVariant> jNodeVariant)
       : m_jNodeVariant(std::move(jNodeVariant)) {}
-  JNode(const std::initializer_list<InternalTypes> &list);
+  JNode(const std::initializer_list<InternalTypes> &array);
   JNode(
-      const std::initializer_list<std::pair<std::string, InternalTypes>> &list);
+      const std::initializer_list<std::pair<std::string, InternalTypes>> &object);
   JNode(const JNode &other) = delete;
   JNode &operator=(const JNode &other) = delete;
   JNode(JNode &&other) = default;
