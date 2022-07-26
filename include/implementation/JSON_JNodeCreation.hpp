@@ -10,7 +10,7 @@ namespace JSONLib {
 // ==============
 // JNode Creation
 // ==============
-inline std::unique_ptr<JNode> makeObject(JNodeObject::ObjectList &objects) {
+inline std::unique_ptr<JNode> makeObject(JNodeObject::EntryList &objects) {
   return (std::make_unique<JNode>(
       JNode{std::make_unique<JNodeObject>(JNodeObject{objects})}));
 }

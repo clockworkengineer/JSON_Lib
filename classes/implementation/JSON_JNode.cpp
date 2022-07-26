@@ -42,38 +42,38 @@ namespace JSONLib {
 // ==================
 // Construct JSON array from initializer list
 JNode::JNode(const std::initializer_list<InternalTypes> &array) {
-  JNodeArray jNodeArray;
+  JNodeArray::ArrayList jNodeArrayList;
   for (const auto &entry : array) {
     if (const int *pint = std::get_if<int>(&entry)) {
-      jNodeArray.array().emplace_back(makeNumber(JNodeNumeric{*pint}));
+      jNodeArrayList.emplace_back(makeNumber(JNodeNumeric{*pint}));
     } else if (const long *plong = std::get_if<long>(&entry)) {
-      jNodeArray.array().emplace_back(makeNumber(JNodeNumeric{*plong}));
+      jNodeArrayList.emplace_back(makeNumber(JNodeNumeric{*plong}));
     } else if (const long long *plonglong = std::get_if<long long>(&entry)) {
-      jNodeArray.array().emplace_back(makeNumber(JNodeNumeric{*plonglong}));
+      jNodeArrayList.emplace_back(makeNumber(JNodeNumeric{*plonglong}));
     } else if (const float *pfloat = std::get_if<float>(&entry)) {
-      jNodeArray.array().emplace_back(makeNumber(JNodeNumeric{*pfloat}));
+      jNodeArrayList.emplace_back(makeNumber(JNodeNumeric{*pfloat}));
     } else if (const double *pdouble = std::get_if<double>(&entry)) {
-      jNodeArray.array().emplace_back(makeNumber(JNodeNumeric{*pdouble}));
+      jNodeArrayList.emplace_back(makeNumber(JNodeNumeric{*pdouble}));
     } else if (const long double *plongdouble =
                    std::get_if<long double>(&entry)) {
-      jNodeArray.array().emplace_back(makeNumber(JNodeNumeric{*plongdouble}));
+      jNodeArrayList.emplace_back(makeNumber(JNodeNumeric{*plongdouble}));
     } else if (const std::string *pstring = std::get_if<std::string>(&entry)) {
-      jNodeArray.array().emplace_back(makeString(*pstring));
+      jNodeArrayList.emplace_back(makeString(*pstring));
     } else if (const bool *pboolean = std::get_if<bool>(&entry)) {
-      jNodeArray.array().emplace_back(makeBoolean(*pboolean));
+      jNodeArrayList.emplace_back(makeBoolean(*pboolean));
     } else if (const std::nullptr_t *pnull =
                    std::get_if<std::nullptr_t>(&entry)) {
-      jNodeArray.array().emplace_back(makeNull());
+      jNodeArrayList.emplace_back(makeNull());
     }
   }
-  m_jNodeVariant = std::make_unique<JNodeArray>(std::move(jNodeArray));
+  std::swap(*this, *makeArray(jNodeArrayList));
 }
 // Construct JSON object from initializer list
 JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
                  &object) {
-  JNodeObject::ObjectList jObjectList;
-  JNodeObject::Entry jNodeObjectEntry;
+  JNodeObject::EntryList jObjectList;
   for (const auto &entry : object) {
+    JNodeObject::Entry jNodeObjectEntry;
     jNodeObjectEntry.key = entry.first;
     if (const int *pint = std::get_if<int>(&entry.second)) {
       jNodeObjectEntry.value = makeNumber(JNodeNumeric{*pint});

@@ -37,10 +37,10 @@ struct JNodeObject : JNodeVariant {
     JNode::Ptr value;
   };
   // Object entry list
-  using ObjectList = std::vector<JNodeObject::Entry>;
+  using EntryList = std::vector<JNodeObject::Entry>;
   // Constructors/Destructors
   JNodeObject() : JNodeVariant(JNodeType::object) {}
-  explicit JNodeObject(ObjectList &objects)
+  explicit JNodeObject(EntryList &objects)
       : JNodeVariant(JNodeType::object), m_jsonObjects(std::move(objects)) {}
   JNodeObject(const JNodeObject &other) = delete;
   JNodeObject &operator=(const JNodeObject &other) = delete;
@@ -48,9 +48,9 @@ struct JNodeObject : JNodeVariant {
   JNodeObject &operator=(JNodeObject &&other) = default;
   ~JNodeObject() = default;
   // Search for a given entry given a key and object list
-  static auto findKey(const std::string &key, const ObjectList &objects) {
+  static auto findKey(const std::string &key, const EntryList &objects) {
     auto entry = std::find_if(objects.begin(), objects.end(),
-                              [&key](const JNodeObject::Entry &entry) -> bool {
+                              [&key](const Entry &entry) -> bool {
                                 return (entry.key == key);
                               });
     if (entry == objects.end()) {
@@ -83,11 +83,11 @@ struct JNodeObject : JNodeVariant {
     return (*(findKey(key, m_jsonObjects)->value));
   }
   // Return reference to base of object entries
-  ObjectList &objects() { return (m_jsonObjects); }
-  [[nodiscard]] const ObjectList &objects() const { return (m_jsonObjects); }
+  EntryList &objects() { return (m_jsonObjects); }
+  [[nodiscard]] const EntryList &objects() const { return (m_jsonObjects); }
 
 private:
-  ObjectList m_jsonObjects;
+  EntryList m_jsonObjects;
 };
 // =====
 // Array

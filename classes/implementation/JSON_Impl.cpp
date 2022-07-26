@@ -144,7 +144,7 @@ JNode::Ptr JSON_Impl::parseNull(ISource &source) {
 /// <param name="source">Source of JSON.</param>
 /// <returns>Object JNode (key/value pairs).</returns>
 JNode::Ptr JSON_Impl::parseObject(ISource &source) {
-  JNodeObject::ObjectList objects;
+  JNodeObject::EntryList objects;
   source.next();
   source.ignoreWS();
   if (source.current() != '}') {

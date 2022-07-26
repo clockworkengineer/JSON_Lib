@@ -67,7 +67,7 @@ struct JNodeNumeric {
     throw Error("Could not convert unknown type.");
   }
   // Numeric types
-  enum class Type { Int = 0, Long, LLong, Float, Double, LDouble };
+  enum class Type { Unknown = 0, Int, Long, LLong, Float, Double, LDouble };
   // Numeric union
   union Numbers {
     int m_integer;
@@ -267,7 +267,7 @@ struct JNodeNumeric {
   }
 
 private:
-  Type m_type;
-  Numbers m_values;
+  Type m_type{Type::Unknown};
+  Numbers m_values{0};
 };
 } // namespace JSONLib
