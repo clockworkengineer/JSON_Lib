@@ -27,18 +27,17 @@ struct JNodeVariant {
 private:
   JNodeType m_nodeType;
 };
-
 // ======
 // Object
 // ======
 struct JNodeObject : JNodeVariant {
   // Object entry
-  struct ObjectEntry {
+  struct Entry {
     std::string key;
     JNode::Ptr value;
   };
   // Object entry list
-  using ObjectList = std::vector<JNodeObject::ObjectEntry>;
+  using ObjectList = std::vector<JNodeObject::Entry>;
   // Constructors/Destructors
   JNodeObject() : JNodeVariant(JNodeType::object) {}
   explicit JNodeObject(ObjectList &objects)
@@ -50,11 +49,10 @@ struct JNodeObject : JNodeVariant {
   ~JNodeObject() = default;
   // Search for a given entry given a key and object list
   static auto findKey(const std::string &key, const ObjectList &objects) {
-    auto entry =
-        std::find_if(objects.begin(), objects.end(),
-                     [&key](const JNodeObject::ObjectEntry &entry) -> bool {
-                       return (entry.key == key);
-                     });
+    auto entry = std::find_if(objects.begin(), objects.end(),
+                              [&key](const JNodeObject::Entry &entry) -> bool {
+                                return (entry.key == key);
+                              });
     if (entry == objects.end()) {
       throw JNode::Error("Invalid key used to access object.");
     }

@@ -34,7 +34,9 @@ public:
   // ======================
   // CONSTRUCTOR/DESTRUCTOR
   // ======================
+  // Pass in user defined converter here
   explicit JSON_Translator(const IConverter &converter);
+  // No other constructors supported
   JSON_Translator(const JSON_Translator &other) = delete;
   JSON_Translator &operator=(const JSON_Translator &other) = delete;
   JSON_Translator(JSON_Translator &&other) = delete;
@@ -43,8 +45,10 @@ public:
   // ==============
   // PUBLIC METHODS
   // ==============
+  // Convert to/from JSON escaped characters
   std::string fromJSON(const std::string &jsonString) override;
   std::string toJSON(const std::string &utf8String) override;
+  // Return true if character is a valid escape character
   bool validEscape(char escape) override;
   // ================
   // PUBLIC VARIABLES

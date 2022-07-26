@@ -3,7 +3,7 @@
 //
 // Description: JNode struct is used to hold the parsed JSON and model its
 // structure by arranging the JNodes in a tree; this can then be traversed to
-// reform the JSON during stringification.
+// reform the JSON text during stringification.
 //
 // Dependencies:   C20++ - Language standard features used.
 //
@@ -40,6 +40,7 @@ namespace JSONLib {
 // ==================
 // JNode constructors
 // ==================
+// Construct JSON array from initializer list
 JNode::JNode(const std::initializer_list<InternalTypes> &array) {
   JNodeArray jNodeArray;
   for (const auto &entry : array) {
@@ -67,10 +68,11 @@ JNode::JNode(const std::initializer_list<InternalTypes> &array) {
   }
   m_jNodeVariant = std::make_unique<JNodeArray>(std::move(jNodeArray));
 }
+// Construct JSON object from initializer list
 JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
                  &object) {
   JNodeObject::ObjectList jObjectList;
-  JNodeObject::ObjectEntry jNodeObjectEntry;
+  JNodeObject::Entry jNodeObjectEntry;
   for (const auto &entry : object) {
     jNodeObjectEntry.key = entry.first;
     if (const int *pint = std::get_if<int>(&entry.second)) {
@@ -110,7 +112,7 @@ JNode &JNode::operator[](const std::string &key) {
   if (this->getNodeType() == JNodeType::hole) {
     this->m_jNodeVariant = std::make_unique<JNodeObject>();
     JNodeRef<JNodeObject>(*this).objects().emplace_back(
-        JNodeObject::ObjectEntry{key, makeHole()});
+        JNodeObject::Entry{key, makeHole()});
     return (*JNodeRef<JNodeObject>(*this).objects().back().value);
   }
   return (JNodeRef<JNodeObject>(*this)[key]);

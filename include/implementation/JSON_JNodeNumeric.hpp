@@ -66,7 +66,7 @@ struct JNodeNumeric {
     }
     throw Error("Could not convert unknown type.");
   }
-  // Number type
+  // Numeric types
   enum class Type { Int = 0, Long, LLong, Float, Double, LDouble };
   // Numeric union
   union Numbers {

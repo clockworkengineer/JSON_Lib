@@ -1,9 +1,8 @@
 //
 // Class: JSON_Impl
 //
-// Description: JSON class implementation layer that implementations recursive
-// traversing to produce a JSON tree (parse) and also reconstitute the tree back
-// into raw JSON text (stringify).
+// Description: JSON class implementation layer that uses recursion to produce a JSON tree 
+// (parse) and also reconstitute the tree back into raw JSON text (stringify).
 //
 // Dependencies:   C20++ - Language standard features used.
 //
@@ -79,7 +78,7 @@ std::string JSON_Impl::extractString(ISource &source, bool translate) {
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Object key/value pair.</returns>
-JNodeObject::ObjectEntry JSON_Impl::parseKeyValuePair(ISource &source) {
+JNodeObject::Entry JSON_Impl::parseKeyValuePair(ISource &source) {
   source.ignoreWS();
   const std::string keyValue{extractString(source)};
   source.ignoreWS();
@@ -87,7 +86,7 @@ JNodeObject::ObjectEntry JSON_Impl::parseKeyValuePair(ISource &source) {
     throw Error("Syntax error detected.");
   }
   source.next();
-  return (JNodeObject::ObjectEntry{keyValue, parseJNodes(source)});
+  return (JNodeObject::Entry{keyValue, parseJNodes(source)});
 }
 /// <summary>
 /// Parse a string from a JSON source stream.
@@ -383,7 +382,7 @@ JNode &JSON_Impl::operator[](const std::string &key) {
   } catch ([[maybe_unused]] JNode::Error &error) {
     JNodeRef<JNodeObject>(*m_jNodeRoot)
         .objects()
-        .emplace_back(JNodeObject::ObjectEntry{key, makeHole()});
+        .emplace_back(JNodeObject::Entry{key, makeHole()});
     return (*JNodeRef<JNodeObject>(*m_jNodeRoot).objects().back().value);
   }
 }

@@ -44,6 +44,7 @@ public:
     return (m_bufferPosition < m_parseBuffer.size());
   }
   void backup(unsigned long length) override {
+    // Make sure to dont backup past the beginning
     if (length >= m_bufferPosition) {
       m_bufferPosition = 0;
     } else {
@@ -81,8 +82,8 @@ public:
   }
   bool more() const override { return (m_source.peek() != EOF); }
   void backup(unsigned long length) override {
-    if ((length <= m_source.tellg()) ||
-        (current() == (char)EOF)) {
+    // Make sure to dont backup past the beginning
+    if ((length <= m_source.tellg()) || (current() == (char)EOF)) {
       m_source.clear();
       m_source.seekg(-static_cast<long>(length), std::ios_base::cur);
     } else {
