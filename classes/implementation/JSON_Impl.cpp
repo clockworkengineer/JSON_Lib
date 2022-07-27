@@ -1,8 +1,9 @@
 //
 // Class: JSON_Impl
 //
-// Description: JSON class implementation layer that uses recursion to produce a JSON tree 
-// (parse) and also reconstitute the tree back into raw JSON text (stringify).
+// Description: JSON class implementation layer that uses recursion to produce a
+// JSON tree (parse) and also reconstitute the tree back into raw JSON text
+// (stringify).
 //
 // Dependencies:   C20++ - Language standard features used.
 //
@@ -11,7 +12,6 @@
 // =================
 #include "JSON_Impl.hpp"
 #include "JSON.hpp"
-
 // ====================
 // CLASS IMPLEMENTATION
 // ====================

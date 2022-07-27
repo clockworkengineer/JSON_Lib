@@ -249,18 +249,17 @@ struct JNodeNumeric {
   }
   // Get string representation of numeric
   [[nodiscard]] std::string getString() const {
-    switch (m_type) {
-    case Type::Int:
+    if (m_type == Type::Int) {
       return (numericToString(m_values.m_integer));
-    case Type::Long:
+    } else if (m_type == Type::Long) {
       return (numericToString(m_values.m_long));
-    case Type::LLong:
+    } else if (m_type == Type::LLong) {
       return (numericToString(m_values.m_llong));
-    case Type::Float:
+    } else if (m_type == Type::Float) {
       return (numericToString(m_values.m_float));
-    case Type::Double:
+    } else if (m_type == Type::Double) {
       return (numericToString(m_values.m_double));
-    case Type::LDouble:
+    } else if (m_type == Type::LDouble) {
       return (numericToString(m_values.m_ldouble));
     }
     throw Error("Could not convert unknown type.");
