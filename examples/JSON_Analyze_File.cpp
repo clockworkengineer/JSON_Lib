@@ -71,13 +71,13 @@ std::string prefixTestDataPath(const std::string &file) {
 /// <param name="jNodeDetails">result of JNode tree analysis</param>
 void outputAnalysis(const JNodeDetails &jNodeDetails) {
   PLOG_INFO << "--------------------JNode Sizes---------------------";
-  PLOG_INFO << "JNodeObject size " << sizeof(JNodeObject) << " in bytes.";
-  PLOG_INFO << "JNodeArray size " << sizeof(JNodeArray) << " in bytes.";
-  PLOG_INFO << "JNodeNumeric size " << sizeof(JNodeNumeric) << " in bytes.";
-  PLOG_INFO << "JNodeNumber size " << sizeof(JNodeNumber) << " in bytes.";
-  PLOG_INFO << "JNodeString size " << sizeof(JNodeString) << " in bytes.";
-  PLOG_INFO << "JNodeBoolean size " << sizeof(JNodeBoolean) << " in bytes.";
-  PLOG_INFO << "JNodeNull size " << sizeof(JNodeNull) << " in bytes.";
+  PLOG_INFO << "JNodeObject size " << sizeof(Object) << " in bytes.";
+  PLOG_INFO << "JNodeArray size " << sizeof(Array) << " in bytes.";
+  PLOG_INFO << "JNodeNumeric size " << sizeof(Numeric) << " in bytes.";
+  PLOG_INFO << "JNodeNumber size " << sizeof(Number) << " in bytes.";
+  PLOG_INFO << "JNodeString size " << sizeof(String) << " in bytes.";
+  PLOG_INFO << "JNodeBoolean size " << sizeof(Boolean) << " in bytes.";
+  PLOG_INFO << "JNodeNull size " << sizeof(Null) << " in bytes.";
   PLOG_INFO << "------------------JNode Tree Stats------------------";
   PLOG_INFO << "JNode Tree contains " << jNodeDetails.totalNodes << " nodes.";
   PLOG_INFO << "JNode Tree size " << jNodeDetails.sizeInBytes << " in bytes.";
@@ -104,41 +104,41 @@ void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails) {
   jNodeDetails.totalNodes++;
   switch (jNode.getNodeType()) {
   case JNodeType::number:
-    jNodeDetails.sizeInBytes += sizeof(JNodeNumber);
+    jNodeDetails.sizeInBytes += sizeof(Number);
     break;
   case JNodeType::string:
-    jNodeDetails.sizeInBytes += sizeof(JNodeString);
-    jNodeDetails.sizeInBytes += JNodeRef<JNodeString>(jNode).string().size();
-    jNodeDetails.unique_strings.insert(JNodeRef<JNodeString>(jNode).string());
+    jNodeDetails.sizeInBytes += sizeof(String);
+    jNodeDetails.sizeInBytes += JNodeRef<String>(jNode).string().size();
+    jNodeDetails.unique_strings.insert(JNodeRef<String>(jNode).string());
     jNodeDetails.totalStrings++;
     break;
   case JNodeType::boolean:
-    jNodeDetails.sizeInBytes += sizeof(JNodeBoolean);
+    jNodeDetails.sizeInBytes += sizeof(Boolean);
     break;
   case JNodeType::null:
-    jNodeDetails.sizeInBytes += sizeof(JNodeNull);
+    jNodeDetails.sizeInBytes += sizeof(Null);
     break;
   case JNodeType::object: {
-    jNodeDetails.sizeInBytes += sizeof(JNodeObject);
+    jNodeDetails.sizeInBytes += sizeof(Object);
     jNodeDetails.totalObjects++;
     jNodeDetails.maxObjectSize =
-        std::max(JNodeRef<JNodeObject>(jNode).objects().size(),
+        std::max(JNodeRef<Object>(jNode).objects().size(),
                  jNodeDetails.maxObjectSize);
-    for (auto &[key, jNodePtr] : JNodeRef<JNodeObject>(jNode).objects()) {
-      analyzeJNode(JNodeRef<JNodeObject>(jNode)[key], jNodeDetails);
+    for (auto &[key, jNodePtr] : JNodeRef<Object>(jNode).objects()) {
+      analyzeJNode(JNodeRef<Object>(jNode)[key], jNodeDetails);
       jNodeDetails.unique_keys.insert(key);
       jNodeDetails.sizeInBytes += key.size();
-      jNodeDetails.sizeInBytes += sizeof(JNodeObject::Entry);
+      jNodeDetails.sizeInBytes += sizeof(Object::Entry);
       jNodeDetails.totalKeys++;
     }
     break;
   }
   case JNodeType::array: {
-    jNodeDetails.sizeInBytes += sizeof(JNodeArray);
+    jNodeDetails.sizeInBytes += sizeof(Array);
     jNodeDetails.totalArrays++;
     jNodeDetails.maxArraySize =
-        std::max(JNodeRef<JNodeArray>(jNode).size(), jNodeDetails.maxArraySize);
-    for (auto &bNodeEntry : JNodeRef<JNodeArray>(jNode).array()) {
+        std::max(JNodeRef<Array>(jNode).size(), jNodeDetails.maxArraySize);
+    for (auto &bNodeEntry : JNodeRef<Array>(jNode).array()) {
       analyzeJNode(*bNodeEntry, jNodeDetails);
       jNodeDetails.sizeInBytes += sizeof(JNode::Ptr);
     }

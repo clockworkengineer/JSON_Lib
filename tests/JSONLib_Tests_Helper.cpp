@@ -58,15 +58,15 @@ void writeToFile(const std::string &jsonFileName, const std::string &jsonString)
 /// <returns></returns>
 void checkArray(const JNode &jNode) { // Array [\"Dog\",1964,true,null]
   REQUIRE(jNode.getNodeType() == JNodeType::array);
-  REQUIRE(JNodeRef<JNodeArray>(jNode).size() == 4);
+  REQUIRE(JNodeRef<Array>(jNode).size() == 4);
   REQUIRE(jNode[0].getNodeType() == JNodeType::string);
   REQUIRE(jNode[1].getNodeType() == JNodeType::number);
   REQUIRE(jNode[2].getNodeType() == JNodeType::boolean);
   REQUIRE(jNode[3].getNodeType() == JNodeType::null);
-  REQUIRE(JNodeRef<JNodeString>(jNode[0]).string() == "Dog");
-  REQUIRE(JNodeRef<JNodeNumber>(jNode[1]).toString() == "1964");
-  REQUIRE(JNodeRef<JNodeBoolean>(jNode[2]).boolean() == true);
-  REQUIRE(JNodeRef<JNodeNull>(jNode[3]).null() == nullptr);
+  REQUIRE(JNodeRef<String>(jNode[0]).string() == "Dog");
+  REQUIRE(JNodeRef<Number>(jNode[1]).toString() == "1964");
+  REQUIRE(JNodeRef<Boolean>(jNode[2]).boolean() == true);
+  REQUIRE(JNodeRef<Null>(jNode[3]).null() == nullptr);
 }
 /// <summary>
 /// Verify that an JNodeObjectData has the correct parsed format.
@@ -76,13 +76,13 @@ void checkArray(const JNode &jNode) { // Array [\"Dog\",1964,true,null]
 void checkObject(
     const JNode &jNode) { // {\"City\":\"Southampton\",\"Population\":500000}
   REQUIRE(jNode.getNodeType() == JNodeType::object);
-  REQUIRE(JNodeRef<JNodeObject>(jNode).size() == 2);
-  REQUIRE(JNodeRef<JNodeObject>(jNode).contains("City"));
-  REQUIRE(JNodeRef<JNodeObject>(jNode).contains("Population"));
+  REQUIRE(JNodeRef<Object>(jNode).size() == 2);
+  REQUIRE(JNodeRef<Object>(jNode).contains("City"));
+  REQUIRE(JNodeRef<Object>(jNode).contains("Population"));
   REQUIRE(jNode["City"].getNodeType() == JNodeType::string);
   REQUIRE(jNode["Population"].getNodeType() == JNodeType::number);
-  REQUIRE(JNodeRef<JNodeString>(jNode["City"]).string() == "Southampton");
-  REQUIRE(JNodeRef<JNodeNumber>(jNode["Population"]).toString() == "500000");
+  REQUIRE(JNodeRef<String>(jNode["City"]).string() == "Southampton");
+  REQUIRE(JNodeRef<Number>(jNode["Population"]).toString() == "500000");
 }
 /// <summary>
 /// Strip white space from source JSON and place remainder in destination.

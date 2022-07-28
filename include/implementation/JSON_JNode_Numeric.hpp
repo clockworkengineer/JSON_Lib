@@ -21,7 +21,7 @@ concept Float = std::is_floating_point<T>::value;
 // =============
 // JNode Numeric
 // =============
-struct JNodeNumeric {
+struct Numeric {
   // Shortened type names
   using llong = long long;
   using ldouble = long double;
@@ -78,39 +78,39 @@ struct JNodeNumeric {
     ldouble m_ldouble;
   };
   // Constructors/Destructors
-  JNodeNumeric() = default;
-  explicit JNodeNumeric(const std::string &number) {
+  Numeric() = default;
+  explicit Numeric(const std::string &number) {
     [[maybe_unused]] auto valid = setValidNumber(number);
   }
-  explicit JNodeNumeric(int integer) {
+  explicit Numeric(int integer) {
     m_values.m_integer = integer;
     m_type = Type::Int;
   }
-  explicit JNodeNumeric(long integer) {
+  explicit Numeric(long integer) {
     m_values.m_long = integer;
     m_type = Type::Long;
   }
-  explicit JNodeNumeric(llong integer) {
+  explicit Numeric(llong integer) {
     m_values.m_llong = integer;
     m_type = Type::LLong;
   }
-  explicit JNodeNumeric(float floatingPoint) {
+  explicit Numeric(float floatingPoint) {
     m_values.m_float = floatingPoint;
     m_type = Type::Float;
   }
-  explicit JNodeNumeric(double floatingPoint) {
+  explicit Numeric(double floatingPoint) {
     m_values.m_double = floatingPoint;
     m_type = Type::Double;
   }
-  explicit JNodeNumeric(ldouble floatingPoint) {
+  explicit Numeric(ldouble floatingPoint) {
     m_values.m_ldouble = floatingPoint;
     m_type = Type::LDouble;
   }
-  JNodeNumeric(const JNodeNumeric &other) = default;
-  JNodeNumeric &operator=(const JNodeNumeric &other) = default;
-  JNodeNumeric(JNodeNumeric &&other) = default;
-  JNodeNumeric &operator=(JNodeNumeric &&other) = default;
-  ~JNodeNumeric() = default;
+  Numeric(const Numeric &other) = default;
+  Numeric &operator=(const Numeric &other) = default;
+  Numeric(Numeric &&other) = default;
+  Numeric &operator=(Numeric &&other) = default;
+  ~Numeric() = default;
   // Is character a valid numeric character ?
   // Includes possible sign, decimal point or exponent
   [[nodiscard]] static bool isValidNumericChar(char ch) {

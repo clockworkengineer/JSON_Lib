@@ -30,10 +30,10 @@ set (JSON_INCLUDES
     ./include/JSON.hpp
     ./include/implementation/JSON_Types.hpp
     ./include/implementation/JSON_Error.hpp
-    ./include/implementation/JSON_JNodeNumeric.hpp
     ./include/implementation/JSON_JNode.hpp
-    ./include/implementation/JSON_JNodeVariant.hpp
-    ./include/implementation/JSON_JNodeCreation.hpp
+    ./include/implementation/JSON_JNode_Numeric.hpp
+    ./include/implementation/JSON_JNode_Variant.hpp
+    ./include/implementation/JSON_JNode_Creation.hpp
     ./include/implementation/JSON_Impl.hpp
     ./include/implementation/JSON_Sources.hpp
     ./include/implementation/JSON_Destinations.hpp

@@ -14,15 +14,15 @@ namespace JSONLib {
 // ====
 // Base
 // ====
-struct JNodeVariant {
-  explicit JNodeVariant(JNodeType nodeType = JNodeType::base)
+struct Variant {
+  explicit Variant(JNodeType nodeType = JNodeType::base)
       : m_nodeType(nodeType) {}
   [[nodiscard]] JNodeType getNodeType() const { return (m_nodeType); }
-  JNodeVariant(const JNodeVariant &other) = delete;
-  JNodeVariant &operator=(const JNodeVariant &other) = delete;
-  JNodeVariant(JNodeVariant &&other) = default;
-  JNodeVariant &operator=(JNodeVariant &&other) = default;
-  ~JNodeVariant() = default;
+  Variant(const Variant &other) = delete;
+  Variant &operator=(const Variant &other) = delete;
+  Variant(Variant &&other) = default;
+  Variant &operator=(Variant &&other) = default;
+  ~Variant() = default;
 
 private:
   JNodeType m_nodeType;
@@ -30,23 +30,23 @@ private:
 // ======
 // Object
 // ======
-struct JNodeObject : JNodeVariant {
+struct Object : Variant {
   // Object entry
   struct Entry {
     std::string key;
     JNode::Ptr value;
   };
   // Object entry list
-  using EntryList = std::vector<JNodeObject::Entry>;
+  using EntryList = std::vector<Object::Entry>;
   // Constructors/Destructors
-  JNodeObject() : JNodeVariant(JNodeType::object) {}
-  explicit JNodeObject(EntryList &objects)
-      : JNodeVariant(JNodeType::object), m_jsonObjects(std::move(objects)) {}
-  JNodeObject(const JNodeObject &other) = delete;
-  JNodeObject &operator=(const JNodeObject &other) = delete;
-  JNodeObject(JNodeObject &&other) = default;
-  JNodeObject &operator=(JNodeObject &&other) = default;
-  ~JNodeObject() = default;
+  Object() : Variant(JNodeType::object) {}
+  explicit Object(EntryList &objects)
+      : Variant(JNodeType::object), m_jsonObjects(std::move(objects)) {}
+  Object(const Object &other) = delete;
+  Object &operator=(const Object &other) = delete;
+  Object(Object &&other) = default;
+  Object &operator=(Object &&other) = default;
+  ~Object() = default;
   // Search for a given entry given a key and object list
   static auto findKey(const std::string &key, const EntryList &objects) {
     auto entry = std::find_if(objects.begin(), objects.end(),
@@ -92,18 +92,18 @@ private:
 // =====
 // Array
 // =====
-struct JNodeArray : JNodeVariant {
+struct Array : Variant {
   // Array entry list
   using ArrayList = std::vector<JNode::Ptr>;
   // Constructors/Destructors
-  JNodeArray() : JNodeVariant(JNodeType::array) {}
-  explicit JNodeArray(ArrayList &array)
-      : JNodeVariant(JNodeType::array), m_jsonArray(std::move(array)) {}
-  JNodeArray(const JNodeArray &other) = delete;
-  JNodeArray &operator=(const JNodeArray &other) = delete;
-  JNodeArray(JNodeArray &&other) = default;
-  JNodeArray &operator=(JNodeArray &&other) = default;
-  ~JNodeArray() = default;
+  Array() : Variant(JNodeType::array) {}
+  explicit Array(ArrayList &array)
+      : Variant(JNodeType::array), m_jsonArray(std::move(array)) {}
+  Array(const Array &other) = delete;
+  Array &operator=(const Array &other) = delete;
+  Array(Array &&other) = default;
+  Array &operator=(Array &&other) = default;
+  ~Array() = default;
   // Return the size of array
   [[nodiscard]] std::size_t size() const { return (m_jsonArray.size()); }
   // Return reference to array base
@@ -129,40 +129,40 @@ private:
 // ======
 // Number
 // ======
-struct JNodeNumber : JNodeVariant {
+struct Number : Variant {
   // Constructors/Destructors
-  JNodeNumber() : JNodeVariant(JNodeType::number) {}
-  explicit JNodeNumber(const JNodeNumeric &number)
-      : JNodeVariant(JNodeType::number), m_jsonNumber(number) {}
-  JNodeNumber(const JNodeNumber &other) = delete;
-  JNodeNumber &operator=(const JNodeNumber &other) = delete;
-  JNodeNumber(JNodeNumber &&other) = default;
-  JNodeNumber &operator=(JNodeNumber &&other) = default;
-  ~JNodeNumber() = default;
+  Number() : Variant(JNodeType::number) {}
+  explicit Number(const Numeric &number)
+      : Variant(JNodeType::number), m_jsonNumber(number) {}
+  Number(const Number &other) = delete;
+  Number &operator=(const Number &other) = delete;
+  Number(Number &&other) = default;
+  Number &operator=(Number &&other) = default;
+  ~Number() = default;
   // Return reference to number string
-  [[nodiscard]] JNodeNumeric &number() { return (m_jsonNumber); }
-  [[nodiscard]] const JNodeNumeric &number() const { return (m_jsonNumber); }
+  [[nodiscard]] Numeric &number() { return (m_jsonNumber); }
+  [[nodiscard]] const Numeric &number() const { return (m_jsonNumber); }
   // Convert number to string
   [[nodiscard]] std::string toString() const {
     return (m_jsonNumber.getString());
   }
 
 private:
-  JNodeNumeric m_jsonNumber{};
+  Numeric m_jsonNumber{};
 };
 // ======
 // String
 // ======
-struct JNodeString : JNodeVariant {
+struct String : Variant {
   // Constructors/Destructors
-  JNodeString() : JNodeVariant(JNodeType::string) {}
-  explicit JNodeString(std::string string)
-      : JNodeVariant(JNodeType::string), m_jsonString(std::move(string)) {}
-  JNodeString(const JNodeString &other) = delete;
-  JNodeString &operator=(const JNodeString &other) = delete;
-  JNodeString(JNodeString &&other) = default;
-  JNodeString &operator=(JNodeString &&other) = default;
-  ~JNodeString() = default;
+  String() : Variant(JNodeType::string) {}
+  explicit String(std::string string)
+      : Variant(JNodeType::string), m_jsonString(std::move(string)) {}
+  String(const String &other) = delete;
+  String &operator=(const String &other) = delete;
+  String(String &&other) = default;
+  String &operator=(String &&other) = default;
+  ~String() = default;
   // Return reference to string
   std::string &string() { return (m_jsonString); }
   [[nodiscard]] const std::string &string() const { return (m_jsonString); }
@@ -175,16 +175,16 @@ private:
 // =======
 // Boolean
 // =======
-struct JNodeBoolean : JNodeVariant {
+struct Boolean : Variant {
   // Constructors/Destructors
-  JNodeBoolean() : JNodeVariant(JNodeType::boolean) {}
-  explicit JNodeBoolean(bool boolean)
-      : JNodeVariant(JNodeType::boolean), m_jsonBoolean(boolean) {}
-  JNodeBoolean(const JNodeBoolean &other) = delete;
-  JNodeBoolean &operator=(const JNodeBoolean &other) = delete;
-  JNodeBoolean(JNodeBoolean &&other) = default;
-  JNodeBoolean &operator=(JNodeBoolean &&other) = default;
-  ~JNodeBoolean() = default;
+  Boolean() : Variant(JNodeType::boolean) {}
+  explicit Boolean(bool boolean)
+      : Variant(JNodeType::boolean), m_jsonBoolean(boolean) {}
+  Boolean(const Boolean &other) = delete;
+  Boolean &operator=(const Boolean &other) = delete;
+  Boolean(Boolean &&other) = default;
+  Boolean &operator=(Boolean &&other) = default;
+  ~Boolean() = default;
   // Return boolean value
   [[nodiscard]] bool boolean() const { return (m_jsonBoolean); }
   // Return string representation of boolean value
@@ -198,14 +198,14 @@ private:
 // ====
 // Null
 // ====
-struct JNodeNull : JNodeVariant {
+struct Null : Variant {
   // Constructors/Destructors
-  JNodeNull() : JNodeVariant(JNodeType::null) {}
-  JNodeNull(const JNodeNull &other) = delete;
-  JNodeNull &operator=(const JNodeNull &other) = delete;
-  JNodeNull(JNodeNull &&other) = default;
-  JNodeNull &operator=(JNodeNull &&other) = default;
-  ~JNodeNull() = default;
+  Null() : Variant(JNodeType::null) {}
+  Null(const Null &other) = delete;
+  Null &operator=(const Null &other) = delete;
+  Null(Null &&other) = default;
+  Null &operator=(Null &&other) = default;
+  ~Null() = default;
   // Return null value
   [[nodiscard]] void *null() const { return (nullptr); }
   // Return string representation of null value
@@ -214,41 +214,41 @@ struct JNodeNull : JNodeVariant {
 // ====
 // Hole
 // ====
-struct JNodeHole : JNodeVariant {
+struct Hole : Variant {
   // Constructors/Destructors
-  JNodeHole() : JNodeVariant(JNodeType::hole) {}
-  JNodeHole(const JNodeHole &other) = delete;
-  JNodeHole &operator=(const JNodeHole &other) = delete;
-  JNodeHole(JNodeHole &&other) = default;
-  JNodeHole &operator=(JNodeHole &&other) = default;
-  ~JNodeHole() = default;
+  Hole() : Variant(JNodeType::hole) {}
+  Hole(const Hole &other) = delete;
+  Hole &operator=(const Hole &other) = delete;
+  Hole(Hole &&other) = default;
+  Hole &operator=(Hole &&other) = default;
+  ~Hole() = default;
   [[nodiscard]] std::string toString() const { return ("null"); }
 };
 // =========================
 // JNode reference converter
 // =========================
-template <typename T> void CheckJNodeType(const JNodeVariant &jNodeVariant) {
-  if constexpr (std::is_same_v<T, JNodeString>) {
+template <typename T> void CheckJNodeType(const Variant &jNodeVariant) {
+  if constexpr (std::is_same_v<T, String>) {
     if (jNodeVariant.getNodeType() != JNodeType::string) {
       throw JNode::Error("Node not a string.");
     }
-  } else if constexpr (std::is_same_v<T, JNodeNumber>) {
+  } else if constexpr (std::is_same_v<T, Number>) {
     if (jNodeVariant.getNodeType() != JNodeType::number) {
       throw JNode::Error("Node not a number.");
     }
-  } else if constexpr (std::is_same_v<T, JNodeArray>) {
+  } else if constexpr (std::is_same_v<T, Array>) {
     if (jNodeVariant.getNodeType() != JNodeType::array) {
       throw JNode::Error("Node not an array.");
     }
-  } else if constexpr (std::is_same_v<T, JNodeObject>) {
+  } else if constexpr (std::is_same_v<T, Object>) {
     if (jNodeVariant.getNodeType() != JNodeType::object) {
       throw JNode::Error("Node not an object.");
     }
-  } else if constexpr (std::is_same_v<T, JNodeBoolean>) {
+  } else if constexpr (std::is_same_v<T, Boolean>) {
     if (jNodeVariant.getNodeType() != JNodeType::boolean) {
       throw JNode::Error("Node not an boolean.");
     }
-  } else if constexpr (std::is_same_v<T, JNodeNull>) {
+  } else if constexpr (std::is_same_v<T, Null>) {
     if (jNodeVariant.getNodeType() != JNodeType::null) {
       throw JNode::Error("Node not a null.");
     }

@@ -26,7 +26,7 @@ enum class JNodeType {
 // =====
 // JNode
 // =====
-struct JNodeVariant;
+struct Variant;
 struct JNode {
   // Pointer to JNode
   using Ptr = std::unique_ptr<JNode>;
@@ -40,7 +40,7 @@ struct JNode {
         : std::runtime_error("JNode Error: " + message) {}
   };
   // Constructors/Destructors
-  explicit JNode(std::unique_ptr<JNodeVariant> jNodeVariant)
+  explicit JNode(std::unique_ptr<Variant> jNodeVariant)
       : m_jNodeVariant(std::move(jNodeVariant)) {}
   JNode(const std::initializer_list<InternalTypes> &array);
   JNode(
@@ -69,10 +69,10 @@ struct JNode {
   // Get JNode type
   [[nodiscard]] JNodeType getNodeType() const;
   // Get reference to JNodeVariant
-  [[nodiscard]] std::unique_ptr<JNodeVariant> &getJNodeVariant();
-  [[nodiscard]] const std::unique_ptr<JNodeVariant> &getJNodeVariant() const;
+  [[nodiscard]] std::unique_ptr<Variant> &getJNodeVariant();
+  [[nodiscard]] const std::unique_ptr<Variant> &getJNodeVariant() const;
 
 private:
-  std::unique_ptr<JNodeVariant> m_jNodeVariant;
+  std::unique_ptr<Variant> m_jNodeVariant;
 };
 } // namespace JSONLib

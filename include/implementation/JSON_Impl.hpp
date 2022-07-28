@@ -77,7 +77,7 @@ private:
   // ===============
   // Parse JSON
   static std::string extractString(ISource &source, bool translate = true);
-  static JNodeObject::Entry parseKeyValuePair(ISource &source);
+  static Object::Entry parseKeyValuePair(ISource &source);
   static JNode::Ptr parseString(ISource &source);
   static JNode::Ptr parseNumber(ISource &source);
   static JNode::Ptr parseBoolean(ISource &source);
