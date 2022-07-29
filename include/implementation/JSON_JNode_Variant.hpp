@@ -17,7 +17,7 @@ namespace JSONLib {
 struct Variant {
   explicit Variant(JNodeType nodeType = JNodeType::base)
       : m_nodeType(nodeType) {}
-  [[nodiscard]] JNodeType getNodeType() const { return (m_nodeType); }
+  [[nodiscard]] JNodeType getType() const { return (m_nodeType); }
   Variant(const Variant &other) = delete;
   Variant &operator=(const Variant &other) = delete;
   Variant(Variant &&other) = default;
@@ -34,7 +34,7 @@ struct Object : Variant {
   // Object entry
   struct Entry {
     std::string key;
-    JNode::Ptr value;
+    JNode value;
   };
   // Object entry list
   using EntryList = std::vector<Object::Entry>;
@@ -48,11 +48,19 @@ struct Object : Variant {
   Object &operator=(Object &&other) = default;
   ~Object() = default;
   // Search for a given entry given a key and object list
-  static auto findKey(const std::string &key, const EntryList &objects) {
-    auto entry = std::find_if(objects.begin(), objects.end(),
-                              [&key](const Entry &entry) -> bool {
-                                return (entry.key == key);
-                              });
+  auto findKey(const std::string &key, EntryList &objects) {
+    auto entry = std::find_if(
+        objects.begin(), objects.end(),
+        [&key](const Entry &entry) -> bool { return (entry.key == key); });
+    if (entry == objects.end()) {
+      throw JNode::Error("Invalid key used to access object.");
+    }
+    return (entry);
+  }
+  auto findKey(const std::string &key, const EntryList &objects) const {
+    auto entry = std::find_if(
+        objects.begin(), objects.end(),
+        [&key](const Entry &entry) -> bool { return (entry.key == key); });
     if (entry == objects.end()) {
       throw JNode::Error("Invalid key used to access object.");
     }
@@ -77,10 +85,10 @@ struct Object : Variant {
   }
   // Return object entry for a given key
   JNode &operator[](const std::string &key) {
-    return (*(findKey(key, m_jsonObjects)->value));
+    return (findKey(key, m_jsonObjects)->value);
   }
   const JNode &operator[](const std::string &key) const {
-    return (*(findKey(key, m_jsonObjects)->value));
+    return (findKey(key, m_jsonObjects)->value);
   }
   // Return reference to base of object entries
   EntryList &objects() { return (m_jsonObjects); }
@@ -94,7 +102,7 @@ private:
 // =====
 struct Array : Variant {
   // Array entry list
-  using ArrayList = std::vector<JNode::Ptr>;
+  using ArrayList = std::vector<JNode>;
   // Constructors/Destructors
   Array() : Variant(JNodeType::array) {}
   explicit Array(ArrayList &array)
@@ -112,13 +120,13 @@ struct Array : Variant {
   // Array indexing operators
   JNode &operator[](std::size_t index) {
     if ((index >= 0) && (index < (static_cast<int>(m_jsonArray.size())))) {
-      return (*m_jsonArray[index]);
+      return (m_jsonArray[index]);
     }
     throw JNode::Error("Invalid index used to access array.");
   }
   const JNode &operator[](std::size_t index) const {
     if ((index >= 0) && (index < (static_cast<int>(m_jsonArray.size())))) {
-      return (*m_jsonArray[index]);
+      return (m_jsonArray[index]);
     }
     throw JNode::Error("Invalid index used to access array.");
   }
@@ -229,37 +237,37 @@ struct Hole : Variant {
 // =========================
 template <typename T> void CheckJNodeType(const Variant &jNodeVariant) {
   if constexpr (std::is_same_v<T, String>) {
-    if (jNodeVariant.getNodeType() != JNodeType::string) {
+    if (jNodeVariant.getType() != JNodeType::string) {
       throw JNode::Error("Node not a string.");
     }
   } else if constexpr (std::is_same_v<T, Number>) {
-    if (jNodeVariant.getNodeType() != JNodeType::number) {
+    if (jNodeVariant.getType() != JNodeType::number) {
       throw JNode::Error("Node not a number.");
     }
   } else if constexpr (std::is_same_v<T, Array>) {
-    if (jNodeVariant.getNodeType() != JNodeType::array) {
+    if (jNodeVariant.getType() != JNodeType::array) {
       throw JNode::Error("Node not an array.");
     }
   } else if constexpr (std::is_same_v<T, Object>) {
-    if (jNodeVariant.getNodeType() != JNodeType::object) {
+    if (jNodeVariant.getType() != JNodeType::object) {
       throw JNode::Error("Node not an object.");
     }
   } else if constexpr (std::is_same_v<T, Boolean>) {
-    if (jNodeVariant.getNodeType() != JNodeType::boolean) {
+    if (jNodeVariant.getType() != JNodeType::boolean) {
       throw JNode::Error("Node not an boolean.");
     }
   } else if constexpr (std::is_same_v<T, Null>) {
-    if (jNodeVariant.getNodeType() != JNodeType::null) {
+    if (jNodeVariant.getType() != JNodeType::null) {
       throw JNode::Error("Node not a null.");
     }
   }
 }
 template <typename T> T &JNodeRef(JNode &jNode) {
-  CheckJNodeType<T>(*jNode.getJNodeVariant());
-  return (static_cast<T &>(*jNode.getJNodeVariant()));
+  CheckJNodeType<T>(*jNode.getVariant());
+  return (static_cast<T &>(*jNode.getVariant()));
 }
 template <typename T> const T &JNodeRef(const JNode &jNode) {
-  CheckJNodeType<T>(*jNode.getJNodeVariant());
-  return (static_cast<const T &>(*jNode.getJNodeVariant()));
+  CheckJNodeType<T>(*jNode.getVariant());
+  return (static_cast<const T &>(*jNode.getVariant()));
 }
 } // namespace JSONLib

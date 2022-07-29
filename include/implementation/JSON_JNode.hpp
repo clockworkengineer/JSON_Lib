@@ -40,11 +40,12 @@ struct JNode {
         : std::runtime_error("JNode Error: " + message) {}
   };
   // Constructors/Destructors
+  JNode() = default;
   explicit JNode(std::unique_ptr<Variant> jNodeVariant)
       : m_jNodeVariant(std::move(jNodeVariant)) {}
   JNode(const std::initializer_list<InternalTypes> &array);
-  JNode(
-      const std::initializer_list<std::pair<std::string, InternalTypes>> &object);
+  JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
+            &object);
   JNode(const JNode &other) = delete;
   JNode &operator=(const JNode &other) = delete;
   JNode(JNode &&other) = default;
@@ -66,11 +67,11 @@ struct JNode {
   const JNode &operator[](const std::string &key) const;
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
-  // Get JNode type
-  [[nodiscard]] JNodeType getNodeType() const;
-  // Get reference to JNodeVariant
-  [[nodiscard]] std::unique_ptr<Variant> &getJNodeVariant();
-  [[nodiscard]] const std::unique_ptr<Variant> &getJNodeVariant() const;
+  // Get JNode variant type
+  [[nodiscard]] JNodeType getType() const;
+  // Get reference to JNode variant
+  [[nodiscard]] std::unique_ptr<Variant> &getVariant();
+  [[nodiscard]] const std::unique_ptr<Variant> &getVariant() const;
 
 private:
   std::unique_ptr<Variant> m_jNodeVariant;

@@ -57,8 +57,8 @@ public:
   void translator(ITranslator *translator);
   void converter(IConverter *converter);
   // Get root of JSON tree
-  [[nodiscard]] JNode &root() { return (*m_jNodeRoot); }
-  [[nodiscard]] const JNode &root() const { return (*m_jNodeRoot); }
+  [[nodiscard]] JNode &root() { return (m_jNodeRoot); }
+  [[nodiscard]] const JNode &root() const { return (m_jNodeRoot); }
   // Search for JSON object entry with a given key
   JNode &operator[](const std::string &key);
   const JNode &operator[](const std::string &key) const;
@@ -78,13 +78,13 @@ private:
   // Parse JSON
   static std::string extractString(ISource &source, bool translate = true);
   static Object::Entry parseKeyValuePair(ISource &source);
-  static JNode::Ptr parseString(ISource &source);
-  static JNode::Ptr parseNumber(ISource &source);
-  static JNode::Ptr parseBoolean(ISource &source);
-  static JNode::Ptr parseNull(ISource &source);
-  static JNode::Ptr parseObject(ISource &source);
-  static JNode::Ptr parseArray(ISource &source);
-  static JNode::Ptr parseJNodes(ISource &source);
+  static JNode parseString(ISource &source);
+  static JNode parseNumber(ISource &source);
+  static JNode parseBoolean(ISource &source);
+  static JNode parseNull(ISource &source);
+  static JNode parseObject(ISource &source);
+  static JNode parseArray(ISource &source);
+  static JNode parseJNodes(ISource &source);
   // Produce JSON test string from JSON tree
   static void stringifyJNodes(const JNode &jNode, IDestination &destination);
   // Remove JSON whitespace
@@ -93,7 +93,7 @@ private:
   // PRIVATE VARIABLES
   // =================
   // Root of JSON tree
-  std::unique_ptr<JNode> m_jNodeRoot;
+  JNode m_jNodeRoot;
   // Pointer to JSON translator interface
   inline static std::unique_ptr<ITranslator> m_translator;
   // Pointer to character conversion interface

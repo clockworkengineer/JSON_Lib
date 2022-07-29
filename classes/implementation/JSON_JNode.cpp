@@ -66,7 +66,8 @@ JNode::JNode(const std::initializer_list<InternalTypes> &array) {
       jNodeArrayList.emplace_back(makeNull());
     }
   }
-  std::swap(*this, *makeArray(jNodeArrayList));
+  JNode jNode{makeArray(jNodeArrayList)};
+  std::swap(*this, jNode);
 }
 // Construct JSON object from initializer list
 JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
@@ -100,7 +101,8 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
     }
     jObjectList.emplace_back(std::move(jNodeObjectEntry));
   }
-  std::swap(*this, *makeObject(jObjectList));
+  JNode jNode{makeObject(jObjectList)};
+  std::swap(*this, jNode);
 }
 // =====================
 // JNode index overloads
@@ -109,11 +111,11 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
 // Object
 // ======
 JNode &JNode::operator[](const std::string &key) {
-  if (this->getNodeType() == JNodeType::hole) {
+  if (this->getType() == JNodeType::hole) {
     this->m_jNodeVariant = std::make_unique<Object>();
     JNodeRef<Object>(*this).objects().emplace_back(
         Object::Entry{key, makeHole()});
-    return (*JNodeRef<Object>(*this).objects().back().value);
+    return (JNodeRef<Object>(*this).objects().back().value);
   }
   return (JNodeRef<Object>(*this)[key]);
 }
@@ -125,7 +127,7 @@ const JNode &JNode::operator[](const std::string &key) const {
 // =====
 JNode &JNode::operator[](std::size_t index) {
   try {
-    if (this->getNodeType() == JNodeType::hole) {
+    if (this->getType() == JNodeType::hole) {
       this->m_jNodeVariant = std::make_unique<Array>();
     }
     return (JNodeRef<Array>(*this)[index]);
@@ -133,7 +135,7 @@ JNode &JNode::operator[](std::size_t index) {
     JNodeRef<Array>(*this).array().resize(index + 1);
     JNodeRef<Array>(*this).array()[index] = makeHole();
     for (auto &entry : JNodeRef<Array>(*this).array()) {
-      if (entry == nullptr) {
+      if (entry.getVariant() == nullptr) {
         entry = makeHole();
       }
     }
@@ -147,56 +149,64 @@ const JNode &JNode::operator[](std::size_t index) const {
 // JNode assignment operators
 // ==========================
 JNode &JNode::operator=(float floatingPoint) {
-  std::swap(*this, *makeNumber(Numeric{floatingPoint}));
+  JNode jNode{makeNumber(Numeric{floatingPoint})};
+  std::swap(*this, jNode);
   return (*this);
 }
 JNode &JNode::operator=(double floatingPoint) {
-  std::swap(*this, *makeNumber(Numeric{floatingPoint}));
+  JNode jNode{makeNumber(Numeric{floatingPoint})};
+  std::swap(*this, jNode);
   return (*this);
 }
 JNode &JNode::operator=(long double floatingPoint) {
-  std::swap(*this, *makeNumber(Numeric{floatingPoint}));
+  JNode jNode{makeNumber(Numeric{floatingPoint})};
+  std::swap(*this, jNode);
   return (*this);
 }
 JNode &JNode::operator=(int integer) {
-  std::swap(*this, *makeNumber(Numeric{integer}));
+  JNode jNode{makeNumber(Numeric{integer})};
+  std::swap(*this, jNode);
   return (*this);
 }
 JNode &JNode::operator=(long integer) {
-  std::swap(*this, *makeNumber(Numeric{integer}));
+  JNode jNode{makeNumber(Numeric{integer})};
+  std::swap(*this, jNode);
   return (*this);
 }
 JNode &JNode::operator=(long long integer) {
-  std::swap(*this, *makeNumber(Numeric{integer}));
+  JNode jNode{makeNumber(Numeric{integer})};
+  std::swap(*this, jNode);
   return (*this);
 }
 JNode &JNode::operator=(const char *cString) {
-  std::swap(*this, *makeString(cString));
+  JNode jNode{makeString(cString)};
+  std::swap(*this, jNode);
   return (*this);
 }
 JNode &JNode::operator=(const std::string &string) {
-  std::swap(*this, *makeString(string));
+  JNode jNode{makeString(string)};
+  std::swap(*this, jNode);
   return (*this);
 }
 JNode &JNode::operator=(bool boolean) {
-  std::swap(*this, *makeBoolean(boolean));
+  JNode jNode{makeBoolean(boolean)};
+  std::swap(*this, jNode);
   return (*this);
 }
 JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null) {
-  std::swap(*this, *makeNull());
+  JNode jNode{makeNull()};
+  std::swap(*this, jNode);
   return (*this);
 }
 // ==============
 // Get JNode type
 // ==============
-JNodeType JNode::getNodeType() const { return (m_jNodeVariant->getNodeType()); }
+JNodeType JNode::getType() const { return (m_jNodeVariant->getType()); }
 // =============================
 // Get reference to JNodeVariant
 // =============================
-std::unique_ptr<Variant> &JNode::getJNodeVariant() {
-  return (m_jNodeVariant);
-}
-const std::unique_ptr<Variant> &JNode::getJNodeVariant() const {
+std::unique_ptr<Variant> &JNode::getVariant() { return (m_jNodeVariant); }
+const std::unique_ptr<Variant> &JNode::getVariant() const {
   return (m_jNodeVariant);
 }
 } // namespace JSONLib

@@ -24,32 +24,32 @@ TEST_CASE("JSON object for parse of simple types (number,string,boolean,null).",
   SECTION("Parse an string (example string)", "[JSON][Parse][Simple]") {
     BufferSource jsonSource{"\"example string\""};
     json.parse(jsonSource);
-    REQUIRE((json.root()).getNodeType() == JNodeType::string);
+    REQUIRE((json.root()).getType() == JNodeType::string);
   }
   SECTION("Parse an number (6767)", "[JSON][Parse][Simple]") {
     BufferSource jsonSource{"6767"};
     json.parse(jsonSource);
-    REQUIRE((json.root()).getNodeType() == JNodeType::number);
+    REQUIRE((json.root()).getType() == JNodeType::number);
   }
   SECTION("Parse an boolean (true)", "[JSON][Parse][Simple]") {
     BufferSource jsonSource{"true"};
     json.parse(jsonSource);
-    REQUIRE((json.root()).getNodeType() == JNodeType::boolean);
+    REQUIRE((json.root()).getType() == JNodeType::boolean);
   }
   SECTION("Parse an boolean (false)", "[JSON][Parse][Simple]") {
     BufferSource jsonSource{"false"};
     json.parse(jsonSource);
-    REQUIRE((json.root()).getNodeType() == JNodeType::boolean);
+    REQUIRE((json.root()).getType() == JNodeType::boolean);
   }
   SECTION("Parse an null", "[JSON][Parse][Simple]") {
     BufferSource jsonSource{"null"};
     json.parse(jsonSource);
-    REQUIRE((json.root()).getNodeType() == JNodeType::null);
+    REQUIRE((json.root()).getType() == JNodeType::null);
   }
   SECTION("Parse an empty string", "[JSON][Parse][Simple]") {
     BufferSource jsonSource{"\"\""};
     json.parse(jsonSource);
-    REQUIRE((json.root()).getNodeType() == JNodeType::string);
+    REQUIRE((json.root()).getType() == JNodeType::string);
   }
 }
 // ====================================

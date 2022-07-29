@@ -57,12 +57,12 @@ void writeToFile(const std::string &jsonFileName, const std::string &jsonString)
 /// <param name="jNode">Pointer to JNNodeArray</param>
 /// <returns></returns>
 void checkArray(const JNode &jNode) { // Array [\"Dog\",1964,true,null]
-  REQUIRE(jNode.getNodeType() == JNodeType::array);
+  REQUIRE(jNode.getType() == JNodeType::array);
   REQUIRE(JNodeRef<Array>(jNode).size() == 4);
-  REQUIRE(jNode[0].getNodeType() == JNodeType::string);
-  REQUIRE(jNode[1].getNodeType() == JNodeType::number);
-  REQUIRE(jNode[2].getNodeType() == JNodeType::boolean);
-  REQUIRE(jNode[3].getNodeType() == JNodeType::null);
+  REQUIRE(jNode[0].getType() == JNodeType::string);
+  REQUIRE(jNode[1].getType() == JNodeType::number);
+  REQUIRE(jNode[2].getType() == JNodeType::boolean);
+  REQUIRE(jNode[3].getType() == JNodeType::null);
   REQUIRE(JNodeRef<String>(jNode[0]).string() == "Dog");
   REQUIRE(JNodeRef<Number>(jNode[1]).toString() == "1964");
   REQUIRE(JNodeRef<Boolean>(jNode[2]).boolean() == true);
@@ -75,12 +75,12 @@ void checkArray(const JNode &jNode) { // Array [\"Dog\",1964,true,null]
 /// <returns></returns>
 void checkObject(
     const JNode &jNode) { // {\"City\":\"Southampton\",\"Population\":500000}
-  REQUIRE(jNode.getNodeType() == JNodeType::object);
+  REQUIRE(jNode.getType() == JNodeType::object);
   REQUIRE(JNodeRef<Object>(jNode).size() == 2);
   REQUIRE(JNodeRef<Object>(jNode).contains("City"));
   REQUIRE(JNodeRef<Object>(jNode).contains("Population"));
-  REQUIRE(jNode["City"].getNodeType() == JNodeType::string);
-  REQUIRE(jNode["Population"].getNodeType() == JNodeType::number);
+  REQUIRE(jNode["City"].getType() == JNodeType::string);
+  REQUIRE(jNode["Population"].getType() == JNodeType::number);
   REQUIRE(JNodeRef<String>(jNode["City"]).string() == "Southampton");
   REQUIRE(JNodeRef<Number>(jNode["Population"]).toString() == "500000");
 }

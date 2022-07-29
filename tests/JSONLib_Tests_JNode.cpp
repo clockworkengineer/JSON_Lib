@@ -55,9 +55,9 @@ TEST_CASE("Use of JNode indexing operators", "[JSON][JNode][Index]") {
           "[JSON][JNode][Index]") {
     BufferSource jsonSource{"{\"City\":\"Southampton\",\"Population\":500000}"};
     json.parse(jsonSource);
-    REQUIRE_THROWS_AS((json.root())["Cityy"].getNodeType() == JNodeType::object,
+    REQUIRE_THROWS_AS((json.root())["Cityy"].getType() == JNodeType::object,
                       JNode::Error);
-    REQUIRE_THROWS_WITH((json.root())["Cityy"].getNodeType() ==
+    REQUIRE_THROWS_WITH((json.root())["Cityy"].getType() ==
                             JNodeType::object,
                         "JNode Error: Invalid key used to access object.");
   }
@@ -65,9 +65,9 @@ TEST_CASE("Use of JNode indexing operators", "[JSON][JNode][Index]") {
           "[JSON][JNode][Index]") {
     BufferSource jsonSource{"[777,9000,\"apples\"]"};
     json.parse(jsonSource);
-    REQUIRE_THROWS_AS((json.root())[3].getNodeType() == JNodeType::array,
+    REQUIRE_THROWS_AS((json.root())[3].getType() == JNodeType::array,
                       JNode::Error);
-    REQUIRE_THROWS_WITH((json.root())[3].getNodeType() == JNodeType::array,
+    REQUIRE_THROWS_WITH((json.root())[3].getType() == JNodeType::array,
                         "JNode Error: Invalid index used to access array.");
   }
 }

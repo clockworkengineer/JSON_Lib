@@ -93,7 +93,7 @@ Object::Entry JSON_Impl::parseKeyValuePair(ISource &source) {
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>String JNode.</returns>
-JNode::Ptr JSON_Impl::parseString(ISource &source) {
+JNode JSON_Impl::parseString(ISource &source) {
   return (makeString(extractString(source)));
 }
 /// <summary>
@@ -101,7 +101,7 @@ JNode::Ptr JSON_Impl::parseString(ISource &source) {
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Number JNode.</returns>
-JNode::Ptr JSON_Impl::parseNumber(ISource &source) {
+JNode JSON_Impl::parseNumber(ISource &source) {
   std::string number;
   for (; source.more() && Numeric::isValidNumericChar(source.current());
        source.next()) {
@@ -118,7 +118,7 @@ JNode::Ptr JSON_Impl::parseNumber(ISource &source) {
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Boolean JNode.</returns>
-JNode::Ptr JSON_Impl::parseBoolean(ISource &source) {
+JNode JSON_Impl::parseBoolean(ISource &source) {
   if (source.match("true")) {
     return (makeBoolean(true));
   }
@@ -132,7 +132,7 @@ JNode::Ptr JSON_Impl::parseBoolean(ISource &source) {
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Null JNode.</returns>
-JNode::Ptr JSON_Impl::parseNull(ISource &source) {
+JNode JSON_Impl::parseNull(ISource &source) {
   if (!source.match("null")) {
     throw Error("Syntax error detected.");
   }
@@ -143,7 +143,7 @@ JNode::Ptr JSON_Impl::parseNull(ISource &source) {
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Object JNode (key/value pairs).</returns>
-JNode::Ptr JSON_Impl::parseObject(ISource &source) {
+JNode JSON_Impl::parseObject(ISource &source) {
   Object::EntryList objects;
   source.next();
   source.ignoreWS();
@@ -165,7 +165,7 @@ JNode::Ptr JSON_Impl::parseObject(ISource &source) {
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Array JNode.</returns>
-JNode::Ptr JSON_Impl::parseArray(ISource &source) {
+JNode JSON_Impl::parseArray(ISource &source) {
   Array::ArrayList array;
   source.next();
   source.ignoreWS();
@@ -188,8 +188,8 @@ JNode::Ptr JSON_Impl::parseArray(ISource &source) {
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Pointer to JNode.</returns>
-JNode::Ptr JSON_Impl::parseJNodes(ISource &source) {
-  JNode::Ptr jNode;
+JNode JSON_Impl::parseJNodes(ISource &source) {
+  JNode jNode;
   source.ignoreWS();
   switch (source.current()) {
   case '{':
@@ -235,7 +235,7 @@ JNode::Ptr JSON_Impl::parseJNodes(ISource &source) {
 /// <param name=jNode>JNode structure to be traversed.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination) {
-  switch (jNode.getNodeType()) {
+  switch (jNode.getType()) {
   case JNodeType::number:
     destination.add(JNodeRef<const Number>(jNode).toString());
     break;
@@ -273,7 +273,7 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination) {
     std::size_t commaCount = JNodeRef<Array>(jNode).size() - 1;
     destination.add('[');
     for (auto &bNodeEntry : JNodeRef<Array>(jNode).array()) {
-      stringifyJNodes(*bNodeEntry, destination);
+      stringifyJNodes(bNodeEntry, destination);
       if (commaCount-- > 0) {
         destination.add(',');
       }
@@ -364,10 +364,10 @@ void JSON_Impl::parse(const std::string &jsonString) {
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 void JSON_Impl::stringify(IDestination &destination) {
-  if (m_jNodeRoot == nullptr) {
+  if (m_jNodeRoot.getVariant()==nullptr) {
     throw Error("No JSON to stringify.");
   }
-  stringifyJNodes(*m_jNodeRoot, destination);
+  stringifyJNodes(m_jNodeRoot, destination);
 }
 /// <summary>
 /// Return object entry for the passed in key.
@@ -375,20 +375,20 @@ void JSON_Impl::stringify(IDestination &destination) {
 /// <param name=key>Object entry (JNode) key.</param>
 JNode &JSON_Impl::operator[](const std::string &key) {
   try {
-    if (m_jNodeRoot == nullptr) {
+    if (m_jNodeRoot.getVariant()==nullptr) {
       parse("{}");
     }
-    return ((*m_jNodeRoot)[key]);
+    return ((m_jNodeRoot)[key]);
   } catch ([[maybe_unused]] JNode::Error &error) {
-    JNodeRef<Object>(*m_jNodeRoot)
+    JNodeRef<Object>(m_jNodeRoot)
         .objects()
         .emplace_back(Object::Entry{key, makeHole()});
-    return (*JNodeRef<Object>(*m_jNodeRoot).objects().back().value);
+    return (JNodeRef<Object>(m_jNodeRoot).objects().back().value);
   }
 }
 const JNode &JSON_Impl::operator[](const std::string &key) const // Object
 {
-  return ((*m_jNodeRoot)[key]);
+  return ((m_jNodeRoot)[key]);
 }
 /// <summary>
 /// Return array entry for the passed in index.
@@ -396,17 +396,17 @@ const JNode &JSON_Impl::operator[](const std::string &key) const // Object
 /// <param name=index>Array entry (JNode) index.</param>
 JNode &JSON_Impl::operator[](std::size_t index) {
   try {
-    if (m_jNodeRoot == nullptr) {
+    if (m_jNodeRoot.getVariant()==nullptr) {
       parse("[]");
     }
-    return ((*m_jNodeRoot)[index]);
+    return ((m_jNodeRoot)[index]);
   } catch ([[maybe_unused]] JNode::Error &error) {
-    JNodeRef<Array>(*m_jNodeRoot).array().resize(index + 1);
-    JNodeRef<Array>(*m_jNodeRoot).array()[index] = std::move(makeNull());
-    return (*JNodeRef<Array>(*m_jNodeRoot).array()[index]);
+    JNodeRef<Array>(m_jNodeRoot).array().resize(index + 1);
+    JNodeRef<Array>(m_jNodeRoot).array()[index] = std::move(makeNull());
+    return (JNodeRef<Array>(m_jNodeRoot).array()[index]);
   }
 }
 const JNode &JSON_Impl::operator[](std::size_t index) const {
-  return ((*m_jNodeRoot)[index]);
+  return ((m_jNodeRoot)[index]);
 }
 } // namespace JSONLib
