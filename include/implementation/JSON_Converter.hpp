@@ -30,8 +30,8 @@ public:
   // ==============
   // PUBLIC METHODS
   // ==============
-  std::u16string toUtf16(const std::string &utf8) const override;
-  std::string toUtf8(const std::u16string &utf16) const override;
+  [[nodiscard]] std::u16string toUtf16(const std::string &utf8) const override;
+  [[nodiscard]] std::string toUtf8(const std::u16string &utf16) const override;
   // ================
   // PUBLIC VARIABLES
   // ================
@@ -56,12 +56,12 @@ private:
 // ============================================================
 #if defined(_WIN64)
 inline int WideCharToBytes(wchar_t *wideString, int wideStringLength,
-                           char *bytes = NULL, int length = 0) {
+                           char *bytes = nullptr, int length = 0) {
   return (WideCharToMultiByte(CP_UTF8, 0, wideString, wideStringLength, bytes,
-                              length, NULL, NULL));
+                              length, nullptr, nullptr));
 }
 inline int BytesToWideChar(const char *bytes, int length,
-                           wchar_t *sideString = NULL,
+                           wchar_t *sideString = nullptr,
                            int wideStringLength = 0) {
   return (MultiByteToWideChar(CP_UTF8, 0, bytes, length, sideString,
                               wideStringLength));

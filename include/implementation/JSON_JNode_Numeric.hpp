@@ -22,20 +22,24 @@ concept Float = std::is_floating_point<T>::value;
 // JNode Numeric
 // =============
 struct Numeric {
+  // All string conversions are for base 10
+  static constexpr int kStringConversionBase{10};
   // Shortened type names
   using llong = long long;
   using ldouble = long double;
   // Number to string
-  template <Integer T> std::string numericToString(const T &t) const {
+  template <Integer T>
+  [[nodiscard]] std::string numericToString(const T &t) const {
     std::ostringstream os;
     os << t;
     return os.str();
   }
-  template <Float T> std::string numericToString(const T &t) const {
+  template <Float T>
+  [[nodiscard]] std::string numericToString(const T &t) const {
     std::ostringstream os;
     os << t;
     std::string floatString = os.str();
-    if (floatString.find(".") == std::string::npos) {
+    if (floatString.find('.') == std::string::npos) {
       floatString.push_back('.');
     }
     floatString.erase(floatString.find_last_not_of('0') + 1, std::string::npos);
@@ -50,7 +54,7 @@ struct Numeric {
         : std::runtime_error("JNodeNumeric Error: " + message) {}
   };
   // Convert types
-  template <typename T> T convertType() const {
+  template <typename T> [[nodiscard]] T convertType() const {
     if (m_type == Type::Int) {
       return (static_cast<T>(m_values.m_integer));
     } else if (m_type == Type::Long) {
@@ -136,8 +140,8 @@ struct Numeric {
   // returning true if the value is set.
   [[nodiscard]] bool setInt(const std::string &number) {
     try {
-      std::size_t end;
-      m_values.m_integer = std::stoi(number.c_str(), &end, 10);
+      std::size_t end = 0;
+      m_values.m_integer = std::stoi(number, &end, kStringConversionBase);
       if (end != number.size()) {
         return (false);
       }
@@ -154,8 +158,9 @@ struct Numeric {
   }
   [[nodiscard]] bool setLong(const std::string &number) {
     try {
-      char *end;
-      m_values.m_long = std::strtol(number.c_str(), &end, 10);
+      char *end = nullptr;
+      m_values.m_long =
+          std::strtol(number.c_str(), &end, kStringConversionBase);
       if (*end != '\0') {
         return (false);
       }
@@ -172,8 +177,9 @@ struct Numeric {
   }
   [[nodiscard]] bool setLLong(const std::string &number) {
     try {
-      char *end;
-      m_values.m_llong = std::strtoll(number.c_str(), &end, 10);
+      char *end = nullptr;
+      m_values.m_llong =
+          std::strtoll(number.c_str(), &end, kStringConversionBase);
       if (*end != '\0') {
         return (false);
       }
@@ -190,8 +196,8 @@ struct Numeric {
   }
   [[nodiscard]] bool setFloat(const std::string &number) {
     try {
-      std::size_t end;
-      m_values.m_float = std::stof(number.c_str(), &end);
+      std::size_t end = 0;
+      m_values.m_float = std::stof(number, &end);
       if (end != number.size()) {
         return (false);
       }
@@ -208,7 +214,7 @@ struct Numeric {
   }
   [[nodiscard]] bool setDouble(const std::string &number) {
     try {
-      char *end;
+      char *end = nullptr;
       m_values.m_double = std::strtod(number.c_str(), &end);
       if (*end != '\0') {
         return (false);
@@ -226,7 +232,7 @@ struct Numeric {
   }
   [[nodiscard]] bool setLDouble(const std::string &number) {
     try {
-      char *end;
+      char *end = nullptr;
       m_values.m_ldouble = std::strtold(number.c_str(), &end);
       if (*end != '\0') {
         return (false);
@@ -251,7 +257,8 @@ struct Numeric {
   [[nodiscard]] std::string getString() const {
     if (m_type == Type::Int) {
       return (numericToString(m_values.m_integer));
-    } else if (m_type == Type::Long) {
+    }
+    if (m_type == Type::Long) {
       return (numericToString(m_values.m_long));
     } else if (m_type == Type::LLong) {
       return (numericToString(m_values.m_llong));

@@ -48,7 +48,7 @@ struct Object : Variant {
   Object &operator=(Object &&other) = default;
   ~Object() = default;
   // Search for a given entry given a key and object list
-  auto findKey(const std::string &key, EntryList &objects) {
+  [[nodiscard]] auto findKey(const std::string &key, EntryList &objects) {
     auto entry = std::find_if(
         objects.begin(), objects.end(),
         [&key](const Entry &entry) -> bool { return (entry.key == key); });
@@ -57,7 +57,7 @@ struct Object : Variant {
     }
     return (entry);
   }
-  auto findKey(const std::string &key, const EntryList &objects) const {
+  [[nodiscard]] auto findKey(const std::string &key, const EntryList &objects) const {
     auto entry = std::find_if(
         objects.begin(), objects.end(),
         [&key](const Entry &entry) -> bool { return (entry.key == key); });

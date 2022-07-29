@@ -202,9 +202,9 @@ JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null) {
 // Get JNode type
 // ==============
 JNodeType JNode::getType() const { return (m_jNodeVariant->getType()); }
-// =============================
-// Get reference to JNodeVariant
-// =============================
+// ==============================
+// Get reference to JNode variant
+// ==============================
 std::unique_ptr<Variant> &JNode::getVariant() { return (m_jNodeVariant); }
 const std::unique_ptr<Variant> &JNode::getVariant() const {
   return (m_jNodeVariant);
