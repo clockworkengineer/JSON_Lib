@@ -257,7 +257,7 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination) {
   case JNodeType::object: {
     int commaCount = JRef<Object>(jNode).size() - 1;
     destination.add('{');
-    for (auto &[key, jNodePtr] : JRef<Object>(jNode).objects()) {
+    for (auto &[key, node] : JRef<Object>(jNode).objects()) {
       destination.add('"');
       destination.add(m_translator->toJSON(key));
       destination.add("\":");

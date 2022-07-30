@@ -123,7 +123,7 @@ void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails) {
     jNodeDetails.totalObjects++;
     jNodeDetails.maxObjectSize = std::max(
         JRef<Object>(jNode).objects().size(), jNodeDetails.maxObjectSize);
-    for (auto &[key, jNodePtr] : JRef<Object>(jNode).objects()) {
+    for (auto &[key, node] : JRef<Object>(jNode).objects()) {
       analyzeJNode(JRef<Object>(jNode)[key], jNodeDetails);
       jNodeDetails.unique_keys.insert(key);
       jNodeDetails.sizeInBytes += key.size();
