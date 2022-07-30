@@ -25,39 +25,39 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]") {
           "\\uD834\\uDD1E End' and check value",
           "[JSON][DefaultTranslator]") {
     const std::u8string expected{u8"Begin \U0001D11E End"};
-    REQUIRE(translator.fromJSON("Begin \\uD834\\uDD1E End") ==
+    REQUIRE(translator.fromJSON(R"(Begin \uD834\uDD1E End)") ==
             std::string{expected.begin(), expected.end()});
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 "
           "\\uDD1E End' in error then expect exception",
           "[JSON][DefaultTranslator][Exception]") {
-    REQUIRE_THROWS_AS(translator.fromJSON("Begin \\uD834 \\uDD1E End"),
+    REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uD834 \uDD1E End)"),
                       JSON_Translator::Error);
-    REQUIRE_THROWS_WITH(translator.fromJSON("Begin \\uD834 \\uDD1E End"),
+    REQUIRE_THROWS_WITH(translator.fromJSON(R"(Begin \uD834 \uDD1E End)"),
                         "JSON Translator Error: Syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin "
           "\\uD834\\u0045 End' in error then expect exception",
           "[JSON][DefaultTranslator][Exception]") {
-    REQUIRE_THROWS_AS(translator.fromJSON("Begin \\uD834\\u0045 End"),
+    REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uD834\u0045 End)"),
                       JSON_Translator::Error);
-    REQUIRE_THROWS_WITH(translator.fromJSON("Begin \\uD834\\u0045 End"),
+    REQUIRE_THROWS_WITH(translator.fromJSON(R"(Begin \uD834\u0045 End)"),
                         "JSON Translator Error: Syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 End' "
           "in error then expect exception",
           "[JSON][DefaultTranslator][Exception]") {
-    REQUIRE_THROWS_AS(translator.fromJSON("Begin \\uD834 End"),
+    REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uD834 End)"),
                       JSON_Translator::Error);
-    REQUIRE_THROWS_WITH(translator.fromJSON("Begin \\uD834 End"),
+    REQUIRE_THROWS_WITH(translator.fromJSON(R"(Begin \uD834 End)"),
                         "JSON Translator Error: Syntax error detected.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uDD1E End' "
           "in error then expect exception",
           "[JSON][DefaultTranslator][Exception]") {
-    REQUIRE_THROWS_AS(translator.fromJSON("Begin \\uDD1E End"),
+    REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uDD1E End)"),
                       JSON_Translator::Error);
-    REQUIRE_THROWS_WITH(translator.fromJSON("Begin \\uDD1E End"),
+    REQUIRE_THROWS_WITH(translator.fromJSON(R"(Begin \uDD1E End)"),
                         "JSON Translator Error: Syntax error detected.");
   }
   SECTION("Translate to escape sequences valid surrogate pair 'Begin "
@@ -65,7 +65,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]") {
           "[JSON][DefaultTranslator]") {
     std::u8string actual{u8"Begin \U0001D11E End"};
     REQUIRE(translator.toJSON({actual.begin(), actual.end()}) ==
-            "Begin \\uD834\\uDD1E End");
+            R"(Begin \uD834\uDD1E End)");
   }
 }
 // ========================
@@ -77,7 +77,7 @@ TEST_CASE("Check R-Value reference parse/stringify.",
   SECTION("Parse with R-Value reference (Buffer).",
           "[JSON][JNode][R-Value Reference]") {
     json.parse(
-        BufferSource{"{\"City\":\"Southampton\",\"Population\":500000 }"});
+        BufferSource{R"({"City":"Southampton","Population":500000 })"});
     REQUIRE(JRef<Object>(json.root()).size() == 2);
     REQUIRE(JRef<String>((json.root())["City"]).string() ==
             "Southampton");
@@ -98,7 +98,7 @@ TEST_CASE("Check whitespace stripping with escape characters.",
   const JSON json;
   SECTION("Strip JSON with escaped ascii characters.", "[JSON][Parse][Strip]") {
     BufferSource jsonSource{
-        "   [  \"fffgh \\/ \\n\\t \\p \\w \\u1234 \"  ]       "};
+        R"(   [  "fffgh \/ \n\t \p \w \u1234 "  ]       )"};
     BufferDestination strippedDestination;
     json.strip(jsonSource, strippedDestination);
     REQUIRE(strippedDestination.getBuffer() ==
