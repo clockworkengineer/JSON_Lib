@@ -113,14 +113,14 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
 JNode &JNode::operator[](const std::string &key) {
   if (this->getType() == JNodeType::hole) {
     this->m_jNodeVariant = std::make_unique<Object>();
-    JNodeRef<Object>(*this).objects().emplace_back(
+    JRef<Object>(*this).objects().emplace_back(
         Object::Entry{key, makeHole()});
-    return (JNodeRef<Object>(*this).objects().back().value);
+    return (JRef<Object>(*this).objects().back().value);
   }
-  return (JNodeRef<Object>(*this)[key]);
+  return (JRef<Object>(*this)[key]);
 }
 const JNode &JNode::operator[](const std::string &key) const {
-  return (JNodeRef<const Object>(*this)[key]);
+  return (JRef<const Object>(*this)[key]);
 }
 // =====
 // Array
@@ -130,20 +130,20 @@ JNode &JNode::operator[](std::size_t index) {
     if (this->getType() == JNodeType::hole) {
       this->m_jNodeVariant = std::make_unique<Array>();
     }
-    return (JNodeRef<Array>(*this)[index]);
+    return (JRef<Array>(*this)[index]);
   } catch ([[maybe_unused]] const JNode::Error &error) {
-    JNodeRef<Array>(*this).array().resize(index + 1);
-    JNodeRef<Array>(*this).array()[index] = makeHole();
-    for (auto &entry : JNodeRef<Array>(*this).array()) {
+    JRef<Array>(*this).array().resize(index + 1);
+    JRef<Array>(*this).array()[index] = makeHole();
+    for (auto &entry : JRef<Array>(*this).array()) {
       if (entry.getVariant() == nullptr) {
         entry = makeHole();
       }
     }
-    return (JNodeRef<Array>(*this)[index]);
+    return (JRef<Array>(*this)[index]);
   }
 }
 const JNode &JNode::operator[](std::size_t index) const {
-  return (JNodeRef<Array>(*this)[index]);
+  return (JRef<Array>(*this)[index]);
 }
 // ==========================
 // JNode assignment operators

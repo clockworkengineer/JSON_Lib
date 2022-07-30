@@ -71,31 +71,31 @@ TEST_CASE("JSON object for parse of collection types and check values",
     BufferSource jsonSource{"{\"Name\":\"Robert\",\"Age\":15}"};
     json.parse(jsonSource);
     REQUIRE((json.root()).getType() == JNodeType::object);
-    REQUIRE(JNodeRef<Object>(json.root()).size() == 2);
-    REQUIRE(JNodeRef<Object>(json.root()).contains("Name"));
-    REQUIRE(JNodeRef<Object>(json.root()).contains("Age"));
-    REQUIRE(JNodeRef<String>((json.root())["Name"]).getType() ==
+    REQUIRE(JRef<Object>(json.root()).size() == 2);
+    REQUIRE(JRef<Object>(json.root()).contains("Name"));
+    REQUIRE(JRef<Object>(json.root()).contains("Age"));
+    REQUIRE(JRef<String>((json.root())["Name"]).getType() ==
             JNodeType::string);
-    REQUIRE(JNodeRef<Number>((json.root())["Age"]).getType() ==
+    REQUIRE(JRef<Number>((json.root())["Age"]).getType() ==
             JNodeType::number);
-    REQUIRE(JNodeRef<String>((json.root())["Name"]).string() == "Robert");
-    REQUIRE(JNodeRef<Number>((json.root())["Age"]).toString() == "15");
+    REQUIRE(JRef<String>((json.root())["Name"]).string() == "Robert");
+    REQUIRE(JRef<Number>((json.root())["Age"]).toString() == "15");
   }
   SECTION("Parse an array [777,9000,\"apples\"] and check its value",
           "[JSON][Parse][Collection][validate]") {
     BufferSource jsonSource{"[777,9000,\"apples\"]"};
     json.parse(jsonSource);
     REQUIRE((json.root()).getType() == JNodeType::array);
-    REQUIRE(JNodeRef<Array>(json.root()).size() == 3);
-    REQUIRE(JNodeRef<Number>((json.root())[0]).getType() ==
+    REQUIRE(JRef<Array>(json.root()).size() == 3);
+    REQUIRE(JRef<Number>((json.root())[0]).getType() ==
             JNodeType::number);
-    REQUIRE(JNodeRef<Number>((json.root())[1]).getType() ==
+    REQUIRE(JRef<Number>((json.root())[1]).getType() ==
             JNodeType::number);
-    REQUIRE(JNodeRef<String>((json.root())[2]).getType() ==
+    REQUIRE(JRef<String>((json.root())[2]).getType() ==
             JNodeType::string);
-    REQUIRE(JNodeRef<Number>((json.root())[0]).toString() == "777");
-    REQUIRE(JNodeRef<Number>((json.root())[1]).toString() == "9000");
-    REQUIRE(JNodeRef<String>((json.root())[2]).string() == "apples");
+    REQUIRE(JRef<Number>((json.root())[0]).toString() == "777");
+    REQUIRE(JRef<Number>((json.root())[1]).toString() == "9000");
+    REQUIRE(JRef<String>((json.root())[2]).string() == "apples");
   }
   SECTION("Parse object {\"City\":\"Southampton\",\"Population\":500000} and "
           "check its value",

@@ -237,31 +237,31 @@ JNode JSON_Impl::parseJNodes(ISource &source) {
 void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination) {
   switch (jNode.getType()) {
   case JNodeType::number:
-    destination.add(JNodeRef<const Number>(jNode).toString());
+    destination.add(JRef<const Number>(jNode).toString());
     break;
   case JNodeType::string:
     destination.add('"');
     destination.add(
-        m_translator->toJSON(JNodeRef<String>(jNode).toString()));
+        m_translator->toJSON(JRef<String>(jNode).toString()));
     destination.add('"');
     break;
   case JNodeType::boolean:
-    destination.add(JNodeRef<Boolean>(jNode).toString());
+    destination.add(JRef<Boolean>(jNode).toString());
     break;
   case JNodeType::null:
-    destination.add(JNodeRef<Null>(jNode).toString());
+    destination.add(JRef<Null>(jNode).toString());
     break;
   case JNodeType::hole:
-    destination.add(JNodeRef<Hole>(jNode).toString());
+    destination.add(JRef<Hole>(jNode).toString());
     break;
   case JNodeType::object: {
-    int commaCount = JNodeRef<Object>(jNode).size() - 1;
+    int commaCount = JRef<Object>(jNode).size() - 1;
     destination.add('{');
-    for (auto &[key, jNodePtr] : JNodeRef<Object>(jNode).objects()) {
+    for (auto &[key, jNodePtr] : JRef<Object>(jNode).objects()) {
       destination.add('"');
       destination.add(m_translator->toJSON(key));
       destination.add("\":");
-      stringifyJNodes(JNodeRef<Object>(jNode)[key], destination);
+      stringifyJNodes(JRef<Object>(jNode)[key], destination);
       if (commaCount-- > 0) {
         destination.add(',');
       }
@@ -270,9 +270,9 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination) {
     break;
   }
   case JNodeType::array: {
-    std::size_t commaCount = JNodeRef<Array>(jNode).size() - 1;
+    std::size_t commaCount = JRef<Array>(jNode).size() - 1;
     destination.add('[');
-    for (auto &bNodeEntry : JNodeRef<Array>(jNode).array()) {
+    for (auto &bNodeEntry : JRef<Array>(jNode).array()) {
       stringifyJNodes(bNodeEntry, destination);
       if (commaCount-- > 0) {
         destination.add(',');
@@ -380,10 +380,10 @@ JNode &JSON_Impl::operator[](const std::string &key) {
     }
     return ((m_jNodeRoot)[key]);
   } catch ([[maybe_unused]] JNode::Error &error) {
-    JNodeRef<Object>(m_jNodeRoot)
+    JRef<Object>(m_jNodeRoot)
         .objects()
         .emplace_back(Object::Entry{key, makeHole()});
-    return (JNodeRef<Object>(m_jNodeRoot).objects().back().value);
+    return (JRef<Object>(m_jNodeRoot).objects().back().value);
   }
 }
 const JNode &JSON_Impl::operator[](const std::string &key) const // Object
@@ -401,9 +401,9 @@ JNode &JSON_Impl::operator[](std::size_t index) {
     }
     return ((m_jNodeRoot)[index]);
   } catch ([[maybe_unused]] JNode::Error &error) {
-    JNodeRef<Array>(m_jNodeRoot).array().resize(index + 1);
-    JNodeRef<Array>(m_jNodeRoot).array()[index] = std::move(makeNull());
-    return (JNodeRef<Array>(m_jNodeRoot).array()[index]);
+    JRef<Array>(m_jNodeRoot).array().resize(index + 1);
+    JRef<Array>(m_jNodeRoot).array()[index] = std::move(makeNull());
+    return (JRef<Array>(m_jNodeRoot).array()[index]);
   }
 }
 const JNode &JSON_Impl::operator[](std::size_t index) const {

@@ -58,15 +58,15 @@ void writeToFile(const std::string &jsonFileName, const std::string &jsonString)
 /// <returns></returns>
 void checkArray(const JNode &jNode) { // Array [\"Dog\",1964,true,null]
   REQUIRE(jNode.getType() == JNodeType::array);
-  REQUIRE(JNodeRef<Array>(jNode).size() == 4);
+  REQUIRE(JRef<Array>(jNode).size() == 4);
   REQUIRE(jNode[0].getType() == JNodeType::string);
   REQUIRE(jNode[1].getType() == JNodeType::number);
   REQUIRE(jNode[2].getType() == JNodeType::boolean);
   REQUIRE(jNode[3].getType() == JNodeType::null);
-  REQUIRE(JNodeRef<String>(jNode[0]).string() == "Dog");
-  REQUIRE(JNodeRef<Number>(jNode[1]).toString() == "1964");
-  REQUIRE(JNodeRef<Boolean>(jNode[2]).boolean() == true);
-  REQUIRE(JNodeRef<Null>(jNode[3]).null() == nullptr);
+  REQUIRE(JRef<String>(jNode[0]).string() == "Dog");
+  REQUIRE(JRef<Number>(jNode[1]).toString() == "1964");
+  REQUIRE(JRef<Boolean>(jNode[2]).boolean() == true);
+  REQUIRE(JRef<Null>(jNode[3]).null() == nullptr);
 }
 /// <summary>
 /// Verify that an JNodeObjectData has the correct parsed format.
@@ -76,13 +76,13 @@ void checkArray(const JNode &jNode) { // Array [\"Dog\",1964,true,null]
 void checkObject(
     const JNode &jNode) { // {\"City\":\"Southampton\",\"Population\":500000}
   REQUIRE(jNode.getType() == JNodeType::object);
-  REQUIRE(JNodeRef<Object>(jNode).size() == 2);
-  REQUIRE(JNodeRef<Object>(jNode).contains("City"));
-  REQUIRE(JNodeRef<Object>(jNode).contains("Population"));
+  REQUIRE(JRef<Object>(jNode).size() == 2);
+  REQUIRE(JRef<Object>(jNode).contains("City"));
+  REQUIRE(JRef<Object>(jNode).contains("Population"));
   REQUIRE(jNode["City"].getType() == JNodeType::string);
   REQUIRE(jNode["Population"].getType() == JNodeType::number);
-  REQUIRE(JNodeRef<String>(jNode["City"]).string() == "Southampton");
-  REQUIRE(JNodeRef<Number>(jNode["Population"]).toString() == "500000");
+  REQUIRE(JRef<String>(jNode["City"]).string() == "Southampton");
+  REQUIRE(JRef<Number>(jNode["Population"]).toString() == "500000");
 }
 /// <summary>
 /// Strip white space from source JSON and place remainder in destination.

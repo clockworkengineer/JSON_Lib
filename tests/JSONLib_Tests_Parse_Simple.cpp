@@ -62,43 +62,43 @@ TEST_CASE("JSON object for parse of simple types and check values.",
           "[JSON][Parse][Simple][Validate]") {
     BufferSource jsonSource{"\"example string\""};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<String>(json.root()).string() == "example string");
+    REQUIRE(JRef<String>(json.root()).string() == "example string");
   }
   SECTION("Parse an string (another example string) and check its value",
           "[JSON][Parse][Simple][Validate]") {
     BufferSource jsonSource{"\"another example string\""};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<String>(json.root()).string() ==
+    REQUIRE(JRef<String>(json.root()).string() ==
             "another example string");
   }
   SECTION("Parse an number (6767) and check its value",
           "[JSON][Parse][Simple][Validate]") {
     BufferSource jsonSource{"6767"};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<Number>(json.root()).toString() == "6767");
+    REQUIRE(JRef<Number>(json.root()).toString() == "6767");
   }
   SECTION("Parse an number (190000) and check its value",
           "[JSON][Parse][Simple][Validate]") {
     BufferSource jsonSource{"190000"};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<Number>(json.root()).toString() == "190000");
+    REQUIRE(JRef<Number>(json.root()).toString() == "190000");
   }
   SECTION("Parse an boolean (true) and check its value",
           "[JSON][Parse][Simple][Validate]") {
     BufferSource jsonSource{"true"};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<Boolean>(json.root()).boolean() == true);
+    REQUIRE(JRef<Boolean>(json.root()).boolean() == true);
   }
   SECTION("Parse an boolean (false) and check its value",
           "[JSON][Parse][Simple][Validate]") {
     BufferSource jsonSource{"false"};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<Boolean>(json.root()).boolean() == false);
+    REQUIRE(JRef<Boolean>(json.root()).boolean() == false);
   }
   SECTION("Parse an null and check its value",
           "[JSON][Parse][Simple][Validate]") {
     BufferSource jsonSource{"null"};
     json.parse(jsonSource);
-    REQUIRE(JNodeRef<Null>(json.root()).null() == nullptr);
+    REQUIRE(JRef<Null>(json.root()).null() == nullptr);
   }
 }

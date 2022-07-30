@@ -262,11 +262,11 @@ template <typename T> void CheckJNodeType(const Variant &jNodeVariant) {
     }
   }
 }
-template <typename T> T &JNodeRef(JNode &jNode) {
+template <typename T> T &JRef(JNode &jNode) {
   CheckJNodeType<T>(*jNode.getVariant());
   return (static_cast<T &>(*jNode.getVariant()));
 }
-template <typename T> const T &JNodeRef(const JNode &jNode) {
+template <typename T> const T &JRef(const JNode &jNode) {
   CheckJNodeType<T>(*jNode.getVariant());
   return (static_cast<const T &>(*jNode.getVariant()));
 }
