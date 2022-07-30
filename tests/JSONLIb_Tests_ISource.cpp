@@ -28,7 +28,7 @@ TEST_CASE("ISource (Buffer) interface (uses file testfile001.json).",
   }
   SECTION("Check that BufferSource position() works correctly.",
           "[JSON][ISource][Buffer]") {
-    BufferSource source{"[true  , \"Out of time\",  7.89043e+18, true]"};
+    BufferSource source{R"([true  , "Out of time",  7.89043e+18, true])"};
     while (source.more() && !source.match("time")) {
       source.next();
     }
@@ -85,7 +85,7 @@ TEST_CASE("ISource (Buffer) interface (uses file testfile001.json).",
       strippedJSON += source.current();
       source.next();
     }
-    REQUIRE(strippedJSON == "{\"Name\":\"Pete\"}");
+    REQUIRE(strippedJSON == R"({"Name":"Pete"})");
     REQUIRE(source.current() == static_cast<char>(EOF));
   }
   SECTION("Check that BufferSource ignoreWS() at end of file does not throw "
@@ -104,15 +104,15 @@ TEST_CASE("ISource (Buffer) interface (uses file testfile001.json).",
   SECTION("Check that BufferSource finds a string at the current position and "
           "moves on past it in stream",
           "[JSON][ISource][Buffer]") {
-    BufferSource source{"[true  , \"Out of time\",  7.89043e+18, true]"};
+    BufferSource source{R"([true  , "Out of time",  7.89043e+18, true])"};
     REQUIRE_FALSE(source.match("[trap"));  // Not there
     REQUIRE_FALSE(!source.match("[true")); // Match
     REQUIRE(source.position() == 5);       // new position
   }
   SECTION("Check that BufferSource backup works and doesn't go negative.",
           "[XML][Parse][BufferSource]") {
-    BufferSource source{"[true  , \"Out of time\",  7.89043e+18, true]"};
-    REQUIRE_FALSE(!source.match("[true  , \"Out "));
+    BufferSource source{R"([true  , "Out of time",  7.89043e+18, true])"};
+    REQUIRE_FALSE(!source.match(R"([true  , "Out )"));
     REQUIRE(source.current() == 'o');
     source.backup(4);
     REQUIRE(source.current() == 'O');
@@ -156,7 +156,7 @@ TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]") {
           "[JSON][ISource][File]") {
     std::filesystem::remove(kGeneratedJSONFile);
     writeToFile(kGeneratedJSONFile,
-                "[true  , \"Out of time\",  7.89043e+18, true]");
+                R"([true  , "Out of time",  7.89043e+18, true])");
     FileSource source{kGeneratedJSONFile};
     while (source.more() && !source.match("time")) {
       source.next();
@@ -216,7 +216,7 @@ TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]") {
       strippedJSON += source.current();
       source.next();
     }
-    REQUIRE(strippedJSON == "{\"Name\":\"Pete\"}");
+    REQUIRE(strippedJSON == R"({"Name":"Pete"})");
     REQUIRE(source.current() == static_cast<char>(EOF));
   }
   SECTION("Check that FileSource ignoreWS() at end of file does not throw "
@@ -240,7 +240,7 @@ TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]") {
           "[JSON][ISource][File]") {
     std::filesystem::remove(kGeneratedJSONFile);
     writeToFile(kGeneratedJSONFile,
-                "[true  , \"Out of time\",  7.89043e+18, true]");
+                R"([true  , "Out of time",  7.89043e+18, true])");
     FileSource source{kGeneratedJSONFile};
     REQUIRE_FALSE(source.match("[trap"));  // Not there
     REQUIRE_FALSE(!source.match("[true")); // Match
@@ -250,9 +250,9 @@ TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]") {
           "[XML][Parse][File]") {
     std::filesystem::remove(kGeneratedJSONFile);
     writeToFile(kGeneratedJSONFile,
-                "[true  , \"Out of time\",  7.89043e+18, true]");
+                R"([true  , "Out of time",  7.89043e+18, true])");
     FileSource source{kGeneratedJSONFile};
-    REQUIRE_FALSE(!source.match("[true  , \"Out "));
+    REQUIRE_FALSE(!source.match(R"([true  , "Out )"));
     REQUIRE(source.current() == 'o');
     source.backup(4);
     REQUIRE(source.current() == 'O');
