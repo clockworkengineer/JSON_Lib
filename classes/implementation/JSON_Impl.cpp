@@ -144,21 +144,21 @@ JNode JSON_Impl::parseNull(ISource &source) {
 /// <param name="source">Source of JSON.</param>
 /// <returns>Object JNode (key/value pairs).</returns>
 JNode JSON_Impl::parseObject(ISource &source) {
-  Object::EntryList objects;
+  Object::EntryList objectEntries;
   source.next();
   source.ignoreWS();
   if (source.current() != '}') {
-    objects.emplace_back(parseKeyValuePair(source));
+    objectEntries.emplace_back(parseKeyValuePair(source));
     while (source.current() == ',') {
       source.next();
-      objects.emplace_back(parseKeyValuePair(source));
+      objectEntries.emplace_back(parseKeyValuePair(source));
     }
   }
   if (source.current() != '}') {
     throw Error("Syntax error detected.");
   }
   source.next();
-  return (makeObject(objects));
+  return (makeObject(objectEntries));
 }
 /// <summary>
 /// Parse an array from a JSON source stream.
@@ -257,7 +257,7 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination) {
   case JNodeType::object: {
     int commaCount = JRef<Object>(jNode).size() - 1;
     destination.add('{');
-    for (auto &[key, node] : JRef<Object>(jNode).objects()) {
+    for (auto &[key, node] : JRef<Object>(jNode).objectEntries()) {
       destination.add('"');
       destination.add(m_translator->toJSON(key));
       destination.add("\":");
@@ -381,9 +381,9 @@ JNode &JSON_Impl::operator[](const std::string &key) {
     return ((m_jNodeRoot)[key]);
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Object>(m_jNodeRoot)
-        .objects()
+        .entries()
         .emplace_back(Object::Entry{key, makeHole()});
-    return (JRef<Object>(m_jNodeRoot).objects().back().value);
+    return (JRef<Object>(m_jNodeRoot).entries().back().value);
   }
 }
 const JNode &JSON_Impl::operator[](const std::string &key) const // Object

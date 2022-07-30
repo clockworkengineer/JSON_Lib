@@ -90,7 +90,7 @@ void outputAnalysis(const JNodeDetails &jNodeDetails) {
   PLOG_INFO << "JNode Tree contains " << jNodeDetails.totalArrays << " arrays.";
   PLOG_INFO << "JNode Tree max array size " << jNodeDetails.maxArraySize << ".";
   PLOG_INFO << "JNode Tree contains " << jNodeDetails.totalObjects
-            << " objects.";
+            << " objectEntries.";
   PLOG_INFO << "JNode Tree max object size " << jNodeDetails.maxObjectSize
             << ".";
   PLOG_INFO << "----------------------------------------------------";
@@ -122,8 +122,8 @@ void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails) {
     jNodeDetails.sizeInBytes += sizeof(Object);
     jNodeDetails.totalObjects++;
     jNodeDetails.maxObjectSize = std::max(
-        JRef<Object>(jNode).objects().size(), jNodeDetails.maxObjectSize);
-    for (auto &[key, node] : JRef<Object>(jNode).objects()) {
+        JRef<Object>(jNode).objectEntries().size(), jNodeDetails.maxObjectSize);
+    for (auto &[key, node] : JRef<Object>(jNode).objectEntries()) {
       analyzeJNode(JRef<Object>(jNode)[key], jNodeDetails);
       jNodeDetails.unique_keys.insert(key);
       jNodeDetails.sizeInBytes += key.size();

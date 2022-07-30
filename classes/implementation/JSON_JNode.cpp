@@ -113,9 +113,9 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
 JNode &JNode::operator[](const std::string &key) {
   if (this->getType() == JNodeType::hole) {
     this->m_jNodeVariant = std::make_unique<Object>();
-    JRef<Object>(*this).objects().emplace_back(
+    JRef<Object>(*this).entries().emplace_back(
         Object::Entry{key, makeHole()});
-    return (JRef<Object>(*this).objects().back().value);
+    return (JRef<Object>(*this).entries().back().value);
   }
   return (JRef<Object>(*this)[key]);
 }

@@ -40,40 +40,40 @@ struct Object : Variant {
   using EntryList = std::vector<Object::Entry>;
   // Constructors/Destructors
   Object() : Variant(JNodeType::object) {}
-  explicit Object(EntryList &objects)
-      : Variant(JNodeType::object), m_jsonObjects(std::move(objects)) {}
+  explicit Object(EntryList &objectEntries)
+      : Variant(JNodeType::object), m_jsonObjectEntries(std::move(objectEntries)) {}
   Object(const Object &other) = delete;
   Object &operator=(const Object &other) = delete;
   Object(Object &&other) = default;
   Object &operator=(Object &&other) = default;
   ~Object() = default;
   // Search for a given entry given a key and object list
-  [[nodiscard]] auto findKey(const std::string &key, EntryList &objects) {
+  [[nodiscard]] auto findKey(const std::string &key, EntryList &objectEntries) {
     auto entry = std::find_if(
-        objects.begin(), objects.end(),
+        objectEntries.begin(), objectEntries.end(),
         [&key](const Entry &entry) -> bool { return (entry.key == key); });
-    if (entry == objects.end()) {
+    if (entry == objectEntries.end()) {
       throw JNode::Error("Invalid key used to access object.");
     }
     return (entry);
   }
-  [[nodiscard]] auto findKey(const std::string &key, const EntryList &objects) const {
+  [[nodiscard]] auto findKey(const std::string &key, const EntryList &objectEntries) const {
     auto entry = std::find_if(
-        objects.begin(), objects.end(),
+        objectEntries.begin(), objectEntries.end(),
         [&key](const Entry &entry) -> bool { return (entry.key == key); });
-    if (entry == objects.end()) {
+    if (entry == objectEntries.end()) {
       throw JNode::Error("Invalid key used to access object.");
     }
     return (entry);
   }
   // Find a given object entry given its key
   [[nodiscard]] auto find(const std::string &key) const {
-    return (findKey(key, m_jsonObjects));
+    return (findKey(key, m_jsonObjectEntries));
   }
   // Return true if an object contains a given key
   [[nodiscard]] bool contains(const std::string &key) const {
     try {
-      [[maybe_unused]] auto entry = findKey(key, m_jsonObjects);
+      [[maybe_unused]] auto entry = findKey(key, m_jsonObjectEntries);
     } catch ([[maybe_unused]] const JNode::Error &e) {
       return (false);
     }
@@ -81,21 +81,21 @@ struct Object : Variant {
   }
   // Return number of entries in an object
   [[nodiscard]] int size() const {
-    return (static_cast<int>(m_jsonObjects.size()));
+    return (static_cast<int>(m_jsonObjectEntries.size()));
   }
   // Return object entry for a given key
   JNode &operator[](const std::string &key) {
-    return (findKey(key, m_jsonObjects)->value);
+    return (findKey(key, m_jsonObjectEntries)->value);
   }
   const JNode &operator[](const std::string &key) const {
-    return (findKey(key, m_jsonObjects)->value);
+    return (findKey(key, m_jsonObjectEntries)->value);
   }
   // Return reference to base of object entries
-  EntryList &objects() { return (m_jsonObjects); }
-  [[nodiscard]] const EntryList &objects() const { return (m_jsonObjects); }
+  EntryList &entries() { return (m_jsonObjectEntries); }
+  [[nodiscard]] const EntryList &objectEntries() const { return (m_jsonObjectEntries); }
 
 private:
-  EntryList m_jsonObjects;
+  EntryList m_jsonObjectEntries;
 };
 // =====
 // Array

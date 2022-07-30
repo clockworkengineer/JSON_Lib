@@ -10,8 +10,8 @@ namespace JSONLib {
 // ==============
 // JNode Creation
 // ==============
-inline JNode makeObject(Object::EntryList &objects) {
-  return (JNode{std::make_unique<Object>(Object{objects})});
+inline JNode makeObject(Object::EntryList &objectEntries) {
+  return (JNode{std::make_unique<Object>(Object{objectEntries})});
 }
 inline JNode makeArray(Array::ArrayList &array) {
   return (JNode{std::make_unique<Array>(Array{array})});
