@@ -17,7 +17,6 @@
 #include <filesystem>
 #include <iostream>
 #include <set>
-
 // ====
 // JSON
 // ====
@@ -25,13 +24,11 @@
 #include "JSON_Destinations.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Types.hpp"
-
 // =======
 // Logging
 // =======
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "plog/Log.h"
-
 // ====================
 // JSON class namespace
 // ====================

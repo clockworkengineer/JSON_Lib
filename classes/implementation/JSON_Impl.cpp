@@ -241,8 +241,7 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination) {
     break;
   case JNodeType::string:
     destination.add('"');
-    destination.add(
-        m_translator->toJSON(JRef<String>(jNode).toString()));
+    destination.add(m_translator->toJSON(JRef<String>(jNode).toString()));
     destination.add('"');
     break;
   case JNodeType::boolean:
@@ -303,6 +302,12 @@ void JSON_Impl::stripWhiteSpace(ISource &source, IDestination &destination) {
     source.next();
   }
 }
+/// <summary>
+/// Recursively traverse JNode tree calling IAction methods.
+/// </summary>
+/// <param name=jNode>JNode structure to be traversed.</param>
+/// <param name=action>Action methods to call during traversal.</param>
+void JSON_Impl::traverseJNodes([[maybe_unused]]const JNode &jNode, [[maybe_unused]] IAction &action) {}
 // ==============
 // PUBLIC METHODS
 // ==============
@@ -364,10 +369,17 @@ void JSON_Impl::parse(const std::string &jsonString) {
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 void JSON_Impl::stringify(IDestination &destination) {
-  if (m_jNodeRoot.getVariant()==nullptr) {
+  if (m_jNodeRoot.getVariant() == nullptr) {
     throw Error("No JSON to stringify.");
   }
   stringifyJNodes(m_jNodeRoot, destination);
+}
+/// <summary>
+/// Recursively traverse JNode structure calling IAction methods.
+/// </summary>
+/// <param name=action>Action methods to call during traversal.</param>
+void JSON_Impl::traverse([[maybe_unused]] IAction &action) {
+  traverseJNodes(m_jNodeRoot, action);
 }
 /// <summary>
 /// Return object entry for the passed in key.
@@ -375,7 +387,7 @@ void JSON_Impl::stringify(IDestination &destination) {
 /// <param name=key>Object entry (JNode) key.</param>
 JNode &JSON_Impl::operator[](const std::string &key) {
   try {
-    if (m_jNodeRoot.getVariant()==nullptr) {
+    if (m_jNodeRoot.getVariant() == nullptr) {
       parse("{}");
     }
     return ((m_jNodeRoot)[key]);
@@ -396,7 +408,7 @@ const JNode &JSON_Impl::operator[](const std::string &key) const // Object
 /// <param name=index>Array entry (JNode) index.</param>
 JNode &JSON_Impl::operator[](std::size_t index) {
   try {
-    if (m_jNodeRoot.getVariant()==nullptr) {
+    if (m_jNodeRoot.getVariant() == nullptr) {
       parse("[]");
     }
     return ((m_jNodeRoot)[index]);

@@ -10,8 +10,12 @@
 // =============================
 // Source/Destination interfaces
 // =============================
-#include "IDestination.hpp"
 #include "ISource.hpp"
+#include "IDestination.hpp"
+// ==========================
+// Traversal action interface
+// ==========================
+#include "IAction.hpp"
 // ====
 // JSON
 // ====
@@ -65,6 +69,8 @@ public:
   // Get JSON array element at index
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
+  // Traverse JSON tree
+  void traverse(IAction &action);
   // ================
   // PUBLIC VARIABLES
   // ================
@@ -89,6 +95,8 @@ private:
   static void stringifyJNodes(const JNode &jNode, IDestination &destination);
   // Remove JSON whitespace
   static void stripWhiteSpace(ISource &source, IDestination &destination);
+    // Produce JSON test string from JSON tree
+  static void traverseJNodes(const JNode &jNode, IAction &action);
   // =================
   // PRIVATE VARIABLES
   // =================

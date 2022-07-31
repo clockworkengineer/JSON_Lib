@@ -9,7 +9,7 @@
 // the process of parsing for the requirements of this library
 // (this might change in future versions). For an in-depth description
 // of the JSON specification refer to its RFC at web address
-// https://tools.ietf.org/html/rfc8259 and JSON grammar at web page 
+// https://tools.ietf.org/html/rfc8259 and JSON grammar at web page
 // https://www.json.org/json-en.html.
 //
 // Dependencies:   C20++ - Language standard features used.
@@ -132,4 +132,11 @@ const JNode &JSON::operator[](std::size_t index) const {
 /// <returns>Root of JSON tree,</returns>
 JNode &JSON::root() { return (m_jsonImplementation->root()); }
 const JNode &JSON::root() const { return (m_jsonImplementation->root()); }
+/// <summary>
+/// Recursively traverse JNode structure calling IAction methods.
+/// </summary>
+/// <param name=action>Action methods to call during traversal.</param>
+void JSON::traverse([[maybe_unused]]IAction &action) {
+
+}
 } // namespace JSONLib

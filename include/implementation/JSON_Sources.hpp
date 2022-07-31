@@ -5,7 +5,6 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
-
 // ================
 // Source interface
 // ================
@@ -55,7 +54,6 @@ public:
   [[nodiscard]] std::size_t position() const override {
     return (m_bufferPosition);
   }
-
 private:
   std::size_t m_bufferPosition = 0;
   std::string m_parseBuffer;
@@ -100,7 +98,6 @@ public:
     }
     return (std::filesystem::file_size(m_sourceFileName));
   }
-
 private:
   mutable std::ifstream m_source;
   std::string m_sourceFileName;

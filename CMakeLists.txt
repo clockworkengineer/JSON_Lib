@@ -39,6 +39,7 @@ set (JSON_INCLUDES
     ./include/implementation/JSON_Destinations.hpp
     ./include/implementation/JSON_Translator.hpp
     ./include/implementation/JSON_Converter.hpp
+    ./include/interface/IAction.hpp
     ./include/interface/ISource.hpp
     ./include/interface/IDestination.hpp
     ./include/interface/ITranslator.hpp

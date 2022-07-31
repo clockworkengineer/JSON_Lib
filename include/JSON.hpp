@@ -16,6 +16,7 @@ namespace JSONLib {
 class JSON_Impl;
 class ISource;
 class IDestination;
+class IAction;
 class IConverter;
 class ITranslator;
 struct JNode;
@@ -58,6 +59,8 @@ public:
   void strip(ISource &source, IDestination &&destination) const;
   void strip(ISource &&source, IDestination &destination) const;
   void strip(ISource &&source, IDestination &&destination) const;
+    // Traverse JSON tree
+  void traverse(IAction &action);
   // Get root of JSON tree
   [[nodiscard]] JNode &root();
   [[nodiscard]] const JNode &root() const;
