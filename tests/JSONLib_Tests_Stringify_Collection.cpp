@@ -23,35 +23,35 @@ TEST_CASE(
     "[JSON][Stringify]") {
   const JSON json;
   SECTION(
-      "Stringify an object ({\"Age\":77,\"Name\":\"Rob\"}) and check its value",
+      R"(Stringify an object ({"Age":77,"Name":"Rob"}) and check its value)",
       "[JSON][Stringify]") {
-    const std::string expected{"{\"Age\":77,\"Name\":\"Rob\"}"};
+    const std::string expected{R"({"Age":77,"Name":"Rob"})"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Stringify an array ([999,\"Time\",null,true] and check its value",
+  SECTION(R"(Stringify an array ([999,"Time",null,true] and check its value)",
           "[JSON][Stringify]") {
-    const std::string expected{"[999,\"Time\",null,true]"};
+    const std::string expected{R"([999,"Time",null,true])"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Stringify an object ({\"City\":\"London\",\"Population\":8000000}) "
+  SECTION(R"(Stringify an object ({"City":"London","Population":8000000}) )"
           "and check its value",
           "[JSON][Stringify]") {
-    const std::string expected{"{\"City\":\"London\",\"Population\":8000000}"};
+    const std::string expected{R"({"City":"London","Population":8000000})"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Stringify an array ([true,\"Out of time\",7.89043e+18,true]) and "
+  SECTION(R"(Stringify an array ([true,"Out of time",7.89043e+18,true]) and )"
           "check its value",
           "[JSON][Stringify]") {
-    const std::string expected{"[true,\"Out of time\",7.89043e+18,true]"};
+    const std::string expected{R"([true,"Out of time",7.89043e+18,true])"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);

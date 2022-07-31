@@ -24,53 +24,53 @@ TEST_CASE("JSON object for stringification of strings with escape characters.",
   const JSON json;
   SECTION("Stringify JSON string with escapes '/' to buffer and check value",
           "[JSON][Stringify][Escapes]") {
-    const std::string expected{"\"Test String / \\t \""};
+    const std::string expected{R"("Test String / \t ")"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     REQUIRE(JRef<String>(json.root()).string() == "Test String / \t ");
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Stringify JSON string with escapes '\\t' to buffer and check value",
+  SECTION(R"(Stringify JSON string with escapes '\t' to buffer and check value)",
           "[JSON][Stringify][Escapes]") {
-    const std::string expected{"\"Test String \\t \""};
+    const std::string expected{R"("Test String \t ")"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Stringify JSON string with escapes '\\\"' to buffer and check value",
+  SECTION(R"(Stringify JSON string with escapes '\"' to buffer and check value)",
           "[JSON][Stringify][Escapes]") {
-    const std::string expected{"\"Test String \\\" \""};
+    const std::string expected{R"("Test String \" ")"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Stringify JSON string with escapes '\\\\' to buffer and check value",
+  SECTION(R"(Stringify JSON string with escapes '\\' to buffer and check value)",
           "[JSON][Stringify][Escapes]") {
-    const std::string expected{"\"Test String \\\\ \""};
+    const std::string expected{R"("Test String \\ ")"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Stringify JSON string with escapes '\\b' to buffer and check value",
+  SECTION(R"(Stringify JSON string with escapes '\b' to buffer and check value)",
           "[JSON][Stringify][Escapes]") {
-    const std::string expected{"\"Test String \\b \""};
+    const std::string expected{R"("Test String \b ")"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Stringify JSON string with escapes '\\/' to buffer and check value",
+  SECTION(R"(Stringify JSON string with escapes '\/' to buffer and check value)",
           "[JSON][Stringify][Escapes]") {
     // Escaped normal ascii is not re-scaped for stringification
-    const std::string expected{"\"Test String \\/ \""};
+    const std::string expected{R"("Test String \/ ")"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == "\"Test String / \"");
+    REQUIRE(jsonDestination.getBuffer() == R"("Test String / ")");
   }
   SECTION("Stringify JSON string with escapes '\\f' to buffer and check value",
           "[JSON][Stringify][Escapes]") {
@@ -80,43 +80,43 @@ TEST_CASE("JSON object for stringification of strings with escape characters.",
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Stringify JSON string with escapes '\\n' to buffer and check value",
+  SECTION(R"(Stringify JSON string with escapes '\n' to buffer and check value)",
           "[JSON][Stringify][Escapes]") {
-    const std::string expected{"\"Test String \\n \""};
+    const std::string expected{R"("Test String \n ")"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Stringify JSON string with escapes '\\r' to buffer and check value",
+  SECTION(R"(Stringify JSON string with escapes '\r' to buffer and check value)",
           "[JSON][Stringify][Escapes]") {
-    const std::string expected{"\"Test String \\r \""};
+    const std::string expected{R"("Test String \r ")"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Stringify JSON string with escapes '\\t' to buffer and check value",
+  SECTION(R"(Stringify JSON string with escapes '\t' to buffer and check value)",
           "[JSON][Stringify][Escapes]") {
-    const std::string expected{"\"Test String \\t \""};
+    const std::string expected{R"("Test String \t ")"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
   SECTION(
-      "Stringify JSON string with escapes '\\u0123' to buffer and check value",
+      R"(Stringify JSON string with escapes '\u0123' to buffer and check value)",
       "[JSON][Stringify][Escapes]") {
-    const std::string expected{"\"Test String \\u0123 \""};
+    const std::string expected{R"("Test String \u0123 ")"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Stringify JSON string with escapes '\\u0123 \\u0456' to buffer and "
+  SECTION(R"(Stringify JSON string with escapes '\u0123 \u0456' to buffer and )"
           "check value",
           "[JSON][Stringify][Escapes]") {
-    const std::string expected{"\"Test String \\u0123 \\u0456 \""};
+    const std::string expected{R"("Test String \u0123 \u0456 ")"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);

@@ -22,7 +22,7 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]") {
   const JSON json;
   SECTION("Parse missing terminating '\"' in string",
           "[JSON][Parse][Exceptions]") {
-    BufferSource jsonSource{"{ \"one\" : \"Apple }"};
+    BufferSource jsonSource{R"({ "one" : "Apple })"};
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource),
@@ -30,7 +30,7 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]") {
   }
   SECTION("Parse number with starting with invalid character",
           "[JSON][Parse][Exceptions]") {
-    BufferSource jsonSource{"{ \"one\" : z19034}"};
+    BufferSource jsonSource{R"({ "one" : z19034})"};
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource),
@@ -38,7 +38,7 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]") {
   }
   SECTION("Parse object with invalid value field (number).",
           "[JSON][Parse][Exceptions]") {
-    BufferSource jsonSource{"{ \"one\" : 18987u3 }"};
+    BufferSource jsonSource{R"({ "one" : 18987u3 })"};
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource),
@@ -46,14 +46,14 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]") {
   }
   SECTION("Parse object with missing value field.",
           "[JSON][Parse][Exceptions]") {
-    BufferSource jsonSource{"{ \"one\" : }"};
+    BufferSource jsonSource{R"({ "one" : })"};
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource),
                         "JSON Error: Syntax error detected.");
   }
   SECTION("Parse object with missing key field.", "[JSON][Parse][Exceptions]") {
-    BufferSource jsonSource{"{  : 89012 }"};
+    BufferSource jsonSource{R"({  : 89012 })"};
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource),
@@ -61,7 +61,7 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]") {
   }
   SECTION("Parse object with missing closing '}'.",
           "[JSON][Parse][Exceptions]") {
-    BufferSource jsonSource{"{  \"one\" : 18987"};
+    BufferSource jsonSource{R"({  "one" : 18987)"};
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource),

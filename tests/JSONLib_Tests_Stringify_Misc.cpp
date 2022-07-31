@@ -24,7 +24,7 @@ TEST_CASE("Stringify to a file and check result.",
   const std::string generatedFileName{prefixTestDataPath(kGeneratedJSONFile)};
   SECTION("Stringify object to file and check value",
           "[JSON][Stringify][File][Validate]") {
-    const std::string expected{"{\"City\":\"London\",\"Population\":8000000}"};
+    const std::string expected{R"({"City":"London","Population":8000000})"};
     std::filesystem::remove(generatedFileName);
     FileDestination jsonDestination{generatedFileName};
     json.parse(BufferSource{expected});
@@ -33,7 +33,7 @@ TEST_CASE("Stringify to a file and check result.",
   }
   SECTION("Stringify array to file and check value",
           "[JSON][Stringify][File][Validate]") {
-    const std::string expected{"[999,\"Time\",null,true]"};
+    const std::string expected{R"([999,"Time",null,true])"};
     std::filesystem::remove(generatedFileName);
     FileDestination jsonDestination{generatedFileName};
     json.parse(BufferSource{expected});

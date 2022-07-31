@@ -22,7 +22,7 @@ TEST_CASE("JSON object for parse of simple types (number,string,boolean,null).",
           "[JSON][Parse][Simple]") {
   const JSON json;
   SECTION("Parse an string (example string)", "[JSON][Parse][Simple]") {
-    BufferSource jsonSource{"\"example string\""};
+    BufferSource jsonSource{R"("example string")"};
     json.parse(jsonSource);
     REQUIRE((json.root()).getType() == JNodeType::string);
   }
@@ -60,13 +60,13 @@ TEST_CASE("JSON object for parse of simple types and check values.",
   const JSON json;
   SECTION("Parse an string (example string) and check its value",
           "[JSON][Parse][Simple][Validate]") {
-    BufferSource jsonSource{"\"example string\""};
+    BufferSource jsonSource{R"("example string")"};
     json.parse(jsonSource);
     REQUIRE(JRef<String>(json.root()).string() == "example string");
   }
   SECTION("Parse an string (another example string) and check its value",
           "[JSON][Parse][Simple][Validate]") {
-    BufferSource jsonSource{"\"another example string\""};
+    BufferSource jsonSource{R"("another example string")"};
     json.parse(jsonSource);
     REQUIRE(JRef<String>(json.root()).string() ==
             "another example string");

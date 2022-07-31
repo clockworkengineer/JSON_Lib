@@ -23,7 +23,7 @@ TEST_CASE("JSON object for stringification of simple types and check values",
   const JSON json;
   SECTION("Stringify a string (Test string) and check its value",
           "[JSON][Stringify][Simple][Validate]") {
-    const std::string expected{"\"Test string.\""};
+    const std::string expected{R"("Test string.")"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
@@ -31,7 +31,7 @@ TEST_CASE("JSON object for stringification of simple types and check values",
   }
   SECTION("Stringify a string (Test another string) and check its value",
           "[JSON][Stringify][Simple][Validate]") {
-    const std::string expected{"\"Test another string.\""};
+    const std::string expected{R"("Test another string.")"};
     BufferDestination jsonDestination;
     json.parse(BufferSource{expected});
     json.stringify(jsonDestination);
