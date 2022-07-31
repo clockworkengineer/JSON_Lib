@@ -6,7 +6,6 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-
 // =========
 // NAMESPACE
 // =========
@@ -57,15 +56,20 @@ struct Numeric {
   template <typename T> [[nodiscard]] T convertType() const {
     if (m_type == Type::Int) {
       return (static_cast<T>(m_values.m_integer));
-    } else if (m_type == Type::Long) {
+    }
+    if (m_type == Type::Long) {
       return (static_cast<T>(m_values.m_long));
-    } else if (m_type == Type::LLong) {
+    }
+    if (m_type == Type::LLong) {
       return (static_cast<T>(m_values.m_llong));
-    } else if (m_type == Type::Float) {
+    }
+    if (m_type == Type::Float) {
       return (static_cast<T>(m_values.m_float));
-    } else if (m_type == Type::Double) {
+    }
+    if (m_type == Type::Double) {
       return (static_cast<T>(m_values.m_double));
-    } else if (m_type == Type::LDouble) {
+    }
+    if (m_type == Type::LDouble) {
       return (static_cast<T>(m_values.m_double));
     }
     throw Error("Could not convert unknown type.");
@@ -260,13 +264,17 @@ struct Numeric {
     }
     if (m_type == Type::Long) {
       return (numericToString(m_values.m_long));
-    } else if (m_type == Type::LLong) {
+    }
+    if (m_type == Type::LLong) {
       return (numericToString(m_values.m_llong));
-    } else if (m_type == Type::Float) {
+    }
+    if (m_type == Type::Float) {
       return (numericToString(m_values.m_float));
-    } else if (m_type == Type::Double) {
+    }
+    if (m_type == Type::Double) {
       return (numericToString(m_values.m_double));
-    } else if (m_type == Type::LDouble) {
+    }
+    if (m_type == Type::LDouble) {
       return (numericToString(m_values.m_ldouble));
     }
     throw Error("Could not convert unknown type.");
