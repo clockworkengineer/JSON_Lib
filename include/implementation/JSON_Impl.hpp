@@ -12,7 +12,6 @@
 // =============================
 #include "IDestination.hpp"
 #include "ISource.hpp"
-
 // ==========================
 // Traversal action interface
 // ==========================
@@ -97,7 +96,7 @@ private:
   static void stringifyJNodes(const JNode &jNode, IDestination &destination);
   // Remove JSON whitespace
   static void stripWhiteSpace(ISource &source, IDestination &destination);
-  // Produce JSON test string from JSON tree
+  // Traverse JSON tree
   static void traverseJNodes(JNode &jNode, IAction &action);
   static void traverseJNodes(const JNode &jNode, IAction &action);
   // =================

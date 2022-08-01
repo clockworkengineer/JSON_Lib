@@ -33,11 +33,35 @@ public:
   IAction(IAction &&IAction) = delete;
   IAction &operator=(IAction &&other) = delete;
   virtual ~IAction() = default;
-  virtual void onString(const String &jNodeString) = 0;
-  virtual void onNumber(const Number &jNodeNumber) = 0;
-  virtual void onBoolean(const Boolean &jNodeBoolean) = 0;
-  virtual void onNull(const Null &jNodeNull) = 0;
-  virtual void onArray(const Array &jNodeArray) = 0;
-  virtual void onObject(const Object &jNodeObject) = 0;
+  // =============================
+  // String encountered so process
+  // =============================
+  virtual void onString([[maybe_unused]] String &jNodeString) {}
+  virtual void onString([[maybe_unused]] const String &jNodeString) {}
+  // =============================
+  // Number encountered so process
+  // =============================
+  virtual void onNumber([[maybe_unused]] Number &jNodeNumber) {}
+  virtual void onNumber([[maybe_unused]] const Number &jNodeNumber) {}
+  // ==============================
+  // Boolean encountered so process
+  // ==============================
+  virtual void onBoolean([[maybe_unused]] Boolean &jNodeBoolean) {}
+  virtual void onBoolean([[maybe_unused]] const Boolean &jNodeBoolean)  {}
+  // ===========================
+  // Null encountered so process
+  // ===========================
+  virtual void onNull([[maybe_unused]] Null &jNodeNull) {}
+  virtual void onNull([[maybe_unused]] const Null &jNodeNull)  {}
+  // ============================
+  // Array encountered so process
+  // ============================
+  virtual void onArray([[maybe_unused]] Array &jNodeArray) {}
+  virtual void onArray([[maybe_unused]] const Array &jNodeArray)  {}
+  // =============================
+  // Object encountered so process
+  // =============================
+  virtual void onObject([[maybe_unused]] Object &jNodeObject) {}
+  virtual void onObject([[maybe_unused]] const Object &jNodeObject) {}
 };
 } // namespace JSONLib

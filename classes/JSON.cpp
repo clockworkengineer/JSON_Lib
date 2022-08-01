@@ -110,7 +110,7 @@ void JSON::stringify(IDestination &&destination) const {
 /// <param name=action>Action methods to call during traversal.</param>
 void JSON::traverse(IAction &action) { m_jsonImplementation->traverse(action); }
 void JSON::traverse(IAction &action) const {
-  m_jsonImplementation->traverse(action);
+  std::as_const(*m_jsonImplementation).traverse(action);
 }
 /// <summary>
 /// Return object entry for the passed in key.

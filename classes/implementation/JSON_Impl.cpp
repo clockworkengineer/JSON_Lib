@@ -470,9 +470,9 @@ JNode &JSON_Impl::operator[](const std::string &key) {
     return ((m_jNodeRoot)[key]);
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Object>(m_jNodeRoot)
-        .entries()
+        .objectEntries()
         .emplace_back(Object::Entry{key, makeHole()});
-    return (JRef<Object>(m_jNodeRoot).entries().back().value);
+    return (JRef<Object>(m_jNodeRoot).objectEntries().back().value);
   }
 }
 const JNode &JSON_Impl::operator[](const std::string &key) const // Object

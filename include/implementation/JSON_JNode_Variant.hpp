@@ -91,7 +91,7 @@ struct Object : Variant {
     return (findKey(key, m_jsonObjectEntries)->value);
   }
   // Return reference to base of object entries
-  EntryList &entries() { return (m_jsonObjectEntries); }
+  EntryList &objectEntries() { return (m_jsonObjectEntries); }
   [[nodiscard]] const EntryList &objectEntries() const { return (m_jsonObjectEntries); }
 
 private:

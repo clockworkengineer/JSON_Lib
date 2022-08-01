@@ -20,10 +20,12 @@
 // ====
 // JSON
 // ====
+#include "IAction.hpp"
 #include "JSON.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Types.hpp"
+
 // =======
 // Logging
 // =======
@@ -39,7 +41,64 @@ using namespace JSONLib;
 //
 // JNode Tree Details
 //
-struct JNodeDetails {
+class JNodeDetails : public IAction {
+public:
+  // ========================
+  // Constructors/destructors
+  // ========================
+  JNodeDetails() = default;
+  JNodeDetails(const JNodeDetails &other) = delete;
+  JNodeDetails &operator=(const JNodeDetails &other) = delete;
+  JNodeDetails(IAction &&JNodeDetails) = delete;
+  JNodeDetails &operator=(JNodeDetails &&other) = delete;
+  virtual ~JNodeDetails() = default;
+  // Add string details to analysis
+  virtual void onString(const String &jNodeString) override {
+    totalNodes++;
+    sizeInBytes += sizeof(String);
+    sizeInBytes += jNodeString.string().size();
+    unique_strings.insert(jNodeString.string());
+    totalStrings++;
+  }
+  // Add number details to analysis
+  virtual void onNumber([[maybe_unused]] const Number &jNodeNumber) override {
+    totalNodes++;
+    sizeInBytes += sizeof(Number);
+  }
+  virtual void
+  onBoolean([[maybe_unused]] const Boolean &jNodeBoolean) override {
+    totalNodes++;
+    sizeInBytes += sizeof(Boolean);
+  }
+  // Add null details to analysis
+  virtual void onNull([[maybe_unused]] const Null &jNodeNull) override {
+    totalNodes++;
+    sizeInBytes += sizeof(Null);
+  }
+  // Add array details to analysis
+  virtual void onArray(const Array &jNodeArray) override {
+    totalNodes++;
+    sizeInBytes += sizeof(Array);
+    totalArrays++;
+    maxArraySize = std::max(jNodeArray.size(), maxArraySize);
+    for ([[maybe_unused]] auto &bNodeEntry : jNodeArray.array()) {
+      sizeInBytes += sizeof(JNode);
+    }
+  }
+  // Add object details to analysis
+  virtual void onObject(const Object &jNodeObject) override {
+    totalNodes++;
+    sizeInBytes += sizeof(Object);
+    totalObjects++;
+    maxObjectSize = std::max(jNodeObject.objectEntries().size(), maxObjectSize);
+    for (auto &[key, node] : jNodeObject.objectEntries()) {
+      unique_keys.insert(key);
+      sizeInBytes += key.size();
+      sizeInBytes += sizeof(Object::Entry);
+      totalKeys++;
+    }
+  }
+  // JSON analysis data
   int64_t totalNodes{};
   size_t sizeInBytes{};
   int64_t totalKeys{};
@@ -93,68 +152,6 @@ void outputAnalysis(const JNodeDetails &jNodeDetails) {
   PLOG_INFO << "----------------------------------------------------";
 }
 /// <summary>
-/// Recursively analyzes JNode tree.
-/// </summary>
-/// <param name="jNode">Current JNode</param>
-/// <param name="jNodeDetails">Result of JNode tree analysis</param>
-void analyzeJNode(const JNode &jNode, JNodeDetails &jNodeDetails) {
-  jNodeDetails.totalNodes++;
-  switch (jNode.getType()) {
-  case JNodeType::number:
-    jNodeDetails.sizeInBytes += sizeof(Number);
-    break;
-  case JNodeType::string:
-    jNodeDetails.sizeInBytes += sizeof(String);
-    jNodeDetails.sizeInBytes += JRef<String>(jNode).string().size();
-    jNodeDetails.unique_strings.insert(JRef<String>(jNode).string());
-    jNodeDetails.totalStrings++;
-    break;
-  case JNodeType::boolean:
-    jNodeDetails.sizeInBytes += sizeof(Boolean);
-    break;
-  case JNodeType::null:
-    jNodeDetails.sizeInBytes += sizeof(Null);
-    break;
-  case JNodeType::object: {
-    jNodeDetails.sizeInBytes += sizeof(Object);
-    jNodeDetails.totalObjects++;
-    jNodeDetails.maxObjectSize = std::max(
-        JRef<Object>(jNode).objectEntries().size(), jNodeDetails.maxObjectSize);
-    for (auto &[key, node] : JRef<Object>(jNode).objectEntries()) {
-      analyzeJNode(JRef<Object>(jNode)[key], jNodeDetails);
-      jNodeDetails.unique_keys.insert(key);
-      jNodeDetails.sizeInBytes += key.size();
-      jNodeDetails.sizeInBytes += sizeof(Object::Entry);
-      jNodeDetails.totalKeys++;
-    }
-    break;
-  }
-  case JNodeType::array: {
-    jNodeDetails.sizeInBytes += sizeof(Array);
-    jNodeDetails.totalArrays++;
-    jNodeDetails.maxArraySize =
-        std::max(JRef<Array>(jNode).size(), jNodeDetails.maxArraySize);
-    for (auto &bNodeEntry : JRef<Array>(jNode).array()) {
-      analyzeJNode(bNodeEntry, jNodeDetails);
-      jNodeDetails.sizeInBytes += sizeof(JNode);
-    }
-    break;
-  }
-  default:
-    throw Error("Unknown JNode type encountered during stringification.");
-  }
-}
-/// <summary>
-/// Analyzes JNode tree and outputs its details.
-/// </summary>
-/// <param name="jNode">Current JNode</param>
-/// <param name="jNodeDetails">Root of JNode</param>
-void analyzeJNodeTree(const JNode &jNodeRoot) {
-  JNodeDetails jNodeDetails;
-  analyzeJNode(jNodeRoot, jNodeDetails);
-  outputAnalysis(jNodeDetails);
-}
-/// <summary>
 /// Parse JSON file and analyze its JNode Tree.
 /// </summary>
 /// <param name="fileName">JSON file name</param>
@@ -162,8 +159,10 @@ void processJSONFile(const std::string &fileName) {
   std::cout << "Analyzing " << fileName << "\n";
   PLOG_INFO << "Analyzing " << fileName;
   const JSON json;
+  JNodeDetails jNodeDetails;
   json.parse(FileSource{fileName});
-  analyzeJNodeTree(json.root());
+  json.traverse(jNodeDetails);
+  outputAnalysis(jNodeDetails);
   PLOG_INFO << "Finished " << fileName << ".";
   std::cout << "Finished " << fileName << ".\n";
 }
