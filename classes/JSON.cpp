@@ -105,10 +105,13 @@ void JSON::stringify(IDestination &&destination) const {
   m_jsonImplementation->stringify(destination);
 }
 /// <summary>
-/// Recursively traverse JNode structure calling IAction methods.
+/// Recursively traverse JNode structure calling IAction methods or to change
+/// the JSON tree node directly.
 /// </summary>
 /// <param name=action>Action methods to call during traversal.</param>
+// Traverse using non-const JSON so can change JSON tree
 void JSON::traverse(IAction &action) { m_jsonImplementation->traverse(action); }
+// Traverse using const JSON so cannot change JSON tree
 void JSON::traverse(IAction &action) const {
   std::as_const(*m_jsonImplementation).traverse(action);
 }
