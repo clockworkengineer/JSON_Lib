@@ -17,20 +17,17 @@
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
-
 // ====
 // JSON
 // ====
 #include "JSON.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Sources.hpp"
-
 // =======
 // Logging
 // =======
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "plog/Log.h"
-
 // ====================
 // JSON class namespace
 // ====================
