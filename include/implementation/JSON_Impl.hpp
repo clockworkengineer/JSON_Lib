@@ -10,8 +10,9 @@
 // =============================
 // Source/Destination interfaces
 // =============================
-#include "ISource.hpp"
 #include "IDestination.hpp"
+#include "ISource.hpp"
+
 // ==========================
 // Traversal action interface
 // ==========================
@@ -49,14 +50,14 @@ public:
   // PUBLIC METHODS
   // ==============
   // Get JSONLib version
-  std::string version();
+  std::string version() const;
   // Parse JSON into tree
   void parse(ISource &source);
   void parse(const std::string &jsonString);
   // Create JSON text string from tree
-  void stringify(IDestination &destination);
+  void stringify(IDestination &destination) const;
   // Strip whitespace from JSON string
-  void strip(ISource &source, IDestination &destination);
+  void strip(ISource &source, IDestination &destination) const;
   // Set JSON translator/converter
   void translator(ITranslator *translator);
   void converter(IConverter *converter);
@@ -71,6 +72,7 @@ public:
   const JNode &operator[](std::size_t index) const;
   // Traverse JSON tree
   void traverse(IAction &action);
+  void traverse(IAction &action) const;
   // ================
   // PUBLIC VARIABLES
   // ================
@@ -95,7 +97,8 @@ private:
   static void stringifyJNodes(const JNode &jNode, IDestination &destination);
   // Remove JSON whitespace
   static void stripWhiteSpace(ISource &source, IDestination &destination);
-    // Produce JSON test string from JSON tree
+  // Produce JSON test string from JSON tree
+  static void traverseJNodes(JNode &jNode, IAction &action);
   static void traverseJNodes(const JNode &jNode, IAction &action);
   // =================
   // PRIVATE VARIABLES

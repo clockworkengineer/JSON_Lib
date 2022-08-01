@@ -105,11 +105,18 @@ void JSON::stringify(IDestination &&destination) const {
   m_jsonImplementation->stringify(destination);
 }
 /// <summary>
+/// Recursively traverse JNode structure calling IAction methods.
+/// </summary>
+/// <param name=action>Action methods to call during traversal.</param>
+void JSON::traverse(IAction &action) { m_jsonImplementation->traverse(action); }
+void JSON::traverse(IAction &action) const {
+  m_jsonImplementation->traverse(action);
+}
+/// <summary>
 /// Return object entry for the passed in key.
 /// </summary>
 /// <param name=destination>Object entry (JNode) key.</param>
 JNode &JSON::operator[](const std::string &key) {
-
   return ((*m_jsonImplementation)[key]);
 }
 const JNode &JSON::operator[](const std::string &key) const // Object
@@ -132,11 +139,4 @@ const JNode &JSON::operator[](std::size_t index) const {
 /// <returns>Root of JSON tree,</returns>
 JNode &JSON::root() { return (m_jsonImplementation->root()); }
 const JNode &JSON::root() const { return (m_jsonImplementation->root()); }
-/// <summary>
-/// Recursively traverse JNode structure calling IAction methods.
-/// </summary>
-/// <param name=action>Action methods to call during traversal.</param>
-void JSON::traverse([[maybe_unused]]IAction &action) {
-
-}
 } // namespace JSONLib

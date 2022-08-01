@@ -59,8 +59,9 @@ public:
   void strip(ISource &source, IDestination &&destination) const;
   void strip(ISource &&source, IDestination &destination) const;
   void strip(ISource &&source, IDestination &&destination) const;
-    // Traverse JSON tree
+  // Traverse JSON tree
   void traverse(IAction &action);
+  void traverse(IAction &action) const;
   // Get root of JSON tree
   [[nodiscard]] JNode &root();
   [[nodiscard]] const JNode &root() const;

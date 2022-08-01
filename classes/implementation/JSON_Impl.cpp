@@ -229,7 +229,7 @@ JNode JSON_Impl::parseJNodes(ISource &source) {
   return (jNode);
 }
 /// <summary>
-/// Recursively traverse JNode structure encoding it into JSON on
+/// Recursively traverse JNode structure encoding it into JSON text on
 /// the destination stream passed in.
 /// </summary>
 /// <param name=jNode>JNode structure to be traversed.</param>
@@ -237,7 +237,7 @@ JNode JSON_Impl::parseJNodes(ISource &source) {
 void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination) {
   switch (jNode.getType()) {
   case JNodeType::number:
-    destination.add(JRef<const Number>(jNode).toString());
+    destination.add(JRef<Number>(jNode).toString());
     break;
   case JNodeType::string:
     destination.add('"');
@@ -260,7 +260,7 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination) {
       destination.add('"');
       destination.add(m_translator->toJSON(key));
       destination.add("\":");
-      stringifyJNodes(JRef<Object>(jNode)[key], destination);
+      stringifyJNodes(node, destination);
       if (commaCount-- > 0) {
         destination.add(',');
       }
@@ -271,8 +271,8 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination) {
   case JNodeType::array: {
     std::size_t commaCount = JRef<Array>(jNode).size() - 1;
     destination.add('[');
-    for (auto &bNodeEntry : JRef<Array>(jNode).array()) {
-      stringifyJNodes(bNodeEntry, destination);
+    for (auto &node : JRef<Array>(jNode).array()) {
+      stringifyJNodes(node, destination);
       if (commaCount-- > 0) {
         destination.add(',');
       }
@@ -303,18 +303,86 @@ void JSON_Impl::stripWhiteSpace(ISource &source, IDestination &destination) {
   }
 }
 /// <summary>
-/// Recursively traverse JNode tree calling IAction methods.
+/// Recursively traverse JNode tree calling IAction methods and possibly modifying the tree
+/// contents or even structure.
 /// </summary>
-/// <param name=jNode>JNode structure to be traversed.</param>
+/// <param name=jNode>JNode tree to be traversed.</param>
 /// <param name=action>Action methods to call during traversal.</param>
-void JSON_Impl::traverseJNodes([[maybe_unused]]const JNode &jNode, [[maybe_unused]] IAction &action) {}
+void JSON_Impl::traverseJNodes(JNode &jNode, IAction &action) {
+  switch (jNode.getType()) {
+  case JNodeType::number:
+    action.onNumber(JRef<Number>(jNode));
+    break;
+  case JNodeType::string:
+    action.onString(JRef<String>(jNode));
+    break;
+  case JNodeType::boolean:
+    action.onBoolean(JRef<Boolean>(jNode));
+    break;
+  case JNodeType::null:
+    action.onNull(JRef<Null>(jNode));
+    break;
+  case JNodeType::hole:
+    break;
+  case JNodeType::object: {
+    action.onObject(JRef<Object>(jNode));
+    for (auto &[key, node] : JRef<Object>(jNode).objectEntries()) {
+      traverseJNodes(node, action);
+    }
+    break;
+  }
+  case JNodeType::array: {
+    action.onArray(JRef<Array>(jNode));
+    for (auto &node : JRef<Array>(jNode).array()) {
+      traverseJNodes(node, action);
+    }
+    break;
+  }
+  default:
+    throw Error("Unknown JNode type encountered during stringification.");
+  }
+}
+void JSON_Impl::traverseJNodes(const JNode &jNode, IAction &action) {
+  switch (jNode.getType()) {
+  case JNodeType::number:
+    action.onNumber(JRef<Number>(jNode));
+    break;
+  case JNodeType::string:
+    action.onString(JRef<String>(jNode));
+    break;
+  case JNodeType::boolean:
+    action.onBoolean(JRef<Boolean>(jNode));
+    break;
+  case JNodeType::null:
+    action.onNull(JRef<Null>(jNode));
+    break;
+  case JNodeType::hole:
+    break;
+  case JNodeType::object: {
+    action.onObject(JRef<Object>(jNode));
+    for (auto &[key, node] : JRef<Object>(jNode).objectEntries()) {
+      traverseJNodes(node, action);
+    }
+    break;
+  }
+  case JNodeType::array: {
+    action.onArray(JRef<Array>(jNode));
+    for (auto &node : JRef<Array>(jNode).array()) {
+      traverseJNodes(node, action);
+    }
+    break;
+  }
+  default:
+    throw Error("Unknown JNode type encountered during stringification.");
+  }
+}
 // ==============
 // PUBLIC METHODS
 // ==============
 /// <summary>
 ///  Get JSONLib version.
 /// </summary>
-std::string JSON_Impl::version() {
+std::string JSON_Impl::version() const {
   std::stringstream versionString;
   versionString << "JSONLib Version  " << JSON_VERSION_MAJOR << "."
                 << JSON_VERSION_MINOR << "." << JSON_VERSION_PATCH;
@@ -347,7 +415,7 @@ void JSON_Impl::converter(IConverter *converter) {
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <param name="destination">Destination for stripped JSON.</param>
-void JSON_Impl::strip(ISource &source, IDestination &destination) {
+void JSON_Impl::strip(ISource &source, IDestination &destination) const {
   stripWhiteSpace(source, destination);
 }
 /// <summary>
@@ -368,7 +436,7 @@ void JSON_Impl::parse(const std::string &jsonString) {
 /// stream.
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
-void JSON_Impl::stringify(IDestination &destination) {
+void JSON_Impl::stringify(IDestination &destination) const {
   if (m_jNodeRoot.getVariant() == nullptr) {
     throw Error("No JSON to stringify.");
   }
@@ -378,7 +446,16 @@ void JSON_Impl::stringify(IDestination &destination) {
 /// Recursively traverse JNode structure calling IAction methods.
 /// </summary>
 /// <param name=action>Action methods to call during traversal.</param>
-void JSON_Impl::traverse([[maybe_unused]] IAction &action) {
+void JSON_Impl::traverse(IAction &action) {
+  if (m_jNodeRoot.getVariant() == nullptr) {
+    throw Error("No JSON to traverse.");
+  }
+  traverseJNodes(m_jNodeRoot, action);
+}
+void JSON_Impl::traverse(IAction &action) const {
+  if (m_jNodeRoot.getVariant() == nullptr) {
+    throw Error("No JSON to traverse.");
+  }
   traverseJNodes(m_jNodeRoot, action);
 }
 /// <summary>
