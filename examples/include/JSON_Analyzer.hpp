@@ -6,18 +6,18 @@
 // ====
 // JSON
 // ====
-#include "IAction.hpp"
 #include "JSON.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Types.hpp"
+#include "IAction.hpp"
 // =========
 // NAMESPACE
 // =========
 namespace JSONLib {
-//
+// ==================
 // JSON Tree Analysis
-//
+// ==================
 class JSON_Analyzer : public IAction {
 public:
   // ========================

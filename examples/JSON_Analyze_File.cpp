@@ -1,7 +1,7 @@
 //
 // Program: JSON_Analyze_File
 //
-// Description: For a JSON file parse it then analyze its JSON Tree
+// Description: For a JSON file parse it then analyze its JSON tree
 // and produce a output report of the analysis.
 //
 // Dependencies: C20++, PLOG, JSONLib.
@@ -43,7 +43,7 @@ std::string prefixTestDataPath(const std::string &file) {
   return ((std::filesystem::current_path() / "files" / file).string());
 }
 /// <summary>
-/// Parse JSON file and analyze its JSON Tree.
+/// Parse JSON file and analyze its JSON tree.
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName) {
@@ -55,24 +55,20 @@ void processJSONFile(const std::string &fileName) {
   PLOG_INFO << jsonAnalyzer.dump();
   PLOG_INFO << "Finished " << fileName << ".";
 }
-// // ============================
-// // ===== MAIN ENTRY POINT =====
-// // ============================
+// ============================
+// ===== MAIN ENTRY POINT =====
+// ============================
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   const std::vector<std::string> fileList{
       "testfile001.json", "testfile002.json", "testfile003.json",
       "testfile004.json", "testfile005.json",
       "large-file.json" // Not kept in GitHub as 24Meg in size.
   };
-  //
   // Initialise logging.
-  //
   plog::init(plog::debug, "JSON_Analyze_File.log");
   PLOG_INFO << "JSON_Analyze_File started ...";
   PLOG_INFO << JSON().version();
-  //
-  // Analyze JSON file and display its details.
-  //
+  // Analyze JSON files.
   for (auto &fileName : fileList) {
     try {
       if (const auto fullFileName{prefixTestDataPath(fileName)};
