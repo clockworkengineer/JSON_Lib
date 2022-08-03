@@ -31,6 +31,11 @@ using namespace JSONLib;
 // ========================
 // LOCAL TYPES/DEFINITIONS
 // ========================
+static const std::vector<std::string> jsonFileList{
+    "testfile001.json", "testfile002.json", "testfile003.json",
+    "testfile004.json", "testfile005.json",
+    "large-file.json" // Not kept in GitHub as 24Meg in size.
+};
 // ===============
 // LOCAL FUNCTIONS
 // ===============
@@ -39,7 +44,7 @@ using namespace JSONLib;
 /// </summary>
 /// <param name="name">Test data file name</param>
 /// <returns>Full path to test data file</returns>
-std::string prefixTestDataPath(const std::string &file) {
+std::string prefixPath(const std::string &file) {
   return ((std::filesystem::current_path() / "files" / file).string());
 }
 /// <summary>
@@ -59,19 +64,14 @@ void processJSONFile(const std::string &fileName) {
 // ===== MAIN ENTRY POINT =====
 // ============================
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
-  const std::vector<std::string> fileList{
-      "testfile001.json", "testfile002.json", "testfile003.json",
-      "testfile004.json", "testfile005.json",
-      "large-file.json" // Not kept in GitHub as 24Meg in size.
-  };
   // Initialise logging.
   plog::init(plog::debug, "JSON_Analyze_File.log");
   PLOG_INFO << "JSON_Analyze_File started ...";
   PLOG_INFO << JSON().version();
   // Analyze JSON files.
-  for (auto &fileName : fileList) {
+  for (auto &fileName : jsonFileList) {
     try {
-      if (const auto fullFileName{prefixTestDataPath(fileName)};
+      if (const auto fullFileName{prefixPath(fileName)};
           std::filesystem::exists(fullFileName)) {
         std::cout << "Analyzing " << fullFileName << "\n";
         processJSONFile(fullFileName);

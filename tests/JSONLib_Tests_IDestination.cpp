@@ -61,7 +61,7 @@ TEST_CASE("IDestination (Buffer) interface.",
 // File
 // ====
 TEST_CASE("IDestination (File) interface.", "[JSON][IDestination][File]") {
-  const std::string testFileName{prefixTestDataPath(kGeneratedJSONFile)};
+  const std::string testFileName{prefixPath(kGeneratedJSONFile)};
   SECTION("Create FileDestination.", "[JSON][IDestination][File]") {
     std::filesystem::remove(testFileName);
     REQUIRE_NOTHROW(FileDestination(testFileName));

@@ -21,7 +21,7 @@ using namespace JSONLib;
 TEST_CASE("Stringify to a file and check result.",
           "[JSON][Stringify][File][Validate]") {
   const JSON json;
-  const std::string generatedFileName{prefixTestDataPath(kGeneratedJSONFile)};
+  const std::string generatedFileName{prefixPath(kGeneratedJSONFile)};
   SECTION("Stringify object to file and check value",
           "[JSON][Stringify][File][Validate]") {
     const std::string expected{R"({"City":"London","Population":8000000})"};
@@ -50,7 +50,7 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.",
   TEST_FILE_LIST(testFile);
   SECTION("Stringify to  buffer and check value", "[JSON][Stringify][Buffer]") {
     const std::string jsonFileBuffer{
-        readFromFile(prefixTestDataPath(testFile))};
+        readFromFile(prefixPath(testFile))};
     BufferSource jsonSource{jsonFileBuffer};
     BufferDestination jsonDestination;
     json.parse(jsonSource);
@@ -59,8 +59,8 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.",
             stripWhiteSpace(json, jsonFileBuffer));
   }
   SECTION("Stringify to file and check value", "[JSON][Stringify][File]") {
-    const std::string testFileName{prefixTestDataPath(testFile)};
-    const std::string generatedFileName{prefixTestDataPath(kGeneratedJSONFile)};
+    const std::string testFileName{prefixPath(testFile)};
+    const std::string generatedFileName{prefixPath(kGeneratedJSONFile)};
     std::filesystem::remove(generatedFileName);
     std::string jsonFileBuffer{readFromFile(testFileName)};
     BufferSource jsonSource{jsonFileBuffer};

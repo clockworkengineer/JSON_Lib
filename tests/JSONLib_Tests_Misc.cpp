@@ -84,8 +84,8 @@ TEST_CASE("Check R-Value reference parse/stringify.",
   }
   SECTION("Parse/Stringify both with R-Value reference (File).",
           "[JSON][JNode][R-Value Reference]") {
-    const std::string testFileName{prefixTestDataPath(kSingleJSONFile)};
-    const std::string generatedFileName{prefixTestDataPath(kGeneratedJSONFile)};
+    const std::string testFileName{prefixPath(kSingleJSONFile)};
+    const std::string generatedFileName{prefixPath(kGeneratedJSONFile)};
     std::filesystem::remove(generatedFileName);
     json.parse(FileSource{testFileName});
     json.stringify(FileDestination{generatedFileName});
@@ -107,9 +107,9 @@ TEST_CASE("Check whitespace stripping with escape characters.",
   TEST_FILE_LIST(testFile);
   SECTION("Stripped (File) should be the same as parsed then stringified JSON",
           "[JSON][Parse][Strip]") {
-    const std::string generatedFileName{prefixTestDataPath(kGeneratedJSONFile)};
+    const std::string generatedFileName{prefixPath(kGeneratedJSONFile)};
     std::filesystem::remove(generatedFileName);
-    FileSource jsonSource{prefixTestDataPath(testFile)};
+    FileSource jsonSource{prefixPath(testFile)};
     BufferDestination jsonDestination;
     json.parse(jsonSource);
     json.stringify(jsonDestination);
@@ -128,7 +128,7 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]") {
   SECTION(
       "Stripped (Buffer) should be the same as parsed then stringified JSON",
       "[JSON][Parse][Strip]") {
-    BufferSource jsonSource{readFromFile(prefixTestDataPath(testFile))};
+    BufferSource jsonSource{readFromFile(prefixPath(testFile))};
     BufferDestination jsonDestination;
     json.parse(jsonSource);
     json.stringify(jsonDestination);
@@ -139,9 +139,9 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]") {
   }
   SECTION("Stripped (File) should be the same as parsed then stringified JSON",
           "[JSON][Parse][Strip]") {
-    const std::string generatedFileName{prefixTestDataPath(kGeneratedJSONFile)};
+    const std::string generatedFileName{prefixPath(kGeneratedJSONFile)};
     std::filesystem::remove(generatedFileName);
-    FileSource jsonSource{prefixTestDataPath(testFile)};
+    FileSource jsonSource{prefixPath(testFile)};
     BufferDestination jsonDestination;
     json.parse(jsonSource);
     json.stringify(jsonDestination);

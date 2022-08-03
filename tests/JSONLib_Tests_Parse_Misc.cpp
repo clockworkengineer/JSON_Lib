@@ -24,7 +24,7 @@ TEST_CASE("JSON object for parse of a list of example JSON files.",
 
   TEST_FILE_LIST(testFile);
   SECTION("Parse from buffer", "[JSON][Parse][Examples][Buffer]") {
-    BufferSource jsonSource{readFromFile(prefixTestDataPath(testFile))};
+    BufferSource jsonSource{readFromFile(prefixPath(testFile))};
     REQUIRE_NOTHROW(json.parse(jsonSource));
     jsonSource.reset();
     json.parse(jsonSource);
@@ -32,7 +32,7 @@ TEST_CASE("JSON object for parse of a list of example JSON files.",
              ((json.root()).getType() == JNodeType::array)));
   }
   SECTION("Parse from file directly", "[JSON][Parse][Examples][File]") {
-    FileSource jsonSource{prefixTestDataPath(testFile)};
+    FileSource jsonSource{prefixPath(testFile)};
     REQUIRE_NOTHROW(json.parse(jsonSource));
     jsonSource.reset();
     json.parse(jsonSource);

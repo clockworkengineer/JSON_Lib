@@ -6,11 +6,11 @@
 // ====
 // JSON
 // ====
+#include "IAction.hpp"
 #include "JSON.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Types.hpp"
-#include "IAction.hpp"
 // =========
 // NAMESPACE
 // =========
@@ -35,7 +35,7 @@ public:
     totalStrings++;
     sizeInBytes += sizeof(String);
     sizeInBytes += jNodeString.string().size();
-    unique_strings.insert(jNodeString.string());
+    uniqueStrings.insert(jNodeString.string());
   }
   // Add number details to analysis
   virtual void onNumber([[maybe_unused]] const Number &jNodeNumber) override {
@@ -72,7 +72,7 @@ public:
     sizeInBytes += sizeof(Object);
     maxObjectSize = std::max(jNodeObject.objectEntries().size(), maxObjectSize);
     for (auto &[key, node] : jNodeObject.objectEntries()) {
-      unique_keys.insert(key);
+      uniqueKeys.insert(key);
       sizeInBytes += key.size();
       sizeInBytes += sizeof(Object::Entry);
       totalKeys++;
@@ -93,36 +93,41 @@ public:
     os << "------------------JSON Tree Stats------------------\n";
     os << "JSON Tree contains " << totalNodes << " nodes.\n";
     os << "JSON Tree size " << sizeInBytes << " in bytes.\n";
+    os << "JSON Tree contains " << totalObjects << " objectEntries.\n";
+    os << "JSON Tree max object size " << maxObjectSize << ".\n";
     os << "JSON Tree total " << totalKeys << " keys.\n";
-    os << "JSON Tree contains " << unique_keys.size() << " unique keys.\n";
+    os << "JSON Tree contains " << uniqueKeys.size() << " unique keys.\n";
+    os << "JSON Tree contains " << totalArrays << " arrays.\n";
+    os << "JSON Tree max array size " << maxArraySize << ".\n";
     os << "JSON Tree total " << totalStrings << " strings.\n";
-    os << "JSON Tree contains " << unique_strings.size()
-       << " unique strings.\n";
+    os << "JSON Tree contains " << uniqueStrings.size() << " unique strings.\n";
     os << "JSON Tree contains " << totalNumbers << " numbers.\n";
     os << "JSON Tree contains " << totalBoolean << " booleans.\n";
     os << "JSON Tree contains " << totalNull << " nulls.\n";
-    os << "JSON Tree contains " << totalArrays << " arrays.\n";
-    os << "JSON Tree max array size " << maxArraySize << ".\n";
-    os << "JSON Tree contains " << totalObjects << " objectEntries.\n";
-    os << "JSON Tree max object size " << maxObjectSize << ".\n";
     os << "----------------------------------------------------";
     return (os.str());
   }
-
 private:
   // JSON analysis data
+  // Node
   int64_t totalNodes{};
   size_t sizeInBytes{};
+  // Object
+  int64_t totalObjects{};
+  size_t maxObjectSize{};
   int64_t totalKeys{};
-  std::set<std::string> unique_keys{};
-  int64_t totalStrings{};
-  int64_t totalNumbers{};
-  int64_t totalBoolean{};
-  int64_t totalNull{};
-  std::set<std::string> unique_strings{};
+  std::set<std::string> uniqueKeys{};
+  // Array
   size_t maxArraySize{};
   int64_t totalArrays{};
-  size_t maxObjectSize{};
-  int64_t totalObjects{};
+  // String
+  int64_t totalStrings{};
+  std::set<std::string> uniqueStrings{};
+  // Number
+  int64_t totalNumbers{};
+  // Boolean
+  int64_t totalBoolean{};
+  // Null
+  int64_t totalNull{};
 };
 } // namespace JSONLib

@@ -21,7 +21,7 @@ using namespace JSONLib;
 // ======
 TEST_CASE("ISource (Buffer) interface (uses file testfile001.json).",
           "[JSON][ISource][Buffer]") {
-  const std::string testFileName{prefixTestDataPath(kSingleJSONFile)};
+  const std::string testFileName{prefixPath(kSingleJSONFile)};
   const std::string buffer{readFromFile(testFileName)};
   SECTION("Create BufferSource.", "[JSON][ISource][Buffer]") {
     REQUIRE_NOTHROW(BufferSource(buffer));
@@ -148,7 +148,7 @@ TEST_CASE("ISource (Buffer) interface (uses file testfile001.json).",
 // File
 // ====
 TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]") {
-  const std::string testFileName{prefixTestDataPath(kSingleJSONFile)};
+  const std::string testFileName{prefixPath(kSingleJSONFile)};
   SECTION("Create FileSource with testfile001.json.", "[JSON][ISource][File]") {
     REQUIRE_NOTHROW(FileSource(testFileName));
   }
@@ -268,7 +268,7 @@ TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]") {
   SECTION("Create FileSource with non existant file.",
           "[JSON][ISource][File][Exception]") {
     const std::string nonExistantFileName{
-        prefixTestDataPath(kNonExistantJSONFile)};
+        prefixPath(kNonExistantJSONFile)};
     REQUIRE_THROWS_AS(FileSource(nonExistantFileName), ISource::Error);
     REQUIRE_THROWS_WITH(
         FileSource(nonExistantFileName),
