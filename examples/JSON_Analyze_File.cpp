@@ -15,6 +15,9 @@
 #include <filesystem>
 #include <iostream>
 #include <set>
+#include <string>
+#include <utility>
+#include <vector>
 // =============
 // JSON Analyzer
 // =============
@@ -24,28 +27,31 @@
 // =======
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "plog/Log.h"
-// ====================
-// JSON class namespace
-// ====================
-using namespace JSONLib;
+// ==========
+// Namespaces
+// ==========
+namespace js = JSONLib;
+namespace fs = std::filesystem;
 // ========================
 // LOCAL TYPES/DEFINITIONS
 // ========================
-static const std::vector<std::string> jsonFileList{
-    "testfile001.json", "testfile002.json", "testfile003.json",
-    "testfile004.json", "testfile005.json",
-    "large-file.json" // Not kept in GitHub as 24Meg in size.
-};
 // ===============
 // LOCAL FUNCTIONS
 // ===============
 /// <summary>
-/// Prefix current path to test data file name.
+/// Return a vector of JSON files to analyze.
 /// </summary>
-/// <param name="name">Test data file name</param>
-/// <returns>Full path to test data file</returns>
-std::string prefixPath(const std::string &file) {
-  return ((std::filesystem::current_path() / "files" / file).string());
+/// <returns>Vector of JSON file names</returns>
+std::vector<std::string> readJSONFileList() {
+  std::vector<std::string> fileList;
+  for (auto &file : fs::directory_iterator(
+           fs::path(fs::current_path() / "files").string())) {
+    if (const auto fileName = file.path().string();
+        fileName.ends_with(".json")) {
+      fileList.push_back(fileName);
+    }
+  }
+  return (fileList);
 }
 /// <summary>
 /// Parse JSON file and analyze its JSON tree.
@@ -53,9 +59,9 @@ std::string prefixPath(const std::string &file) {
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName) {
   PLOG_INFO << "Analyzing " << fileName;
-  const JSON json;
-  JSON_Analyzer jsonAnalyzer;
-  json.parse(FileSource{fileName});
+  const js::JSON json;
+  js::JSON_Analyzer jsonAnalyzer;
+  json.parse(js::FileSource{fileName});
   json.traverse(jsonAnalyzer);
   PLOG_INFO << jsonAnalyzer.dump();
   PLOG_INFO << "Finished " << fileName << ".";
@@ -67,18 +73,13 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   // Initialise logging.
   plog::init(plog::debug, "JSON_Analyze_File.log");
   PLOG_INFO << "JSON_Analyze_File started ...";
-  PLOG_INFO << JSON().version();
+  PLOG_INFO << js::JSON().version();
   // Analyze JSON files.
-  for (auto &fileName : jsonFileList) {
+  for (auto &fileName : readJSONFileList()) {
     try {
-      if (const auto fullFileName{prefixPath(fileName)};
-          std::filesystem::exists(fullFileName)) {
-        std::cout << "Analyzing " << fullFileName << "\n";
-        processJSONFile(fullFileName);
-        std::cout << "Finished " << fullFileName << ".\n";
-      } else {
-        std::cout << "File " << fullFileName << " not present.\n";
-      }
+      std::cout << "Analyzing " << fileName << "\n";
+      processJSONFile(fileName);
+      std::cout << "Finished " << fileName << ".\n";
     } catch (std::exception &ex) {
       std::cout << ex.what() << "\n";
     }

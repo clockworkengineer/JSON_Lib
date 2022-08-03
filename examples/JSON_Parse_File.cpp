@@ -28,22 +28,33 @@
 // =======
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "plog/Log.h"
-// ====================
-// JSON class namespace
-// ====================
-using namespace JSONLib;
+// ==========
+// Namespaces
+// ==========
+namespace js = JSONLib;
+namespace fs = std::filesystem;
 // ========================
 // LOCAL TYPES/DEFINITIONS
 // ========================
 static constexpr size_t kMaxFileLengthToDisplay = 16 * 1024;
-static const std::vector<std::string> jsonFileList{
-    "testfile001.json", "testfile002.json", "testfile003.json",
-    "testfile004.json", "testfile005.json",
-    "large-file.json" // Not kept in GitHub as 24Meg in size.
-};
 // ===============
 // LOCAL FUNCTIONS
 // ===============
+/// <summary>
+/// Return a vector of JSON files to analyze.
+/// </summary>
+/// <returns>Vector of JSON file names</returns>
+std::vector<std::string> readJSONFileList() {
+  std::vector<std::string> fileList;
+  for (auto &file : fs::directory_iterator(
+           fs::path(fs::current_path() / "files").string())) {
+    if (const auto fileName = file.path().string();
+        fileName.ends_with(".json")) {
+      fileList.push_back(fileName);
+    }
+  }
+  return (fileList);
+}
 /// <summary>
 /// Prefix current path to test data file name.
 /// </summary>
@@ -63,11 +74,11 @@ void processJSONFile(const std::string &fileName) {
                 .count());
   };
   PLOG_INFO << "Processing " << fileName;
-  const JSON json;
-  BufferDestination jsonDestination;
+  const js::JSON json;
+  js::BufferDestination jsonDestination;
   // Parse from file
   auto start = std::chrono::high_resolution_clock::now();
-  json.parse(FileSource{fileName});
+  json.parse(js::FileSource{fileName});
   auto stop = std::chrono::high_resolution_clock::now();
   PLOG_INFO << elapsedTime(start, stop) << " microseconds to parse from file.";
   // Stringify
@@ -77,7 +88,7 @@ void processJSONFile(const std::string &fileName) {
   PLOG_INFO << elapsedTime(start, stop) << " microseconds to stringify.";
   // Parse from buffer
   start = std::chrono::high_resolution_clock::now();
-  json.parse(BufferSource{jsonDestination.getBuffer()});
+  json.parse(js::BufferSource{jsonDestination.getBuffer()});
   stop = std::chrono::high_resolution_clock::now();
   PLOG_INFO << elapsedTime(start, stop)
             << " microseconds to parse from buffer.";
@@ -95,18 +106,13 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   // Initialise logging.
   plog::init(plog::debug, "JSON_Parse_Files.log");
   PLOG_INFO << "JSON_Parse_Files started ...";
-  PLOG_INFO << JSON().version();
+  PLOG_INFO << js::JSON().version();
   // For each json parse it, stringify it and display unless its to large.
-  for (auto &fileName : jsonFileList) {
+  for (auto &fileName : readJSONFileList()) {
     try {
-      if (const std::string fullFileName{prefixPath(fileName)};
-          std::filesystem::exists(fullFileName)) {
-        std::cout << "Processing " << fullFileName << "\n";
-        processJSONFile(fullFileName);
-        std::cout << "Finished " << fullFileName << ".\n";
-      } else {
-        PLOG_INFO << "File " << fullFileName << " not present.";
-      }
+      std::cout << "Processing " << fileName << "\n";
+      processJSONFile(fileName);
+      std::cout << "Finished " << fileName << ".\n";
     } catch (std::exception &ex) {
       std::cout << ex.what() << "\n";
     }
