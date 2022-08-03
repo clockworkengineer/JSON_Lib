@@ -28,7 +28,7 @@
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "plog/Log.h"
 // ==========
-// Namespaces
+// NAMESPACES
 // ==========
 namespace js = JSONLib;
 namespace fs = std::filesystem;
@@ -39,13 +39,19 @@ namespace fs = std::filesystem;
 // LOCAL FUNCTIONS
 // ===============
 /// <summary>
+/// Return directory name containing JSON files.
+/// </summary>
+/// <returns>JSON file directory</returns>
+std::string jsonFileDirectory() {
+  return ((fs::current_path() / "files").string());
+}
+/// <summary>
 /// Return a vector of JSON files to analyze.
 /// </summary>
 /// <returns>Vector of JSON file names</returns>
 std::vector<std::string> readJSONFileList() {
   std::vector<std::string> fileList;
-  for (auto &file : fs::directory_iterator(
-           fs::path(fs::current_path() / "files").string())) {
+  for (auto &file : fs::directory_iterator(fs::path(jsonFileDirectory()))) {
     if (const auto fileName = file.path().string();
         fileName.ends_with(".json")) {
       fileList.push_back(fileName);
