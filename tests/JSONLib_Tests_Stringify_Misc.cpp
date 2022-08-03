@@ -49,14 +49,12 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.",
   const JSON json;
   TEST_FILE_LIST(testFile);
   SECTION("Stringify to  buffer and check value", "[JSON][Stringify][Buffer]") {
-    const std::string jsonFileBuffer{
-        readFromFile(prefixPath(testFile))};
+    const std::string jsonFileBuffer{readFromFile(prefixPath(testFile))};
     BufferSource jsonSource{jsonFileBuffer};
     BufferDestination jsonDestination;
     json.parse(jsonSource);
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() ==
-            stripWhiteSpace(json, jsonFileBuffer));
+    REQUIRE(jsonDestination.getBuffer() == stripWhiteSpace(jsonFileBuffer));
   }
   SECTION("Stringify to file and check value", "[JSON][Stringify][File]") {
     const std::string testFileName{prefixPath(testFile)};
@@ -67,7 +65,6 @@ TEST_CASE("JSON object for stringification of a list of example JSON files.",
     FileDestination jsonDestination{generatedFileName};
     json.parse(jsonSource);
     json.stringify(jsonDestination);
-    REQUIRE(readFromFile(generatedFileName) ==
-            stripWhiteSpace(json, jsonFileBuffer));
+    REQUIRE(readFromFile(generatedFileName) == stripWhiteSpace(jsonFileBuffer));
   }
 }

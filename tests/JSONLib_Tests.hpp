@@ -37,7 +37,7 @@ std::string readFromFile(const std::string &jsonFileName);
 void writeToFile(const std::string &jsonFileName, const std::string &jsonString);
 void checkObject(const JSONLib::JNode &jNode);
 void checkArray(const JSONLib::JNode &jNode);
-std::string stripWhiteSpace(const JSONLib::JSON &json, const std::string &jsonBuffer);
+std::string stripWhiteSpace(const std::string &jsonBuffer);
 // ================
 // Test files macro
 // ================

@@ -3,6 +3,7 @@
 // C++ STL
 // =======
 #include <sstream>
+#include <set>
 // ====
 // JSON
 // ====

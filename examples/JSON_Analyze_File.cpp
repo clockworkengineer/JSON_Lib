@@ -1,8 +1,8 @@
 //
 // Program: JSON_Analyze_File
 //
-// Description: For a JSON file parse it then analyze its JSON tree
-// and produce a output report of the analysis.
+// Description: For a each JSON file in a directory parse it, then analyze its
+// JSON tree and produce a output report of the analysis.
 //
 // Dependencies: C20++, PLOG, JSONLib.
 //
@@ -14,9 +14,7 @@
 // =======
 #include <filesystem>
 #include <iostream>
-#include <set>
 #include <string>
-#include <utility>
 #include <vector>
 // =============
 // JSON Analyzer
@@ -30,7 +28,7 @@
 // ==========
 // NAMESPACES
 // ==========
-namespace js = JSONLib;
+namespace json = JSONLib;
 namespace fs = std::filesystem;
 // ========================
 // LOCAL TYPES/DEFINITIONS
@@ -65,9 +63,9 @@ std::vector<std::string> readJSONFileList() {
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName) {
   PLOG_INFO << "Analyzing " << fileName;
-  const js::JSON json;
-  js::JSON_Analyzer jsonAnalyzer;
-  json.parse(js::FileSource{fileName});
+  const json::JSON json;
+  json::JSON_Analyzer jsonAnalyzer;
+  json.parse(json::FileSource{fileName});
   json.traverse(jsonAnalyzer);
   PLOG_INFO << jsonAnalyzer.dump();
   PLOG_INFO << "Finished " << fileName << ".";
@@ -79,7 +77,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
   // Initialise logging.
   plog::init(plog::debug, "JSON_Analyze_File.log");
   PLOG_INFO << "JSON_Analyze_File started ...";
-  PLOG_INFO << js::JSON().version();
+  PLOG_INFO << json::JSON().version();
   // Analyze JSON files.
   for (auto &fileName : readJSONFileList()) {
     try {

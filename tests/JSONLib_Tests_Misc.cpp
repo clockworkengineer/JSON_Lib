@@ -76,11 +76,9 @@ TEST_CASE("Check R-Value reference parse/stringify.",
   const JSON json;
   SECTION("Parse with R-Value reference (Buffer).",
           "[JSON][JNode][R-Value Reference]") {
-    json.parse(
-        BufferSource{R"({"City":"Southampton","Population":500000 })"});
+    json.parse(BufferSource{R"({"City":"Southampton","Population":500000 })"});
     REQUIRE(JRef<Object>(json.root()).size() == 2);
-    REQUIRE(JRef<String>((json.root())["City"]).string() ==
-            "Southampton");
+    REQUIRE(JRef<String>((json.root())["City"]).string() == "Southampton");
   }
   SECTION("Parse/Stringify both with R-Value reference (File).",
           "[JSON][JNode][R-Value Reference]") {
@@ -90,15 +88,14 @@ TEST_CASE("Check R-Value reference parse/stringify.",
     json.parse(FileSource{testFileName});
     json.stringify(FileDestination{generatedFileName});
     REQUIRE(readFromFile(generatedFileName) ==
-            stripWhiteSpace(json, (readFromFile(testFileName))));
+            stripWhiteSpace(readFromFile(testFileName)));
   }
 }
 TEST_CASE("Check whitespace stripping with escape characters.",
           "[JSON][Parse][Strip]") {
   const JSON json;
   SECTION("Strip JSON with escaped ascii characters.", "[JSON][Parse][Strip]") {
-    BufferSource jsonSource{
-        R"(   [  "fffgh \/ \n\t \p \w \u1234 "  ]       )"};
+    BufferSource jsonSource{R"(   [  "fffgh \/ \n\t \p \w \u1234 "  ]       )"};
     BufferDestination strippedDestination;
     json.strip(jsonSource, strippedDestination);
     REQUIRE(strippedDestination.getBuffer() ==
