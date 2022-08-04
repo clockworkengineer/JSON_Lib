@@ -86,7 +86,7 @@ Object::Entry JSON_Impl::parseKeyValuePair(ISource &source) {
     throw Error("Syntax error detected.");
   }
   source.next();
-  return (Object::Entry{keyValue, parseJNodes(source)});
+  return (Object::Entry(keyValue, parseJNodes(source)));
 }
 /// <summary>
 /// Parse a string from a JSON source stream.
@@ -256,11 +256,11 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination) {
   case JNodeType::object: {
     int commaCount = JRef<Object>(jNode).size() - 1;
     destination.add('{');
-    for (auto &[key, node] : JRef<Object>(jNode).objectEntries()) {
+    for (auto &entry : JRef<Object>(jNode).objectEntries()) {
       destination.add('"');
-      destination.add(m_translator->toJSON(key));
+      destination.add(m_translator->toJSON(entry.getKey()));
       destination.add("\":");
-      stringifyJNodes(node, destination);
+      stringifyJNodes(entry.getJNode(), destination);
       if (commaCount-- > 0) {
         destination.add(',');
       }
@@ -326,8 +326,8 @@ void JSON_Impl::traverseJNodes(JNode &jNode, IAction &action) {
     break;
   case JNodeType::object: {
     action.onObject(JRef<Object>(jNode));
-    for (auto &[key, node] : JRef<Object>(jNode).objectEntries()) {
-      traverseJNodes(node, action);
+    for (auto &entry : JRef<Object>(jNode).objectEntries()) {
+      traverseJNodes(entry.getJNode(), action);
     }
     break;
   }
@@ -360,8 +360,8 @@ void JSON_Impl::traverseJNodes(const JNode &jNode, IAction &action) {
     break;
   case JNodeType::object: {
     action.onObject(JRef<Object>(jNode));
-    for (auto &[key, node] : JRef<Object>(jNode).objectEntries()) {
-      traverseJNodes(node, action);
+    for (auto &entry : JRef<Object>(jNode).objectEntries()) {
+      traverseJNodes(entry.getJNode(), action);
     }
     break;
   }
@@ -471,8 +471,8 @@ JNode &JSON_Impl::operator[](const std::string &key) {
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Object>(m_jNodeRoot)
         .objectEntries()
-        .emplace_back(Object::Entry{key, makeHole()});
-    return (JRef<Object>(m_jNodeRoot).objectEntries().back().value);
+        .emplace_back(Object::Entry(key,  makeHole()));
+    return (JRef<Object>(m_jNodeRoot).objectEntries().back().getJNode());
   }
 }
 const JNode &JSON_Impl::operator[](const std::string &key) const // Object

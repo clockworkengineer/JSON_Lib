@@ -33,15 +33,30 @@ private:
 struct Object : Variant {
   // Object entry
   struct Entry {
-    std::string key;
-    JNode value;
+    Entry(const std::string &key, JNode &jNode) {
+      this->m_key = key;
+      this->m_jNode = std::move(jNode);
+    }
+    Entry(const std::string &key, JNode &&jNode) {
+      this->m_key = key;
+      this->m_jNode = std::move(jNode);
+    }
+    std::string &getKey() { return (m_key); }
+    const std::string &getKey() const { return (m_key); }
+    JNode &getJNode() { return (m_jNode); }
+    const JNode &getJNode() const { return (m_jNode); }
+
+  private:
+    std::string m_key;
+    JNode m_jNode;
   };
   // Object entry list
   using EntryList = std::vector<Object::Entry>;
   // Constructors/Destructors
   Object() : Variant(JNodeType::object) {}
   explicit Object(EntryList &objectEntries)
-      : Variant(JNodeType::object), m_jsonObjectEntries(std::move(objectEntries)) {}
+      : Variant(JNodeType::object),
+        m_jsonObjectEntries(std::move(objectEntries)) {}
   Object(const Object &other) = delete;
   Object &operator=(const Object &other) = delete;
   Object(Object &&other) = default;
@@ -51,24 +66,21 @@ struct Object : Variant {
   [[nodiscard]] auto findKey(const std::string &key, EntryList &objectEntries) {
     auto entry = std::find_if(
         objectEntries.begin(), objectEntries.end(),
-        [&key](const Entry &entry) -> bool { return (entry.key == key); });
+        [&key](const Entry &entry) -> bool { return (entry.getKey() == key); });
     if (entry == objectEntries.end()) {
       throw JNode::Error("Invalid key used to access object.");
     }
     return (entry);
   }
-  [[nodiscard]] auto findKey(const std::string &key, const EntryList &objectEntries) const {
+  [[nodiscard]] auto findKey(const std::string &key,
+                             const EntryList &objectEntries) const {
     auto entry = std::find_if(
         objectEntries.begin(), objectEntries.end(),
-        [&key](const Entry &entry) -> bool { return (entry.key == key); });
+        [&key](const Entry &entry) -> bool { return (entry.getKey() == key); });
     if (entry == objectEntries.end()) {
       throw JNode::Error("Invalid key used to access object.");
     }
     return (entry);
-  }
-  // Find a given object entry given its key
-  [[nodiscard]] auto find(const std::string &key) const {
-    return (findKey(key, m_jsonObjectEntries));
   }
   // Return true if an object contains a given key
   [[nodiscard]] bool contains(const std::string &key) const {
@@ -85,14 +97,16 @@ struct Object : Variant {
   }
   // Return object entry for a given key
   JNode &operator[](const std::string &key) {
-    return (findKey(key, m_jsonObjectEntries)->value);
+    return (findKey(key, m_jsonObjectEntries)->getJNode());
   }
   const JNode &operator[](const std::string &key) const {
-    return (findKey(key, m_jsonObjectEntries)->value);
+    return (findKey(key, m_jsonObjectEntries)->getJNode());
   }
   // Return reference to base of object entries
   EntryList &objectEntries() { return (m_jsonObjectEntries); }
-  [[nodiscard]] const EntryList &objectEntries() const { return (m_jsonObjectEntries); }
+  [[nodiscard]] const EntryList &objectEntries() const {
+    return (m_jsonObjectEntries);
+  }
 
 private:
   EntryList m_jsonObjectEntries;

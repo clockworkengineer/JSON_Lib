@@ -72,9 +72,9 @@ public:
     totalObjects++;
     sizeInBytes += sizeof(Object);
     maxObjectSize = std::max(jNodeObject.objectEntries().size(), maxObjectSize);
-    for (auto &[key, node] : jNodeObject.objectEntries()) {
-      uniqueKeys.insert(key);
-      sizeInBytes += key.size();
+    for (auto &entry : jNodeObject.objectEntries()) {
+      uniqueKeys.insert(entry.getKey());
+      sizeInBytes += entry.getKey().size();
       sizeInBytes += sizeof(Object::Entry);
       totalKeys++;
     }

@@ -74,32 +74,31 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
                  &object) {
   Object::EntryList jObjectList;
   for (const auto &entry : object) {
-    Object::Entry jNodeObjectEntry;
-    jNodeObjectEntry.key = entry.first;
+    JNode jNode;
     if (const int *pint = std::get_if<int>(&entry.second)) {
-      jNodeObjectEntry.value = makeNumber(Numeric{*pint});
+      jNode = makeNumber(Numeric{*pint});
     } else if (const long *plong = std::get_if<long>(&entry.second)) {
-      jNodeObjectEntry.value = makeNumber(Numeric{*plong});
+      jNode = makeNumber(Numeric{*plong});
     } else if (const long long *plonglong =
                    std::get_if<long long>(&entry.second)) {
-      jNodeObjectEntry.value = makeNumber(Numeric{*plonglong});
+      jNode = makeNumber(Numeric{*plonglong});
     } else if (const float *pfloat = std::get_if<float>(&entry.second)) {
-      jNodeObjectEntry.value = makeNumber(Numeric{*pfloat});
+      jNode = makeNumber(Numeric{*pfloat});
     } else if (const double *pdouble = std::get_if<double>(&entry.second)) {
-      jNodeObjectEntry.value = makeNumber(Numeric{*pdouble});
+      jNode = makeNumber(Numeric{*pdouble});
     } else if (const long double *plongdouble =
                    std::get_if<long double>(&entry.second)) {
-      jNodeObjectEntry.value = makeNumber(Numeric{*plongdouble});
+      jNode = makeNumber(Numeric{*plongdouble});
     } else if (const std::string *pstring =
                    std::get_if<std::string>(&entry.second)) {
-      jNodeObjectEntry.value = makeString(*pstring);
+      jNode = makeString(*pstring);
     } else if (const bool *pboolean = std::get_if<bool>(&entry.second)) {
-      jNodeObjectEntry.value = makeBoolean(*pboolean);
+      jNode = makeBoolean(*pboolean);
     } else if (const std::nullptr_t *pnull =
                    std::get_if<std::nullptr_t>(&entry.second)) {
-      jNodeObjectEntry.value = makeNull();
+      jNode = makeNull();
     }
-    jObjectList.emplace_back(std::move(jNodeObjectEntry));
+    jObjectList.emplace_back(Object::Entry(entry.first, jNode));
   }
   JNode jNode{makeObject(jObjectList)};
   std::swap(*this, jNode);
@@ -113,9 +112,8 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
 JNode &JNode::operator[](const std::string &key) {
   if (this->getType() == JNodeType::hole) {
     this->m_jNodeVariant = std::make_unique<Object>();
-    JRef<Object>(*this).objectEntries().emplace_back(
-        Object::Entry{key, makeHole()});
-    return (JRef<Object>(*this).objectEntries().back().value);
+    JRef<Object>(*this).objectEntries().emplace_back(Object::Entry(key, makeHole()));
+    return (JRef<Object>(*this).objectEntries().back().getJNode());
   }
   return (JRef<Object>(*this)[key]);
 }
