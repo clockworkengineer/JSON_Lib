@@ -2,8 +2,9 @@
 // =======
 // C++ STL
 // =======
-#include <sstream>
 #include <set>
+#include <sstream>
+
 // ====
 // JSON
 // ====
@@ -85,6 +86,7 @@ public:
     os << "\n--------------------JNode Sizes---------------------\n";
     os << "JNode size " << sizeof(JNode) << " in bytes.\n";
     os << "Object size " << sizeof(Object) << " in bytes.\n";
+    os << "Object Entry size " << sizeof(Object::Entry) << " in bytes.\n";
     os << "Array size " << sizeof(Array) << " in bytes.\n";
     os << "Numeric size " << sizeof(Numeric) << " in bytes.\n";
     os << "Number size " << sizeof(Number) << " in bytes.\n";
@@ -108,6 +110,7 @@ public:
     os << "----------------------------------------------------";
     return (os.str());
   }
+
 private:
   // JSON analysis data
   // Node
