@@ -130,7 +130,6 @@ public:
     os << "JSON Tree contains " << totalDouble << " doubles.\n";
     os << "JSON Tree contains " << totalLDouble << " long doubles.\n";
     os << "------------------JSON Boolean Stats------------------\n";
-    os << "------------------JSON Boolean Stats------------------\n";
     os << "JSON Tree contains " << totalBoolean << " booleans.\n";
     os << "------------------JSON Null Stats------------------\n";
     os << "JSON Tree contains " << totalNull << " nulls.\n";
