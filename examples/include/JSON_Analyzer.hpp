@@ -4,7 +4,6 @@
 // =======
 #include <set>
 #include <sstream>
-
 // ====
 // JSON
 // ====
@@ -44,6 +43,19 @@ public:
     totalNodes++;
     totalNumbers++;
     sizeInBytes += sizeof(Number);
+    if (jNodeNumber.number().isInt()) {
+      totalInteger++;
+    } else if (jNodeNumber.number().isLong()) {
+      totalLong++;
+    } else if (jNodeNumber.number().isLLong()) {
+      totalLLong++;
+    } else if (jNodeNumber.number().isFloat()) {
+      totalFloat++;
+    } else if (jNodeNumber.number().isDouble()) {
+      totalDouble++;
+    } else if (jNodeNumber.number().isLDouble()) {
+      totalLDouble++;
+    }
   }
   virtual void
   onBoolean([[maybe_unused]] const Boolean &jNodeBoolean) override {
@@ -89,6 +101,8 @@ public:
     os << "Object Entry size " << sizeof(Object::Entry) << " in bytes.\n";
     os << "Array size " << sizeof(Array) << " in bytes.\n";
     os << "Numeric size " << sizeof(Numeric) << " in bytes.\n";
+    os << "Numeric::Numbers size " << sizeof(Numeric::Numbers)
+       << " in bytes.\n";
     os << "Number size " << sizeof(Number) << " in bytes.\n";
     os << "String size " << sizeof(String) << " in bytes.\n";
     os << "Boolean size " << sizeof(Boolean) << " in bytes.\n";
@@ -96,16 +110,29 @@ public:
     os << "------------------JSON Tree Stats------------------\n";
     os << "JSON Tree contains " << totalNodes << " nodes.\n";
     os << "JSON Tree size " << sizeInBytes << " in bytes.\n";
+    os << "------------------JSON Object Stats------------------\n";
     os << "JSON Tree contains " << totalObjects << " objectEntries.\n";
     os << "JSON Tree max object size " << maxObjectSize << ".\n";
     os << "JSON Tree total " << totalKeys << " keys.\n";
     os << "JSON Tree contains " << uniqueKeys.size() << " unique keys.\n";
+    os << "------------------JSON Array Stats------------------\n";
     os << "JSON Tree contains " << totalArrays << " arrays.\n";
     os << "JSON Tree max array size " << maxArraySize << ".\n";
+    os << "------------------JSON String Stats------------------\n";
     os << "JSON Tree total " << totalStrings << " strings.\n";
     os << "JSON Tree contains " << uniqueStrings.size() << " unique strings.\n";
+    os << "------------------JSON Number Stats------------------\n";
     os << "JSON Tree contains " << totalNumbers << " numbers.\n";
+    os << "JSON Tree contains " << totalInteger << " integers.\n";
+    os << "JSON Tree contains " << totalLong << " longs.\n";
+    os << "JSON Tree contains " << totalLLong << " long longs.\n";
+    os << "JSON Tree contains " << totalFloat << " floats.\n";
+    os << "JSON Tree contains " << totalDouble << " doubles.\n";
+    os << "JSON Tree contains " << totalLDouble << " long doubles.\n";
+    os << "------------------JSON Boolean Stats------------------\n";
+    os << "------------------JSON Boolean Stats------------------\n";
     os << "JSON Tree contains " << totalBoolean << " booleans.\n";
+    os << "------------------JSON Null Stats------------------\n";
     os << "JSON Tree contains " << totalNull << " nulls.\n";
     os << "----------------------------------------------------";
     return (os.str());
@@ -129,6 +156,12 @@ private:
   std::set<std::string> uniqueStrings{};
   // Number
   int64_t totalNumbers{};
+  int64_t totalInteger{};
+  int64_t totalLong{};
+  int64_t totalLLong{};
+  int64_t totalFloat{};
+  int64_t totalDouble{};
+  int64_t totalLDouble{};
   // Boolean
   int64_t totalBoolean{};
   // Null
