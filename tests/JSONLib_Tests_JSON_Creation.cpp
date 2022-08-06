@@ -44,16 +44,7 @@ TEST_CASE("JSON object creation api.", "[JSON][Create][Object]") {
     JSON json;
     json["integer"] = 30000l;
     REQUIRE(json["integer"].getType() == JNodeType::number);
-    REQUIRE(JRef<Number>(json.root()["integer"]).toString() ==
-            "30000");
-  }
-  SECTION("Initialise root JSON object with one entry containing a long long .",
-          "[JSON][Create][Object][Number]") {
-    JSON json;
-    json["integer"] = 30000000ll;
-    REQUIRE(json["integer"].getType() == JNodeType::number);
-    REQUIRE(JRef<Number>(json.root()["integer"]).toString() ==
-            "30000000");
+    REQUIRE(JRef<Number>(json.root()["integer"]).toString() == "30000");
   }
   SECTION("Initialise root JSON object with one entry containing a float.",
           "[JSON][Create][Object][Number]") {
@@ -66,14 +57,6 @@ TEST_CASE("JSON object creation api.", "[JSON][Create][Object]") {
           "[JSON][Create][Object][Number]") {
     JSON json;
     json["pi"] = 3.141;
-    REQUIRE(json["pi"].getType() == JNodeType::number);
-    REQUIRE(JRef<Number>(json.root()["pi"]).toString() == "3.141");
-  }
-  SECTION(
-      "Initialise root JSON object with one entry containing a long double.",
-      "[JSON][Create][Object][Number]") {
-    JSON json;
-    json["pi"] = 3.141L;
     REQUIRE(json["pi"].getType() == JNodeType::number);
     REQUIRE(JRef<Number>(json.root()["pi"]).toString() == "3.141");
   }
@@ -112,16 +95,15 @@ TEST_CASE("JSON object creation api.", "[JSON][Create][Object]") {
     JSON json;
     json["nothing"]["extra"] = nullptr;
     REQUIRE(json["nothing"]["extra"].getType() == JNodeType::null);
-    REQUIRE(JRef<Null>(json.root()["nothing"]["extra"]).toString() ==
-            "null");
+    REQUIRE(JRef<Null>(json.root()["nothing"]["extra"]).toString() == "null");
   }
   SECTION("Create three level object and null at base and stringify.",
           "[JSON][Create][Object][null]") {
     JSON json;
     json["nothing"]["extra"]["more"] = nullptr;
     REQUIRE(json["nothing"]["extra"]["more"].getType() == JNodeType::null);
-    REQUIRE(JRef<Null>(json.root()["nothing"]["extra"]["more"])
-                .toString() == "null");
+    REQUIRE(JRef<Null>(json.root()["nothing"]["extra"]["more"]).toString() ==
+            "null");
     BufferDestination destinationBuffer;
     REQUIRE_NOTHROW(json.stringify(destinationBuffer));
     REQUIRE(destinationBuffer.getBuffer() ==
@@ -156,13 +138,6 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]") {
     REQUIRE(json[0].getType() == JNodeType::number);
     REQUIRE(JRef<Number>(json.root()[0]).toString() == "30000");
   }
-  SECTION("Initialise root JSON array with one entry containing a long long .",
-          "[JSON][Create][Array][Number]") {
-    JSON json;
-    json[0] = 30000000ll;
-    REQUIRE(json[0].getType() == JNodeType::number);
-    REQUIRE(JRef<Number>(json.root()[0]).toString() == "30000000");
-  }
   SECTION("Initialise root JSON array with one entry containing a float.",
           "[JSON][Create][Array][Number]") {
     JSON json;
@@ -174,13 +149,6 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]") {
           "[JSON][Create][Array][Number]") {
     JSON json;
     json[0] = 3.141;
-    REQUIRE(json[0].getType() == JNodeType::number);
-    REQUIRE(JRef<Number>(json.root()[0]).toString() == "3.141");
-  }
-  SECTION("Initialise root JSON array with one entry containing a long double.",
-          "[JSON][Create][Array][Number]") {
-    JSON json;
-    json[0] = 3.141L;
     REQUIRE(json[0].getType() == JNodeType::number);
     REQUIRE(JRef<Number>(json.root()[0]).toString() == "3.141");
   }
@@ -268,8 +236,7 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]") {
     REQUIRE(JRef<Number>(json[5][2]).toString() == "3");
     REQUIRE(JRef<Number>(json[5][3]).toString() == "4.333");
     REQUIRE(JRef<String>(json[5][4]).toString() == "5.0");
-    REQUIRE(JRef<String>(json[5][5]).toString() ==
-            "test test test test");
+    REQUIRE(JRef<String>(json[5][5]).toString() == "test test test test");
     REQUIRE(JRef<Boolean>(json[5][6]).toString() == "false");
     REQUIRE(JRef<Null>(json[5][7]).toString() == "null");
     BufferDestination jsonDestination;

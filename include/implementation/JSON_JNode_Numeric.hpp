@@ -23,9 +23,6 @@ concept Float = std::is_floating_point<T>::value;
 struct Numeric {
   // All string conversions are for base 10
   static constexpr int kStringConversionBase{10};
-  // Shortened type names
-  using llong = long long;
-  using ldouble = long double;
   // Number to string
   template <Integer T>
   [[nodiscard]] std::string numericToString(const T &t) const {
@@ -60,16 +57,10 @@ struct Numeric {
     if (m_type == Type::Long) {
       return (static_cast<T>(m_values.m_long));
     }
-    if (m_type == Type::LLong) {
-      return (static_cast<T>(m_values.m_llong));
-    }
     if (m_type == Type::Float) {
       return (static_cast<T>(m_values.m_float));
     }
     if (m_type == Type::Double) {
-      return (static_cast<T>(m_values.m_double));
-    }
-    if (m_type == Type::LDouble) {
       return (static_cast<T>(m_values.m_double));
     }
     throw Error("Could not convert unknown type.");
@@ -80,10 +71,8 @@ struct Numeric {
   union Numbers {
     int m_integer;
     long m_long;
-    llong m_llong;
     float m_float;
     double m_double;
-    ldouble m_ldouble;
   };
   // Constructors/Destructors
   Numeric() = default;
@@ -98,10 +87,6 @@ struct Numeric {
     m_values.m_long = integer;
     m_type = Type::Long;
   }
-  explicit Numeric(llong integer) {
-    m_values.m_llong = integer;
-    m_type = Type::LLong;
-  }
   explicit Numeric(float floatingPoint) {
     m_values.m_float = floatingPoint;
     m_type = Type::Float;
@@ -109,10 +94,6 @@ struct Numeric {
   explicit Numeric(double floatingPoint) {
     m_values.m_double = floatingPoint;
     m_type = Type::Double;
-  }
-  explicit Numeric(ldouble floatingPoint) {
-    m_values.m_ldouble = floatingPoint;
-    m_type = Type::LDouble;
   }
   Numeric(const Numeric &other) = default;
   Numeric &operator=(const Numeric &other) = default;
@@ -125,22 +106,18 @@ struct Numeric {
     return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' ||
             ch == 'E' || ch == 'e');
   }
-  // Is number a int/long/llong/float/double/ldouble ?
+  // Is number a int/long/float/double ?
   [[nodiscard]] bool isInt() const { return (m_type == Type::Int); }
   [[nodiscard]] bool isLong() const { return (m_type == Type::Long); }
-  [[nodiscard]] bool isLLong() const { return (m_type == Type::LLong); }
   [[nodiscard]] bool isFloat() const { return (m_type == Type::Float); }
   [[nodiscard]] bool isDouble() const { return (m_type == Type::Double); }
-  [[nodiscard]] bool isLDouble() const { return (m_type == Type::LDouble); }
-  // Return numbers value int/long/llong/float/double/ldouble.
+  // Return numbers value int/long/float/double.
   // Note: Can still return a long value for floating point.
   [[nodiscard]] int getInt() const { return (convertType<int>()); }
   [[nodiscard]] long getLong() const { return (convertType<long>()); }
-  [[nodiscard]] llong getLLong() const { return (convertType<llong>()); }
   [[nodiscard]] float getFloat() const { return (convertType<float>()); }
   [[nodiscard]] double getDouble() const { return (convertType<double>()); }
-  [[nodiscard]] ldouble getLDouble() const { return (convertType<ldouble>()); }
-  // Set numbers value to int/long/llong/float/double/ldouble
+  // Set numbers value to int/long/float/double
   // returning true if the value is set.
   [[nodiscard]] bool setInt(const std::string &number) {
     try {
@@ -179,25 +156,6 @@ struct Numeric {
     m_values.m_long = number;
     return (true);
   }
-  [[nodiscard]] bool setLLong(const std::string &number) {
-    try {
-      char *end = nullptr;
-      m_values.m_llong =
-          std::strtoll(number.c_str(), &end, kStringConversionBase);
-      if (*end != '\0') {
-        return (false);
-      }
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    m_type = Type::LLong;
-    return (true);
-  }
-  [[nodiscard]] bool setLLong(llong number) {
-    m_type = Type::LLong;
-    m_values.m_llong = number;
-    return (true);
-  }
   [[nodiscard]] bool setFloat(const std::string &number) {
     try {
       std::size_t end = 0;
@@ -234,28 +192,10 @@ struct Numeric {
     m_values.m_double = number;
     return (true);
   }
-  [[nodiscard]] bool setLDouble(const std::string &number) {
-    try {
-      char *end = nullptr;
-      m_values.m_ldouble = std::strtold(number.c_str(), &end);
-      if (*end != '\0') {
-        return (false);
-      }
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    m_type = Type::LDouble;
-    return (true);
-  }
-  [[nodiscard]] bool setLDouble(ldouble number) {
-    m_type = Type::LDouble;
-    m_values.m_ldouble = number;
-    return (true);
-  }
   // Set numeric value
   [[nodiscard]] bool setValidNumber(const std::string &number) {
-    return (setInt(number) || setLong(number) || setLLong(number) ||
-            setFloat(number) || setDouble(number) || setLDouble(number));
+    return (setInt(number) || setLong(number) || setFloat(number) ||
+            setDouble(number));
   }
   // Get string representation of numeric
   [[nodiscard]] std::string getString() const {
@@ -265,17 +205,11 @@ struct Numeric {
     if (m_type == Type::Long) {
       return (numericToString(m_values.m_long));
     }
-    if (m_type == Type::LLong) {
-      return (numericToString(m_values.m_llong));
-    }
     if (m_type == Type::Float) {
       return (numericToString(m_values.m_float));
     }
     if (m_type == Type::Double) {
       return (numericToString(m_values.m_double));
-    }
-    if (m_type == Type::LDouble) {
-      return (numericToString(m_values.m_ldouble));
     }
     throw Error("Could not convert unknown type.");
   }

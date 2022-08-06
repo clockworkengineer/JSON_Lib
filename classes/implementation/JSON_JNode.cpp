@@ -48,15 +48,10 @@ JNode::JNode(const std::initializer_list<InternalTypes> &array) {
       jNodeArrayList.emplace_back(makeNumber(Numeric{*pint}));
     } else if (const long *plong = std::get_if<long>(&entry)) {
       jNodeArrayList.emplace_back(makeNumber(Numeric{*plong}));
-    } else if (const long long *plonglong = std::get_if<long long>(&entry)) {
-      jNodeArrayList.emplace_back(makeNumber(Numeric{*plonglong}));
     } else if (const float *pfloat = std::get_if<float>(&entry)) {
       jNodeArrayList.emplace_back(makeNumber(Numeric{*pfloat}));
     } else if (const double *pdouble = std::get_if<double>(&entry)) {
       jNodeArrayList.emplace_back(makeNumber(Numeric{*pdouble}));
-    } else if (const long double *plongdouble =
-                   std::get_if<long double>(&entry)) {
-      jNodeArrayList.emplace_back(makeNumber(Numeric{*plongdouble}));
     } else if (const std::string *pstring = std::get_if<std::string>(&entry)) {
       jNodeArrayList.emplace_back(makeString(*pstring));
     } else if (const bool *pboolean = std::get_if<bool>(&entry)) {
@@ -79,16 +74,10 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
       jNode = makeNumber(Numeric{*pint});
     } else if (const long *plong = std::get_if<long>(&entry.second)) {
       jNode = makeNumber(Numeric{*plong});
-    } else if (const long long *plonglong =
-                   std::get_if<long long>(&entry.second)) {
-      jNode = makeNumber(Numeric{*plonglong});
     } else if (const float *pfloat = std::get_if<float>(&entry.second)) {
       jNode = makeNumber(Numeric{*pfloat});
     } else if (const double *pdouble = std::get_if<double>(&entry.second)) {
       jNode = makeNumber(Numeric{*pdouble});
-    } else if (const long double *plongdouble =
-                   std::get_if<long double>(&entry.second)) {
-      jNode = makeNumber(Numeric{*plongdouble});
     } else if (const std::string *pstring =
                    std::get_if<std::string>(&entry.second)) {
       jNode = makeString(*pstring);
@@ -156,22 +145,12 @@ JNode &JNode::operator=(double floatingPoint) {
   std::swap(*this, jNode);
   return (*this);
 }
-JNode &JNode::operator=(long double floatingPoint) {
-  JNode jNode{makeNumber(Numeric{floatingPoint})};
-  std::swap(*this, jNode);
-  return (*this);
-}
 JNode &JNode::operator=(int integer) {
   JNode jNode{makeNumber(Numeric{integer})};
   std::swap(*this, jNode);
   return (*this);
 }
 JNode &JNode::operator=(long integer) {
-  JNode jNode{makeNumber(Numeric{integer})};
-  std::swap(*this, jNode);
-  return (*this);
-}
-JNode &JNode::operator=(long long integer) {
   JNode jNode{makeNumber(Numeric{integer})};
   std::swap(*this, jNode);
   return (*this);

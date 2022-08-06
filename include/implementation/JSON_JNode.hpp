@@ -32,8 +32,7 @@ struct JNode {
   using Ptr = std::unique_ptr<JNode>;
   // Possible JSON node value types
   using InternalTypes =
-      std::variant<int, long, long long, float, double, long double, bool,
-                   std::string, std::nullptr_t>;
+      std::variant<int, long, float, double, bool, std::string, std::nullptr_t>;
   // JNode Error
   struct Error : public std::runtime_error {
     explicit Error(const std::string &message)
@@ -54,10 +53,8 @@ struct JNode {
   // Assignment operators
   JNode &operator=(float floatingPoint);
   JNode &operator=(double floatingPoint);
-  JNode &operator=(long double floatingPoint);
   JNode &operator=(int integer);
   JNode &operator=(long integer);
-  JNode &operator=(long long integer);
   JNode &operator=(const char *cString);
   JNode &operator=(const std::string &string);
   JNode &operator=(bool boolean);
