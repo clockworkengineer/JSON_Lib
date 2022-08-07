@@ -10,8 +10,8 @@
 // =================
 // CLASS DEFINITIONS
 // =================
-#include "JSON_Impl.hpp"
 #include "JSON.hpp"
+#include "JSON_Impl.hpp"
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
@@ -303,8 +303,8 @@ void JSON_Impl::stripWhiteSpace(ISource &source, IDestination &destination) {
   }
 }
 /// <summary>
-/// Recursively traverse JNode tree calling IAction methods and possibly modifying the tree
-/// contents or even structure.
+/// Recursively traverse JNode tree calling IAction methods and possibly
+/// modifying the tree contents or even structure.
 /// </summary>
 /// <param name=jNode>JNode tree to be traversed.</param>
 /// <param name=action>Action methods to call during traversal.</param>
@@ -471,7 +471,7 @@ JNode &JSON_Impl::operator[](const std::string &key) {
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Object>(m_jNodeRoot)
         .objectEntries()
-        .emplace_back(Object::Entry(key,  makeHole()));
+        .emplace_back(Object::Entry(key, makeHole()));
     return (JRef<Object>(m_jNodeRoot).objectEntries().back().getJNode());
   }
 }

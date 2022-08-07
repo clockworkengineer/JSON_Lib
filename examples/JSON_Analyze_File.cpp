@@ -40,7 +40,7 @@ namespace fs = std::filesystem;
 /// Return directory name containing JSON files.
 /// </summary>
 /// <returns>JSON file directory</returns>
-std::string jsonFileDirectory() {
+std::string torrentFileDirectory() {
   return ((fs::current_path() / "files").string());
 }
 /// <summary>
@@ -49,7 +49,7 @@ std::string jsonFileDirectory() {
 /// <returns>Vector of JSON file names</returns>
 std::vector<std::string> readJSONFileList() {
   std::vector<std::string> fileList;
-  for (auto &file : fs::directory_iterator(fs::path(jsonFileDirectory()))) {
+  for (auto &file : fs::directory_iterator(fs::path(torrentFileDirectory()))) {
     if (const auto fileName = file.path().string();
         fileName.ends_with(".json")) {
       fileList.push_back(fileName);

@@ -28,8 +28,6 @@ enum class JNodeType {
 // =====
 struct Variant;
 struct JNode {
-  // Pointer to JNode
-  using Ptr = std::unique_ptr<JNode>;
   // Possible JSON node value types
   using InternalTypes =
       std::variant<int, long, float, double, bool, std::string, std::nullptr_t>;

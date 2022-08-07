@@ -8,11 +8,10 @@
 // ====
 #include "JSON.hpp"
 #include "JSON_Converter.hpp"
-#include "JSON_Destinations.hpp"
 #include "JSON_Sources.hpp"
+#include "JSON_Destinations.hpp"
 #include "JSON_Translator.hpp"
 #include "JSON_Types.hpp"
-
 // =======
 // C++ STL
 // =======
@@ -22,7 +21,6 @@
 #include <sstream>
 #include <string>
 #include <iostream>
-
 // ===================
 // Unit test constants
 // ===================
