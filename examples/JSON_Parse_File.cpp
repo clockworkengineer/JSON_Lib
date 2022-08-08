@@ -63,14 +63,6 @@ std::vector<std::string> readJSONFileList() {
   return (fileList);
 }
 /// <summary>
-/// Prefix current path to test data file name.
-/// </summary>
-/// <param name="name">Test data file name</param>
-/// <returns>Full path to test data file</returns>
-std::string prefixPath(const std::string &file) {
-  return ((fs::current_path() / "files" / file).string());
-}
-/// <summary>
 /// Parse JSON file, stringify and parse JSON from buffer whilst timing each
 /// step.
 /// </summary>
