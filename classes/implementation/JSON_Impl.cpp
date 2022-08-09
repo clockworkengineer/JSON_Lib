@@ -47,17 +47,17 @@ std::string JSON_Impl::extractString(ISource &source, bool translate) {
     throw Error("Syntax error detected.");
   }
   source.next();
-  std::string stringValue;
+  std::string extracted;
   while (source.more() && source.current() != '"') {
     if (source.current() == '\\') {
-      stringValue += '\\';
+      extracted += '\\';
       source.next();
       if (!translate && !m_translator->validEscape(source.current())) {
-        stringValue.pop_back();
+        extracted.pop_back();
       }
       translateEscapes = translate;
     }
-    stringValue += source.current();
+    extracted += source.current();
     source.next();
   }
   if (source.current() != '"') {
@@ -66,11 +66,11 @@ std::string JSON_Impl::extractString(ISource &source, bool translate) {
   source.next();
   // Need to translate escapes to UTF8
   if (translateEscapes) {
-    return (m_translator->fromJSON(stringValue));
+    return (m_translator->fromJSON(extracted));
   }
   // None so just pass on
   else {
-    return (stringValue);
+    return (extracted);
   }
 }
 /// <summary>
@@ -80,13 +80,13 @@ std::string JSON_Impl::extractString(ISource &source, bool translate) {
 /// <returns>Object key/value pair.</returns>
 Object::Entry JSON_Impl::parseKeyValuePair(ISource &source) {
   source.ignoreWS();
-  const std::string keyValue{extractString(source)};
+  const std::string key{extractString(source)};
   source.ignoreWS();
   if (source.current() != ':') {
     throw Error("Syntax error detected.");
   }
   source.next();
-  return (Object::Entry(keyValue, parseJNodes(source)));
+  return (Object::Entry(key, parseJNodes(source)));
 }
 /// <summary>
 /// Parse a string from a JSON source stream.

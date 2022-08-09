@@ -122,8 +122,7 @@ void JSON::traverse(IAction &action) const {
 JNode &JSON::operator[](const std::string &key) {
   return ((*m_jsonImplementation)[key]);
 }
-const JNode &JSON::operator[](const std::string &key) const // Object
-{
+const JNode &JSON::operator[](const std::string &key) const {
   return ((*m_jsonImplementation)[key]);
 }
 /// <summary>
