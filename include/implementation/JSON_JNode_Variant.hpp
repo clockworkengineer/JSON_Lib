@@ -295,4 +295,12 @@ template <typename T> const T &JRef(const JNode &jNode) {
   CheckJNodeType<T>(*jNode.getVariant());
   return (static_cast<const T &>(*jNode.getVariant()));
 }
+template <typename T> T &JRef(Object::Entry &jNodeEntry) {
+  CheckJNodeType<T>(*jNodeEntry.getJNode().getVariant());
+  return (static_cast<T &>(*jNodeEntry.getJNode().getVariant()));
+}
+template <typename T> const T &JRef(const Object::Entry &jNodeEntry) {
+  CheckJNodeType<T>(*jNodeEntry.getJNode().getVariant());
+  return (static_cast<const T &>(*jNodeEntry.getJNode().getVariant()));
+}
 } // namespace JSONLib

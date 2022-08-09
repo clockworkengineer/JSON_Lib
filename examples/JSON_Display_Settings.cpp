@@ -46,65 +46,68 @@ namespace fs = std::filesystem;
 std::string jsonFileDirectory() {
   return ((fs::current_path() / "files").string());
 }
-void processEntry(const JSONLib::Object::Entry &entry) {
-  std::string output;
+void processEntry(const json::Object::Entry &entry) {
+  std::string entryJSON;
   PLOG_INFO << "[" << entry.getKey() << "]";
   if (entry.getKey() == "files.exclude") {
     if (entry.getJNode().getType() != json::JNodeType::object) {
       throw std::runtime_error("Invalid JSON settings file.");
     }
-    output += "{";
-    for (const auto &file :
-         json::JRef<json::Object>(entry.getJNode()).objectEntries()) {
+    entryJSON += "\n{\n";
+    for (const auto &file : json::JRef<json::Object>(entry).objectEntries()) {
       if (file.getJNode().getType() == json::JNodeType::boolean) {
-        output += "\"" + file.getKey() + "\" : " +
-                  json::JRef<json::Boolean>(file.getJNode()).toString() + ",";
+        entryJSON += "\"" + file.getKey() +
+                     "\" : " + json::JRef<json::Boolean>(file).toString() +
+                     ",\n";
       } else {
         throw std::runtime_error("Invalid JSON settings file.");
       }
     }
-    output.pop_back();
-    output += "}";
+    entryJSON.pop_back();
+    entryJSON.pop_back();
+    entryJSON += "\n}";
   } else if (entry.getKey() == "explorerExclude.backup") {
     if (entry.getJNode().getType() != json::JNodeType::null) {
       throw std::runtime_error("Invalid JSON settings file.");
     }
-    output += json::JRef<json::Null>(entry.getJNode()).toString();
+    entryJSON += json::JRef<json::Null>(entry).toString();
   } else if (entry.getKey() == "cSpell.words") {
     if (entry.getJNode().getType() != json::JNodeType::array) {
       throw std::runtime_error("Invalid JSON settings file.");
     }
-    output += "[";
-    for (const auto &word : json::JRef<json::Array>(entry.getJNode()).array()) {
+    entryJSON += "[";
+    for (const auto &word : json::JRef<json::Array>(entry).array()) {
       if (word.getType() != json::JNodeType::string) {
         throw std::runtime_error("Invalid JSON settings file.");
       }
-      output += "\"" + json::JRef<json::String>(word).toString() + "\",";
+      entryJSON += "\"" + json::JRef<json::String>(word).toString() + "\",";
     }
-    output.pop_back();
-    output += "]";
+    entryJSON.pop_back();
+    entryJSON += "]";
   } else if (entry.getKey() == "files.associations") {
     if (entry.getJNode().getType() != json::JNodeType::object) {
       throw std::runtime_error("Invalid JSON settings file.");
     }
-    output += "{";
-    for (const auto &file :
-         json::JRef<json::Object>(entry.getJNode()).objectEntries()) {
+    entryJSON += "\n{\n";
+    for (const auto &file : json::JRef<json::Object>(entry).objectEntries()) {
       if (file.getJNode().getType() != json::JNodeType::string) {
         throw std::runtime_error("Invalid JSON settings file.");
       }
-      output += "\"" + file.getKey() + "\" : " + "\"" +
-                json::JRef<json::String>(file.getJNode()).toString() + "\",";
+      entryJSON += "\"" + file.getKey() + "\" : " + "\"" +
+                   json::JRef<json::String>(file).toString() + "\",\n";
     }
-    output.pop_back();
-    output += "}";
+    entryJSON.pop_back();
+    entryJSON.pop_back();
+    entryJSON += "\n}";
   } else if (entry.getKey() == "C_Cpp.codeAnalysis.clangTidy.enabled") {
     if (entry.getJNode().getType() != json::JNodeType::boolean) {
       throw std::runtime_error("Invalid JSON settings file.");
     }
-    output += json::JRef<json::Boolean>(entry.getJNode()).toString();
+    entryJSON += json::JRef<json::Boolean>(entry).toString();
+  } else {
+    throw std::runtime_error("Invalid JSON settings file.");
   }
-  PLOG_INFO << output;
+  PLOG_INFO << entryJSON;
 }
 // ============================
 // ===== MAIN ENTRY POINT =====
@@ -123,7 +126,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
       throw std::runtime_error("Invalid JSON settings file.");
     }
     PLOG_INFO << "Displaying settings ...";
-    PLOG_INFO << "Top level keys ...";
     for (const auto &entry :
          json::JRef<json::Object>(settingsRoot).objectEntries()) {
       processEntry(entry);
