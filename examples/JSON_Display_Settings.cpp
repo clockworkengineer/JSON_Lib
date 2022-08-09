@@ -47,59 +47,64 @@ std::string jsonFileDirectory() {
   return ((fs::current_path() / "files").string());
 }
 void processEntry(const JSONLib::Object::Entry &entry) {
+  std::string output;
   PLOG_INFO << "[" << entry.getKey() << "]";
-
   if (entry.getKey() == "files.exclude") {
     if (entry.getJNode().getType() != json::JNodeType::object) {
       throw std::runtime_error("Invalid JSON settings file.");
     }
+    output += "{";
     for (const auto &file :
          json::JRef<json::Object>(entry.getJNode()).objectEntries()) {
       if (file.getJNode().getType() == json::JNodeType::boolean) {
-        PLOG_INFO << "{" << file.getKey() << " : "
-                  << json::JRef<json::Boolean>(file.getJNode()).toString()
-                  << "}";
+        output += "\"" + file.getKey() + "\" : " +
+                  json::JRef<json::Boolean>(file.getJNode()).toString() + ",";
       } else {
         throw std::runtime_error("Invalid JSON settings file.");
       }
     }
+    output.pop_back();
+    output += "}";
   } else if (entry.getKey() == "explorerExclude.backup") {
     if (entry.getJNode().getType() != json::JNodeType::null) {
       throw std::runtime_error("Invalid JSON settings file.");
     }
-    return;
+    output += json::JRef<json::Null>(entry.getJNode()).toString();
   } else if (entry.getKey() == "cSpell.words") {
     if (entry.getJNode().getType() != json::JNodeType::array) {
       throw std::runtime_error("Invalid JSON settings file.");
     }
+    output += "[";
     for (const auto &word : json::JRef<json::Array>(entry.getJNode()).array()) {
       if (word.getType() != json::JNodeType::string) {
         throw std::runtime_error("Invalid JSON settings file.");
       }
-      PLOG_INFO << "["
-                << "\"" << json::JRef<json::String>(word).toString() << "\""
-                << "]";
+      output += "\"" + json::JRef<json::String>(word).toString() + "\",";
     }
+    output.pop_back();
+    output += "]";
   } else if (entry.getKey() == "files.associations") {
     if (entry.getJNode().getType() != json::JNodeType::object) {
       throw std::runtime_error("Invalid JSON settings file.");
     }
+    output += "{";
     for (const auto &file :
          json::JRef<json::Object>(entry.getJNode()).objectEntries()) {
       if (file.getJNode().getType() != json::JNodeType::string) {
         throw std::runtime_error("Invalid JSON settings file.");
       }
-      PLOG_INFO << "{" << file.getKey() << " : "
-                << "\"" << json::JRef<json::String>(file.getJNode()).toString()
-                << "\""
-                << "}";
+      output += "\"" + file.getKey() + "\" : " + "\"" +
+                json::JRef<json::String>(file.getJNode()).toString() + "\",";
     }
+    output.pop_back();
+    output += "}";
   } else if (entry.getKey() == "C_Cpp.codeAnalysis.clangTidy.enabled") {
     if (entry.getJNode().getType() != json::JNodeType::boolean) {
       throw std::runtime_error("Invalid JSON settings file.");
     }
-    return;
+    output += json::JRef<json::Boolean>(entry.getJNode()).toString();
   }
+  PLOG_INFO << output;
 }
 // ============================
 // ===== MAIN ENTRY POINT =====
