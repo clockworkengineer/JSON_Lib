@@ -19,6 +19,7 @@
 // JSON
 // ====
 #include "JSON.hpp"
+#include "JSON_Types.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 // =======
@@ -48,10 +49,35 @@ std::string jsonFileDirectory() {
 // ===== MAIN ENTRY POINT =====
 // ============================
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
-  // Initialise logging.
-  plog::init(plog::debug, "JSON_Toggle_Setting.log");
-  PLOG_INFO << "JSON_Toggle_Setting started ...";
-  PLOG_INFO << json::JSON().version();
+  try {
+    // Initialise logging.
+    plog::init(plog::debug, "JSON_Toggle_Setting.log");
+    PLOG_INFO << "JSON_Toggle_Setting started ...";
+    // Log version
+    PLOG_INFO << json::JSON().version();
+    // Parse in settings file
+    json::JSON json;
+    json.parse(json::FileSource{
+        (fs::path(jsonFileDirectory()) / "settings.json").string()});
+    auto &settingsRoot = json.root();
+    // BNode root has to be an object
+    if (settingsRoot.getType() != json::JNodeType::object) {
+      throw std::runtime_error("Invalid JSON settings file.");
+    }
+    if (settingsRoot["C_Cpp.codeAnalysis.clangTidy.enabled"].getType() ==
+        json::JNodeType::boolean) {
+      auto &enabled = json::JRef<json::Boolean>(
+                          settingsRoot["C_Cpp.codeAnalysis.clangTidy.enabled"])
+                          .boolean();
+      PLOG_INFO << "Before = " << enabled;
+      enabled = !enabled;
+      PLOG_INFO << "After = " << enabled;
+      json.stringify(json::FileDestination{
+          (fs::path(jsonFileDirectory()) / "settings.json").string()});
+    }
+  } catch (std::exception &e) {
+    PLOG_ERROR << "Error: " << e.what();
+  }
   PLOG_INFO << "JSON_Toggle_Setting exited.";
   exit(EXIT_SUCCESS);
 }

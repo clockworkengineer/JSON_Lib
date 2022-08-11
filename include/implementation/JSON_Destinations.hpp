@@ -40,8 +40,7 @@ class FileDestination : public IDestination {
 public:
   explicit FileDestination(const std::string &destinationFileName)
       : m_destinationFileName(destinationFileName) {
-    m_destination.open(destinationFileName.c_str(), std::ios_base::binary);
-    clear();
+    m_destination.open(destinationFileName.c_str(), std::ios_base::binary | std::ios_base::trunc);
   }
   void add(const std::string &bytes) override {
     m_destination.write(bytes.c_str(), bytes.length());

@@ -172,7 +172,7 @@ struct Number : Variant {
   Number(Number &&other) = default;
   Number &operator=(Number &&other) = default;
   ~Number() = default;
-  // Return reference to number string
+  // Return reference to numberic
   [[nodiscard]] Numeric &number() { return (m_jsonNumber); }
   [[nodiscard]] const Numeric &number() const { return (m_jsonNumber); }
   // Convert number to string
@@ -197,7 +197,7 @@ struct String : Variant {
   String &operator=(String &&other) = default;
   ~String() = default;
   // Return reference to string
-  std::string &string() { return (m_jsonString); }
+  [[nodiscard]] std::string &string() { return (m_jsonString); }
   [[nodiscard]] const std::string &string() const { return (m_jsonString); }
   // Convert string representation to a string
   [[nodiscard]] std::string toString() const { return (m_jsonString); }
@@ -218,8 +218,9 @@ struct Boolean : Variant {
   Boolean(Boolean &&other) = default;
   Boolean &operator=(Boolean &&other) = default;
   ~Boolean() = default;
-  // Return boolean value
-  [[nodiscard]] bool boolean() const { return (m_jsonBoolean); }
+  // Return reference boolean value
+  [[nodiscard]] bool &boolean() { return (m_jsonBoolean); }
+  [[nodiscard]] const bool &boolean() const { return (m_jsonBoolean); }
   // Return string representation of boolean value
   [[nodiscard]] std::string toString() const {
     return (m_jsonBoolean ? "true" : "false");
