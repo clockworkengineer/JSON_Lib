@@ -57,12 +57,22 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     // add an object inside the object
     json["the_answer"]["everything"] = 42;
     // add an array that is stored as std::vector (using an initializer list)
-    json["list"] = {1, 0, 2};
+    json["list"] = {1, 0, 2, 4, 6};
     // add another object (using an initializer list of pairs)
     json["object"] = {{"currency", "USD"}, {"value", 42.99}};
     json::BufferDestination destination;
     json.stringify(destination);
     PLOG_INFO << destination.getBuffer();
+    // instead, you could also write (which looks very similar to the JSON
+    // above) 
+    // NOT SUPPORTED YET.
+    // json json2 = {{"pi", 3.141},
+    //               {"sad", true},
+    //               {"first_name", "Niels"},
+    //               {"nothing", nullptr},
+    //               {"the_answer", {{"everything", 42}}},
+    //               {"list", {1, 0, 2, 4, 6}},
+    //               {"object", {{"currency", "USD"}, {"value", 42.99}}}};
   } catch (std::exception &e) {
     PLOG_ERROR << "Error: " << e.what();
   }
