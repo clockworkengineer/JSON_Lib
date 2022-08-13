@@ -1,7 +1,9 @@
 //
 // Program: JSON_Toggle_Setting
 //
-// Description:
+// Description: Parse JSON example settings file and toggle the clang-tidy
+// enabled setting before writing it back to the settings file. Note: After the
+// first run that the settings will have no whitespace characters present.
 //
 // Dependencies: C20++, PLOG, JSONLib.
 //

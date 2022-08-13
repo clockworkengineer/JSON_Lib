@@ -43,11 +43,11 @@ namespace fs = std::filesystem;
 // LOCAL FUNCTIONS
 // ===============
 /// <summary>
-/// Return directory name containing JSON files.
+/// Return settings json file name.
 /// </summary>
-/// <returns>JSON file directory</returns>
-std::string jsonFileDirectory() {
-  return ((fs::current_path() / "files").string());
+/// <returns>JSON settings file name.</returns>
+std::string jsonSettingsFile() {
+  return ((fs::current_path() / "files" / "settings.json").string());
 }
 /// <summary>
 /// Process settings file top level object entry. This involves jusr reading the
@@ -107,8 +107,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     PLOG_INFO << json::JSON().version();
     // Parse in settings file
     const json::JSON json;
-    json.parse(json::FileSource{
-        (fs::path(jsonFileDirectory()) / "settings.json").string()});
+    json.parse(json::FileSource{jsonSettingsFile()});
     auto &settingsRoot = json.root();
     // BNode root has to be an object
     if (settingsRoot.getType() != json::JNodeType::object) {
