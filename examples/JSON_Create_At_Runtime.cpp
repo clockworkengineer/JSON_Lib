@@ -64,15 +64,15 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     json.stringify(destination);
     PLOG_INFO << destination.getBuffer();
     // instead, you could also write (which looks very similar to the JSON
-    // above) 
+    // above)
     // NOT SUPPORTED YET AS I CANNOT GET TO COMPILE.
-    // json json2 = {{"pi", 3.141},
-    //               {"sad", true},
-    //               {"first_name", "Niels"},
-    //               {"nothing", nullptr},
-    //               {"the_answer", {{"everything", 42}}},
-    //               {"list", {1, 0, 2, 4, 6}},
-    //               {"object", {{"currency", "USD"}, {"value", 42.99}}}};
+    // json::JSON json2 = {{"pi", 3.141},
+    //                     {"sad", true},
+    //                     {"first_name", "Niels"},
+    //                     {"nothing", nullptr},
+    //                     {"the_answer", {{"everything", 42}}},
+    //                     {"list", {1, 0, 2, 4, 6}},
+    //                     {"object", {{"currency", "USD"}, {"value", 42.99}}}};
   } catch (std::exception &e) {
     PLOG_ERROR << "Error: " << e.what();
   }
