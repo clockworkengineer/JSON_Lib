@@ -2,9 +2,9 @@
 // Program: JSON_Display_Settings
 //
 // Description: Parse JSON example settings file and read its Bencode tree data
-// (BNode) and write out a textual representation of it; this is almost the same
+// (JNode) and write out a textual representation of it; this is almost the same
 // as stringification but it is used to provide example code that traverses and
-// interperets the BNode tree data.
+// interperets the JNode tree data.
 //
 // Dependencies: C20++, PLOG, JSONLib.
 //
@@ -51,7 +51,7 @@ std::string jsonSettingsFile() {
 }
 /// <summary>
 /// Process settings file top level object entry. This involves jusr reading the
-/// entries BNode data and logging it to a file.
+/// entries JNode data and logging it to a file.
 /// </summary>
 void processEntry(const json::Object::Entry &entry) {
   // Log main entry key
@@ -109,7 +109,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     const json::JSON json;
     json.parse(json::FileSource{jsonSettingsFile()});
     auto &settingsRoot = json.root();
-    // BNode root has to be an object
+    // JNode root has to be an object
     if (settingsRoot.getType() != json::JNodeType::object) {
       throw std::runtime_error("Invalid JSON settings file.");
     }

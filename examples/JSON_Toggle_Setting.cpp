@@ -61,7 +61,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     json::JSON json;
     json.parse(json::FileSource{jsonSettingsFile()});
     auto &settingsRoot = json.root();
-    // BNode root has to be an object
+    // JNode root has to be an object
     if (settingsRoot.getType() != json::JNodeType::object) {
       throw std::runtime_error("Invalid JSON settings file.");
     }

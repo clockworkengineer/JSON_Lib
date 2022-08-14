@@ -71,7 +71,7 @@ public:
     totalArrays++;
     sizeInBytes += sizeof(Array);
     maxArraySize = std::max(jNodeArray.size(), maxArraySize);
-    for ([[maybe_unused]] auto &bNodeEntry : jNodeArray.array()) {
+    for ([[maybe_unused]] auto &jNodeEntry : jNodeArray.array()) {
       sizeInBytes += sizeof(JNode);
     }
   }
