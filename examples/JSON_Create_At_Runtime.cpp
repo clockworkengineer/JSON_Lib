@@ -65,7 +65,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     PLOG_INFO << destination.getBuffer();
     // instead, you could also write (which looks very similar to the JSON
     // above) 
-    // NOT SUPPORTED YET.
+    // NOT SUPPORTED YET AS I CANNOT GET TO COMPILE.
     // json json2 = {{"pi", 3.141},
     //               {"sad", true},
     //               {"first_name", "Niels"},
