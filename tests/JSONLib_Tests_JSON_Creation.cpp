@@ -300,6 +300,41 @@ TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]") {
         jsonDestination.getBuffer() ==
         R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2],"object":{"currency":"USD","value":42.99}})");
   }
+  SECTION("Object with sub array/object with an embedded array create using "
+          "initializer list.",
+          "[JSON][Create][Complex]") {
+    JSON json;
+    json["pi"] = 3.141;
+    json["happy"] = true;
+    json["name"] = "Niels";
+    json["nothing"] = nullptr;
+    json["answer"]["everything"] = 42;
+    json["list"] = {1, 0, 2};
+    json["object"] = {{"currency", "USD"}, {"value", JNode{1, 2, 3, 4, 5}}};
+    BufferDestination jsonDestination;
+    REQUIRE_NOTHROW(json.stringify(jsonDestination));
+    REQUIRE(
+        jsonDestination.getBuffer() ==
+        R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2],"object":{"currency":"USD","value":[1,2,3,4,5]}})");
+  }
+  SECTION("Object with sub array/object with an embedded object create using "
+          "initializer list.",
+          "[JSON][Create][Complex]") {
+    JSON json;
+    json["pi"] = 3.141;
+    json["happy"] = true;
+    json["name"] = "Niels";
+    json["nothing"] = nullptr;
+    json["answer"]["everything"] = 42;
+    json["list"] = {1, 0, 2};
+    json["object"] = {{"currency", "USD"},
+                      {"value", JNode{{"key1", 22}, {"key2", 99.899}}}};
+    BufferDestination jsonDestination;
+    REQUIRE_NOTHROW(json.stringify(jsonDestination));
+    REQUIRE(
+        jsonDestination.getBuffer() ==
+        R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2],"object":{"currency":"USD","value":{"key1":22,"key2":99.899}}})");
+  }
   // Currently not supported but on TODO.
   // SECTION("Object creation completely using a nested initializer list.",
   //         "[JSON][Create][Complex][Initializer") {

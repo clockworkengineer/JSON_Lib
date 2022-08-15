@@ -69,7 +69,7 @@ JNode::JNode(bool boolean) {
   JNode jNode{makeBoolean(boolean)};
   std::swap(*this, jNode);
 }
-JNode::JNode([[maybe_unused]]std::nullptr_t null) {
+JNode::JNode([[maybe_unused]] std::nullptr_t null) {
   JNode jNode{makeNull()};
   std::swap(*this, jNode);
 }
@@ -77,21 +77,22 @@ JNode::JNode([[maybe_unused]]std::nullptr_t null) {
 JNode::JNode(const std::initializer_list<InternalTypes> &array) {
   Array::ArrayList jNodeArrayList;
   for (const auto &entry : array) {
-    if (const int *pint = std::get_if<int>(&entry)) {
-      jNodeArrayList.emplace_back(makeNumber(Numeric{*pint}));
-    } else if (const long *plong = std::get_if<long>(&entry)) {
-      jNodeArrayList.emplace_back(makeNumber(Numeric{*plong}));
-    } else if (const float *pfloat = std::get_if<float>(&entry)) {
-      jNodeArrayList.emplace_back(makeNumber(Numeric{*pfloat}));
-    } else if (const double *pdouble = std::get_if<double>(&entry)) {
-      jNodeArrayList.emplace_back(makeNumber(Numeric{*pdouble}));
-    } else if (const std::string *pstring = std::get_if<std::string>(&entry)) {
-      jNodeArrayList.emplace_back(makeString(*pstring));
-    } else if (const bool *pboolean = std::get_if<bool>(&entry)) {
-      jNodeArrayList.emplace_back(makeBoolean(*pboolean));
-    } else if (const std::nullptr_t *pnull =
-                   std::get_if<std::nullptr_t>(&entry)) {
+    if (auto pInteger = std::get_if<int>(&entry)) {
+      jNodeArrayList.emplace_back(makeNumber(Numeric{*pInteger}));
+    } else if (auto pLong = std::get_if<long>(&entry)) {
+      jNodeArrayList.emplace_back(makeNumber(Numeric{*pLong}));
+    } else if (auto pFLoat = std::get_if<float>(&entry)) {
+      jNodeArrayList.emplace_back(makeNumber(Numeric{*pFLoat}));
+    } else if (auto pDouble = std::get_if<double>(&entry)) {
+      jNodeArrayList.emplace_back(makeNumber(Numeric{*pDouble}));
+    } else if (auto pString = std::get_if<std::string>(&entry)) {
+      jNodeArrayList.emplace_back(makeString(*pString));
+    } else if (auto pBoolean = std::get_if<bool>(&entry)) {
+      jNodeArrayList.emplace_back(makeBoolean(*pBoolean));
+    } else if (auto pNull = std::get_if<std::nullptr_t>(&entry)) {
       jNodeArrayList.emplace_back(makeNull());
+    }  else if (auto pJNode = std::get_if<JNode>(&entry)) {
+      jNodeArrayList.emplace_back(std::move(*const_cast<JNode*>(pJNode)));
     }
   }
   JNode jNode{makeArray(jNodeArrayList)};
@@ -103,22 +104,22 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
   Object::EntryList jObjectList;
   for (const auto &entry : object) {
     JNode jNode;
-    if (const int *pint = std::get_if<int>(&entry.second)) {
-      jNode = makeNumber(Numeric{*pint});
-    } else if (const long *plong = std::get_if<long>(&entry.second)) {
-      jNode = makeNumber(Numeric{*plong});
-    } else if (const float *pfloat = std::get_if<float>(&entry.second)) {
-      jNode = makeNumber(Numeric{*pfloat});
-    } else if (const double *pdouble = std::get_if<double>(&entry.second)) {
-      jNode = makeNumber(Numeric{*pdouble});
-    } else if (const std::string *pstring =
-                   std::get_if<std::string>(&entry.second)) {
-      jNode = makeString(*pstring);
-    } else if (const bool *pboolean = std::get_if<bool>(&entry.second)) {
-      jNode = makeBoolean(*pboolean);
-    } else if (const std::nullptr_t *pnull =
-                   std::get_if<std::nullptr_t>(&entry.second)) {
+    if (auto pInteger = std::get_if<int>(&entry.second)) {
+      jNode = makeNumber(Numeric{*pInteger});
+    } else if (auto pLong = std::get_if<long>(&entry.second)) {
+      jNode = makeNumber(Numeric{*pLong});
+    } else if (auto pFloat = std::get_if<float>(&entry.second)) {
+      jNode = makeNumber(Numeric{*pFloat});
+    } else if (auto pDouble = std::get_if<double>(&entry.second)) {
+      jNode = makeNumber(Numeric{*pDouble});
+    } else if (auto pString = std::get_if<std::string>(&entry.second)) {
+      jNode = makeString(*pString);
+    } else if (auto pBoolean = std::get_if<bool>(&entry.second)) {
+      jNode = makeBoolean(*pBoolean);
+    } else if (auto pNull = std::get_if<std::nullptr_t>(&entry.second)) {
       jNode = makeNull();
+    } else if (auto pJNode = std::get_if<JNode>(&entry.second)) {
+       jNode = std::move(*const_cast<JNode*>(pJNode));
     }
     jObjectList.emplace_back(Object::Entry(entry.first, jNode));
   }

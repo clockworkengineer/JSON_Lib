@@ -60,6 +60,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     json["list"] = {1, 0, 2, 4, 6};
     // add another object (using an initializer list of pairs)
     json["object"] = {{"currency", "USD"}, {"value", 42.99}};
+    // add another object that a nested array
+    json["object2"] = {{"currency", "USD"}, {"array", json::JNode{23.22, 33, 55, 99.99}}};
     json::BufferDestination destination;
     json.stringify(destination);
     PLOG_INFO << destination.getBuffer();

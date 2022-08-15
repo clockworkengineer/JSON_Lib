@@ -30,7 +30,7 @@ struct Variant;
 struct JNode {
   // Possible JSON node value types
   using InternalTypes =
-      std::variant<int, long, float, double, bool, std::string, std::nullptr_t>;
+      std::variant<int, long, float, double, bool, std::string, std::nullptr_t, JNode>;
   // JNode Error
   struct Error : public std::runtime_error {
     explicit Error(const std::string &message)
