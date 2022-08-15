@@ -40,6 +40,39 @@ namespace JSONLib {
 // ==================
 // JNode constructors
 // ==================
+// Construct from raw values
+JNode::JNode(int integer) {
+  JNode jNode{makeNumber(Numeric{integer})};
+  std::swap(*this, jNode);
+}
+JNode::JNode(long integer) {
+  JNode jNode{makeNumber(Numeric{integer})};
+  std::swap(*this, jNode);
+}
+JNode::JNode(float floatingPoint) {
+  JNode jNode{makeNumber(Numeric{floatingPoint})};
+  std::swap(*this, jNode);
+}
+JNode::JNode(double floatingPoint) {
+  JNode jNode{makeNumber(Numeric{floatingPoint})};
+  std::swap(*this, jNode);
+}
+JNode::JNode(const char *cString) {
+  JNode jNode{makeString(cString)};
+  std::swap(*this, jNode);
+}
+JNode::JNode(const std::string &string) {
+  JNode jNode{makeString(string)};
+  std::swap(*this, jNode);
+}
+JNode::JNode(bool boolean) {
+  JNode jNode{makeBoolean(boolean)};
+  std::swap(*this, jNode);
+}
+JNode::JNode([[maybe_unused]]std::nullptr_t null) {
+  JNode jNode{makeNull()};
+  std::swap(*this, jNode);
+}
 // Construct JSON array from initializer list
 JNode::JNode(const std::initializer_list<InternalTypes> &array) {
   Array::ArrayList jNodeArrayList;
@@ -136,16 +169,6 @@ const JNode &JNode::operator[](std::size_t index) const {
 // ==========================
 // JNode assignment operators
 // ==========================
-JNode &JNode::operator=(float floatingPoint) {
-  JNode jNode{makeNumber(Numeric{floatingPoint})};
-  std::swap(*this, jNode);
-  return (*this);
-}
-JNode &JNode::operator=(double floatingPoint) {
-  JNode jNode{makeNumber(Numeric{floatingPoint})};
-  std::swap(*this, jNode);
-  return (*this);
-}
 JNode &JNode::operator=(int integer) {
   JNode jNode{makeNumber(Numeric{integer})};
   std::swap(*this, jNode);
@@ -153,6 +176,16 @@ JNode &JNode::operator=(int integer) {
 }
 JNode &JNode::operator=(long integer) {
   JNode jNode{makeNumber(Numeric{integer})};
+  std::swap(*this, jNode);
+  return (*this);
+}
+JNode &JNode::operator=(float floatingPoint) {
+  JNode jNode{makeNumber(Numeric{floatingPoint})};
+  std::swap(*this, jNode);
+  return (*this);
+}
+JNode &JNode::operator=(double floatingPoint) {
+  JNode jNode{makeNumber(Numeric{floatingPoint})};
   std::swap(*this, jNode);
   return (*this);
 }

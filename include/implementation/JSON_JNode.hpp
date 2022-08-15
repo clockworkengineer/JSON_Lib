@@ -38,6 +38,14 @@ struct JNode {
   };
   // Constructors/Destructors
   JNode() = default;
+  explicit JNode(float floatingPoint);
+  explicit JNode(double floatingPoint);
+  explicit JNode(int integer);
+  explicit JNode(long integer);
+  explicit JNode(const char *cString);
+  explicit JNode(const std::string &string);
+  explicit JNode(bool boolean);
+  explicit JNode(std::nullptr_t null);
   explicit JNode(std::unique_ptr<Variant> jNodeVariant)
       : m_jNodeVariant(std::move(jNodeVariant)) {}
   JNode(const std::initializer_list<InternalTypes> &array);
