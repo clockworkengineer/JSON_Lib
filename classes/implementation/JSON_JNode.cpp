@@ -63,46 +63,25 @@ JNode JNode::getJNode(const JNode::InternalTypes &type) {
 // JNode constructors
 // ==================
 // Construct JNode from raw values
-JNode::JNode(int integer) {
-  JNode jNode{makeNumber(Numeric{integer})};
-  std::swap(*this, jNode);
-}
-JNode::JNode(long integer) {
-  JNode jNode{makeNumber(Numeric{integer})};
-  std::swap(*this, jNode);
-}
+JNode::JNode(int integer) { *this = makeNumber(Numeric{integer}); }
+JNode::JNode(long integer) { *this = makeNumber(Numeric{integer}); }
 JNode::JNode(float floatingPoint) {
-  JNode jNode{makeNumber(Numeric{floatingPoint})};
-  std::swap(*this, jNode);
+  *this = makeNumber(Numeric{floatingPoint});
 }
 JNode::JNode(double floatingPoint) {
-  JNode jNode{makeNumber(Numeric{floatingPoint})};
-  std::swap(*this, jNode);
+  *this = makeNumber(Numeric{floatingPoint});
 }
-JNode::JNode(const char *cString) {
-  JNode jNode{makeString(cString)};
-  std::swap(*this, jNode);
-}
-JNode::JNode(const std::string &string) {
-  JNode jNode{makeString(string)};
-  std::swap(*this, jNode);
-}
-JNode::JNode(bool boolean) {
-  JNode jNode{makeBoolean(boolean)};
-  std::swap(*this, jNode);
-}
-JNode::JNode([[maybe_unused]] std::nullptr_t null) {
-  JNode jNode{makeNull()};
-  std::swap(*this, jNode);
-}
+JNode::JNode(const char *cString) { *this = makeString(cString); }
+JNode::JNode(const std::string &string) { *this = makeString(string); }
+JNode::JNode(bool boolean) { *this = makeBoolean(boolean); }
+JNode::JNode([[maybe_unused]] std::nullptr_t null) { *this = makeNull(); }
 // Construct JSON array from initializer list
 JNode::JNode(const std::initializer_list<InternalTypes> &array) {
   Array::ArrayList jNodeArrayList;
   for (const auto &entry : array) {
     jNodeArrayList.emplace_back(getJNode(entry));
   }
-  JNode jNode{makeArray(jNodeArrayList)};
-  std::swap(*this, jNode);
+  *this = makeArray(jNodeArrayList);
 }
 // Construct JSON object from initializer list
 JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
@@ -112,8 +91,7 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
     jObjectList.emplace_back(
         Object::Entry(entry.first, getJNode(entry.second)));
   }
-  JNode jNode{makeObject(jObjectList)};
-  std::swap(*this, jNode);
+  *this = makeObject(jObjectList);
 }
 // =====================
 // JNode index overloads
@@ -160,43 +138,35 @@ const JNode &JNode::operator[](std::size_t index) const {
 // JNode assignment operators
 // ==========================
 JNode &JNode::operator=(int integer) {
-  JNode jNode{makeNumber(Numeric{integer})};
-  std::swap(*this, jNode);
+  *this = makeNumber(Numeric{integer});
   return (*this);
 }
 JNode &JNode::operator=(long integer) {
-  JNode jNode{makeNumber(Numeric{integer})};
-  std::swap(*this, jNode);
+  *this = makeNumber(Numeric{integer});
   return (*this);
 }
 JNode &JNode::operator=(float floatingPoint) {
-  JNode jNode{makeNumber(Numeric{floatingPoint})};
-  std::swap(*this, jNode);
+  *this = makeNumber(Numeric{floatingPoint});
   return (*this);
 }
 JNode &JNode::operator=(double floatingPoint) {
-  JNode jNode{makeNumber(Numeric{floatingPoint})};
-  std::swap(*this, jNode);
+  *this = makeNumber(Numeric{floatingPoint});
   return (*this);
 }
 JNode &JNode::operator=(const char *cString) {
-  JNode jNode{makeString(cString)};
-  std::swap(*this, jNode);
+  *this = makeString(cString);
   return (*this);
 }
 JNode &JNode::operator=(const std::string &string) {
-  JNode jNode{makeString(string)};
-  std::swap(*this, jNode);
+  *this = makeString(string);
   return (*this);
 }
 JNode &JNode::operator=(bool boolean) {
-  JNode jNode{makeBoolean(boolean)};
-  std::swap(*this, jNode);
+  *this = makeBoolean(boolean);
   return (*this);
 }
 JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null) {
-  JNode jNode{makeNull()};
-  std::swap(*this, jNode);
+  *this = makeNull();
   return (*this);
 }
 // ==============
