@@ -19,33 +19,33 @@ using namespace JSONLib;
 // JNode constructors
 // ==================
 TEST_CASE("Use of JNode constructors", "[JSON][JNode][Constructor]") {
-  SECTION("Test JNode(integer).", "[JSON][JNode][Constructor]") {
+  SECTION("Test JNode(integer).", "[JSON][JNode][Constructor][Integer]") {
     JNode jNode(999);
     REQUIRE(jNode.getType() == JNodeType::number);
     REQUIRE_FALSE(!JRef<Number>(jNode).number().isInt());
     REQUIRE(JRef<Number>(jNode).number().getInt() == 999);
   }
-  SECTION("Test JNode(long).", "[JSON][JNode][Constructor]") {
+  SECTION("Test JNode(long).", "[JSON][JNode][Constructor][Long]") {
     JNode jNode(99988899l);
     REQUIRE(jNode.getType() == JNodeType::number);
     REQUIRE_FALSE(!JRef<Number>(jNode).number().isLong());
     REQUIRE(JRef<Number>(jNode).number().getInt() == 99988899l);
   }
-  SECTION("Test JNode(float).", "[JSON][JNode][Constructor]") {
+  SECTION("Test JNode(float).", "[JSON][JNode][Constructor][Float]") {
     JNode jNode(777.999f);
     REQUIRE(jNode.getType() == JNodeType::number);
     REQUIRE_FALSE(!JRef<Number>(jNode).number().isFloat());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).number().getFloat(),
                                       777.999f, 0.0001));
   }
-  SECTION("Test JNode(double).", "[JSON][JNode][Constructor]") {
+  SECTION("Test JNode(double).", "[JSON][JNode][Constructor][Double]") {
     JNode jNode(66666.8888);
     REQUIRE(jNode.getType() == JNodeType::number);
     REQUIRE_FALSE(!JRef<Number>(jNode).number().isDouble());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).number().getDouble(),
                                       66666.8888, 0.0001));
   }
-  SECTION("Test JNode(C string).", "[JSON][JNode][Constructor]") {
+  SECTION("Test JNode(C string).", "[JSON][JNode][Constructor][CString]") {
     JNode jNode("test string");
     REQUIRE(jNode.getType() == JNodeType::string);
     REQUIRE(JRef<String>(jNode).string() == "test string");
@@ -55,15 +55,31 @@ TEST_CASE("Use of JNode constructors", "[JSON][JNode][Constructor]") {
     REQUIRE(jNode.getType() == JNodeType::string);
     REQUIRE(JRef<String>(jNode).string() == "test string");
   }
-  SECTION("Test JNode(boolean).", "[JSON][JNode][Constructor]") {
+  SECTION("Test JNode(boolean).", "[JSON][JNode][Constructor][String]") {
     JNode jNode(false);
     REQUIRE(jNode.getType() == JNodeType::boolean);
     REQUIRE_FALSE(JRef<Boolean>(jNode).boolean());
   }
-  SECTION("Test JNode(null).", "[JSON][JNode][Constructor]") {
+  SECTION("Test JNode(null).", "[JSON][JNode][Constructor][Null]") {
     JNode jNode(nullptr);
     REQUIRE(jNode.getType() == JNodeType::null);
     REQUIRE(JRef<Null>(jNode).null() == nullptr);
+  }
+  SECTION("Test JNode(array).", "[JSON][JNode][Constructor][Array]") {
+    JNode jNode{1, 2, 3, 4};
+    REQUIRE(jNode.getType() == JNodeType::array);
+    auto &array = JRef<Array>(jNode).array();
+    REQUIRE(JRef<Number>(array[0]).number().getInt() == 1);
+    REQUIRE(JRef<Number>(array[1]).number().getInt() == 2);
+    REQUIRE(JRef<Number>(array[2]).number().getInt() == 3);
+    REQUIRE(JRef<Number>(array[3]).number().getInt() == 4);
+  }
+  SECTION("Test JNode(object).", "[JSON][JNode][Constructor][Object]") {
+    JNode jNode{{"key1", 55}, {"key2", 26666}};
+    REQUIRE(jNode.getType() == JNodeType::object);
+    auto &object = JRef<Object>(jNode);
+    REQUIRE(JRef<Number>(object["key1"]).number().getInt() == 55);
+    REQUIRE(JRef<Number>(object["key2"]).number().getInt() == 26666);
   }
 }
 // ==============
