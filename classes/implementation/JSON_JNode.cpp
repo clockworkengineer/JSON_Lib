@@ -34,13 +34,35 @@ namespace JSONLib {
 // ===============
 // PRIVATE METHODS
 // ===============
+// Create JNode for passed in type
+JNode JNode::getJNode(const JNode::InternalTypes &type) {
+  JNode jNode;
+  if (auto pInteger = std::get_if<int>(&type)) {
+    jNode = makeNumber(Numeric{*pInteger});
+  } else if (auto pLong = std::get_if<long>(&type)) {
+    jNode = makeNumber(Numeric{*pLong});
+  } else if (auto pFLoat = std::get_if<float>(&type)) {
+    jNode = makeNumber(Numeric{*pFLoat});
+  } else if (auto pDouble = std::get_if<double>(&type)) {
+    jNode = makeNumber(Numeric{*pDouble});
+  } else if (auto pString = std::get_if<std::string>(&type)) {
+    jNode = makeString(*pString);
+  } else if (auto pBoolean = std::get_if<bool>(&type)) {
+    jNode = makeBoolean(*pBoolean);
+  } else if (auto pNull = std::get_if<std::nullptr_t>(&type)) {
+    jNode = makeNull();
+  } else if (auto pJNode = std::get_if<JNode>(&type)) {
+    jNode = std::move(*const_cast<JNode *>(pJNode));
+  }
+  return (jNode);
+}
 // ==============
 // PUBLIC METHODS
 // ==============
 // ==================
 // JNode constructors
 // ==================
-// Construct from raw values
+// Construct JNode from raw values
 JNode::JNode(int integer) {
   JNode jNode{makeNumber(Numeric{integer})};
   std::swap(*this, jNode);
@@ -77,23 +99,7 @@ JNode::JNode([[maybe_unused]] std::nullptr_t null) {
 JNode::JNode(const std::initializer_list<InternalTypes> &array) {
   Array::ArrayList jNodeArrayList;
   for (const auto &entry : array) {
-    if (auto pInteger = std::get_if<int>(&entry)) {
-      jNodeArrayList.emplace_back(makeNumber(Numeric{*pInteger}));
-    } else if (auto pLong = std::get_if<long>(&entry)) {
-      jNodeArrayList.emplace_back(makeNumber(Numeric{*pLong}));
-    } else if (auto pFLoat = std::get_if<float>(&entry)) {
-      jNodeArrayList.emplace_back(makeNumber(Numeric{*pFLoat}));
-    } else if (auto pDouble = std::get_if<double>(&entry)) {
-      jNodeArrayList.emplace_back(makeNumber(Numeric{*pDouble}));
-    } else if (auto pString = std::get_if<std::string>(&entry)) {
-      jNodeArrayList.emplace_back(makeString(*pString));
-    } else if (auto pBoolean = std::get_if<bool>(&entry)) {
-      jNodeArrayList.emplace_back(makeBoolean(*pBoolean));
-    } else if (auto pNull = std::get_if<std::nullptr_t>(&entry)) {
-      jNodeArrayList.emplace_back(makeNull());
-    }  else if (auto pJNode = std::get_if<JNode>(&entry)) {
-      jNodeArrayList.emplace_back(std::move(*const_cast<JNode*>(pJNode)));
-    }
+    jNodeArrayList.emplace_back(getJNode(entry));
   }
   JNode jNode{makeArray(jNodeArrayList)};
   std::swap(*this, jNode);
@@ -103,25 +109,8 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
                  &object) {
   Object::EntryList jObjectList;
   for (const auto &entry : object) {
-    JNode jNode;
-    if (auto pInteger = std::get_if<int>(&entry.second)) {
-      jNode = makeNumber(Numeric{*pInteger});
-    } else if (auto pLong = std::get_if<long>(&entry.second)) {
-      jNode = makeNumber(Numeric{*pLong});
-    } else if (auto pFloat = std::get_if<float>(&entry.second)) {
-      jNode = makeNumber(Numeric{*pFloat});
-    } else if (auto pDouble = std::get_if<double>(&entry.second)) {
-      jNode = makeNumber(Numeric{*pDouble});
-    } else if (auto pString = std::get_if<std::string>(&entry.second)) {
-      jNode = makeString(*pString);
-    } else if (auto pBoolean = std::get_if<bool>(&entry.second)) {
-      jNode = makeBoolean(*pBoolean);
-    } else if (auto pNull = std::get_if<std::nullptr_t>(&entry.second)) {
-      jNode = makeNull();
-    } else if (auto pJNode = std::get_if<JNode>(&entry.second)) {
-       jNode = std::move(*const_cast<JNode*>(pJNode));
-    }
-    jObjectList.emplace_back(Object::Entry(entry.first, jNode));
+    jObjectList.emplace_back(
+        Object::Entry(entry.first, getJNode(entry.second)));
   }
   JNode jNode{makeObject(jObjectList)};
   std::swap(*this, jNode);

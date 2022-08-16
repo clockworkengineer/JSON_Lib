@@ -1,7 +1,7 @@
 //
 // Unit Tests: JSON
 //
-// Description: JNode access/index/reference unit tests for JSON class
+// Description: JNode access/index/reference/constructor unit tests for JSON class
 // using the Catch2 test framework.
 //
 // ================
