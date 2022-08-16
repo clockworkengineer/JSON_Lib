@@ -29,8 +29,8 @@ enum class JNodeType {
 struct Variant;
 struct JNode {
   // Possible JSON node value types
-  using InternalTypes =
-      std::variant<int, long, float, double, bool, std::string, std::nullptr_t, JNode>;
+  using InternalTypes = std::variant<int, long, float, double, bool,
+                                     std::string, std::nullptr_t, JNode>;
   // JNode Error
   struct Error : public std::runtime_error {
     explicit Error(const std::string &message)
@@ -46,11 +46,11 @@ struct JNode {
   explicit JNode(const std::string &string);
   explicit JNode(bool boolean);
   explicit JNode(std::nullptr_t null);
-  explicit JNode(std::unique_ptr<Variant> jNodeVariant)
-      : m_jNodeVariant(std::move(jNodeVariant)) {}
   JNode(const std::initializer_list<InternalTypes> &array);
   JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
             &object);
+  explicit JNode(std::unique_ptr<Variant> jNodeVariant)
+      : m_jNodeVariant(std::move(jNodeVariant)) {}
   JNode(const JNode &other) = delete;
   JNode &operator=(const JNode &other) = delete;
   JNode(JNode &&other) = default;
