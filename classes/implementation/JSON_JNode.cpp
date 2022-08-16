@@ -123,7 +123,7 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
 // ======
 JNode &JNode::operator[](const std::string &key) {
   if (this->getType() == JNodeType::hole) {
-    this->m_jNodeVariant = std::make_unique<Object>();
+    *this = makeObject();
     JRef<Object>(*this).objectEntries().emplace_back(
         Object::Entry(key, makeHole()));
     return (JRef<Object>(*this).objectEntries().back().getJNode());
@@ -139,7 +139,7 @@ const JNode &JNode::operator[](const std::string &key) const {
 JNode &JNode::operator[](std::size_t index) {
   try {
     if (this->getType() == JNodeType::hole) {
-      this->m_jNodeVariant = std::make_unique<Array>();
+      *this = makeArray();
     }
     return (JRef<Array>(*this)[index]);
   } catch ([[maybe_unused]] const JNode::Error &error) {
