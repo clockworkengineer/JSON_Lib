@@ -35,7 +35,7 @@ namespace JSONLib {
 // PRIVATE METHODS
 // ===============
 // Create JNode for passed in type
-JNode JNode::getJNode(const JNode::InternalTypes &type) {
+JNode JNode::getJNode(const JSON::InternalTypes &type) {
   JNode jNode;
   if (auto pInteger = std::get_if<int>(&type)) {
     jNode = makeNumber(Numeric{*pInteger});
@@ -76,7 +76,7 @@ JNode::JNode(const std::string &string) { *this = makeString(string); }
 JNode::JNode(bool boolean) { *this = makeBoolean(boolean); }
 JNode::JNode([[maybe_unused]] std::nullptr_t null) { *this = makeNull(); }
 // Construct JNode array from initializer list
-JNode::JNode(const std::initializer_list<InternalTypes> &array) {
+JNode::JNode(const std::initializer_list<JSON::InternalTypes> &array) {
   Array::ArrayList jNodeArrayList;
   for (const auto &entry : array) {
     jNodeArrayList.emplace_back(getJNode(entry));
@@ -84,7 +84,7 @@ JNode::JNode(const std::initializer_list<InternalTypes> &array) {
   *this = makeArray(jNodeArrayList);
 }
 // Construct JNode object from initializer list
-JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
+JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::InternalTypes>>
                  &object) {
   Object::EntryList jObjectList;
   for (const auto &entry : object) {

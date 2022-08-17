@@ -28,9 +28,6 @@ enum class JNodeType {
 // =====
 struct Variant;
 struct JNode {
-  // Possible JSON node value types
-  using InternalTypes = std::variant<int, long, float, double, bool,
-                                     std::string, std::nullptr_t, JNode>;
   // JNode Error
   struct Error : public std::runtime_error {
     explicit Error(const std::string &message)
@@ -46,8 +43,8 @@ struct JNode {
   explicit JNode(const std::string &string);
   explicit JNode(bool boolean);
   explicit JNode(std::nullptr_t null);
-  JNode(const std::initializer_list<InternalTypes> &array);
-  JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
+  JNode(const std::initializer_list<JSON::InternalTypes> &array);
+  JNode(const std::initializer_list<std::pair<std::string, JSON::InternalTypes>>
             &object);
   explicit JNode(std::unique_ptr<Variant> jNodeVariant)
       : m_jNodeVariant(std::move(jNodeVariant)) {}
@@ -77,7 +74,7 @@ struct JNode {
   [[nodiscard]] const std::unique_ptr<Variant> &getVariant() const;
 
 private:
-  JNode getJNode(const JNode::InternalTypes &type);
+  JNode getJNode(const JSON::InternalTypes &type);
   std::unique_ptr<Variant> m_jNodeVariant;
 };
 } // namespace JSONLib
