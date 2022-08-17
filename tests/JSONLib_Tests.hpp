@@ -2,7 +2,8 @@
 // =====================
 // Catch2 Test framework
 // =====================
-#include "catch2/catch.hpp"
+// #include "catch2/catch.hpp"
+#include "catch2/catch_all.hpp"
 // ====
 // JSON
 // ====
@@ -55,7 +56,7 @@ std::string stripWhiteSpace(const std::string &jsonBuffer);
       "testfile012.json"                                                      \
   }))
 //      "testfile013.json",                                                      \
-// FLoating point comparison (accurate to within an epsilon)
+// Floating point comparison (accurate to within an epsilon)
 template <typename T> bool equalFloatingPoint(T a, T b, double epsilon) {
   return (std::fabs(a - b) <= epsilon);
 };

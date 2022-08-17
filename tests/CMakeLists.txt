@@ -9,8 +9,8 @@ Include(FetchContent)
 FetchContent_Declare(
   Catch2
   GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  # GIT_TAG        v3.0.1 # or a later release
-  GIT_TAG        v2.13.4
+  GIT_TAG        v3.0.1 # or a later release
+  #GIT_TAG        v2.13.4
 )
 
 FetchContent_MakeAvailable(Catch2)
@@ -22,6 +22,7 @@ enable_testing()
 set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
 set(TEST_SOURCES
+    JSONLib_Tests_JSON.cpp
     JSONLib_Tests_JNode.cpp
     JSONLib_Tests_JNodeNumber.cpp
     JSONLib_Tests_ISource.cpp
@@ -37,7 +38,6 @@ set(TEST_SOURCES
     JSONLib_Tests_Stringify_Simple.cpp
     JSONLib_Tests_Stringify_Collection.cpp
     JSONLib_Tests_Stringify_Exceptions.cpp
-    JSONLib_Tests_JSON_Creation.cpp
     JSONLib_Tests_Misc.cpp
     JSONLib_Tests_Helper.cpp)
 

@@ -42,7 +42,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     PLOG_INFO << json::JSON().version();
     // create an empty structure (null)
     json::JSON json;
-    // add a number that is stored as double (note the implicit conversion of j
+    // add a number that is stored as double (note the implicit conversion of json
     // to an object)
     json["pi"] = 3.141;
     // add a Boolean that is stored as bool
@@ -57,7 +57,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     json["list"] = {1, 0, 2};
     // add another object (using an initializer list of pairs)
     json["object"] = {{"currency", "USD"}, {"value", 42.99}};
-    // add another object that a nested array (JNode{})
+    // add another object that has a nested array (JNode{})
     json["object2"] = {{"currency", "USD"},
                        {"array", json::JNode{23.22, 33, 55, 99.99}}};
     json::BufferDestination destination;
