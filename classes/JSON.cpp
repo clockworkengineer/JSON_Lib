@@ -55,6 +55,22 @@ JSON::JSON(ITranslator *translator, IConverter *converter)
   m_jsonImplementation->translator(translator);
 }
 /// <summary>
+/// JSON constructor (array).
+/// </summary>
+/// <param name="array">Intialiser list of single values or JNode.</param>
+JSON::JSON(const std::initializer_list<InternalTypes> &array) : JSON() {
+  this->root() = JNode(array);
+}
+/// <summary>
+/// JSON constructor (object).
+/// </summary>
+/// <param name="array">Intialiser list of key/value(JNode) pairs.</param>
+JSON::JSON(
+    const std::initializer_list<std::pair<std::string, InternalTypes>> &object)
+    : JSON() {
+  this->root() = JNode(object);
+}
+/// <summary>
 /// JSON constructor. Pass a JSON string to be initially parsed.
 /// </summary>
 /// <param name="jsonString">JSON string.</param>

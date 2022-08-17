@@ -22,12 +22,12 @@ using namespace JSONLib;
 TEST_CASE("JSON object creation api.", "[JSON][Create][Object]") {
   SECTION("Initialise JSON with JSON object  passed to constructor.",
           "[JSON][Create][Constructor]") {
-    REQUIRE_NOTHROW(JSON{R"({ "pi" : 3.141 })"});
+    REQUIRE_NOTHROW(JSON(R"({ "pi" : 3.141 })"));
   }
   SECTION(
       "Initialise JSON with JSON object  passed to constructor and validate.",
       "[JSON][Create][Constructor][Validate]") {
-    const JSON json{R"({ "pi" : 3.141 })"};
+    const JSON json(R"({ "pi" : 3.141 })");
     REQUIRE(json.root().getType() == JNodeType::object);
     REQUIRE(json.root()["pi"].getType() == JNodeType::number);
     REQUIRE(JRef<Number>(json.root()["pi"]).toString() == "3.141");
@@ -113,11 +113,11 @@ TEST_CASE("JSON object creation api.", "[JSON][Create][Object]") {
 TEST_CASE("JSON array creation api.", "[JSON][Create][Array]") {
   SECTION("Initialise JSON with JSON array  passed to constructor.",
           "[JSON][Create][Constructor]") {
-    REQUIRE_NOTHROW(JSON{R"([ "pi", 3.141 ])"});
+    REQUIRE_NOTHROW(JSON(R"([ "pi", 3.141 ])"));
   }
   SECTION("Initialise JSON with JSON array passed to constructor and validate.",
           "[JSON][Create][Constructor][Validate]") {
-    const JSON json{R"([ "pi", 3.141 ])"};
+    const JSON json(R"([ "pi", 3.141 ])");
     REQUIRE(json.root().getType() == JNodeType::array);
     REQUIRE(json.root()[0].getType() == JNodeType::string);
     REQUIRE(json.root()[1].getType() == JNodeType::number);
@@ -335,20 +335,36 @@ TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]") {
         jsonDestination.getBuffer() ==
         R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2],"object":{"currency":"USD","value":{"key1":22,"key2":99.899}}})");
   }
-  // Currently not supported but on TODO.
-  // SECTION("Object creation completely using a nested initializer list.",
-  //         "[JSON][Create][Complex][Initializer") {
-  //   JSON json = {{"pi", 3.141},
-  //                {"happy", true},
-  //                {"name", "Niels"},
-  //                {"nothing", nullptr},
-  //                {"answer", {{"everything", 42}}},
-  //                {"list", {1, 0, 2}},
-  //                {"object", {{"currency", "USD"}, {"value", 42.99}}}};
-  //   BufferDestination jsonDestination;
-  //   REQUIRE_NOTHROW(json.stringify(jsonDestination));
-  //   REQUIRE(
-  //       jsonDestination.getBuffer() ==
-  //       R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2],"object":{"currency":"USD","value":42.99}})");
-  // }
+  SECTION("Array creation completely using a initializer list.",
+          "[JSON][Create][Complex][Initializer") {
+    JSON json = {1, 2, 3, 4};
+    BufferDestination jsonDestination;
+    REQUIRE_NOTHROW(json.stringify(jsonDestination));
+    REQUIRE(jsonDestination.getBuffer() == R"([1,2,3,4])");
+  }
+  SECTION("Object creation completely using a initializer list.",
+          "[JSON][Create][Complex][Initializer") {
+    JSON json = {{"currency", "USD"}, {"value", 42.99}};
+    BufferDestination jsonDestination;
+    REQUIRE_NOTHROW(json.stringify(jsonDestination));
+    REQUIRE(jsonDestination.getBuffer() ==
+            R"({"currency":"USD","value":42.99})");
+  }
+  SECTION("Object creation completely using a nested initializer list.",
+          "[JSON][Create][Complex][Initializer") {
+    // Note: For the moment has to explicitly uses JNode to create a 
+    // nested object/array
+    JSON json = {{"pi", 3.141},
+                 {"happy", true},
+                 {"name", "Niels"},
+                 {"nothing", nullptr},
+                 {"answer", JNode{{"everything", 42}}},
+                 {"list", JNode{1, 0, 2}},
+                 {"object", JNode{{"currency", "USD"}, {"value", 42.99}}}};
+    BufferDestination jsonDestination;
+    REQUIRE_NOTHROW(json.stringify(jsonDestination));
+    REQUIRE(
+        jsonDestination.getBuffer() ==
+        R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2],"object":{"currency":"USD","value":42.99}})");
+  }
 }

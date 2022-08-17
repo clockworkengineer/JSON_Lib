@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <variant>
 // =========
 // NAMESPACE
 // =========
@@ -28,6 +29,9 @@ public:
   // ==========================
   // PUBLIC TYPES AND CONSTANTS
   // ==========================
+  // Possible JSON node value types
+  using InternalTypes = std::variant<int, long, float, double, bool,
+                                     std::string, std::nullptr_t, JNode>;
   // ======================
   // CONSTRUCTOR/DESTRUCTOR
   // ======================
@@ -36,6 +40,11 @@ public:
                 IConverter *converter = nullptr);
   // Pass in default JSON to parse
   explicit JSON(const std::string &jsonString);
+  // Construct array
+  JSON(const std::initializer_list<InternalTypes> &array);
+  // Construct object
+  JSON(const std::initializer_list<std::pair<std::string, InternalTypes>>
+           &object);
   // No other constructors supported
   JSON(const JSON &other) = delete;
   JSON &operator=(const JSON &other) = delete;

@@ -75,7 +75,7 @@ JNode::JNode(const char *cString) { *this = makeString(cString); }
 JNode::JNode(const std::string &string) { *this = makeString(string); }
 JNode::JNode(bool boolean) { *this = makeBoolean(boolean); }
 JNode::JNode([[maybe_unused]] std::nullptr_t null) { *this = makeNull(); }
-// Construct JSON array from initializer list
+// Construct JNode array from initializer list
 JNode::JNode(const std::initializer_list<InternalTypes> &array) {
   Array::ArrayList jNodeArrayList;
   for (const auto &entry : array) {
@@ -83,7 +83,7 @@ JNode::JNode(const std::initializer_list<InternalTypes> &array) {
   }
   *this = makeArray(jNodeArrayList);
 }
-// Construct JSON object from initializer list
+// Construct JNode object from initializer list
 JNode::JNode(const std::initializer_list<std::pair<std::string, InternalTypes>>
                  &object) {
   Object::EntryList jObjectList;
