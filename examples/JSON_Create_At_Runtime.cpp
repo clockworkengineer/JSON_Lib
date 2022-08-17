@@ -57,13 +57,26 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     // add an object inside the object
     json["the_answer"]["everything"] = 42;
     // add an array that is stored as std::vector (using an initializer list)
-    json["list"] = {1, 0, 2, 4, 6};
+    json["list"] = {1, 0, 2};
     // add another object (using an initializer list of pairs)
     json["object"] = {{"currency", "USD"}, {"value", 42.99}};
-    // add another object that a nested array
-    json["object2"] = {{"currency", "USD"}, {"array", json::JNode{23.22, 33, 55, 99.99}}};
+    // add another object that a nested array (JNode{})
+    json["object2"] = {{"currency", "USD"},
+                       {"array", json::JNode{23.22, 33, 55, 99.99}}};
     json::BufferDestination destination;
     json.stringify(destination);
+    PLOG_INFO << destination.getBuffer();
+    destination.clear();
+    // create JSON using an intialiser list and nesting array/objects using JNode{}.
+    json::JSON json2 = {
+        {"pi", 3.141},
+        {"sad", true},
+        {"first_name", "Niels"},
+        {"nothing", nullptr},
+        {"the_answer", json::JNode{{"everything", 42}}},
+        {"list", json::JNode{1, 0, 2}},
+        {"object", json::JNode{{"currency", "USD"}, {"value", json::JNode{23.22, 33, 55, 99.99}}}}};
+    json2.stringify(destination);
     PLOG_INFO << destination.getBuffer();
   } catch (std::exception &e) {
     PLOG_ERROR << "Error: " << e.what();
