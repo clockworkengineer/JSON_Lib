@@ -1,7 +1,9 @@
 //
 // Program: JSON_Fibonacci
 //
-// Description
+// Description: On each activation add the next in the fibonacci
+// sequence to the array stored in fibonacci.json; if the file does
+// not exist then create the intial sequence of [0,1].
 //
 // Dependencies: C20++, PLOG, JSONLib.
 //
@@ -38,36 +40,36 @@ namespace fs = std::filesystem;
 /// Return Fibonaci json file name.
 /// </summary>
 /// <returns>JSON settings file name.</returns>
-std::string jsonFibonacciFile() {
-  return ((fs::current_path() / "files" / "fibonacci.json").string());
-}
+std::string jsonFibonacciFile() { return ((fs::current_path() / "files" / "fibonacci.json").string()); }
 /// <summary>
 /// Read in current fibonacci sequence from JSON file, calculate the
 //  next in sequence and write back to JSON file.
 /// </summary>
-void nextFibonacci() {
+void nextFibonacci()
+{
   json::JSON json;
   if (!fs::exists(jsonFibonacciFile())) {
     // If JSON file does not exist create intial sequence
-    json.parse(json::BufferSource{"[0, 1]"});
+    json.parse(json::BufferSource{ "[0, 1]" });
   } else {
     // Parse in current sequence
-    json.parse(json::FileSource{jsonFibonacciFile()});
+    json.parse(json::FileSource{ jsonFibonacciFile() });
     // Get index of last element
-    auto last = json::JRef<json::Array>(json.root()).size()-1;
+    auto last = json::JRef<json::Array>(json.root()).size() - 1;
     // Next is sum of last two entries
     auto next = json::JRef<json::Number>(json[last]).number().getInt();
     next += json::JRef<json::Number>(json[last - 1]).number().getInt();
     // Expand array by one and add next in sequence
-    json[last+1] = next;
+    json[last + 1] = next;
   }
   // Write updated sequence back to file
-  json.stringify(json::FileDestination{jsonFibonacciFile()});
+  json.stringify(json::FileDestination{ jsonFibonacciFile() });
 }
 // ============================
 // ===== MAIN ENTRY POINT =====
 // ============================
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
+int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+{
   try {
     // Initialise logging.
     plog::init(plog::debug, "JSON_Fibonacci.log");

@@ -19,7 +19,8 @@ namespace JSONLib {
 // ==================
 // JSON Tree Analysis
 // ==================
-class JSON_Analyzer : public IAction {
+class JSON_Analyzer : public IAction
+{
 public:
   // ========================
   // Constructors/destructors
@@ -30,17 +31,19 @@ public:
   JSON_Analyzer(IAction &&JNodeDetails) = delete;
   JSON_Analyzer &operator=(JSON_Analyzer &&other) = delete;
   virtual ~JSON_Analyzer() = default;
+  // Add JNode details to analysis
+  virtual void onJNode([[maybe_unused]] const JNode &jNode) override { totalNodes++; }
   // Add string details to analysis
-  virtual void onString(const String &jNodeString) override {
-    totalNodes++;
+  virtual void onString(const String &jNodeString) override
+  {
     totalStrings++;
     sizeInBytes += sizeof(String);
     sizeInBytes += jNodeString.string().size();
     uniqueStrings.insert(jNodeString.string());
   }
   // Add number details to analysis
-  virtual void onNumber([[maybe_unused]] const Number &jNodeNumber) override {
-    totalNodes++;
+  virtual void onNumber([[maybe_unused]] const Number &jNodeNumber) override
+  {
     totalNumbers++;
     sizeInBytes += sizeof(Number);
     if (jNodeNumber.number().isInt()) {
@@ -53,31 +56,28 @@ public:
       totalDouble++;
     }
   }
-  virtual void
-  onBoolean([[maybe_unused]] const Boolean &jNodeBoolean) override {
-    totalNodes++;
+  virtual void onBoolean([[maybe_unused]] const Boolean &jNodeBoolean) override
+  {
     totalBoolean++;
     sizeInBytes += sizeof(Boolean);
   }
   // Add null details to analysis
-  virtual void onNull([[maybe_unused]] const Null &jNodeNull) override {
-    totalNodes++;
+  virtual void onNull([[maybe_unused]] const Null &jNodeNull) override
+  {
     totalNull++;
     sizeInBytes += sizeof(Null);
   }
   // Add array details to analysis
-  virtual void onArray(const Array &jNodeArray) override {
-    totalNodes++;
+  virtual void onArray(const Array &jNodeArray) override
+  {
     totalArrays++;
     sizeInBytes += sizeof(Array);
     maxArraySize = std::max(jNodeArray.size(), maxArraySize);
-    for ([[maybe_unused]] auto &jNodeEntry : jNodeArray.array()) {
-      sizeInBytes += sizeof(JNode);
-    }
+    for ([[maybe_unused]] auto &jNodeEntry : jNodeArray.array()) { sizeInBytes += sizeof(JNode); }
   }
   // Add object details to analysis
-  virtual void onObject(const Object &jNodeObject) override {
-    totalNodes++;
+  virtual void onObject(const Object &jNodeObject) override
+  {
     totalObjects++;
     sizeInBytes += sizeof(Object);
     maxObjectSize = std::max(jNodeObject.objectEntries().size(), maxObjectSize);
@@ -89,7 +89,8 @@ public:
     }
   }
   // Output analysis details
-  std::string dump() {
+  std::string dump()
+  {
     std::stringstream os;
     os << "\n--------------------JNode Sizes---------------------\n";
     os << "JNode size " << sizeof(JNode) << " in bytes.\n";
@@ -97,8 +98,7 @@ public:
     os << "Object Entry size " << sizeof(Object::Entry) << " in bytes.\n";
     os << "Array size " << sizeof(Array) << " in bytes.\n";
     os << "Numeric size " << sizeof(Numeric) << " in bytes.\n";
-    os << "Numeric::Numbers size " << sizeof(Numeric::Numbers)
-       << " in bytes.\n";
+    os << "Numeric::Numbers size " << sizeof(Numeric::Numbers) << " in bytes.\n";
     os << "Number size " << sizeof(Number) << " in bytes.\n";
     os << "String size " << sizeof(String) << " in bytes.\n";
     os << "Boolean size " << sizeof(Boolean) << " in bytes.\n";
@@ -158,4 +158,4 @@ private:
   // Null
   int64_t totalNull{};
 };
-} // namespace JSONLib
+}// namespace JSONLib

@@ -44,13 +44,12 @@ namespace fs = std::filesystem;
 /// Return settings json file name.
 /// </summary>
 /// <returns>JSON settings file name.</returns>
-std::string jsonSettingsFile() {
-  return ((fs::current_path() / "files" / "settings.json").string());
-}
+std::string jsonSettingsFile() { return ((fs::current_path() / "files" / "settings.json").string()); }
 // ============================
 // ===== MAIN ENTRY POINT =====
 // ============================
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
+int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+{
   try {
     // Initialise logging.
     plog::init(plog::debug, "JSON_Toggle_Setting.log");
@@ -59,20 +58,16 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     PLOG_INFO << json::JSON().version();
     // Parse in settings file
     json::JSON json;
-    json.parse(json::FileSource{jsonSettingsFile()});
+    json.parse(json::FileSource{ jsonSettingsFile() });
     auto &settingsRoot = json.root();
     // JNode root has to be an object
-    if (settingsRoot.getType() != json::JNodeType::object) {
-      throw std::runtime_error("Invalid JSON settings file.");
-    }
+    if (settingsRoot.getType() != json::JNodeType::object) { throw std::runtime_error("Invalid JSON settings file."); }
     // Reference code analysis enabled flag
-    auto &enabled = json::JRef<json::Boolean>(
-                        settingsRoot["C_Cpp.codeAnalysis.clangTidy.enabled"])
-                        .boolean();
+    auto &enabled = json::JRef<json::Boolean>(settingsRoot["C_Cpp.codeAnalysis.clangTidy.enabled"]).boolean();
     // Toggle it
     enabled = !enabled;
     // Write back settings with toggled flag
-    json.stringify(json::FileDestination{jsonSettingsFile()});
+    json.stringify(json::FileDestination{ jsonSettingsFile() });
   } catch (std::exception &e) {
     PLOG_ERROR << "Error: " << e.what();
   }

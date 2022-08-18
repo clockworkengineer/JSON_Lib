@@ -291,6 +291,7 @@ void JSON_Impl::stripWhiteSpace(ISource &source, IDestination &destination)
 /// <param name=action>Action methods to call during traversal.</param>
 void JSON_Impl::traverseJNodes(JNode &jNode, IAction &action)
 {
+  action.onJNode(jNode);
   switch (jNode.getType()) {
   case JNodeType::number:
     action.onNumber(JRef<Number>(jNode));
@@ -322,6 +323,7 @@ void JSON_Impl::traverseJNodes(JNode &jNode, IAction &action)
 }
 void JSON_Impl::traverseJNodes(const JNode &jNode, IAction &action)
 {
+  action.onJNode(jNode);
   switch (jNode.getType()) {
   case JNodeType::number:
     action.onNumber(JRef<Number>(jNode));

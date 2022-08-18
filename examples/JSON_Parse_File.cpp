@@ -42,23 +42,14 @@ static constexpr size_t kMaxFileLengthToDisplay = 16 * 1024;
 // LOCAL FUNCTIONS
 // ===============
 /// <summary>
-/// Return directory name containing JSON files.
-/// </summary>
-/// <returns>JSON file directory</returns>
-std::string jsonFileDirectory() {
-  return ((fs::current_path() / "files").string());
-}
-/// <summary>
 /// Return a vector of JSON files to analyze.
 /// </summary>
 /// <returns>Vector of JSON file names</returns>
-std::vector<std::string> readJSONFileList() {
+std::vector<std::string> readJSONFileList()
+{
   std::vector<std::string> fileList;
-  for (auto &file : fs::directory_iterator(fs::path(jsonFileDirectory()))) {
-    if (const auto fileName = file.path().string();
-        fileName.ends_with(".json")) {
-      fileList.push_back(fileName);
-    }
+  for (auto &file : fs::directory_iterator(fs::current_path() / "files")) {
+    if (const auto fileName = file.path().string(); fileName.ends_with(".json")) { fileList.push_back(fileName); }
   }
   return (fileList);
 }
@@ -67,7 +58,8 @@ std::vector<std::string> readJSONFileList() {
 /// step.
 /// </summary>
 /// <param name="fileName">JSON file name</param>
-void processJSONFile(const std::string &fileName) {
+void processJSONFile(const std::string &fileName)
+{
   auto elapsedTime = [](const auto &start, const auto &stop) {
     return (chrono::duration_cast<chrono::microseconds>(stop - start).count());
   };
@@ -76,7 +68,7 @@ void processJSONFile(const std::string &fileName) {
   json::BufferDestination jsonDestination;
   // Parse from file
   auto start = chrono::high_resolution_clock::now();
-  json.parse(json::FileSource{fileName});
+  json.parse(json::FileSource{ fileName });
   auto stop = chrono::high_resolution_clock::now();
   PLOG_INFO << elapsedTime(start, stop) << " microseconds to parse from file.";
   // Stringify
@@ -86,10 +78,9 @@ void processJSONFile(const std::string &fileName) {
   PLOG_INFO << elapsedTime(start, stop) << " microseconds to stringify.";
   // Parse from buffer
   start = chrono::high_resolution_clock::now();
-  json.parse(json::BufferSource{jsonDestination.getBuffer()});
+  json.parse(json::BufferSource{ jsonDestination.getBuffer() });
   stop = chrono::high_resolution_clock::now();
-  PLOG_INFO << elapsedTime(start, stop)
-            << " microseconds to parse from buffer.";
+  PLOG_INFO << elapsedTime(start, stop) << " microseconds to parse from buffer.";
   // Display contents
   if (jsonDestination.getBuffer().size() < kMaxFileLengthToDisplay) {
     PLOG_INFO << "[" << jsonDestination.getBuffer() << "]";
@@ -100,7 +91,8 @@ void processJSONFile(const std::string &fileName) {
 // ============================
 // ===== MAIN ENTRY POINT =====
 // ============================
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
+int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+{
   // Initialise logging.
   plog::init(plog::debug, "JSON_Parse_Files.log");
   PLOG_INFO << "JSON_Parse_Files started ...";

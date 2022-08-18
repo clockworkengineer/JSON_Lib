@@ -1,7 +1,9 @@
 //
 // Program: JSON_Create_At_Runtime
 //
-// Description:
+// Description: Create JSON programatically at runtime using a combination
+// of the JSON class, indexing/key operators plus the use of intializer lists.
+//
 // Dependencies: C20++, PLOG, JSONLib.
 //
 // =============

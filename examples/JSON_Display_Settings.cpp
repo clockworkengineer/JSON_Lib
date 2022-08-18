@@ -46,22 +46,20 @@ namespace fs = std::filesystem;
 /// Return settings json file name.
 /// </summary>
 /// <returns>JSON settings file name.</returns>
-std::string jsonSettingsFile() {
-  return ((fs::current_path() / "files" / "settings.json").string());
-}
+std::string jsonSettingsFile() { return ((fs::current_path() / "files" / "settings.json").string()); }
 /// <summary>
 /// Process settings file top level object entry. This involves jusr reading the
 /// entries JNode data and logging it to a file.
 /// </summary>
-void processEntry(const json::Object::Entry &entry) {
+void processEntry(const json::Object::Entry &entry)
+{
   // Log main entry key
-  std::string entryJSON{"\n[" + entry.getKey() + "] = "};
+  std::string entryJSON{ "\n[" + entry.getKey() + "] = " };
   if (entry.getKey() == "files.exclude") {
     // Read object data (key/boolean pair) and add to log
     entryJSON += "\n{\n";
     for (const auto &file : json::JRef<json::Object>(entry).objectEntries()) {
-      entryJSON += "\"" + file.getKey() +
-                   "\" : " + json::JRef<json::Boolean>(file).toString() + ",\n";
+      entryJSON += "\"" + file.getKey() + "\" : " + json::JRef<json::Boolean>(file).toString() + ",\n";
     }
     entryJSON.pop_back();
     entryJSON.pop_back();
@@ -81,8 +79,7 @@ void processEntry(const json::Object::Entry &entry) {
     // Read object data (key/string pair) and add to log
     entryJSON += "\n{\n";
     for (const auto &file : json::JRef<json::Object>(entry).objectEntries()) {
-      entryJSON += "\"" + file.getKey() + "\" : " + "\"" +
-                   json::JRef<json::String>(file).toString() + "\",\n";
+      entryJSON += "\"" + file.getKey() + "\" : " + "\"" + json::JRef<json::String>(file).toString() + "\",\n";
     }
     entryJSON.pop_back();
     entryJSON.pop_back();
@@ -98,7 +95,8 @@ void processEntry(const json::Object::Entry &entry) {
 // ============================
 // ===== MAIN ENTRY POINT =====
 // ============================
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
+int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+{
   try {
     // Initialise logging.
     plog::init(plog::debug, "JSON_Display_Settings.log");
@@ -107,18 +105,13 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
     PLOG_INFO << json::JSON().version();
     // Parse in settings file
     const json::JSON json;
-    json.parse(json::FileSource{jsonSettingsFile()});
+    json.parse(json::FileSource{ jsonSettingsFile() });
     auto &settingsRoot = json.root();
     // JNode root has to be an object
-    if (settingsRoot.getType() != json::JNodeType::object) {
-      throw std::runtime_error("Invalid JSON settings file.");
-    }
+    if (settingsRoot.getType() != json::JNodeType::object) { throw std::runtime_error("Invalid JSON settings file."); }
     // Loop and process each top level entry
     PLOG_INFO << "Displaying settings ...";
-    for (const auto &entry :
-         json::JRef<json::Object>(settingsRoot).objectEntries()) {
-      processEntry(entry);
-    }
+    for (const auto &entry : json::JRef<json::Object>(settingsRoot).objectEntries()) { processEntry(entry); }
   } catch (std::exception &e) {
     PLOG_ERROR << "Error: " << e.what();
   }

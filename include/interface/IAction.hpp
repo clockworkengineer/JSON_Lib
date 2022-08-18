@@ -15,14 +15,15 @@ namespace JSONLib {
 // ==========================================================
 // Interface for the action events during JSON tree traversal
 // ==========================================================
-class IAction {
+class IAction
+{
 public:
   // =============
   // IAction Error
   // =============
-  struct Error : public std::runtime_error {
-    explicit Error(const std::string &message)
-        : std::runtime_error("IAction Error: " + message) {}
+  struct Error : public std::runtime_error
+  {
+    explicit Error(const std::string &message) : std::runtime_error("IAction Error: " + message) {}
   };
   // ========================
   // Constructors/destructors
@@ -33,6 +34,11 @@ public:
   IAction(IAction &&IAction) = delete;
   IAction &operator=(IAction &&other) = delete;
   virtual ~IAction() = default;
+  // ============================
+  // JNode encountered so process
+  // ============================
+  virtual void onJNode([[maybe_unused]] JNode &jNode) {}
+  virtual void onJNode([[maybe_unused]] const JNode &jNode) {}
   // =============================
   // String encountered so process
   // =============================
@@ -47,21 +53,21 @@ public:
   // Boolean encountered so process
   // ==============================
   virtual void onBoolean([[maybe_unused]] Boolean &jNodeBoolean) {}
-  virtual void onBoolean([[maybe_unused]] const Boolean &jNodeBoolean)  {}
+  virtual void onBoolean([[maybe_unused]] const Boolean &jNodeBoolean) {}
   // ===========================
   // Null encountered so process
   // ===========================
   virtual void onNull([[maybe_unused]] Null &jNodeNull) {}
-  virtual void onNull([[maybe_unused]] const Null &jNodeNull)  {}
+  virtual void onNull([[maybe_unused]] const Null &jNodeNull) {}
   // ============================
   // Array encountered so process
   // ============================
   virtual void onArray([[maybe_unused]] Array &jNodeArray) {}
-  virtual void onArray([[maybe_unused]] const Array &jNodeArray)  {}
+  virtual void onArray([[maybe_unused]] const Array &jNodeArray) {}
   // =============================
   // Object encountered so process
   // =============================
   virtual void onObject([[maybe_unused]] Object &jNodeObject) {}
   virtual void onObject([[maybe_unused]] const Object &jNodeObject) {}
 };
-} // namespace JSONLib
+}// namespace JSONLib
