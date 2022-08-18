@@ -27,9 +27,13 @@ namespace JSONLib {
 // ========================
 // PRIVATE STATIC VARIABLES
 // ========================
-static const std::vector<std::pair<const char, const char>> escapeSequences{
-    {'\\', '\\'}, {'t', '\t'}, {'"', '\"'}, {'b', '\b'},
-    {'f', '\f'},  {'n', '\n'}, {'r', '\r'}};
+static const std::vector<std::pair<const char, const char>> escapeSequences{ { '\\', '\\' },
+  { 't', '\t' },
+  { '"', '\"' },
+  { 'b', '\b' },
+  { 'f', '\f' },
+  { 'n', '\n' },
+  { 'r', '\r' } };
 // =======================
 // PUBLIC STATIC VARIABLES
 // =======================
@@ -43,17 +47,18 @@ static const std::vector<std::pair<const char, const char>> escapeSequences{
 /// <param name="current">Current character position.</param>
 /// <param name="numberOfCharacters">Number of characters left in source
 /// string.</param> <returns>UTF16 character for "\uxxx".</returns>
-char16_t decodeUTF16(std::string::const_iterator &current,
-                     ptrdiff_t numberOfCharacters) {
+char16_t decodeUTF16(std::string::const_iterator &current, ptrdiff_t numberOfCharacters)
+{
   if (numberOfCharacters >= 4) {
     char16_t utf16value{};
     // Hex digits will be ascii so can throw away high order byte of char
-    std::array<char, 5> hexDigits{
-        static_cast<char>(current[1]), static_cast<char>(current[2]),
-        static_cast<char>(current[3]), static_cast<char>(current[4]), '\0'};
+    std::array<char, 5> hexDigits{ static_cast<char>(current[1]),
+      static_cast<char>(current[2]),
+      static_cast<char>(current[3]),
+      static_cast<char>(current[4]),
+      '\0' };
     char *end;
-    utf16value +=
-        static_cast<char16_t>(std::strtol(hexDigits.data(), &end, 16));
+    utf16value += static_cast<char16_t>(std::strtol(hexDigits.data(), &end, 16));
     if (*end == '\0') {
       current += hexDigits.size();
       return (utf16value);
@@ -67,8 +72,8 @@ char16_t decodeUTF16(std::string::const_iterator &current,
 /// <summary>
 /// JSON translator constructor.
 /// </summary>
-JSON_Translator::JSON_Translator(const IConverter &converter)
-    : m_converter(converter) {
+JSON_Translator::JSON_Translator(const IConverter &converter) : m_converter(converter)
+{
   // Initialise tables used to convert to/from single character
   // escape sequences within a JSON string.
   for (const auto &[key, value] : escapeSequences) {
@@ -85,9 +90,7 @@ JSON_Translator::JSON_Translator(const IConverter &converter)
 /// </summary>
 /// <param name="escape">Escaped character.</param>
 /// <returns>==true then character is a valid escape character.</returns>
-bool JSON_Translator::validEscape(char escape) {
-  return (m_fromEscape.contains(escape) || (escape == 'u'));
-}
+bool JSON_Translator::validEscape(char escape) { return (m_fromEscape.contains(escape) || (escape == 'u')); }
 /// <summary>
 /// Convert any escape sequences in a string to their correct sequence
 //  of UTF-8 characters. If input string contains any unpaired surrogates
@@ -95,7 +98,8 @@ bool JSON_Translator::validEscape(char escape) {
 /// </summary>
 /// <param name="jsonString">JSON string to process.</param>
 /// <returns>String with escapes translated.</returns>
-std::string JSON_Translator::fromJSON(const std::string &jsonString) {
+std::string JSON_Translator::fromJSON(const std::string &jsonString)
+{
   std::u16string utf16Buffer;
   for (auto current = jsonString.begin(); current != jsonString.end();) {
     // Normal character
@@ -113,8 +117,7 @@ std::string JSON_Translator::fromJSON(const std::string &jsonString) {
       }
       // UTF16 "\uxxxx"
       else if (*current == 'u') {
-        utf16Buffer +=
-            decodeUTF16(current, std::distance(current, jsonString.end()));
+        utf16Buffer += decodeUTF16(current, std::distance(current, jsonString.end()));
       }
       // Escaped ASCII
       else if ((*current > 0x1F) && (*current < 0x80)) {
@@ -125,9 +128,7 @@ std::string JSON_Translator::fromJSON(const std::string &jsonString) {
       throw Error("Syntax error detected.");
     }
   }
-  if (unpairedSurrogatesInBuffer(utf16Buffer)) {
-    throw Error("Syntax error detected.");
-  }
+  if (unpairedSurrogatesInBuffer(utf16Buffer)) { throw Error("Syntax error detected."); }
   return (m_converter.toUtf8(utf16Buffer));
 }
 /// <summary>
@@ -136,7 +137,8 @@ std::string JSON_Translator::fromJSON(const std::string &jsonString) {
 /// </summary>
 /// <param name="utf8String">String to convert.</param>
 /// <returns>JSON string with escapes.</returns>
-std::string JSON_Translator::toJSON(const std::string &utf8String) {
+std::string JSON_Translator::toJSON(const std::string &utf8String)
+{
   std::string utf8Buffer;
   for (char16_t utf16Char : m_converter.toUtf16(utf8String)) {
     // Control characters
@@ -160,4 +162,4 @@ std::string JSON_Translator::toJSON(const std::string &utf8String) {
   }
   return (utf8Buffer);
 }
-} // namespace JSONLib
+}// namespace JSONLib

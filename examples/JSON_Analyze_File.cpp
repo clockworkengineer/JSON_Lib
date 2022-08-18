@@ -40,20 +40,16 @@ namespace fs = std::filesystem;
 /// Return directory name containing JSON files.
 /// </summary>
 /// <returns>JSON file directory</returns>
-std::string torrentFileDirectory() {
-  return ((fs::current_path() / "files").string());
-}
+std::string torrentFileDirectory() { return ((fs::current_path() / "files").string()); }
 /// <summary>
 /// Return a vector of JSON files to analyze.
 /// </summary>
 /// <returns>Vector of JSON file names</returns>
-std::vector<std::string> readJSONFileList() {
+std::vector<std::string> readJSONFileList()
+{
   std::vector<std::string> fileList;
   for (auto &file : fs::directory_iterator(fs::path(torrentFileDirectory()))) {
-    if (const auto fileName = file.path().string();
-        fileName.ends_with(".json")) {
-      fileList.push_back(fileName);
-    }
+    if (const auto fileName = file.path().string(); fileName.ends_with(".json")) { fileList.push_back(fileName); }
   }
   return (fileList);
 }
@@ -61,11 +57,12 @@ std::vector<std::string> readJSONFileList() {
 /// Parse JSON file and analyze its JSON tree.
 /// </summary>
 /// <param name="fileName">JSON file name</param>
-void processJSONFile(const std::string &fileName) {
+void processJSONFile(const std::string &fileName)
+{
   PLOG_INFO << "Analyzing " << fileName;
   const json::JSON json;
   json::JSON_Analyzer jsonAnalyzer;
-  json.parse(json::FileSource{fileName});
+  json.parse(json::FileSource{ fileName });
   json.traverse(jsonAnalyzer);
   PLOG_INFO << jsonAnalyzer.dump();
   PLOG_INFO << "Finished " << fileName << ".";
@@ -73,7 +70,8 @@ void processJSONFile(const std::string &fileName) {
 // ============================
 // ===== MAIN ENTRY POINT =====
 // ============================
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv) {
+int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+{
   // Initialise logging.
   plog::init(plog::debug, "JSON_Analyze_File.log");
   PLOG_INFO << "JSON_Analyze_File started ...";
