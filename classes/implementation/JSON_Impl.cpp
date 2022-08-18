@@ -450,7 +450,7 @@ void JSON_Impl::traverse(IAction &action) const
 JNode &JSON_Impl::operator[](const std::string &key)
 {
   try {
-    if (m_jNodeRoot.getVariant() == nullptr) { parse("{}"); }
+    if (m_jNodeRoot.getVariant() == nullptr) { m_jNodeRoot = makeObject(); }
     return ((m_jNodeRoot)[key]);
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Object>(m_jNodeRoot).objectEntries().emplace_back(Object::Entry(key, makeHole()));
@@ -468,7 +468,7 @@ const JNode &JSON_Impl::operator[](const std::string &key) const// Object
 JNode &JSON_Impl::operator[](std::size_t index)
 {
   try {
-    if (m_jNodeRoot.getVariant() == nullptr) { parse("[]"); }
+    if (m_jNodeRoot.getVariant() == nullptr) { m_jNodeRoot = makeArray(); }
     return ((m_jNodeRoot)[index]);
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Array>(m_jNodeRoot).array().resize(index + 1);
