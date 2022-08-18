@@ -31,7 +31,8 @@ namespace JSONLib {
 // ================
 // CLASS DEFINITION
 // ================
-class JSON_Impl {
+class JSON_Impl
+{
 public:
   // ==========================
   // PUBLIC TYPES AND CONSTANTS
@@ -55,6 +56,8 @@ public:
   void parse(const std::string &jsonString);
   // Create JSON text string from tree
   void stringify(IDestination &destination) const;
+  // Create JSON pretty printed text string from tree
+  void print(IDestination &destination) const;
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   // Set JSON translator/converter
@@ -109,4 +112,4 @@ private:
   // Pointer to character conversion interface
   inline static std::unique_ptr<IConverter> m_converter;
 };
-} // namespace JSONLib
+}// namespace JSONLib

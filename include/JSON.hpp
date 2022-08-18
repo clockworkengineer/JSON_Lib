@@ -24,27 +24,25 @@ struct JNode;
 // ================
 // CLASS DEFINITION
 // ================
-class JSON {
+class JSON
+{
 public:
   // ==========================
   // PUBLIC TYPES AND CONSTANTS
   // ==========================
   // Possible JSON node value types
-  using InternalTypes = std::variant<int, long, float, double, bool,
-                                     std::string, std::nullptr_t, JNode>;
+  using InternalTypes = std::variant<int, long, float, double, bool, std::string, std::nullptr_t, JNode>;
   // ======================
   // CONSTRUCTOR/DESTRUCTOR
   // ======================
   // Pass any user defined translator/converter here
-  explicit JSON(ITranslator *translator = nullptr,
-                IConverter *converter = nullptr);
+  explicit JSON(ITranslator *translator = nullptr, IConverter *converter = nullptr);
   // Pass in default JSON to parse
   explicit JSON(const std::string &jsonString);
   // Construct array
   JSON(const std::initializer_list<InternalTypes> &array);
   // Construct object
-  JSON(const std::initializer_list<std::pair<std::string, InternalTypes>>
-           &object);
+  JSON(const std::initializer_list<std::pair<std::string, InternalTypes>> &object);
   // No other constructors supported
   JSON(const JSON &other) = delete;
   JSON &operator=(const JSON &other) = delete;
@@ -60,9 +58,12 @@ public:
   // Parse JSON into tree
   void parse(ISource &source) const;
   void parse(ISource &&source) const;
-  // Create JSON text string from tree
+  // Create JSON text string from tree (no shitespace)
   void stringify(IDestination &destination) const;
   void stringify(IDestination &&destination) const;
+  // Create JSON pretty printed text string from tree
+  void print(IDestination &destination) const;
+  void print(IDestination &&destination) const;
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   void strip(ISource &source, IDestination &&destination) const;
@@ -96,4 +97,4 @@ private:
   // JSON implementation
   const std::unique_ptr<JSON_Impl> m_jsonImplementation;
 };
-} // namespace JSONLib
+}// namespace JSONLib
