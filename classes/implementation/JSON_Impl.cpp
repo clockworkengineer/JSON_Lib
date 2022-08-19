@@ -420,16 +420,6 @@ void JSON_Impl::stringify(IDestination &destination) const
   stringifyJNodes(m_jNodeRoot, destination);
 }
 /// <summary>
-/// Recursively parse JNode structure and building its JSON (pretty printed) in
-/// destination stream.
-/// </summary>
-/// <param name=destination>Destination stream for pretty printed JSON.</param>
-void JSON_Impl::print(IDestination &destination) const
-{
-  if (m_jNodeRoot.getVariant() == nullptr) { throw Error("No JSON to print."); }
-  stringifyJNodes(m_jNodeRoot, destination);
-}
-/// <summary>
 /// Recursively traverse JNode structure calling IAction methods.
 /// </summary>
 /// <param name=action>Action methods to call during traversal.</param>

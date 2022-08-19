@@ -56,8 +56,6 @@ public:
   void parse(const std::string &jsonString);
   // Create JSON text string from tree
   void stringify(IDestination &destination) const;
-  // Create JSON pretty printed text string from tree
-  void print(IDestination &destination) const;
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   // Set JSON translator/converter

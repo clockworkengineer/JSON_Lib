@@ -111,12 +111,6 @@ void JSON::parse(ISource &&source) const { m_jsonImplementation->parse(source); 
 void JSON::stringify(IDestination &destination) const { m_jsonImplementation->stringify(destination); }
 void JSON::stringify(IDestination &&destination) const { m_jsonImplementation->stringify(destination); }
 /// <summary>
-/// Traverse JNode structure and build its JSON text (pretty printed) in destination stream.
-/// </summary>
-/// <param name=destination>Destination stream for stringified JSON.</param>
-void JSON::print(IDestination &destination) const { m_jsonImplementation->print(destination); }
-void JSON::print(IDestination &&destination) const { m_jsonImplementation->print(destination); }
-/// <summary>
 /// Recursively traverse JNode structure calling IAction methods or to change
 /// the JSON tree node directly.
 /// </summary>

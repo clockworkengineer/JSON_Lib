@@ -61,9 +61,6 @@ public:
   // Create JSON text string from tree (no shitespace)
   void stringify(IDestination &destination) const;
   void stringify(IDestination &&destination) const;
-  // Create JSON pretty printed text string from tree
-  void print(IDestination &destination) const;
-  void print(IDestination &&destination) const;
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   void strip(ISource &source, IDestination &&destination) const;
