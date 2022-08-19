@@ -98,8 +98,7 @@ private:
   // Remove JSON whitespace
   static void stripWhiteSpace(ISource &source, IDestination &destination);
   // Traverse JSON tree
-  static void traverseJNodes(JNode &jNode, IAction &action);
-  static void traverseJNodes(const JNode &jNode, IAction &action);
+  template<typename T> static void traverseJNodes(T &jNode, IAction &action);
   // =================
   // PRIVATE VARIABLES
   // =================
@@ -110,4 +109,42 @@ private:
   // Pointer to character conversion interface
   inline static std::unique_ptr<IConverter> m_converter;
 };
+/// <summary>
+/// Recursively traverse JNode tree calling IAction methods and possibly
+/// modifying the tree contents or even structure.
+/// </summary>
+/// <param name=jNode>JNode tree to be traversed.</param>
+/// <param name=action>Action methods to call during traversal.</param>
+template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action) 
+{
+  action.onJNode(jNode);
+  switch (jNode.getType()) {
+  case JNodeType::number:
+    action.onNumber(JRef<Number>(jNode));
+    break;
+  case JNodeType::string:
+    action.onString(JRef<String>(jNode));
+    break;
+  case JNodeType::boolean:
+    action.onBoolean(JRef<Boolean>(jNode));
+    break;
+  case JNodeType::null:
+    action.onNull(JRef<Null>(jNode));
+    break;
+  case JNodeType::hole:
+    break;
+  case JNodeType::object: {
+    action.onObject(JRef<Object>(jNode));
+    for (auto &entry : JRef<Object>(jNode).objectEntries()) { traverseJNodes(entry.getJNode(), action); }
+    break;
+  }
+  case JNodeType::array: {
+    action.onArray(JRef<Array>(jNode));
+    for (auto &node : JRef<Array>(jNode).array()) { traverseJNodes(node, action); }
+    break;
+  }
+  default:
+    throw Error("Unknown JNode type encountered during stringification.");
+  }
+}
 }// namespace JSONLib
