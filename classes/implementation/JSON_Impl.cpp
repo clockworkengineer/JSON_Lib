@@ -98,7 +98,7 @@ JNode JSON_Impl::parseNumber(ISource &source)
   std::string number;
   for (; source.more() && Numeric::isValidNumericChar(source.current()); source.next()) { number += source.current(); }
   Numeric jNodeNumeric{ number };
-  if (!jNodeNumeric.setValidNumber(number)) { throw Error("Syntax error detected."); }
+  if (number.empty() || !jNodeNumeric.setValidNumber(number)) { throw Error("Syntax error detected."); }
   return (makeNumber(jNodeNumeric));
 }
 /// <summary>
@@ -166,7 +166,8 @@ JNode JSON_Impl::parseArray(ISource &source)
 }
 /// <summary>
 /// Recursively parse JSON source stream producing a JNode structure
-/// representation  of it.
+/// representation  of it. Note: If no obvious match is found for 
+/// parsing that it tries to a numeric value.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Pointer to JNode.</returns>
@@ -191,22 +192,9 @@ JNode JSON_Impl::parseJNodes(ISource &source)
   case 'n':
     jNode = parseNull(source);
     break;
-  case '-':
-  case '+':
-  case '0':
-  case '1':
-  case '2':
-  case '3':
-  case '4':
-  case '5':
-  case '6':
-  case '7':
-  case '8':
-  case '9':
+  default:
     jNode = parseNumber(source);
     break;
-  default:
-    throw Error("Syntax error detected.");
   }
   source.ignoreWS();
   return (jNode);
