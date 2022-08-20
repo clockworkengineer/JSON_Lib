@@ -93,6 +93,14 @@ private:
   static JNode parseObject(ISource &source);
   static JNode parseArray(ISource &source);
   static JNode parseJNodes(ISource &source);
+  // Stringify JSON
+  static void stringifyNumber(const JNode &jNode, IDestination &destination);
+  static void stringifyString(const JNode &jNode, IDestination &destination);
+  static void stringifyBoolean(const JNode &jNode, IDestination &destination);
+  static void stringifyNull(const JNode &jNode, IDestination &destination);
+  static void stringifyHole(const JNode &jNode, IDestination &destination);
+  static void stringifyObject(const JNode &jNode, IDestination &destination);
+  static void stringifyArray(const JNode &jNode, IDestination &destination);
   // Produce JSON test string from JSON tree
   static void stringifyJNodes(const JNode &jNode, IDestination &destination);
   // Remove JSON whitespace
@@ -115,7 +123,7 @@ private:
 /// </summary>
 /// <param name=jNode>JNode tree to be traversed.</param>
 /// <param name=action>Action methods to call during traversal.</param>
-template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action) 
+template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
 {
   action.onJNode(jNode);
   switch (jNode.getType()) {

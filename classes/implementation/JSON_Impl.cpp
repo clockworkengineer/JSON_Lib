@@ -200,6 +200,86 @@ JNode JSON_Impl::parseJNodes(ISource &source)
   return (jNode);
 }
 /// <summary>
+/// Convert Number JNode to JSON on destination stream.
+/// </summary>
+/// <param name="jNode">Number JNode.</param>
+/// <param name="destination">Destination stream for JSON.</param>
+void JSON_Impl::stringifyNumber(const JNode &jNode, IDestination &destination)
+{
+  destination.add(JRef<Number>(jNode).toString());
+}
+/// <summary>
+/// Convert String JNode to JSON on destination stream.
+/// </summary>
+/// <param name="jNode">String JNode.</param>
+/// <param name="destination">Destination stream for JSON.</param>
+void JSON_Impl::stringifyString(const JNode &jNode, IDestination &destination)
+{
+  destination.add('"');
+  destination.add(m_translator->toJSON(JRef<String>(jNode).toString()));
+  destination.add('"');
+}
+/// <summary>
+/// Convert Boolean JNode to JSON on destination stream.
+/// </summary>
+/// <param name="jNode">Boolean JNode.</param>
+/// <param name="destination">Destination stream for JSON.</param>
+void JSON_Impl::stringifyBoolean(const JNode &jNode, IDestination &destination)
+{
+  destination.add(JRef<Boolean>(jNode).toString());
+}
+/// <summary>
+/// Convert Null JNode to JSON on destination stream.
+/// </summary>
+/// <param name="jNode">Null JNode.</param>
+/// <param name="destination">Destination stream for JSON.</param>
+void JSON_Impl::stringifyNull(const JNode &jNode, IDestination &destination)
+{
+  destination.add(JRef<Null>(jNode).toString());
+}
+/// <summary>
+/// Convert Hole JNode to JSON on destination stream.
+/// </summary>
+/// <param name="jNode">Hole JNode.</param>
+/// <param name="destination">Destination stream for JSON.</param>
+void JSON_Impl::stringifyHole(const JNode &jNode, IDestination &destination)
+{
+  destination.add(JRef<Hole>(jNode).toString());
+}
+/// <summary>
+/// Convert Object JNode to JSON on destination stream.
+/// </summary>
+/// <param name="jNode">Object JNode.</param>
+/// <param name="destination">Destination stream for JSON.</param>
+void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination)
+{
+  int commaCount = JRef<Object>(jNode).size() - 1;
+  destination.add('{');
+  for (auto &entry : JRef<Object>(jNode).getObjectEntries()) {
+    destination.add('"');
+    destination.add(m_translator->toJSON(entry.getKey()));
+    destination.add("\":");
+    stringifyJNodes(entry.getJNode(), destination);
+    if (commaCount-- > 0) { destination.add(','); }
+  }
+  destination.add('}');
+}
+/// <summary>
+/// Convert Array JNode to JSON on destination stream.
+/// </summary>
+/// <param name="jNode">Array JNode.</param>
+/// <param name="destination">Destination stream for JSON.</param>
+void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination)
+{
+  std::size_t commaCount = JRef<Array>(jNode).size() - 1;
+  destination.add('[');
+  for (auto &node : JRef<Array>(jNode).getArrayEntries()) {
+    stringifyJNodes(node, destination);
+    if (commaCount-- > 0) { destination.add(','); }
+  }
+  destination.add(']');
+}
+/// <summary>
 /// Recursively traverse JNode structure encoding it into JSON text on
 /// the destination stream passed in.
 /// </summary>
@@ -209,45 +289,26 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination)
 {
   switch (jNode.getType()) {
   case JNodeType::number:
-    destination.add(JRef<Number>(jNode).toString());
+    stringifyNumber(jNode, destination);
     break;
   case JNodeType::string:
-    destination.add('"');
-    destination.add(m_translator->toJSON(JRef<String>(jNode).toString()));
-    destination.add('"');
+    stringifyString(jNode, destination);
     break;
   case JNodeType::boolean:
-    destination.add(JRef<Boolean>(jNode).toString());
+    stringifyBoolean(jNode, destination);
     break;
   case JNodeType::null:
-    destination.add(JRef<Null>(jNode).toString());
+    stringifyNull(jNode, destination);
     break;
   case JNodeType::hole:
-    destination.add(JRef<Hole>(jNode).toString());
+    stringifyHole(jNode, destination);
     break;
-  case JNodeType::object: {
-    int commaCount = JRef<Object>(jNode).size() - 1;
-    destination.add('{');
-    for (auto &entry : JRef<Object>(jNode).getObjectEntries()) {
-      destination.add('"');
-      destination.add(m_translator->toJSON(entry.getKey()));
-      destination.add("\":");
-      stringifyJNodes(entry.getJNode(), destination);
-      if (commaCount-- > 0) { destination.add(','); }
-    }
-    destination.add('}');
+  case JNodeType::object:
+    stringifyObject(jNode, destination);
     break;
-  }
-  case JNodeType::array: {
-    std::size_t commaCount = JRef<Array>(jNode).size() - 1;
-    destination.add('[');
-    for (auto &node : JRef<Array>(jNode).getArrayEntries()) {
-      stringifyJNodes(node, destination);
-      if (commaCount-- > 0) { destination.add(','); }
-    }
-    destination.add(']');
+  case JNodeType::array:
+    stringifyArray(jNode, destination);
     break;
-  }
   default:
     throw Error("Unknown JNode type encountered during stringification.");
   }
@@ -319,9 +380,9 @@ void JSON_Impl::strip(ISource &source, IDestination &destination) const { stripW
 /// <param name="source">Source of JSON.</param>
 void JSON_Impl::parse(ISource &source) { m_jNodeRoot = parseJNodes(source); }
 /// <summary>
-/// Create JNode structure by recursively parsing JSON string passed.
+/// Create JNode structure by recursively parsing JSON passed.
 /// </summary>
-/// <param name="jsonString">JSON string.</param>
+/// <param name="jsonString">JSON.</param>
 void JSON_Impl::parse(const std::string &jsonString)
 {
   BufferSource source{ jsonString };
