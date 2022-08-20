@@ -135,12 +135,12 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
     break;
   case JNodeType::object: {
     action.onObject(JRef<Object>(jNode));
-    for (auto &entry : JRef<Object>(jNode).objectEntries()) { traverseJNodes(entry.getJNode(), action); }
+    for (auto &entry : JRef<Object>(jNode).getObjectEntries()) { traverseJNodes(entry.getJNode(), action); }
     break;
   }
   case JNodeType::array: {
     action.onArray(JRef<Array>(jNode));
-    for (auto &node : JRef<Array>(jNode).array()) { traverseJNodes(node, action); }
+    for (auto &node : JRef<Array>(jNode).getArrayEntries()) { traverseJNodes(node, action); }
     break;
   }
   default:

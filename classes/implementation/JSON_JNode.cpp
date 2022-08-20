@@ -96,8 +96,8 @@ JNode &JNode::operator[](const std::string &key)
 {
   if (this->getType() == JNodeType::hole) {
     *this = makeObject();
-    JRef<Object>(*this).objectEntries().emplace_back(Object::Entry(key, makeHole()));
-    return (JRef<Object>(*this).objectEntries().back().getJNode());
+    JRef<Object>(*this).getObjectEntries().emplace_back(Object::Entry(key, makeHole()));
+    return (JRef<Object>(*this).getObjectEntries().back().getJNode());
   }
   return (JRef<Object>(*this)[key]);
 }
@@ -111,9 +111,9 @@ JNode &JNode::operator[](std::size_t index)
     if (this->getType() == JNodeType::hole) { *this = makeArray(); }
     return (JRef<Array>(*this)[index]);
   } catch ([[maybe_unused]] const JNode::Error &error) {
-    JRef<Array>(*this).array().resize(index + 1);
-    JRef<Array>(*this).array()[index] = makeHole();
-    for (auto &entry : JRef<Array>(*this).array()) {
+    JRef<Array>(*this).getArrayEntries().resize(index + 1);
+    JRef<Array>(*this).getArrayEntries()[index] = makeHole();
+    for (auto &entry : JRef<Array>(*this).getArrayEntries()) {
       if (entry.getVariant() == nullptr) { entry = makeHole(); }
     }
     return (JRef<Array>(*this)[index]);

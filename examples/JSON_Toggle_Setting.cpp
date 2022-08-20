@@ -63,7 +63,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     // JNode root has to be an object
     if (settingsRoot.getType() != json::JNodeType::object) { throw std::runtime_error("Invalid JSON settings file."); }
     // Reference code analysis enabled flag
-    auto &enabled = json::JRef<json::Boolean>(settingsRoot["C_Cpp.codeAnalysis.clangTidy.enabled"]).boolean();
+    auto &enabled = json::JRef<json::Boolean>(settingsRoot["C_Cpp.codeAnalysis.clangTidy.enabled"]).getBoolean();
     // Toggle it
     enabled = !enabled;
     // Write back settings with toggled flag

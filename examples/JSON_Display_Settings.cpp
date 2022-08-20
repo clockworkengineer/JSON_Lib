@@ -58,7 +58,7 @@ void processEntry(const json::Object::Entry &entry)
   if (entry.getKey() == "files.exclude") {
     // Read object data (key/boolean pair) and add to log
     entryJSON += "\n{\n";
-    for (const auto &file : json::JRef<json::Object>(entry).objectEntries()) {
+    for (const auto &file : json::JRef<json::Object>(entry).getObjectEntries()) {
       entryJSON += "\"" + file.getKey() + "\" : " + json::JRef<json::Boolean>(file).toString() + ",\n";
     }
     entryJSON.pop_back();
@@ -70,7 +70,7 @@ void processEntry(const json::Object::Entry &entry)
   } else if (entry.getKey() == "cSpell.words") {
     // Read array of string data and add to log
     entryJSON += "[";
-    for (const auto &word : json::JRef<json::Array>(entry).array()) {
+    for (const auto &word : json::JRef<json::Array>(entry).getArrayEntries()) {
       entryJSON += "\"" + json::JRef<json::String>(word).toString() + "\",";
     }
     entryJSON.pop_back();
@@ -78,7 +78,7 @@ void processEntry(const json::Object::Entry &entry)
   } else if (entry.getKey() == "files.associations") {
     // Read object data (key/string pair) and add to log
     entryJSON += "\n{\n";
-    for (const auto &file : json::JRef<json::Object>(entry).objectEntries()) {
+    for (const auto &file : json::JRef<json::Object>(entry).getObjectEntries()) {
       entryJSON += "\"" + file.getKey() + "\" : " + "\"" + json::JRef<json::String>(file).toString() + "\",\n";
     }
     entryJSON.pop_back();
@@ -111,7 +111,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     if (settingsRoot.getType() != json::JNodeType::object) { throw std::runtime_error("Invalid JSON settings file."); }
     // Loop and process each top level entry
     PLOG_INFO << "Displaying settings ...";
-    for (const auto &entry : json::JRef<json::Object>(settingsRoot).objectEntries()) { processEntry(entry); }
+    for (const auto &entry : json::JRef<json::Object>(settingsRoot).getObjectEntries()) { processEntry(entry); }
   } catch (std::exception &e) {
     PLOG_ERROR << "Error: " << e.what();
   }

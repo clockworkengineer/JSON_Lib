@@ -38,21 +38,21 @@ public:
   {
     totalStrings++;
     sizeInBytes += sizeof(String);
-    sizeInBytes += jNodeString.string().size();
-    uniqueStrings.insert(jNodeString.string());
+    sizeInBytes += jNodeString.getString().size();
+    uniqueStrings.insert(jNodeString.getString());
   }
   // Add number details to analysis
   virtual void onNumber([[maybe_unused]] const Number &jNodeNumber) override
   {
     totalNumbers++;
     sizeInBytes += sizeof(Number);
-    if (jNodeNumber.number().isInt()) {
+    if (jNodeNumber.getNumber().isInt()) {
       totalInteger++;
-    } else if (jNodeNumber.number().isLong()) {
+    } else if (jNodeNumber.getNumber().isLong()) {
       totalLong++;
-    } else if (jNodeNumber.number().isFloat()) {
+    } else if (jNodeNumber.getNumber().isFloat()) {
       totalFloat++;
-    } else if (jNodeNumber.number().isDouble()) {
+    } else if (jNodeNumber.getNumber().isDouble()) {
       totalDouble++;
     }
   }
@@ -73,15 +73,15 @@ public:
     totalArrays++;
     sizeInBytes += sizeof(Array);
     maxArraySize = std::max(jNodeArray.size(), maxArraySize);
-    for ([[maybe_unused]] auto &jNodeEntry : jNodeArray.array()) { sizeInBytes += sizeof(JNode); }
+    for ([[maybe_unused]] auto &jNodeEntry : jNodeArray.getArrayEntries()) { sizeInBytes += sizeof(JNode); }
   }
   // Add object details to analysis
   virtual void onObject(const Object &jNodeObject) override
   {
     totalObjects++;
     sizeInBytes += sizeof(Object);
-    maxObjectSize = std::max(jNodeObject.objectEntries().size(), maxObjectSize);
-    for (auto &entry : jNodeObject.objectEntries()) {
+    maxObjectSize = std::max(jNodeObject.getObjectEntries().size(), maxObjectSize);
+    for (auto &entry : jNodeObject.getObjectEntries()) {
       uniqueKeys.insert(entry.getKey());
       sizeInBytes += entry.getKey().size();
       sizeInBytes += sizeof(Object::Entry);

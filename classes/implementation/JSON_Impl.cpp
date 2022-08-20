@@ -166,8 +166,8 @@ JNode JSON_Impl::parseArray(ISource &source)
 }
 /// <summary>
 /// Recursively parse JSON source stream producing a JNode structure
-/// representation  of it. Note: If no obvious match is found for 
-/// parsing that it tries to a numeric value.
+/// representation  of it. Note: If no obvious match is found for
+/// parsing that it defaults to a numeric value.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Pointer to JNode.</returns>
@@ -228,7 +228,7 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination)
   case JNodeType::object: {
     int commaCount = JRef<Object>(jNode).size() - 1;
     destination.add('{');
-    for (auto &entry : JRef<Object>(jNode).objectEntries()) {
+    for (auto &entry : JRef<Object>(jNode).getObjectEntries()) {
       destination.add('"');
       destination.add(m_translator->toJSON(entry.getKey()));
       destination.add("\":");
@@ -241,7 +241,7 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination)
   case JNodeType::array: {
     std::size_t commaCount = JRef<Array>(jNode).size() - 1;
     destination.add('[');
-    for (auto &node : JRef<Array>(jNode).array()) {
+    for (auto &node : JRef<Array>(jNode).getArrayEntries()) {
       stringifyJNodes(node, destination);
       if (commaCount-- > 0) { destination.add(','); }
     }
@@ -361,8 +361,8 @@ JNode &JSON_Impl::operator[](const std::string &key)
     if (m_jNodeRoot.getVariant() == nullptr) { m_jNodeRoot = makeObject(); }
     return ((m_jNodeRoot)[key]);
   } catch ([[maybe_unused]] JNode::Error &error) {
-    JRef<Object>(m_jNodeRoot).objectEntries().emplace_back(Object::Entry(key, makeHole()));
-    return (JRef<Object>(m_jNodeRoot).objectEntries().back().getJNode());
+    JRef<Object>(m_jNodeRoot).getObjectEntries().emplace_back(Object::Entry(key, makeHole()));
+    return (JRef<Object>(m_jNodeRoot).getObjectEntries().back().getJNode());
   }
 }
 const JNode &JSON_Impl::operator[](const std::string &key) const// Object
@@ -379,9 +379,9 @@ JNode &JSON_Impl::operator[](std::size_t index)
     if (m_jNodeRoot.getVariant() == nullptr) { m_jNodeRoot = makeArray(); }
     return ((m_jNodeRoot)[index]);
   } catch ([[maybe_unused]] JNode::Error &error) {
-    JRef<Array>(m_jNodeRoot).array().resize(index + 1);
-    JRef<Array>(m_jNodeRoot).array()[index] = std::move(makeNull());
-    return (JRef<Array>(m_jNodeRoot).array()[index]);
+    JRef<Array>(m_jNodeRoot).getArrayEntries().resize(index + 1);
+    JRef<Array>(m_jNodeRoot).getArrayEntries()[index] = std::move(makeNull());
+    return (JRef<Array>(m_jNodeRoot).getArrayEntries()[index]);
   }
 }
 const JNode &JSON_Impl::operator[](std::size_t index) const { return ((m_jNodeRoot)[index]); }
