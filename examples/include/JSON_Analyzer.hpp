@@ -39,6 +39,7 @@ public:
     totalStrings++;
     sizeInBytes += sizeof(String);
     sizeInBytes += jNodeString.getString().size();
+    maxStringSize = std::max(jNodeString.getString().size(), maxKeySize);
     uniqueStrings.insert(jNodeString.getString());
   }
   // Add number details to analysis
@@ -81,8 +82,10 @@ public:
     totalObjects++;
     sizeInBytes += sizeof(Object);
     maxObjectSize = std::max(jNodeObject.getObjectEntries().size(), maxObjectSize);
+
     for (auto &entry : jNodeObject.getObjectEntries()) {
       uniqueKeys.insert(entry.getKey());
+      maxKeySize = std::max(entry.getKey().size(), maxKeySize);
       sizeInBytes += entry.getKey().size();
       sizeInBytes += sizeof(Object::Entry);
       totalKeys++;
@@ -111,12 +114,14 @@ public:
     os << "JSON Tree max object size " << maxObjectSize << ".\n";
     os << "JSON Tree total " << totalKeys << " keys.\n";
     os << "JSON Tree contains " << uniqueKeys.size() << " unique keys.\n";
+    os << "JSON Tree max key size " << maxKeySize << " in bytes.\n";
     os << "------------------JSON Array Stats------------------\n";
     os << "JSON Tree contains " << totalArrays << " arrays.\n";
     os << "JSON Tree max array size " << maxArraySize << ".\n";
     os << "------------------JSON String Stats------------------\n";
     os << "JSON Tree total " << totalStrings << " strings.\n";
     os << "JSON Tree contains " << uniqueStrings.size() << " unique strings.\n";
+    os << "JSON Tree max string size " << maxStringSize << " in bytes.\n";
     os << "------------------JSON Number Stats------------------\n";
     os << "JSON Tree contains " << totalNumbers << " numbers.\n";
     os << "JSON Tree contains " << totalInteger << " integers.\n";
@@ -140,6 +145,7 @@ private:
   int64_t totalObjects{};
   size_t maxObjectSize{};
   int64_t totalKeys{};
+  size_t maxKeySize{};
   std::set<std::string> uniqueKeys{};
   // Array
   size_t maxArraySize{};
@@ -147,6 +153,7 @@ private:
   // String
   int64_t totalStrings{};
   std::set<std::string> uniqueStrings{};
+  size_t maxStringSize{};
   // Number
   int64_t totalNumbers{};
   int64_t totalInteger{};
