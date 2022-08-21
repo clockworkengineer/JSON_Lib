@@ -11,14 +11,15 @@ namespace JSONLib {
 // =======================================================
 // Interface for reading source stream during JSON parsing
 // =======================================================
-class ISource {
+class ISource
+{
 public:
   // =============
   // ISource Error
   // =============
-  struct Error : public std::runtime_error {
-    explicit Error(const std::string &message)
-        : std::runtime_error("ISource Error: " + message) {}
+  struct Error : public std::runtime_error
+  {
+    explicit Error(const std::string &message) : std::runtime_error("ISource Error: " + message) {}
   };
   // ========================
   // Constructors/destructors
@@ -56,31 +57,37 @@ public:
   // ===================================
   // Is the current character whitespace
   // ===================================
-  [[nodiscard]] bool isWS() const {
-    return (current() == ' ' || current() == '\t' || current() == '\n' ||
-            current() == '\r');
+  [[nodiscard]] bool isWS() const
+  {
+    return (current() == ' ' || current() == '\t' || current() == '\n' || current() == '\r');
   }
   // ==================================
   // Ignore whitespace on source stream
   // ==================================
-  void ignoreWS() {
-    while (more() && isWS()) {
-      next();
-    }
+  void ignoreWS()
+  {
+    while (more() && isWS()) { next(); }
   }
   // ===============================================================
   // Is current string a match at the current source stream position
   // ===============================================================
-  [[nodiscard]] bool match(const std::string &targetString) {
+  [[nodiscard]] bool match(const std::string &targetString)
+  {
     long index = 0;
     while (more() && current() == targetString[index]) {
       next();
-      if (++index == static_cast<long>(targetString.length())) {
-        return (true);
-      }
+      if (++index == static_cast<long>(targetString.length())) { return (true); }
     }
     backup(index);
     return (false);
   }
+  // ==================================
+  // Get current source stream position
+  // ==================================
+  std::pair<long, long> getPosition() const { return (std::make_pair(m_lineNo, m_column)); }
+
+protected:
+  long m_lineNo = 1;
+  long m_column = 1;
 };
-} // namespace JSONLib
+}// namespace JSONLib

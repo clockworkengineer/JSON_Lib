@@ -13,6 +13,11 @@
 // NAMESPACE
 // =========
 namespace JSONLib {
+// ========================
+// JSON character constants
+// ========================
+constexpr char kCarriageReturn{ 0x0D };
+constexpr char kLineFeed{ 0x0A };
 // ==============================
 // Source classes for JSON parser
 // ==============================
@@ -35,6 +40,11 @@ public:
   {
     if (!more()) { throw Error("Tried to read past and of buffer."); }
     m_bufferPosition++;
+    m_column++;
+    if (current() == kLineFeed) {
+      m_lineNo++;
+      m_column = 1;
+    }
   }
   [[nodiscard]] bool more() const override { return (m_bufferPosition < m_parseBuffer.size()); }
   void backup(unsigned long length) override
@@ -46,7 +56,12 @@ public:
       m_bufferPosition -= length;
     }
   }
-  void reset() override { m_bufferPosition = 0; }
+  void reset() override
+  {
+    m_bufferPosition = 0;
+    m_lineNo = 1;
+    m_column = 1;
+  }
   [[nodiscard]] std::size_t position() const override { return (m_bufferPosition); }
 
 private:
@@ -68,8 +83,16 @@ public:
   void next() override
   {
     if (!more()) { throw Error("Tried to read past end of file."); }
-    char c = 0;
-    m_source.get(c);
+    m_source.get();
+    if (current() == kCarriageReturn) {
+      m_source.get();
+      if (current() != kLineFeed) { m_source.unget(); }
+    }
+    m_column++;
+    if (current() == kLineFeed) {
+      m_lineNo++;
+      m_column = 1;
+    }
   }
   bool more() const override { return (m_source.peek() != EOF); }
   void backup(unsigned long length) override
@@ -84,6 +107,8 @@ public:
   }
   void reset() override
   {
+    m_lineNo = 1;
+    m_column = 1;
     m_source.clear();
     m_source.seekg(0, std::ios_base::beg);
   }
