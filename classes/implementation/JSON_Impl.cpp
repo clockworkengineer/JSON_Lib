@@ -98,7 +98,9 @@ JNode JSON_Impl::parseNumber(ISource &source)
   std::string number;
   for (; source.more() && Numeric::isValidNumericChar(source.current()); source.next()) { number += source.current(); }
   Numeric jNodeNumeric{ number };
-  if (number.empty() || !jNodeNumeric.setValidNumber(number)) { throw Error(source.getPosition(), "Invalid numeric value."); }
+  if (number.empty() || !jNodeNumeric.setValidNumber(number)) {
+    throw Error(source.getPosition(), "Invalid numeric value.");
+  }
   return (makeNumber(jNodeNumeric));
 }
 /// <summary>
@@ -253,15 +255,16 @@ void JSON_Impl::stringifyHole(const JNode &jNode, IDestination &destination)
 /// <param name="destination">Destination stream for JSON.</param>
 void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination)
 {
-  int commaCount = JRef<Object>(jNode).size() - 1;
+  // int commaCount = JRef<Object>(jNode).size() - 1;
   destination.add('{');
   for (auto &entry : JRef<Object>(jNode).getObjectEntries()) {
     destination.add('"');
     destination.add(m_translator->toJSON(entry.getKey()));
     destination.add("\":");
     stringifyJNodes(entry.getJNode(), destination);
-    if (commaCount-- > 0) { destination.add(','); }
+    destination.add(',');
   }
+  destination.backup();
   destination.add('}');
 }
 /// <summary>
@@ -271,12 +274,12 @@ void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination)
 /// <param name="destination">Destination stream for JSON.</param>
 void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination)
 {
-  std::size_t commaCount = JRef<Array>(jNode).size() - 1;
   destination.add('[');
   for (auto &node : JRef<Array>(jNode).getArrayEntries()) {
     stringifyJNodes(node, destination);
-    if (commaCount-- > 0) { destination.add(','); }
+    destination.add(',');
   }
+  destination.backup();
   destination.add(']');
 }
 /// <summary>

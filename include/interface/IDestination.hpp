@@ -41,5 +41,9 @@ public:
   // Clear the curent destination
   // ===========================
   virtual void clear() = 0;
+  // ===================================
+  // Backup one character in destination
+  // ===================================
+  virtual void backup() = 0;
 };
 } // namespace JSONLib
