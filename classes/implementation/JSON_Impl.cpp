@@ -162,7 +162,7 @@ JNode JSON_Impl::parseArray(ISource &source)
       array.emplace_back(parseJNodes(source));
     }
   }
-  if (source.current() != ']') { throw Error(source.getPosition(), "Missing closing ']' in object definition."); }
+  if (source.current() != ']') { throw Error(source.getPosition(), "Missing closing ']' in array definition."); }
   source.next();
   return (makeArray(array));
 }
@@ -255,7 +255,6 @@ void JSON_Impl::stringifyHole(const JNode &jNode, IDestination &destination)
 /// <param name="destination">Destination stream for JSON.</param>
 void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination)
 {
-  // int commaCount = JRef<Object>(jNode).size() - 1;
   destination.add('{');
   for (auto &entry : JRef<Object>(jNode).getObjectEntries()) {
     destination.add('"');
