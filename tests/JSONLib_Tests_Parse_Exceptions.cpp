@@ -18,60 +18,56 @@ using namespace JSONLib;
 // ===========================
 // Parser Generated Exceptions
 // ===========================
-TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]") {
+TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]")
+{
   const JSON json;
-  SECTION("Parse missing terminating '\"' in string",
-          "[JSON][Parse][Exceptions]") {
-    BufferSource jsonSource{R"({ "one" : "Apple })"};
+  SECTION("Parse missing terminating '\"' in string", "[JSON][Parse][Exceptions]")
+  {
+    BufferSource jsonSource{ R"({ "one" : "Apple })" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource),
-                        "JSON Error: Syntax error detected.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Missing closing '\"' on string.");
   }
-  SECTION("Parse number with starting with invalid character",
-          "[JSON][Parse][Exceptions]") {
-    BufferSource jsonSource{R"({ "one" : z19034})"};
+  SECTION("Parse number with starting with invalid character", "[JSON][Parse][Exceptions]")
+  {
+    BufferSource jsonSource{ R"({ "one" : z19034})" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource),
-                        "JSON Error: Syntax error detected.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Invalid numeric value.");
   }
-  SECTION("Parse object with invalid value field (number).",
-          "[JSON][Parse][Exceptions]") {
-    BufferSource jsonSource{R"({ "one" : 18987u3 })"};
+  SECTION("Parse object with invalid value field (number).", "[JSON][Parse][Exceptions]")
+  {
+    BufferSource jsonSource{ R"({ "one" : 18987u3 })" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource),
-                        "JSON Error: Syntax error detected.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Missing closing '}' in object definition.");
   }
-  SECTION("Parse object with missing value field.",
-          "[JSON][Parse][Exceptions]") {
-    BufferSource jsonSource{R"({ "one" : })"};
+  SECTION("Parse object with missing value field.", "[JSON][Parse][Exceptions]")
+  {
+    BufferSource jsonSource{ R"({ "one" : })" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource),
-                        "JSON Error: Syntax error detected.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Invalid numeric value.");
   }
-  SECTION("Parse object with missing key field.", "[JSON][Parse][Exceptions]") {
-    BufferSource jsonSource{R"({  : 89012 })"};
+  SECTION("Parse object with missing key field.", "[JSON][Parse][Exceptions]")
+  {
+    BufferSource jsonSource{ R"({  : 89012 })" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource),
-                        "JSON Error: Syntax error detected.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Missing opening '\"' on string.");
   }
-  SECTION("Parse object with missing closing '}'.",
-          "[JSON][Parse][Exceptions]") {
-    BufferSource jsonSource{R"({  "one" : 18987)"};
+  SECTION("Parse object with missing closing '}'.", "[JSON][Parse][Exceptions]")
+  {
+    BufferSource jsonSource{ R"({  "one" : 18987)" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource),
-                        "JSON Error: Syntax error detected.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Missing closing '}' in object definition.");
   }
-  SECTION("Parse an nested objects ({ {} }) ", "[JSON][Parse][Exceptions]") {
-    BufferSource jsonSource{"{{}}"};
+  SECTION("Parse an nested objects ({ {} }) ", "[JSON][Parse][Exceptions]")
+  {
+    BufferSource jsonSource{ "{{}}" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource),
-                        "JSON Error: Syntax error detected.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Missing opening '\"' on string.");
   }
 }

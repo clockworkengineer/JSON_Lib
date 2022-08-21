@@ -94,17 +94,16 @@ TEST_CASE("Check JNodeNumber number conversion", "[JSON][JNode][JNodeNumber]")
     BufferSource jsonSource{ "78.e43e-2" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Syntax error detected.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Invalid numeric value.");
   }
   SECTION("Check floating point with multiple decimal points", "[JSON][JNode][JNodeNumber][Exception]")
   {
     BufferSource jsonSource{ "78.5454.545" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Syntax error detected.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error: Invalid numeric value.");
   }
 }
-
 TEST_CASE("Check JNodeNumeric api for all supported number types.", "[JSON][JNode][JNodeNumeric]")
 {
   JSON json;

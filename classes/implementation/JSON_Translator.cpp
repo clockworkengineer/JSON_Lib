@@ -125,10 +125,10 @@ std::string JSON_Translator::fromJSON(const std::string &jsonString)
         current++;
       }
     } else {
-      throw Error("Syntax error detected.");
+      throw Error("Premature and of character escape sequence.");
     }
   }
-  if (unpairedSurrogatesInBuffer(utf16Buffer)) { throw Error("Syntax error detected."); }
+  if (unpairedSurrogatesInBuffer(utf16Buffer)) { throw Error("Unpaired surrogate found."); }
   return (m_converter.toUtf8(utf16Buffer));
 }
 /// <summary>

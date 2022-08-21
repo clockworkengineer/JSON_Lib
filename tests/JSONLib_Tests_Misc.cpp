@@ -34,7 +34,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]") {
     REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uD834 \uDD1E End)"),
                       JSON_Translator::Error);
     REQUIRE_THROWS_WITH(translator.fromJSON(R"(Begin \uD834 \uDD1E End)"),
-                        "JSON Translator Error: Syntax error detected.");
+                        "JSON Translator Error: Unpaired surrogate found.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin "
           "\\uD834\\u0045 End' in error then expect exception",
@@ -42,7 +42,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]") {
     REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uD834\u0045 End)"),
                       JSON_Translator::Error);
     REQUIRE_THROWS_WITH(translator.fromJSON(R"(Begin \uD834\u0045 End)"),
-                        "JSON Translator Error: Syntax error detected.");
+                        "JSON Translator Error: Unpaired surrogate found.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 End' "
           "in error then expect exception",
@@ -50,7 +50,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]") {
     REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uD834 End)"),
                       JSON_Translator::Error);
     REQUIRE_THROWS_WITH(translator.fromJSON(R"(Begin \uD834 End)"),
-                        "JSON Translator Error: Syntax error detected.");
+                        "JSON Translator Error: Unpaired surrogate found.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uDD1E End' "
           "in error then expect exception",
@@ -58,7 +58,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]") {
     REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uDD1E End)"),
                       JSON_Translator::Error);
     REQUIRE_THROWS_WITH(translator.fromJSON(R"(Begin \uDD1E End)"),
-                        "JSON Translator Error: Syntax error detected.");
+                        "JSON Translator Error: Unpaired surrogate found.");
   }
   SECTION("Translate to escape sequences valid surrogate pair 'Begin "
           "\\uD834\\uDD1E End' and check value",

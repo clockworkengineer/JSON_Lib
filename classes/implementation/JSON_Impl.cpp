@@ -44,7 +44,7 @@ namespace JSONLib {
 std::string JSON_Impl::extractString(ISource &source, bool translate)
 {
   bool translateEscapes = false;
-  if (source.current() != '"') { throw Error("Syntax error detected."); }
+  if (source.current() != '"') { throw Error("Missing opening '\"' on string."); }
   source.next();
   std::string extracted;
   while (source.more() && source.current() != '"') {
@@ -57,7 +57,7 @@ std::string JSON_Impl::extractString(ISource &source, bool translate)
     extracted += source.current();
     source.next();
   }
-  if (source.current() != '"') { throw Error("Syntax error detected."); }
+  if (source.current() != '"') { throw Error("Missing closing '\"' on string."); }
   source.next();
   // Need to translate escapes to UTF8
   if (translateEscapes) {
@@ -78,7 +78,7 @@ Object::Entry JSON_Impl::parseKeyValuePair(ISource &source)
   source.ignoreWS();
   const std::string key{ extractString(source) };
   source.ignoreWS();
-  if (source.current() != ':') { throw Error("Syntax error detected."); }
+  if (source.current() != ':') { throw Error("Missing ':' in key value pair."); }
   source.next();
   return (Object::Entry(key, parseJNodes(source)));
 }
@@ -98,7 +98,7 @@ JNode JSON_Impl::parseNumber(ISource &source)
   std::string number;
   for (; source.more() && Numeric::isValidNumericChar(source.current()); source.next()) { number += source.current(); }
   Numeric jNodeNumeric{ number };
-  if (number.empty() || !jNodeNumeric.setValidNumber(number)) { throw Error("Syntax error detected."); }
+  if (number.empty() || !jNodeNumeric.setValidNumber(number)) { throw Error("Invalid numeric value."); }
   return (makeNumber(jNodeNumeric));
 }
 /// <summary>
@@ -110,7 +110,7 @@ JNode JSON_Impl::parseBoolean(ISource &source)
 {
   if (source.match("true")) { return (makeBoolean(true)); }
   if (source.match("false")) { return (makeBoolean(false)); }
-  throw Error("Syntax error detected.");
+  throw Error("Invalid boolean value.");
 }
 /// <summary>
 /// Parse a null from a JSON source stream.
@@ -119,7 +119,7 @@ JNode JSON_Impl::parseBoolean(ISource &source)
 /// <returns>Null JNode.</returns>
 JNode JSON_Impl::parseNull(ISource &source)
 {
-  if (!source.match("null")) { throw Error("Syntax error detected."); }
+  if (!source.match("null")) { throw Error("Invalid null value."); }
   return (makeNull());
 }
 /// <summary>
@@ -139,7 +139,7 @@ JNode JSON_Impl::parseObject(ISource &source)
       objectEntries.emplace_back(parseKeyValuePair(source));
     }
   }
-  if (source.current() != '}') { throw Error("Syntax error detected."); }
+  if (source.current() != '}') { throw Error("Missing closing '}' in object definition."); }
   source.next();
   return (makeObject(objectEntries));
 }
@@ -160,7 +160,7 @@ JNode JSON_Impl::parseArray(ISource &source)
       array.emplace_back(parseJNodes(source));
     }
   }
-  if (source.current() != ']') { throw Error("Syntax error detected."); }
+  if (source.current() != ']') { throw Error("Missing closing ']' in object definition."); }
   source.next();
   return (makeArray(array));
 }
