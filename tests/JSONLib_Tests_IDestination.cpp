@@ -201,6 +201,7 @@ TEST_CASE("IDestination (File) interface.", "[JSON][IDestination][File]")
     file.backup();
     file.backup();
     // Now at position 0 in file
+    // Old content still there
     REQUIRE(std::filesystem::file_size(filePath) == 5);
     REQUIRE(readFromFile(testFileName) == ("65767"));
     // Overwrite existing contents
