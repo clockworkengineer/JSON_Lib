@@ -29,7 +29,11 @@ public:
   void add(const char ch) override { m_stringifyBuffer.push_back(ch); }
   void clear() override { m_stringifyBuffer.clear(); }
   [[nodiscard]] std::string getBuffer() const { return (m_stringifyBuffer); }
-  virtual void backup() { m_stringifyBuffer.pop_back(); }
+  // Note: This backup strinks the destination and will not go past the beginning
+  virtual void backup()
+  {
+    if (!m_stringifyBuffer.empty()) { m_stringifyBuffer.pop_back(); }
+  }
 
 private:
   std::string m_stringifyBuffer;
@@ -60,7 +64,13 @@ public:
     m_destination.open(m_destinationFileName.c_str(), std::ios_base::binary | std::ios_base::trunc);
     if (!m_destination.is_open()) { throw Error("File output stream failed to open or could not be created."); }
   }
-  virtual void backup() { m_destination.seekp(-1, std::ios_base::cur); }
+  // Note: This backup does not strink the destination but just changes the next position written to; allowing
+  // existing characters to be overwritten (this is for performance reasons). Also note that you cannot backup
+  // past the beginning of the file like the buffer variant.
+  virtual void backup()
+  {
+    if (m_destination.tellp() > 0) { m_destination.seekp(-1, std::ios_base::cur); }
+  }
 
 private:
   std::ofstream m_destination;

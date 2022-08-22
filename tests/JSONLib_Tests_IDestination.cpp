@@ -44,8 +44,7 @@ TEST_CASE("IDestination (Buffer) interface.", "[JSON][IDestination][Buffer]")
     REQUIRE(buffer.getBuffer() == ("65767"));
   }
   SECTION(
-    "Create BufferDestination, add to it, clear buffer and then add to "
-    "it again and check."
+    "Create BufferDestination, add to it, clear buffer and then add to it again and check."
     "result.",
     "[JSON][IDestination][Buffer]")
   {
@@ -57,6 +56,55 @@ TEST_CASE("IDestination (Buffer) interface.", "[JSON][IDestination][Buffer]")
     buffer.add("65767");
     REQUIRE(buffer.getBuffer().size() == 5);
     REQUIRE(buffer.getBuffer() == ("65767"));
+  }
+  SECTION("Create BufferDestination, add number to it, backup 2 and then check result.", "[JSON][IDestination][Buffer]")
+  {
+    BufferDestination buffer;
+    buffer.add("65767");
+    REQUIRE(buffer.getBuffer().size() == 5);
+    REQUIRE(buffer.getBuffer() == ("65767"));
+    buffer.backup();
+    buffer.backup();
+    REQUIRE(buffer.getBuffer().size() == 3);
+    REQUIRE(buffer.getBuffer() == ("657"));
+  }
+
+  SECTION(
+    "Create BufferDestination, add to it, backup 5 and then check its empty."
+    "[JSON][IDestination][Buffer]")
+  {
+    BufferDestination buffer;
+    buffer.add("65767");
+    REQUIRE(buffer.getBuffer().size() == 5);
+    REQUIRE(buffer.getBuffer() == ("65767"));
+    buffer.backup();
+    buffer.backup();
+    buffer.backup();
+    buffer.backup();
+    buffer.backup();
+    REQUIRE(buffer.getBuffer().size() == 0);
+    REQUIRE(buffer.getBuffer() == (""));
+  }
+  SECTION("Create BufferDestination, add to it and try to backup past beginning  and write out new value and check.",
+    "[JSON][IDestination][Buffer]")
+  {
+    BufferDestination buffer;
+    buffer.add("65767");
+    REQUIRE(buffer.getBuffer().size() == 5);
+    REQUIRE(buffer.getBuffer() == ("65767"));
+    buffer.backup();
+    buffer.backup();
+    buffer.backup();
+    buffer.backup();
+    buffer.backup();
+    // Try to back up past beginning
+    buffer.backup();
+    REQUIRE(buffer.getBuffer().size() == 0);
+    REQUIRE(buffer.getBuffer() == (""));
+    // Write new contents
+    buffer.add("999999");
+    REQUIRE(buffer.getBuffer().size() == 6);
+    REQUIRE(buffer.getBuffer() == ("999999"));
   }
 }
 // ====
@@ -101,8 +149,7 @@ TEST_CASE("IDestination (File) interface.", "[JSON][IDestination][File]")
     REQUIRE(readFromFile(testFileName) == "65767");
   }
   SECTION(
-    "Create FileDestination, add to it, clear buffer and then add to "
-    "it again and check."
+    "Create FileDestination, add to it, clear buffer and then add to it again and check."
     "result.",
     "[JSON][IDestination][File]")
   {
@@ -116,5 +163,70 @@ TEST_CASE("IDestination (File) interface.", "[JSON][IDestination][File]")
     file.add("65767");
     REQUIRE(std::filesystem::file_size(filePath) == 5);
     REQUIRE(readFromFile(testFileName) == ("65767"));
+  }
+  SECTION(
+    "Create FileDestination, add number to it, backup 2  add and then check result.", "[JSON][IDestination][File]")
+  {
+    std::filesystem::remove(testFileName);
+    FileDestination file{ testFileName };
+    std::filesystem::path filePath{ testFileName };
+    file.add("65767");
+    REQUIRE(std::filesystem::file_size(filePath) == 5);
+    REQUIRE(readFromFile(testFileName) == ("65767"));
+    file.backup();
+    file.backup();
+    file.add("68");
+    REQUIRE(std::filesystem::file_size(filePath) == 5);
+    REQUIRE(readFromFile(testFileName) == ("65768"));
+  }
+
+  SECTION(
+    "Create FileDestination, add to it, backup 5 and write a new value and check."
+    "[JSON][IDestination][File]")
+  {
+    std::filesystem::remove(testFileName);
+    FileDestination file{ testFileName };
+    std::filesystem::path filePath{ testFileName };
+    file.add("65767");
+    REQUIRE(std::filesystem::file_size(filePath) == 5);
+    REQUIRE(readFromFile(testFileName) == ("65767"));
+    file.backup();
+    file.backup();
+    file.backup();
+    file.backup();
+    file.backup();
+    // Now at position 0 in file
+    REQUIRE(std::filesystem::file_size(filePath) == 5);
+    REQUIRE(readFromFile(testFileName) == ("65767"));
+    // Overwrite existing contents
+    file.add("999976");
+    REQUIRE(std::filesystem::file_size(filePath) == 6);
+    REQUIRE(readFromFile(testFileName) == ("999976"));
+  }
+  SECTION(
+    "Create BufferDestination, add to it and try to backup past beginning and write a new value and check."
+    "[JSON][IDestination][File]")
+  {
+    std::filesystem::remove(testFileName);
+    FileDestination file{ testFileName };
+    std::filesystem::path filePath{ testFileName };
+    file.add("65767");
+    REQUIRE(std::filesystem::file_size(filePath) == 5);
+    REQUIRE(readFromFile(testFileName) == ("65767"));
+    file.backup();
+    file.backup();
+    file.backup();
+    file.backup();
+    file.backup();
+    // Try to back up past beginning
+    file.backup();
+    // Now at position 0 in file
+    // Old content still there
+    REQUIRE(std::filesystem::file_size(filePath) == 5);
+    REQUIRE(readFromFile(testFileName) == ("65767"));
+    // Overwrite existing contents
+    file.add("999999");
+    REQUIRE(std::filesystem::file_size(filePath) == 6);
+    REQUIRE(readFromFile(testFileName) == ("999999"));
   }
 }
