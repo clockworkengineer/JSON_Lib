@@ -170,7 +170,7 @@ TEST_CASE("IDestination (File) interface.", "[JSON][IDestination][File]")
     REQUIRE(readFromFile(testFileName) == ("65767"));
   }
   SECTION(
-    "Create FileDestination, add number to it, backup 2  add and then check result.", "[JSON][IDestination][File]")
+    "Create FileDestination, add number to it, backup 2  add more data and then check result.", "[JSON][IDestination][File]")
   {
     std::filesystem::remove(testFileName);
     FileDestination file{ testFileName };
@@ -186,7 +186,7 @@ TEST_CASE("IDestination (File) interface.", "[JSON][IDestination][File]")
   }
 
   SECTION(
-    "Create FileDestination, add to it, backup 5 and write a new value and check."
+    "Create FileDestination, add to it, backup 5, write a new value and check."
     "[JSON][IDestination][File]")
   {
     std::filesystem::remove(testFileName);
@@ -210,7 +210,7 @@ TEST_CASE("IDestination (File) interface.", "[JSON][IDestination][File]")
     REQUIRE(readFromFile(testFileName) == ("999976"));
   }
   SECTION(
-    "Create BufferDestination, add to it and try to backup past beginning and write a new value and check."
+    "Create FileDestination, add to it and try to backup past beginning, write a new value and check."
     "[JSON][IDestination][File]")
   {
     std::filesystem::remove(testFileName);
