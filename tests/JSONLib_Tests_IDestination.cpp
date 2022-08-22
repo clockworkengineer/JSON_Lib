@@ -82,6 +82,7 @@ TEST_CASE("IDestination (Buffer) interface.", "[JSON][IDestination][Buffer]")
     buffer.backup();
     buffer.backup();
     buffer.backup();
+    // At position 0 and destination empty
     REQUIRE(buffer.getBuffer().size() == 0);
     REQUIRE(buffer.getBuffer() == (""));
   }
@@ -97,8 +98,12 @@ TEST_CASE("IDestination (Buffer) interface.", "[JSON][IDestination][Buffer]")
     buffer.backup();
     buffer.backup();
     buffer.backup();
-    // Try to back up past beginning
+    // At position 0 and destination empty
+    REQUIRE(buffer.getBuffer().size() == 0);
+    REQUIRE(buffer.getBuffer() == (""));
+    // Try to backup past beginning of destination (does nothing)
     buffer.backup();
+    // Stil at position 0 and destination empty
     REQUIRE(buffer.getBuffer().size() == 0);
     REQUIRE(buffer.getBuffer() == (""));
     // Write new contents
@@ -218,9 +223,13 @@ TEST_CASE("IDestination (File) interface.", "[JSON][IDestination][File]")
     file.backup();
     file.backup();
     file.backup();
-    // Try to back up past beginning
-    file.backup();
     // Now at position 0 in file
+    // Old content still there
+    REQUIRE(std::filesystem::file_size(filePath) == 5);
+    REQUIRE(readFromFile(testFileName) == ("65767"));
+    // Try to back up past beginning of destination (does nothing)
+    file.backup();
+    // Still at position 0 in file
     // Old content still there
     REQUIRE(std::filesystem::file_size(filePath) == 5);
     REQUIRE(readFromFile(testFileName) == ("65767"));
