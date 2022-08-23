@@ -105,7 +105,7 @@ void JSON_Impl::traverse(IAction &action) const
 }
 /// <summary>
 /// Return object entry for the passed in key creating a root object if it does not exist
-/// or a placeholder for a new JNode to be created into if it does not exist.
+/// or a placeholder for a new JNode to be created into if the key does not exist.
 /// </summary>
 /// <param name=key>Object entry (JNode) key.</param>
 JNode &JSON_Impl::operator[](const std::string &key)
@@ -123,8 +123,8 @@ const JNode &JSON_Impl::operator[](const std::string &key) const// Object
   return ((m_jNodeRoot)[key]);
 }
 /// <summary>
-/// Return array entry for the passed in index or a placeholder for a new JNode to be created
-/// into if it does not exist.
+/// Return array entry for the passed in index creating a root array if it does not exist
+/// or or a placeholder(s) for a new JNode to be created into if the index(s) do not exist.
 /// </summary>
 /// <param name=index>Array entry (JNode) index.</param>
 JNode &JSON_Impl::operator[](std::size_t index)

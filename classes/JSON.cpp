@@ -49,10 +49,10 @@ namespace JSONLib {
 /// </summary>
 /// <param name="translator">Pointer to translator interface.</param>
 /// <param name="converter">Pointer to converter interface.</param>
-JSON::JSON(ITranslator *translator, IConverter *converter) : m_jsonImplementation(std::make_unique<JSON_Impl>())
+JSON::JSON(ITranslator *translator, IConverter *converter) : m_implementation(std::make_unique<JSON_Impl>())
 {
-  m_jsonImplementation->converter(converter);
-  m_jsonImplementation->translator(translator);
+  m_implementation->converter(converter);
+  m_implementation->translator(translator);
 }
 /// <summary>
 /// JSON constructor (array).
@@ -79,62 +79,53 @@ JSON::~JSON() {}
 /// <summary>
 /// Get JSONLib version.
 /// </summary>
-std::string JSON::version() const { return (m_jsonImplementation->version()); }
+std::string JSON::version() const { return (m_implementation->version()); }
 /// <summary>
 /// Strip all whitespace from a JSON source.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <param name="destination">Destination for stripped JSON.</param>
-void JSON::strip(ISource &source, IDestination &destination) const { m_jsonImplementation->strip(source, destination); }
-void JSON::strip(ISource &source, IDestination &&destination) const
-{
-  m_jsonImplementation->strip(source, destination);
-}
-void JSON::strip(ISource &&source, IDestination &destination) const
-{
-  m_jsonImplementation->strip(source, destination);
-}
-void JSON::strip(ISource &&source, IDestination &&destination) const
-{
-  m_jsonImplementation->strip(source, destination);
-}
+void JSON::strip(ISource &source, IDestination &destination) const { m_implementation->strip(source, destination); }
+void JSON::strip(ISource &source, IDestination &&destination) const { m_implementation->strip(source, destination); }
+void JSON::strip(ISource &&source, IDestination &destination) const { m_implementation->strip(source, destination); }
+void JSON::strip(ISource &&source, IDestination &&destination) const { m_implementation->strip(source, destination); }
 /// <summary>
 /// Create JNode structure by parsing JSON on the source stream.
 /// </summary>
 /// <param name="source">Source for JSON encoded bytes.</param>
-void JSON::parse(ISource &source) const { m_jsonImplementation->parse(source); }
-void JSON::parse(ISource &&source) const { m_jsonImplementation->parse(source); }
+void JSON::parse(ISource &source) const { m_implementation->parse(source); }
+void JSON::parse(ISource &&source) const { m_implementation->parse(source); }
 /// <summary>
 /// Traverse JNode structure and build its JSON text in destination stream.
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
-void JSON::stringify(IDestination &destination) const { m_jsonImplementation->stringify(destination); }
-void JSON::stringify(IDestination &&destination) const { m_jsonImplementation->stringify(destination); }
+void JSON::stringify(IDestination &destination) const { m_implementation->stringify(destination); }
+void JSON::stringify(IDestination &&destination) const { m_implementation->stringify(destination); }
 /// <summary>
 /// Recursively traverse JNode structure calling IAction methods or to change
 /// the JSON tree node directly.
 /// </summary>
 /// <param name=action>Action methods to call during traversal.</param>
 // Traverse using non-const JSON so can change JSON tree
-void JSON::traverse(IAction &action) { m_jsonImplementation->traverse(action); }
+void JSON::traverse(IAction &action) { m_implementation->traverse(action); }
 // Traverse using const JSON so cannot change JSON tree
-void JSON::traverse(IAction &action) const { std::as_const(*m_jsonImplementation).traverse(action); }
+void JSON::traverse(IAction &action) const { std::as_const(*m_implementation).traverse(action); }
 /// <summary>
 /// Return object entry for the passed in key.
 /// </summary>
 /// <param name=destination>Object entry (JNode) key.</param>
-JNode &JSON::operator[](const std::string &key) { return ((*m_jsonImplementation)[key]); }
-const JNode &JSON::operator[](const std::string &key) const { return ((*m_jsonImplementation)[key]); }
+JNode &JSON::operator[](const std::string &key) { return ((*m_implementation)[key]); }
+const JNode &JSON::operator[](const std::string &key) const { return ((*m_implementation)[key]); }
 /// <summary>
 /// Return array entry for the passed in index.
 /// </summary>
 /// <param name=destination>Array entry (JNode) index.</param>
-JNode &JSON::operator[](std::size_t index) { return ((*m_jsonImplementation)[index]); }
-const JNode &JSON::operator[](std::size_t index) const { return ((*m_jsonImplementation)[index]); }
+JNode &JSON::operator[](std::size_t index) { return ((*m_implementation)[index]); }
+const JNode &JSON::operator[](std::size_t index) const { return ((*m_implementation)[index]); }
 /// <summary>
 /// Return root of JSON tree.
 /// </summary>
 /// <returns>Root of JSON tree,</returns>
-JNode &JSON::root() { return (m_jsonImplementation->root()); }
-const JNode &JSON::root() const { return (m_jsonImplementation->root()); }
+JNode &JSON::root() { return (m_implementation->root()); }
+const JNode &JSON::root() const { return (m_implementation->root()); }
 }// namespace JSONLib
