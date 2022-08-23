@@ -104,7 +104,7 @@ private:
   // Produce JSON test string from JSON tree
   static void stringifyJNodes(const JNode &jNode, IDestination &destination);
   // Remove JSON whitespace
-  static void stripWhiteSpace(ISource &source, IDestination &destination);
+  static void stripWhitespace(ISource &source, IDestination &destination);
   // Traverse JSON tree
   template<typename T> static void traverseJNodes(T &jNode, IAction &action);
   // =================
