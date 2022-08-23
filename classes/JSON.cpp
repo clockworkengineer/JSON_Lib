@@ -71,7 +71,7 @@ JSON::JSON(const std::initializer_list<std::pair<std::string, InternalTypes>> &o
 /// JSON constructor. Pass a JSON string to be initially parsed.
 /// </summary>
 /// <param name="jsonString">JSON string.</param>
-JSON::JSON(const std::string &jsonString) : JSON() { m_jsonImplementation->parse(jsonString); }
+JSON::JSON(const std::string &jsonString) : JSON() { parse(BufferSource{ jsonString }); }
 /// <summary>
 /// JSON destructor.
 /// </summary>

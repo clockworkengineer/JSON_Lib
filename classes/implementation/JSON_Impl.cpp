@@ -1,7 +1,7 @@
 //
 // Class: JSON_Impl
 //
-// Description: JSON class implementation layer.
+// Description: High level entry points in JSON class implementation layer.
 //
 // Dependencies:   C20++ - Language standard features used.
 //
@@ -74,16 +74,7 @@ void JSON_Impl::converter(IConverter *converter)
 /// <param name="source">Source of JSON.</param>
 void JSON_Impl::parse(ISource &source) { m_jNodeRoot = parseJNodes(source); }
 /// <summary>
-/// Create JNode structure by recursively parsing JSON passed.
-/// </summary>
-/// <param name="jsonString">JSON.</param>
-void JSON_Impl::parse(const std::string &jsonString)
-{
-  BufferSource source{ jsonString };
-  parse(source);
-}
-/// <summary>
-/// Recursively parse JNode structure and building its JSON in destination
+/// Recursively parse JNode tree structure and building its JSON text in destination
 /// stream.
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
@@ -113,7 +104,8 @@ void JSON_Impl::traverse(IAction &action) const
   traverseJNodes(m_jNodeRoot, action);
 }
 /// <summary>
-/// Return object entry for the passed in key.
+/// Return object entry for the passed in key creating a root object if it does not exist
+/// or a placeholder for a new JNode to be created into if it does not exist.
 /// </summary>
 /// <param name=key>Object entry (JNode) key.</param>
 JNode &JSON_Impl::operator[](const std::string &key)
@@ -131,7 +123,8 @@ const JNode &JSON_Impl::operator[](const std::string &key) const// Object
   return ((m_jNodeRoot)[key]);
 }
 /// <summary>
-/// Return array entry for the passed in index.
+/// Return array entry for the passed in index or a placeholder for a new JNode to be created
+/// into if it does not exist.
 /// </summary>
 /// <param name=index>Array entry (JNode) index.</param>
 JNode &JSON_Impl::operator[](std::size_t index)
@@ -141,7 +134,10 @@ JNode &JSON_Impl::operator[](std::size_t index)
     return ((m_jNodeRoot)[index]);
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Array>(m_jNodeRoot).getArrayEntries().resize(index + 1);
-    JRef<Array>(m_jNodeRoot).getArrayEntries()[index] = std::move(makeNull());
+    JRef<Array>(m_jNodeRoot).getArrayEntries()[index] = std::move(makeHole());
+    for (auto &entry : JRef<Array>(m_jNodeRoot).getArrayEntries()) {
+      if (entry.getVariant() == nullptr) { entry = makeHole(); }
+    }
     return (JRef<Array>(m_jNodeRoot).getArrayEntries()[index]);
   }
 }

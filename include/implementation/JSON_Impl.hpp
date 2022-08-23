@@ -53,7 +53,6 @@ public:
   std::string version() const;
   // Parse JSON into tree
   void parse(ISource &source);
-  void parse(const std::string &jsonString);
   // Create JSON text string from tree
   void stringify(IDestination &destination) const;
   // Strip whitespace from JSON string
