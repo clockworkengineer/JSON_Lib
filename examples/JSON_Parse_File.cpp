@@ -34,9 +34,9 @@
 namespace json = JSONLib;
 namespace fs = std::filesystem;
 namespace chrono = std::chrono;
-// ========================
+// =======================
 // LOCAL TYPES/DEFINITIONS
-// ========================
+// =======================
 static constexpr size_t kMaxFileLengthToDisplay = 16 * 1024;
 // ===============
 // LOCAL FUNCTIONS

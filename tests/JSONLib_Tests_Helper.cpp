@@ -53,9 +53,9 @@ void writeToFile(const std::string &jsonFileName, const std::string &jsonString)
   jsonFile.close();
 }
 /// <summary>
-/// Verify that an JNodeArrayData has the correct parsed format.
+/// Verify that an JNode Array has the correct parsed format.
 /// </summary>
-/// <param name="jNode">Pointer to JNNodeArray</param>
+/// <param name="jNode">Pointer to JNode Array</param>
 /// <returns></returns>
 void checkArray(const JNode &jNode)
 {// Array ["Dog",1964,true,null]
@@ -71,9 +71,9 @@ void checkArray(const JNode &jNode)
   REQUIRE(JRef<Null>(jNode[3]).getNull() == nullptr);
 }
 /// <summary>
-/// Verify that an JNodeObjectData has the correct parsed format.
+/// Verify that an JNode Object has the correct parsed format.
 /// </summary>
-/// <param name="jNode">Pointer to JNodeObjectData</param>
+/// <param name="jNode">Pointer to JNode Object</param>
 /// <returns></returns>
 void checkObject(const JNode &jNode)
 {// {"City":"Southampton","Population":500000}

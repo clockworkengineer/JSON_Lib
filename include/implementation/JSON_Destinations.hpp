@@ -30,7 +30,7 @@ public:
   void clear() override { m_stringifyBuffer.clear(); }
   [[nodiscard]] std::string getBuffer() const { return (m_stringifyBuffer); }
   // Note: This backup strinks the destination and will not go past the beginning
-  virtual void backup()
+  virtual void backup() override
   {
     if (!m_stringifyBuffer.empty()) { m_stringifyBuffer.pop_back(); }
   }
@@ -67,7 +67,7 @@ public:
   // Note: This backup does not strink the destination but just changes the next position written to; allowing
   // existing characters to be overwritten (this is for performance reasons). Also note that you cannot backup
   // past the beginning of the file like the buffer variant.
-  virtual void backup()
+  virtual void backup() override
   {
     if (m_destination.tellp() > 0) { m_destination.seekp(-1, std::ios_base::cur); }
   }
