@@ -36,6 +36,14 @@ set (JSON_INCLUDES
     ./include/implementation/JSON_JNode.hpp
     ./include/implementation/JSON_JNode_Numeric.hpp
     ./include/implementation/JSON_JNode_Variant.hpp
+    ./include/implementation/JSON_JNode_Hole.hpp
+    ./include/implementation/JSON_JNode_Object.hpp
+    ./include/implementation/JSON_JNode_Array.hpp
+    ./include/implementation/JSON_JNode_Number.hpp
+    ./include/implementation/JSON_JNode_String.hpp
+    ./include/implementation/JSON_JNode_Boolean.hpp
+    ./include/implementation/JSON_JNode_Null.hpp
+    ./include/implementation/JSON_JNode_Reference.hpp
     ./include/implementation/JSON_Impl.hpp
     ./include/implementation/JSON_Sources.hpp
     ./include/implementation/JSON_Destinations.hpp
