@@ -133,11 +133,7 @@ JNode &JSON_Impl::operator[](std::size_t index)
     if (m_jNodeRoot.getVariant() == nullptr) { m_jNodeRoot = Array::make(); }
     return ((m_jNodeRoot)[index]);
   } catch ([[maybe_unused]] JNode::Error &error) {
-    JRef<Array>(m_jNodeRoot).getArrayEntries().resize(index + 1);
-    JRef<Array>(m_jNodeRoot).getArrayEntries()[index] = std::move(Hole::make());
-    for (auto &entry : JRef<Array>(m_jNodeRoot).getArrayEntries()) {
-      if (entry.getVariant() == nullptr) { entry = Hole::make(); }
-    }
+    JRef<Array>(m_jNodeRoot).resize(index);
     return (JRef<Array>(m_jNodeRoot).getArrayEntries()[index]);
   }
 }

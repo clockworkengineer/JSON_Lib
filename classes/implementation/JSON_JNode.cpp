@@ -111,11 +111,7 @@ JNode &JNode::operator[](std::size_t index)
     if (this->getType() == JNodeType::hole) { *this = Array::make(); }
     return (JRef<Array>(*this)[index]);
   } catch ([[maybe_unused]] const JNode::Error &error) {
-    JRef<Array>(*this).getArrayEntries().resize(index + 1);
-    JRef<Array>(*this).getArrayEntries()[index] = Hole::make();
-    for (auto &entry : JRef<Array>(*this).getArrayEntries()) {
-      if (entry.getVariant() == nullptr) { entry = Hole::make(); }
-    }
+    JRef<Array>(*this).resize(index);
     return (JRef<Array>(*this)[index]);
   }
 }

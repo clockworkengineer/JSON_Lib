@@ -28,6 +28,22 @@ struct Variant
 private:
   JNodeType m_nodeType;
 };
+// ====
+// Hole
+// ====
+struct Hole : Variant
+{
+  // Constructors/Destructors
+  Hole() : Variant(JNodeType::hole) {}
+  Hole(const Hole &other) = delete;
+  Hole &operator=(const Hole &other) = delete;
+  Hole(Hole &&other) = default;
+  Hole &operator=(Hole &&other) = default;
+  ~Hole() = default;
+  [[nodiscard]] std::string toString() const { return ("null"); }
+  // Make Hole JNode
+  static JNode make() { return (JNode{ std::make_unique<Hole>(Hole()) }); }
+};
 // ======
 // Object
 // ======
@@ -150,6 +166,15 @@ struct Array : Variant
     if ((index >= 0) && (index < (static_cast<int>(m_jsonArray.size())))) { return (m_jsonArray[index]); }
     throw JNode::Error("Invalid index used to access array.");
   }
+  // Resize Array
+  void resize(std::size_t index)
+  {
+    getArrayEntries().resize(index + 1);
+    getArrayEntries()[index] = std::move(Hole::make());
+    for (auto &entry : getArrayEntries()) {
+      if (entry.getVariant() == nullptr) { entry = Hole::make(); }
+    }
+  }
   // Make Array JNode
   static JNode make() { return (JNode{ std::make_unique<Array>() }); }
   static JNode make(Array::ArrayList &array) { return (JNode{ std::make_unique<Array>(Array{ array }) }); }
@@ -247,22 +272,6 @@ struct Null : Variant
   [[nodiscard]] std::string toString() const { return ("null"); }
   // Make Null JNode
   static JNode make() { return (JNode{ std::make_unique<Null>(Null()) }); }
-};
-// ====
-// Hole
-// ====
-struct Hole : Variant
-{
-  // Constructors/Destructors
-  Hole() : Variant(JNodeType::hole) {}
-  Hole(const Hole &other) = delete;
-  Hole &operator=(const Hole &other) = delete;
-  Hole(Hole &&other) = default;
-  Hole &operator=(Hole &&other) = default;
-  ~Hole() = default;
-  [[nodiscard]] std::string toString() const { return ("null"); }
-  // Make Hole JNode
-  static JNode make() { return (JNode{ std::make_unique<Hole>(Hole()) }); }
 };
 // =========================
 // JNode reference converter
