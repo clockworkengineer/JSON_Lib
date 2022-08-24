@@ -86,13 +86,21 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::InternalTy
   for (const auto &entry : object) { jObjectList.emplace_back(Object::Entry(entry.first, getJNode(entry.second))); }
   *this = Object::make(jObjectList);
 }
+// =========================
+// Interrogate Jnode variant
+// =========================
+bool JNode::isObject() const { return (m_jNodeVariant->getType() == JNodeType::object); }
+bool JNode::isArray() const { return (m_jNodeVariant->getType() == JNodeType::array); }
+bool JNode::isNumber() const { return (m_jNodeVariant->getType() == JNodeType::number); }
+bool JNode::isString() const { return (m_jNodeVariant->getType() == JNodeType::string); }
+bool JNode::isBoolean() const { return (m_jNodeVariant->getType() == JNodeType::boolean); }
+bool JNode::isNull() const { return (m_jNodeVariant->getType() == JNodeType::null); }
+bool JNode::isHole() const { return (m_jNodeVariant->getType() == JNodeType::hole); }
 // =====================
 // JNode index overloads
 // =====================
-// ======
 // Object
-// ======
-JNode &JNode::operator[](const std::string &key)
+JNode &JNode::operator[](const std::string &key) 
 {
   if (this->getType() == JNodeType::hole) {
     *this = Object::make();
@@ -102,9 +110,7 @@ JNode &JNode::operator[](const std::string &key)
   return (JRef<Object>(*this)[key]);
 }
 const JNode &JNode::operator[](const std::string &key) const { return (JRef<const Object>(*this)[key]); }
-// =====
 // Array
-// =====
 JNode &JNode::operator[](std::size_t index)
 {
   try {

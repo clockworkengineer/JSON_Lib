@@ -43,7 +43,6 @@ struct Array : Variant
   void resize(std::size_t index)
   {
     m_jsonArray.resize(index + 1);
-    m_jsonArray[index] = Hole::make();
     for (auto &entry : m_jsonArray) {
       if (entry.getVariant() == nullptr) { entry = Hole::make(); }
     }

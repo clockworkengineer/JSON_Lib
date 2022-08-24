@@ -13,25 +13,17 @@ namespace JSONLib {
 // ===========
 // JNode Types
 // ===========
-enum class JNodeType {
-  base = 0,
-  object,
-  array,
-  number,
-  string,
-  boolean,
-  null,
-  hole
-};
+enum class JNodeType { base = 0, object, array, number, string, boolean, null, hole };
 // =====
 // JNode
 // =====
 struct Variant;
-struct JNode {
+struct JNode
+{
   // JNode Error
-  struct Error : public std::runtime_error {
-    explicit Error(const std::string &message)
-        : std::runtime_error("JNode Error: " + message) {}
+  struct Error : public std::runtime_error
+  {
+    explicit Error(const std::string &message) : std::runtime_error("JNode Error: " + message) {}
   };
   // Constructors/Destructors
   JNode() = default;
@@ -44,10 +36,8 @@ struct JNode {
   explicit JNode(bool boolean);
   explicit JNode(std::nullptr_t null);
   JNode(const std::initializer_list<JSON::InternalTypes> &array);
-  JNode(const std::initializer_list<std::pair<std::string, JSON::InternalTypes>>
-            &object);
-  explicit JNode(std::unique_ptr<Variant> jNodeVariant)
-      : m_jNodeVariant(std::move(jNodeVariant)) {}
+  JNode(const std::initializer_list<std::pair<std::string, JSON::InternalTypes>> &object);
+  explicit JNode(std::unique_ptr<Variant> jNodeVariant) : m_jNodeVariant(std::move(jNodeVariant)) {}
   JNode(const JNode &other) = delete;
   JNode &operator=(const JNode &other) = delete;
   JNode(JNode &&other) = default;
@@ -62,6 +52,14 @@ struct JNode {
   JNode &operator=(const std::string &string);
   JNode &operator=(bool boolean);
   JNode &operator=(std::nullptr_t null);
+  // Interrogate variant
+  [[nodiscard]] bool isObject() const;
+  [[nodiscard]] bool isArray() const;
+  [[nodiscard]] bool isNumber() const;
+  [[nodiscard]] bool isString() const;
+  [[nodiscard]] bool isBoolean() const;
+  [[nodiscard]] bool isNull() const;
+  [[nodiscard]] bool isHole() const;
   // Indexing operators
   JNode &operator[](const std::string &key);
   const JNode &operator[](const std::string &key) const;
@@ -77,4 +75,4 @@ private:
   JNode getJNode(const JSON::InternalTypes &type);
   std::unique_ptr<Variant> m_jNodeVariant;
 };
-} // namespace JSONLib
+}// namespace JSONLib
