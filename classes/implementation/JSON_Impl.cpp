@@ -112,10 +112,10 @@ JNode &JSON_Impl::operator[](const std::string &key)
 {
   try {
     if (m_jNodeRoot.getVariant() == nullptr) { m_jNodeRoot = Object::make(); }
-    return ((m_jNodeRoot)[key]);
+    return (m_jNodeRoot[key]);
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Object>(m_jNodeRoot).getObjectEntries().emplace_back(Object::Entry(key, Hole::make()));
-    return (JRef<Object>(m_jNodeRoot).getObjectEntries().back().getJNode());
+    return (m_jNodeRoot[key]);
   }
 }
 const JNode &JSON_Impl::operator[](const std::string &key) const// Object
@@ -131,10 +131,10 @@ JNode &JSON_Impl::operator[](std::size_t index)
 {
   try {
     if (m_jNodeRoot.getVariant() == nullptr) { m_jNodeRoot = Array::make(); }
-    return ((m_jNodeRoot)[index]);
+    return (m_jNodeRoot[index]);
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Array>(m_jNodeRoot).resize(index);
-    return (JRef<Array>(m_jNodeRoot).getArrayEntries()[index]);
+    return (m_jNodeRoot[index]);
   }
 }
 const JNode &JSON_Impl::operator[](std::size_t index) const { return ((m_jNodeRoot)[index]); }
