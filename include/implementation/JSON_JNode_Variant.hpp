@@ -73,6 +73,7 @@ struct Object : Variant
   Object(Object &&other) = default;
   Object &operator=(Object &&other) = default;
   ~Object() = default;
+
   // Search for a given entry given a key and object list
   [[nodiscard]] auto findKey(const std::string &key, EntryList &objectEntries)
   {
@@ -108,6 +109,12 @@ struct Object : Variant
   // Return reference to base of object entries
   EntryList &getObjectEntries() { return (m_jsonObjectEntries); }
   [[nodiscard]] const EntryList &getObjectEntries() const { return (m_jsonObjectEntries); }
+  // Make Object JNode
+  static JNode make() { return (JNode{ std::make_unique<Object>() }); }
+  static JNode make(Object::EntryList &objectEntries)
+  {
+    return (JNode{ std::make_unique<Object>(Object{ objectEntries }) });
+  }
 
 private:
   EntryList m_jsonObjectEntries;
@@ -143,6 +150,9 @@ struct Array : Variant
     if ((index >= 0) && (index < (static_cast<int>(m_jsonArray.size())))) { return (m_jsonArray[index]); }
     throw JNode::Error("Invalid index used to access array.");
   }
+  // Make Array JNode
+  static JNode make() { return (JNode{ std::make_unique<Array>() }); }
+  static JNode make(Array::ArrayList &array) { return (JNode{ std::make_unique<Array>(Array{ array }) }); }
 
 private:
   ArrayList m_jsonArray;
@@ -165,6 +175,8 @@ struct Number : Variant
   [[nodiscard]] const Numeric &getNumber() const { return (m_jsonNumber); }
   // Convert number to string
   [[nodiscard]] std::string toString() const { return (m_jsonNumber.getString()); }
+  // Make Number JNode
+  static JNode make(const Numeric &number) { return (JNode{ std::make_unique<Number>(Number{ number }) }); }
 
 private:
   Numeric m_jsonNumber{};
@@ -187,6 +199,8 @@ struct String : Variant
   [[nodiscard]] const std::string &getString() const { return (m_jsonString); }
   // Convert string representation to a string
   [[nodiscard]] std::string toString() const { return (m_jsonString); }
+  // Make String JNode
+  static JNode make(const std::string &string) { return (JNode{ std::make_unique<String>(String{ string }) }); }
 
 private:
   std::string m_jsonString;
@@ -209,6 +223,8 @@ struct Boolean : Variant
   [[nodiscard]] const bool &getBoolean() const { return (m_jsonBoolean); }
   // Return string representation of boolean value
   [[nodiscard]] std::string toString() const { return (m_jsonBoolean ? "true" : "false"); }
+  // Make Boolean JNode
+  static JNode make(bool boolean) { return (JNode{ std::make_unique<Boolean>(Boolean{ boolean }) }); }
 
 private:
   bool m_jsonBoolean{};
@@ -229,6 +245,8 @@ struct Null : Variant
   [[nodiscard]] void *getNull() const { return (nullptr); }
   // Return string representation of null value
   [[nodiscard]] std::string toString() const { return ("null"); }
+  // Make Null JNode
+  static JNode make() { return (JNode{ std::make_unique<Null>(Null()) }); }
 };
 // ====
 // Hole
@@ -243,6 +261,8 @@ struct Hole : Variant
   Hole &operator=(Hole &&other) = default;
   ~Hole() = default;
   [[nodiscard]] std::string toString() const { return ("null"); }
+  // Make Hole JNode
+  static JNode make() { return (JNode{ std::make_unique<Hole>(Hole()) }); }
 };
 // =========================
 // JNode reference converter

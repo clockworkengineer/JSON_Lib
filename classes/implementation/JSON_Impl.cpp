@@ -111,10 +111,10 @@ void JSON_Impl::traverse(IAction &action) const
 JNode &JSON_Impl::operator[](const std::string &key)
 {
   try {
-    if (m_jNodeRoot.getVariant() == nullptr) { m_jNodeRoot = makeObject(); }
+    if (m_jNodeRoot.getVariant() == nullptr) { m_jNodeRoot = Object::make(); }
     return ((m_jNodeRoot)[key]);
   } catch ([[maybe_unused]] JNode::Error &error) {
-    JRef<Object>(m_jNodeRoot).getObjectEntries().emplace_back(Object::Entry(key, makeHole()));
+    JRef<Object>(m_jNodeRoot).getObjectEntries().emplace_back(Object::Entry(key, Hole::make()));
     return (JRef<Object>(m_jNodeRoot).getObjectEntries().back().getJNode());
   }
 }
@@ -124,19 +124,19 @@ const JNode &JSON_Impl::operator[](const std::string &key) const// Object
 }
 /// <summary>
 /// Return array entry for the passed in index creating a root array if it does not exist
-/// or or a placeholder(s) for a new JNode to be created into if the index(s) do not exist.
+/// or a placeholder(s) for a new JNode to be created into if the index(s) do not exist.
 /// </summary>
 /// <param name=index>Array entry (JNode) index.</param>
 JNode &JSON_Impl::operator[](std::size_t index)
 {
   try {
-    if (m_jNodeRoot.getVariant() == nullptr) { m_jNodeRoot = makeArray(); }
+    if (m_jNodeRoot.getVariant() == nullptr) { m_jNodeRoot = Array::make(); }
     return ((m_jNodeRoot)[index]);
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Array>(m_jNodeRoot).getArrayEntries().resize(index + 1);
-    JRef<Array>(m_jNodeRoot).getArrayEntries()[index] = std::move(makeHole());
+    JRef<Array>(m_jNodeRoot).getArrayEntries()[index] = std::move(Hole::make());
     for (auto &entry : JRef<Array>(m_jNodeRoot).getArrayEntries()) {
-      if (entry.getVariant() == nullptr) { entry = makeHole(); }
+      if (entry.getVariant() == nullptr) { entry = Hole::make(); }
     }
     return (JRef<Array>(m_jNodeRoot).getArrayEntries()[index]);
   }

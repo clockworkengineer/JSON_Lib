@@ -36,7 +36,6 @@ set (JSON_INCLUDES
     ./include/implementation/JSON_JNode.hpp
     ./include/implementation/JSON_JNode_Numeric.hpp
     ./include/implementation/JSON_JNode_Variant.hpp
-    ./include/implementation/JSON_JNode_Creation.hpp
     ./include/implementation/JSON_Impl.hpp
     ./include/implementation/JSON_Sources.hpp
     ./include/implementation/JSON_Destinations.hpp

@@ -86,7 +86,7 @@ Object::Entry JSON_Impl::parseKeyValuePair(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>String JNode.</returns>
-JNode JSON_Impl::parseString(ISource &source) { return (makeString(extractString(source))); }
+JNode JSON_Impl::parseString(ISource &source) { return (String::make(extractString(source))); }
 /// <summary>
 /// Parse a number from a JSON source stream.
 /// </summary>
@@ -100,7 +100,7 @@ JNode JSON_Impl::parseNumber(ISource &source)
   if (number.empty() || !jNodeNumeric.setValidNumber(number)) {
     throw Error(source.getPosition(), "Invalid numeric value.");
   }
-  return (makeNumber(jNodeNumeric));
+  return (Number::make(jNodeNumeric));
 }
 /// <summary>
 /// Parse a boolean from a JSON source stream.
@@ -109,8 +109,8 @@ JNode JSON_Impl::parseNumber(ISource &source)
 /// <returns>Boolean JNode.</returns>
 JNode JSON_Impl::parseBoolean(ISource &source)
 {
-  if (source.match("true")) { return (makeBoolean(true)); }
-  if (source.match("false")) { return (makeBoolean(false)); }
+  if (source.match("true")) { return (Boolean::make(true)); }
+  if (source.match("false")) { return (Boolean::make(false)); }
   throw Error(source.getPosition(), "Invalid boolean value.");
 }
 /// <summary>
@@ -121,7 +121,7 @@ JNode JSON_Impl::parseBoolean(ISource &source)
 JNode JSON_Impl::parseNull(ISource &source)
 {
   if (!source.match("null")) { throw Error(source.getPosition(), "Invalid null value."); }
-  return (makeNull());
+  return (Null::make());
 }
 /// <summary>
 /// Parse an object from a JSON source stream.
@@ -142,7 +142,7 @@ JNode JSON_Impl::parseObject(ISource &source)
   }
   if (source.current() != '}') { throw Error(source.getPosition(), "Missing closing '}' in object definition."); }
   source.next();
-  return (makeObject(objectEntries));
+  return (Object::make(objectEntries));
 }
 /// <summary>
 /// Parse an array from a JSON source stream.
@@ -163,7 +163,7 @@ JNode JSON_Impl::parseArray(ISource &source)
   }
   if (source.current() != ']') { throw Error(source.getPosition(), "Missing closing ']' in array definition."); }
   source.next();
-  return (makeArray(array));
+  return (Array::make(array));
 }
 /// <summary>
 /// Recursively parse JSON source stream producing a JNode structure
