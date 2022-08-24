@@ -42,9 +42,9 @@ struct Array : Variant
   // Resize Array
   void resize(std::size_t index)
   {
-    getArrayEntries().resize(index + 1);
-    getArrayEntries()[index] = std::move(Hole::make());
-    for (auto &entry : getArrayEntries()) {
+    m_jsonArray.resize(index + 1);
+    m_jsonArray[index] = std::move(Hole::make());
+    for (auto &entry : m_jsonArray) {
       if (entry.getVariant() == nullptr) { entry = Hole::make(); }
     }
   }

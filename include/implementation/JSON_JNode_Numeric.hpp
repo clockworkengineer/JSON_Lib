@@ -94,7 +94,7 @@ struct Numeric
   ~Numeric() = default;
   // Is character a valid numeric character ?
   // Includes possible sign, decimal point or exponent
-  [[nodiscard]] static bool isValidNumericChar(char ch)
+  [[nodiscard]] static bool isNumericCharacter(char ch)
   {
     return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
   }
