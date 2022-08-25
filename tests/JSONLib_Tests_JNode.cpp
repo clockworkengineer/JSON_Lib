@@ -23,59 +23,59 @@ TEST_CASE("Use of JNode constructors", "[JSON][JNode][Constructor]")
   SECTION("Test JNode(integer).", "[JSON][JNode][Constructor][Integer]")
   {
     JNode jNode(999);
-    REQUIRE(jNode.getType() == JNodeType::number);
+    REQUIRE_FALSE(!jNode.isNumber());
     REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isInt());
     REQUIRE(JRef<Number>(jNode).getNumber().getInt() == 999);
   }
   SECTION("Test JNode(long).", "[JSON][JNode][Constructor][Long]")
   {
     JNode jNode(99988899l);
-    REQUIRE(jNode.getType() == JNodeType::number);
+    REQUIRE_FALSE(!jNode.isNumber());
     REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLong());
     REQUIRE(JRef<Number>(jNode).getNumber().getInt() == 99988899l);
   }
   SECTION("Test JNode(float).", "[JSON][JNode][Constructor][Float]")
   {
     JNode jNode(777.999f);
-    REQUIRE(jNode.getType() == JNodeType::number);
+    REQUIRE_FALSE(!jNode.isNumber());
     REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isFloat());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getFloat(), 777.999f, 0.0001));
   }
   SECTION("Test JNode(double).", "[JSON][JNode][Constructor][Double]")
   {
     JNode jNode(66666.8888);
-    REQUIRE(jNode.getType() == JNodeType::number);
+    REQUIRE_FALSE(!jNode.isNumber());
     REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isDouble());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getDouble(), 66666.8888, 0.0001));
   }
   SECTION("Test JNode(C string).", "[JSON][JNode][Constructor][CString]")
   {
     JNode jNode("test string");
-    REQUIRE(jNode.getType() == JNodeType::string);
+    REQUIRE_FALSE(!jNode.isString());
     REQUIRE(JRef<String>(jNode).getString() == "test string");
   }
   SECTION("Test JNode(string).", "[JSON][JNode][Constructor]")
   {
     JNode jNode("test string");
-    REQUIRE(jNode.getType() == JNodeType::string);
+    REQUIRE_FALSE(!jNode.isString());
     REQUIRE(JRef<String>(jNode).getString() == "test string");
   }
   SECTION("Test JNode(boolean).", "[JSON][JNode][Constructor][String]")
   {
     JNode jNode(false);
-    REQUIRE(jNode.getType() == JNodeType::boolean);
+    REQUIRE_FALSE(!jNode.isBoolean());
     REQUIRE_FALSE(JRef<Boolean>(jNode).getBoolean());
   }
   SECTION("Test JNode(null).", "[JSON][JNode][Constructor][Null]")
   {
     JNode jNode(nullptr);
-    REQUIRE(jNode.getType() == JNodeType::null);
+    REQUIRE_FALSE(!jNode.isNull());
     REQUIRE(JRef<Null>(jNode).getNull() == nullptr);
   }
   SECTION("Test JNode(array).", "[JSON][JNode][Constructor][Array]")
   {
     JNode jNode{ 1, 2, 3, 4 };
-    REQUIRE(jNode.getType() == JNodeType::array);
+    REQUIRE_FALSE(!jNode.isArray());
     auto &array = JRef<Array>(jNode).getArrayEntries();
     REQUIRE(JRef<Number>(array[0]).getNumber().getInt() == 1);
     REQUIRE(JRef<Number>(array[1]).getNumber().getInt() == 2);
@@ -85,7 +85,7 @@ TEST_CASE("Use of JNode constructors", "[JSON][JNode][Constructor]")
   SECTION("Test JNode(object).", "[JSON][JNode][Constructor][Object]")
   {
     JNode jNode{ { "key1", 55 }, { "key2", 26666 } };
-    REQUIRE(jNode.getType() == JNodeType::object);
+    REQUIRE_FALSE(!jNode.isObject());
     auto &object = JRef<Object>(jNode);
     REQUIRE(JRef<Number>(object["key1"]).getNumber().getInt() == 55);
     REQUIRE(JRef<Number>(object["key2"]).getNumber().getInt() == 26666);
@@ -129,17 +129,15 @@ TEST_CASE("Use of JNode indexing operators", "[JSON][JNode][Index]")
   {
     BufferSource jsonSource{ R"({"City":"Southampton","Population":500000})" };
     json.parse(jsonSource);
-    REQUIRE_THROWS_AS((json.root())["Cityy"].getType() == JNodeType::object, JNode::Error);
-    REQUIRE_THROWS_WITH(
-      (json.root())["Cityy"].getType() == JNodeType::object, "JNode Error: Invalid key used to access object.");
+    REQUIRE_THROWS_AS((json.root())["Cityy"].isObject(), JNode::Error);
+    REQUIRE_THROWS_WITH((json.root())["Cityy"].isObject(), "JNode Error: Invalid key used to access object.");
   }
   SECTION("Parse list and check an invalid index generates exception", "[JSON][JNode][Index]")
   {
     BufferSource jsonSource{ R"([777,9000,"apples"])" };
     json.parse(jsonSource);
-    REQUIRE_THROWS_AS((json.root())[3].getType() == JNodeType::array, JNode::Error);
-    REQUIRE_THROWS_WITH(
-      (json.root())[3].getType() == JNodeType::array, "JNode Error: Invalid index used to access array.");
+    REQUIRE_THROWS_AS((json.root())[3].isArray(), JNode::Error);
+    REQUIRE_THROWS_WITH((json.root())[3].isArray(), "JNode Error: Invalid index used to access array.");
   }
 }
 // =========================

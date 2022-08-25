@@ -59,12 +59,12 @@ void writeToFile(const std::string &jsonFileName, const std::string &jsonString)
 /// <returns></returns>
 void checkArray(const JNode &jNode)
 {// Array ["Dog",1964,true,null]
-  REQUIRE(jNode.getType() == JNodeType::array);
+  REQUIRE_FALSE(!jNode.isArray());
   REQUIRE(JRef<Array>(jNode).size() == 4);
-  REQUIRE(jNode[0].getType() == JNodeType::string);
-  REQUIRE(jNode[1].getType() == JNodeType::number);
-  REQUIRE(jNode[2].getType() == JNodeType::boolean);
-  REQUIRE(jNode[3].getType() == JNodeType::null);
+  REQUIRE_FALSE(!jNode[0].isString());
+  REQUIRE_FALSE(!jNode[1].isNumber());
+  REQUIRE_FALSE(!jNode[2].isBoolean());
+  REQUIRE_FALSE(!jNode[3].isNull());
   REQUIRE(JRef<String>(jNode[0]).getString() == "Dog");
   REQUIRE(JRef<Number>(jNode[1]).getNumber().getInt() == 1964);
   REQUIRE(JRef<Boolean>(jNode[2]).getBoolean() == true);
@@ -77,12 +77,12 @@ void checkArray(const JNode &jNode)
 /// <returns></returns>
 void checkObject(const JNode &jNode)
 {// {"City":"Southampton","Population":500000}
-  REQUIRE(jNode.getType() == JNodeType::object);
+  REQUIRE_FALSE(!jNode.isObject());
   REQUIRE(JRef<Object>(jNode).size() == 2);
   REQUIRE(JRef<Object>(jNode).contains("City"));
   REQUIRE(JRef<Object>(jNode).contains("Population"));
-  REQUIRE(jNode["City"].getType() == JNodeType::string);
-  REQUIRE(jNode["Population"].getType() == JNodeType::number);
+  REQUIRE_FALSE(!jNode["City"].isString());
+  REQUIRE_FALSE(!jNode["Population"].isNumber());
   REQUIRE(JRef<String>(jNode["City"]).getString() == "Southampton");
   REQUIRE(JRef<Number>(jNode["Population"]).getNumber().getInt() == 500000);
 }
