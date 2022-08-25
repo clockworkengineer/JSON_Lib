@@ -25,25 +25,25 @@ TEST_CASE("JSON object for parse of collection types (array,object) ", "[JSON][P
   {
     BufferSource jsonSource{ R"({"name":"Robert","Age":15})" };
     json.parse(jsonSource);
-    REQUIRE((json.root()).getType() == JNodeType::object);
+    REQUIRE_FALSE(!json.root().isObject());
   }
   SECTION(R"(Parse an array ([ 777,9000,"apples"]) )", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ R"([777,9000,"apples"])" };
     json.parse(jsonSource);
-    REQUIRE((json.root()).getType() == JNodeType::array);
+    REQUIRE_FALSE(!json.root().isArray());
   }
   SECTION("Parse an empty array ([]) ", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ "[]" };
     json.parse(jsonSource);
-    REQUIRE((json.root()).getType() == JNodeType::array);
+    REQUIRE_FALSE(!json.root().isArray());
   }
   SECTION("Parse an empty object ({}) ", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ "{}" };
     json.parse(jsonSource);
-    REQUIRE((json.root()).getType() == JNodeType::object);
+    REQUIRE_FALSE(!json.root().isObject());
   }
   SECTION("Parse an nested empty arrays ([[], [], []]) ", "[JSON][Parse][Collection]")
   {
@@ -71,12 +71,12 @@ TEST_CASE("JSON object for parse of collection types and check values", "[JSON][
   {
     BufferSource jsonSource{ R"({"Name":"Robert","Age":15})" };
     json.parse(jsonSource);
-    REQUIRE((json.root()).getType() == JNodeType::object);
+    REQUIRE_FALSE(!json.root().isObject());
     REQUIRE(JRef<Object>(json.root()).size() == 2);
     REQUIRE(JRef<Object>(json.root()).contains("Name"));
     REQUIRE(JRef<Object>(json.root()).contains("Age"));
-    REQUIRE(JRef<String>((json.root())["Name"]).getType() == JNodeType::string);
-    REQUIRE(JRef<Number>((json.root())["Age"]).getType() == JNodeType::number);
+    REQUIRE_FALSE(!json.root()["Name"].isString());
+    REQUIRE_FALSE(!json.root()["Age"].isNumber());
     REQUIRE(JRef<String>((json.root())["Name"]).getString() == "Robert");
     REQUIRE(JRef<Number>((json.root())["Age"]).getNumber().getInt() == 15);
   }
@@ -84,11 +84,11 @@ TEST_CASE("JSON object for parse of collection types and check values", "[JSON][
   {
     BufferSource jsonSource{ R"([777,9000,"apples"])" };
     json.parse(jsonSource);
-    REQUIRE((json.root()).getType() == JNodeType::array);
+    REQUIRE_FALSE(!json.root().isArray());
     REQUIRE(JRef<Array>(json.root()).size() == 3);
-    REQUIRE(JRef<Number>((json.root())[0]).getType() == JNodeType::number);
-    REQUIRE(JRef<Number>((json.root())[1]).getType() == JNodeType::number);
-    REQUIRE(JRef<String>((json.root())[2]).getType() == JNodeType::string);
+    REQUIRE_FALSE(!json.root()[0].isNumber());
+    REQUIRE_FALSE(!json.root()[1].isNumber());
+    REQUIRE_FALSE(!json.root()[2].isString());
     REQUIRE(JRef<Number>((json.root())[0]).getNumber().getInt() == 777);
     REQUIRE(JRef<Number>((json.root())[1]).getNumber().getInt() == 9000);
     REQUIRE(JRef<String>((json.root())[2]).getString() == "apples");
