@@ -120,9 +120,12 @@ std::string JSON_Translator::fromJSON(const std::string &jsonString)
         utf16Buffer += decodeUTF16(current, std::distance(current, jsonString.end()));
       }
       // Escaped ASCII
-      else if ((*current > 0x1F) && (*current < 0x80)) {
+      else if (*current > 0x1F) {
         utf16Buffer += *current;
         current++;
+        // Invalid escaped character
+      } else {
+        throw Error("Invalid escaped character.");
       }
     } else {
       throw Error("Premature and of character escape sequence.");
