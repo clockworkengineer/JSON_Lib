@@ -5,6 +5,15 @@
 //
 // Dependencies:   C20++ - Language standard features used.
 //
+// ==========================
+// C++ STL/ platform specific
+// ==========================
+#if defined(_WIN64)
+#include "Windows.h"
+#else
+#include <codecvt>
+#include <locale>
+#endif
 // =================
 // CLASS DEFINITIONS
 // =================
@@ -25,12 +34,28 @@ namespace JSONLib {
 // ========================
 // PRIVATE STATIC VARIABLES
 // ========================
+#if !defined(_WIN64)
+static std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_UTF16;
+#endif
 // =======================
 // PUBLIC STATIC VARIABLES
 // =======================
 // ===============
 // PRIVATE METHODS
 // ===============
+// ============================================================
+// Windows API for converting between byte and wide characters.
+// ============================================================
+#if defined(_WIN64)
+int WideCharToBytes(wchar_t *wideString, int wideStringLength, char *bytes = nullptr, int length = 0)
+{
+  return (WideCharToMultiByte(CP_UTF8, 0, wideString, wideStringLength, bytes, length, nullptr, nullptr));
+}
+int BytesToWideChar(const char *bytes, int length, wchar_t *sideString = nullptr, int wideStringLength = 0)
+{
+  return (MultiByteToWideChar(CP_UTF8, 0, bytes, length, sideString, wideStringLength));
+}
+#endif
 // ==============
 // PUBLIC METHODS
 // ==============
