@@ -6,7 +6,7 @@
 // Dependencies:   C20++ - Language standard features used.
 //
 // ==========================
-// C++ STL/ platform specific
+// C++ STL
 // ==========================
 #include <codecvt>
 #include <locale>
@@ -30,9 +30,7 @@ namespace JSONLib {
 // ========================
 // PRIVATE STATIC VARIABLES
 // ========================
-
 static std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_UTF16;
-
 // =======================
 // PUBLIC STATIC VARIABLES
 // =======================

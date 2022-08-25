@@ -3,8 +3,7 @@
 //
 // Description: Convert characters to/from UTF8 and UTF16.
 //
-// Dependencies:   C20++ - Language standard features used.
-//                 Windows - character conversion API.
+// Dependencies:  Windows - character conversion API.
 //
 // =======
 // Windows

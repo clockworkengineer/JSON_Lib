@@ -5,4 +5,4 @@
 /nbproject/private/
 /CMakeFiles/
 .vscode/
-examples/testData/large-file.json
+examples/files/large-file.json

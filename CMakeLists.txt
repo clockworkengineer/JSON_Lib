@@ -2,9 +2,13 @@ cmake_minimum_required(VERSION 3.23.1)
 
 project("JSONLib" VERSION 0.1.0 DESCRIPTION "JSON C++ Library" LANGUAGES CXX)
 
+# C++ options
+
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF) 
+
+# Compiler options
 
 if(MSVC)
   add_compile_options(/W4)
@@ -12,7 +16,11 @@ elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   add_compile_options(-Wall -Werror -pedantic)
 endif()
 
+# Setup library version
+
 configure_file(JSON_Config.h.in JSON_Config.hpp)
+
+# Library name
 
 set(JSON_LIBRARY_NAME ${PROJECT_NAME})
 
