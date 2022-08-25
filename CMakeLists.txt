@@ -25,8 +25,7 @@ set (JSON_SOURCES
     ./classes/implementation/JSON_Impl_Stringify.cpp
     ./classes/implementation/JSON_Impl_Strip.cpp
     ./classes/implementation/JSON_JNode.cpp
-    ./classes/implementation/JSON_Translator.cpp
-    ./classes/implementation/JSON_Converter.cpp)
+    ./classes/implementation/JSON_Translator.cpp)
 
 set (JSON_INCLUDES
     JSON_Config.hpp
@@ -54,6 +53,14 @@ set (JSON_INCLUDES
     ./include/interface/IDestination.hpp
     ./include/interface/ITranslator.hpp
     ./include/interface/IConverter.hpp)
+
+# Platform specific
+
+if(MSVC)
+  list (APPEND JSON_SOURCES "./classes/implementation/platform/windows/Converter.cpp")
+else()
+  list (APPEND JSON_SOURCES "./classes/implementation/platform/linux/Converter.cpp")
+endif()
 
 # JSON library
 
