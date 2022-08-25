@@ -125,7 +125,7 @@ private:
 template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
 {
   action.onJNode(jNode);
-  switch (jNode.getType()) {
+  switch (jNode.getVariant()->getType()) {
   case JNodeType::number:
     action.onNumber(JRef<Number>(jNode));
     break;

@@ -65,8 +65,6 @@ struct JNode
   const JNode &operator[](const std::string &key) const;
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
-  // Get JNode variant type
-  [[nodiscard]] JNodeType getType() const;
   // Get reference to JNode variant
   [[nodiscard]] std::unique_ptr<Variant> &getVariant();
   [[nodiscard]] const std::unique_ptr<Variant> &getVariant() const;

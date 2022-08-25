@@ -100,9 +100,9 @@ bool JNode::isHole() const { return (m_jNodeVariant->getType() == JNodeType::hol
 // JNode index overloads
 // =====================
 // Object
-JNode &JNode::operator[](const std::string &key) 
+JNode &JNode::operator[](const std::string &key)
 {
-  if (this->getType() == JNodeType::hole) {
+  if (this->isHole()) {
     *this = Object::make();
     JRef<Object>(*this).getObjectEntries().emplace_back(Object::Entry(key, Hole::make()));
     return (JRef<Object>(*this).getObjectEntries().back().getJNode());
@@ -114,7 +114,7 @@ const JNode &JNode::operator[](const std::string &key) const { return (JRef<cons
 JNode &JNode::operator[](std::size_t index)
 {
   try {
-    if (this->getType() == JNodeType::hole) { *this = Array::make(); }
+    if (this->isHole()) { *this = Array::make(); }
     return (JRef<Array>(*this)[index]);
   } catch ([[maybe_unused]] const JNode::Error &error) {
     JRef<Array>(*this).resize(index);
@@ -165,10 +165,6 @@ JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null)
   *this = Null::make();
   return (*this);
 }
-// ==============
-// Get JNode type
-// ==============
-JNodeType JNode::getType() const { return (m_jNodeVariant->getType()); }
 // ==============================
 // Get reference to JNode variant
 // ==============================
