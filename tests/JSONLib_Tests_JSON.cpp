@@ -21,86 +21,86 @@ using namespace JSONLib;
 // =======================
 TEST_CASE("JSON object creation api.", "[JSON][Create][Object]")
 {
-  SECTION("Initialise JSON with JSON object  passed to constructor.", "[JSON][Create][Constructor]")
+  SECTION("Initialise JSON with JSON object passed to constructor.", "[JSON][Create][Constructor]")
   {
     REQUIRE_NOTHROW(JSON(R"({ "pi" : 3.141 })"));
   }
   SECTION(
-    "Initialise JSON with JSON object  passed to constructor and validate.", "[JSON][Create][Constructor][Validate]")
+    "Initialise JSON with JSON object passed to constructor and validate.", "[JSON][Create][Constructor][Validate]")
   {
     const JSON json(R"({ "pi" : 3.141 })");
-    REQUIRE(json.root().getType() == JNodeType::object);
-    REQUIRE(json.root()["pi"].getType() == JNodeType::number);
+    REQUIRE_FALSE(!json.root().isObject());
+    REQUIRE_FALSE(!json.root()["pi"].isNumber());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()["pi"]).getNumber().getFloat(), 3.141f, 0.0001));
   }
-  SECTION("Initialise root JSON object with one entry containing a integer.", "[JSON][Create][Object][Number]")
+  SECTION("Initialise root JSON JNode with one entry containing a integer.", "[JSON][Create][Object][Number]")
   {
     JSON json;
     json["integer"] = 300;
-    REQUIRE(json["integer"].getType() == JNodeType::number);
+    REQUIRE_FALSE(!json["integer"].isNumber());
     REQUIRE(JRef<Number>(json.root()["integer"]).getNumber().getInt() == 300);
   }
-  SECTION("Initialise root JSON object with one entry containing a long.", "[JSON][Create][Object][Number]")
+  SECTION("Initialise root JSON JNode with one entry containing a long.", "[JSON][Create][Object][Number]")
   {
     JSON json;
     json["integer"] = 30000l;
-    REQUIRE(json["integer"].getType() == JNodeType::number);
-    REQUIRE(JRef<Number>(json.root()["integer"]).getNumber().getInt() == 30000);
+    REQUIRE_FALSE(!json["integer"].isNumber());
+    REQUIRE(JRef<Number>(json.root()["integer"]).getNumber().getLong() == 30000);
   }
-  SECTION("Initialise root JSON object with one entry containing a float.", "[JSON][Create][Object][Number]")
+  SECTION("Initialise root JSON JNode with one entry containing a float.", "[JSON][Create][Object][Number]")
   {
     JSON json;
     json["pi"] = 3.141f;
-    REQUIRE(json["pi"].getType() == JNodeType::number);
+    REQUIRE_FALSE(!json["pi"].isNumber());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()["pi"]).getNumber().getFloat(), 3.141f, 0.0001));
   }
-  SECTION("Initialise root JSON object with one entry containing a double.", "[JSON][Create][Object][Number]")
+  SECTION("Initialise root JSON JNode with one entry containing a double.", "[JSON][Create][Object][Number]")
   {
     JSON json;
     json["pi"] = 3.141;
-    REQUIRE(json["pi"].getType() == JNodeType::number);
+    REQUIRE_FALSE(!json["pi"].isNumber());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()["pi"]).getNumber().getDouble(), 3.141, 0.0001));
   }
-  SECTION("Initialise root JSON object with one entry containing a const char *.", "[JSON][Create][Object][String]")
+  SECTION("Initialise root JSON JNode with one entry containing a const char *.", "[JSON][Create][Object][String]")
   {
     JSON json;
     json["name"] = "robert";
-    REQUIRE(json["name"].getType() == JNodeType::string);
+    REQUIRE_FALSE(!json["name"].isString());
     REQUIRE(JRef<String>(json.root()["name"]).getString() == "robert");
   }
-  SECTION("Initialise root JSON object with one entry containing a std::string.", "[JSON][Create][Object][String]")
+  SECTION("Initialise root JSON JNode with one entry containing a std::string.", "[JSON][Create][Object][String]")
   {
     JSON json;
     json["name"] = std::string{ "robert" };
-    REQUIRE(json["name"].getType() == JNodeType::string);
+    REQUIRE_FALSE(!json["name"].isString());
     REQUIRE(JRef<String>(json.root()["name"]).getString() == "robert");
   }
-  SECTION("Initialise root JSON object with one entry containing a boolean.", "[JSON][Create][Object][Boolean]")
+  SECTION("Initialise root JSON JNode with one entry containing a boolean.", "[JSON][Create][Object][Boolean]")
   {
     JSON json;
     json["flag"] = true;
-    REQUIRE(json["flag"].getType() == JNodeType::boolean);
+    REQUIRE_FALSE(!json["flag"].isBoolean());
     REQUIRE_FALSE(!JRef<Boolean>(json.root()["flag"]).getBoolean());
   }
-  SECTION("Initialise root JSON object with one entry containing a null.", "[JSON][Create][Object][null]")
+  SECTION("Initialise root JSON JNode with one entry containing a null.", "[JSON][Create][Object][null]")
   {
     JSON json;
     json["nothing"] = nullptr;
-    REQUIRE(json["nothing"].getType() == JNodeType::null);
+    REQUIRE_FALSE(!json["nothing"].isNull());
     REQUIRE(JRef<Null>(json.root()["nothing"]).getNull() == nullptr);
   }
   SECTION("Create two level object and null at base.", "[JSON][Create][Object][null]")
   {
     JSON json;
     json["nothing"]["extra"] = nullptr;
-    REQUIRE(json["nothing"]["extra"].getType() == JNodeType::null);
+    REQUIRE_FALSE(!json["nothing"]["extra"].isNull());
     REQUIRE(JRef<Null>(json.root()["nothing"]["extra"]).getNull() == nullptr);
   }
   SECTION("Create three level object and null at base and stringify.", "[JSON][Create][Object][null]")
   {
     JSON json;
     json["nothing"]["extra"]["more"] = nullptr;
-    REQUIRE(json["nothing"]["extra"]["more"].getType() == JNodeType::null);
+    REQUIRE_FALSE(!json["nothing"]["extra"]["more"].isNull());
     REQUIRE(JRef<Null>(json.root()["nothing"]["extra"]["more"]).getNull() == nullptr);
     BufferDestination destinationBuffer;
     REQUIRE_NOTHROW(json.stringify(destinationBuffer));
@@ -117,9 +117,9 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
     "Initialise JSON with JSON array passed to constructor and validate.", "[JSON][Create][Constructor][Validate]")
   {
     const JSON json(R"([ "pi", 3.141 ])");
-    REQUIRE(json.root().getType() == JNodeType::array);
-    REQUIRE(json.root()[0].getType() == JNodeType::string);
-    REQUIRE(json.root()[1].getType() == JNodeType::number);
+    REQUIRE_FALSE(!json.root().isArray());
+    REQUIRE_FALSE(!json.root()[0].isString());
+    REQUIRE_FALSE(!json.root()[1].isNumber());
     REQUIRE(JRef<String>(json.root()[0]).getString() == "pi");
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[1]).getNumber().getFloat(), 3.141f, 0.0001));
   }
@@ -127,63 +127,63 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
   {
     JSON json;
     json[0] = 300;
-    REQUIRE(json[0].getType() == JNodeType::number);
+    REQUIRE_FALSE(!json[0].isNumber());
     REQUIRE(JRef<Number>(json.root()[0]).getNumber().getInt() == 300);
   }
   SECTION("Initialise root JSON array with one entry containing a long.", "[JSON][Create][Array][Number]")
   {
     JSON json;
     json[0] = 30000l;
-    REQUIRE(json[0].getType() == JNodeType::number);
-    REQUIRE(JRef<Number>(json.root()[0]).getNumber().getInt() == 30000);
+    REQUIRE_FALSE(!json[0].isNumber());
+    REQUIRE(JRef<Number>(json.root()[0]).getNumber().getLong() == 30000);
   }
   SECTION("Initialise root JSON array with one entry containing a float.", "[JSON][Create][Array][Number]")
   {
     JSON json;
     json[0] = 3.141f;
-    REQUIRE(json[0].getType() == JNodeType::number);
+    REQUIRE_FALSE(!json[0].isNumber());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[0]).getNumber().getFloat(), 3.141f, 0.0001));
   }
   SECTION("Initialise root JSON array with one entry containing a double.", "[JSON][Create][Array][Number]")
   {
     JSON json;
     json[0] = 3.141;
-    REQUIRE(json[0].getType() == JNodeType::number);
+    REQUIRE_FALSE(!json[0].isNumber());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[0]).getNumber().getDouble(), 3.141, 0.0001));
   }
   SECTION("Initialise root JSON array with one entry containing a const char *.", "[JSON][Create][Array][String]")
   {
     JSON json;
     json[0] = "robert";
-    REQUIRE(json[0].getType() == JNodeType::string);
+    REQUIRE_FALSE(!json[0].isString());
     REQUIRE(JRef<String>(json.root()[0]).getString() == "robert");
   }
   SECTION("Initialise root JSON array with one entry containing a std::string.", "[JSON][Create][Array][String]")
   {
     JSON json;
     json[0] = std::string{ "robert" };
-    REQUIRE(json[0].getType() == JNodeType::string);
+    REQUIRE_FALSE(!json[0].isString());
     REQUIRE(JRef<String>(json.root()[0]).getString() == "robert");
   }
   SECTION("Initialise root JSON array with one entry containing a boolean.", "[JSON][Create][Array][Boolean]")
   {
     JSON json;
     json[0] = true;
-    REQUIRE(json[0].getType() == JNodeType::boolean);
+    REQUIRE_FALSE(!json[0].isBoolean());
     REQUIRE_FALSE(!JRef<Boolean>(json.root()[0]).getBoolean());
   }
   SECTION("Initialise root JSON array with one entry containing a null.", "[JSON][Create][Array][null]")
   {
     JSON json;
     json[0] = nullptr;
-    REQUIRE(json[0].getType() == JNodeType::null);
+    REQUIRE_FALSE(!json[0].isNull());
     REQUIRE(JRef<Null>(json.root()[0]).getNull() == nullptr);
   }
   SECTION("Create two level array with null at the base and stringify.", "[JSON][Create][Array][null]")
   {
     JSON json;
     json[0][0] = nullptr;
-    REQUIRE(json[0][0].getType() == JNodeType::null);
+    REQUIRE_FALSE(!json[0][0].isNull());
     REQUIRE(JRef<Null>(json.root()[0][0]).getNull() == nullptr);
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
@@ -193,7 +193,7 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
   {
     JSON json;
     json[5] = "test";
-    REQUIRE(json[5].getType() == JNodeType::string);
+    REQUIRE_FALSE(!json[5].isString());
     REQUIRE(JRef<String>(json.root()[5]).getString() == "test");
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
@@ -203,10 +203,10 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
   {
     JSON json;
     json[5] = "test";
-    REQUIRE(json[5].getType() == JNodeType::string);
+    REQUIRE_FALSE(!json[5].isString());
     REQUIRE(JRef<String>(json.root()[5]).getString() == "test");
     json[3] = 15;
-    REQUIRE(json[3].getType() == JNodeType::number);
+    REQUIRE_FALSE(!json[3].isNumber());
     REQUIRE(JRef<Number>(json.root()[3]).getNumber().getInt() == 15);
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
@@ -216,14 +216,14 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
   {
     JSON json;
     json[5] = { 1.0, 2.0, 3, 4.333, "5.0", "test test test test", false, nullptr };
-    REQUIRE(json[5][0].getType() == JNodeType::number);
-    REQUIRE(json[5][1].getType() == JNodeType::number);
-    REQUIRE(json[5][2].getType() == JNodeType::number);
-    REQUIRE(json[5][3].getType() == JNodeType::number);
-    REQUIRE(json[5][4].getType() == JNodeType::string);
-    REQUIRE(json[5][5].getType() == JNodeType::string);
-    REQUIRE(json[5][6].getType() == JNodeType::boolean);
-    REQUIRE(json[5][7].getType() == JNodeType::null);
+    REQUIRE_FALSE(!json[5][0].isNumber());
+    REQUIRE_FALSE(!json[5][1].isNumber());
+    REQUIRE_FALSE(!json[5][2].isNumber());
+    REQUIRE_FALSE(!json[5][3].isNumber());
+    REQUIRE_FALSE(!json[5][4].isString());
+    REQUIRE_FALSE(!json[5][5].isString());
+    REQUIRE_FALSE(!json[5][6].isBoolean());
+    REQUIRE_FALSE(!json[5][7].isNull());
     REQUIRE(JRef<Array>(json[5]).size() == 8);
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json[5][0]).getNumber().getDouble(), 1.0, 0.0001));
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json[5][1]).getNumber().getDouble(), 2.0, 0.0001));

@@ -87,7 +87,7 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::InternalTy
   *this = Object::make(jObjectList);
 }
 // =========================
-// Interrogate Jnode variant
+// Interrogate JNode variant
 // =========================
 bool JNode::isObject() const { return (m_jNodeVariant->getType() == JNodeType::object); }
 bool JNode::isArray() const { return (m_jNodeVariant->getType() == JNodeType::array); }
