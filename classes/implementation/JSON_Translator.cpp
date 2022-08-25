@@ -123,8 +123,9 @@ std::string JSON_Translator::fromJSON(const std::string &jsonString)
       else if (*current > 0x1F) {
         utf16Buffer += *current;
         current++;
-        // Invalid escaped character
-      } else {
+      }
+      // Invalid escaped character
+      else {
         throw Error("Invalid escaped character.");
       }
     } else {
