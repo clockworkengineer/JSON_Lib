@@ -38,9 +38,11 @@ set (JSON_SOURCES
 set (JSON_INCLUDES
     JSON_Config.hpp
     ./include/JSON.hpp
+    ./include/implementation/JSON_forward.hpp
     ./include/implementation/JSON_Types.hpp
     ./include/implementation/JSON_Error.hpp
     ./include/implementation/JSON_JNode.hpp
+    ./include/implementation/JSON_JNode_forward.hpp
     ./include/implementation/JSON_JNode_Numeric.hpp
     ./include/implementation/JSON_JNode_Variant.hpp
     ./include/implementation/JSON_JNode_Hole.hpp

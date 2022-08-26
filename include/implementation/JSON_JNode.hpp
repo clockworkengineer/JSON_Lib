@@ -10,10 +10,13 @@
 // NAMESPACE
 // =========
 namespace JSONLib {
+// =========================================================
+// JNode forward declarations for interfaces/classes/structs
+// =========================================================
+#include "JSON_JNode_forward.hpp"
 // =====
 // JNode
 // =====
-struct Variant;
 struct JNode
 {
   // JNode Type

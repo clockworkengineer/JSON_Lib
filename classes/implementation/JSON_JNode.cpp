@@ -126,46 +126,14 @@ const JNode &JNode::operator[](std::size_t index) const { return (JRef<Array>(*t
 // ==========================
 // JNode assignment operators
 // ==========================
-JNode &JNode::operator=(int integer)
-{
-  *this = Number::make(Numeric{ integer });
-  return (*this);
-}
-JNode &JNode::operator=(long integer)
-{
-  *this = Number::make(Numeric{ integer });
-  return (*this);
-}
-JNode &JNode::operator=(float floatingPoint)
-{
-  *this = Number::make(Numeric{ floatingPoint });
-  return (*this);
-}
-JNode &JNode::operator=(double floatingPoint)
-{
-  *this = Number::make(Numeric{ floatingPoint });
-  return (*this);
-}
-JNode &JNode::operator=(const char *cString)
-{
-  *this = String::make(cString);
-  return (*this);
-}
-JNode &JNode::operator=(const std::string &string)
-{
-  *this = String::make(string);
-  return (*this);
-}
-JNode &JNode::operator=(bool boolean)
-{
-  *this = Boolean::make(boolean);
-  return (*this);
-}
-JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null)
-{
-  *this = Null::make();
-  return (*this);
-}
+JNode &JNode::operator=(int integer) { return (*this = Number::make(Numeric{ integer })); }
+JNode &JNode::operator=(long integer) { return (*this = Number::make(Numeric{ integer })); }
+JNode &JNode::operator=(float floatingPoint) { return (*this = Number::make(Numeric{ floatingPoint })); }
+JNode &JNode::operator=(double floatingPoint) { return (*this = Number::make(Numeric{ floatingPoint })); }
+JNode &JNode::operator=(const char *cString) { return (*this = String::make(cString)); }
+JNode &JNode::operator=(const std::string &string) { return (*this = String::make(string)); }
+JNode &JNode::operator=(bool boolean) { return (*this = Boolean::make(boolean)); }
+JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null) { return (*this = Null::make()); }
 // ==============================
 // Get reference to JNode variant
 // ==============================
