@@ -27,22 +27,22 @@ template<typename T> void checkJNode(const Variant &jNodeVariant)
 }
 template<typename T> T &JRef(JNode &jNode)
 {
-  checkJNode<T>(*jNode.getVariant());
-  return (static_cast<T &>(*jNode.getVariant()));
+  checkJNode<T>(jNode.getVariant());
+  return (static_cast<T &>(jNode.getVariant()));
 }
 template<typename T> const T &JRef(const JNode &jNode)
 {
-  checkJNode<T>(*jNode.getVariant());
-  return (static_cast<const T &>(*jNode.getVariant()));
+  checkJNode<T>(jNode.getVariant());
+  return (static_cast<const T &>(jNode.getVariant()));
 }
 template<typename T> T &JRef(Object::Entry &jNodeEntry)
 {
-  checkJNode<T>(*jNodeEntry.getJNode().getVariant());
-  return (static_cast<T &>(*jNodeEntry.getJNode().getVariant()));
+  checkJNode<T>(jNodeEntry.getJNode().getVariant());
+  return (static_cast<T &>(jNodeEntry.getJNode().getVariant()));
 }
 template<typename T> const T &JRef(const Object::Entry &jNodeEntry)
 {
-  checkJNode<T>(*jNodeEntry.getJNode().getVariant());
-  return (static_cast<const T &>(*jNodeEntry.getJNode().getVariant()));
+  checkJNode<T>(jNodeEntry.getJNode().getVariant());
+  return (static_cast<const T &>(jNodeEntry.getJNode().getVariant()));
 }
 }// namespace JSONLib

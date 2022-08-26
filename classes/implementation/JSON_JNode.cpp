@@ -89,6 +89,7 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::Types>> &o
 // =========================
 // Interrogate JNode variant
 // =========================
+bool JNode::isEmpty() const { return (m_jNodeVariant == nullptr); }
 bool JNode::isObject() const { return (m_jNodeVariant->getType() == JNode::Type::object); }
 bool JNode::isArray() const { return (m_jNodeVariant->getType() == JNode::Type::array); }
 bool JNode::isNumber() const { return (m_jNodeVariant->getType() == JNode::Type::number); }
@@ -168,6 +169,6 @@ JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null)
 // ==============================
 // Get reference to JNode variant
 // ==============================
-std::unique_ptr<Variant> &JNode::getVariant() { return (m_jNodeVariant); }
-const std::unique_ptr<Variant> &JNode::getVariant() const { return (m_jNodeVariant); }
+Variant &JNode::getVariant() { return (*m_jNodeVariant); }
+const Variant &JNode::getVariant() const { return (*m_jNodeVariant); }
 }// namespace JSONLib

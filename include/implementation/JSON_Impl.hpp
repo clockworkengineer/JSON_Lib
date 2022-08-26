@@ -125,7 +125,7 @@ private:
 template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
 {
   action.onJNode(jNode);
-  switch (jNode.getVariant()->getType()) {
+  switch (jNode.getVariant().getType()) {
   case JNode::Type::number:
     action.onNumber(JRef<Number>(jNode));
     break;
@@ -140,16 +140,14 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
     break;
   case JNode::Type::hole:
     break;
-  case JNode::Type::object: {
+  case JNode::Type::object:
     action.onObject(JRef<Object>(jNode));
     for (auto &entry : JRef<Object>(jNode).getObjectEntries()) { traverseJNodes(entry.getJNode(), action); }
     break;
-  }
-  case JNode::Type::array: {
+  case JNode::Type::array:
     action.onArray(JRef<Array>(jNode));
     for (auto &node : JRef<Array>(jNode).getArrayEntries()) { traverseJNodes(node, action); }
     break;
-  }
   default:
     throw Error("Unknown JNode type encountered during stringification.");
   }

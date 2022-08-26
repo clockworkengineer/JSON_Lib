@@ -44,7 +44,7 @@ struct Array : Variant
   {
     m_jsonArray.resize(index + 1);
     for (auto &entry : m_jsonArray) {
-      if (entry.getVariant() == nullptr) { entry = Hole::make(); }
+      if (entry.isEmpty()) { entry = Hole::make(); }
     }
   }
   // Make Array JNode

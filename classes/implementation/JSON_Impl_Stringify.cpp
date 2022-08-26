@@ -121,7 +121,7 @@ void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination)
 /// <param name=destination>Destination stream for stringified JSON.</param>
 void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination)
 {
-  switch (jNode.getVariant()->getType()) {
+  switch (jNode.getVariant().getType()) {
   case JNode::Type::number:
     stringifyNumber(jNode, destination);
     break;

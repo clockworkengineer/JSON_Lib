@@ -80,7 +80,7 @@ void JSON_Impl::parse(ISource &source) { m_jNodeRoot = parseJNodes(source); }
 /// <param name=destination>Destination stream for stringified JSON.</param>
 void JSON_Impl::stringify(IDestination &destination) const
 {
-  if (m_jNodeRoot.getVariant() == nullptr) { throw Error("No JSON to stringify."); }
+  if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to stringify."); }
   stringifyJNodes(m_jNodeRoot, destination);
 }
 /// <summary>
@@ -95,12 +95,12 @@ void JSON_Impl::strip(ISource &source, IDestination &destination) const { stripW
 /// <param name=action>Action methods to call during traversal.</param>
 void JSON_Impl::traverse(IAction &action)
 {
-  if (m_jNodeRoot.getVariant() == nullptr) { throw Error("No JSON to traverse."); }
+  if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
   traverseJNodes(m_jNodeRoot, action);
 }
 void JSON_Impl::traverse(IAction &action) const
 {
-  if (m_jNodeRoot.getVariant() == nullptr) { throw Error("No JSON to traverse."); }
+  if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
   traverseJNodes(m_jNodeRoot, action);
 }
 /// <summary>
@@ -111,14 +111,14 @@ void JSON_Impl::traverse(IAction &action) const
 JNode &JSON_Impl::operator[](const std::string &key)
 {
   try {
-    if (m_jNodeRoot.getVariant() == nullptr) { m_jNodeRoot = Object::make(); }
+    if (m_jNodeRoot.isEmpty()) { m_jNodeRoot = Object::make(); }
     return (m_jNodeRoot[key]);
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Object>(m_jNodeRoot).getObjectEntries().emplace_back(Object::Entry(key, Hole::make()));
     return (m_jNodeRoot[key]);
   }
 }
-const JNode &JSON_Impl::operator[](const std::string &key) const// Object
+const JNode &JSON_Impl::operator[](const std::string &key) const// Objec
 {
   return ((m_jNodeRoot)[key]);
 }
@@ -130,7 +130,7 @@ const JNode &JSON_Impl::operator[](const std::string &key) const// Object
 JNode &JSON_Impl::operator[](std::size_t index)
 {
   try {
-    if (m_jNodeRoot.getVariant() == nullptr) { m_jNodeRoot = Array::make(); }
+    if (m_jNodeRoot.isEmpty()) { m_jNodeRoot = Array::make(); }
     return (m_jNodeRoot[index]);
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Array>(m_jNodeRoot).resize(index);

@@ -10,10 +10,6 @@
 // NAMESPACE
 // =========
 namespace JSONLib {
-// // ===========
-// // JNode Types
-// // ===========
-// enum class JNode::Type { base = 0, object, array, number, string, boolean, null, hole };
 // =====
 // JNode
 // =====
@@ -55,6 +51,7 @@ struct JNode
   JNode &operator=(bool boolean);
   JNode &operator=(std::nullptr_t null);
   // Interrogate variant
+  [[nodiscard]] bool isEmpty() const;
   [[nodiscard]] bool isObject() const;
   [[nodiscard]] bool isArray() const;
   [[nodiscard]] bool isNumber() const;
@@ -68,8 +65,8 @@ struct JNode
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
   // Get reference to JNode variant
-  [[nodiscard]] std::unique_ptr<Variant> &getVariant();
-  [[nodiscard]] const std::unique_ptr<Variant> &getVariant() const;
+  [[nodiscard]] Variant &getVariant();
+  [[nodiscard]] const Variant &getVariant() const;
 
 private:
   JNode getJNode(const JSON::Types &type);
