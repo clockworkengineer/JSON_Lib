@@ -11,16 +11,10 @@
 // NAMESPACE
 // =========
 namespace JSONLib {
-// ===================================================
-// Forward declarations for interfaces/classes/structs
-// ===================================================
-class JSON_Impl;
-struct JNode;
-class ISource;
-class IDestination;
-class IAction;
-class IConverter;
-class ITranslator;
+// ========================================================
+// JSON forward declarations for interfaces/classes/structs
+// ========================================================
+#include "JSON_forward.hpp"
 // ================
 // CLASS DEFINITION
 // ================
@@ -31,7 +25,7 @@ public:
   // PUBLIC TYPES AND CONSTANTS
   // ==========================
   // Possible JSON node value types
-  using InternalTypes = std::variant<int, long, float, double, bool, std::string, std::nullptr_t, JNode>;
+  using Types = std::variant<int, long, float, double, bool, std::string, std::nullptr_t, JNode>;
   // ======================
   // CONSTRUCTOR/DESTRUCTOR
   // ======================
@@ -40,9 +34,9 @@ public:
   // Pass in default JSON to parse
   explicit JSON(const std::string &jsonString);
   // Construct array
-  JSON(const std::initializer_list<InternalTypes> &array);
+  JSON(const std::initializer_list<Types> &array);
   // Construct object
-  JSON(const std::initializer_list<std::pair<std::string, InternalTypes>> &object);
+  JSON(const std::initializer_list<std::pair<std::string, Types>> &object);
   // No other constructors supported
   JSON(const JSON &other) = delete;
   JSON &operator=(const JSON &other) = delete;
@@ -53,7 +47,7 @@ public:
   // ==============
   // PUBLIC METHODS
   // ==============
-  // Get JSONLib version
+  // Get JSON library version
   [[nodiscard]] std::string version() const;
   // Parse JSON into tree
   void parse(ISource &source) const;

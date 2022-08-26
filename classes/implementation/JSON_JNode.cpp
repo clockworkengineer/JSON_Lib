@@ -35,7 +35,7 @@ namespace JSONLib {
 // PRIVATE METHODS
 // ===============
 // Create JNode for passed in type
-JNode JNode::getJNode(const JSON::InternalTypes &type)
+JNode JNode::getJNode(const JSON::Types &type)
 {
   JNode jNode;
   if (auto pInteger = std::get_if<int>(&type)) {
@@ -73,14 +73,14 @@ JNode::JNode(const std::string &string) { *this = String::make(string); }
 JNode::JNode(bool boolean) { *this = Boolean::make(boolean); }
 JNode::JNode([[maybe_unused]] std::nullptr_t null) { *this = Null::make(); }
 // Construct JNode array from initializer list
-JNode::JNode(const std::initializer_list<JSON::InternalTypes> &array)
+JNode::JNode(const std::initializer_list<JSON::Types> &array)
 {
   Array::ArrayList jNodeArrayList;
   for (const auto &entry : array) { jNodeArrayList.emplace_back(getJNode(entry)); }
   *this = Array::make(jNodeArrayList);
 }
 // Construct JNode object from initializer list
-JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::InternalTypes>> &object)
+JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::Types>> &object)
 {
   Object::EntryList jObjectList;
   for (const auto &entry : object) { jObjectList.emplace_back(Object::Entry(entry.first, getJNode(entry.second))); }
@@ -89,13 +89,13 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::InternalTy
 // =========================
 // Interrogate JNode variant
 // =========================
-bool JNode::isObject() const { return (m_jNodeVariant->getType() == JNodeType::object); }
-bool JNode::isArray() const { return (m_jNodeVariant->getType() == JNodeType::array); }
-bool JNode::isNumber() const { return (m_jNodeVariant->getType() == JNodeType::number); }
-bool JNode::isString() const { return (m_jNodeVariant->getType() == JNodeType::string); }
-bool JNode::isBoolean() const { return (m_jNodeVariant->getType() == JNodeType::boolean); }
-bool JNode::isNull() const { return (m_jNodeVariant->getType() == JNodeType::null); }
-bool JNode::isHole() const { return (m_jNodeVariant->getType() == JNodeType::hole); }
+bool JNode::isObject() const { return (m_jNodeVariant->getType() == JNode::Type::object); }
+bool JNode::isArray() const { return (m_jNodeVariant->getType() == JNode::Type::array); }
+bool JNode::isNumber() const { return (m_jNodeVariant->getType() == JNode::Type::number); }
+bool JNode::isString() const { return (m_jNodeVariant->getType() == JNode::Type::string); }
+bool JNode::isBoolean() const { return (m_jNodeVariant->getType() == JNode::Type::boolean); }
+bool JNode::isNull() const { return (m_jNodeVariant->getType() == JNode::Type::null); }
+bool JNode::isHole() const { return (m_jNodeVariant->getType() == JNode::Type::hole); }
 // =====================
 // JNode index overloads
 // =====================

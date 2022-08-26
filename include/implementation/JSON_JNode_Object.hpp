@@ -46,8 +46,9 @@ struct Object : Variant
   // Object entry list
   using EntryList = std::vector<Object::Entry>;
   // Constructors/Destructors
-  Object() : Variant(JNodeType::object) {}
-  explicit Object(EntryList &objectEntries) : Variant(JNodeType::object), m_jsonObjectEntries(std::move(objectEntries))
+  Object() : Variant(JNode::Type::object) {}
+  explicit Object(EntryList &objectEntries)
+    : Variant(JNode::Type::object), m_jsonObjectEntries(std::move(objectEntries))
   {}
   Object(const Object &other) = delete;
   Object &operator=(const Object &other) = delete;

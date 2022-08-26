@@ -16,8 +16,8 @@ struct Array : Variant
   // Array entry list
   using ArrayList = std::vector<JNode>;
   // Constructors/Destructors
-  Array() : Variant(JNodeType::array) {}
-  explicit Array(ArrayList &array) : Variant(JNodeType::array), m_jsonArray(std::move(array)) {}
+  Array() : Variant(JNode::Type::array) {}
+  explicit Array(ArrayList &array) : Variant(JNode::Type::array), m_jsonArray(std::move(array)) {}
   Array(const Array &other) = delete;
   Array &operator=(const Array &other) = delete;
   Array(Array &&other) = default;

@@ -10,16 +10,18 @@
 // NAMESPACE
 // =========
 namespace JSONLib {
-// ===========
-// JNode Types
-// ===========
-enum class JNodeType { base = 0, object, array, number, string, boolean, null, hole };
+// // ===========
+// // JNode Types
+// // ===========
+// enum class JNode::Type { base = 0, object, array, number, string, boolean, null, hole };
 // =====
 // JNode
 // =====
 struct Variant;
 struct JNode
 {
+  // JNode Type
+  enum class Type { base = 0, object, array, number, string, boolean, null, hole };
   // JNode Error
   struct Error : public std::runtime_error
   {
@@ -35,8 +37,8 @@ struct JNode
   explicit JNode(const std::string &string);
   explicit JNode(bool boolean);
   explicit JNode(std::nullptr_t null);
-  JNode(const std::initializer_list<JSON::InternalTypes> &array);
-  JNode(const std::initializer_list<std::pair<std::string, JSON::InternalTypes>> &object);
+  JNode(const std::initializer_list<JSON::Types> &array);
+  JNode(const std::initializer_list<std::pair<std::string, JSON::Types>> &object);
   explicit JNode(std::unique_ptr<Variant> jNodeVariant) : m_jNodeVariant(std::move(jNodeVariant)) {}
   JNode(const JNode &other) = delete;
   JNode &operator=(const JNode &other) = delete;
@@ -70,7 +72,7 @@ struct JNode
   [[nodiscard]] const std::unique_ptr<Variant> &getVariant() const;
 
 private:
-  JNode getJNode(const JSON::InternalTypes &type);
+  JNode getJNode(const JSON::Types &type);
   std::unique_ptr<Variant> m_jNodeVariant;
 };
 }// namespace JSONLib

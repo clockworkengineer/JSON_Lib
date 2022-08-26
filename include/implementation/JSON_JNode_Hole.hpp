@@ -13,7 +13,7 @@ namespace JSONLib {
 struct Hole : Variant
 {
   // Constructors/Destructors
-  Hole() : Variant(JNodeType::hole) {}
+  Hole() : Variant(JNode::Type::hole) {}
   Hole(const Hole &other) = delete;
   Hole &operator=(const Hole &other) = delete;
   Hole(Hole &&other) = default;

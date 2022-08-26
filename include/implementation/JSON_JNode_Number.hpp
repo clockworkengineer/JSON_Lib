@@ -13,8 +13,8 @@ namespace JSONLib {
 struct Number : Variant
 {
   // Constructors/Destructors
-  Number() : Variant(JNodeType::number) {}
-  explicit Number(const Numeric &number) : Variant(JNodeType::number), m_jsonNumber(number) {}
+  Number() : Variant(JNode::Type::number) {}
+  explicit Number(const Numeric &number) : Variant(JNode::Type::number), m_jsonNumber(number) {}
   Number(const Number &other) = delete;
   Number &operator=(const Number &other) = delete;
   Number(Number &&other) = default;

@@ -13,8 +13,8 @@ namespace JSONLib {
 struct String : Variant
 {
   // Constructors/Destructors
-  String() : Variant(JNodeType::string) {}
-  explicit String(std::string string) : Variant(JNodeType::string), m_jsonString(std::move(string)) {}
+  String() : Variant(JNode::Type::string) {}
+  explicit String(std::string string) : Variant(JNode::Type::string), m_jsonString(std::move(string)) {}
   String(const String &other) = delete;
   String &operator=(const String &other) = delete;
   String(String &&other) = default;

@@ -1,7 +1,7 @@
 //
 // Class: JSON_Impl
 //
-// Description: JSON class implementation layer that uses recursion to reconstitute 
+// Description: JSON class implementation layer that uses recursion to reconstitute
 // the JSON tree presentation back into raw JSON text (stringification).
 //
 // Dependencies:   C20++ - Language standard features used.
@@ -122,25 +122,25 @@ void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination)
 void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination)
 {
   switch (jNode.getVariant()->getType()) {
-  case JNodeType::number:
+  case JNode::Type::number:
     stringifyNumber(jNode, destination);
     break;
-  case JNodeType::string:
+  case JNode::Type::string:
     stringifyString(jNode, destination);
     break;
-  case JNodeType::boolean:
+  case JNode::Type::boolean:
     stringifyBoolean(jNode, destination);
     break;
-  case JNodeType::null:
+  case JNode::Type::null:
     stringifyNull(jNode, destination);
     break;
-  case JNodeType::hole:
+  case JNode::Type::hole:
     stringifyHole(jNode, destination);
     break;
-  case JNodeType::object:
+  case JNode::Type::object:
     stringifyObject(jNode, destination);
     break;
-  case JNodeType::array:
+  case JNode::Type::array:
     stringifyArray(jNode, destination);
     break;
   default:

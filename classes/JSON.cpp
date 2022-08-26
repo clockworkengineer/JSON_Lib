@@ -1,12 +1,10 @@
 //
 // Class: JSON
 //
-// Description: Perform JSON  stringify/parse to/from a buffer or
-// file. It is also  possible to customize this with the ISource
-// and IDestination interfaces if required.For an in-depth description
-// of the JSON specification refer to its RFC at web address
-// https://tools.ietf.org/html/rfc8259 and JSON grammar at web page
-// https://www.json.org/json-en.html.
+// Description: Perform JSON parse/stringify to/from a buffer or
+// file. For an in-depth description of the JSON specification refer
+// to its RFC at https://tools.ietf.org/html/rfc8259 and JSON grammar
+// at https://www.json.org/json-en.html.
 //
 // Dependencies:   C20++ - Language standard features used.
 //
@@ -41,7 +39,7 @@ namespace JSONLib {
 // PUBLIC METHODS
 // ==============
 /// <summary>
-/// JSON constructor. Pass any custom converter or translator here.
+/// JSON constructor. Set any custom converter or translator here.
 /// </summary>
 /// <param name="translator">Pointer to translator interface.</param>
 /// <param name="converter">Pointer to converter interface.</param>
@@ -54,12 +52,12 @@ JSON::JSON(ITranslator *translator, IConverter *converter) : m_implementation(st
 /// JSON constructor (array).
 /// </summary>
 /// <param name="array">Intialiser list of single values or JNode.</param>
-JSON::JSON(const std::initializer_list<InternalTypes> &array) : JSON() { this->root() = JNode(array); }
+JSON::JSON(const std::initializer_list<Types> &array) : JSON() { this->root() = JNode(array); }
 /// <summary>
 /// JSON constructor (object).
 /// </summary>
 /// <param name="array">Intialiser list of key/value(JNode) pairs.</param>
-JSON::JSON(const std::initializer_list<std::pair<std::string, InternalTypes>> &object) : JSON()
+JSON::JSON(const std::initializer_list<std::pair<std::string, Types>> &object) : JSON()
 {
   this->root() = JNode(object);
 }
@@ -73,7 +71,7 @@ JSON::JSON(const std::string &jsonString) : JSON() { parse(BufferSource{ jsonStr
 /// </summary>
 JSON::~JSON() {}
 /// <summary>
-/// Get JSONLib version.
+/// Get JSON library version.
 /// </summary>
 std::string JSON::version() const { return (m_implementation->version()); }
 /// <summary>
@@ -92,14 +90,14 @@ void JSON::strip(ISource &&source, IDestination &&destination) const { m_impleme
 void JSON::parse(ISource &source) const { m_implementation->parse(source); }
 void JSON::parse(ISource &&source) const { m_implementation->parse(source); }
 /// <summary>
-/// Traverse JNode structure and build its JSON text in destination stream.
+/// Traverse JNode structure and build its JSON string on destination stream.
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 void JSON::stringify(IDestination &destination) const { m_implementation->stringify(destination); }
 void JSON::stringify(IDestination &&destination) const { m_implementation->stringify(destination); }
 /// <summary>
-/// Recursively traverse JNode structure calling IAction methods or to change
-/// the JSON tree node directly.
+/// Recursively traverse JNode structure calling IAction methods (read only)
+//  or to change the JSON tree node directly.
 /// </summary>
 /// <param name=action>Action methods to call during traversal.</param>
 // Traverse using non-const JSON so can change JSON tree
@@ -121,7 +119,7 @@ const JNode &JSON::operator[](std::size_t index) const { return ((*m_implementat
 /// <summary>
 /// Return root of JSON tree.
 /// </summary>
-/// <returns>Root of JSON tree,</returns>
+/// <returns>Root of JSON tree.</returns>
 JNode &JSON::root() { return (m_implementation->root()); }
 const JNode &JSON::root() const { return (m_implementation->root()); }
 }// namespace JSONLib

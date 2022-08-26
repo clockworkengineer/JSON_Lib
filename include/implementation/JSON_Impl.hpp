@@ -126,26 +126,26 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
 {
   action.onJNode(jNode);
   switch (jNode.getVariant()->getType()) {
-  case JNodeType::number:
+  case JNode::Type::number:
     action.onNumber(JRef<Number>(jNode));
     break;
-  case JNodeType::string:
+  case JNode::Type::string:
     action.onString(JRef<String>(jNode));
     break;
-  case JNodeType::boolean:
+  case JNode::Type::boolean:
     action.onBoolean(JRef<Boolean>(jNode));
     break;
-  case JNodeType::null:
+  case JNode::Type::null:
     action.onNull(JRef<Null>(jNode));
     break;
-  case JNodeType::hole:
+  case JNode::Type::hole:
     break;
-  case JNodeType::object: {
+  case JNode::Type::object: {
     action.onObject(JRef<Object>(jNode));
     for (auto &entry : JRef<Object>(jNode).getObjectEntries()) { traverseJNodes(entry.getJNode(), action); }
     break;
   }
-  case JNodeType::array: {
+  case JNode::Type::array: {
     action.onArray(JRef<Array>(jNode));
     for (auto &node : JRef<Array>(jNode).getArrayEntries()) { traverseJNodes(node, action); }
     break;
