@@ -1,9 +1,9 @@
 //
-// Class: JSON_Impl
+// Class: JSON_Impl_Print
 //
 // Description: JSON class implementation layer that uses recursion to reconstitute
-// the JSON tree presentation back into raw JSON string without any whitespace
-// (stringification).
+// the JSON tree presentation back into raw JSON string adding suitable idents where
+// necessary (pretty print).
 //
 // Dependencies:   C20++ - Language standard features used.
 //
@@ -39,7 +39,7 @@ namespace JSONLib {
 /// </summary>
 /// <param name="jNode">Number JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyNumber(const JNode &jNode, IDestination &destination)
+void JSON_Impl::printNumber(const JNode &jNode, IDestination &destination)
 {
   destination.add(JRef<Number>(jNode).toString());
 }
@@ -48,7 +48,7 @@ void JSON_Impl::stringifyNumber(const JNode &jNode, IDestination &destination)
 /// </summary>
 /// <param name="jNode">String JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyString(const JNode &jNode, IDestination &destination)
+void JSON_Impl::printString(const JNode &jNode, IDestination &destination)
 {
   destination.add('"');
   destination.add(m_translator->toJSON(JRef<String>(jNode).toString()));
@@ -59,7 +59,7 @@ void JSON_Impl::stringifyString(const JNode &jNode, IDestination &destination)
 /// </summary>
 /// <param name="jNode">Boolean JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyBoolean(const JNode &jNode, IDestination &destination)
+void JSON_Impl::printBoolean(const JNode &jNode, IDestination &destination)
 {
   destination.add(JRef<Boolean>(jNode).toString());
 }
@@ -68,7 +68,7 @@ void JSON_Impl::stringifyBoolean(const JNode &jNode, IDestination &destination)
 /// </summary>
 /// <param name="jNode">Null JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyNull(const JNode &jNode, IDestination &destination)
+void JSON_Impl::printNull(const JNode &jNode, IDestination &destination)
 {
   destination.add(JRef<Null>(jNode).toString());
 }
@@ -77,7 +77,7 @@ void JSON_Impl::stringifyNull(const JNode &jNode, IDestination &destination)
 /// </summary>
 /// <param name="jNode">Hole JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyHole(const JNode &jNode, IDestination &destination)
+void JSON_Impl::printHole(const JNode &jNode, IDestination &destination)
 {
   destination.add(JRef<Hole>(jNode).toString());
 }
@@ -86,14 +86,14 @@ void JSON_Impl::stringifyHole(const JNode &jNode, IDestination &destination)
 /// </summary>
 /// <param name="jNode">Object JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination)
+void JSON_Impl::printObject(const JNode &jNode, IDestination &destination)
 {
   destination.add('{');
   for (auto &entry : JRef<Object>(jNode).getObjectEntries()) {
     destination.add('"');
     destination.add(m_translator->toJSON(entry.getKey()));
     destination.add("\":");
-    stringifyJNodes(entry.getJNode(), destination);
+    printJNodes(entry.getJNode(), destination);
     destination.add(',');
   }
   destination.backup();
@@ -104,11 +104,11 @@ void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination)
 /// </summary>
 /// <param name="jNode">Array JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination)
+void JSON_Impl::printArray(const JNode &jNode, IDestination &destination)
 {
   destination.add('[');
   for (auto &node : JRef<Array>(jNode).getArrayEntries()) {
-    stringifyJNodes(node, destination);
+    printJNodes(node, destination);
     destination.add(',');
   }
   destination.backup();
@@ -120,32 +120,32 @@ void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination)
 /// </summary>
 /// <param name=jNode>JNode structure to be traversed.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
-void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination)
+void JSON_Impl::printJNodes(const JNode &jNode, IDestination &destination)
 {
   switch (jNode.getVariant().getType()) {
   case JNode::Type::number:
-    stringifyNumber(jNode, destination);
+    printNumber(jNode, destination);
     break;
   case JNode::Type::string:
-    stringifyString(jNode, destination);
+    printString(jNode, destination);
     break;
   case JNode::Type::boolean:
-    stringifyBoolean(jNode, destination);
+    printBoolean(jNode, destination);
     break;
   case JNode::Type::null:
-    stringifyNull(jNode, destination);
+    printNull(jNode, destination);
     break;
   case JNode::Type::hole:
-    stringifyHole(jNode, destination);
+    printHole(jNode, destination);
     break;
   case JNode::Type::object:
-    stringifyObject(jNode, destination);
+    printObject(jNode, destination);
     break;
   case JNode::Type::array:
-    stringifyArray(jNode, destination);
+    printArray(jNode, destination);
     break;
   default:
-    throw Error("Unknown JNode type encountered during stringification.");
+    throw Error("Unknown JNode type encountered during print.");
   }
 }
 }// namespace JSONLib

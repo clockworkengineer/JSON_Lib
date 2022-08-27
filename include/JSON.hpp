@@ -52,9 +52,12 @@ public:
   // Parse JSON into tree
   void parse(ISource &source) const;
   void parse(ISource &&source) const;
-  // Create JSON text string from tree (no shitespace)
+  // Create JSON text string from JNode tree (no shitespace)
   void stringify(IDestination &destination) const;
   void stringify(IDestination &&destination) const;
+  // Create JSON text string from JNode tree (pretty printed)
+  void print(IDestination &destination) const;
+  void print(IDestination &&destination) const;
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   void strip(ISource &source, IDestination &&destination) const;

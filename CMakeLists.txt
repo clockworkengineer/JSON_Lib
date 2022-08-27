@@ -30,6 +30,7 @@ set (JSON_SOURCES
     ./classes/JSON.cpp
     ./classes/implementation/JSON_Impl.cpp
     ./classes/implementation/JSON_Impl_Parse.cpp
+    ./classes/implementation/JSON_Impl_Print.cpp
     ./classes/implementation/JSON_Impl_Stringify.cpp
     ./classes/implementation/JSON_Impl_Strip.cpp
     ./classes/implementation/JSON_JNode.cpp

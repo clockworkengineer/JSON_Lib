@@ -74,14 +74,24 @@ void JSON_Impl::converter(IConverter *converter)
 /// <param name="source">Source of JSON.</param>
 void JSON_Impl::parse(ISource &source) { m_jNodeRoot = parseJNodes(source); }
 /// <summary>
-/// Recursively parse JNode tree structure and building its JSON text in destination
-/// stream.
+/// Recursively parse JNode tree structure and building its JSON string (no whitespace)
+/// in destination stream.
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 void JSON_Impl::stringify(IDestination &destination) const
 {
   if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to stringify."); }
   stringifyJNodes(m_jNodeRoot, destination);
+}
+/// <summary>
+/// Recursively parse JNode tree structure and building its JSON string (pretty printed)
+/// in destination stream.
+/// </summary>
+/// <param name=destination>Destination stream for printed JSON.</param>
+void JSON_Impl::print(IDestination &destination) const
+{
+  if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to print."); }
+  printJNodes(m_jNodeRoot, destination);
 }
 /// <summary>
 /// Strip all whitespace from a JSON source.

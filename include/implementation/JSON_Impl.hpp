@@ -53,8 +53,10 @@ public:
   std::string version() const;
   // Parse JSON into tree
   void parse(ISource &source);
-  // Create JSON text string from tree
+  // Create JSON text string (no white space) from JNode tree
   void stringify(IDestination &destination) const;
+  // Create JSON structured text string (pretty print) from JNode tree
+  void print(IDestination &destination) const;
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   // Set JSON translator/converter
@@ -102,6 +104,16 @@ private:
   static void stringifyArray(const JNode &jNode, IDestination &destination);
   // Produce JSON test string from JSON tree
   static void stringifyJNodes(const JNode &jNode, IDestination &destination);
+  // Print JSON
+  static void printNumber(const JNode &jNode, IDestination &destination);
+  static void printString(const JNode &jNode, IDestination &destination);
+  static void printBoolean(const JNode &jNode, IDestination &destination);
+  static void printNull(const JNode &jNode, IDestination &destination);
+  static void printHole(const JNode &jNode, IDestination &destination);
+  static void printObject(const JNode &jNode, IDestination &destination);
+  static void printArray(const JNode &jNode, IDestination &destination);
+  // Produce JSON structured string (pretty print) from JSON tree
+  static void printJNodes(const JNode &jNode, IDestination &destination);
   // Remove JSON whitespace
   static void stripWhitespace(ISource &source, IDestination &destination);
   // Traverse JSON tree
