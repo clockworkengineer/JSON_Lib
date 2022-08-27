@@ -37,6 +37,7 @@ set(TEST_SOURCES
     JSONLib_Tests_Stringify_Simple.cpp
     JSONLib_Tests_Stringify_Collection.cpp
     JSONLib_Tests_Stringify_Exceptions.cpp
+    JSONLib_Tests_Print.cpp
     JSONLib_Tests_Misc.cpp
     JSONLib_Tests_Helper.cpp)
 

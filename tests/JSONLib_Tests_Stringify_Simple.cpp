@@ -1,7 +1,7 @@
 //
 // Unit Tests: JSON
 //
-// Description: JSON stringification of simple type unit
+// Description: JSON stringification of simple types unit
 // tests for JSON class using the Catch2 test framework.
 //
 // ================

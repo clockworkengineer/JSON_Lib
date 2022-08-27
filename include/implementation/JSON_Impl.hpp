@@ -56,7 +56,7 @@ public:
   // Create JSON text string (no white space) from JNode tree
   void stringify(IDestination &destination) const;
   // Create JSON structured text string (pretty print) from JNode tree
-  void print(IDestination &destination) const;
+  void print(IDestination &destination, unsigned long indent) const;
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   // Set JSON translator/converter
@@ -105,15 +105,15 @@ private:
   // Produce JSON test string from JSON tree
   static void stringifyJNodes(const JNode &jNode, IDestination &destination);
   // Print JSON
-  static void printNumber(const JNode &jNode, IDestination &destination);
-  static void printString(const JNode &jNode, IDestination &destination);
-  static void printBoolean(const JNode &jNode, IDestination &destination);
-  static void printNull(const JNode &jNode, IDestination &destination);
-  static void printHole(const JNode &jNode, IDestination &destination);
-  static void printObject(const JNode &jNode, IDestination &destination);
-  static void printArray(const JNode &jNode, IDestination &destination);
+  static void printNumber(const JNode &jNode, IDestination &destination, unsigned long indent);
+  static void printString(const JNode &jNode, IDestination &destination, unsigned long indent);
+  static void printBoolean(const JNode &jNode, IDestination &destination, unsigned long indent);
+  static void printNull(const JNode &jNode, IDestination &destination, unsigned long indent);
+  static void printHole(const JNode &jNode, IDestination &destination, unsigned long indent);
+  static void printObject(const JNode &jNode, IDestination &destination, unsigned long indent);
+  static void printArray(const JNode &jNode, IDestination &destination, unsigned long indent);
   // Produce JSON structured string (pretty print) from JSON tree
-  static void printJNodes(const JNode &jNode, IDestination &destination);
+  static void printJNodes(const JNode &jNode, IDestination &destination, unsigned long indent);
   // Remove JSON whitespace
   static void stripWhitespace(ISource &source, IDestination &destination);
   // Traverse JSON tree

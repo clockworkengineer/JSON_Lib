@@ -88,10 +88,10 @@ void JSON_Impl::stringify(IDestination &destination) const
 /// in destination stream.
 /// </summary>
 /// <param name=destination>Destination stream for printed JSON.</param>
-void JSON_Impl::print(IDestination &destination) const
+void JSON_Impl::print(IDestination &destination, unsigned long indent) const
 {
   if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to print."); }
-  printJNodes(m_jNodeRoot, destination);
+  printJNodes(m_jNodeRoot, destination, indent);
 }
 /// <summary>
 /// Strip all whitespace from a JSON source.
