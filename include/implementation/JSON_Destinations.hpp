@@ -45,12 +45,22 @@ public:
   }
   void add(const std::string &bytes) override
   {
-    m_destination.write(bytes.c_str(), bytes.length());
+    for (auto ch : bytes) {
+      if (ch == '\n') {
+        m_destination.write("\r\n", 2);
+      } else {
+        m_destination.put(ch);
+      }
+    }
     m_destination.flush();
   }
   void add(const char ch) override
   {
-    m_destination.put(ch);
+    if (ch == '\n') {
+      m_destination.write("\r\n", 2);
+    } else {
+      m_destination.put(ch);
+    }
     m_destination.flush();
   }
   void clear() override
