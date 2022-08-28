@@ -21,14 +21,14 @@ using namespace JSONLib;
 TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]")
 {
   const JSON json;
-  SECTION("Parse missing terminating '\"' in string", "[JSON][Parse][Exceptions]")
+  SECTION("Parse missing terminating '\"' in string.", "[JSON][Parse][Exceptions]")
   {
     BufferSource jsonSource{ R"({ "one" : "Apple })" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 19]: Missing closing '\"' on string.");
   }
-  SECTION("Parse number with starting with invalid character", "[JSON][Parse][Exceptions]")
+  SECTION("Parse number with starting with invalid character.", "[JSON][Parse][Exceptions]")
   {
     BufferSource jsonSource{ R"({ "one" : z19034})" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
@@ -65,7 +65,7 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exceptions]")
     REQUIRE_THROWS_WITH(
       json.parse(jsonSource), "JSON Error [Line: 1 Column: 17]: Missing closing '}' in object definition.");
   }
-  SECTION("Parse an nested objects ({ {} }) ", "[JSON][Parse][Exceptions]")
+  SECTION("Parse an nested objects ({ {} }) .", "[JSON][Parse][Exceptions]")
   {
     BufferSource jsonSource{ "{{}}" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);

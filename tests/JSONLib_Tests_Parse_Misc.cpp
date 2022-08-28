@@ -23,7 +23,7 @@ TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Pars
   const JSON json;
 
   TEST_FILE_LIST(testFile);
-  SECTION("Parse from buffer", "[JSON][Parse][Examples][Buffer]")
+  SECTION("Parse from buffer.", "[JSON][Parse][Examples][Buffer]")
   {
     BufferSource jsonSource{ readFromFile(prefixPath(testFile)) };
     REQUIRE_NOTHROW(json.parse(jsonSource));
@@ -31,7 +31,7 @@ TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Pars
     json.parse(jsonSource);
     REQUIRE_FALSE(!(json.root().isObject() || (json.root().isArray())));
   }
-  SECTION("Parse from file directly", "[JSON][Parse][Examples][File]")
+  SECTION("Parse from file directly.", "[JSON][Parse][Examples][File]")
   {
     FileSource jsonSource{ prefixPath(testFile) };
     REQUIRE_NOTHROW(json.parse(jsonSource));
