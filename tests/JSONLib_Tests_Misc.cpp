@@ -18,18 +18,18 @@ using namespace JSONLib;
 // ===============
 // JSON Translator
 // ===============
-TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]") {
+TEST_CASE("Check translation of surrogate pairs.", "[JSON][DefaultTranslator]") {
   JSON_Converter converter;
   JSON_Translator translator(converter);
   SECTION("Translate from escape sequences valid surrogate pair 'Begin "
-          "\\uD834\\uDD1E End' and check value",
+          "\\uD834\\uDD1E End' and check value.",
           "[JSON][DefaultTranslator]") {
     const std::u8string expected{u8"Begin \U0001D11E End"};
     REQUIRE(translator.fromJSON(R"(Begin \uD834\uDD1E End)") ==
             std::string{expected.begin(), expected.end()});
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 "
-          "\\uDD1E End' in error then expect exception",
+          "\\uDD1E End' in error then expect exception.",
           "[JSON][DefaultTranslator][Exception]") {
     REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uD834 \uDD1E End)"),
                       JSON_Translator::Error);
@@ -37,7 +37,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]") {
                         "JSON Translator Error: Unpaired surrogate found.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin "
-          "\\uD834\\u0045 End' in error then expect exception",
+          "\\uD834\\u0045 End' in error then expect exception.",
           "[JSON][DefaultTranslator][Exception]") {
     REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uD834\u0045 End)"),
                       JSON_Translator::Error);
@@ -45,7 +45,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]") {
                         "JSON Translator Error: Unpaired surrogate found.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 End' "
-          "in error then expect exception",
+          "in error then expect exception.",
           "[JSON][DefaultTranslator][Exception]") {
     REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uD834 End)"),
                       JSON_Translator::Error);
@@ -53,7 +53,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]") {
                         "JSON Translator Error: Unpaired surrogate found.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uDD1E End' "
-          "in error then expect exception",
+          "in error then expect exception.",
           "[JSON][DefaultTranslator][Exception]") {
     REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uDD1E End)"),
                       JSON_Translator::Error);
@@ -61,7 +61,7 @@ TEST_CASE("Check translation of surrogate pairs", "[JSON][DefaultTranslator]") {
                         "JSON Translator Error: Unpaired surrogate found.");
   }
   SECTION("Translate to escape sequences valid surrogate pair 'Begin "
-          "\\uD834\\uDD1E End' and check value",
+          "\\uD834\\uDD1E End' and check value.",
           "[JSON][DefaultTranslator]") {
     std::u8string actual{u8"Begin \U0001D11E End"};
     REQUIRE(translator.toJSON({actual.begin(), actual.end()}) ==
@@ -102,7 +102,7 @@ TEST_CASE("Check whitespace stripping with escape characters.",
             "[\"fffgh / \\n\\t p w \\u1234 \"]");
   }
   TEST_FILE_LIST(testFile);
-  SECTION("Stripped (File) should be the same as parsed then stringified JSON",
+  SECTION("Stripped (File) should be the same as parsed then stringified JSON.",
           "[JSON][Parse][Strip]") {
     const std::string generatedFileName{prefixPath(kGeneratedJSONFile)};
     std::filesystem::remove(generatedFileName);
@@ -123,7 +123,7 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]") {
   const JSON json;
   TEST_FILE_LIST(testFile);
   SECTION(
-      "Stripped (Buffer) should be the same as parsed then stringified JSON",
+      "Stripped (Buffer) should be the same as parsed then stringified JSON.",
       "[JSON][Parse][Strip]") {
     BufferSource jsonSource{readFromFile(prefixPath(testFile))};
     BufferDestination jsonDestination;
@@ -134,7 +134,7 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]") {
     json.strip(jsonSource, strippedDestination);
     REQUIRE(jsonDestination.getBuffer() == strippedDestination.getBuffer());
   }
-  SECTION("Stripped (File) should be the same as parsed then stringified JSON",
+  SECTION("Stripped (File) should be the same as parsed then stringified JSON.",
           "[JSON][Parse][Strip]") {
     const std::string generatedFileName{prefixPath(kGeneratedJSONFile)};
     std::filesystem::remove(generatedFileName);

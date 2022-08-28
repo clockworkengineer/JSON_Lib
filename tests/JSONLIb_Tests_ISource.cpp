@@ -34,7 +34,7 @@ TEST_CASE("ISource (Buffer) interface (uses file testfile001.json).", "[JSON][IS
   }
   SECTION(
     "Create BufferSource and that it is positioned "
-    "on the correct first character",
+    "on the correct first character.",
     "[JSON][ISource][Buffer]")
   {
     BufferSource source{ BufferSource(buffer) };
@@ -96,7 +96,7 @@ TEST_CASE("ISource (Buffer) interface (uses file testfile001.json).", "[JSON][IS
   }
   SECTION(
     "Check that BufferSource finds a string at the current position and "
-    "moves on past it in stream",
+    "moves on past it in stream.",
     "[JSON][ISource][Buffer]")
   {
     BufferSource source{ R"([true  , "Out of time",  7.89043e+18, true])" };
@@ -156,7 +156,7 @@ TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]")
   }
   SECTION(
     "Create FileSource and check positioned on the "
-    "correct first character",
+    "correct first character.",
     "[JSON][ISource][File]")
   {
     FileSource source{ FileSource(testFileName) };
@@ -165,7 +165,7 @@ TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]")
   }
   SECTION(
     "Create FileSource and then check next "
-    "positions to correct next character",
+    "positions to correct next character.",
     "[JSON][ISource][File]")
   {
     FileSource source{ testFileName };
@@ -222,7 +222,7 @@ TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]")
   }
   SECTION(
     "Check that FileSource finds a string at the current position and "
-    "moves on past it in stream",
+    "moves on past it in stream.",
     "[JSON][ISource][File]")
   {
     std::filesystem::remove(kGeneratedJSONFile);
@@ -257,7 +257,7 @@ TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]")
   }
   SECTION(
     "Create FileSource and then try to read off "
-    "the end",
+    "the end.",
     "[JSON][ISource][File][Exception]")
   {
     FileSource source{ testFileName };

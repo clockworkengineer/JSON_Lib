@@ -239,7 +239,7 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
             == R"([null,null,null,null,null,[1.0,2.0,3,4.333,"5.0","test test test test",false,null]])");
   }
 }
-TEST_CASE("JSON create complex JSON structures", "[JSON][Create][Complex]")
+TEST_CASE("JSON create complex JSON structures.", "[JSON][Create][Complex]")
 {
   SECTION("A Single level object.", "[JSON][Create][Complex]")
   {

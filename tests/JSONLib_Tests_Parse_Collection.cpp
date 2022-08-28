@@ -18,44 +18,44 @@ using namespace JSONLib;
 // ===========================
 // Parse collection JSON types
 // ===========================
-TEST_CASE("JSON object for parse of collection types (array,object) ", "[JSON][Parse][Collection]")
+TEST_CASE("JSON object for parse of collection types (array,object).", "[JSON][Parse][Collection]")
 {
   const JSON json;
-  SECTION(R"(Parse an object ({"name":"Robert","Age":15}))", "[JSON][Parse][Collection]")
+  SECTION(R"(Parse an object ({"name":"Robert","Age":15}).)", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ R"({"name":"Robert","Age":15})" };
     json.parse(jsonSource);
     REQUIRE_FALSE(!json.root().isObject());
   }
-  SECTION(R"(Parse an array ([ 777,9000,"apples"]) )", "[JSON][Parse][Collection]")
+  SECTION(R"(Parse an array ([ 777,9000,"apples"]).)", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ R"([777,9000,"apples"])" };
     json.parse(jsonSource);
     REQUIRE_FALSE(!json.root().isArray());
   }
-  SECTION("Parse an empty array ([]) ", "[JSON][Parse][Collection]")
+  SECTION("Parse an empty array ([]).", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ "[]" };
     json.parse(jsonSource);
     REQUIRE_FALSE(!json.root().isArray());
   }
-  SECTION("Parse an empty object ({}) ", "[JSON][Parse][Collection]")
+  SECTION("Parse an empty object ({}).", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ "{}" };
     json.parse(jsonSource);
     REQUIRE_FALSE(!json.root().isObject());
   }
-  SECTION("Parse an nested empty arrays ([[], [], []]) ", "[JSON][Parse][Collection]")
+  SECTION("Parse an nested empty arrays ([[], [], []]).", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ "[[], [], []]" };
     REQUIRE_NOTHROW(json.parse(jsonSource));
   }
-  SECTION("Parse an nested empty objects ([{}, {}, {}]) ", "[JSON][Parse][Collection]")
+  SECTION("Parse an nested empty objects ([{}, {}, {}]).", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ "[[], [], []]" };
     REQUIRE_NOTHROW(json.parse(jsonSource));
   }
-  SECTION("Parse an nested empty objects/arrays ([{}, [], {},   [], {}, []]) ", "[JSON][Parse][Collection]")
+  SECTION("Parse an nested empty objects/arrays ([{}, [], {},   [], {}, []]).", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ "[{}, [], {},   [], {}, []]" };
     REQUIRE_NOTHROW(json.parse(jsonSource));
@@ -64,10 +64,10 @@ TEST_CASE("JSON object for parse of collection types (array,object) ", "[JSON][P
 // ========================================
 // Parse collection JSON types and validate
 // ========================================
-TEST_CASE("JSON object for parse of collection types and check values", "[JSON][Parse][Collection][validate]")
+TEST_CASE("JSON object for parse of collection types and check values.", "[JSON][Parse][Collection][validate]")
 {
   const JSON json;
-  SECTION(R"(Parse an object {"name":"Robert","Age":15} and check its value)", "[JSON][Parse][Collection][validate]")
+  SECTION(R"(Parse an object {"name":"Robert","Age":15} and check its value.)", "[JSON][Parse][Collection][validate]")
   {
     BufferSource jsonSource{ R"({"Name":"Robert","Age":15})" };
     json.parse(jsonSource);
@@ -80,7 +80,7 @@ TEST_CASE("JSON object for parse of collection types and check values", "[JSON][
     REQUIRE(JRef<String>((json.root())["Name"]).getString() == "Robert");
     REQUIRE(JRef<Number>((json.root())["Age"]).getNumber().getInt() == 15);
   }
-  SECTION(R"(Parse an array [777,9000,"apples"] and check its value)", "[JSON][Parse][Collection][validate]")
+  SECTION(R"(Parse an array [777,9000,"apples"] and check its value.)", "[JSON][Parse][Collection][validate]")
   {
     BufferSource jsonSource{ R"([777,9000,"apples"])" };
     json.parse(jsonSource);
@@ -94,14 +94,14 @@ TEST_CASE("JSON object for parse of collection types and check values", "[JSON][
     REQUIRE(JRef<String>((json.root())[2]).getString() == "apples");
   }
   SECTION(R"(Parse object {"City":"Southampton","Population":500000} and )"
-          "check its value",
+          "check its value.",
     "[JSON][Parse][Collection][validate]")
   {
     BufferSource jsonSource{ R"({"City":"Southampton","Population":500000})" };
     json.parse(jsonSource);
     checkObject(json.root());
   }
-  SECTION(R"(Parse an array ["Dog",1964,true,null ] and check its value)", "[JSON][Parse][Collection][validate]")
+  SECTION(R"(Parse an array ["Dog",1964,true,null ] and check its value.)", "[JSON][Parse][Collection][validate]")
   {
     BufferSource jsonSource{ R"(["Dog",1964,true,null])" };
     json.parse(jsonSource);
