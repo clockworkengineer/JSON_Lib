@@ -89,10 +89,11 @@ void JSON_Impl::printHole(const JNode &jNode, IDestination &destination, [[maybe
 /// <param name="destination">Destination stream for JSON.</param>
 void JSON_Impl::printObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] std::size_t indent)
 {
-  std::string padding(indent, ' ');
+  std::string padding1(indent, ' ');
+  std::string padding2(indent - 4, ' ');
   destination.add("{\n");
   for (auto &entry : JRef<Object>(jNode).getObjectEntries()) {
-    destination.add(padding);
+    destination.add(padding1);
     destination.add('"');
     destination.add(m_translator->toJSON(entry.getKey()));
     destination.add("\": ");
@@ -101,7 +102,9 @@ void JSON_Impl::printObject(const JNode &jNode, IDestination &destination, [[may
   }
   destination.backup();
   destination.backup();
-  destination.add("\n}");
+  destination.add("\n");
+  destination.add(padding2);
+  destination.add("}");
 }
 /// <summary>
 /// Convert Array JNode to JSON on destination stream.

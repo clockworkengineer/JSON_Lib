@@ -2,33 +2,10 @@
     "name": "Alann",
     "Age": 58,
     "Eye Color": "Blue",
-    "Sex": "Male"
+    "Sex": "Male",
+    "Details": {
+        "Phone": "0999-999-999",
+        "email": "john.doe@express.com",
+        "enabled": true
+    }
 }
-
-[
-    1,
-    2,
-    3,
-    [
-        5,
-        6,
-        7,
-        8
-    ],
-    5,
-    6,
-    [
-        4,
-        5,
-        6,
-        7,
-        8
-    ]
-]
-[
-    1,
-    2,
-    3,
-    4,
-    5
-]

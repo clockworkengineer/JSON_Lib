@@ -75,4 +75,22 @@ TEST_CASE("Check printing of example JSON", "[JSON][Print]")
     json.print(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
+  SECTION("Print a nested object", "[JSON][Print][Object][Validate]")
+  {
+    const std::string expected{ R"({
+    "name": "Alann",
+    "Age": 58,
+    "Eye Color": "Blue",
+    "Sex": "Male",
+    "Details": {
+        "Phone": "0999-999-999",
+        "email": "john.doe@express.com",
+        "enabled": true
+    }
+})" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.print(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == expected);
+  }
 }
