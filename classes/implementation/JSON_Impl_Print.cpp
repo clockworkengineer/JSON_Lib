@@ -79,7 +79,6 @@ void JSON_Impl::printNull(const JNode &jNode, IDestination &destination, [[maybe
 /// <param name="destination">Destination stream for JSON.</param>
 void JSON_Impl::printHole(const JNode &jNode, IDestination &destination, [[maybe_unused]] std::size_t indent)
 {
-  std::string padding(" ", indent);
   destination.add(JRef<Hole>(jNode).toString());
 }
 /// <summary>

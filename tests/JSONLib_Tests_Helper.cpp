@@ -26,7 +26,7 @@ std::string prefixPath(const std::string &jsonFileName)
 }
 /// <summary>
 /// Open a JSON file, read its contents into a string buffer and return
-/// the buffer.
+/// the buffer; converting any <CR><LF> to just <LF>.
 /// </summary>
 /// <param name="jsonFileName">JSON file name</param>
 /// <returns>JSON string.</returns>
@@ -36,7 +36,13 @@ std::string readFromFile(const std::string &jsonFileName)
   jsonFile.open(jsonFileName, std::ios_base::binary);
   std::ostringstream jsonFileBuffer;
   jsonFileBuffer << jsonFile.rdbuf();
-  return (jsonFileBuffer.str());
+  std::string jsonBuffer { jsonFileBuffer.str()};
+  size_t pos =  jsonBuffer.find(kCRLF);
+  while (pos != std::string::npos) {
+    jsonBuffer.replace(pos, 2, kLF);
+    pos = jsonBuffer.find(kCRLF, pos + 1);
+  }
+  return (jsonBuffer);
 }
 /// <summary>
 /// Create an JSON file and write JSON.

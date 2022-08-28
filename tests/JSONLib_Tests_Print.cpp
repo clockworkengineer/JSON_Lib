@@ -93,4 +93,36 @@ TEST_CASE("Check printing of example JSON", "[JSON][Print]")
     json.print(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
+  SECTION("Print a complex nested JSON object", "[JSON][Print][Object][Validate]")
+  {
+    const std::string expected{ R"({
+    "glossary": {
+        "title": "example glossary",
+        "GlossDiv": {
+            "title": "S",
+            "GlossList": {
+                "GlossEntry": {
+                    "ID": "SGML",
+                    "SortAs": "SGML",
+                    "GlossTerm": "Standard Generalized Markup Language",
+                    "Acronym": "SGML",
+                    "Abbrev": "ISO 8879:1986",
+                    "GlossDef": {
+                        "para": "A meta-markup language, used to create markup languages such as DocBook.",
+                        "GlossSeeAlso": [
+                            "GML",
+                            "XML"
+                        ]
+                    },
+                    "GlossSee": "markup"
+                }
+            }
+        }
+    }
+})" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.print(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == expected);
+  }
 }

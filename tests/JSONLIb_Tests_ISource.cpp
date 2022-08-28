@@ -49,7 +49,7 @@ TEST_CASE("ISource (Buffer) interface (uses file testfile001.json).", "[JSON][IS
     BufferSource source{ BufferSource(buffer) };
     source.next();
     REQUIRE_FALSE(!source.more());
-    REQUIRE(static_cast<char>(source.current()) == '\r');
+    REQUIRE(static_cast<char>(source.current()) == '\n');
   }
   SECTION(
     "Create BufferSource move past last character, "
@@ -58,7 +58,7 @@ TEST_CASE("ISource (Buffer) interface (uses file testfile001.json).", "[JSON][IS
   {
     BufferSource source{ BufferSource(buffer) };
     while (source.more()) { source.next(); }
-    REQUIRE(source.position() == std::filesystem::file_size(testFileName));// eof
+    REQUIRE(source.position() == 787);// eof
     REQUIRE(source.current() == static_cast<char>(EOF));// eof
   }
   SECTION(
