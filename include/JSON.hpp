@@ -56,8 +56,8 @@ public:
   void stringify(IDestination &destination) const;
   void stringify(IDestination &&destination) const;
   // Create JSON text string from JNode tree (pretty printed)
-  void print(IDestination &destination, unsigned long indent=4) const;
-  void print(IDestination &&destination, unsigned long indent=4) const;
+  void print(IDestination &destination, std::size_t indent = 4) const;
+  void print(IDestination &&destination, std::size_t indent = 4) const;
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   void strip(ISource &source, IDestination &&destination) const;

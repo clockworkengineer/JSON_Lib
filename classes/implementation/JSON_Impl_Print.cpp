@@ -39,7 +39,7 @@ namespace JSONLib {
 /// </summary>
 /// <param name="jNode">Number JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::printNumber(const JNode &jNode, IDestination &destination, [[maybe_unused]] unsigned long indent)
+void JSON_Impl::printNumber(const JNode &jNode, IDestination &destination, [[maybe_unused]] std::size_t indent)
 {
   destination.add(JRef<Number>(jNode).toString());
 }
@@ -48,7 +48,7 @@ void JSON_Impl::printNumber(const JNode &jNode, IDestination &destination, [[may
 /// </summary>
 /// <param name="jNode">String JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::printString(const JNode &jNode, IDestination &destination, [[maybe_unused]] unsigned long indent)
+void JSON_Impl::printString(const JNode &jNode, IDestination &destination, [[maybe_unused]] std::size_t indent)
 {
   destination.add('"');
   destination.add(m_translator->toJSON(JRef<String>(jNode).toString()));
@@ -59,7 +59,7 @@ void JSON_Impl::printString(const JNode &jNode, IDestination &destination, [[may
 /// </summary>
 /// <param name="jNode">Boolean JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::printBoolean(const JNode &jNode, IDestination &destination, [[maybe_unused]] unsigned long indent)
+void JSON_Impl::printBoolean(const JNode &jNode, IDestination &destination, [[maybe_unused]] std::size_t indent)
 {
   destination.add(JRef<Boolean>(jNode).toString());
 }
@@ -68,7 +68,7 @@ void JSON_Impl::printBoolean(const JNode &jNode, IDestination &destination, [[ma
 /// </summary>
 /// <param name="jNode">Null JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::printNull(const JNode &jNode, IDestination &destination, [[maybe_unused]] unsigned long indent)
+void JSON_Impl::printNull(const JNode &jNode, IDestination &destination, [[maybe_unused]] std::size_t indent)
 {
   destination.add(JRef<Null>(jNode).toString());
 }
@@ -77,8 +77,9 @@ void JSON_Impl::printNull(const JNode &jNode, IDestination &destination, [[maybe
 /// </summary>
 /// <param name="jNode">Hole JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::printHole(const JNode &jNode, IDestination &destination, [[maybe_unused]] unsigned long indent)
+void JSON_Impl::printHole(const JNode &jNode, IDestination &destination, [[maybe_unused]] std::size_t indent)
 {
+  std::string padding(" ", indent);
   destination.add(JRef<Hole>(jNode).toString());
 }
 /// <summary>
@@ -86,33 +87,42 @@ void JSON_Impl::printHole(const JNode &jNode, IDestination &destination, [[maybe
 /// </summary>
 /// <param name="jNode">Object JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::printObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] unsigned long indent)
+void JSON_Impl::printObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] std::size_t indent)
 {
-  destination.add('{');
+  std::string padding(indent, ' ');
+  destination.add("{\n");
   for (auto &entry : JRef<Object>(jNode).getObjectEntries()) {
+    destination.add(padding);
     destination.add('"');
     destination.add(m_translator->toJSON(entry.getKey()));
-    destination.add("\":");
-    printJNodes(entry.getJNode(), destination, indent);
-    destination.add(',');
+    destination.add("\": ");
+    printJNodes(entry.getJNode(), destination, indent + 4);
+    destination.add(",\n");
   }
   destination.backup();
-  destination.add('}');
+  destination.backup();
+  destination.add("\n}");
 }
 /// <summary>
 /// Convert Array JNode to JSON on destination stream.
 /// </summary>
 /// <param name="jNode">Array JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::printArray(const JNode &jNode, IDestination &destination, [[maybe_unused]] unsigned long indent)
+void JSON_Impl::printArray(const JNode &jNode, IDestination &destination, [[maybe_unused]] std::size_t indent)
 {
-  destination.add('[');
+  std::string padding1(indent, ' ');
+  std::string padding2(indent - 4, ' ');
+  destination.add("[\n");
   for (auto &node : JRef<Array>(jNode).getArrayEntries()) {
-    printJNodes(node, destination, indent);
-    destination.add(',');
+    destination.add(padding1);
+    printJNodes(node, destination, indent + 4);
+    destination.add(",\n");
   }
   destination.backup();
-  destination.add(']');
+  destination.backup();
+  destination.add("\n");
+  destination.add(padding2);
+  destination.add("]");
 }
 /// <summary>
 /// Recursively traverse JNode structure encoding it into JSON string on
@@ -120,7 +130,7 @@ void JSON_Impl::printArray(const JNode &jNode, IDestination &destination, [[mayb
 /// </summary>
 /// <param name=jNode>JNode structure to be traversed.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
-void JSON_Impl::printJNodes(const JNode &jNode, IDestination &destination, [[maybe_unused]] unsigned long indent)
+void JSON_Impl::printJNodes(const JNode &jNode, IDestination &destination, [[maybe_unused]] std::size_t indent)
 {
   switch (jNode.getVariant().getType()) {
   case JNode::Type::number:

@@ -21,7 +21,7 @@ using namespace JSONLib;
 TEST_CASE("Check printing of example JSON", "[JSON][Print]")
 {
   const JSON json;
-  SECTION("Print a simple array", "[JSON][Stringify][Simple][Validate]")
+  SECTION("Print a simple array", "[JSON][Print][Array][Validate]")
   {
     const std::string expected{ R"([
     1,
@@ -29,6 +29,46 @@ TEST_CASE("Check printing of example JSON", "[JSON][Print]")
     3,
     4,
     5
+])" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.print(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == expected);
+  }
+  SECTION("Print a simple object", "[JSON][Print][Object][Validate]")
+  {
+    const std::string expected{ R"({
+    "name": "Alann",
+    "Age": 58,
+    "Eye Color": "Blue",
+    "Sex": "Male"
+})" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.print(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == expected);
+  }
+  SECTION("Print a nested array", "[JSON][Print][Array][Validate]")
+  {
+    const std::string expected{ R"([
+    1,
+    2,
+    3,
+    [
+        5,
+        6,
+        7,
+        8
+    ],
+    5,
+    6,
+    [
+        4,
+        5,
+        6,
+        7,
+        8
+    ]
 ])" };
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
