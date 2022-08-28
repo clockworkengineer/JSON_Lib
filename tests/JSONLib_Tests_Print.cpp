@@ -15,13 +15,13 @@ using namespace JSONLib;
 // ==========
 // Test cases
 // ==========
-// ==============================================
-// Stringification of simple types and validation
-// ==============================================
-TEST_CASE("Check printing of example JSON", "[JSON][Print]")
+// ==========================================
+// Pretty printing of sample JSON to a buffer
+// ==========================================
+TEST_CASE("Check printing of example JSON to a buffer.", "[JSON][Print][Buffer]")
 {
   const JSON json;
-  SECTION("Print a simple array", "[JSON][Print][Array][Validate]")
+  SECTION("Print a simple array", "[JSON][Print][Array][Buffer]")
   {
     const std::string expected{ R"([
     1,
@@ -35,7 +35,7 @@ TEST_CASE("Check printing of example JSON", "[JSON][Print]")
     json.print(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Print a simple object", "[JSON][Print][Object][Validate]")
+  SECTION("Print a simple object", "[JSON][Print][Object][Buffer]")
   {
     const std::string expected{ R"({
     "name": "Alann",
@@ -48,7 +48,7 @@ TEST_CASE("Check printing of example JSON", "[JSON][Print]")
     json.print(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Print a nested array", "[JSON][Print][Array][Validate]")
+  SECTION("Print a nested array", "[JSON][Print][Array][Buffer]")
   {
     const std::string expected{ R"([
     1,
@@ -75,7 +75,7 @@ TEST_CASE("Check printing of example JSON", "[JSON][Print]")
     json.print(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Print a nested object", "[JSON][Print][Object][Validate]")
+  SECTION("Print a nested object", "[JSON][Print][Object][Buffer]")
   {
     const std::string expected{ R"({
     "name": "Alann",
@@ -93,7 +93,7 @@ TEST_CASE("Check printing of example JSON", "[JSON][Print]")
     json.print(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Print a complex nested JSON object", "[JSON][Print][Object][Validate]")
+  SECTION("Print a complex JSON object", "[JSON][Print][Object][Buffer]")
   {
     const std::string expected{ R"({
     "glossary": {
@@ -125,4 +125,119 @@ TEST_CASE("Check printing of example JSON", "[JSON][Print]")
     json.print(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
+}
+// ========================================
+// Pretty printing of sample JSON to a file
+// ========================================
+TEST_CASE("Check printing of example JSON to a file.", "[JSON][Print][File]")
+{
+  const JSON json;
+  SECTION("Print a simple array", "[JSON][Print][Array][File]")
+  {
+    const std::string expected{ R"([
+    1,
+    2,
+    3,
+    4,
+    5
+])" };
+    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    std::filesystem::remove(generatedFileName);
+    FileDestination jsonDestination{ generatedFileName };
+    json.parse(BufferSource{ expected });
+    json.print(jsonDestination);
+    REQUIRE(readFromFile(generatedFileName) == expected);
+  }
+  SECTION("Print a simple object", "[JSON][Print][Object][File]")
+  {
+    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    std::filesystem::remove(generatedFileName);
+    FileDestination jsonDestination{ generatedFileName };
+    const std::string expected{ R"({
+    "name": "Alann",
+    "Age": 58,
+    "Eye Color": "Blue",
+    "Sex": "Male"
+})" };
+    json.parse(BufferSource{ expected });
+    json.print(jsonDestination);
+    REQUIRE(readFromFile(generatedFileName) == expected);
+  }
+  //   SECTION("Print a nested array", "[JSON][Print][Array][Buffer]")
+  //   {
+  //     const std::string expected{ R"([
+  //     1,
+  //     2,
+  //     3,
+  //     [
+  //         5,
+  //         6,
+  //         7,
+  //         8
+  //     ],
+  //     5,
+  //     6,
+  //     [
+  //         4,
+  //         5,
+  //         6,
+  //         7,
+  //         8
+  //     ]
+  // ])" };
+  //     BufferDestination jsonDestination;
+  //     json.parse(BufferSource{ expected });
+  //     json.print(jsonDestination);
+  //     REQUIRE(jsonDestination.getBuffer() == expected);
+  //   }
+  //   SECTION("Print a nested object", "[JSON][Print][Object][Buffer]")
+  //   {
+  //     const std::string expected{ R"({
+  //     "name": "Alann",
+  //     "Age": 58,
+  //     "Eye Color": "Blue",
+  //     "Sex": "Male",
+  //     "Details": {
+  //         "Phone": "0999-999-999",
+  //         "email": "john.doe@express.com",
+  //         "enabled": true
+  //     }
+  // })" };
+  //     BufferDestination jsonDestination;
+  //     json.parse(BufferSource{ expected });
+  //     json.print(jsonDestination);
+  //     REQUIRE(jsonDestination.getBuffer() == expected);
+  //   }
+  //   SECTION("Print a complex JSON object", "[JSON][Print][Object][Buffer]")
+  //   {
+  //     const std::string expected{ R"({
+  //     "glossary": {
+  //         "title": "example glossary",
+  //         "GlossDiv": {
+  //             "title": "S",
+  //             "GlossList": {
+  //                 "GlossEntry": {
+  //                     "ID": "SGML",
+  //                     "SortAs": "SGML",
+  //                     "GlossTerm": "Standard Generalized Markup Language",
+  //                     "Acronym": "SGML",
+  //                     "Abbrev": "ISO 8879:1986",
+  //                     "GlossDef": {
+  //                         "para": "A meta-markup language, used to create markup languages such as DocBook.",
+  //                         "GlossSeeAlso": [
+  //                             "GML",
+  //                             "XML"
+  //                         ]
+  //                     },
+  //                     "GlossSee": "markup"
+  //                 }
+  //             }
+  //         }
+  //     }
+  // })" };
+  //     BufferDestination jsonDestination;
+  //     json.parse(BufferSource{ expected });
+  //     json.print(jsonDestination);
+  //     REQUIRE(jsonDestination.getBuffer() == expected);
+  //   }
 }

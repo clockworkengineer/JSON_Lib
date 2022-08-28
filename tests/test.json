@@ -2,10 +2,5 @@
     "name": "Alann",
     "Age": 58,
     "Eye Color": "Blue",
-    "Sex": "Male",
-    "Details": {
-        "Phone": "0999-999-999",
-        "email": "john.doe@express.com",
-        "enabled": true
-    }
+    "Sex": "Male"
 }
