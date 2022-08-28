@@ -88,15 +88,15 @@ void JSON_Impl::stringifyHole(const JNode &jNode, IDestination &destination)
 /// <param name="destination">Destination stream for JSON.</param>
 void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination)
 {
+  size_t commaCount = JRef<Object>(jNode).getObjectEntries().size() - 1;
   destination.add('{');
   for (auto &entry : JRef<Object>(jNode).getObjectEntries()) {
     destination.add('"');
     destination.add(m_translator->toJSON(entry.getKey()));
     destination.add("\":");
     stringifyJNodes(entry.getJNode(), destination);
-    destination.add(',');
+    if (commaCount-- > 0) { destination.add(','); };
   }
-  destination.backup();
   destination.add('}');
 }
 /// <summary>
@@ -106,12 +106,12 @@ void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination)
 /// <param name="destination">Destination stream for JSON.</param>
 void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination)
 {
+  size_t commaCount = JRef<Array>(jNode).getArrayEntries().size() - 1;
   destination.add('[');
   for (auto &node : JRef<Array>(jNode).getArrayEntries()) {
     stringifyJNodes(node, destination);
-    destination.add(',');
+    if (commaCount-- > 0) { destination.add(','); };
   }
-  destination.backup();
   destination.add(']');
 }
 /// <summary>
