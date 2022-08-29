@@ -18,7 +18,7 @@ using namespace JSONLib;
 // ==========================================
 // Pretty printing of sample JSON to a buffer
 // ==========================================
-TEST_CASE("Check printing of example JSON to a buffer.", "[JSON][Print][Buffer]")
+TEST_CASE("Check printing of JSON to a buffer.", "[JSON][Print][Buffer]")
 {
   const JSON json;
   SECTION("Print a simple array to a buffer.", "[JSON][Print][Array][Buffer]")
@@ -129,7 +129,7 @@ TEST_CASE("Check printing of example JSON to a buffer.", "[JSON][Print][Buffer]"
 // ========================================
 // Pretty printing of sample JSON to a file
 // ========================================
-TEST_CASE("Check printing of example JSON to a file.", "[JSON][Print][File]")
+TEST_CASE("Check printing of JSON to a file.", "[JSON][Print][File]")
 {
   const JSON json;
   SECTION("Print a simple array to a file.", "[JSON][Print][Array][File]")
@@ -251,7 +251,7 @@ TEST_CASE("Check printing of example JSON to a file.", "[JSON][Print][File]")
 // =========================
 // Pretty printing indenting
 // =========================
-TEST_CASE("Check printing setting of indentation.", "[JSON][Print][Indent]")
+TEST_CASE("Check setting of print indentation.", "[JSON][Print][Indent]")
 {
   const JSON json;
   SECTION("Set ident to 8 and print JSON to a buffer.", "[JSON][Print][Ident][Buffer]")
@@ -328,8 +328,8 @@ TEST_CASE("Print list of example JSON files.", "[JSON][Print]")
   TEST_FILE_LIST(testFile);
   SECTION("Print to  buffer and check value.", "[JSON][Print][Buffer]")
   {
-    const std::string jsonFileBuffer{ readFromFile(prefixPath(testFile)) };
     json.setIndent(4);
+    const std::string jsonFileBuffer{ readFromFile(prefixPath(testFile)) };
     BufferSource jsonSource{ jsonFileBuffer };
     BufferDestination jsonDestination;
     json.parse(jsonSource);
@@ -338,6 +338,7 @@ TEST_CASE("Print list of example JSON files.", "[JSON][Print]")
   }
   SECTION("Print to file and check value.", "[JSON][Print][File]")
   {
+    json.setIndent(4);
     const std::string testFileName{ prefixPath(testFile) };
     const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
