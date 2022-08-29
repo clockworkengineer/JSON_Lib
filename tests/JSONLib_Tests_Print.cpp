@@ -319,3 +319,33 @@ TEST_CASE("Check printing setting of indentation.", "[JSON][Print][Indent]")
     REQUIRE_THROWS_WITH(json.setIndent(-4), "JSON Error: Invalid print indentation value.");
   }
 }
+// =======================
+// Parsing and print files
+// =======================
+TEST_CASE("Print list of example JSON files.", "[JSON][Print]")
+{
+  const JSON json;
+  TEST_FILE_LIST(testFile);
+  SECTION("Print to  buffer and check value.", "[JSON][Print][Buffer]")
+  {
+    const std::string jsonFileBuffer{ readFromFile(prefixPath(testFile)) };
+    json.setIndent(4);
+    BufferSource jsonSource{ jsonFileBuffer };
+    BufferDestination jsonDestination;
+    json.parse(jsonSource);
+    json.print(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == jsonFileBuffer);
+  }
+  SECTION("Print to file and check value.", "[JSON][Print][File]")
+  {
+    const std::string testFileName{ prefixPath(testFile) };
+    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    std::filesystem::remove(generatedFileName);
+    std::string jsonFileBuffer{ readFromFile(testFileName) };
+    BufferSource jsonSource{ jsonFileBuffer };
+    FileDestination jsonDestination{ generatedFileName };
+    json.parse(jsonSource);
+    json.print(jsonDestination);
+    REQUIRE(readFromFile(generatedFileName) == jsonFileBuffer);
+  }
+}
