@@ -21,7 +21,7 @@ using namespace JSONLib;
 TEST_CASE("Check printing of example JSON to a buffer.", "[JSON][Print][Buffer]")
 {
   const JSON json;
-  SECTION("Print a simple array to a buffer", "[JSON][Print][Array][Buffer]")
+  SECTION("Print a simple array to a buffer.", "[JSON][Print][Array][Buffer]")
   {
     const std::string expected{ R"([
     1,
@@ -35,7 +35,7 @@ TEST_CASE("Check printing of example JSON to a buffer.", "[JSON][Print][Buffer]"
     json.print(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Print a simple object to a buffer", "[JSON][Print][Object][Buffer]")
+  SECTION("Print a simple object to a buffer.", "[JSON][Print][Object][Buffer]")
   {
     const std::string expected{ R"({
     "name": "Alann",
@@ -48,7 +48,7 @@ TEST_CASE("Check printing of example JSON to a buffer.", "[JSON][Print][Buffer]"
     json.print(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Print a nested array to a buffer", "[JSON][Print][Array][Buffer]")
+  SECTION("Print a nested array to a buffer.", "[JSON][Print][Array][Buffer]")
   {
     const std::string expected{ R"([
     1,
@@ -75,7 +75,7 @@ TEST_CASE("Check printing of example JSON to a buffer.", "[JSON][Print][Buffer]"
     json.print(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Print a nested object to a buffer", "[JSON][Print][Object][Buffer]")
+  SECTION("Print a nested object to a buffer.", "[JSON][Print][Object][Buffer]")
   {
     const std::string expected{ R"({
     "name": "Alann",
@@ -93,7 +93,7 @@ TEST_CASE("Check printing of example JSON to a buffer.", "[JSON][Print][Buffer]"
     json.print(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION("Print a complex JSON object to a buffer", "[JSON][Print][Object][Buffer]")
+  SECTION("Print a complex JSON object to a buffer.", "[JSON][Print][Object][Buffer]")
   {
     const std::string expected{ R"({
     "glossary": {
@@ -132,7 +132,7 @@ TEST_CASE("Check printing of example JSON to a buffer.", "[JSON][Print][Buffer]"
 TEST_CASE("Check printing of example JSON to a file.", "[JSON][Print][File]")
 {
   const JSON json;
-  SECTION("Print a simple array to a file", "[JSON][Print][Array][File]")
+  SECTION("Print a simple array to a file.", "[JSON][Print][Array][File]")
   {
     const std::string expected{ R"([
     1,
@@ -148,7 +148,7 @@ TEST_CASE("Check printing of example JSON to a file.", "[JSON][Print][File]")
     json.print(jsonDestination);
     REQUIRE(readFromFile(generatedFileName) == expected);
   }
-  SECTION("Print a simple object to a file", "[JSON][Print][Object][File]")
+  SECTION("Print a simple object to a file.", "[JSON][Print][Object][File]")
   {
     const std::string expected{ R"({
     "name": "Alann",
@@ -163,7 +163,7 @@ TEST_CASE("Check printing of example JSON to a file.", "[JSON][Print][File]")
     json.print(jsonDestination);
     REQUIRE(readFromFile(generatedFileName) == expected);
   }
-  SECTION("Print a nested array to a file", "[JSON][Print][Array][File]")
+  SECTION("Print a nested array to a file.", "[JSON][Print][Array][File]")
   {
 
     const std::string expected{ R"([
@@ -193,7 +193,7 @@ TEST_CASE("Check printing of example JSON to a file.", "[JSON][Print][File]")
     json.print(jsonDestination);
     REQUIRE(readFromFile(generatedFileName) == expected);
   }
-  SECTION("Print a nested object to a file", "[JSON][Print][Object][File]")
+  SECTION("Print a nested object to a file.", "[JSON][Print][Object][File]")
   {
     const std::string expected{ R"({
     "name": "Alann",
@@ -213,7 +213,7 @@ TEST_CASE("Check printing of example JSON to a file.", "[JSON][Print][File]")
     json.print(jsonDestination);
     REQUIRE(readFromFile(generatedFileName) == expected);
   }
-  SECTION("Print a complex JSON object to a file", "[JSON][Print][Object][File]")
+  SECTION("Print a complex JSON object to a file.", "[JSON][Print][Object][File]")
   {
     const std::string expected{ R"({
     "glossary": {
