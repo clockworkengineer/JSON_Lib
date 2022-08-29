@@ -248,3 +248,74 @@ TEST_CASE("Check printing of example JSON to a file.", "[JSON][Print][File]")
     REQUIRE(readFromFile(generatedFileName) == expected);
   }
 }
+// =========================
+// Pretty printing indenting
+// =========================
+TEST_CASE("Check printing setting of indentation.", "[JSON][Print][Indent]")
+{
+  const JSON json;
+  SECTION("Set ident to 8 and print JSON to a buffer.", "[JSON][Print][Ident][Buffer]")
+  {
+    const std::string expected{ R"({
+        "name": "Alann",
+        "Age": 58,
+        "Eye Color": "Blue",
+        "Sex": "Male",
+        "Details": {
+                "Phone": "0999-999-999",
+                "email": "john.doe@express.com",
+                "enabled": true
+        }
+})" };
+    BufferDestination jsonDestination;
+    json.setIndent(8);
+    json.parse(BufferSource{ expected });
+    json.print(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == expected);
+  }
+  SECTION("Set ident to 8 and print JSON to a file.", "[JSON][Print][Ident][File]")
+  {
+    const std::string expected{ R"({
+        "name": "Alann",
+        "Age": 58,
+        "Eye Color": "Blue",
+        "Sex": "Male",
+        "Details": {
+                "Phone": "0999-999-999",
+                "email": "john.doe@express.com",
+                "enabled": true
+        }
+})" };
+    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    std::filesystem::remove(generatedFileName);
+    FileDestination jsonDestination{ generatedFileName };
+    json.setIndent(8);
+    json.parse(BufferSource{ expected });
+    json.print(jsonDestination);
+    REQUIRE(readFromFile(generatedFileName) == expected);
+  }
+  SECTION("Set ident to 0 and print JSON to a buffer.", "[JSON][Print][Ident]")
+  {
+    const std::string expected{ R"({
+"name": "Alann",
+"Age": 58,
+"Eye Color": "Blue",
+"Sex": "Male",
+"Details": {
+"Phone": "0999-999-999",
+"email": "john.doe@express.com",
+"enabled": true
+}
+})" };
+    BufferDestination jsonDestination;
+    json.setIndent(0);
+    json.parse(BufferSource{ expected });
+    json.print(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == expected);
+  }
+  SECTION("Set ident to -4 and trigger invalid indent expection.", "[JSON][Print][Ident][Exception]")
+  {
+    REQUIRE_THROWS_AS(json.setIndent(-4), JSONLib::Error);
+    REQUIRE_THROWS_WITH(json.setIndent(-4), "JSON Error: Invalid print indentation value.");
+  }
+}

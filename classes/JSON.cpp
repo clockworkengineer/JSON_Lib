@@ -105,7 +105,10 @@ void JSON::print(IDestination &&destination) const { m_implementation->print(des
 /// Set print indent value.
 /// </summary>
 /// <param name=indent>Pretty print indent value.</param>
-void JSON::setIndent(long indent) const { m_implementation->setIndent(indent); }
+void JSON::setIndent(long indent) const
+{
+  m_implementation->setIndent(indent);
+}
 /// <summary>
 /// Recursively traverse JNode structure calling IAction methods (read only)
 //  or to change the JSON tree node directly.

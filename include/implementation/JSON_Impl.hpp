@@ -75,7 +75,11 @@ public:
   void traverse(IAction &action);
   void traverse(IAction &action) const;
   // Set print ident value
-  void setIndent(long indent) { m_indent = indent; }
+  void setIndent(long indent)
+  {
+    if (indent < 0) { throw Error("Invalid print indentation value."); };
+    m_indent = indent;
+  }
   // ================
   // PUBLIC VARIABLES
   // ================
