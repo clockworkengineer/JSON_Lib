@@ -102,9 +102,9 @@ void JSON::stringify(IDestination &&destination) const { m_implementation->strin
 void JSON::print(IDestination &destination) const { m_implementation->print(destination); }
 void JSON::print(IDestination &&destination) const { m_implementation->print(destination); }
 /// <summary>
-/// Set pretty print indent value.
+/// Set print indent value.
 /// </summary>
-/// <param name=destination>Destination stream for stringified JSON.</param>
+/// <param name=indent>Pretty print indent value.</param>
 void JSON::setIndent(long indent) const { m_implementation->setIndent(indent); }
 /// <summary>
 /// Recursively traverse JNode structure calling IAction methods (read only)
