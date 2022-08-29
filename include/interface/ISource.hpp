@@ -42,10 +42,10 @@ public:
   // Are there still more characters to read
   // ========================================
   [[nodiscard]] virtual bool more() const = 0;
-  // ========================
-  // Backup length characters
-  // ========================
-  virtual void backup(unsigned long length) = 0;
+  // // ========================
+  // // Backup length characters
+  // // ========================
+  // virtual void backup(unsigned long length) = 0;
   // ===================================
   // Reset to beginning of source stream
   // ===================================
@@ -87,6 +87,13 @@ public:
   std::pair<long, long> getPosition() const { return (std::make_pair(m_lineNo, m_column)); }
 
 protected:
+  // ========================
+  // Backup length characters
+  // ========================
+  virtual void backup(unsigned long length) = 0;
+  // ========================================
+  // Current line and column on source stream
+  // ========================================
   long m_lineNo = 1;
   long m_column = 1;
 };

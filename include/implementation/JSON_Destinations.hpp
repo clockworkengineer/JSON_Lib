@@ -43,17 +43,6 @@ public:
   {
     m_destination.open(destinationFileName.c_str(), std::ios_base::binary | std::ios_base::trunc);
   }
-  void add(const std::string &bytes) override
-  {
-    for (auto ch : bytes) {
-      if (ch == '\n') {
-        m_destination.write("\r\n", 2);
-      } else {
-        m_destination.put(ch);
-      }
-    }
-    m_destination.flush();
-  }
   void add(const char ch) override
   {
     if (ch == '\n') {
@@ -61,6 +50,11 @@ public:
     } else {
       m_destination.put(ch);
     }
+    m_destination.flush();
+  }
+  void add(const std::string &bytes) override
+  {
+    for (auto ch : bytes) { add(ch); }
     m_destination.flush();
   }
   void clear() override

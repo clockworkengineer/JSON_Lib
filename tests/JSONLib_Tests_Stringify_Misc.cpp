@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSON
+// Unit Tests: JSONLib
 //
 // Description: JSON stringification miscellaneous unit
 // tests for JSON class using the Catch2 test framework.
@@ -18,25 +18,25 @@ using namespace JSONLib;
 // ================================================
 // Stringification to file and validation of result
 // ================================================
-TEST_CASE("Stringify to a file and check result.",
-          "[JSON][Stringify][File][Validate]") {
+TEST_CASE("Stringify to a file and check result.", "[JSON][Stringify][File][Validate]")
+{
   const JSON json;
-  const std::string generatedFileName{prefixPath(kGeneratedJSONFile)};
-  SECTION("Stringify object to file and check value",
-          "[JSON][Stringify][File][Validate]") {
-    const std::string expected{R"({"City":"London","Population":8000000})"};
+  const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+  SECTION("Stringify object to file and check value", "[JSON][Stringify][File][Validate]")
+  {
+    const std::string expected{ R"({"City":"London","Population":8000000})" };
     std::filesystem::remove(generatedFileName);
-    FileDestination jsonDestination{generatedFileName};
-    json.parse(BufferSource{expected});
+    FileDestination jsonDestination{ generatedFileName };
+    json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
     REQUIRE(readFromFile(generatedFileName) == expected);
   }
-  SECTION("Stringify array to file and check value",
-          "[JSON][Stringify][File][Validate]") {
-    const std::string expected{R"([999,"Time",null,true])"};
+  SECTION("Stringify array to file and check value", "[JSON][Stringify][File][Validate]")
+  {
+    const std::string expected{ R"([999,"Time",null,true])" };
     std::filesystem::remove(generatedFileName);
-    FileDestination jsonDestination{generatedFileName};
-    json.parse(BufferSource{expected});
+    FileDestination jsonDestination{ generatedFileName };
+    json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
     REQUIRE(readFromFile(generatedFileName) == expected);
   }
@@ -44,25 +44,27 @@ TEST_CASE("Stringify to a file and check result.",
 // =================================
 // Parsing and stringification files
 // =================================
-TEST_CASE("JSON object for stringification of a list of example JSON files.",
-          "[JSON][Stringify]") {
+TEST_CASE("JSON object for stringification of a list of example JSON files.", "[JSON][Stringify]")
+{
   const JSON json;
   TEST_FILE_LIST(testFile);
-  SECTION("Stringify to  buffer and check value.", "[JSON][Stringify][Buffer]") {
-    const std::string jsonFileBuffer{readFromFile(prefixPath(testFile))};
-    BufferSource jsonSource{jsonFileBuffer};
+  SECTION("Stringify to  buffer and check value.", "[JSON][Stringify][Buffer]")
+  {
+    const std::string jsonFileBuffer{ readFromFile(prefixPath(testFile)) };
+    BufferSource jsonSource{ jsonFileBuffer };
     BufferDestination jsonDestination;
     json.parse(jsonSource);
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == stripWhiteSpace(jsonFileBuffer));
   }
-  SECTION("Stringify to file and check value.", "[JSON][Stringify][File]") {
-    const std::string testFileName{prefixPath(testFile)};
-    const std::string generatedFileName{prefixPath(kGeneratedJSONFile)};
+  SECTION("Stringify to file and check value.", "[JSON][Stringify][File]")
+  {
+    const std::string testFileName{ prefixPath(testFile) };
+    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
-    std::string jsonFileBuffer{readFromFile(testFileName)};
-    BufferSource jsonSource{jsonFileBuffer};
-    FileDestination jsonDestination{generatedFileName};
+    std::string jsonFileBuffer{ readFromFile(testFileName) };
+    BufferSource jsonSource{ jsonFileBuffer };
+    FileDestination jsonDestination{ generatedFileName };
     json.parse(jsonSource);
     json.stringify(jsonDestination);
     REQUIRE(readFromFile(generatedFileName) == stripWhiteSpace(jsonFileBuffer));

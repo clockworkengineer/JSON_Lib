@@ -47,15 +47,6 @@ public:
     }
   }
   [[nodiscard]] bool more() const override { return (m_bufferPosition < m_parseBuffer.size()); }
-  void backup(unsigned long length) override
-  {
-    // Make sure to dont backup past the beginning
-    if (length >= m_bufferPosition) {
-      m_bufferPosition = 0;
-    } else {
-      m_bufferPosition -= length;
-    }
-  }
   void reset() override
   {
     m_bufferPosition = 0;
@@ -65,6 +56,7 @@ public:
   [[nodiscard]] std::size_t position() const override { return (m_bufferPosition); }
 
 private:
+  void backup(unsigned long length) override { m_bufferPosition -= length; }
   std::size_t m_bufferPosition = 0;
   std::string m_parseBuffer;
 };
@@ -95,16 +87,6 @@ public:
     }
   }
   bool more() const override { return (m_source.peek() != EOF); }
-  void backup(unsigned long length) override
-  {
-    // Make sure to dont backup past the beginning
-    if ((length <= m_source.tellg()) || (current() == (char)EOF)) {
-      m_source.clear();
-      m_source.seekg(-static_cast<long>(length), std::ios_base::cur);
-    } else {
-      m_source.seekg(0, std::ios_base::beg);
-    }
-  }
   void reset() override
   {
     m_lineNo = 1;
@@ -119,6 +101,11 @@ public:
   }
 
 private:
+  void backup(unsigned long length) override
+  {
+    m_source.clear();
+    m_source.seekg(-static_cast<long>(length), std::ios_base::cur);
+  }
   mutable std::ifstream m_source;
   std::string m_sourceFileName;
 };

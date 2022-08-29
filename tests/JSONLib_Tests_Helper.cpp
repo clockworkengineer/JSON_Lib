@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSON
+// Unit Tests: JSONLib
 //
 // Description: JSON unit test helper functions.
 //
@@ -19,10 +19,9 @@ using namespace JSONLib;
 /// </summary>
 /// <param name="jsonFileName">Test JSON data file name</param>
 /// <returns>Full path to test data file</returns>
-std::string prefixPath(const std::string &jsonFileName)
+const std::string prefixPath(const std::string &jsonFileName)
 {
-  const std::filesystem::path currentPath = std::filesystem::current_path() / "files" / jsonFileName;
-  return (currentPath.string());
+  return ((std::filesystem::current_path() / "files" / jsonFileName).string());
 }
 /// <summary>
 /// Open a JSON file, read its contents into a string buffer and return
@@ -36,8 +35,8 @@ std::string readFromFile(const std::string &jsonFileName)
   jsonFile.open(jsonFileName, std::ios_base::binary);
   std::ostringstream jsonFileBuffer;
   jsonFileBuffer << jsonFile.rdbuf();
-  std::string jsonBuffer { jsonFileBuffer.str()};
-  size_t pos =  jsonBuffer.find(kCRLF);
+  std::string jsonBuffer{ jsonFileBuffer.str() };
+  size_t pos = jsonBuffer.find(kCRLF);
   while (pos != std::string::npos) {
     jsonBuffer.replace(pos, 2, kLF);
     pos = jsonBuffer.find(kCRLF, pos + 1);
@@ -101,8 +100,7 @@ void checkObject(const JNode &jNode)
 std::string stripWhiteSpace(const std::string &jsonBuffer)
 {
   const JSONLib::JSON json;
-  BufferSource source(jsonBuffer);
   BufferDestination destination;
-  json.strip(source, destination);
+  json.strip(BufferSource {jsonBuffer}, destination);
   return (destination.getBuffer());
 }
