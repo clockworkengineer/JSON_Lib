@@ -56,8 +56,8 @@ public:
   void stringify(IDestination &destination) const;
   void stringify(IDestination &&destination) const;
   // Create JSON text string from JNode tree (pretty printed)
-  void print(IDestination &destination, std::size_t indent = 4) const;
-  void print(IDestination &&destination, std::size_t indent = 4) const;
+  void print(IDestination &destination) const;
+  void print(IDestination &&destination) const;
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   void strip(ISource &source, IDestination &&destination) const;
@@ -66,6 +66,8 @@ public:
   // Traverse JSON tree
   void traverse(IAction &action);
   void traverse(IAction &action) const;
+  // Set print ident value
+  void setIndent(long indent) const;
   // Get root of JSON tree
   [[nodiscard]] JNode &root();
   [[nodiscard]] const JNode &root() const;

@@ -99,8 +99,13 @@ void JSON::stringify(IDestination &&destination) const { m_implementation->strin
 /// Traverse JNode structure and build its JSON string (pretty printed) on destination stream.
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
-void JSON::print(IDestination &destination, std::size_t indent) const { m_implementation->print(destination, indent); }
-void JSON::print(IDestination &&destination, std::size_t indent) const { m_implementation->print(destination, indent); }
+void JSON::print(IDestination &destination) const { m_implementation->print(destination); }
+void JSON::print(IDestination &&destination) const { m_implementation->print(destination); }
+/// <summary>
+/// Set pretty print indent value.
+/// </summary>
+/// <param name=destination>Destination stream for stringified JSON.</param>
+void JSON::setIndent(long indent) const { m_implementation->setIndent(indent); }
 /// <summary>
 /// Recursively traverse JNode structure calling IAction methods (read only)
 //  or to change the JSON tree node directly.
