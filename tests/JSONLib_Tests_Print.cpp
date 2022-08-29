@@ -1,8 +1,8 @@
 //
-// Unit Tests: JSON
+// Unit Tests: JSON_Print
 //
-// Description: JSON print of JSON unit tests for JSON class
-// using the Catch2 test framework.
+// Description: JSON print unit tests for JSON class using
+// the Catch2 test framework.
 //
 // ================
 // Test definitions
