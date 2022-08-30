@@ -34,6 +34,7 @@ inline static const char *kNonExistantJSONFile = "doesntexist.json";
 // Unit test helper functions
 // ==========================
 const std::string prefixPath(const std::string &jsonFileName);
+std::string crlfTolf(const std::string &jsonBuffer);
 std::string readFromFile(const std::string &jsonFileName);
 void writeToFile(const std::string &jsonFileName, const std::string &jsonString);
 void checkObject(const JSONLib::JNode &jNode);

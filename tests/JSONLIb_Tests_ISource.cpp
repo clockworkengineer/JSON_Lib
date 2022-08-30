@@ -22,7 +22,7 @@ using namespace JSONLib;
 TEST_CASE("ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
 {
   const std::string testFileName{ prefixPath(kSingleJSONFile) };// Uses file testfile001.json
-  const std::string buffer{ readFromFile(testFileName) };
+  const std::string buffer{ crlfTolf(readFromFile(testFileName)) };
   SECTION("Create BufferSource.", "[JSON][ISource][Buffer][Construct]") { REQUIRE_NOTHROW(BufferSource(buffer)); }
   SECTION("Check that BufferSource position() works correctly.", "[JSON][ISource][Buffer][Position]")
   {
@@ -104,6 +104,30 @@ TEST_CASE("ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
     while (source.more()) { source.next(); }
     REQUIRE_THROWS_AS(source.next(), ISource::Error);
     REQUIRE_THROWS_WITH(source.next(), "ISource Error: Tried to read past and of buffer.");
+  }
+  SECTION("Create a BufferSource that contains linfeeds and read from it into a string and compare.",
+    "[JSON][ISource][Buffer][Linefeeds]")
+  {
+    std::string result;
+    BufferSource source{ "[true\n,\"Out of time\"\n,7.89043e+18\n,true\n]" };
+    while (source.more()) {
+      result.push_back(source.current());
+      source.next();
+    }
+    //  No translation of linefeeds occurs
+    REQUIRE(result == "[true\n,\"Out of time\"\n,7.89043e+18\n,true\n]");
+  }
+  SECTION("Create a BufferSource that contains carriage return/linfeed and read from it into a string and compare.",
+    "[JSON][ISource][Buffer][Linefeeds]")
+  {
+    std::string result;
+    BufferSource source{ "[true\r\n,\"Out of time\"\r\n,7.89043e+18\r\n,true\r\n]" };
+    while (source.more()) {
+      result.push_back(source.current());
+      source.next();
+    }
+    //  No translation of carriage return/linefeed occurs
+    REQUIRE(result == "[true\r\n,\"Out of time\"\r\n,7.89043e+18\r\n,true\r\n]");
   }
 }
 // ====
@@ -202,5 +226,45 @@ TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]")
     while (source.more()) { source.next(); }
     REQUIRE_THROWS_AS(source.next(), ISource::Error);
     REQUIRE_THROWS_WITH(source.next(), "ISource Error: Tried to read past end of file.");
+  }
+  SECTION("Create a FileSource that contains linfeeds and read from it into a string and compare.",
+    "[JSON][ISource][Buffer][Linefeeds]")
+  {
+    std::string result;
+    BufferSource source{ R"([true\n,Out of time"\n,7.89043e+18\n,true\n])" };
+    while (source.more()) {
+      result.push_back(source.current());
+      source.next();
+    }
+    //  No translation  of linefeeds occurs
+    REQUIRE(result == R"([true\n,Out of time"\n,7.89043e+18\n,true\n])");
+  }
+  SECTION("Create a FileSource that contains linfeeds and read from it into a string and compare.",
+    "[JSON][ISource][Buffer][Linefeeds]")
+  {
+    std::string result;
+    std::filesystem::remove(kGeneratedJSONFile);
+    writeToFile(kGeneratedJSONFile, "[true\n,\"Out of time\"\n,7.89043e+18\n,true\n]");
+    FileSource source{ kGeneratedJSONFile };
+    while (source.more()) {
+      result.push_back(source.current());
+      source.next();
+    }
+    // No translation of just linefeeds occurs when reading from source stream
+    REQUIRE(result == "[true\n,\"Out of time\"\n,7.89043e+18\n,true\n]");
+  }
+  SECTION("Create a FileSource that contains carriage return/linfeeds and read from it into a string and compare.",
+    "[JSON][ISource][Buffer][Linefeeds]")
+  {
+    std::string result;
+    std::filesystem::remove(kGeneratedJSONFile);
+    writeToFile(kGeneratedJSONFile, "[true\r\n,\"Out of time\"\r\n,7.89043e+18\r\n,true\r\n]");
+    FileSource source{ kGeneratedJSONFile };
+    while (source.more()) {
+      result.push_back(source.current());
+      source.next();
+    }
+    // Carriage return/linefeed translated to linefeed when reading from source stream
+    REQUIRE(result == "[true\n,\"Out of time\"\n,7.89043e+18\n,true\n]");
   }
 }

@@ -24,8 +24,23 @@ const std::string prefixPath(const std::string &jsonFileName)
   return ((std::filesystem::current_path() / "files" / jsonFileName).string());
 }
 /// <summary>
+/// Convert any <CR><LF> to just <LF>.
+/// </summary>
+/// <param name="jsonBuffer">JSON string buffer</param>
+/// <returns>Translated JSON string</returns>
+std::string crlfTolf(const std::string &jsonBuffer)
+{
+  std::string translated { jsonBuffer};
+  size_t pos = translated.find(kCRLF);
+  while (pos != std::string::npos) {
+    translated.replace(pos, 2, kLF);
+    pos = translated.find(kCRLF, pos + 1);
+  }
+  return (translated);
+}
+/// <summary>
 /// Open a JSON file, read its contents into a string buffer and return
-/// the buffer; converting any <CR><LF> to just <LF>.
+/// the buffer.
 /// </summary>
 /// <param name="jsonFileName">JSON file name</param>
 /// <returns>JSON string.</returns>
@@ -35,13 +50,7 @@ std::string readFromFile(const std::string &jsonFileName)
   jsonFile.open(jsonFileName, std::ios_base::binary);
   std::ostringstream jsonFileBuffer;
   jsonFileBuffer << jsonFile.rdbuf();
-  std::string jsonBuffer{ jsonFileBuffer.str() };
-  size_t pos = jsonBuffer.find(kCRLF);
-  while (pos != std::string::npos) {
-    jsonBuffer.replace(pos, 2, kLF);
-    pos = jsonBuffer.find(kCRLF, pos + 1);
-  }
-  return (jsonBuffer);
+  return (jsonFileBuffer.str());
 }
 /// <summary>
 /// Create an JSON file and write JSON.
