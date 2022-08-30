@@ -12,17 +12,17 @@ namespace JSONLib {
 template<typename T> void checkJNode(const Variant &jNodeVariant)
 {
   if constexpr (std::is_same_v<T, String>) {
-    if (jNodeVariant.getType() != JNode::Type::string) { throw JNode::Error("Node not a string."); }
+    if (jNodeVariant.getType() != JNode::Type::string) { throw JNode::Error("JNode not a string."); }
   } else if constexpr (std::is_same_v<T, Number>) {
-    if (jNodeVariant.getType() != JNode::Type::number) { throw JNode::Error("Node not a number."); }
+    if (jNodeVariant.getType() != JNode::Type::number) { throw JNode::Error("JNode not a number."); }
   } else if constexpr (std::is_same_v<T, Array>) {
-    if (jNodeVariant.getType() != JNode::Type::array) { throw JNode::Error("Node not an array."); }
+    if (jNodeVariant.getType() != JNode::Type::array) { throw JNode::Error("JNode not an array."); }
   } else if constexpr (std::is_same_v<T, Object>) {
-    if (jNodeVariant.getType() != JNode::Type::object) { throw JNode::Error("Node not an object."); }
+    if (jNodeVariant.getType() != JNode::Type::object) { throw JNode::Error("JNode not an object."); }
   } else if constexpr (std::is_same_v<T, Boolean>) {
-    if (jNodeVariant.getType() != JNode::Type::boolean) { throw JNode::Error("Node not an boolean."); }
+    if (jNodeVariant.getType() != JNode::Type::boolean) { throw JNode::Error("JNode not an boolean."); }
   } else if constexpr (std::is_same_v<T, Null>) {
-    if (jNodeVariant.getType() != JNode::Type::null) { throw JNode::Error("Node not a null."); }
+    if (jNodeVariant.getType() != JNode::Type::null) { throw JNode::Error("JNode not a null."); }
   }
 }
 template<typename T> T &JRef(JNode &jNode)

@@ -21,7 +21,7 @@ using namespace JSONLib;
 TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
 {
   const JSON json;
-  // Note:: That floating point -> integer will be rounded up/down
+  // Note: That floating point -> integer will be rounded up/down
   SECTION("Floating point converted to int.", "[JSON][JNode][Number]")
   {
     BufferSource jsonSource{ "6788888.8990" };
