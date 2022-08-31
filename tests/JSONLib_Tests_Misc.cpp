@@ -18,56 +18,44 @@ using namespace JSONLib;
 // ===============
 // JSON Translator
 // ===============
-TEST_CASE("Check translation of surrogate pairs.", "[JSON][DefaultTranslator]")
+TEST_CASE("Check translation of surrogate pairs.", "[JSON][Translator]")
 {
   JSON_Converter converter;
   JSON_Translator translator(converter);
-  SECTION(
-    "Translate from escape sequences valid surrogate pair 'Begin "
-    "\\uD834\\uDD1E End' and check value.",
-    "[JSON][DefaultTranslator]")
+  SECTION("Translate from escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value.",
+    "[JSON][Translator]")
   {
     const std::u8string expected{ u8"Begin \U0001D11E End" };
     REQUIRE(translator.fromJSON(R"(Begin \uD834\uDD1E End)") == std::string{ expected.begin(), expected.end() });
   }
-  SECTION(
-    "Translate from escape sequences surrogate pair 'Begin \\uD834 "
-    "\\uDD1E End' in error then expect exception.",
-    "[JSON][DefaultTranslator][Exception]")
+  SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 \\uDD1E End' in error then expect exception.",
+    "[JSON][Translator][Exception]")
   {
     REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uD834 \uDD1E End)"), JSON_Translator::Error);
     REQUIRE_THROWS_WITH(
       translator.fromJSON(R"(Begin \uD834 \uDD1E End)"), "JSON Translator Error: Unpaired surrogate found.");
   }
-  SECTION(
-    "Translate from escape sequences surrogate pair 'Begin "
-    "\\uD834\\u0045 End' in error then expect exception.",
-    "[JSON][DefaultTranslator][Exception]")
+  SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834\\u0045 End' in error then expect exception.",
+    "[JSON][Translator][Exception]")
   {
     REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uD834\u0045 End)"), JSON_Translator::Error);
     REQUIRE_THROWS_WITH(
       translator.fromJSON(R"(Begin \uD834\u0045 End)"), "JSON Translator Error: Unpaired surrogate found.");
   }
-  SECTION(
-    "Translate from escape sequences surrogate pair 'Begin \\uD834 End' "
-    "in error then expect exception.",
-    "[JSON][DefaultTranslator][Exception]")
+  SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 End' in error then expect exception.",
+    "[JSON][Translator][Exception]")
   {
     REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uD834 End)"), JSON_Translator::Error);
     REQUIRE_THROWS_WITH(translator.fromJSON(R"(Begin \uD834 End)"), "JSON Translator Error: Unpaired surrogate found.");
   }
-  SECTION(
-    "Translate from escape sequences surrogate pair 'Begin \\uDD1E End' "
-    "in error then expect exception.",
-    "[JSON][DefaultTranslator][Exception]")
+  SECTION("Translate from escape sequences surrogate pair 'Begin \\uDD1E End' in error then expect exception.",
+    "[JSON][Translator][Exception]")
   {
     REQUIRE_THROWS_AS(translator.fromJSON(R"(Begin \uDD1E End)"), JSON_Translator::Error);
     REQUIRE_THROWS_WITH(translator.fromJSON(R"(Begin \uDD1E End)"), "JSON Translator Error: Unpaired surrogate found.");
   }
-  SECTION(
-    "Translate to escape sequences valid surrogate pair 'Begin "
-    "\\uD834\\uDD1E End' and check value.",
-    "[JSON][DefaultTranslator]")
+  SECTION("Translate to escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value.",
+    "[JSON][Translator]")
   {
     std::u8string actual{ u8"Begin \U0001D11E End" };
     REQUIRE(translator.toJSON({ actual.begin(), actual.end() }) == R"(Begin \uD834\uDD1E End)");
@@ -76,16 +64,16 @@ TEST_CASE("Check translation of surrogate pairs.", "[JSON][DefaultTranslator]")
 // ========================
 // R-Value Reference API(s)
 // ========================
-TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value Reference]")
+TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value-Reference]")
 {
   const JSON json;
-  SECTION("Parse with R-Value reference (Buffer).", "[JSON][JNode][R-Value Reference]")
+  SECTION("Parse with R-Value reference (Buffer).", "[JSON][JNode][R-Value-Reference]")
   {
     json.parse(BufferSource{ R"({"City":"Southampton","Population":500000 })" });
     REQUIRE(JRef<Object>(json.root()).size() == 2);
     REQUIRE(JRef<String>((json.root())["City"]).getString() == "Southampton");
   }
-  SECTION("Parse/Stringify both with R-Value reference (File).", "[JSON][JNode][R-Value Reference]")
+  SECTION("Parse/Stringify both with R-Value reference (File).", "[JSON][JNode][R-Value-Reference]")
   {
     const std::string testFileName{ prefixPath(kSingleJSONFile) };
     const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };

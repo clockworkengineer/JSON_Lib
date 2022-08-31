@@ -146,9 +146,9 @@ TEST_CASE("Check JNode Number conversion exceptions.", "[JSON][JNode][Number][Ex
   }
 }
 // ===============================
-// JNode Numeric numeric type apis
+// JNode Numeric numeric type API(s)
 // ===============================
-TEST_CASE("Check JNode Numeric api for all supported number types.", "[JSON][JNode][Numeric]")
+TEST_CASE("Check JNode Numeric API(s) for all supported number types.", "[JSON][JNode][Numeric]")
 {
   JSON json;
   SECTION("Check numbers are the correct type.", "[JSON][JNode][Numeric][Addition]")

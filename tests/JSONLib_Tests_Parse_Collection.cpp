@@ -27,7 +27,7 @@ TEST_CASE("JSON object for parse of collection types (array,object).", "[JSON][P
     json.parse(jsonSource);
     REQUIRE_FALSE(!json.root().isObject());
   }
-  SECTION(R"(Parse an array ([ 777,9000,"apples"]).)", "[JSON][Parse][Collection]")
+  SECTION(R"(Parse an array ([777,9000,"apples"]).)", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ R"([777,9000,"apples"])" };
     json.parse(jsonSource);
@@ -93,8 +93,7 @@ TEST_CASE("JSON object for parse of collection types and check values.", "[JSON]
     REQUIRE(JRef<Number>((json.root())[1]).getNumber().getInt() == 9000);
     REQUIRE(JRef<String>((json.root())[2]).getString() == "apples");
   }
-  SECTION(R"(Parse object {"City":"Southampton","Population":500000} and )"
-          "check its value.",
+  SECTION(R"(Parse object {"City":"Southampton","Population":500000} and check its value.)",
     "[JSON][Parse][Collection][validate]")
   {
     BufferSource jsonSource{ R"({"City":"Southampton","Population":500000})" };

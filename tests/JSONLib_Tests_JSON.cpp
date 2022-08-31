@@ -1,7 +1,7 @@
 //
 // Unit Tests: JSONLib
 //
-// Description: JSON creation api unit tests for JSON class
+// Description: JSON creation API(s) unit tests for JSON class
 // using the Catch2 test framework. Note: These tests use more
 // modern raw literal strings to represent JSON.
 //
