@@ -18,32 +18,35 @@ using namespace JSONLib;
 // =======================
 // JNode Number assignment
 // =======================
-TEST_CASE("Check JNode Number assignment.", "[JSON][JNode][Number][Assignment]")
+TEST_CASE("Check JNode Number assignment/creation.", "[JSON][JNode][Number][Assignment]")
 {
-  JSON json;
-  SECTION("Create array element with int in first element.", "[JSON][JNode][Number][Integer]")
+  SECTION("Create JNode with int assigment.", "[JSON][JNode][Number][Integer][Assignment]")
   {
-    json[0] = 666;
-    REQUIRE_FALSE(!JRef<Number>(json[0]).getNumber().isInt());
-    REQUIRE(JRef<Number>(json[0]).getNumber().getInt() == 666);
+    JNode jNode;
+    jNode = 666;
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isInt());
+    REQUIRE(JRef<Number>(jNode).getNumber().getInt() == 666);
   }
-  SECTION("Create array element with long in second element.", "[JSON][JNode][Number][Long]")
+  SECTION("Create JNode with long assigment.", "[JSON][JNode][Number][Long][Assignment]")
   {
-    json[1] = 666l;
-    REQUIRE_FALSE(!JRef<Number>(json[1]).getNumber().isLong());
-    REQUIRE(JRef<Number>(json[1]).getNumber().getLong() == 666);
+    JNode jNode;
+    jNode = 666l;
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLong());
+    REQUIRE(JRef<Number>(jNode).getNumber().getLong() == 666l);
   }
-  SECTION("Create array element with float in third element.", "[JSON][JNode][Number][Float]")
+  SECTION("Create JNode with float assigment.", "[JSON][JNode][Number][Float][Assignment]")
   {
-    json[2] = 666.666f;
-    REQUIRE_FALSE(!JRef<Number>(json[2]).getNumber().isFloat());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json[2]).getNumber().getFloat(), 666.666f, 0.0001));
+    JNode jNode;
+    jNode = 666.666f;
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isFloat());
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getFloat(), 666.666f, 0.0001));
   }
-  SECTION("Create array element with double in fourth element.", "[JSON][JNode][Number][Double]")
+  SECTION("Create JNode with double assigment.", "[JSON][JNode][Number][Double][Assignment]")
   {
-    json[3] = 666.666;
-    REQUIRE_FALSE(!JRef<Number>(json[3]).getNumber().isDouble());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json[3]).getNumber().getDouble(), 666.666, 0.0001));
+    JNode jNode;
+    jNode = 666.666;
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isDouble());
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getDouble(), 666.666, 0.0001));
   }
 }
 // =======================

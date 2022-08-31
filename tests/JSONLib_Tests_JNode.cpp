@@ -268,6 +268,9 @@ TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]")
     REQUIRE(JRef<String>((json.root())["City"]).getString() == "Southampton");
   }
 }
+// ===================================
+// JNode Reference function exceptions
+// ===================================
 TEST_CASE("Check JNode reference function exceptions.", "[JSON][JNode][Reference][Exception]")
 {
   const JSON json;
