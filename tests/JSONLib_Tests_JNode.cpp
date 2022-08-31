@@ -131,7 +131,7 @@ TEST_CASE("Use of JNode assigment operators.", "[JSON][JNode][Assignment]")
   SECTION("Assign C string to JNode.", "[JSON][JNode][Assignment][CString]")
   {
     JNode jNode;
-    jNode  = "test string";
+    jNode = "test string";
     REQUIRE_FALSE(!jNode.isString());
     REQUIRE(JRef<String>(jNode).getString() == "test string");
   }
@@ -260,11 +260,57 @@ TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]")
     REQUIRE(JRef<Array>(json.root()).size() == 3);
     REQUIRE(JRef<String>((json.root())[2]).getString() == "apples");
   }
-  SECTION("Dictionary reference.", "[JSON][JNode][Reference][Dictionary]")
+  SECTION("Object reference.", "[JSON][JNode][Reference][Object]")
   {
     BufferSource jsonSource{ R"({"City":"Southampton","Population":500000 })" };
     json.parse(jsonSource);
     REQUIRE(JRef<Object>(json.root()).size() == 2);
     REQUIRE(JRef<String>((json.root())["City"]).getString() == "Southampton");
+  }
+}
+TEST_CASE("Check JNode reference function exceptions.", "[JSON][JNode][Reference][Exceptions]")
+{
+  const JSON json;
+  SECTION("String reference an number.", "[JSON][JNode][Reference][String]")
+  {
+    BufferSource jsonSource{ "45500" };
+    json.parse(jsonSource);
+    REQUIRE_THROWS_AS(JRef<String>(json.root()).getString(), JNode::Error);
+    REQUIRE_THROWS_WITH(JRef<String>(json.root()).getString(), "JNode Error: JNode not a string.");
+  }
+  SECTION("Number reference a string.", "[JSON][JNode][Reference][Number][Exceptions]")
+  {
+    BufferSource jsonSource{ R"("0123456789")" };
+    json.parse(jsonSource);
+    REQUIRE_THROWS_AS(JRef<Number>(json.root()).getNumber().isInt(), JNode::Error);
+    REQUIRE_THROWS_WITH(JRef<Number>(json.root()).getNumber().isInt(), "JNode Error: JNode not a number.");
+  }
+  SECTION("Null reference a boolean.", "[JSON][JNode][Reference][Null][Exceptions]")
+  {
+    BufferSource jsonSource{ R"(true)" };
+    json.parse(jsonSource);
+    REQUIRE_THROWS_AS(JRef<Null>(json.root()).getNull(), JNode::Error);
+    REQUIRE_THROWS_WITH(JRef<Null>(json.root()).getNull(), "JNode Error: JNode not a null.");
+  }
+  SECTION("Boolean reference a null.", "[JSON][JNode][Reference][Boolean][Exceptions]")
+  {
+    BufferSource jsonSource{ R"(null)" };
+    json.parse(jsonSource);
+    REQUIRE_THROWS_AS(JRef<Boolean>(json.root()).getBoolean(), JNode::Error);
+    REQUIRE_THROWS_WITH(JRef<Boolean>(json.root()).getBoolean(), "JNode Error: JNode not a boolean.");
+  }
+  SECTION("Object reference an array.", "[JSON][JNode][Reference][Object][Exceptions]")
+  {
+    BufferSource jsonSource{ R"([777,9000,"apples"])" };
+    json.parse(jsonSource);
+    REQUIRE_THROWS_AS(JRef<Object>(json.root()).size(), JNode::Error);
+    REQUIRE_THROWS_WITH(JRef<Object>(json.root()).size(), "JNode Error: JNode not an object.");
+  }
+  SECTION("Array reference an object.", "[JSON][JNode][Reference][Array][Exceptions]")
+  {
+    BufferSource jsonSource{ R"({"City":"Southampton","Population":500000 })" };
+    json.parse(jsonSource);
+    REQUIRE_THROWS_AS(JRef<Array>(json.root()).size(), JNode::Error);
+    REQUIRE_THROWS_WITH(JRef<Array>(json.root()).size(), "JNode Error: JNode not an array.");
   }
 }

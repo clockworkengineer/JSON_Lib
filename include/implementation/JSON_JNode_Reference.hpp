@@ -20,7 +20,7 @@ template<typename T> void checkJNode(const Variant &jNodeVariant)
   } else if constexpr (std::is_same_v<T, Object>) {
     if (jNodeVariant.getType() != JNode::Type::object) { throw JNode::Error("JNode not an object."); }
   } else if constexpr (std::is_same_v<T, Boolean>) {
-    if (jNodeVariant.getType() != JNode::Type::boolean) { throw JNode::Error("JNode not an boolean."); }
+    if (jNodeVariant.getType() != JNode::Type::boolean) { throw JNode::Error("JNode not a boolean."); }
   } else if constexpr (std::is_same_v<T, Null>) {
     if (jNodeVariant.getType() != JNode::Type::null) { throw JNode::Error("JNode not a null."); }
   }
