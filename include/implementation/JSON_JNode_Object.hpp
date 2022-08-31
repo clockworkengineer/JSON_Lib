@@ -59,7 +59,7 @@ struct Object : Variant
   [[nodiscard]] bool contains(const std::string &key) const
   {
     try {
-      [[maybe_unused]] auto entry = findKey(key, m_jsonObjectEntries);
+      [[maybe_unused]] auto entry = findKey(key);
     } catch ([[maybe_unused]] const JNode::Error &e) {
       return (false);
     }
@@ -68,8 +68,8 @@ struct Object : Variant
   // Return number of entries in an object
   [[nodiscard]] int size() const { return (static_cast<int>(m_jsonObjectEntries.size())); }
   // Return object entry for a given key
-  JNode &operator[](const std::string &key) { return (findKey(key, m_jsonObjectEntries)->getJNode()); }
-  const JNode &operator[](const std::string &key) const { return (findKey(key, m_jsonObjectEntries)->getJNode()); }
+  JNode &operator[](const std::string &key) { return (findKey(key)->getJNode()); }
+  const JNode &operator[](const std::string &key) const { return (findKey(key)->getJNode()); }
   // Return reference to base of object entries
   EntryList &getObjectEntries() { return (m_jsonObjectEntries); }
   [[nodiscard]] const EntryList &getObjectEntries() const { return (m_jsonObjectEntries); }
@@ -82,20 +82,20 @@ struct Object : Variant
 
 private:
   // Search for a given entry given a key and object list
-  [[nodiscard]] Object::EntryList::iterator findKey(const std::string &key, EntryList &objectEntries)
+  [[nodiscard]] Object::EntryList::iterator findKey(const std::string &key)
   {
-    auto entry = std::find_if(objectEntries.begin(), objectEntries.end(), [&key](const Entry &entry) -> bool {
+    auto entry = std::find_if(m_jsonObjectEntries.begin(), m_jsonObjectEntries.end(), [&key](const Entry &entry) -> bool {
       return (entry.getKey() == key);
     });
-    if (entry == objectEntries.end()) { throw JNode::Error("Invalid key used to access object."); }
+    if (entry == m_jsonObjectEntries.end()) { throw JNode::Error("Invalid key used to access object."); }
     return (entry);
   }
-  [[nodiscard]] Object::EntryList::const_iterator findKey(const std::string &key, const EntryList &objectEntries) const
+  [[nodiscard]] Object::EntryList::const_iterator findKey(const std::string &key) const
   {
-    auto entry = std::find_if(objectEntries.begin(), objectEntries.end(), [&key](const Entry &entry) -> bool {
+    auto entry = std::find_if(m_jsonObjectEntries.begin(), m_jsonObjectEntries.end(), [&key](const Entry &entry) -> bool {
       return (entry.getKey() == key);
     });
-    if (entry == objectEntries.end()) { throw JNode::Error("Invalid key used to access object."); }
+    if (entry == m_jsonObjectEntries.end()) { throw JNode::Error("Invalid key used to access object."); }
     return (entry);
   }
   // Object entries list
