@@ -41,10 +41,10 @@ struct Numeric
     if (floatString.back() == '.') { floatString += '0'; }
     return floatString;
   }
-  // JNodeNumeric Error
+  // JNode Numeric Error
   struct Error : public std::runtime_error
   {
-    explicit Error(const std::string &message) : std::runtime_error("JNodeNumeric Error: " + message) {}
+    explicit Error(const std::string &message) : std::runtime_error("JNode Numeric Error: " + message) {}
   };
   // Convert types
   template<typename T> [[nodiscard]] T convertType() const
