@@ -55,24 +55,6 @@ struct Object : Variant
   Object(Object &&other) = default;
   Object &operator=(Object &&other) = default;
   ~Object() = default;
-
-  // Search for a given entry given a key and object list
-  [[nodiscard]] auto findKey(const std::string &key, EntryList &objectEntries)
-  {
-    auto entry = std::find_if(objectEntries.begin(), objectEntries.end(), [&key](const Entry &entry) -> bool {
-      return (entry.getKey() == key);
-    });
-    if (entry == objectEntries.end()) { throw JNode::Error("Invalid key used to access object."); }
-    return (entry);
-  }
-  [[nodiscard]] auto findKey(const std::string &key, const EntryList &objectEntries) const
-  {
-    auto entry = std::find_if(objectEntries.begin(), objectEntries.end(), [&key](const Entry &entry) -> bool {
-      return (entry.getKey() == key);
-    });
-    if (entry == objectEntries.end()) { throw JNode::Error("Invalid key used to access object."); }
-    return (entry);
-  }
   // Return true if an object contains a given key
   [[nodiscard]] bool contains(const std::string &key) const
   {
@@ -99,6 +81,24 @@ struct Object : Variant
   }
 
 private:
+  // Search for a given entry given a key and object list
+  [[nodiscard]] Object::EntryList::iterator findKey(const std::string &key, EntryList &objectEntries)
+  {
+    auto entry = std::find_if(objectEntries.begin(), objectEntries.end(), [&key](const Entry &entry) -> bool {
+      return (entry.getKey() == key);
+    });
+    if (entry == objectEntries.end()) { throw JNode::Error("Invalid key used to access object."); }
+    return (entry);
+  }
+  [[nodiscard]] Object::EntryList::const_iterator findKey(const std::string &key, const EntryList &objectEntries) const
+  {
+    auto entry = std::find_if(objectEntries.begin(), objectEntries.end(), [&key](const Entry &entry) -> bool {
+      return (entry.getKey() == key);
+    });
+    if (entry == objectEntries.end()) { throw JNode::Error("Invalid key used to access object."); }
+    return (entry);
+  }
+  // Object entries list
   EntryList m_jsonObjectEntries;
 };
 }// namespace JSONLib

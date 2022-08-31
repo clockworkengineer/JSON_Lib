@@ -52,6 +52,7 @@ struct Array : Variant
   static JNode make(Array::ArrayList &array) { return (JNode{ std::make_unique<Array>(Array{ array }) }); }
 
 private:
+  // Array entries list
   ArrayList m_jsonArray;
 };
 }// namespace JSONLib

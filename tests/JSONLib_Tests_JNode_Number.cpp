@@ -1,7 +1,7 @@
 //
 // Unit Tests: JSONLib
 //
-// Description: JNode Number unit tests for JSON class
+// Description: JNode Number/Numeric class unit tests for JSON class
 // using the Catch2 test framework.
 //
 // ================
@@ -15,9 +15,9 @@ using namespace JSONLib;
 // ==========
 // Test cases
 // ==========
-// ============
-// JNode Number
-// ============
+// =======================
+// JNode Number conversion
+// =======================
 TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
 {
   const JSON json;
@@ -84,7 +84,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isDouble());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).getNumber().getDouble(), 78989.0, 0.0001));
   }
-  SECTION("Check  floating point with exponent.", "[JSON][JNode][Number][Exception")
+  SECTION("Check  floating point with exponent.", "[JSON][JNode][Number][Exception]")
   {
     BufferSource jsonSource{ "78.43e-2" };
     REQUIRE_NOTHROW(json.parse(jsonSource));
@@ -104,6 +104,9 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 12]: Invalid numeric value.");
   }
 }
+// ===============================
+// JNode Numeric numeric type apis
+// ===============================
 TEST_CASE("Check JNode Numeric api for all supported number types.", "[JSON][JNode][Numeric]")
 {
   JSON json;

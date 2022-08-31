@@ -18,10 +18,10 @@ using namespace JSONLib;
 // ====================================
 // Stringification generated exceptions
 // ====================================
-TEST_CASE("Stringify generated exceptions.", "[JSON][Stringify][Exceptions]")
+TEST_CASE("Stringify generated exceptions.", "[JSON][Stringify][Exception]")
 {
   const JSON json;
-  SECTION("Stringify has no JSON to process.", "[JSON][Stringify][Exceptions]")
+  SECTION("Stringify has no JSON to process.", "[JSON][Stringify][Exception]")
   {
     REQUIRE_THROWS_AS(json.stringify(BufferDestination{}), JSONLib::Error);
     REQUIRE_THROWS_WITH(json.stringify(BufferDestination{}), "JSON Error: No JSON to stringify.");
