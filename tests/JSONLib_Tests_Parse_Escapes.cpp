@@ -1,7 +1,7 @@
 //
 // Unit Tests: JSONLib
 //
-// Description: JSON parse escape character unit tests for JSON class
+// Description: JSON parse escaped characters unit tests for JSON class
 // using the Catch2 test framework.
 //
 // ================

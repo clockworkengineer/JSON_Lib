@@ -33,7 +33,8 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exception]")
     BufferSource jsonSource{ R"({ "one" : z19034})" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 11]: Invalid numeric value.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource),
+      "JSON Error [Line: 1 Column: 11]: Missing String, Numeric, Boolean, Array, Object or Null.");
   }
   SECTION("Parse object with invalid value field (number).", "[JSON][Parse][Exception]")
   {
@@ -48,7 +49,8 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exception]")
     BufferSource jsonSource{ R"({ "one" : })" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 11]: Invalid numeric value.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource),
+      "JSON Error [Line: 1 Column: 11]: Missing String, Numeric, Boolean, Array, Object or Null.");
   }
   SECTION("Parse object with missing key field.", "[JSON][Parse][Exception]")
   {
@@ -57,6 +59,27 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exception]")
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 4]: Missing opening '\"' on string.");
   }
+  SECTION("Parse object with an invalid boolean value.", "[JSON][Parse][Exception]")
+  {
+    BufferSource jsonSource{ R"({ "key" : trrue })" };
+    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+    jsonSource.reset();
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 13]: Invalid boolean value.");
+  }
+  SECTION("Parse object with an invalid nul; value.", "[JSON][Parse][Exception]")
+  {
+    BufferSource jsonSource{ R"({ "key" : nul })" };
+    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+    jsonSource.reset();
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 14]: Invalid null value.");
+  }
+  SECTION("Parse object with missing ':'' between key and value fields.", "[JSON][Parse][Exception]")
+  {
+    BufferSource jsonSource{ R"({ "key" 4444})" };
+    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+    jsonSource.reset();
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 9]: Missing ':' in key value pair.");
+  }
   SECTION("Parse object with missing closing '}'.", "[JSON][Parse][Exception]")
   {
     BufferSource jsonSource{ R"({  "one" : 18987)" };
@@ -64,6 +87,14 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exception]")
     jsonSource.reset();
     REQUIRE_THROWS_WITH(
       json.parse(jsonSource), "JSON Error [Line: 1 Column: 17]: Missing closing '}' in object definition.");
+  }
+  SECTION("Parse array with missing closing ']'.", "[JSON][Parse][Exception]")
+  {
+    BufferSource jsonSource{ R"([1,2,3,4,5,6"})" };
+    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+    jsonSource.reset();
+    REQUIRE_THROWS_WITH(
+      json.parse(jsonSource), "JSON Error [Line: 1 Column: 13]: Missing closing ']' in array definition.");
   }
   SECTION("Parse an nested objects ({ {} }) .", "[JSON][Parse][Exception]")
   {

@@ -21,7 +21,6 @@ using namespace JSONLib;
 TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Parse][Examples]")
 {
   const JSON json;
-
   TEST_FILE_LIST(testFile);
   SECTION("Parse from buffer.", "[JSON][Parse][Examples][Buffer]")
   {

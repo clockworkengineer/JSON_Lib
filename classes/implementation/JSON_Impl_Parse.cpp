@@ -193,9 +193,22 @@ JNode JSON_Impl::parseJNodes(ISource &source)
   case 'n':
     jNode = parseNull(source);
     break;
-  default:
+  case '0':
+  case '1':
+  case '2':
+  case '3':
+  case '4':
+  case '5':
+  case '6':
+  case '7':
+  case '8':
+  case '9':
+  case '+':
+  case '-':
     jNode = parseNumber(source);
     break;
+  default:
+    throw Error(source.getPosition(), "Missing String, Numeric, Boolean, Array, Object or Null.");
   }
   source.ignoreWS();
   return (jNode);
