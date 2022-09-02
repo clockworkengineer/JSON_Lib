@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSONLib
+// Unit Tests: JSONLib_Tests_JNode_Number
 //
 // Description: JNode Number/Numeric class unit tests for JSON class
 // using the Catch2 test framework.

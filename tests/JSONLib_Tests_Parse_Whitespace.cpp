@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSONLib
+// Unit Tests: JSONLib_Tests_Parse_Whitespace
 //
 // Description: JSON parse whitespace unit tests for JSON class
 // using the Catch2 test framework.
@@ -29,8 +29,7 @@ TEST_CASE("JSON object for parse checking various whitespace characters are igno
     json.parse(jsonSource);
     checkArray(json.root());
   }
-  SECTION(R"(Parse object {"City":"Southampton","Population":500000} with )"
-          "no whitespace",
+  SECTION(R"(Parse object {"City":"Southampton","Population":500000} with no whitespace.)",
     "[JSON][Parse][Whitespace]")
   {
     BufferSource jsonSource{ ws + "{" + ws + R"("City")" + ws + ":" + ws + R"("Southampton")" + ws + "," + ws
@@ -62,8 +61,7 @@ TEST_CASE("JSON object for parse checking various whitespace characters are igno
     json.parse(jsonSource);
     checkArray(json.root());
   }
-  SECTION(R"(Parse object {"City":"Southampton","Population":500000} with .)"
-          R"(whitespace ' \t'.)",
+  SECTION(R"(Parse object {"City":"Southampton","Population":500000} with whitespace ' \t'.)",
     "[JSON][Parse][Whitespace]")
   {
     BufferSource jsonSource{ ws + "{" + ws + R"("City")" + ws + ":" + ws + R"("Southampton")" + ws + "," + ws

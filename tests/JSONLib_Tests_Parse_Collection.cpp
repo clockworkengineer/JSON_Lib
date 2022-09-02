@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSONLib
+// Unit Tests: JSONLib_Tests_Parse_Collection
 //
 // Description: JSON parse collection types unit tests for JSON class
 // using the Catch2 test framework.

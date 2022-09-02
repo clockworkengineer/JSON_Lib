@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSONLib
+// Unit Tests: JSONLib_Tests_IDestination
 //
 // Description: IDestination inteface unit tests for JSON class using
 // the Catch2 test framework. At present the only supported destination

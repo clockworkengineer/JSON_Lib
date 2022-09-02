@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSONLib
+// Unit Tests: JSONLib_Tests_JNode
 //
 // Description: JNode access/index/reference/constructor/assignment
 // unit tests for JSON class using the Catch2 test framework.

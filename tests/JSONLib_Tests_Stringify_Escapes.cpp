@@ -1,7 +1,7 @@
 //
-// Unit Tests: JSONLib
+// Unit Tests: JSONLib_Tests_Stringify_Escapes
 //
-// Description: JSON stringification of escaped character
+// Description: JSON stringification of escapeds characters
 // unit tests for JSON class using the Catch2 test framework.
 //
 // ================

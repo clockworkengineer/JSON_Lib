@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSONLib
+// Unit Tests: JSONLib_Tests_JSON
 //
 // Description: JSON creation API(s) unit tests for JSON class
 // using the Catch2 test framework. Note: These tests use more

@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSONLib_Print
+// Unit Tests: JSONLib_Tests_Print
 //
 // Description: JSON print unit tests for JSON class using
 // the Catch2 test framework.
