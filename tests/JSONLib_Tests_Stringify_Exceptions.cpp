@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSONLib
+// Unit Tests: JSONLib_Tests_Stringify_Exceptions
 //
 // Description: JSON stringification exceptions unit
 // tests for JSON class using the Catch2 test framework.

@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSONLib
+// Unit Tests: JSONLib_Tests_Stringify_Misc
 //
 // Description: JSON stringification miscellaneous unit
 // tests for JSON class using the Catch2 test framework.
@@ -15,35 +15,9 @@ using namespace JSONLib;
 // ==========
 // Test cases
 // ==========
-// ================================================
-// Stringification to file and validation of result
-// ================================================
-TEST_CASE("Stringify to a file and check result.", "[JSON][Stringify][File][Validate]")
-{
-  const JSON json;
-  const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
-  SECTION("Stringify object to file and check value", "[JSON][Stringify][File][Validate]")
-  {
-    const std::string expected{ R"({"City":"London","Population":8000000})" };
-    std::filesystem::remove(generatedFileName);
-    FileDestination jsonDestination{ generatedFileName };
-    json.parse(BufferSource{ expected });
-    json.stringify(jsonDestination);
-    REQUIRE(readFromFile(generatedFileName) == expected);
-  }
-  SECTION("Stringify array to file and check value", "[JSON][Stringify][File][Validate]")
-  {
-    const std::string expected{ R"([999,"Time",null,true])" };
-    std::filesystem::remove(generatedFileName);
-    FileDestination jsonDestination{ generatedFileName };
-    json.parse(BufferSource{ expected });
-    json.stringify(jsonDestination);
-    REQUIRE(readFromFile(generatedFileName) == expected);
-  }
-}
-// =================================
-// Parsing and stringification files
-// =================================
+// ====================================
+// Parsing and stringification of files
+// ====================================
 TEST_CASE("JSON object for stringification of a list of example JSON files.", "[JSON][Stringify]")
 {
   const JSON json;
