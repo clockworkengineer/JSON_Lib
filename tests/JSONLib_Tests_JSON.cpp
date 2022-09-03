@@ -137,6 +137,13 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
     REQUIRE_FALSE(!json[0].isNumber());
     REQUIRE(JRef<Number>(json.root()[0]).getNumber().getLong() == 30000);
   }
+  SECTION("Initialise root JSON array with one entry containing a long long.", "[JSON][Create][Array][Number]")
+  {
+    JSON json;
+    json[0] = 30000ll;
+    REQUIRE_FALSE(!json[0].isNumber());
+    REQUIRE(JRef<Number>(json.root()[0]).getNumber().getLongLong() == 30000);
+  }
   SECTION("Initialise root JSON array with one entry containing a float.", "[JSON][Create][Array][Number]")
   {
     JSON json;
@@ -145,6 +152,13 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[0]).getNumber().getFloat(), 3.141f, 0.0001));
   }
   SECTION("Initialise root JSON array with one entry containing a double.", "[JSON][Create][Array][Number]")
+  {
+    JSON json;
+    json[0] = 3.141l;
+    REQUIRE_FALSE(!json[0].isNumber());
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[0]).getNumber().getLongDouble(), 3.141l, 0.0001));
+  }
+  SECTION("Initialise root JSON array with one entry containing a long double.", "[JSON][Create][Array][Number]")
   {
     JSON json;
     json[0] = 3.141;
