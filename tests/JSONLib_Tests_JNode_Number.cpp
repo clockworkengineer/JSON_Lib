@@ -34,6 +34,13 @@ TEST_CASE("Check JNode Number assignment/creation.", "[JSON][JNode][Number][Assi
     REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLong());
     REQUIRE(JRef<Number>(jNode).getNumber().getLong() == 666l);
   }
+  SECTION("Create JNode with long long assigment.", "[JSON][JNode][Number][Long Long][Assignment]")
+  {
+    JNode jNode;
+    jNode = 666ll;
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLongLong());
+    REQUIRE(JRef<Number>(jNode).getNumber().getLong() == 666ll);
+  }
   SECTION("Create JNode with float assigment.", "[JSON][JNode][Number][Float][Assignment]")
   {
     JNode jNode;
@@ -47,6 +54,13 @@ TEST_CASE("Check JNode Number assignment/creation.", "[JSON][JNode][Number][Assi
     jNode = 666.666;
     REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isDouble());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getDouble(), 666.666, 0.0001));
+  }
+  SECTION("Create JNode with long double assigment.", "[JSON][JNode][Number][Long Double][Assignment]")
+  {
+    JNode jNode;
+    jNode = 666.666l;
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLongDouble());
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getLongDouble(), 666.666l, 0.0001));
   }
 }
 // =======================
@@ -72,12 +86,13 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isLong());
     REQUIRE(JRef<Number>(json.root()).getNumber().getLong() == 6788889);
   }
-  SECTION("Float converted to float.", "[JSON][JNode][Number][Float]")
+  SECTION("Float converted to long long.", "[JSON][JNode][Number][Float]")
   {
-    BufferSource jsonSource{ "678.8990" };
+    BufferSource jsonSource{ "6788888.8990" };
     json.parse(jsonSource);
     REQUIRE_FALSE(!JRef<Number>(json.root()).getNumber().isFloat());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).getNumber().getFloat(), 678.8990f, 0.0001));
+    REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isLongLong());
+    REQUIRE(JRef<Number>(json.root()).getNumber().getLongLong() == 6788889ll);
   }
   SECTION("Float converted to double.", "[JSON][JNode][Number][Float]")
   {
@@ -102,6 +117,14 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isLong());
     REQUIRE(JRef<Number>(json.root()).getNumber().getLong() == 78989);
   }
+  SECTION("Int converted to long long.", "[JSON][JNode][Number][Int]")
+  {
+    BufferSource jsonSource{ "78989" };
+    json.parse(jsonSource);
+    REQUIRE_FALSE(!JRef<Number>(json.root()).getNumber().isInt());
+    REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isLongLong());
+    REQUIRE(JRef<Number>(json.root()).getNumber().getLongLong() == 78989ll);
+  }
   SECTION("Int converted to float.", "[JSON][JNode][Number][Int]")
   {
     BufferSource jsonSource{ "78989" };
@@ -118,14 +141,31 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isDouble());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).getNumber().getDouble(), 78989.0, 0.0001));
   }
-  SECTION("Large integer conversion.", "[JSON][JNode][Number][Long Long]")
+  SECTION("Int converted to long double.", "[JSON][JNode][Number][Int]")
+  {
+    BufferSource jsonSource{ "78989" };
+    json.parse(jsonSource);
+    REQUIRE_FALSE(!JRef<Number>(json.root()).getNumber().isInt());
+    REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isLongDouble());
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).getNumber().getLongDouble(), 78989.0l, 0.0001));
+  }
+  SECTION("Large positive integer conversion.", "[JSON][JNode][Number][Long Long]")
   {
     BufferSource jsonSource{ "877994604561387500" };
     json.parse(jsonSource);
     REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isInt());
     REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isLong());
     REQUIRE_FALSE(!JRef<Number>(json.root()).getNumber().isLongLong());
-    REQUIRE(JRef<Number>(json.root()).getNumber().getLongLong() == 877994604561387500);
+    REQUIRE(JRef<Number>(json.root()).getNumber().getLongLong() == 877994604561387500ll);
+  }
+  SECTION("Large negative integer conversion.", "[JSON][JNode][Number][Long Long]")
+  {
+    BufferSource jsonSource{ "-877994604561387500" };
+    json.parse(jsonSource);
+    REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isInt());
+    REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isLong());
+    REQUIRE_FALSE(!JRef<Number>(json.root()).getNumber().isLongLong());
+    REQUIRE(JRef<Number>(json.root()).getNumber().getLongLong() == -877994604561387500ll);
   }
 }
 // ==================================

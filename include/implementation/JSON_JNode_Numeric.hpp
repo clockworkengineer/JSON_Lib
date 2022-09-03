@@ -85,7 +85,7 @@ struct Numeric
   explicit Numeric(long long integer)
   {
     m_values.m_longlong = integer;
-    m_type = Type::Long;
+    m_type = Type::LongLong;
   }
   explicit Numeric(float floatingPoint)
   {
@@ -100,7 +100,7 @@ struct Numeric
   explicit Numeric(long double floatingPoint)
   {
     m_values.m_longdouble = floatingPoint;
-    m_type = Type::Double;
+    m_type = Type::LongDouble;
   }
   Numeric(const Numeric &other) = default;
   Numeric &operator=(const Numeric &other) = default;

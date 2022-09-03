@@ -30,8 +30,10 @@ struct JNode
   JNode() = default;
   explicit JNode(float floatingPoint);
   explicit JNode(double floatingPoint);
+  explicit JNode(long double floatingPoint);
   explicit JNode(int integer);
   explicit JNode(long integer);
+  explicit JNode(long long integer);
   explicit JNode(const char *cString);
   explicit JNode(const std::string &string);
   explicit JNode(bool boolean);
@@ -47,8 +49,10 @@ struct JNode
   // Assignment operators
   JNode &operator=(float floatingPoint);
   JNode &operator=(double floatingPoint);
+  JNode &operator=(long double floatingPoint);
   JNode &operator=(int integer);
   JNode &operator=(long integer);
+  JNode &operator=(long long integer);
   JNode &operator=(const char *cString);
   JNode &operator=(const std::string &string);
   JNode &operator=(bool boolean);

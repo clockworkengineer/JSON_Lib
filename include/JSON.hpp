@@ -25,7 +25,8 @@ public:
   // PUBLIC TYPES AND CONSTANTS
   // ==========================
   // Possible JSON node value types
-  using Types = std::variant<int, long, float, double, bool, std::string, std::nullptr_t, JNode>;
+  using Types =
+    std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t, JNode>;
   // ======================
   // CONSTRUCTOR/DESTRUCTOR
   // ======================

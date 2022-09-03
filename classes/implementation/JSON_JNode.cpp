@@ -66,8 +66,10 @@ JNode JNode::getJNode(const JSON::Types &type)
 // Construct JNode from raw values
 JNode::JNode(int integer) { *this = Number::make(Numeric{ integer }); }
 JNode::JNode(long integer) { *this = Number::make(Numeric{ integer }); }
+JNode::JNode(long long integer) { *this = Number::make(Numeric{ integer }); }
 JNode::JNode(float floatingPoint) { *this = Number::make(Numeric{ floatingPoint }); }
 JNode::JNode(double floatingPoint) { *this = Number::make(Numeric{ floatingPoint }); }
+JNode::JNode(long double floatingPoint) { *this = Number::make(Numeric{ floatingPoint }); }
 JNode::JNode(const char *cString) { *this = String::make(cString); }
 JNode::JNode(const std::string &string) { *this = String::make(string); }
 JNode::JNode(bool boolean) { *this = Boolean::make(boolean); }
@@ -128,8 +130,10 @@ const JNode &JNode::operator[](std::size_t index) const { return (JRef<Array>(*t
 // ==========================
 JNode &JNode::operator=(int integer) { return (*this = Number::make(Numeric{ integer })); }
 JNode &JNode::operator=(long integer) { return (*this = Number::make(Numeric{ integer })); }
+JNode &JNode::operator=(long long integer) { return (*this = Number::make(Numeric{ integer })); }
 JNode &JNode::operator=(float floatingPoint) { return (*this = Number::make(Numeric{ floatingPoint })); }
 JNode &JNode::operator=(double floatingPoint) { return (*this = Number::make(Numeric{ floatingPoint })); }
+JNode &JNode::operator=(long double floatingPoint) { return (*this = Number::make(Numeric{ floatingPoint })); }
 JNode &JNode::operator=(const char *cString) { return (*this = String::make(cString)); }
 JNode &JNode::operator=(const std::string &string) { return (*this = String::make(string)); }
 JNode &JNode::operator=(bool boolean) { return (*this = Boolean::make(boolean)); }
