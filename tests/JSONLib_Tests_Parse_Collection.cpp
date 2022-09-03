@@ -18,7 +18,7 @@ using namespace JSONLib;
 // ===========================
 // Parse collection JSON types
 // ===========================
-TEST_CASE("JSON object for parse of collection types (array,object).", "[JSON][Parse][Collection]")
+TEST_CASE("JSON parsing of collection types (array,object).", "[JSON][Parse][Collection]")
 {
   const JSON json;
   SECTION(R"(Parse an object ({"name":"Robert","Age":15}).)", "[JSON][Parse][Collection]")
@@ -64,7 +64,7 @@ TEST_CASE("JSON object for parse of collection types (array,object).", "[JSON][P
 // ========================================
 // Parse collection JSON types and validate
 // ========================================
-TEST_CASE("JSON object for parse of collection types and check values.", "[JSON][Parse][Collection][validate]")
+TEST_CASE("JSON parsing of collection types and check values.", "[JSON][Parse][Collection][validate]")
 {
   const JSON json;
   SECTION(R"(Parse an object {"name":"Robert","Age":15} and check its value.)", "[JSON][Parse][Collection][validate]")

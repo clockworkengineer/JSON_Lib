@@ -18,7 +18,7 @@ using namespace JSONLib;
 // ==============================================================
 // Stringification of collection types to a buffer and validation
 // ==============================================================
-TEST_CASE("JSON object for stringification of collection types to a buffer and check values.",
+TEST_CASE("JSON stringification of collection types to a buffer and check values.",
   "[JSON][Stringify][Buffer]")
 {
   const JSON json;
@@ -62,7 +62,7 @@ TEST_CASE("JSON object for stringification of collection types to a buffer and c
 // ============================================================
 // Stringification of collection types to a buffer and validation
 // ============================================================
-TEST_CASE("JSON object for stringification of collection types to a file and check values.", "[JSON][Stringify][File]")
+TEST_CASE("JSON stringification of collection types to a file and check values.", "[JSON][Stringify][File]")
 {
   const JSON json;
   const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };

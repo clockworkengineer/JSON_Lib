@@ -18,7 +18,7 @@ using namespace JSONLib;
 // ========================
 // Parse Example JSON Files
 // ========================
-TEST_CASE("JSON object for parse of a list of example JSON files.", "[JSON][Parse][Examples]")
+TEST_CASE("JSON parsing of a list of example JSON files.", "[JSON][Parse][Examples]")
 {
   const JSON json;
   TEST_FILE_LIST(testFile);

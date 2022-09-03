@@ -19,7 +19,7 @@ using namespace JSONLib;
 // =====================================
 // Stringification of escaped characters
 // =====================================
-TEST_CASE("JSON object for stringification of strings with escape characters.", "[JSON][Stringify][Escapes]")
+TEST_CASE("JSON stringification of strings with escape characters.", "[JSON][Stringify][Escapes]")
 {
   const JSON json;
   SECTION("Stringify JSON string with escapes '/' to buffer and check value.", "[JSON][Stringify][Escapes]")
