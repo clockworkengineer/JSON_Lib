@@ -42,10 +42,14 @@ JNode JNode::getJNode(const JSON::Types &type)
     jNode = Number::make(Numeric{ *pInteger });
   } else if (auto pLong = std::get_if<long>(&type)) {
     jNode = Number::make(Numeric{ *pLong });
+  } else if (auto pLongLong = std::get_if<long long>(&type)) {
+    jNode = Number::make(Numeric{ *pLongLong });
   } else if (auto pFLoat = std::get_if<float>(&type)) {
     jNode = Number::make(Numeric{ *pFLoat });
   } else if (auto pDouble = std::get_if<double>(&type)) {
     jNode = Number::make(Numeric{ *pDouble });
+  } else if (auto pLongDouble = std::get_if<long double>(&type)) {
+    jNode = Number::make(Numeric{ *pLongDouble });
   } else if (auto pString = std::get_if<std::string>(&type)) {
     jNode = String::make(*pString);
   } else if (auto pBoolean = std::get_if<bool>(&type)) {
