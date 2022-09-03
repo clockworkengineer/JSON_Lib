@@ -34,6 +34,13 @@ TEST_CASE("Use of JNode constructors.", "[JSON][JNode][Constructor]")
     REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLong());
     REQUIRE(JRef<Number>(jNode).getNumber().getInt() == 99988899l);
   }
+  SECTION("Construct JNode(long long).", "[JSON][JNode][Constructor][Long Long]")
+  {
+    JNode jNode(99988899ll);
+    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLongLong());
+    REQUIRE(JRef<Number>(jNode).getNumber().getLongLong() == 99988899ll);
+  }
   SECTION("Construct JNode(float).", "[JSON][JNode][Constructor][Float]")
   {
     JNode jNode(777.999f);
@@ -47,6 +54,13 @@ TEST_CASE("Use of JNode constructors.", "[JSON][JNode][Constructor]")
     REQUIRE_FALSE(!jNode.isNumber());
     REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isDouble());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getDouble(), 66666.8888, 0.0001));
+  }
+  SECTION("Construct JNode(long double).", "[JSON][JNode][Constructor][Long Double]")
+  {
+    JNode jNode(66666.8888l);
+    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLongDouble());
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getLongDouble(), 66666.8888l, 0.0001));
   }
   SECTION("Construct JNode(C string).", "[JSON][JNode][Constructor][CString]")
   {
@@ -112,6 +126,14 @@ TEST_CASE("Use of JNode assigment operators.", "[JSON][JNode][Assignment]")
     REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLong());
     REQUIRE(JRef<Number>(jNode).getNumber().getInt() == 99988899l);
   }
+  SECTION("Assign long long to JNode.", "[JSON][JNode][Assignment][Long Long]")
+  {
+    JNode jNode;
+    jNode = 99988899ll;
+    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLongLong());
+    REQUIRE(JRef<Number>(jNode).getNumber().getLongLong() == 99988899ll);
+  }
   SECTION("Assign float to JNode.", "[JSON][JNode][Assignment][Float]")
   {
     JNode jNode;
@@ -127,6 +149,14 @@ TEST_CASE("Use of JNode assigment operators.", "[JSON][JNode][Assignment]")
     REQUIRE_FALSE(!jNode.isNumber());
     REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isDouble());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getDouble(), 66666.8888, 0.0001));
+  }
+  SECTION("Assign long double to JNode.", "[JSON][JNode][Assignment][Long Double]")
+  {
+    JNode jNode;
+    jNode = 66666.8888l;
+    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLongDouble());
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getLongDouble(), 66666.8888l, 0.0001));
   }
   SECTION("Assign C string to JNode.", "[JSON][JNode][Assignment][CString]")
   {
