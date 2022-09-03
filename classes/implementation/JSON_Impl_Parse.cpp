@@ -34,6 +34,16 @@ namespace JSONLib {
 // PRIVATE METHODS
 // ===============
 /// <summary>
+/// Has the end of a number been reached in source stream ?
+/// </summary>
+/// <param name="source">Source of JSON.</param>
+/// translating.</param>
+/// <returns>==true on end of number</returns>
+bool JSON_Impl::endOfNumber(ISource &source)
+{
+  return (source.isWS() || source.current() == ',' || source.current() == ']' || source.current() == '}');
+}
+/// <summary>
 /// Extract a string from a JSON encoded source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
@@ -95,11 +105,9 @@ JNode JSON_Impl::parseString(ISource &source) { return (String::make(extractStri
 JNode JSON_Impl::parseNumber(ISource &source)
 {
   std::string number;
-  for (; source.more() && Numeric::isNumericCharacter(source.current()); source.next()) { number += source.current(); }
+  for (; source.more() && !endOfNumber(source) ; source.next()) { number += source.current(); }
   Numeric jNodeNumeric;
-  if (!jNodeNumeric.setValidNumber(number)) {
-    throw Error(source.getPosition(), "Invalid numeric value.");
-  }
+  if (!jNodeNumeric.setValidNumber(number)) { throw Error(source.getPosition(), "Invalid numeric value."); }
   return (Number::make(jNodeNumeric));
 }
 /// <summary>

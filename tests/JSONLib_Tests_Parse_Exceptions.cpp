@@ -41,8 +41,7 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exception]")
     BufferSource jsonSource{ R"({ "one" : 18987u3 })" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(
-      json.parse(jsonSource), "JSON Error [Line: 1 Column: 16]: Missing closing '}' in object definition.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 18]: Invalid numeric value.");
   }
   SECTION("Parse object with missing value field.", "[JSON][Parse][Exception]")
   {
@@ -90,7 +89,7 @@ TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exception]")
   }
   SECTION("Parse array with missing closing ']'.", "[JSON][Parse][Exception]")
   {
-    BufferSource jsonSource{ R"([1,2,3,4,5,6"})" };
+    BufferSource jsonSource{ R"([1,2,3,4,5,6)" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(

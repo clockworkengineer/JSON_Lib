@@ -90,6 +90,8 @@ private:
   // ===============
   // PRIVATE METHODS
   // ===============
+  // Has end of number been reached ?
+  static bool endOfNumber(ISource &source);
   // Parse JSON
   static std::string extractString(ISource &source, bool translate = true);
   static Object::Entry parseKeyValuePair(ISource &source);

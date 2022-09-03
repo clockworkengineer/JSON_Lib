@@ -107,12 +107,6 @@ struct Numeric
   Numeric(Numeric &&other) = default;
   Numeric &operator=(Numeric &&other) = default;
   ~Numeric() = default;
-  // Is character a valid numeric character ?
-  // Includes possible sign, decimal point or exponent
-  [[nodiscard]] static bool isNumericCharacter(char ch)
-  {
-    return ((std::isdigit(ch) != 0) || ch == '.' || ch == '-' || ch == '+' || ch == 'E' || ch == 'e');
-  }
   // Is number a int/long/long long/float/double/long double ?
   [[nodiscard]] bool isInt() const { return (m_type == Type::Int); }
   [[nodiscard]] bool isLong() const { return (m_type == Type::Long); }
@@ -121,7 +115,7 @@ struct Numeric
   [[nodiscard]] bool isDouble() const { return (m_type == Type::Double); }
   [[nodiscard]] bool isLongDouble() const { return (m_type == Type::LongDouble); }
   // Return numbers value int/long long/float/double/long double.
-  // Note: Can still return a long value for floating point.
+  // Note: Can still return a integer value for a floating point.
   [[nodiscard]] int getInt() const { return (convertType<int>()); }
   [[nodiscard]] long getLong() const { return (convertType<long>()); }
   [[nodiscard]] long long getLongLong() const { return (convertType<long long>()); }
