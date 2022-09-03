@@ -18,7 +18,7 @@ using namespace JSONLib;
 // ========================================================
 // Stringification of simple types to buffer and validation
 // ========================================================
-TEST_CASE("JSON stringification of simple types to buffer and check values.",
+TEST_CASE("Check JSON stringification of simple types to buffer and check values.",
   "[JSON][Stringify][Simple][Buffer][Validate]")
 {
   const JSON json;
@@ -59,7 +59,7 @@ TEST_CASE("JSON stringification of simple types to buffer and check values.",
 // ======================================================
 // Stringification of simple types to file and validation
 // ======================================================
-TEST_CASE("JSON stringification of simple types to file and check values.", "[JSON][Stringify][Simple][File][Validate]")
+TEST_CASE("Check JSON stringification of simple types to file and check values.", "[JSON][Stringify][Simple][File][Validate]")
 {
   const JSON json;
   SECTION(

@@ -18,7 +18,7 @@ using namespace JSONLib;
 // ==================
 // JNode constructors
 // ==================
-TEST_CASE("Use of JNode constructors.", "[JSON][JNode][Constructor]")
+TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
 {
   SECTION("Construct JNode(integer).", "[JSON][JNode][Constructor][Integer]")
   {
@@ -108,7 +108,7 @@ TEST_CASE("Use of JNode constructors.", "[JSON][JNode][Constructor]")
 // =================
 // JNode assignments
 // =================
-TEST_CASE("Use of JNode assigment operators.", "[JSON][JNode][Assignment]")
+TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]")
 {
   SECTION("Assign integer to JNode.", "[JSON][JNode][Assignment][Integer]")
   {
@@ -210,7 +210,7 @@ TEST_CASE("Use of JNode assigment operators.", "[JSON][JNode][Assignment]")
 // ==============
 // JNode Indexing
 // ==============
-TEST_CASE("Use of JNode indexing operators.", "[JSON][JNode][Index]")
+TEST_CASE("Check use of JNode indexing operators.", "[JSON][JNode][Index]")
 {
   const JSON json;
   SECTION("Parse dictionary and check its components using indexing.", "[JSON][JNode][Index]")
@@ -259,7 +259,7 @@ TEST_CASE("Use of JNode indexing operators.", "[JSON][JNode][Index]")
 TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]")
 {
   const JSON json;
-  SECTION("Integer reference.", "[JSON][JNode][Reference][Number]")
+  SECTION("Number reference.", "[JSON][JNode][Reference][Number]")
   {
     BufferSource jsonSource{ "45500" };
     json.parse(jsonSource);

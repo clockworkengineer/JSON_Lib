@@ -19,7 +19,7 @@ using namespace JSONLib;
 // ======
 // Buffer
 // ======
-TEST_CASE("ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
+TEST_CASE("Check ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
 {
   const std::string testFileName{ prefixPath(kSingleJSONFile) };// Uses file testfile001.json
   const std::string buffer{ crlfTolf(readFromFile(testFileName)) };
@@ -133,7 +133,7 @@ TEST_CASE("ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
 // ====
 // File
 // ====
-TEST_CASE("ISource (File) interface.", "[JSON][ISource][File]")
+TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
 {
   const std::string testFileName{ prefixPath(kSingleJSONFile) };
   SECTION("Create FileSource with testfile001.json.", "[JSON][ISource][File][Construct]")

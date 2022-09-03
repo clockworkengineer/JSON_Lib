@@ -18,7 +18,7 @@ using namespace JSONLib;
 // ==========================================
 // Pretty printing of sample JSON to a buffer
 // ==========================================
-TEST_CASE("Check printing of JSON to a buffer.", "[JSON][Print][Buffer]")
+TEST_CASE("Check Check printing of JSON to a buffer.", "[JSON][Print][Buffer]")
 {
   const JSON json;
   SECTION("Print a simple array to a buffer.", "[JSON][Print][Array][Buffer]")
@@ -129,7 +129,7 @@ TEST_CASE("Check printing of JSON to a buffer.", "[JSON][Print][Buffer]")
 // ========================================
 // Pretty printing of sample JSON to a file
 // ========================================
-TEST_CASE("Check printing of JSON to a file.", "[JSON][Print][File]")
+TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
 {
   const JSON json;
   SECTION("Print a simple array to a file.", "[JSON][Print][Array][File]")
@@ -251,7 +251,7 @@ TEST_CASE("Check printing of JSON to a file.", "[JSON][Print][File]")
 // =========================
 // Pretty printing indenting
 // =========================
-TEST_CASE("Check setting of print indentation.", "[JSON][Print][Indent]")
+TEST_CASE("Check Check setting of print indentation.", "[JSON][Print][Indent]")
 {
   const JSON json;
   SECTION("Set ident to 8 and print JSON to a buffer.", "[JSON][Print][Ident][Buffer]")
@@ -322,7 +322,7 @@ TEST_CASE("Check setting of print indentation.", "[JSON][Print][Indent]")
 // =======================
 // Parsing and print files
 // =======================
-TEST_CASE("Print list of example JSON files.", "[JSON][Print]")
+TEST_CASE("Check JSON print of list of example JSON files.", "[JSON][Print]")
 {
   const JSON json;
   TEST_FILE_LIST(testFile);

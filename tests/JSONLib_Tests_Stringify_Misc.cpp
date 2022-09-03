@@ -18,7 +18,7 @@ using namespace JSONLib;
 // ====================================
 // Parsing and stringification of files
 // ====================================
-TEST_CASE("JSON stringification of a list of example JSON files.", "[JSON][Stringify]")
+TEST_CASE("Check JSON stringification of a list of example JSON files.", "[JSON][Stringify]")
 {
   const JSON json;
   TEST_FILE_LIST(testFile);

@@ -18,7 +18,7 @@ using namespace JSONLib;
 // ==========================
 // Parse JSON with Whitespace
 // ==========================
-TEST_CASE("JSON parsing checking various whitespace characters are ignored.", "[JSON][Parse][Whitespace]")
+TEST_CASE("Check JSON parsing of various whitespace characters are ignored.", "[JSON][Parse][Whitespace]")
 {
   const JSON json;
   std::string ws = "";

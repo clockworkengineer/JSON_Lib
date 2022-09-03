@@ -19,7 +19,7 @@ using namespace JSONLib;
 // =======================
 // Parse simple JSON types
 // =======================
-TEST_CASE("JSON object creation api.", "[JSON][Create][Object]")
+TEST_CASE("Check JSON object creation api.", "[JSON][Create][Object]")
 {
   SECTION("Initialise JSON with JSON object passed to constructor.", "[JSON][Create][Constructor]")
   {
@@ -107,7 +107,7 @@ TEST_CASE("JSON object creation api.", "[JSON][Create][Object]")
     REQUIRE(destinationBuffer.getBuffer() == R"({"nothing":{"extra":{"more":null}}})");
   }
 }
-TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
+TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
 {
   SECTION("Initialise JSON with JSON array  passed to constructor.", "[JSON][Create][Constructor]")
   {
@@ -253,7 +253,7 @@ TEST_CASE("JSON array creation api.", "[JSON][Create][Array]")
             == R"([null,null,null,null,null,[1.0,2.0,3,4.333,"5.0","test test test test",false,null]])");
   }
 }
-TEST_CASE("JSON create complex JSON structures.", "[JSON][Create][Complex]")
+TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]")
 {
   SECTION("A Single level object.", "[JSON][Create][Complex]")
   {

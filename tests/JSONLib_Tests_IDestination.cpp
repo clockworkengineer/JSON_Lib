@@ -19,7 +19,7 @@ using namespace JSONLib;
 // ======
 // Buffer
 // ======
-TEST_CASE("IDestination (Buffer) interface.", "[JSON][IDestination][Buffer]")
+TEST_CASE("Check IDestination (Buffer) interface.", "[JSON][IDestination][Buffer]")
 {
   SECTION("Create BufferDestination.", "[JSON][IDestination][Buffer][Construct]")
   {
@@ -69,7 +69,7 @@ TEST_CASE("IDestination (Buffer) interface.", "[JSON][IDestination][Buffer]")
 // ====
 // File
 // ====
-TEST_CASE("IDestination (File) interface.", "[JSON][IDestination][File]")
+TEST_CASE("Check IDestination (File) interface.", "[JSON][IDestination][File]")
 {
   const std::string testFileName{ prefixPath(kGeneratedJSONFile) };
   SECTION("Create FileDestination.", "[JSON][IDestination][File][Construct]")

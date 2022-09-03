@@ -18,7 +18,7 @@ using namespace JSONLib;
 // ===========================
 // Parser Generated Exceptions
 // ===========================
-TEST_CASE("Parse generated exceptions.", "[JSON][Parse][Exception]")
+TEST_CASE("Check parser generated exceptions.", "[JSON][Parse][Exception]")
 {
   const JSON json;
   SECTION("Parse missing terminating '\"' in string.", "[JSON][Parse][Exception]")

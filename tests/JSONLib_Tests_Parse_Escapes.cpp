@@ -18,7 +18,7 @@ using namespace JSONLib;
 // =================================
 // Parse JSON With Escape Characters
 // =================================
-TEST_CASE("JSON object for decoding of strings with escape characters.", "[JSON][Parse][Escapes]")
+TEST_CASE("Check JSON object for decoding of strings with escape characters.", "[JSON][Parse][Escapes]")
 {
   const JSON json;
   SECTION("Parse JSON string with escapes '\\t' to buffer and check value.", "[JSON][Parse][Escapes]")

@@ -18,7 +18,7 @@ using namespace JSONLib;
 // =======================
 // Parse simple JSON types
 // =======================
-TEST_CASE("JSON parsing of simple types (number,string,boolean,null).", "[JSON][Parse][Simple]")
+TEST_CASE("Check JSON parsing of simple types (number,string,boolean,null).", "[JSON][Parse][Simple]")
 {
   const JSON json;
   SECTION("Parse an string (example string).", "[JSON][Parse][Simple]")
@@ -61,7 +61,7 @@ TEST_CASE("JSON parsing of simple types (number,string,boolean,null).", "[JSON][
 // ====================================
 // Parse simple JSON types and validate
 // ====================================
-TEST_CASE("JSON parsing of simple types and check values.", "[JSON][Parse][Simple][Validate]")
+TEST_CASE("Check JSON parsing of simple types and check values.", "[JSON][Parse][Simple][Validate]")
 {
   const JSON json;
   SECTION("Parse an string (example string) and check its value.", "[JSON][Parse][Simple][Validate]")

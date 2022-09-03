@@ -18,7 +18,7 @@ using namespace JSONLib;
 // ====================================
 // Stringification generated exceptions
 // ====================================
-TEST_CASE("Stringify generated exceptions.", "[JSON][Stringify][Exception]")
+TEST_CASE("Check JSON stringify generated exceptions.", "[JSON][Stringify][Exception]")
 {
   const JSON json;
   SECTION("Stringify has no JSON to process.", "[JSON][Stringify][Exception]")
