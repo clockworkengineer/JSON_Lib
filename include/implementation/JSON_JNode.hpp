@@ -76,7 +76,7 @@ struct JNode
   [[nodiscard]] const Variant &getVariant() const;
 
 private:
-  JNode getJNode(const JSON::Types &type);
+  JNode createJNodeFromType(const JSON::Types &type);
   std::unique_ptr<Variant> m_jNodeVariant;
 };
 }// namespace JSONLib

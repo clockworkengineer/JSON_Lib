@@ -34,32 +34,31 @@ namespace JSONLib {
 // ===============
 // PRIVATE METHODS
 // ===============
-// Create JNode for passed in type
-JNode JNode::getJNode(const JSON::Types &type)
+// Create JNode from passed in type
+JNode JNode::createJNodeFromType(const JSON::Types &type)
 {
-  JNode jNode;
   if (auto pInteger = std::get_if<int>(&type)) {
-    jNode = Number::make(Numeric{ *pInteger });
+    return (Number::make(Numeric{ *pInteger }));
   } else if (auto pLong = std::get_if<long>(&type)) {
-    jNode = Number::make(Numeric{ *pLong });
+    return (Number::make(Numeric{ *pLong }));
   } else if (auto pLongLong = std::get_if<long long>(&type)) {
-    jNode = Number::make(Numeric{ *pLongLong });
+    return (Number::make(Numeric{ *pLongLong }));
   } else if (auto pFLoat = std::get_if<float>(&type)) {
-    jNode = Number::make(Numeric{ *pFLoat });
+    return (Number::make(Numeric{ *pFLoat }));
   } else if (auto pDouble = std::get_if<double>(&type)) {
-    jNode = Number::make(Numeric{ *pDouble });
+    return (Number::make(Numeric{ *pDouble }));
   } else if (auto pLongDouble = std::get_if<long double>(&type)) {
-    jNode = Number::make(Numeric{ *pLongDouble });
+    return (Number::make(Numeric{ *pLongDouble }));
   } else if (auto pString = std::get_if<std::string>(&type)) {
-    jNode = String::make(*pString);
+    return (String::make(*pString));
   } else if (auto pBoolean = std::get_if<bool>(&type)) {
-    jNode = Boolean::make(*pBoolean);
+    return (Boolean::make(*pBoolean));
   } else if (auto pNull = std::get_if<std::nullptr_t>(&type)) {
-    jNode = Null::make();
+    return (Null::make());
   } else if (auto pJNode = std::get_if<JNode>(&type)) {
-    jNode = std::move(*const_cast<JNode *>(pJNode));
+    return (std::move(*const_cast<JNode *>(pJNode)));
   }
-  return (jNode);
+  throw Error("JNode of non-existant type could not be created.");
 }
 // ==============
 // PUBLIC METHODS
@@ -82,14 +81,16 @@ JNode::JNode([[maybe_unused]] std::nullptr_t null) { *this = Null::make(); }
 JNode::JNode(const std::initializer_list<JSON::Types> &array)
 {
   Array::ArrayList jNodeArrayList;
-  for (const auto &entry : array) { jNodeArrayList.emplace_back(getJNode(entry)); }
+  for (const auto &entry : array) { jNodeArrayList.emplace_back(createJNodeFromType(entry)); }
   *this = Array::make(jNodeArrayList);
 }
 // Construct JNode object from initializer list
 JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::Types>> &object)
 {
   Object::EntryList jObjectList;
-  for (const auto &entry : object) { jObjectList.emplace_back(Object::Entry(entry.first, getJNode(entry.second))); }
+  for (const auto &entry : object) {
+    jObjectList.emplace_back(Object::Entry(entry.first, createJNodeFromType(entry.second)));
+  }
   *this = Object::make(jObjectList);
 }
 // =========================
