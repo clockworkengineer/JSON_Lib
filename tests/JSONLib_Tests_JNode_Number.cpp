@@ -118,6 +118,15 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isDouble());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).getNumber().getDouble(), 78989.0, 0.0001));
   }
+  SECTION("Large integer conversion.", "[JSON][JNode][Number][Long Long]")
+  {
+    BufferSource jsonSource{ "877994604561387500" };
+    json.parse(jsonSource);
+    REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isInt());
+    REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isLong());
+    REQUIRE_FALSE(!JRef<Number>(json.root()).getNumber().isLongLong());
+    REQUIRE(JRef<Number>(json.root()).getNumber().getLongLong() == 877994604561387500);
+  }
 }
 // ==================================
 // JNode Number conversion exceptions

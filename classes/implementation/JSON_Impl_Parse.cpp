@@ -96,8 +96,8 @@ JNode JSON_Impl::parseNumber(ISource &source)
 {
   std::string number;
   for (; source.more() && Numeric::isNumericCharacter(source.current()); source.next()) { number += source.current(); }
-  Numeric jNodeNumeric{ number };
-  if (number.empty() || !jNodeNumeric.setValidNumber(number)) {
+  Numeric jNodeNumeric;
+  if (!jNodeNumeric.setValidNumber(number)) {
     throw Error(source.getPosition(), "Invalid numeric value.");
   }
   return (Number::make(jNodeNumeric));
