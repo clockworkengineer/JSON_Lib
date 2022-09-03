@@ -175,6 +175,13 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
 TEST_CASE("Check JNode Number conversion exceptions.", "[JSON][JNode][Number][Exceptions]")
 {
   const JSON json;
+  SECTION("Check integer with invalid characters.", "[JSON][JNode][Number][Exceptions]")
+  {
+    BufferSource jsonSource{ "4345u334u" };
+    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+    jsonSource.reset();
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 10]: Invalid numeric value.");
+  }
   SECTION("Check floating point with exponent.", "[JSON][JNode][Number][Exceptions]")
   {
     BufferSource jsonSource{ "78.43e-2" };
