@@ -204,12 +204,13 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     Numeric::setNotation(Numeric::Notation::scientific);
     jsonDestination.clear();
     json.stringify(jsonDestination);
+    Numeric::setNotation(Numeric::Notation::normal);
     REQUIRE(jsonDestination.getBuffer() == R"({"latitude":3.906834e+01,"longitude":-7.074162e+01})");
     Numeric::setNotation(Numeric::Notation::fixed);
     jsonDestination.clear();
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.068340,"longitude":-70.741615})");
     Numeric::setNotation(Numeric::Notation::normal);
+    REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.068340,"longitude":-70.741615})");
   }
 }
 // ==================================
