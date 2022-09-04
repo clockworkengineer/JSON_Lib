@@ -111,17 +111,21 @@ void JSON_Impl::printObject(const JNode &jNode, IDestination &destination, [[may
 /// <param name="destination">Destination stream for JSON.</param>
 void JSON_Impl::printArray(const JNode &jNode, IDestination &destination, [[maybe_unused]] long indent)
 {
-  size_t commaCount = JRef<Array>(jNode).getArrayEntries().size() - 1;
-  std::string padding1(indent, ' ');
-  std::string padding2(indent - m_indent, ' ');
-  destination.add("[\n");
-  for (auto &node : JRef<Array>(jNode).getArrayEntries()) {
-    destination.add(padding1);
-    printJNodes(node, destination, indent + m_indent);
-    if (commaCount-- > 0) { destination.add(",\n"); };
+
+  destination.add('[');
+  if (!JRef<Array>(jNode).getArrayEntries().empty()) {
+    size_t commaCount = JRef<Array>(jNode).getArrayEntries().size() - 1;
+    std::string padding1(indent, ' ');
+    std::string padding2(indent - m_indent, ' ');
+    destination.add('\n');
+    for (auto &node : JRef<Array>(jNode).getArrayEntries()) {
+      destination.add(padding1);
+      printJNodes(node, destination, indent + m_indent);
+      if (commaCount-- > 0) { destination.add(",\n"); };
+    }
+    destination.add('\n');
+    destination.add(padding2);
   }
-  destination.add("\n");
-  destination.add(padding2);
   destination.add("]");
 }
 /// <summary>
