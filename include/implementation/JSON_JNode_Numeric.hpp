@@ -25,17 +25,29 @@ struct Numeric
 {
   // All string conversions are for base 10
   static constexpr int kStringConversionBase{ 10 };
+  // Floating point notation
+  enum class Notation { normal = 0, fixed, scientific };
   // Number to string
-  template<Integer T> [[nodiscard]] std::string numericToString(const T &t) const
+  template<Integer T> [[nodiscard]] std::string numericToString(const T &number) const
   {
     std::ostringstream os;
-    os << t;
+    os << number;
     return os.str();
   }
-  template<Float T> [[nodiscard]] std::string numericToString(const T &t) const
+  template<Float T> [[nodiscard]] std::string numericToString(const T &number) const
   {
     std::ostringstream os;
-    os << std::setprecision(m_precision) << t;
+    switch (m_notation) {
+    case Notation::normal:
+      os << std::defaultfloat << std::setprecision(m_precision) << number;
+      break;
+    case Notation::fixed:
+      os << std::fixed << std::setprecision(m_precision) << number;
+      break;
+    case Notation::scientific:
+      os << std::scientific << std::setprecision(m_precision) << number;
+      break;
+    }
     if (os.str().find('.') == std::string::npos) { return (os.str() + ".0"); }
     return (os.str());
   }
@@ -250,6 +262,7 @@ struct Numeric
   }
   // Set floating point to string conversion parameters
   inline static void setPrecision(int precision) { m_precision = precision; }
+  inline static void setNotation(Notation notation) { m_notation = notation; }
 
 private:
   // Number type
@@ -258,5 +271,6 @@ private:
   Numbers m_values{ 0 };
   // Floating point to string parameters
   inline static int m_precision{ 6 };
+  inline static Notation m_notation{ Notation::normal };
 };
 }// namespace JSONLib
