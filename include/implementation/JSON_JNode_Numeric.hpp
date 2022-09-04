@@ -35,12 +35,9 @@ struct Numeric
   template<Float T> [[nodiscard]] std::string numericToString(const T &t) const
   {
     std::ostringstream os;
-    os << t;
-    std::string floatString = os.str();
-    if (floatString.find('.') == std::string::npos) { floatString.push_back('.'); }
-    floatString.erase(floatString.find_last_not_of('0') + 1, std::string::npos);
-    if (floatString.back() == '.') { floatString += '0'; }
-    return floatString;
+    os << std::setprecision(m_precision) << t;
+    if (os.str().find('.') == std::string::npos) { return (os.str() + ".0"); }
+    return (os.str());
   }
   // JNode Numeric Error
   struct Error : public std::runtime_error
@@ -251,9 +248,15 @@ struct Numeric
     if (m_type == Type::LongDouble) { return (numericToString(m_values.m_longdouble)); }
     throw Error("Could not convert unknown type.");
   }
+  // Set floating point to string conversion parameters
+  inline static void setPrecision(int precision) { m_precision = precision; }
 
 private:
+  // Number type
   Type m_type{ Type::Unknown };
+  // Number value union
   Numbers m_values{ 0 };
+  // Floating point to string parameters
+  inline static int m_precision{ 6 };
 };
 }// namespace JSONLib

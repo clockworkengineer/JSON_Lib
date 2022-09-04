@@ -168,17 +168,27 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     REQUIRE_FALSE(!JRef<Number>(json.root()).getNumber().isLongLong());
     REQUIRE(JRef<Number>(json.root()).getNumber().getLongLong() == -877994604561387500ll);
   }
-  // SECTION("Floating point precision.", "[JSON][JNode][Number][Float]")
-  // {
-  //   std::string expected { R"({"latitude":39.068341,"longitude":-70.741615})"};
-  //   BufferSource jsonSource{ expected };
-  //   json.parse(jsonSource);
-  //   REQUIRE_FALSE(!JRef<Number>(json["latitude"]).getNumber().isFloat());
-  //   REQUIRE_FALSE(!JRef<Number>(json["longitude"]).getNumber().isFloat());
-  //   BufferDestination jsonDestination;
-  //   json.stringify(jsonDestination);
-  //   REQUIRE(jsonDestination.getBuffer() == expected);
-  // }
+  SECTION("Floating point precision.", "[JSON][JNode][Number][Float]")
+  {
+    std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
+    BufferSource jsonSource{ expected };
+    json.parse(jsonSource);
+    REQUIRE_FALSE(!JRef<Number>(json["latitude"]).getNumber().isFloat());
+    REQUIRE_FALSE(!JRef<Number>(json["longitude"]).getNumber().isFloat());
+    BufferDestination jsonDestination;
+    Numeric::setPrecision(6);
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.0683,"longitude":-70.7416})");
+    jsonDestination.clear();
+    Numeric::setPrecision(7);
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.06834,"longitude":-70.74162})");
+    jsonDestination.clear();
+    Numeric::setPrecision(8);
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.06834,"longitude":-70.741615})");
+    Numeric::setPrecision(6);
+  }
 }
 // ==================================
 // JNode Number conversion exceptions
