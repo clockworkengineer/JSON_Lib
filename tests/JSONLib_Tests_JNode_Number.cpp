@@ -168,6 +168,17 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     REQUIRE_FALSE(!JRef<Number>(json.root()).getNumber().isLongLong());
     REQUIRE(JRef<Number>(json.root()).getNumber().getLongLong() == -877994604561387500ll);
   }
+  // SECTION("Floating point precision.", "[JSON][JNode][Number][Float]")
+  // {
+  //   std::string expected { R"({"latitude":39.068341,"longitude":-70.741615})"};
+  //   BufferSource jsonSource{ expected };
+  //   json.parse(jsonSource);
+  //   REQUIRE_FALSE(!JRef<Number>(json["latitude"]).getNumber().isFloat());
+  //   REQUIRE_FALSE(!JRef<Number>(json["longitude"]).getNumber().isFloat());
+  //   BufferDestination jsonDestination;
+  //   json.stringify(jsonDestination);
+  //   REQUIRE(jsonDestination.getBuffer() == expected);
+  // }
 }
 // ==================================
 // JNode Number conversion exceptions

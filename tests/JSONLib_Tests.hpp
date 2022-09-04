@@ -61,6 +61,7 @@ std::string stripWhiteSpace(const std::string &jsonBuffer);
     "testfile016.json",                                          \
     "testfile017.json",                                          \
     "testfile018.json",                                          \
-    "testfile019.json" }))
+    "testfile019.json",                                          \
+    "testfile020.json" }))
 // Floating point comparison (accurate to within an epsilon)
 template<typename T> bool equalFloatingPoint(T a, T b, double epsilon) { return (std::fabs(a - b) <= epsilon); };
