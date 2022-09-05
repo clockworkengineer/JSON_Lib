@@ -48,7 +48,7 @@ struct Object : Variant
   // Constructors/Destructors
   Object() : Variant(JNode::Type::object) {}
   explicit Object(EntryList &objectEntries)
-    : Variant(JNode::Type::object), m_jsonObjectEntries(std::move(objectEntries))
+    : Variant(JNode::Type::object), m_object(std::move(objectEntries))
   {}
   Object(const Object &other) = delete;
   Object &operator=(const Object &other) = delete;
@@ -66,13 +66,13 @@ struct Object : Variant
     return (true);
   }
   // Return number of entries in an object
-  [[nodiscard]] int size() const { return (static_cast<int>(m_jsonObjectEntries.size())); }
+  [[nodiscard]] int size() const { return (static_cast<int>(m_object.size())); }
   // Return object entry for a given key
   JNode &operator[](const std::string &key) { return (findKey(key)->getJNode()); }
   const JNode &operator[](const std::string &key) const { return (findKey(key)->getJNode()); }
   // Return reference to base of object entries
-  EntryList &getObjectEntries() { return (m_jsonObjectEntries); }
-  [[nodiscard]] const EntryList &getObjectEntries() const { return (m_jsonObjectEntries); }
+  EntryList &getObjectEntries() { return (m_object); }
+  [[nodiscard]] const EntryList &getObjectEntries() const { return (m_object); }
   // Make Object JNode
   static JNode make() { return (JNode{ std::make_unique<Object>() }); }
   static JNode make(Object::EntryList &objectEntries)
@@ -84,21 +84,21 @@ private:
   // Search for a given entry given a key and object list
   [[nodiscard]] Object::EntryList::iterator findKey(const std::string &key)
   {
-    auto entry = std::find_if(m_jsonObjectEntries.begin(), m_jsonObjectEntries.end(), [&key](const Entry &entry) -> bool {
+    auto entry = std::find_if(m_object.begin(), m_object.end(), [&key](const Entry &entry) -> bool {
       return (entry.getKey() == key);
     });
-    if (entry == m_jsonObjectEntries.end()) { throw JNode::Error("Invalid key used to access object."); }
+    if (entry == m_object.end()) { throw JNode::Error("Invalid key used to access object."); }
     return (entry);
   }
   [[nodiscard]] Object::EntryList::const_iterator findKey(const std::string &key) const
   {
-    auto entry = std::find_if(m_jsonObjectEntries.begin(), m_jsonObjectEntries.end(), [&key](const Entry &entry) -> bool {
+    auto entry = std::find_if(m_object.begin(), m_object.end(), [&key](const Entry &entry) -> bool {
       return (entry.getKey() == key);
     });
-    if (entry == m_jsonObjectEntries.end()) { throw JNode::Error("Invalid key used to access object."); }
+    if (entry == m_object.end()) { throw JNode::Error("Invalid key used to access object."); }
     return (entry);
   }
   // Object entries list
-  EntryList m_jsonObjectEntries;
+  EntryList m_object;
 };
 }// namespace JSONLib

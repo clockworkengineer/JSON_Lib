@@ -96,14 +96,14 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::Types>> &o
 // =========================
 // Interrogate JNode variant
 // =========================
-bool JNode::isEmpty() const { return (m_jNodeVariant == nullptr); }
-bool JNode::isObject() const { return (m_jNodeVariant->getType() == JNode::Type::object); }
-bool JNode::isArray() const { return (m_jNodeVariant->getType() == JNode::Type::array); }
-bool JNode::isNumber() const { return (m_jNodeVariant->getType() == JNode::Type::number); }
-bool JNode::isString() const { return (m_jNodeVariant->getType() == JNode::Type::string); }
-bool JNode::isBoolean() const { return (m_jNodeVariant->getType() == JNode::Type::boolean); }
-bool JNode::isNull() const { return (m_jNodeVariant->getType() == JNode::Type::null); }
-bool JNode::isHole() const { return (m_jNodeVariant->getType() == JNode::Type::hole); }
+bool JNode::isEmpty() const { return (m_variant == nullptr); }
+bool JNode::isObject() const { return (m_variant->getType() == JNode::Type::object); }
+bool JNode::isArray() const { return (m_variant->getType() == JNode::Type::array); }
+bool JNode::isNumber() const { return (m_variant->getType() == JNode::Type::number); }
+bool JNode::isString() const { return (m_variant->getType() == JNode::Type::string); }
+bool JNode::isBoolean() const { return (m_variant->getType() == JNode::Type::boolean); }
+bool JNode::isNull() const { return (m_variant->getType() == JNode::Type::null); }
+bool JNode::isHole() const { return (m_variant->getType() == JNode::Type::hole); }
 // =====================
 // JNode index overloads
 // =====================
@@ -146,6 +146,6 @@ JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null) { return (*this = 
 // ==============================
 // Get reference to JNode variant
 // ==============================
-Variant &JNode::getVariant() { return (*m_jNodeVariant); }
-const Variant &JNode::getVariant() const { return (*m_jNodeVariant); }
+Variant &JNode::getVariant() { return (*m_variant); }
+const Variant &JNode::getVariant() const { return (*m_variant); }
 }// namespace JSONLib

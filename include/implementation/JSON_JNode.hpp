@@ -40,7 +40,7 @@ struct JNode
   explicit JNode(std::nullptr_t null);
   JNode(const std::initializer_list<JSON::Types> &array);
   JNode(const std::initializer_list<std::pair<std::string, JSON::Types>> &object);
-  explicit JNode(std::unique_ptr<Variant> jNodeVariant) : m_jNodeVariant(std::move(jNodeVariant)) {}
+  explicit JNode(std::unique_ptr<Variant> jNodeVariant) : m_variant(std::move(jNodeVariant)) {}
   JNode(const JNode &other) = delete;
   JNode &operator=(const JNode &other) = delete;
   JNode(JNode &&other) = default;
@@ -77,6 +77,6 @@ struct JNode
 
 private:
   JNode createJNodeFromType(const JSON::Types &type);
-  std::unique_ptr<Variant> m_jNodeVariant;
+  std::unique_ptr<Variant> m_variant;
 };
 }// namespace JSONLib

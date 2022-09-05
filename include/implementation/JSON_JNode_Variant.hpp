@@ -14,8 +14,8 @@ namespace JSONLib {
 // ====
 struct Variant
 {
-  explicit Variant(JNode::Type nodeType = JNode::Type::base) : m_nodeType(nodeType) {}
-  [[nodiscard]] JNode::Type getType() const { return (m_nodeType); }
+  explicit Variant(JNode::Type nodeType = JNode::Type::base) : m_type(nodeType) {}
+  [[nodiscard]] JNode::Type getType() const { return (m_type); }
   Variant(const Variant &other) = delete;
   Variant &operator=(const Variant &other) = delete;
   Variant(Variant &&other) = default;
@@ -23,6 +23,6 @@ struct Variant
   ~Variant() = default;
 
 private:
-  JNode::Type m_nodeType;
+  JNode::Type m_type;
 };
 }// namespace JSONLib
