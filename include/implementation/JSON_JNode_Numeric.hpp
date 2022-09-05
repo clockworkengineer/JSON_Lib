@@ -82,7 +82,13 @@ struct Numeric
   };
   // Constructors/Destructors
   Numeric() = default;
-  explicit Numeric(const std::string &number) { [[maybe_unused]] auto valid = setValidNumber(number); }
+  // Find the smallest type that can represent a number. Note: That if it cannot be held as an
+  // integer then floating point types are tried.
+  explicit Numeric(const std::string &number)
+  {
+    [[maybe_unused]] auto valid = validInt(number) || validLong(number) || validLongLong(number) || validFloat(number)
+                                  || validDouble(number) || validLongDouble(number);
+  }
   explicit Numeric(int integer) : m_type(Type::Int) { m_values.m_integer = integer; }
   explicit Numeric(long integer) : m_type(Type::Long) { m_values.m_long = integer; }
   explicit Numeric(long long integer) : m_type(Type::LongLong) { m_values.m_longlong = integer; }
@@ -122,14 +128,6 @@ struct Numeric
     *this = Numeric(number);
     return (true);
   }
-  // Set numeric value
-  [[nodiscard]] bool setValidNumber(const std::string &number)
-  {
-    // Find the smallest type that can represent a number. Note: That if it cannot be held as an
-    // integer then floating point types are tried.
-    return (setInt(number) || setLong(number) || setLongLong(number) || setFloat(number) || setDouble(number)
-            || setLongDouble(number));
-  }
   [[nodiscard]] std::string getString() const
   {
     if (m_type == Type::Int) { return (numericToString(m_values.m_integer)); }
@@ -145,7 +143,7 @@ struct Numeric
   inline static void setNotation(Notation notation) { m_notation = notation; }
 
 private:
-  [[nodiscard]] bool setInt(const std::string &number)
+  [[nodiscard]] bool validInt(const std::string &number)
   {
     try {
       std::size_t end = 0;
@@ -157,7 +155,7 @@ private:
     }
     return (true);
   }
-  [[nodiscard]] bool setLong(const std::string &number)
+  [[nodiscard]] bool validLong(const std::string &number)
   {
     try {
       char *end = nullptr;
@@ -170,7 +168,7 @@ private:
     }
     return (true);
   }
-  [[nodiscard]] bool setLongLong(const std::string &number)
+  [[nodiscard]] bool validLongLong(const std::string &number)
   {
     try {
       char *end = nullptr;
@@ -183,7 +181,7 @@ private:
     }
     return (true);
   }
-  [[nodiscard]] bool setFloat(const std::string &number)
+  [[nodiscard]] bool validFloat(const std::string &number)
   {
     try {
       std::size_t end = 0;
@@ -195,7 +193,7 @@ private:
     }
     return (true);
   }
-  [[nodiscard]] bool setDouble(const std::string &number)
+  [[nodiscard]] bool validDouble(const std::string &number)
   {
     try {
       char *end = nullptr;
@@ -207,7 +205,7 @@ private:
     }
     return (true);
   }
-  [[nodiscard]] bool setLongDouble(const std::string &number)
+  [[nodiscard]] bool validLongDouble(const std::string &number)
   {
     try {
       char *end = nullptr;

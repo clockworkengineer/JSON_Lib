@@ -105,10 +105,13 @@ JNode JSON_Impl::parseString(ISource &source) { return (String::make(extractStri
 JNode JSON_Impl::parseNumber(ISource &source)
 {
   std::string number;
-  for (; source.more() && !endOfNumber(source) ; source.next()) { number += source.current(); }
-  Numeric jNodeNumeric;
-  if (!jNodeNumeric.setValidNumber(number)) { throw Error(source.getPosition(), "Invalid numeric value."); }
-  return (Number::make(jNodeNumeric));
+  for (; source.more() && !endOfNumber(source); source.next()) { number += source.current(); }
+  Numeric jNodeNumeric{ number };
+  if (jNodeNumeric.is<int>() || jNodeNumeric.is<long>() || jNodeNumeric.is<long long>() || jNodeNumeric.is<float>()
+      || jNodeNumeric.is<double>() || jNodeNumeric.is<long double>()) {
+    return (Number::make(jNodeNumeric));
+  }
+  throw Error(source.getPosition(), "Invalid numeric value.");
 }
 /// <summary>
 /// Parse a boolean from a JSON source stream.
