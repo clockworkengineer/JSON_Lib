@@ -56,7 +56,11 @@ set (JSON_INCLUDES
     ./include/implementation/JSON_JNode_Reference.hpp
     ./include/implementation/JSON_Impl.hpp
     ./include/implementation/JSON_Sources.hpp
+    ./include/implementation/JSON_BufferSource.hpp
+    ./include/implementation/JSON_FileSource.hpp
     ./include/implementation/JSON_Destinations.hpp
+    ./include/implementation/JSON_BufferDestination.hpp
+    ./include/implementation/JSON_FileDestination.hpp
     ./include/implementation/JSON_Translator.hpp
     ./include/implementation/JSON_Converter.hpp
     ./include/interface/IAction.hpp

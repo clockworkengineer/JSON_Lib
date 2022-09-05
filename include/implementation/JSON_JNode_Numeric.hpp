@@ -248,6 +248,8 @@ struct Numeric
   // Set numeric value
   [[nodiscard]] bool setValidNumber(const std::string &number)
   {
+    // Find the smallest type that can represent a number. Note: That if it cannot be held as an
+    // integer then floating point types are tried.
     return (setInt(number) || setLong(number) || setLongLong(number) || setFloat(number) || setDouble(number)
             || setLongDouble(number));
   }
