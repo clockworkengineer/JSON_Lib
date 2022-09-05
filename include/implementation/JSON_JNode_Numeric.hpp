@@ -47,6 +47,8 @@ struct Numeric
     case Notation::scientific:
       os << std::scientific << std::setprecision(m_precision) << number;
       break;
+    default:
+      os << std::setprecision(m_precision) << number;
     }
     if (os.str().find('.') == std::string::npos) { return (os.str() + ".0"); }
     return (os.str());
