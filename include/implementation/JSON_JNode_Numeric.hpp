@@ -56,30 +56,26 @@ struct Numeric
   // JNode Numeric Error
   struct Error : public std::runtime_error
   {
-    explicit Error(const std::string &message) : std::runtime_error("JNode Numeric Error: " + message) {}
+    explicit Error(const std::string &message) : pFLoatstd::runtime_error("JNode Numeric Error: " + message) {}
   };
   // Convert types
   template<typename T> [[nodiscard]] T convertType() const
   {
-    if (m_type == Type::Int) { return (static_cast<T>(m_values.m_integer)); }
-    if (m_type == Type::Long) { return (static_cast<T>(m_values.m_long)); }
-    if (m_type == Type::LongLong) { return (static_cast<T>(m_values.m_longlong)); }
-    if (m_type == Type::Float) { return (static_cast<T>(m_values.m_float)); }
-    if (m_type == Type::Double) { return (static_cast<T>(m_values.m_double)); }
-    if (m_type == Type::LongDouble) { return (static_cast<T>(m_values.m_longdouble)); }
+    if (auto pInteger = std::get_if<int>(&m_values)) {
+      return (static_cast<T>(*pInteger));
+    } else if (auto pLong = std::get_if<long>(&m_values)) {
+      return (static_cast<T>(*pLong));
+    } else if (auto pLongLong = std::get_if<long long>(&m_values)) {
+      return (static_cast<T>(*pLongLong));
+    } else if (auto pFloat = std::get_if<float>(&m_values)) {
+      return (static_cast<T>(*pFloat));
+    } else if (auto pDouble = std::get_if<double>(&m_values)) {
+      return (static_cast<T>(*pDouble));
+    } else if (auto pLongDouble = std::get_if<long double>(&m_values)) {
+      return (static_cast<T>(*pLongDouble));
+    }
     throw Error("Could not convert unknown type.");
   }
-  // Numeric types
-  enum class Type { Unknown = 0, Int, Long, LongLong, Float, Double, LongDouble };
-  // Numeric union
-  union Numbers {
-    int m_integer;
-    long m_long;
-    long long m_longlong;
-    float m_float;
-    double m_double;
-    long double m_longdouble;
-  };
   // Constructors/Destructors
   Numeric() = default;
   // Find the smallest type that can represent a number. Note: That if it cannot be held as an
@@ -89,34 +85,19 @@ struct Numeric
     [[maybe_unused]] auto valid = validInt(number) || validLong(number) || validLongLong(number) || validFloat(number)
                                   || validDouble(number) || validLongDouble(number);
   }
-  explicit Numeric(int integer) : m_type(Type::Int) { m_values.m_integer = integer; }
-  explicit Numeric(long integer) : m_type(Type::Long) { m_values.m_long = integer; }
-  explicit Numeric(long long integer) : m_type(Type::LongLong) { m_values.m_longlong = integer; }
-  explicit Numeric(float floatingPoint) : m_type(Type::Float) { m_values.m_float = floatingPoint; }
-  explicit Numeric(double floatingPoint) : m_type(Type::Double) { m_values.m_double = floatingPoint; }
-  explicit Numeric(long double floatingPoint) : m_type(Type::LongDouble) { m_values.m_longdouble = floatingPoint; }
+  explicit Numeric(int integer) : m_values(integer) {}
+  explicit Numeric(long integer) : m_values(integer) {}
+  explicit Numeric(long long integer) : m_values(integer) {}
+  explicit Numeric(float floatingPoint) : m_values(floatingPoint) {}
+  explicit Numeric(double floatingPoint) : m_values(floatingPoint) {}
+  explicit Numeric(long double floatingPoint) : m_values(floatingPoint) {}
   Numeric(const Numeric &other) = default;
   Numeric &operator=(const Numeric &other) = default;
   Numeric(Numeric &&other) = default;
   Numeric &operator=(Numeric &&other) = default;
   ~Numeric() = default;
   // Is number a int/long/long long/float/double/long double ?
-  template<typename T> [[nodiscard]] bool is() const
-  {
-    if constexpr (std::is_same_v<T, int>) {
-      return (m_type == Type::Int);
-    } else if constexpr (std::is_same_v<T, long>) {
-      return (m_type == Type::Long);
-    } else if constexpr (std::is_same_v<T, long long>) {
-      return (m_type == Type::LongLong);
-    } else if constexpr (std::is_same_v<T, float>) {
-      return (m_type == Type::Float);
-    } else if constexpr (std::is_same_v<T, double>) {
-      return (m_type == Type::Double);
-    } else if constexpr (std::is_same_v<T, long double>) {
-      return (m_type == Type::LongDouble);
-    }
-  }
+  template<typename T> [[nodiscard]] bool is() const { return (std::get_if<T>(&m_values) != nullptr); }
   // Return numbers value int/long long/float/double/long double.
   // Note: Can still return a integer value for a floating point.
   // Number to string
@@ -130,12 +111,19 @@ struct Numeric
   }
   [[nodiscard]] std::string getString() const
   {
-    if (m_type == Type::Int) { return (numericToString(m_values.m_integer)); }
-    if (m_type == Type::Long) { return (numericToString(m_values.m_long)); }
-    if (m_type == Type::LongLong) { return (numericToString(m_values.m_longlong)); }
-    if (m_type == Type::Float) { return (numericToString(m_values.m_float)); }
-    if (m_type == Type::Double) { return (numericToString(m_values.m_double)); }
-    if (m_type == Type::LongDouble) { return (numericToString(m_values.m_longdouble)); }
+    if (auto pInteger = std::get_if<int>(&m_values)) {
+      return (numericToString(*pInteger));
+    } else if (auto pLong = std::get_if<long>(&m_values)) {
+      return (numericToString(*pLong));
+    } else if (auto pLongLong = std::get_if<long long>(&m_values)) {
+      return (numericToString(*pLongLong));
+    } else if (auto pFloat = std::get_if<float>(&m_values)) {
+      return (numericToString(*pFloat));
+    } else if (auto pDouble = std::get_if<double>(&m_values)) {
+      return (numericToString(*pDouble));
+    } else if (auto pLongDouble = std::get_if<long double>(&m_values)) {
+      return (numericToString(*pLongDouble));
+    }
     throw Error("Could not convert unknown type.");
   }
   // Set floating point to string conversion parameters
@@ -217,10 +205,8 @@ private:
     }
     return (true);
   }
-  // Number type
-  Type m_type{ Type::Unknown };
-  // Number value union
-  Numbers m_values{ 0 };
+  // Number value variant
+  std::variant<std::monostate, int, long, long long, float, double, long double> m_values;
   // Floating point to string parameters
   inline static int m_precision{ 6 };
   inline static Notation m_notation{ Notation::normal };
