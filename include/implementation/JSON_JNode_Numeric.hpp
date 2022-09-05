@@ -83,36 +83,12 @@ struct Numeric
   // Constructors/Destructors
   Numeric() = default;
   explicit Numeric(const std::string &number) { [[maybe_unused]] auto valid = setValidNumber(number); }
-  explicit Numeric(int integer)
-  {
-    m_values.m_integer = integer;
-    m_type = Type::Int;
-  }
-  explicit Numeric(long integer)
-  {
-    m_values.m_long = integer;
-    m_type = Type::Long;
-  }
-  explicit Numeric(long long integer)
-  {
-    m_values.m_longlong = integer;
-    m_type = Type::LongLong;
-  }
-  explicit Numeric(float floatingPoint)
-  {
-    m_values.m_float = floatingPoint;
-    m_type = Type::Float;
-  }
-  explicit Numeric(double floatingPoint)
-  {
-    m_values.m_double = floatingPoint;
-    m_type = Type::Double;
-  }
-  explicit Numeric(long double floatingPoint)
-  {
-    m_values.m_longdouble = floatingPoint;
-    m_type = Type::LongDouble;
-  }
+  explicit Numeric(int integer) : m_type(Type::Int) { m_values.m_integer = integer; }
+  explicit Numeric(long integer) : m_type(Type::Long) { m_values.m_long = integer; }
+  explicit Numeric(long long integer) : m_type(Type::LongLong) { m_values.m_longlong = integer; }
+  explicit Numeric(float floatingPoint) : m_type(Type::Float) { m_values.m_float = floatingPoint; }
+  explicit Numeric(double floatingPoint) : m_type(Type::Double) { m_values.m_double = floatingPoint; }
+  explicit Numeric(long double floatingPoint) : m_type(Type::LongDouble) { m_values.m_longdouble = floatingPoint; }
   Numeric(const Numeric &other) = default;
   Numeric &operator=(const Numeric &other) = default;
   Numeric(Numeric &&other) = default;
@@ -141,114 +117,9 @@ struct Numeric
   template<typename T> [[nodiscard]] T get() const { return (convertType<T>()); }
   // Set numbers value to int/long/long long/float/double/long double
   // returning true if the value is set.
-  [[nodiscard]] bool setInt(const std::string &number)
+  template<typename T> [[nodiscard]] bool set(T number)
   {
-    try {
-      std::size_t end = 0;
-      m_values.m_integer = std::stoi(number, &end, kStringConversionBase);
-      if (end != number.size()) { return (false); }
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    m_type = Type::Int;
-    return (true);
-  }
-  [[nodiscard]] bool setInt(int number)
-  {
-    m_type = Type::Int;
-    m_values.m_integer = number;
-    return (true);
-  }
-  [[nodiscard]] bool setLong(const std::string &number)
-  {
-    try {
-      char *end = nullptr;
-      errno = 0;
-      m_values.m_long = std::strtol(number.c_str(), &end, kStringConversionBase);
-      if ((*end != '\0') || (errno == ERANGE)) { return (false); }
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    m_type = Type::Long;
-    return (true);
-  }
-  [[nodiscard]] bool setLong(long number)
-  {
-    m_type = Type::Long;
-    m_values.m_long = number;
-    return (true);
-  }
-  [[nodiscard]] bool setLongLong(const std::string &number)
-  {
-    try {
-      char *end = nullptr;
-      errno = 0;
-      m_values.m_longlong = std::strtoll(number.c_str(), &end, kStringConversionBase);
-      if ((*end != '\0') || (errno == ERANGE)) { return (false); }
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    m_type = Type::LongLong;
-    return (true);
-  }
-  [[nodiscard]] bool setLongLong(long long number)
-  {
-    m_type = Type::LongLong;
-    m_values.m_longlong = number;
-    return (true);
-  }
-  [[nodiscard]] bool setFloat(const std::string &number)
-  {
-    try {
-      std::size_t end = 0;
-      m_values.m_float = std::stof(number, &end);
-      if (end != number.size()) { return (false); }
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    m_type = Type::Float;
-    return (true);
-  }
-  [[nodiscard]] bool setFloat(float number)
-  {
-    m_type = Type::Float;
-    m_values.m_float = number;
-    return (true);
-  }
-  [[nodiscard]] bool setDouble(const std::string &number)
-  {
-    try {
-      char *end = nullptr;
-      m_values.m_double = std::strtod(number.c_str(), &end);
-      if (*end != '\0') { return (false); }
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    m_type = Type::Double;
-    return (true);
-  }
-  [[nodiscard]] bool setDouble(double number)
-  {
-    m_type = Type::Double;
-    m_values.m_double = number;
-    return (true);
-  }
-  [[nodiscard]] bool setLongDouble(const std::string &number)
-  {
-    try {
-      char *end = nullptr;
-      m_values.m_longdouble = std::strtold(number.c_str(), &end);
-      if (*end != '\0') { return (false); }
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    m_type = Type::LongDouble;
-    return (true);
-  }
-  [[nodiscard]] bool setLongDouble(long double number)
-  {
-    m_type = Type::LongDouble;
-    m_values.m_longdouble = number;
+    *this = Numeric(number);
     return (true);
   }
   // Set numeric value
@@ -259,7 +130,6 @@ struct Numeric
     return (setInt(number) || setLong(number) || setLongLong(number) || setFloat(number) || setDouble(number)
             || setLongDouble(number));
   }
-  // Get string representation of numeric
   [[nodiscard]] std::string getString() const
   {
     if (m_type == Type::Int) { return (numericToString(m_values.m_integer)); }
@@ -275,6 +145,80 @@ struct Numeric
   inline static void setNotation(Notation notation) { m_notation = notation; }
 
 private:
+  [[nodiscard]] bool setInt(const std::string &number)
+  {
+    try {
+      std::size_t end = 0;
+      int integer = std::stoi(number, &end, kStringConversionBase);
+      if (end != number.size()) { return (false); }
+      *this = Numeric(integer);
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
+  [[nodiscard]] bool setLong(const std::string &number)
+  {
+    try {
+      char *end = nullptr;
+      errno = 0;
+      long integer = std::strtol(number.c_str(), &end, kStringConversionBase);
+      if ((*end != '\0') || (errno == ERANGE)) { return (false); }
+      *this = Numeric(integer);
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
+  [[nodiscard]] bool setLongLong(const std::string &number)
+  {
+    try {
+      char *end = nullptr;
+      errno = 0;
+      long long integer = std::strtoll(number.c_str(), &end, kStringConversionBase);
+      if ((*end != '\0') || (errno == ERANGE)) { return (false); }
+      *this = Numeric(integer);
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
+  [[nodiscard]] bool setFloat(const std::string &number)
+  {
+    try {
+      std::size_t end = 0;
+      float floatingPoint = std::stof(number, &end);
+      if (end != number.size()) { return (false); }
+      *this = Numeric(floatingPoint);
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
+  [[nodiscard]] bool setDouble(const std::string &number)
+  {
+    try {
+      char *end = nullptr;
+      double floatingPoint = std::strtod(number.c_str(), &end);
+      if (*end != '\0') { return (false); }
+      *this = Numeric(floatingPoint);
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
+  [[nodiscard]] bool setLongDouble(const std::string &number)
+  {
+    try {
+      char *end = nullptr;
+      long double floatingPoint = std::strtold(number.c_str(), &end);
+      if (*end != '\0') { return (false); }
+      *this = Numeric(floatingPoint);
+    } catch ([[maybe_unused]] const std::exception &e) {
+      return (false);
+    }
+    return (true);
+  }
   // Number type
   Type m_type{ Type::Unknown };
   // Number value union
