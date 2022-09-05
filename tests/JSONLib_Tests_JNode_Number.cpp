@@ -168,6 +168,28 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     REQUIRE_FALSE(!JRef<Number>(json.root()).getNumber().isLongLong());
     REQUIRE(JRef<Number>(json.root()).getNumber().getLongLong() == -877994604561387500ll);
   }
+  SECTION("Positive integer overflow conversion.", "[JSON][JNode][Number][Long Long]")
+  {
+    BufferSource jsonSource{ "9223372036854775808" };// LLONG_MAX + 1
+    json.parse(jsonSource);
+    REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isInt());
+    REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isLong());
+    REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isLongLong());
+    REQUIRE_FALSE(!JRef<Number>(json.root()).getNumber().isFloat());
+    REQUIRE_FALSE(
+      !equalFloatingPoint(JRef<Number>(json.root()).getNumber().getFloat(), 9223372036854775808.0f, 0.0001));
+  }
+  SECTION("Negative integer overflow conversion.", "[JSON][JNode][Number][Long Long]")
+  {
+    BufferSource jsonSource{ "-9223372036854775809" };// LLONG_MIN - 1
+    json.parse(jsonSource);
+    REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isInt());
+    REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isLong());
+    REQUIRE_FALSE(JRef<Number>(json.root()).getNumber().isLongLong());
+    REQUIRE_FALSE(!JRef<Number>(json.root()).getNumber().isFloat());
+    REQUIRE_FALSE(
+      !equalFloatingPoint(JRef<Number>(json.root()).getNumber().getFloat(), -9223372036854775808.0f, 0.0001));
+  }
 }
 // =====================================
 // JNode Number floating point precision
