@@ -119,20 +119,26 @@ struct Numeric
   Numeric &operator=(Numeric &&other) = default;
   ~Numeric() = default;
   // Is number a int/long/long long/float/double/long double ?
-  [[nodiscard]] bool isInt() const { return (m_type == Type::Int); }
-  [[nodiscard]] bool isLong() const { return (m_type == Type::Long); }
-  [[nodiscard]] bool isLongLong() const { return (m_type == Type::LongLong); }
-  [[nodiscard]] bool isFloat() const { return (m_type == Type::Float); }
-  [[nodiscard]] bool isDouble() const { return (m_type == Type::Double); }
-  [[nodiscard]] bool isLongDouble() const { return (m_type == Type::LongDouble); }
+  template<typename T> [[nodiscard]] bool is() const
+  {
+    if constexpr (std::is_same_v<T, int>) {
+      return (m_type == Type::Int);
+    } else if constexpr (std::is_same_v<T, long>) {
+      return (m_type == Type::Long);
+    } else if constexpr (std::is_same_v<T, long long>) {
+      return (m_type == Type::LongLong);
+    } else if constexpr (std::is_same_v<T, float>) {
+      return (m_type == Type::Float);
+    } else if constexpr (std::is_same_v<T, double>) {
+      return (m_type == Type::Double);
+    } else if constexpr (std::is_same_v<T, long double>) {
+      return (m_type == Type::LongDouble);
+    }
+  }
   // Return numbers value int/long long/float/double/long double.
   // Note: Can still return a integer value for a floating point.
-  [[nodiscard]] int getInt() const { return (convertType<int>()); }
-  [[nodiscard]] long getLong() const { return (convertType<long>()); }
-  [[nodiscard]] long long getLongLong() const { return (convertType<long long>()); }
-  [[nodiscard]] float getFloat() const { return (convertType<float>()); }
-  [[nodiscard]] double getDouble() const { return (convertType<double>()); }
-  [[nodiscard]] long double getLongDouble() const { return (convertType<long double>()); }
+  // Number to string
+  template<typename T> [[nodiscard]] T get() const { return (convertType<T>()); }
   // Set numbers value to int/long/long long/float/double/long double
   // returning true if the value is set.
   [[nodiscard]] bool setInt(const std::string &number)

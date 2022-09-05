@@ -24,43 +24,43 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
   {
     JNode jNode(999);
     REQUIRE_FALSE(!jNode.isNumber());
-    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isInt());
-    REQUIRE(JRef<Number>(jNode).getNumber().getInt() == 999);
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().is<int>());
+    REQUIRE(JRef<Number>(jNode).getNumber().get<int>() == 999);
   }
   SECTION("Construct JNode(long).", "[JSON][JNode][Constructor][Long]")
   {
     JNode jNode(99988899l);
     REQUIRE_FALSE(!jNode.isNumber());
-    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLong());
-    REQUIRE(JRef<Number>(jNode).getNumber().getInt() == 99988899l);
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().is<long>());
+    REQUIRE(JRef<Number>(jNode).getNumber().get<int>() == 99988899l);
   }
   SECTION("Construct JNode(long long).", "[JSON][JNode][Constructor][Long Long]")
   {
     JNode jNode(99988899ll);
     REQUIRE_FALSE(!jNode.isNumber());
-    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLongLong());
-    REQUIRE(JRef<Number>(jNode).getNumber().getLongLong() == 99988899ll);
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().is<long long>());
+    REQUIRE(JRef<Number>(jNode).getNumber().get<long long>() == 99988899ll);
   }
   SECTION("Construct JNode(float).", "[JSON][JNode][Constructor][Float]")
   {
     JNode jNode(777.999f);
     REQUIRE_FALSE(!jNode.isNumber());
-    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isFloat());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getFloat(), 777.999f, 0.0001));
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().is<float>());
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().get<float>(), 777.999f, 0.0001));
   }
   SECTION("Construct JNode(double).", "[JSON][JNode][Constructor][Double]")
   {
     JNode jNode(66666.8888);
     REQUIRE_FALSE(!jNode.isNumber());
-    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isDouble());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getDouble(), 66666.8888, 0.0001));
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().is<double>());
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().get<double>(), 66666.8888, 0.0001));
   }
   SECTION("Construct JNode(long double).", "[JSON][JNode][Constructor][Long Double]")
   {
     JNode jNode(66666.8888l);
     REQUIRE_FALSE(!jNode.isNumber());
-    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLongDouble());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getLongDouble(), 66666.8888l, 0.0001));
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().is<long double>());
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().get<long double>(), 66666.8888l, 0.0001));
   }
   SECTION("Construct JNode(C string).", "[JSON][JNode][Constructor][CString]")
   {
@@ -91,18 +91,18 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
     JNode jNode{ 1, 2, 3, 4 };
     REQUIRE_FALSE(!jNode.isArray());
     auto &array = JRef<Array>(jNode).getArrayEntries();
-    REQUIRE(JRef<Number>(array[0]).getNumber().getInt() == 1);
-    REQUIRE(JRef<Number>(array[1]).getNumber().getInt() == 2);
-    REQUIRE(JRef<Number>(array[2]).getNumber().getInt() == 3);
-    REQUIRE(JRef<Number>(array[3]).getNumber().getInt() == 4);
+    REQUIRE(JRef<Number>(array[0]).getNumber().get<int>() == 1);
+    REQUIRE(JRef<Number>(array[1]).getNumber().get<int>() == 2);
+    REQUIRE(JRef<Number>(array[2]).getNumber().get<int>() == 3);
+    REQUIRE(JRef<Number>(array[3]).getNumber().get<int>() == 4);
   }
   SECTION("Construct JNode(object).", "[JSON][JNode][Constructor][Object]")
   {
     JNode jNode{ { "key1", 55 }, { "key2", 26666 } };
     REQUIRE_FALSE(!jNode.isObject());
     auto &object = JRef<Object>(jNode);
-    REQUIRE(JRef<Number>(object["key1"]).getNumber().getInt() == 55);
-    REQUIRE(JRef<Number>(object["key2"]).getNumber().getInt() == 26666);
+    REQUIRE(JRef<Number>(object["key1"]).getNumber().get<int>() == 55);
+    REQUIRE(JRef<Number>(object["key2"]).getNumber().get<int>() == 26666);
   }
 }
 // =================
@@ -115,48 +115,48 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
     JNode jNode;
     jNode = 999;
     REQUIRE_FALSE(!jNode.isNumber());
-    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isInt());
-    REQUIRE(JRef<Number>(jNode).getNumber().getInt() == 999);
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().is<int>());
+    REQUIRE(JRef<Number>(jNode).getNumber().get<int>() == 999);
   }
   SECTION("Assign long to JNode.", "[JSON][JNode][Assignment][Long]")
   {
     JNode jNode;
     jNode = 99988899l;
     REQUIRE_FALSE(!jNode.isNumber());
-    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLong());
-    REQUIRE(JRef<Number>(jNode).getNumber().getInt() == 99988899l);
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().is<long>());
+    REQUIRE(JRef<Number>(jNode).getNumber().get<int>() == 99988899l);
   }
   SECTION("Assign long long to JNode.", "[JSON][JNode][Assignment][Long Long]")
   {
     JNode jNode;
     jNode = 99988899ll;
     REQUIRE_FALSE(!jNode.isNumber());
-    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLongLong());
-    REQUIRE(JRef<Number>(jNode).getNumber().getLongLong() == 99988899ll);
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().is<long long>());
+    REQUIRE(JRef<Number>(jNode).getNumber().get<long long>() == 99988899ll);
   }
   SECTION("Assign float to JNode.", "[JSON][JNode][Assignment][Float]")
   {
     JNode jNode;
     jNode = 777.999f;
     REQUIRE_FALSE(!jNode.isNumber());
-    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isFloat());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getFloat(), 777.999f, 0.0001));
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().is<float>());
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().get<float>(), 777.999f, 0.0001));
   }
   SECTION("Assign double to JNode.", "[JSON][JNode][Assignment][Double]")
   {
     JNode jNode;
     jNode = 66666.8888;
     REQUIRE_FALSE(!jNode.isNumber());
-    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isDouble());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getDouble(), 66666.8888, 0.0001));
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().is<double>());
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().get<double>(), 66666.8888, 0.0001));
   }
   SECTION("Assign long double to JNode.", "[JSON][JNode][Assignment][Long Double]")
   {
     JNode jNode;
     jNode = 66666.8888l;
     REQUIRE_FALSE(!jNode.isNumber());
-    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().isLongDouble());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().getLongDouble(), 66666.8888l, 0.0001));
+    REQUIRE_FALSE(!JRef<Number>(jNode).getNumber().is<long double>());
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).getNumber().get<long double>(), 66666.8888l, 0.0001));
   }
   SECTION("Assign C string to JNode.", "[JSON][JNode][Assignment][CString]")
   {
@@ -192,10 +192,10 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
     jNode = { 1, 2, 3, 4 };
     REQUIRE_FALSE(!jNode.isArray());
     auto &array = JRef<Array>(jNode).getArrayEntries();
-    REQUIRE(JRef<Number>(array[0]).getNumber().getInt() == 1);
-    REQUIRE(JRef<Number>(array[1]).getNumber().getInt() == 2);
-    REQUIRE(JRef<Number>(array[2]).getNumber().getInt() == 3);
-    REQUIRE(JRef<Number>(array[3]).getNumber().getInt() == 4);
+    REQUIRE(JRef<Number>(array[0]).getNumber().get<int>() == 1);
+    REQUIRE(JRef<Number>(array[1]).getNumber().get<int>() == 2);
+    REQUIRE(JRef<Number>(array[2]).getNumber().get<int>() == 3);
+    REQUIRE(JRef<Number>(array[3]).getNumber().get<int>() == 4);
   }
   SECTION("Assign object to JNode.", "[JSON][JNode][Assignment][Object]")
   {
@@ -203,8 +203,8 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
     jNode = { { "key1", 55 }, { "key2", 26666 } };
     REQUIRE_FALSE(!jNode.isObject());
     auto &object = JRef<Object>(jNode);
-    REQUIRE(JRef<Number>(object["key1"]).getNumber().getInt() == 55);
-    REQUIRE(JRef<Number>(object["key2"]).getNumber().getInt() == 26666);
+    REQUIRE(JRef<Number>(object["key1"]).getNumber().get<int>() == 55);
+    REQUIRE(JRef<Number>(object["key2"]).getNumber().get<int>() == 26666);
   }
 }
 // ==============
@@ -219,23 +219,23 @@ TEST_CASE("Check use of JNode indexing operators.", "[JSON][JNode][Index]")
     json.parse(jsonSource);
     checkObject(json.root());
     REQUIRE(JRef<String>((json.root())["City"]).getString() == "Southampton");
-    REQUIRE(JRef<Number>((json.root())["Population"]).getNumber().getInt() == 500000);
+    REQUIRE(JRef<Number>((json.root())["Population"]).getNumber().get<int>() == 500000);
   }
   SECTION("Parse array and check its components using indexing.", "[JSON][JNode][Index]")
   {
     BufferSource jsonSource{ R"([777,9000,"apples"])" };
     json.parse(jsonSource);
-    REQUIRE(JRef<Number>((json.root())[0]).getNumber().getInt() == 777);
-    REQUIRE(JRef<Number>((json.root())[1]).getNumber().getInt() == 9000);
+    REQUIRE(JRef<Number>((json.root())[0]).getNumber().get<int>() == 777);
+    REQUIRE(JRef<Number>((json.root())[1]).getNumber().get<int>() == 9000);
     REQUIRE(JRef<String>((json.root())[2]).getString() == "apples");
   }
   SECTION("Parse array with embedded dictionary and check its components using indexing.", "[JSON][JNode][Index]")
   {
     BufferSource jsonSource{ R"([777,{"City":"Southampton","Population":500000},"apples"])" };
     json.parse(jsonSource);
-    REQUIRE(JRef<Number>((json.root())[0]).getNumber().getInt() == 777);
+    REQUIRE(JRef<Number>((json.root())[0]).getNumber().get<int>() == 777);
     REQUIRE(JRef<String>((json.root())[1]["City"]).getString() == "Southampton");
-    REQUIRE(JRef<Number>((json.root())[1]["Population"]).getNumber().getInt() == 500000);
+    REQUIRE(JRef<Number>((json.root())[1]["Population"]).getNumber().get<int>() == 500000);
     REQUIRE(JRef<String>((json.root())[2]).getString() == "apples");
   }
   SECTION("Parse dictionary and check an invalid key generates exception.", "[JSON][JNode][Index]")
@@ -263,7 +263,7 @@ TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]")
   {
     BufferSource jsonSource{ "45500" };
     json.parse(jsonSource);
-    REQUIRE(JRef<Number>(json.root()).getNumber().getInt() == 45500);
+    REQUIRE(JRef<Number>(json.root()).getNumber().get<int>() == 45500);
   }
   SECTION("String reference.", "[JSON][JNode][Reference][String]")
   {
@@ -315,8 +315,8 @@ TEST_CASE("Check JNode reference function exceptions.", "[JSON][JNode][Reference
   {
     BufferSource jsonSource{ R"("0123456789")" };
     json.parse(jsonSource);
-    REQUIRE_THROWS_AS(JRef<Number>(json.root()).getNumber().isInt(), JNode::Error);
-    REQUIRE_THROWS_WITH(JRef<Number>(json.root()).getNumber().isInt(), "JNode Error: JNode not a number.");
+    REQUIRE_THROWS_AS(JRef<Number>(json.root()).getNumber().is<int>(), JNode::Error);
+    REQUIRE_THROWS_WITH(JRef<Number>(json.root()).getNumber().is<int>(), "JNode Error: JNode not a number.");
   }
   SECTION("Null reference a boolean.", "[JSON][JNode][Reference][Null][Exception]")
   {

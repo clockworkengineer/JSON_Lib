@@ -47,13 +47,13 @@ public:
   {
     totalNumbers++;
     sizeInBytes += sizeof(Number);
-    if (jNodeNumber.getNumber().isInt()) {
+    if (jNodeNumber.getNumber().is<int>()) {
       totalInteger++;
-    } else if (jNodeNumber.getNumber().isLong()) {
+    } else if (jNodeNumber.getNumber().is<long>()) {
       totalLong++;
-    } else if (jNodeNumber.getNumber().isFloat()) {
+    } else if (jNodeNumber.getNumber().is<float>()) {
       totalFloat++;
-    } else if (jNodeNumber.getNumber().isDouble()) {
+    } else if (jNodeNumber.getNumber().is<double>()) {
       totalDouble++;
     }
   }

@@ -78,7 +78,7 @@ TEST_CASE("Check JSON parsing of collection types and check values.", "[JSON][Pa
     REQUIRE_FALSE(!json.root()["Name"].isString());
     REQUIRE_FALSE(!json.root()["Age"].isNumber());
     REQUIRE(JRef<String>((json.root())["Name"]).getString() == "Robert");
-    REQUIRE(JRef<Number>((json.root())["Age"]).getNumber().getInt() == 15);
+    REQUIRE(JRef<Number>((json.root())["Age"]).getNumber().get<int>() == 15);
   }
   SECTION(R"(Parse an array [777,9000,"apples"] and check its value.)", "[JSON][Parse][Collection][validate]")
   {
@@ -89,8 +89,8 @@ TEST_CASE("Check JSON parsing of collection types and check values.", "[JSON][Pa
     REQUIRE_FALSE(!json.root()[0].isNumber());
     REQUIRE_FALSE(!json.root()[1].isNumber());
     REQUIRE_FALSE(!json.root()[2].isString());
-    REQUIRE(JRef<Number>((json.root())[0]).getNumber().getInt() == 777);
-    REQUIRE(JRef<Number>((json.root())[1]).getNumber().getInt() == 9000);
+    REQUIRE(JRef<Number>((json.root())[0]).getNumber().get<int>() == 777);
+    REQUIRE(JRef<Number>((json.root())[1]).getNumber().get<int>() == 9000);
     REQUIRE(JRef<String>((json.root())[2]).getString() == "apples");
   }
   SECTION(R"(Parse object {"City":"Southampton","Population":500000} and check its value.)",

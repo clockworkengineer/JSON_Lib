@@ -30,7 +30,7 @@ const std::string prefixPath(const std::string &jsonFileName)
 /// <returns>Translated JSON string</returns>
 std::string crlfTolf(const std::string &jsonBuffer)
 {
-  std::string translated { jsonBuffer};
+  std::string translated{ jsonBuffer };
   size_t pos = translated.find(kCRLF);
   while (pos != std::string::npos) {
     translated.replace(pos, 2, kLF);
@@ -80,7 +80,7 @@ void checkArray(const JNode &jNode)
   REQUIRE_FALSE(!jNode[2].isBoolean());
   REQUIRE_FALSE(!jNode[3].isNull());
   REQUIRE(JRef<String>(jNode[0]).getString() == "Dog");
-  REQUIRE(JRef<Number>(jNode[1]).getNumber().getInt() == 1964);
+  REQUIRE(JRef<Number>(jNode[1]).getNumber().get<int>() == 1964);
   REQUIRE(JRef<Boolean>(jNode[2]).getBoolean() == true);
   REQUIRE(JRef<Null>(jNode[3]).getNull() == nullptr);
 }
@@ -98,7 +98,7 @@ void checkObject(const JNode &jNode)
   REQUIRE_FALSE(!jNode["City"].isString());
   REQUIRE_FALSE(!jNode["Population"].isNumber());
   REQUIRE(JRef<String>(jNode["City"]).getString() == "Southampton");
-  REQUIRE(JRef<Number>(jNode["Population"]).getNumber().getInt() == 500000);
+  REQUIRE(JRef<Number>(jNode["Population"]).getNumber().get<int>() == 500000);
 }
 /// <summary>
 /// Strip white space from source JSON and place remainder in destination.
@@ -110,6 +110,6 @@ std::string stripWhiteSpace(const std::string &jsonBuffer)
 {
   const JSONLib::JSON json;
   BufferDestination destination;
-  json.strip(BufferSource {jsonBuffer}, destination);
+  json.strip(BufferSource{ jsonBuffer }, destination);
   return (destination.getBuffer());
 }
