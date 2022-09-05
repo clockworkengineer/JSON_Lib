@@ -37,7 +37,7 @@ public:
   // ==============
   // PUBLIC METHODS
   // ==============
-  void add(const char ch) override
+  virtual void add(const char ch) override
   {
     if (ch == '\n') {
       m_destination.write("\r\n", 2);
@@ -46,12 +46,12 @@ public:
     }
     m_destination.flush();
   }
-  void add(const std::string &bytes) override
+  virtual void add(const std::string &bytes) override
   {
     for (auto ch : bytes) { add(ch); }
     m_destination.flush();
   }
-  void clear() override
+  virtual void clear() override
   {
     if (m_destination.is_open()) { m_destination.close(); }
     m_destination.open(m_filename.c_str(), std::ios_base::binary | std::ios_base::trunc);

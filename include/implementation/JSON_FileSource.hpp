@@ -39,8 +39,8 @@ public:
   // ==============
   // PUBLIC METHODS
   // ==============
-  char current() const override { return (static_cast<char>(m_source.peek())); }
-  void next() override
+  virtual [[nodiscard]] char current() const override { return (static_cast<char>(m_source.peek())); }
+  virtual void next() override
   {
     if (!more()) { throw Error("Tried to read past end of file."); }
     m_source.get();
@@ -54,15 +54,15 @@ public:
       m_column = 1;
     }
   }
-  bool more() const override { return (m_source.peek() != EOF); }
-  void reset() override
+  virtual bool more() const override { return (m_source.peek() != EOF); }
+  virtual void reset() override
   {
     m_lineNo = 1;
     m_column = 1;
     m_source.clear();
     m_source.seekg(0, std::ios_base::beg);
   }
-  std::size_t position() const override
+  virtual [[nodiscard]] std::size_t position() const override
   {
     if (more()) { return (static_cast<std::size_t>(m_source.tellg())); }
     return (std::filesystem::file_size(m_filename));
@@ -77,7 +77,7 @@ private:
   // ===============
   // PRIVATE METHODS
   // ===============
-  void backup(unsigned long length) override
+  virtual void backup(unsigned long length) override
   {
     m_source.clear();
     m_source.seekg(-static_cast<long>(length), std::ios_base::cur);

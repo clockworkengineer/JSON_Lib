@@ -37,12 +37,12 @@ public:
   // ==============
   // PUBLIC METHODS
   // ==============
-  [[nodiscard]] char current() const override
+  virtual [[nodiscard]] char current() const override
   {
     if (more()) { return (m_buffer[m_position]); }
     return (EOF);
   }
-  void next() override
+  virtual [[nodiscard]] void next() override
   {
     if (!more()) { throw Error("Tried to read past and of buffer."); }
     m_position++;
@@ -52,14 +52,14 @@ public:
       m_column = 1;
     }
   }
-  [[nodiscard]] bool more() const override { return (m_position < m_buffer.size()); }
+  virtual [[nodiscard]] bool more() const override { return (m_position < m_buffer.size()); }
   void reset() override
   {
     m_position = 0;
     m_lineNo = 1;
     m_column = 1;
   }
-  [[nodiscard]] std::size_t position() const override { return (m_position); }
+  virtual [[nodiscard]] std::size_t position() const override { return (m_position); }
   // ================
   // PUBLIC VARIABLES
   // ================
@@ -70,7 +70,7 @@ private:
   // ===============
   // PRIVATE METHODS
   // ===============
-  void backup(unsigned long length) override { m_position -= length; }
+  virtual void backup(unsigned long length) override { m_position -= length; }
   // =================
   // PRIVATE VARIABLES
   // =================
