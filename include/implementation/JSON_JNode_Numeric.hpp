@@ -82,8 +82,8 @@ struct Numeric
   // integer then floating point types are tried.
   explicit Numeric(const std::string &number)
   {
-    [[maybe_unused]] auto valid = validInt(number) || validLong(number) || validLongLong(number) || validFloat(number)
-                                  || validDouble(number) || validLongDouble(number);
+    [[maybe_unused]] auto ok = valid<int>(number) || valid<long>(number) || valid<long long>(number)
+                               || valid<float>(number) || valid<double>(number) || valid<long double>(number);
   }
   explicit Numeric(int integer) : m_values(integer) {}
   explicit Numeric(long integer) : m_values(integer) {}
@@ -131,81 +131,49 @@ struct Numeric
   inline static void setNotation(Notation notation) { m_notation = notation; }
 
 private:
-  [[nodiscard]] bool validInt(const std::string &number)
+  template<Integer T> bool valid(const std::string &number)
   {
-    try {
-      std::size_t end = 0;
-      int integer = std::stoi(number, &end, kStringConversionBase);
-      if (end != number.size()) { return (false); }
-      *this = Numeric(integer);
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
+    {
+      try {
+        std::size_t end = 0;
+        T integer;
+        if constexpr (std::is_same_v<T, int>) {
+          integer = std::stoi(number, &end, kStringConversionBase);
+        } else if constexpr (std::is_same_v<T, long>) {
+          integer = std::stol(number, &end, kStringConversionBase);
+        } else if constexpr (std::is_same_v<T, long long>) {
+          integer = std::stoll(number, &end, kStringConversionBase);
+        }
+        if (end != number.size()) { return (false); }
+        *this = Numeric(integer);
+      } catch ([[maybe_unused]] const std::exception &e) {
+        return (false);
+      }
+      return (true);
     }
-    return (true);
   }
-  [[nodiscard]] bool validLong(const std::string &number)
+  template<Float T> bool valid(const std::string &number)
   {
-    try {
-      char *end = nullptr;
-      errno = 0;
-      long integer = std::strtol(number.c_str(), &end, kStringConversionBase);
-      if ((*end != '\0') || (errno == ERANGE)) { return (false); }
-      *this = Numeric(integer);
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
+    {
+      try {
+        std::size_t end = 0;
+        T floatingPoint;
+        if constexpr (std::is_same_v<T, int>) {
+          floatingPoint = std::stof(number, &end, kStringConversionBase);
+        } else if constexpr (std::is_same_v<T, long>) {
+          floatingPoint = std::stod(number, &end, kStringConversionBase);
+        } else if constexpr (std::is_same_v<T, long long>) {
+          floatingPoint = std::stold(number, &end, kStringConversionBase);
+        }
+        if (end != number.size()) { return (false); }
+        *this = Numeric(floatingPoint);
+      } catch ([[maybe_unused]] const std::exception &e) {
+        return (false);
+      }
+      return (true);
     }
-    return (true);
   }
-  [[nodiscard]] bool validLongLong(const std::string &number)
-  {
-    try {
-      char *end = nullptr;
-      errno = 0;
-      long long integer = std::strtoll(number.c_str(), &end, kStringConversionBase);
-      if ((*end != '\0') || (errno == ERANGE)) { return (false); }
-      *this = Numeric(integer);
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    return (true);
-  }
-  [[nodiscard]] bool validFloat(const std::string &number)
-  {
-    try {
-      std::size_t end = 0;
-      float floatingPoint = std::stof(number, &end);
-      if (end != number.size()) { return (false); }
-      *this = Numeric(floatingPoint);
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    return (true);
-  }
-  [[nodiscard]] bool validDouble(const std::string &number)
-  {
-    try {
-      char *end = nullptr;
-      double floatingPoint = std::strtod(number.c_str(), &end);
-      if (*end != '\0') { return (false); }
-      *this = Numeric(floatingPoint);
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    return (true);
-  }
-  [[nodiscard]] bool validLongDouble(const std::string &number)
-  {
-    try {
-      char *end = nullptr;
-      long double floatingPoint = std::strtold(number.c_str(), &end);
-      if (*end != '\0') { return (false); }
-      *this = Numeric(floatingPoint);
-    } catch ([[maybe_unused]] const std::exception &e) {
-      return (false);
-    }
-    return (true);
-  }
-  // Number value variant
+  // Numeric value variants
   std::variant<std::monostate, int, long, long long, float, double, long double> m_values;
   // Floating point to string parameters
   inline static int m_precision{ 6 };
