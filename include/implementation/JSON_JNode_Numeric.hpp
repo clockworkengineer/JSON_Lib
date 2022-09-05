@@ -56,7 +56,7 @@ struct Numeric
   // JNode Numeric Error
   struct Error : public std::runtime_error
   {
-    explicit Error(const std::string &message) : pFLoatstd::runtime_error("JNode Numeric Error: " + message) {}
+    explicit Error(const std::string &message) : std::runtime_error("JNode Numeric Error: " + message) {}
   };
   // Convert types
   template<typename T> [[nodiscard]] T convertType() const
