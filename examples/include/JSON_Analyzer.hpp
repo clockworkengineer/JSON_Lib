@@ -51,10 +51,14 @@ public:
       totalInteger++;
     } else if (jNodeNumber.getNumber().is<long>()) {
       totalLong++;
+    } else if (jNodeNumber.getNumber().is<long long>()) {
+      totalLongLong++;
     } else if (jNodeNumber.getNumber().is<float>()) {
       totalFloat++;
     } else if (jNodeNumber.getNumber().is<double>()) {
       totalDouble++;
+    } else if (jNodeNumber.getNumber().is<long double>()) {
+      totalLongDouble++;
     }
   }
   virtual void onBoolean([[maybe_unused]] const Boolean &jNodeBoolean) override
@@ -126,8 +130,10 @@ public:
     os << "JSON Tree contains " << totalNumbers << " numbers.\n";
     os << "JSON Tree contains " << totalInteger << " integers.\n";
     os << "JSON Tree contains " << totalLong << " longs.\n";
+    os << "JSON Tree contains " << totalLongLong << " long longs.\n";
     os << "JSON Tree contains " << totalFloat << " floats.\n";
     os << "JSON Tree contains " << totalDouble << " doubles.\n";
+    os << "JSON Tree contains " << totalLongDouble << " long doubles.\n";
     os << "------------------JSON Boolean Stats------------------\n";
     os << "JSON Tree contains " << totalBoolean << " booleans.\n";
     os << "------------------JSON Null Stats------------------\n";
@@ -158,8 +164,10 @@ private:
   int64_t totalNumbers{};
   int64_t totalInteger{};
   int64_t totalLong{};
+  int64_t totalLongLong{};
   int64_t totalFloat{};
   int64_t totalDouble{};
+  int64_t totalLongDouble{};
   // Boolean
   int64_t totalBoolean{};
   // Null
