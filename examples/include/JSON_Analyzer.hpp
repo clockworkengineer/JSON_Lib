@@ -101,7 +101,7 @@ public:
     os << "Object Entry size " << sizeof(Object::Entry) << " in bytes.\n";
     os << "Array size " << sizeof(Array) << " in bytes.\n";
     os << "Numeric size " << sizeof(Numeric) << " in bytes.\n";
-    // os << "Numeric::Numbers size " << sizeof(Numeric::Numbers) << " in bytes.\n";
+    os << "Numeric::Numbers size " << sizeof(Numeric::Numbers) << " in bytes.\n";
     os << "Number size " << sizeof(Number) << " in bytes.\n";
     os << "String size " << sizeof(String) << " in bytes.\n";
     os << "Boolean size " << sizeof(Boolean) << " in bytes.\n";

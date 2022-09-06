@@ -23,6 +23,8 @@ concept Float = std::is_floating_point<T>::value;
 // =============
 struct Numeric
 {
+  // Numeric variant
+  using Numbers = std::variant<std::monostate, int, long, long long, float, double, long double>;
   // JNode Numeric Error
   struct Error : public std::runtime_error
   {
@@ -94,7 +96,6 @@ struct Numeric
   template<typename T> [[nodiscard]] bool is() const { return (std::get_if<T>(&m_values) != nullptr); }
   // Return numbers value int/long long/float/double/long double.
   // Note: Can still return a integer value for a floating point.
-  // Number to string
   template<typename T> [[nodiscard]] T get() const { return (convertType<T>()); }
   // Set numbers value to int/long/long long/float/double/long double
   template<typename T> [[nodiscard]] void set(T number) { *this = Numeric(number); }
@@ -157,8 +158,8 @@ private:
                                || stringToNumeric<long long>(number) || stringToNumeric<float>(number)
                                || stringToNumeric<double>(number) || stringToNumeric<long double>(number);
   }
-  // Numeric value variants
-  std::variant<std::monostate, int, long, long long, float, double, long double> m_values;
+  // Numeric variants
+  Numbers m_values;
   // Floating point to string parameters
   inline static int m_precision{ 6 };
   inline static Notation m_notation{ Notation::normal };

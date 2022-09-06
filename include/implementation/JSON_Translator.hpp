@@ -24,9 +24,7 @@ public:
   // ==========================
   // PUBLIC TYPES AND CONSTANTS
   // ==========================
-  // =====================
   // JSON translator error
-  // =====================
   struct Error : public std::runtime_error {
     explicit Error(const std::string &message)
         : std::runtime_error("JSON Translator Error: " + message) {}
