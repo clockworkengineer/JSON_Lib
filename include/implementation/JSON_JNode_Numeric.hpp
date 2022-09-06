@@ -23,6 +23,11 @@ concept Float = std::is_floating_point<T>::value;
 // =============
 struct Numeric
 {
+  // JNode Numeric Error
+  struct Error : public std::runtime_error
+  {
+    explicit Error(const std::string &message) : std::runtime_error("JNode Numeric Error: " + message) {}
+  };
   // All string conversions are for base 10
   static constexpr int kStringConversionBase{ 10 };
   // Floating point notation
@@ -53,12 +58,7 @@ struct Numeric
     if (os.str().find('.') == std::string::npos) { return (os.str() + ".0"); }
     return (os.str());
   }
-  // JNode Numeric Error
-  struct Error : public std::runtime_error
-  {
-    explicit Error(const std::string &message) : std::runtime_error("JNode Numeric Error: " + message) {}
-  };
-  // Convert types
+  // Convert values to another specified type
   template<typename T> [[nodiscard]] T convertType() const
   {
     if (auto pInteger = std::get_if<int>(&m_values)) {
@@ -78,13 +78,7 @@ struct Numeric
   }
   // Constructors/Destructors
   Numeric() = default;
-  // Find the smallest type that can represent a number. Note: That if it cannot be held as an
-  // integer then floating point types are tried.
-  explicit Numeric(const std::string &number)
-  {
-    [[maybe_unused]] auto ok = valid<int>(number) || valid<long>(number) || valid<long long>(number)
-                               || valid<float>(number) || valid<double>(number) || valid<long double>(number);
-  }
+  explicit Numeric(const std::string &number) { convertNumber(number); }
   explicit Numeric(int integer) : m_values(integer) {}
   explicit Numeric(long integer) : m_values(integer) {}
   explicit Numeric(long long integer) : m_values(integer) {}
@@ -103,12 +97,8 @@ struct Numeric
   // Number to string
   template<typename T> [[nodiscard]] T get() const { return (convertType<T>()); }
   // Set numbers value to int/long/long long/float/double/long double
-  // returning true if the value is set.
-  template<typename T> [[nodiscard]] bool set(T number)
-  {
-    *this = Numeric(number);
-    return (true);
-  }
+  template<typename T> [[nodiscard]] void set(T number) { *this = Numeric(number); }
+  // Get numeric string value
   [[nodiscard]] std::string getString() const
   {
     if (auto pInteger = std::get_if<int>(&m_values)) {
@@ -131,47 +121,41 @@ struct Numeric
   inline static void setNotation(Notation notation) { m_notation = notation; }
 
 private:
-  template<Integer T> bool valid(const std::string &number)
+  // Try to convert string to specific numeric type (returns true on success)
+  template<typename T> bool stringToNumeric(const std::string &number)
   {
     {
       try {
         std::size_t end = 0;
-        T integer;
+        T value;
         if constexpr (std::is_same_v<T, int>) {
-          integer = std::stoi(number, &end, kStringConversionBase);
+          value = std::stoi(number, &end, kStringConversionBase);
         } else if constexpr (std::is_same_v<T, long>) {
-          integer = std::stol(number, &end, kStringConversionBase);
+          value = std::stol(number, &end, kStringConversionBase);
         } else if constexpr (std::is_same_v<T, long long>) {
-          integer = std::stoll(number, &end, kStringConversionBase);
+          value = std::stoll(number, &end, kStringConversionBase);
+        } else if constexpr (std::is_same_v<T, float>) {
+          value = std::stof(number, &end);
+        } else if constexpr (std::is_same_v<T, double>) {
+          value = std::stod(number, &end);
+        } else if constexpr (std::is_same_v<T, long double>) {
+          value = std::stold(number, &end);
         }
         if (end != number.size()) { return (false); }
-        *this = Numeric(integer);
+        *this = Numeric(value);
       } catch ([[maybe_unused]] const std::exception &e) {
         return (false);
       }
       return (true);
     }
   }
-  template<Float T> bool valid(const std::string &number)
+  // Find the smallest type that can represent a number. Note: That if it cannot be held as an
+  // integer then floating point types are tried.
+  void convertNumber(const std::string &number)
   {
-    {
-      try {
-        std::size_t end = 0;
-        T floatingPoint;
-        if constexpr (std::is_same_v<T, int>) {
-          floatingPoint = std::stof(number, &end, kStringConversionBase);
-        } else if constexpr (std::is_same_v<T, long>) {
-          floatingPoint = std::stod(number, &end, kStringConversionBase);
-        } else if constexpr (std::is_same_v<T, long long>) {
-          floatingPoint = std::stold(number, &end, kStringConversionBase);
-        }
-        if (end != number.size()) { return (false); }
-        *this = Numeric(floatingPoint);
-      } catch ([[maybe_unused]] const std::exception &e) {
-        return (false);
-      }
-      return (true);
-    }
+    [[maybe_unused]] auto ok = stringToNumeric<int>(number) || stringToNumeric<long>(number)
+                               || stringToNumeric<long long>(number) || stringToNumeric<float>(number)
+                               || stringToNumeric<double>(number) || stringToNumeric<long double>(number);
   }
   // Numeric value variants
   std::variant<std::monostate, int, long, long long, float, double, long double> m_values;
