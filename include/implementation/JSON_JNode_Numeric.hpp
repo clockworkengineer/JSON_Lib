@@ -98,7 +98,7 @@ struct Numeric
   // Note: Can still return a integer value for a floating point.
   template<typename T> [[nodiscard]] T get() const { return (convertType<T>()); }
   // Set numbers value to int/long/long long/float/double/long double
-  template<typename T> [[nodiscard]] void set(T number) { *this = Numeric(number); }
+  template<typename T> void set(T number) { *this = Numeric(number); }
   // Get numeric string value
   [[nodiscard]] std::string getString() const
   {

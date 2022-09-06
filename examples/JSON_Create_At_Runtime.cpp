@@ -66,8 +66,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     json.stringify(destination);
     PLOG_INFO << destination.getBuffer();
     destination.clear();
-    // create JSON using an intialiser list and nesting array/objects using
-    // JNode{}.
+    // create JSON using an intialiser list and nesting array/objects using JNode{}.
     json::JSON json2 = { { "pi", 3.141 },
       { "sad", true },
       { "first_name", "Niels" },
