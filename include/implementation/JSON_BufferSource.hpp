@@ -42,7 +42,7 @@ public:
     if (more()) { return (m_buffer[m_position]); }
     return (EOF);
   }
-  virtual [[nodiscard]] void next() override
+  virtual void next() override
   {
     if (!more()) { throw Error("Tried to read past and of buffer."); }
     m_position++;
@@ -53,7 +53,7 @@ public:
     }
   }
   virtual [[nodiscard]] bool more() const override { return (m_position < m_buffer.size()); }
-  void reset() override
+  virtual void reset() override
   {
     m_position = 0;
     m_lineNo = 1;

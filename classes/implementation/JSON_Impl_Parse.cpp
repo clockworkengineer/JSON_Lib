@@ -67,15 +67,10 @@ std::string JSON_Impl::extractString(ISource &source, bool translate)
     source.next();
   }
   if (source.current() != '"') { throw Error(source.getPosition(), "Missing closing '\"' on string."); }
-  source.next();
   // Need to translate escapes to UTF8
-  if (translateEscapes) {
-    return (m_translator->fromJSON(extracted));
-  }
-  // None so just pass on
-  else {
-    return (extracted);
-  }
+  if (translateEscapes) { extracted = m_translator->fromJSON(extracted); }
+  source.next();
+  return (extracted);
 }
 /// <summary>
 /// Parse a key/value pair from a JSON encoded source stream.
