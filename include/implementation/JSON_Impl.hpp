@@ -113,11 +113,11 @@ private:
   // Produce JSON test string from JSON tree
   static void stringifyJNodes(const JNode &jNode, IDestination &destination);
   // Print JSON
-  static void printNumber(const JNode &jNode, IDestination &destination, long indent);
-  static void printString(const JNode &jNode, IDestination &destination, long indent);
-  static void printBoolean(const JNode &jNode, IDestination &destination, long indent);
-  static void printNull(const JNode &jNode, IDestination &destination, long indent);
-  static void printHole(const JNode &jNode, IDestination &destination, long indent);
+  static void printNumber(const JNode &jNode, IDestination &destination);
+  static void printString(const JNode &jNode, IDestination &destination);
+  static void printBoolean(const JNode &jNode, IDestination &destination);
+  static void printNull(const JNode &jNode, IDestination &destination);
+  static void printHole(const JNode &jNode, IDestination &destination);
   static void printObject(const JNode &jNode, IDestination &destination, long indent);
   static void printArray(const JNode &jNode, IDestination &destination, long indent);
   // Produce JSON structured string (pretty print) from JSON tree
