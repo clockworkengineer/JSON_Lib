@@ -34,7 +34,7 @@ TEST_CASE("Check parser generated exceptions.", "[JSON][Parse][Exception]")
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource),
-      "JSON Error [Line: 1 Column: 11]: Missing String, Numeric, Boolean, Array, Object or Null.");
+      "JSON Error [Line: 1 Column: 11]: Missing String, Number, Boolean, Array, Object or Null.");
   }
   SECTION("Parse object with invalid value field (number).", "[JSON][Parse][Exception]")
   {
@@ -49,7 +49,7 @@ TEST_CASE("Check parser generated exceptions.", "[JSON][Parse][Exception]")
     REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource),
-      "JSON Error [Line: 1 Column: 11]: Missing String, Numeric, Boolean, Array, Object or Null.");
+      "JSON Error [Line: 1 Column: 11]: Missing String, Number, Boolean, Array, Object or Null.");
   }
   SECTION("Parse object with missing key field.", "[JSON][Parse][Exception]")
   {

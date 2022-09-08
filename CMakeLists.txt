@@ -44,7 +44,6 @@ set (JSON_INCLUDES
     ./include/implementation/JSON_Error.hpp
     ./include/implementation/JSON_JNode.hpp
     ./include/implementation/JSON_JNode_forward.hpp
-    ./include/implementation/JSON_JNode_Numeric.hpp
     ./include/implementation/JSON_JNode_Variant.hpp
     ./include/implementation/JSON_JNode_Hole.hpp
     ./include/implementation/JSON_JNode_Object.hpp

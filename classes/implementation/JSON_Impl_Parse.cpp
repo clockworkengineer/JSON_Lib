@@ -99,12 +99,12 @@ JNode JSON_Impl::parseString(ISource &source) { return (String::make(extractStri
 /// <returns>Number JNode.</returns>
 JNode JSON_Impl::parseNumber(ISource &source)
 {
-  std::string number;
-  for (; source.more() && !endOfNumber(source); source.next()) { number += source.current(); }
-  Numeric jNodeNumeric{ number };
-  if (jNodeNumeric.is<int>() || jNodeNumeric.is<long>() || jNodeNumeric.is<long long>() || jNodeNumeric.is<float>()
-      || jNodeNumeric.is<double>() || jNodeNumeric.is<long double>()) {
-    return (Number::make(jNodeNumeric));
+  std::string string;
+  for (; source.more() && !endOfNumber(source); source.next()) { string += source.current(); }
+  Number number{ string };
+  if (number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>()
+      || number.is<double>() || number.is<long double>()) {
+    return (Number::make(number));
   }
   throw Error(source.getPosition(), "Invalid numeric value.");
 }
@@ -214,7 +214,7 @@ JNode JSON_Impl::parseJNodes(ISource &source)
     jNode = parseNumber(source);
     break;
   default:
-    throw Error(source.getPosition(), "Missing String, Numeric, Boolean, Array, Object or Null.");
+    throw Error(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null.");
   }
   source.ignoreWS();
   return (jNode);

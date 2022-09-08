@@ -47,17 +47,17 @@ public:
   {
     totalNumbers++;
     sizeInBytes += sizeof(Number);
-    if (jNodeNumber.getNumber().is<int>()) {
+    if (jNodeNumber.is<int>()) {
       totalInteger++;
-    } else if (jNodeNumber.getNumber().is<long>()) {
+    } else if (jNodeNumber.is<long>()) {
       totalLong++;
-    } else if (jNodeNumber.getNumber().is<long long>()) {
+    } else if (jNodeNumber.is<long long>()) {
       totalLongLong++;
-    } else if (jNodeNumber.getNumber().is<float>()) {
+    } else if (jNodeNumber.is<float>()) {
       totalFloat++;
-    } else if (jNodeNumber.getNumber().is<double>()) {
+    } else if (jNodeNumber.is<double>()) {
       totalDouble++;
-    } else if (jNodeNumber.getNumber().is<long double>()) {
+    } else if (jNodeNumber.is<long double>()) {
       totalLongDouble++;
     }
   }
@@ -105,8 +105,8 @@ public:
     os << "Object size " << sizeof(Object) << " in bytes.\n";
     os << "Object Entry size " << sizeof(Object::Entry) << " in bytes.\n";
     os << "Array size " << sizeof(Array) << " in bytes.\n";
-    os << "Numeric size " << sizeof(Numeric) << " in bytes.\n";
-    os << "Numeric::Numbers size " << sizeof(Numeric::Numbers) << " in bytes.\n";
+    os << " size " << sizeof(Number) << " in bytes.\n";
+    os << "Number::Values size " << sizeof(Number::Values) << " in bytes.\n";
     os << "Number size " << sizeof(Number) << " in bytes.\n";
     os << "String size " << sizeof(String) << " in bytes.\n";
     os << "Boolean size " << sizeof(Boolean) << " in bytes.\n";

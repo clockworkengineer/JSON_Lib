@@ -80,7 +80,7 @@ void checkArray(const JNode &jNode)
   REQUIRE_FALSE(!jNode[2].isBoolean());
   REQUIRE_FALSE(!jNode[3].isNull());
   REQUIRE(JRef<String>(jNode[0]).getString() == "Dog");
-  REQUIRE(JRef<Number>(jNode[1]).getNumber().get<int>() == 1964);
+  REQUIRE(JRef<Number>(jNode[1]).get<int>() == 1964);
   REQUIRE(JRef<Boolean>(jNode[2]).getBoolean() == true);
   REQUIRE(JRef<Null>(jNode[3]).getNull() == nullptr);
 }
@@ -98,7 +98,7 @@ void checkObject(const JNode &jNode)
   REQUIRE_FALSE(!jNode["City"].isString());
   REQUIRE_FALSE(!jNode["Population"].isNumber());
   REQUIRE(JRef<String>(jNode["City"]).getString() == "Southampton");
-  REQUIRE(JRef<Number>(jNode["Population"]).getNumber().get<int>() == 500000);
+  REQUIRE(JRef<Number>(jNode["Population"]).get<int>() == 500000);
 }
 /// <summary>
 /// Strip white space from source JSON and place remainder in destination.

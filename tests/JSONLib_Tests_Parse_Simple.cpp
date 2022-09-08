@@ -80,13 +80,13 @@ TEST_CASE("Check JSON parsing of simple types and check values.", "[JSON][Parse]
   {
     BufferSource jsonSource{ "6767" };
     json.parse(jsonSource);
-    REQUIRE(JRef<Number>(json.root()).getNumber().get<int>() == 6767);
+    REQUIRE(JRef<Number>(json.root()).get<int>() == 6767);
   }
   SECTION("Parse an number (190000) and check its value.", "[JSON][Parse][Simple][Validate]")
   {
     BufferSource jsonSource{ "190000" };
     json.parse(jsonSource);
-    REQUIRE(JRef<Number>(json.root()).getNumber().get<int>() == 190000);
+    REQUIRE(JRef<Number>(json.root()).get<int>() == 190000);
   }
   SECTION("Parse an boolean (true) and check its value.", "[JSON][Parse][Simple][Validate]")
   {

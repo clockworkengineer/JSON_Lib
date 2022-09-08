@@ -31,35 +31,35 @@ TEST_CASE("Check JSON object creation api.", "[JSON][Create][Object]")
     const JSON json(R"({ "pi" : 3.141 })");
     REQUIRE_FALSE(!json.root().isObject());
     REQUIRE_FALSE(!json.root()["pi"].isNumber());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()["pi"]).getNumber().get<float>(), 3.141f, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()["pi"]).get<float>(), 3.141f, 0.0001));
   }
   SECTION("Initialise root JSON JNode with one entry containing a integer.", "[JSON][Create][Object][Number]")
   {
     JSON json;
     json["integer"] = 300;
     REQUIRE_FALSE(!json["integer"].isNumber());
-    REQUIRE(JRef<Number>(json.root()["integer"]).getNumber().get<int>() == 300);
+    REQUIRE(JRef<Number>(json.root()["integer"]).get<int>() == 300);
   }
   SECTION("Initialise root JSON JNode with one entry containing a long.", "[JSON][Create][Object][Number]")
   {
     JSON json;
     json["integer"] = 30000l;
     REQUIRE_FALSE(!json["integer"].isNumber());
-    REQUIRE(JRef<Number>(json.root()["integer"]).getNumber().get<long>() == 30000);
+    REQUIRE(JRef<Number>(json.root()["integer"]).get<long>() == 30000);
   }
   SECTION("Initialise root JSON JNode with one entry containing a float.", "[JSON][Create][Object][Number]")
   {
     JSON json;
     json["pi"] = 3.141f;
     REQUIRE_FALSE(!json["pi"].isNumber());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()["pi"]).getNumber().get<float>(), 3.141f, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()["pi"]).get<float>(), 3.141f, 0.0001));
   }
   SECTION("Initialise root JSON JNode with one entry containing a double.", "[JSON][Create][Object][Number]")
   {
     JSON json;
     json["pi"] = 3.141;
     REQUIRE_FALSE(!json["pi"].isNumber());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()["pi"]).getNumber().get<double>(), 3.141, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()["pi"]).get<double>(), 3.141, 0.0001));
   }
   SECTION("Initialise root JSON JNode with one entry containing a const char *.", "[JSON][Create][Object][String]")
   {
@@ -121,49 +121,49 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
     REQUIRE_FALSE(!json.root()[0].isString());
     REQUIRE_FALSE(!json.root()[1].isNumber());
     REQUIRE(JRef<String>(json.root()[0]).getString() == "pi");
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[1]).getNumber().get<float>(), 3.141f, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[1]).get<float>(), 3.141f, 0.0001));
   }
   SECTION("Initialise root JSON array with one entry containing a integer.", "[JSON][Create][Array][Number]")
   {
     JSON json;
     json[0] = 300;
     REQUIRE_FALSE(!json[0].isNumber());
-    REQUIRE(JRef<Number>(json.root()[0]).getNumber().get<int>() == 300);
+    REQUIRE(JRef<Number>(json.root()[0]).get<int>() == 300);
   }
   SECTION("Initialise root JSON array with one entry containing a long.", "[JSON][Create][Array][Number]")
   {
     JSON json;
     json[0] = 30000l;
     REQUIRE_FALSE(!json[0].isNumber());
-    REQUIRE(JRef<Number>(json.root()[0]).getNumber().get<long>() == 30000);
+    REQUIRE(JRef<Number>(json.root()[0]).get<long>() == 30000);
   }
   SECTION("Initialise root JSON array with one entry containing a long long.", "[JSON][Create][Array][Number]")
   {
     JSON json;
     json[0] = 30000ll;
     REQUIRE_FALSE(!json[0].isNumber());
-    REQUIRE(JRef<Number>(json.root()[0]).getNumber().get<long long>() == 30000);
+    REQUIRE(JRef<Number>(json.root()[0]).get<long long>() == 30000);
   }
   SECTION("Initialise root JSON array with one entry containing a float.", "[JSON][Create][Array][Number]")
   {
     JSON json;
     json[0] = 3.141f;
     REQUIRE_FALSE(!json[0].isNumber());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[0]).getNumber().get<float>(), 3.141f, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[0]).get<float>(), 3.141f, 0.0001));
   }
   SECTION("Initialise root JSON array with one entry containing a double.", "[JSON][Create][Array][Number]")
   {
     JSON json;
     json[0] = 3.141l;
     REQUIRE_FALSE(!json[0].isNumber());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[0]).getNumber().get<long double>(), 3.141l, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[0]).get<long double>(), 3.141l, 0.0001));
   }
   SECTION("Initialise root JSON array with one entry containing a long double.", "[JSON][Create][Array][Number]")
   {
     JSON json;
     json[0] = 3.141;
     REQUIRE_FALSE(!json[0].isNumber());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[0]).getNumber().get<double>(), 3.141, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[0]).get<double>(), 3.141, 0.0001));
   }
   SECTION("Initialise root JSON array with one entry containing a const char *.", "[JSON][Create][Array][String]")
   {
@@ -221,7 +221,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
     REQUIRE(JRef<String>(json.root()[5]).getString() == "test");
     json[3] = 15;
     REQUIRE_FALSE(!json[3].isNumber());
-    REQUIRE(JRef<Number>(json.root()[3]).getNumber().get<int>() == 15);
+    REQUIRE(JRef<Number>(json.root()[3]).get<int>() == 15);
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
     REQUIRE(jsonDestination.getBuffer() == R"([null,null,null,15,null,"test"])");
@@ -239,10 +239,10 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
     REQUIRE_FALSE(!json[5][6].isBoolean());
     REQUIRE_FALSE(!json[5][7].isNull());
     REQUIRE(JRef<Array>(json[5]).size() == 8);
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json[5][0]).getNumber().get<double>(), 1.0, 0.0001));
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json[5][1]).getNumber().get<double>(), 2.0, 0.0001));
-    REQUIRE(JRef<Number>(json[5][2]).getNumber().get<int>() == 3);
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json[5][3]).getNumber().get<double>(), 4.333, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json[5][0]).get<double>(), 1.0, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json[5][1]).get<double>(), 2.0, 0.0001));
+    REQUIRE(JRef<Number>(json[5][2]).get<int>() == 3);
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json[5][3]).get<double>(), 4.333, 0.0001));
     REQUIRE(JRef<String>(json[5][4]).getString() == "5.0");
     REQUIRE(JRef<String>(json[5][5]).getString() == "test test test test");
     REQUIRE_FALSE(JRef<Boolean>(json[5][6]).getBoolean());
