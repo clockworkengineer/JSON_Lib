@@ -93,9 +93,8 @@ void JSON_Impl::printObject(const JNode &jNode, IDestination &destination, long 
   destination.add("{\n");
   for (auto &entry : JRef<Object>(jNode).getObjectEntries()) {
     destination.add(std::string(indent, ' '));
-    destination.add('"');
-    destination.add(m_translator->toJSON(entry.getKey()));
-    destination.add("\": ");
+    printString(entry.getKey(), destination);
+    destination.add(": ");
     printJNodes(entry.getJNode(), destination, indent + m_indent);
     if (commaCount-- > 0) { destination.add(",\n"); };
   }

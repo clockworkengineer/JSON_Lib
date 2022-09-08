@@ -53,21 +53,23 @@ std::string jsonSettingsFile() { return ((fs::current_path() / "files" / "settin
 /// </summary>
 void processEntry(const json::Object::Entry &entry)
 {
+  auto &key = json::JRef<json::String>(entry.getKey()).getString();
   // Log main entry key
-  std::string entryJSON{ "\n[" + entry.getKey() + "] = " };
-  if (entry.getKey() == "files.exclude") {
+  std::string entryJSON{ "\n[" + key + "] = " };
+  if (key == "files.exclude") {
     // Read object data (key/boolean pair) and add to log
     entryJSON += "\n{\n";
     for (const auto &file : json::JRef<json::Object>(entry).getObjectEntries()) {
-      entryJSON += "\"" + file.getKey() + "\" : " + json::JRef<json::Boolean>(file).toString() + ",\n";
+      entryJSON += "\"" + json::JRef<json::String>(file.getKey()).getString()
+                   + "\" : " + json::JRef<json::Boolean>(file).toString() + ",\n";
     }
     entryJSON.pop_back();
     entryJSON.pop_back();
     entryJSON += "\n}";
-  } else if (entry.getKey() == "explorerExclude.backup") {
+  } else if (key == "explorerExclude.backup") {
     // Read null data and add to log
     entryJSON += json::JRef<json::Null>(entry).toString();
-  } else if (entry.getKey() == "cSpell.words") {
+  } else if (key == "cSpell.words") {
     // Read array of string data and add to log
     entryJSON += "[";
     for (const auto &word : json::JRef<json::Array>(entry).getArrayEntries()) {
@@ -75,16 +77,17 @@ void processEntry(const json::Object::Entry &entry)
     }
     entryJSON.pop_back();
     entryJSON += "]";
-  } else if (entry.getKey() == "files.associations") {
+  } else if (key == "files.associations") {
     // Read object data (key/string pair) and add to log
     entryJSON += "\n{\n";
     for (const auto &file : json::JRef<json::Object>(entry).getObjectEntries()) {
-      entryJSON += "\"" + file.getKey() + "\" : " + "\"" + json::JRef<json::String>(file).toString() + "\",\n";
+      entryJSON += "\"" + json::JRef<json::String>(file).toString() + "\" : " + "\""
+                   + json::JRef<json::String>(file).toString() + "\",\n";
     }
     entryJSON.pop_back();
     entryJSON.pop_back();
     entryJSON += "\n}";
-  } else if (entry.getKey() == "C_Cpp.codeAnalysis.clangTidy.enabled") {
+  } else if (key == "C_Cpp.codeAnalysis.clangTidy.enabled") {
     // Read boolean data and add to log
     entryJSON += json::JRef<json::Boolean>(entry).toString();
   } else {

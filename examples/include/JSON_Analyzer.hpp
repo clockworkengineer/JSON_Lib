@@ -88,9 +88,10 @@ public:
     maxObjectSize = std::max(jNodeObject.getObjectEntries().size(), maxObjectSize);
 
     for (auto &entry : jNodeObject.getObjectEntries()) {
-      uniqueKeys.insert(entry.getKey());
-      maxKeySize = std::max(entry.getKey().size(), maxKeySize);
-      sizeInBytes += entry.getKey().size();
+      auto &key = JSONLib::JRef<String>(entry.getKey()).getString();
+      uniqueKeys.insert(key);
+      maxKeySize = std::max(key.size(), maxKeySize);
+      sizeInBytes += key.size();
       sizeInBytes += sizeof(Object::Entry);
       totalKeys++;
     }

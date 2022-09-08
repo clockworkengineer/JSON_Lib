@@ -91,9 +91,8 @@ void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination)
   size_t commaCount = JRef<Object>(jNode).getObjectEntries().size() - 1;
   destination.add('{');
   for (auto &entry : JRef<Object>(jNode).getObjectEntries()) {
-    destination.add('"');
-    destination.add(m_translator->toJSON(entry.getKey()));
-    destination.add("\":");
+    stringifyString(entry.getKey(), destination);
+    destination.add(":");
     stringifyJNodes(entry.getJNode(), destination);
     if (commaCount-- > 0) { destination.add(','); };
   }

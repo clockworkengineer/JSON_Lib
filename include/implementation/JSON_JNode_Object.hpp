@@ -17,39 +17,22 @@ struct Object : Variant
   // Object entry
   struct Entry
   {
-    Entry(const std::string &key, JNode &jNode) { initEntry(key, jNode); }
-    Entry(const std::string &key, JNode &&jNode) { initEntry(key, jNode); }
-    std::string &getKey() { return (m_keys[m_keyID]); }
-    const std::string &getKey() const { return (m_keys[m_keyID]); }
+    Entry(const std::string &key, JNode &jNode) : m_key(String::make(key)), m_jNode(std::move(jNode)) {}
+    Entry(const std::string &key, JNode &&jNode) : m_key(String::make(key)), m_jNode(std::move(jNode)) {}
+    JNode &getKey() { return (m_key); }
+    const JNode &getKey() const { return (m_key); }
     JNode &getJNode() { return (m_jNode); }
     const JNode &getJNode() const { return (m_jNode); }
 
   private:
-    void initEntry(const std::string &key, JNode &jNode)
-    {
-      auto entry = std::find_if(m_keys.begin(),
-        m_keys.end(),
-        [&key](const std::pair<int64_t, std::string> &keyEntry) -> bool { return (keyEntry.second == key); });
-      if (entry == m_keys.end()) {
-        m_keyID = m_currentKeyID++;
-        m_keys[m_keyID] = key;
-      } else {
-        m_keyID = entry->first;
-      }
-      m_jNode = std::move(jNode);
-    }
-    int64_t m_keyID;
+    JNode m_key;
     JNode m_jNode;
-    inline static int64_t m_currentKeyID{};
-    inline static std::unordered_map<int64_t, std::string> m_keys;
   };
   // Object entry list
   using EntryList = std::vector<Object::Entry>;
   // Constructors/Destructors
   Object() : Variant(JNode::Type::object) {}
-  explicit Object(EntryList &objectEntries)
-    : Variant(JNode::Type::object), m_object(std::move(objectEntries))
-  {}
+  explicit Object(EntryList &objectEntries) : Variant(JNode::Type::object), m_object(std::move(objectEntries)) {}
   Object(const Object &other) = delete;
   Object &operator=(const Object &other) = delete;
   Object(Object &&other) = default;
@@ -84,8 +67,8 @@ private:
   // Search for a given entry given a key and object list
   [[nodiscard]] Object::EntryList::iterator findKey(const std::string &key)
   {
-    auto entry = std::find_if(m_object.begin(), m_object.end(), [&key](const Entry &entry) -> bool {
-      return (entry.getKey() == key);
+    auto entry = std::find_if(m_object.begin(), m_object.end(), [&key](Entry &entry) -> bool {
+      return (static_cast<String &>(entry.getKey().getVariant()).getString() == key);
     });
     if (entry == m_object.end()) { throw JNode::Error("Invalid key used to access object."); }
     return (entry);
@@ -93,7 +76,7 @@ private:
   [[nodiscard]] Object::EntryList::const_iterator findKey(const std::string &key) const
   {
     auto entry = std::find_if(m_object.begin(), m_object.end(), [&key](const Entry &entry) -> bool {
-      return (entry.getKey() == key);
+      return (static_cast<const String &>(entry.getKey().getVariant()).getString() == key);
     });
     if (entry == m_object.end()) { throw JNode::Error("Invalid key used to access object."); }
     return (entry);
