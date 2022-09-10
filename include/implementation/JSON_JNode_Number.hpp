@@ -123,7 +123,12 @@ struct Number : Variant
   inline static void setNotation(Notation notation) { m_notation = notation; }
   // Make number JNode
   static JNode make(Number &number) { return (JNode{ std::make_unique<Number>(std::move(number)) }); }
-  static JNode make(Number &&number) { return (JNode{ std::make_unique<Number>(std::move(number)) }); }
+  static JNode make(int integer) { return (JNode{ std::make_unique<Number>(Number{ integer }) }); }
+  static JNode make(long integer) { return (JNode{ std::make_unique<Number>(Number{ integer }) }); }
+  static JNode make(long long integer) { return (JNode{ std::make_unique<Number>(Number{ integer }) }); }
+  static JNode make(float floatingPoint) { return (JNode{ std::make_unique<Number>(Number{ floatingPoint }) }); }
+  static JNode make(double floatingPoint) { return (JNode{ std::make_unique<Number>(Number{ floatingPoint }) }); }
+  static JNode make(long double floatingPoint) { return (JNode{ std::make_unique<Number>(Number{ floatingPoint }) }); }
 
 private:
   // Try to convert string to specific numeric type (returns true on success)
