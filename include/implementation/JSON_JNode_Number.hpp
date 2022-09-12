@@ -24,7 +24,7 @@ concept Float = std::is_floating_point<T>::value;
 // ======
 struct Number : Variant
 {
-  // Number variant
+  // Number values variant
   using Values = std::variant<std::monostate, int, long, long long, float, double, long double>;
   // JNode Number Error
   struct Error : public std::runtime_error
@@ -121,7 +121,7 @@ struct Number : Variant
   // Set floating point to string conversion parameters
   inline static void setPrecision(int precision) { m_precision = precision; }
   inline static void setNotation(Notation notation) { m_notation = notation; }
-  // Make number JNode
+  // Make Number JNode
   static JNode make(Number &number) { return (JNode{ std::make_unique<Number>(std::move(number)) }); }
   template<typename T> static JNode make(T number) { return (JNode{ std::make_unique<Number>(Number{ number }) }); }
 
