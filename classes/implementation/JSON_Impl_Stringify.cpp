@@ -3,7 +3,7 @@
 //
 // Description: JSON class implementation layer that uses recursion to reconstitute
 // the JSON tree presentation back into raw JSON string without any whitespace
-// (stringification).
+// (stringification) or with indentation and whitespace pretty print.
 //
 // Dependencies:   C20++ - Language standard features used.
 //
