@@ -81,7 +81,7 @@ void JSON_Impl::parse(ISource &source) { m_jNodeRoot = parseJNodes(source); }
 void JSON_Impl::stringify(IDestination &destination) const
 {
   if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to stringify."); }
-  stringifyJNodes(m_jNodeRoot, destination);
+  stringifyJNodes(m_jNodeRoot, destination, 0);
 }
 /// <summary>
 /// Recursively parse JNode tree structure and building its JSON string (pretty printed)
@@ -91,7 +91,7 @@ void JSON_Impl::stringify(IDestination &destination) const
 void JSON_Impl::print(IDestination &destination) const
 {
   if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to print."); }
-  printJNodes(m_jNodeRoot, destination, m_indent);
+  stringifyJNodes(m_jNodeRoot, destination, m_indent);
 }
 /// <summary>
 /// Strip all whitespace from a JSON source.

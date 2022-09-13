@@ -294,19 +294,11 @@ TEST_CASE("Check Check setting of print indentation.", "[JSON][Print][Indent]")
     json.print(jsonDestination);
     REQUIRE(crlfTolf(readFromFile(generatedFileName)) == expected);
   }
-  SECTION("Set ident to 0 and print JSON to a buffer.", "[JSON][Print][Ident]")
+  SECTION("Set ident to 0 and print JSON to a buffer (result same as stringify).", "[JSON][Print][Ident]")
   {
-    const std::string expected{ R"({
-"name": "Alann",
-"Age": 58,
-"Eye Color": "Blue",
-"Sex": "Male",
-"Details": {
-"Phone": "0999-999-999",
-"email": "john.doe@express.com",
-"enabled": true
-}
-})" };
+    const std::string expected{
+      R"({"name":"Alann","Age":58,"Eye Color":"Blue","Sex":"Male","Details":{"Phone":"0999-999-999","email":"john.doe@express.com","enabled":true}})"
+    };
     BufferDestination jsonDestination;
     json.setIndent(0);
     json.parse(BufferSource{ expected });

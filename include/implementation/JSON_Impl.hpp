@@ -108,20 +108,10 @@ private:
   static void stringifyBoolean(const JNode &jNode, IDestination &destination);
   static void stringifyNull(const JNode &jNode, IDestination &destination);
   static void stringifyHole(const JNode &jNode, IDestination &destination);
-  static void stringifyObject(const JNode &jNode, IDestination &destination);
-  static void stringifyArray(const JNode &jNode, IDestination &destination);
+  static void stringifyObject(const JNode &jNode, IDestination &destination, long indent);
+  static void stringifyArray(const JNode &jNode, IDestination &destination, long indent);
   // Produce JSON test string from JSON tree
-  static void stringifyJNodes(const JNode &jNode, IDestination &destination);
-  // Print JSON
-  static void printNumber(const JNode &jNode, IDestination &destination);
-  static void printString(const JNode &jNode, IDestination &destination);
-  static void printBoolean(const JNode &jNode, IDestination &destination);
-  static void printNull(const JNode &jNode, IDestination &destination);
-  static void printHole(const JNode &jNode, IDestination &destination);
-  static void printObject(const JNode &jNode, IDestination &destination, long indent);
-  static void printArray(const JNode &jNode, IDestination &destination, long indent);
-  // Produce JSON structured string (pretty print) from JSON tree
-  static void printJNodes(const JNode &jNode, IDestination &destination, long indent);
+  static void stringifyJNodes(const JNode &jNode, IDestination &destination, long indent);
   // Remove JSON whitespace
   static void stripWhitespace(ISource &source, IDestination &destination);
   // Traverse JSON tree

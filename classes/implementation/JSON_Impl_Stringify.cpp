@@ -86,32 +86,55 @@ void JSON_Impl::stringifyHole(const JNode &jNode, IDestination &destination)
 /// </summary>
 /// <param name="jNode">Object JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination)
+/// <param name="indent">Current print indentation.</param>
+void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination, long indent)
 {
   size_t commaCount = JRef<Object>(jNode).getObjectEntries().size() - 1;
   destination.add('{');
+  if (indent != 0) { destination.add('\n'); };
   for (auto &entry : JRef<Object>(jNode).getObjectEntries()) {
+    if (indent != 0) { destination.add(std::string(indent, ' ')); };
     stringifyString(entry.getKey(), destination);
     destination.add(":");
-    stringifyJNodes(entry.getJNode(), destination);
-    if (commaCount-- > 0) { destination.add(','); };
+    if (indent != 0) { destination.add(" "); }
+    stringifyJNodes(entry.getJNode(), destination, (indent != 0) ? (indent + m_indent) : 0);
+    if (commaCount-- > 0) {
+      destination.add(",");
+      if (indent != 0) { destination.add('\n'); }
+    }
   }
-  destination.add('}');
+  if (indent != 0) {
+    destination.add('\n');
+    destination.add(std::string(indent - m_indent, ' '));
+  }
+  destination.add("}");
 }
 /// <summary>
 /// Convert Array JNode to JSON on destination stream.
 /// </summary>
 /// <param name="jNode">Array JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination)
+/// <param name="indent">Current print indentation.</param>
+void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination, long indent)
 {
-  size_t commaCount = JRef<Array>(jNode).getArrayEntries().size() - 1;
   destination.add('[');
-  for (auto &node : JRef<Array>(jNode).getArrayEntries()) {
-    stringifyJNodes(node, destination);
-    if (commaCount-- > 0) { destination.add(','); };
+  if (!JRef<Array>(jNode).getArrayEntries().empty()) {
+    size_t commaCount = JRef<Array>(jNode).getArrayEntries().size() - 1;
+    if (indent != 0) { destination.add('\n'); };
+    for (auto &node : JRef<Array>(jNode).getArrayEntries()) {
+      if (indent != 0) { destination.add(std::string(indent, ' ')); };
+      stringifyJNodes(node, destination, (indent != 0) ? (indent + m_indent) : 0);
+      if (commaCount-- > 0) {
+        destination.add(",");
+        if (indent != 0) { destination.add('\n'); }
+      }
+    }
+    if (indent != 0) {
+      destination.add('\n');
+      destination.add(std::string(indent - m_indent, ' '));
+    }
   }
-  destination.add(']');
+  destination.add("]");
 }
 /// <summary>
 /// Recursively traverse JNode structure encoding it into JSON string on
@@ -119,7 +142,8 @@ void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination)
 /// </summary>
 /// <param name=jNode>JNode structure to be traversed.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
-void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination)
+/// <param name="indent">Current print indentation.</param>
+void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination, long indent)
 {
   switch (jNode.getVariant().getType()) {
   case JNode::Type::number:
@@ -138,10 +162,10 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination)
     stringifyHole(jNode, destination);
     break;
   case JNode::Type::object:
-    stringifyObject(jNode, destination);
+    stringifyObject(jNode, destination, indent);
     break;
   case JNode::Type::array:
-    stringifyArray(jNode, destination);
+    stringifyArray(jNode, destination, indent);
     break;
   default:
     throw Error("Unknown JNode type encountered during stringification.");
