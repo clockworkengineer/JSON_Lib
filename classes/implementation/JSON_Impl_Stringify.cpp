@@ -146,25 +146,25 @@ void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination, lo
 void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination, long indent)
 {
   switch (jNode.getVariant().getType()) {
-  case JNode::Type::number:
+  case Variant::Type::number:
     stringifyNumber(jNode, destination);
     break;
-  case JNode::Type::string:
+  case Variant::Type::string:
     stringifyString(jNode, destination);
     break;
-  case JNode::Type::boolean:
+  case Variant::Type::boolean:
     stringifyBoolean(jNode, destination);
     break;
-  case JNode::Type::null:
+  case Variant::Type::null:
     stringifyNull(jNode, destination);
     break;
-  case JNode::Type::hole:
+  case Variant::Type::hole:
     stringifyHole(jNode, destination);
     break;
-  case JNode::Type::object:
+  case Variant::Type::object:
     stringifyObject(jNode, destination, indent);
     break;
-  case JNode::Type::array:
+  case Variant::Type::array:
     stringifyArray(jNode, destination, indent);
     break;
   default:

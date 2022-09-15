@@ -80,14 +80,14 @@ struct Number : Variant
     throw Error("Could not convert unknown type.");
   }
   // Constructors/Destructors
-  Number() : Variant(JNode::Type::number) {}
-  explicit Number(const std::string &number) : Variant(JNode::Type::number) { convertNumber(number); }
-  explicit Number(int integer) : Variant(JNode::Type::number), m_values(integer) {}
-  explicit Number(long integer) : Variant(JNode::Type::number), m_values(integer) {}
-  explicit Number(long long integer) : Variant(JNode::Type::number), m_values(integer) {}
-  explicit Number(float floatingPoint) : Variant(JNode::Type::number), m_values(floatingPoint) {}
-  explicit Number(double floatingPoint) : Variant(JNode::Type::number), m_values(floatingPoint) {}
-  explicit Number(long double floatingPoint) : Variant(JNode::Type::number), m_values(floatingPoint) {}
+  Number() : Variant(Variant::Type::number) {}
+  explicit Number(const std::string &number) : Variant(Variant::Type::number) { convertNumber(number); }
+  explicit Number(int integer) : Variant(Variant::Type::number), m_values(integer) {}
+  explicit Number(long integer) : Variant(Variant::Type::number), m_values(integer) {}
+  explicit Number(long long integer) : Variant(Variant::Type::number), m_values(integer) {}
+  explicit Number(float floatingPoint) : Variant(Variant::Type::number), m_values(floatingPoint) {}
+  explicit Number(double floatingPoint) : Variant(Variant::Type::number), m_values(floatingPoint) {}
+  explicit Number(long double floatingPoint) : Variant(Variant::Type::number), m_values(floatingPoint) {}
   Number(const Number &other) = delete;
   Number &operator=(const Number &other) = delete;
   Number(Number &&other) = default;

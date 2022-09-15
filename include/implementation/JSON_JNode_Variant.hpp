@@ -6,16 +6,16 @@
 // NAMESPACE
 // =========
 namespace JSON_Lib {
-// ==============
-// JNode variants
-// ==============
 // ====
 // Base
 // ====
 struct Variant
 {
-  explicit Variant(JNode::Type nodeType = JNode::Type::base) : m_type(nodeType) {}
-  [[nodiscard]] JNode::Type getType() const { return (m_type); }
+  // JNode Variant Types
+  enum class Type { base = 0, object, array, number, string, boolean, null, hole };
+  // Constructors/Destructors
+  explicit Variant(Variant::Type nodeType = Variant::Type::base) : m_type(nodeType) {}
+  [[nodiscard]] Variant::Type getType() const { return (m_type); }
   Variant(const Variant &other) = delete;
   Variant &operator=(const Variant &other) = delete;
   Variant(Variant &&other) = default;
@@ -23,6 +23,6 @@ struct Variant
   ~Variant() = default;
 
 private:
-  JNode::Type m_type;
+  Variant::Type m_type;
 };
 }// namespace JSON_Lib

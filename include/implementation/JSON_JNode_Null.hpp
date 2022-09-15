@@ -13,7 +13,7 @@ namespace JSON_Lib {
 struct Null : Variant
 {
   // Constructors/Destructors
-  Null() : Variant(JNode::Type::null) {}
+  Null() : Variant(Variant::Type::null) {}
   Null(const Null &other) = delete;
   Null &operator=(const Null &other) = delete;
   Null(Null &&other) = default;

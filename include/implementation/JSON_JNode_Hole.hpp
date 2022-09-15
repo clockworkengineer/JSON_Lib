@@ -13,7 +13,7 @@ namespace JSON_Lib {
 struct Hole : Variant
 {
   // Constructors/Destructors
-  Hole() : Variant(JNode::Type::hole) {}
+  Hole() : Variant(Variant::Type::hole) {}
   Hole(const Hole &other) = delete;
   Hole &operator=(const Hole &other) = delete;
   Hole(Hole &&other) = default;

@@ -19,8 +19,6 @@ namespace JSON_Lib {
 // =====
 struct JNode
 {
-  // JNode Type
-  enum class Type { base = 0, object, array, number, string, boolean, null, hole };
   // JNode Error
   struct Error : public std::runtime_error
   {
@@ -38,8 +36,8 @@ struct JNode
   explicit JNode(const std::string &string);
   explicit JNode(bool boolean);
   explicit JNode(std::nullptr_t null);
-  JNode(const std::initializer_list<JSON::Types> &array);
-  JNode(const std::initializer_list<std::pair<std::string, JSON::Types>> &object);
+  JNode(const std::initializer_list<JSON::InternalTypes> &array);
+  JNode(const std::initializer_list<std::pair<std::string, JSON::InternalTypes>> &object);
   explicit JNode(std::unique_ptr<Variant> jNodeVariant) : m_variant(std::move(jNodeVariant)) {}
   JNode(const JNode &other) = delete;
   JNode &operator=(const JNode &other) = delete;
@@ -76,7 +74,7 @@ struct JNode
   [[nodiscard]] const Variant &getVariant() const;
 
 private:
-  JNode createJNodeFromType(const JSON::Types &type);
+  JNode createJNodeFromType(const JSON::InternalTypes &type);
   std::unique_ptr<Variant> m_variant;
 };
 }// namespace JSON_Lib

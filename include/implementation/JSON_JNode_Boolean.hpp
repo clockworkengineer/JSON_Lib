@@ -13,8 +13,8 @@ namespace JSON_Lib {
 struct Boolean : Variant
 {
   // Constructors/Destructors
-  Boolean() : Variant(JNode::Type::boolean) {}
-  explicit Boolean(bool boolean) : Variant(JNode::Type::boolean), m_boolean(boolean) {}
+  Boolean() : Variant(Variant::Type::boolean) {}
+  explicit Boolean(bool boolean) : Variant(Variant::Type::boolean), m_boolean(boolean) {}
   Boolean(const Boolean &other) = delete;
   Boolean &operator=(const Boolean &other) = delete;
   Boolean(Boolean &&other) = default;
