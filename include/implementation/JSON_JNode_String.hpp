@@ -6,7 +6,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ======
 // String
 // ======
@@ -31,4 +31,4 @@ struct String : Variant
 private:
   std::string m_string;
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

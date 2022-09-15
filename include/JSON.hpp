@@ -10,7 +10,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ========================================================
 // JSON forward declarations for interfaces/classes/structs
 // ========================================================
@@ -94,4 +94,4 @@ private:
   // JSON implementation
   const std::unique_ptr<JSON_Impl> m_implementation;
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

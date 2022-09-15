@@ -6,7 +6,7 @@
 // as stringification but it is used to provide example code that traverses and
 // interperets the JNode tree data.
 //
-// Dependencies: C20++, PLOG, JSONLib.
+// Dependencies: C20++, PLOG, JSON_Lib.
 //
 // =============
 // INCLUDE FILES
@@ -34,7 +34,7 @@
 // ==========
 // NAMESPACES
 // ==========
-namespace json = JSONLib;
+namespace json = JSON_Lib;
 namespace fs = std::filesystem;
 // =======================
 // LOCAL TYPES/DEFINITIONS

@@ -6,7 +6,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // =======
 // Boolean
 // =======
@@ -31,4 +31,4 @@ struct Boolean : Variant
 private:
   bool m_boolean{};
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

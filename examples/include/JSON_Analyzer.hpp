@@ -15,7 +15,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ==================
 // JSON Tree Analysis
 // ==================
@@ -88,7 +88,7 @@ public:
     maxObjectSize = std::max(jNodeObject.getObjectEntries().size(), maxObjectSize);
 
     for (auto &entry : jNodeObject.getObjectEntries()) {
-      auto &key = JSONLib::JRef<String>(entry.getKey()).getString();
+      auto &key = JSON_Lib::JRef<String>(entry.getKey()).getString();
       uniqueKeys.insert(key);
       maxKeySize = std::max(key.size(), maxKeySize);
       sizeInBytes += key.size();
@@ -174,4 +174,4 @@ private:
   // Null
   int64_t totalNull{};
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

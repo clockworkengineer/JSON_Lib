@@ -5,7 +5,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // =========================
 // JNode reference converter
 // =========================
@@ -45,4 +45,4 @@ template<typename T> const T &JRef(const Object::Entry &jNodeEntry)
   checkJNode<T>(jNodeEntry.getJNode().getVariant());
   return (static_cast<const T &>(jNodeEntry.getJNode().getVariant()));
 }
-}// namespace JSONLib
+}// namespace JSON_Lib

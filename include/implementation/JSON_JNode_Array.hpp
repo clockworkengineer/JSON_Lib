@@ -7,7 +7,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // =====
 // Array
 // =====
@@ -55,4 +55,4 @@ private:
   // Array entries list
   ArrayList m_array;
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

@@ -20,7 +20,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ===========================
 // PRIVATE TYPES AND CONSTANTS
 // ===========================
@@ -51,4 +51,4 @@ std::string JSON_Converter::toUtf8(const std::u16string &utf16) const
 {
   return (m_UTF16.to_bytes(utf16));
 }
-}// namespace JSONLib
+}// namespace JSON_Lib

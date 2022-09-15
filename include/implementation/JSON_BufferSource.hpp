@@ -12,7 +12,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ================
 // CLASS DEFINITION
 // ================
@@ -77,4 +77,4 @@ private:
   std::size_t m_position = 0;
   std::string m_buffer;
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

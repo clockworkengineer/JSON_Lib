@@ -18,7 +18,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ===========================
 // PRIVATE TYPES AND CONSTANTS
 // ===========================
@@ -148,4 +148,4 @@ JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null) { return (*this = 
 // ==============================
 Variant &JNode::getVariant() { return (*m_variant); }
 const Variant &JNode::getVariant() const { return (*m_variant); }
-}// namespace JSONLib
+}// namespace JSON_Lib

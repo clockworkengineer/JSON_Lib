@@ -11,7 +11,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ================
 // Number concepts
 // ================
@@ -168,4 +168,4 @@ private:
   inline static int m_precision{ 6 };
   inline static Notation m_notation{ Notation::normal };
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSONLib_Tests_JNode_Number
+// Unit Tests: JSON_Lib_Tests_JNode_Number
 //
 // Description: JNode Number/Number class unit tests for JSON class
 // using the Catch2 test framework.
@@ -7,11 +7,11 @@
 // ================
 // Test definitions
 // =================
-#include "JSONLib_Tests.hpp"
+#include "JSON_Lib_Tests.hpp"
 // ======================
 // JSON library namespace
 // ======================
-using namespace JSONLib;
+using namespace JSON_Lib;
 // ==========
 // Test cases
 // ==========
@@ -306,7 +306,7 @@ TEST_CASE("Check JNode Number conversion exceptions.", "[JSON][JNode][Number][Ex
   SECTION("Check integer with invalid characters.", "[JSON][JNode][Number][Exceptions]")
   {
     BufferSource jsonSource{ "4345u334u" };
-    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+    REQUIRE_THROWS_AS(json.parse(jsonSource), JSON_Lib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 10]: Invalid numeric value.");
   }
@@ -318,14 +318,14 @@ TEST_CASE("Check JNode Number conversion exceptions.", "[JSON][JNode][Number][Ex
   SECTION("Check floating point with invalid exponent.", "[JSON][JNode][Number][Exceptions]")
   {
     BufferSource jsonSource{ "78.e43e-2" };
-    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+    REQUIRE_THROWS_AS(json.parse(jsonSource), JSON_Lib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 10]: Invalid numeric value.");
   }
   SECTION("Check floating point with multiple decimal points.", "[JSON][JNode][Number][Exceptions]")
   {
     BufferSource jsonSource{ "78.5454.545" };
-    REQUIRE_THROWS_AS(json.parse(jsonSource), JSONLib::Error);
+    REQUIRE_THROWS_AS(json.parse(jsonSource), JSON_Lib::Error);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 12]: Invalid numeric value.");
   }

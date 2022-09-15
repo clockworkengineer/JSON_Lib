@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSONLib_Tests_ISource
+// Unit Tests: JSON_Lib_Tests_ISource
 //
 // Description: ISource inteface unit tests for JSON class using the
 // Catch2 test framework. At present the only supported source streams
@@ -8,11 +8,11 @@
 // ================
 // Test definitions
 // =================
-#include "JSONLib_Tests.hpp"
+#include "JSON_Lib_Tests.hpp"
 // ======================
 // JSON library namespace
 // ======================
-using namespace JSONLib;
+using namespace JSON_Lib;
 // ==========
 // Test cases
 // ==========

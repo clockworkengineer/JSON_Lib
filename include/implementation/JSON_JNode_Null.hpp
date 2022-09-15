@@ -6,7 +6,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ====
 // Null
 // ====
@@ -26,4 +26,4 @@ struct Null : Variant
   // Make Null JNode
   static JNode make() { return (JNode{ std::make_unique<Null>(Null()) }); }
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

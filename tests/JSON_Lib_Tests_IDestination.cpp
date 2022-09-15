@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSONLib_Tests_IDestination
+// Unit Tests: JSON_Lib_Tests_IDestination
 //
 // Description: IDestination inteface unit tests for JSON class using
 // the Catch2 test framework. At present the only supported destination
@@ -8,11 +8,11 @@
 // ================
 // Test definitions
 // =================
-#include "JSONLib_Tests.hpp"
+#include "JSON_Lib_Tests.hpp"
 // ======================
 // JSON library namespace
 // ======================
-using namespace JSONLib;
+using namespace JSON_Lib;
 // ==========
 // Test cases
 // ==========

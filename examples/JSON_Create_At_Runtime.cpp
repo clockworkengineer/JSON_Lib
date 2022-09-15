@@ -4,7 +4,7 @@
 // Description: Create JSON programatically at runtime using a combination
 // of the JSON class, indexing/key operators plus the use of intializer lists.
 //
-// Dependencies: C20++, PLOG, JSONLib.
+// Dependencies: C20++, PLOG, JSON_Lib.
 //
 // =============
 // INCLUDE FILES
@@ -24,7 +24,7 @@
 // ==========
 // NAMESPACES
 // ==========
-namespace json = JSONLib;
+namespace json = JSON_Lib;
 namespace fs = std::filesystem;
 // =======================
 // LOCAL TYPES/DEFINITIONS

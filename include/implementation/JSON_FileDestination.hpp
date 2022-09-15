@@ -11,7 +11,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ================
 // CLASS DEFINITION
 // ================
@@ -73,4 +73,4 @@ private:
   std::ofstream m_destination;
   std::string m_filename;
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

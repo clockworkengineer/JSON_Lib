@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSONLib_Tests_Print
+// Unit Tests: JSON_Lib_Tests_Print
 //
 // Description: JSON pretty print unit tests for JSON class using
 // the Catch2 test framework.
@@ -7,11 +7,11 @@
 // ================
 // Test definitions
 // =================
-#include "JSONLib_Tests.hpp"
+#include "JSON_Lib_Tests.hpp"
 // ======================
 // JSON library namespace
 // ======================
-using namespace JSONLib;
+using namespace JSON_Lib;
 // ==========
 // Test cases
 // ==========
@@ -307,7 +307,7 @@ TEST_CASE("Check Check setting of print indentation.", "[JSON][Print][Indent]")
   }
   SECTION("Set ident to -4 and trigger invalid indent expection.", "[JSON][Print][Ident][Exception]")
   {
-    REQUIRE_THROWS_AS(json.setIndent(-4), JSONLib::Error);
+    REQUIRE_THROWS_AS(json.setIndent(-4), JSON_Lib::Error);
     REQUIRE_THROWS_WITH(json.setIndent(-4), "JSON Error: Invalid print indentation value.");
   }
 }

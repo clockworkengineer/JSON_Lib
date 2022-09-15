@@ -11,7 +11,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ==========================================================
 // Interface for the action events during JSON tree traversal
 // ==========================================================
@@ -70,4 +70,4 @@ public:
   virtual void onObject([[maybe_unused]] Object &jNodeObject) {}
   virtual void onObject([[maybe_unused]] const Object &jNodeObject) {}
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

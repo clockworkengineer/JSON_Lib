@@ -6,7 +6,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ================
 // CLASS DEFINITION
 // ================
@@ -37,4 +37,4 @@ private:
   // PRIVATE VARIABLES
   // =================
 };
-} // namespace JSONLib
+} // namespace JSON_Lib

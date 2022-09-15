@@ -6,7 +6,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // =======================================
 // Interface for utf8 <-> uft16 conversion
 // =======================================
@@ -30,4 +30,4 @@ public:
   // ==================
   [[nodiscard]] virtual std::string toUtf8(const std::u16string &utf16) const = 0;
 };
-} // namespace JSONLib
+} // namespace JSON_Lib

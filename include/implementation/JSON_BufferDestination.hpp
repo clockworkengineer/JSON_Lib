@@ -11,7 +11,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ================
 // CLASS DEFINITION
 // ================
@@ -55,4 +55,4 @@ private:
   // =================
   std::string m_buffer;
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

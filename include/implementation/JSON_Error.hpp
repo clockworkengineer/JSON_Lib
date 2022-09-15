@@ -8,7 +8,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ==========
 // JSON Error
 // ==========
@@ -20,4 +20,4 @@ struct Error : public std::runtime_error
                          + " Column: " + std::to_string(position.second) + "]: " + message)
   {}
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

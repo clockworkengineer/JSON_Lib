@@ -9,7 +9,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // =========================================================
 // JNode forward declarations for interfaces/classes/structs
 // =========================================================
@@ -79,4 +79,4 @@ private:
   JNode createJNodeFromType(const JSON::Types &type);
   std::unique_ptr<Variant> m_variant;
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

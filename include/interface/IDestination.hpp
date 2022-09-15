@@ -7,7 +7,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ====================================================================
 // Interface for writing destination stream during JSON stringification
 // ====================================================================
@@ -42,4 +42,4 @@ public:
   // ===========================
   virtual void clear() = 0;
 };
-} // namespace JSONLib
+} // namespace JSON_Lib

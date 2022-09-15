@@ -5,7 +5,7 @@
 // it back into text form and then parse the buffer created; timing each
 // step in turn for each file.
 //
-// Dependencies: C20++, PLOG, JSONLib.
+// Dependencies: C20++, PLOG, JSON_Lib.
 //
 // =============
 // INCLUDE FILES
@@ -31,7 +31,7 @@
 // ==========
 // NAMESPACES
 // ==========
-namespace json = JSONLib;
+namespace json = JSON_Lib;
 namespace fs = std::filesystem;
 namespace chrono = std::chrono;
 // =======================

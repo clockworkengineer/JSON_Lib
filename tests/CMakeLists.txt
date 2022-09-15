@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23.1)
 
-project("JSONLib Unit Tests" VERSION 0.1.0 DESCRIPTION "JSON C++ Library Catch Unit Tests" LANGUAGES CXX)
+project("JSON_Lib Unit Tests" VERSION 0.1.0 DESCRIPTION "JSON C++ Library Catch Unit Tests" LANGUAGES CXX)
 
 # Get Catch2 from repository
 
@@ -21,25 +21,25 @@ enable_testing()
 set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
 set(TEST_SOURCES
-    JSONLib_Tests_JSON.cpp
-    JSONLib_Tests_JNode.cpp
-    JSONLib_Tests_JNode_Number.cpp
-    JSONLib_Tests_ISource.cpp
-    JSONLib_Tests_IDestination.cpp
-    JSONLib_Tests_Parse_Escapes.cpp
-    JSONLib_Tests_Parse_Misc.cpp
-    JSONLib_Tests_Parse_Simple.cpp
-    JSONLib_Tests_Parse_Collection.cpp
-    JSONLib_Tests_Parse_Whitespace.cpp
-    JSONLib_Tests_Parse_Exceptions.cpp
-    JSONLib_Tests_Stringify_Misc.cpp
-    JSONLib_Tests_Stringify_Escapes.cpp
-    JSONLib_Tests_Stringify_Simple.cpp
-    JSONLib_Tests_Stringify_Collection.cpp
-    JSONLib_Tests_Stringify_Exceptions.cpp
-    JSONLib_Tests_Print.cpp
-    JSONLib_Tests_Misc.cpp
-    JSONLib_Tests_Helper.cpp)
+    JSON_Lib_Tests_JSON.cpp
+    JSON_Lib_Tests_JNode.cpp
+    JSON_Lib_Tests_JNode_Number.cpp
+    JSON_Lib_Tests_ISource.cpp
+    JSON_Lib_Tests_IDestination.cpp
+    JSON_Lib_Tests_Parse_Escapes.cpp
+    JSON_Lib_Tests_Parse_Misc.cpp
+    JSON_Lib_Tests_Parse_Simple.cpp
+    JSON_Lib_Tests_Parse_Collection.cpp
+    JSON_Lib_Tests_Parse_Whitespace.cpp
+    JSON_Lib_Tests_Parse_Exceptions.cpp
+    JSON_Lib_Tests_Stringify_Misc.cpp
+    JSON_Lib_Tests_Stringify_Escapes.cpp
+    JSON_Lib_Tests_Stringify_Simple.cpp
+    JSON_Lib_Tests_Stringify_Collection.cpp
+    JSON_Lib_Tests_Stringify_Exceptions.cpp
+    JSON_Lib_Tests_Print.cpp
+    JSON_Lib_Tests_Misc.cpp
+    JSON_Lib_Tests_Helper.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${PROJECT_CURRENT_SOURCE_DIR}/include)

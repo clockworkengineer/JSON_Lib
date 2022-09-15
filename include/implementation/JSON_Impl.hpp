@@ -27,7 +27,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ================
 // CLASS DEFINITION
 // ================
@@ -49,7 +49,7 @@ public:
   // ==============
   // PUBLIC METHODS
   // ==============
-  // Get JSONLib version
+  // Get JSON_Lib version
   std::string version() const;
   // Parse JSON into tree
   void parse(ISource &source);
@@ -164,4 +164,4 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
     throw Error("Unknown JNode type encountered during stringification.");
   }
 }
-}// namespace JSONLib
+}// namespace JSON_Lib

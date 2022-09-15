@@ -5,7 +5,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ==============
 // JNode variants
 // ==============
@@ -25,4 +25,4 @@ struct Variant
 private:
   JNode::Type m_type;
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

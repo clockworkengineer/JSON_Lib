@@ -19,7 +19,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ===========================
 // PRIVATE TYPES AND CONSTANTS
 // ===========================
@@ -65,4 +65,4 @@ std::string JSON_Converter::toUtf8(const std::u16string &utf16) const
   WideCharToBytes(&wideString[0], -1, &bytes[0], static_cast<int>(bytes.length()));
   return bytes;
 }
-}// namespace JSONLib
+}// namespace JSON_Lib

@@ -12,7 +12,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ================
 // CLASS DEFINITION
 // ================
@@ -88,4 +88,4 @@ private:
   mutable std::ifstream m_source;
   std::string m_filename;
 };
-}// namespace JSONLib
+}// namespace JSON_Lib

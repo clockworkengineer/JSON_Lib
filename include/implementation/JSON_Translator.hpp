@@ -15,7 +15,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ================
 // CLASS DEFINITION
 // ================
@@ -67,4 +67,4 @@ private:
   std::unordered_map<char, char16_t> m_fromEscape;
   std::unordered_map<char16_t, char> m_toEscape;
 };
-} // namespace JSONLib
+} // namespace JSON_Lib

@@ -17,7 +17,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ===========================
 // PRIVATE TYPES AND CONSTANTS
 // ===========================
@@ -219,4 +219,4 @@ JNode JSON_Impl::parseJNodes(ISource &source)
   source.ignoreWS();
   return (jNode);
 }
-}// namespace JSONLib
+}// namespace JSON_Lib

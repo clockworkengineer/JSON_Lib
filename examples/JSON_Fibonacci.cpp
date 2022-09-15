@@ -5,7 +5,7 @@
 // sequence to the array stored in fibonacci.json; if the file does
 // not exist then create the intial sequence of [0,1].
 //
-// Dependencies: C20++, PLOG, JSONLib.
+// Dependencies: C20++, PLOG, JSON_Lib.
 //
 // =============
 // INCLUDE FILES
@@ -28,7 +28,7 @@
 // ==========
 // NAMESPACES
 // ==========
-namespace json = JSONLib;
+namespace json = JSON_Lib;
 namespace fs = std::filesystem;
 // =======================
 // LOCAL TYPES/DEFINITIONS

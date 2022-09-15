@@ -6,7 +6,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ========================
 // Unicode surrogate ranges
 // ========================
@@ -81,4 +81,4 @@ private:
             (c <= static_cast<char16_t>(kLowSurrogatesEnd)));
   }
 };
-} // namespace JSONLib
+} // namespace JSON_Lib

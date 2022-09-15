@@ -17,7 +17,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ===========================
 // PRIVATE TYPES AND CONSTANTS
 // ===========================
@@ -166,4 +166,4 @@ std::string JSON_Translator::toJSON(const std::string &utf8String)
   }
   return (utf8Buffer);
 }
-}// namespace JSONLib
+}// namespace JSON_Lib

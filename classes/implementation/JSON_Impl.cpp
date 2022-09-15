@@ -16,7 +16,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ===========================
 // PRIVATE TYPES AND CONSTANTS
 // ===========================
@@ -36,12 +36,12 @@ namespace JSONLib {
 // PUBLIC METHODS
 // ==============
 /// <summary>
-///  Get JSONLib version.
+///  Get JSON_Lib version.
 /// </summary>
 std::string JSON_Impl::version() const
 {
   std::stringstream versionString;
-  versionString << "JSONLib Version  " << JSON_VERSION_MAJOR << "." << JSON_VERSION_MINOR << "." << JSON_VERSION_PATCH;
+  versionString << "JSON_Lib Version  " << JSON_VERSION_MAJOR << "." << JSON_VERSION_MINOR << "." << JSON_VERSION_PATCH;
   return (versionString.str());
 }
 /// <summary>
@@ -148,4 +148,4 @@ JNode &JSON_Impl::operator[](std::size_t index)
   }
 }
 const JNode &JSON_Impl::operator[](std::size_t index) const { return ((m_jNodeRoot)[index]); }
-}// namespace JSONLib
+}// namespace JSON_Lib

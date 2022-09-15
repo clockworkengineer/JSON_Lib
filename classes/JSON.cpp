@@ -19,7 +19,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ===========================
 // PRIVATE TYPES AND CONSTANTS
 // ===========================
@@ -136,4 +136,4 @@ const JNode &JSON::operator[](std::size_t index) const { return ((*m_implementat
 /// <returns>Root of JSON tree.</returns>
 JNode &JSON::root() { return (m_implementation->root()); }
 const JNode &JSON::root() const { return (m_implementation->root()); }
-}// namespace JSONLib
+}// namespace JSON_Lib

@@ -17,7 +17,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ===========================
 // PRIVATE TYPES AND CONSTANTS
 // ===========================
@@ -52,4 +52,4 @@ void JSON_Impl::stripWhitespace(ISource &source, IDestination &destination)
     source.next();
   }
 }
-}// namespace JSONLib
+}// namespace JSON_Lib

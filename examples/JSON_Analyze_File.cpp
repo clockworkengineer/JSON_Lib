@@ -4,7 +4,7 @@
 // Description: For a each JSON file in a directory parse it, then analyze its
 // JSON tree and produce a output report of the analysis.
 //
-// Dependencies: C20++, PLOG, JSONLib.
+// Dependencies: C20++, PLOG, JSON_Lib.
 //
 // =============
 // INCLUDE FILES
@@ -28,7 +28,7 @@
 // ==========
 // NAMESPACES
 // ==========
-namespace json = JSONLib;
+namespace json = JSON_Lib;
 namespace fs = std::filesystem;
 // =======================
 // LOCAL TYPES/DEFINITIONS

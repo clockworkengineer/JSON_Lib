@@ -1,16 +1,16 @@
 //
-// Unit Tests: JSONLib
+// Unit Tests: JSON_Lib
 //
 // Description: JSON unit test helper functions.
 //
 // ================
 // Test definitions
 // =================
-#include "JSONLib_Tests.hpp"
+#include "JSON_Lib_Tests.hpp"
 // ======================
 // JSON library namespace
 // ======================
-using namespace JSONLib;
+using namespace JSON_Lib;
 // ==========================
 // Unit test helper functions
 // ==========================
@@ -108,7 +108,7 @@ void checkObject(const JNode &jNode)
 /// <returns></returns>
 std::string stripWhiteSpace(const std::string &jsonBuffer)
 {
-  const JSONLib::JSON json;
+  const JSON_Lib::JSON json;
   BufferDestination destination;
   json.strip(BufferSource{ jsonBuffer }, destination);
   return (destination.getBuffer());

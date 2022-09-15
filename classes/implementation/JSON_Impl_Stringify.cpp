@@ -18,7 +18,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ===========================
 // PRIVATE TYPES AND CONSTANTS
 // ===========================
@@ -171,4 +171,4 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination, l
     throw Error("Unknown JNode type encountered during stringification.");
   }
 }
-}// namespace JSONLib
+}// namespace JSON_Lib

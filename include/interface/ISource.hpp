@@ -7,7 +7,7 @@
 // =========
 // NAMESPACE
 // =========
-namespace JSONLib {
+namespace JSON_Lib {
 // ========================
 // JSON character constants
 // ========================
@@ -102,4 +102,4 @@ protected:
   long m_lineNo = 1;
   long m_column = 1;
 };
-}// namespace JSONLib
+}// namespace JSON_Lib
