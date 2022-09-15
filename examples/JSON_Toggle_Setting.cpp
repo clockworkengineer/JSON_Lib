@@ -2,8 +2,7 @@
 // Program: JSON_Toggle_Setting
 //
 // Description: Parse JSON example settings file and toggle the clang-tidy
-// enabled setting before writing it back to the settings file. Note: After the
-// first run that the settings will have no whitespace characters present.
+// enabled setting before writing it back to the settings file.
 //
 // Dependencies: C20++, PLOG, JSON_Lib.
 //
@@ -62,12 +61,16 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     auto &settingsRoot = json.root();
     // JNode root has to be an object
     if (!settingsRoot.isObject()) { throw std::runtime_error("Invalid JSON settings file."); }
+    // Check key exists
+    if (!json::JRef<json::Object>(settingsRoot).contains("C_Cpp.codeAnalysis.clangTidy.enabled")) {
+      throw std::runtime_error("Object missing key 'C_Cpp.codeAnalysis.clangTidy.enabled' .");
+    }
     // Reference code analysis enabled flag
     auto &enabled = json::JRef<json::Boolean>(settingsRoot["C_Cpp.codeAnalysis.clangTidy.enabled"]).getBoolean();
     // Toggle it
     enabled = !enabled;
     // Write back settings with toggled flag
-    json.stringify(json::FileDestination{ jsonSettingsFile() });
+    json.print(json::FileDestination{ jsonSettingsFile() });
   } catch (std::exception &e) {
     PLOG_ERROR << "Error: " << e.what();
   }

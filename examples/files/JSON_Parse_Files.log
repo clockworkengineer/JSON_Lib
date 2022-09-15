@@ -1,0 +1,50 @@
+﻿2022-09-15 14:48:27.779 INFO  [5732] [main@98] JSON_Parse_Files started ...
+2022-09-15 14:48:27.781 INFO  [5732] [main@99] JSON_Lib Version  0.1.0
+2022-09-15 14:48:27.785 INFO  [5732] [processJSONFile@66] Processing C:\Projects\JSON_Lib\build\examples\Debug\files\large-file.json
+2022-09-15 14:48:55.249 INFO  [5732] [processJSONFile@73] 27463345 microseconds to parse from file.
+2022-09-15 14:49:05.692 INFO  [5732] [processJSONFile@78] 10443328 microseconds to stringify.
+2022-09-15 14:49:15.399 INFO  [5732] [processJSONFile@83] 9706409 microseconds to parse from buffer.
+2022-09-15 14:49:15.399 INFO  [5732] [processJSONFile@88] --------------------FILE PROCESSED OK--------------------
+2022-09-15 14:49:15.400 INFO  [5732] [processJSONFile@89] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\large-file.json.
+2022-09-15 14:49:15.405 INFO  [5732] [processJSONFile@66] Processing C:\Projects\JSON_Lib\build\examples\Debug\files\settings.json
+2022-09-15 14:49:15.408 INFO  [5732] [processJSONFile@73] 2966 microseconds to parse from file.
+2022-09-15 14:49:15.409 INFO  [5732] [processJSONFile@78] 1141 microseconds to stringify.
+2022-09-15 14:49:15.410 INFO  [5732] [processJSONFile@83] 989 microseconds to parse from buffer.
+2022-09-15 14:49:15.410 INFO  [5732] [processJSONFile@86] [{"files.exclude":{"**/.git":true,"**/.svn":true,"**/.hg":true,"**/CVS":true,"**/.DS_Store":true,"**/Thumbs.db":true,"**/build":true,"**/.vscode":true},"explorerExclude.backup":null,"cSpell.words":["Cityy","doesntexist","stringification"],"files.associations":{"algorithm":"cpp","array":"cpp","atomic":"cpp","bit":"cpp","cctype":"cpp","charconv":"cpp","chrono":"cpp","clocale":"cpp","cmath":"cpp","codecvt":"cpp","compare":"cpp","concepts":"cpp","condition_variable":"cpp","cstddef":"cpp","cstdint":"cpp","cstdio":"cpp","cstdlib":"cpp","cstring":"cpp","ctime":"cpp","cwchar":"cpp","cwctype":"cpp","deque":"cpp","exception":"cpp","filesystem":"cpp","format":"cpp","forward_list":"cpp","fstream":"cpp","functional":"cpp","future":"cpp","initializer_list":"cpp","iomanip":"cpp","ios":"cpp","iosfwd":"cpp","iostream":"cpp","istream":"cpp","iterator":"cpp","limits":"cpp","list":"cpp","locale":"cpp","map":"cpp","memory":"cpp","mutex":"cpp","new":"cpp","numeric":"cpp","optional":"cpp","ostream":"cpp","random":"cpp","ratio":"cpp","regex":"cpp","set":"cpp","sstream":"cpp","stack":"cpp","stdexcept":"cpp","stop_token":"cpp","streambuf":"cpp","string":"cpp","system_error":"cpp","thread":"cpp","tuple":"cpp","type_traits":"cpp","typeinfo":"cpp","unordered_map":"cpp","utility":"cpp","variant":"cpp","vector":"cpp","xfacet":"cpp","xhash":"cpp","xiosbase":"cpp","xlocale":"cpp","xlocbuf":"cpp","xlocinfo":"cpp","xlocmes":"cpp","xlocmon":"cpp","xlocnum":"cpp","xloctime":"cpp","xmemory":"cpp","xstddef":"cpp","xstring":"cpp","xtr1common":"cpp","xtree":"cpp","xutility":"cpp","*.rh":"cpp","cstdarg":"cpp","span":"cpp","any":"cpp","ranges":"cpp","valarray":"cpp","climits":"cpp"},"C_Cpp.codeAnalysis.clangTidy.enabled":true}]
+2022-09-15 14:49:15.410 INFO  [5732] [processJSONFile@88] --------------------FILE PROCESSED OK--------------------
+2022-09-15 14:49:15.410 INFO  [5732] [processJSONFile@89] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\settings.json.
+2022-09-15 14:49:15.411 INFO  [5732] [processJSONFile@66] Processing C:\Projects\JSON_Lib\build\examples\Debug\files\testfile001.json
+2022-09-15 14:49:15.412 INFO  [5732] [processJSONFile@73] 753 microseconds to parse from file.
+2022-09-15 14:49:15.412 INFO  [5732] [processJSONFile@78] 198 microseconds to stringify.
+2022-09-15 14:49:15.412 INFO  [5732] [processJSONFile@83] 165 microseconds to parse from buffer.
+2022-09-15 14:49:15.412 INFO  [5732] [processJSONFile@86] [{"glossary":{"title":"example glossary","GlossDiv":{"title":"S","GlossList":{"GlossEntry":{"ID":"SGML","SortAs":"SGML","GlossTerm":"Standard Generalized Markup Language","Acronym":"SGML","Abbrev":"ISO 8879:1986","GlossDef":{"para":"A meta-markup language, used to create markup languages such as DocBook.","GlossSeeAlso":["GML","XML"]},"GlossSee":"markup"}}}}}]
+2022-09-15 14:49:15.413 INFO  [5732] [processJSONFile@88] --------------------FILE PROCESSED OK--------------------
+2022-09-15 14:49:15.413 INFO  [5732] [processJSONFile@89] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\testfile001.json.
+2022-09-15 14:49:15.413 INFO  [5732] [processJSONFile@66] Processing C:\Projects\JSON_Lib\build\examples\Debug\files\testfile002.json
+2022-09-15 14:49:15.414 INFO  [5732] [processJSONFile@73] 817 microseconds to parse from file.
+2022-09-15 14:49:15.414 INFO  [5732] [processJSONFile@78] 287 microseconds to stringify.
+2022-09-15 14:49:15.415 INFO  [5732] [processJSONFile@83] 204 microseconds to parse from buffer.
+2022-09-15 14:49:15.415 INFO  [5732] [processJSONFile@86] [{"widget":{"debug":"on","window":{"title":"Sample Konfabulator Widget","name":"main_window","width":500,"height":500},"image":{"src":"Images/Sun.png","name":"sun1","hOffset":250,"vOffset":250,"alignment":"center"},"text":{"data":"Click Here","size":36,"style":"bold","name":"text1","hOffset":250,"vOffset":100,"alignment":"center","onMouseUp":"sun1.opacity = (sun1.opacity / 100) * 90;"}}}]
+2022-09-15 14:49:15.415 INFO  [5732] [processJSONFile@88] --------------------FILE PROCESSED OK--------------------
+2022-09-15 14:49:15.415 INFO  [5732] [processJSONFile@89] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\testfile002.json.
+2022-09-15 14:49:15.415 INFO  [5732] [processJSONFile@66] Processing C:\Projects\JSON_Lib\build\examples\Debug\files\testfile003.json
+2022-09-15 14:49:15.416 INFO  [5732] [processJSONFile@73] 656 microseconds to parse from file.
+2022-09-15 14:49:15.416 INFO  [5732] [processJSONFile@78] 227 microseconds to stringify.
+2022-09-15 14:49:15.417 INFO  [5732] [processJSONFile@83] 168 microseconds to parse from buffer.
+2022-09-15 14:49:15.417 INFO  [5732] [processJSONFile@86] [{"$id":"https://example.com/geographical-location.schema.json","$schema":"http://json-schema.org/draft-07/schema#","title":"Longitude and Latitude Values","description":"A geographical coordinate.","required":["latitude","longitude"],"type":"object","properties":{"latitude":{"type":"number","minimum":-90,"maximum":90},"longitude":{"type":"number","minimum":-180,"maximum":180}}}]
+2022-09-15 14:49:15.417 INFO  [5732] [processJSONFile@88] --------------------FILE PROCESSED OK--------------------
+2022-09-15 14:49:15.417 INFO  [5732] [processJSONFile@89] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\testfile003.json.
+2022-09-15 14:49:15.417 INFO  [5732] [processJSONFile@66] Processing C:\Projects\JSON_Lib\build\examples\Debug\files\testfile004.json
+2022-09-15 14:49:15.418 INFO  [5732] [processJSONFile@73] 193 microseconds to parse from file.
+2022-09-15 14:49:15.418 INFO  [5732] [processJSONFile@78] 104 microseconds to stringify.
+2022-09-15 14:49:15.418 INFO  [5732] [processJSONFile@83] 31 microseconds to parse from buffer.
+2022-09-15 14:49:15.418 INFO  [5732] [processJSONFile@86] [{"latitude":48.8581,"longitude":2.29469}]
+2022-09-15 14:49:15.418 INFO  [5732] [processJSONFile@88] --------------------FILE PROCESSED OK--------------------
+2022-09-15 14:49:15.418 INFO  [5732] [processJSONFile@89] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\testfile004.json.
+2022-09-15 14:49:15.419 INFO  [5732] [processJSONFile@66] Processing C:\Projects\JSON_Lib\build\examples\Debug\files\testfile005.json
+2022-09-15 14:49:15.419 INFO  [5732] [processJSONFile@73] 244 microseconds to parse from file.
+2022-09-15 14:49:15.419 INFO  [5732] [processJSONFile@78] 53 microseconds to stringify.
+2022-09-15 14:49:15.419 INFO  [5732] [processJSONFile@83] 90 microseconds to parse from buffer.
+2022-09-15 14:49:15.419 INFO  [5732] [processJSONFile@86] [{"KEY\\\t/\"":"VALUE\\\t/\r\n\"","0":"\u0000","1":"\u0001","31":"\u001F"}]
+2022-09-15 14:49:15.419 INFO  [5732] [processJSONFile@88] --------------------FILE PROCESSED OK--------------------
+2022-09-15 14:49:15.419 INFO  [5732] [processJSONFile@89] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\testfile005.json.

@@ -1,7 +1,7 @@
 //
 // Program: JSON_Display_Settings
 //
-// Description: Parse JSON example settings file and read its Bencode tree data
+// Description: Parse JSON example settings file and read its JSON tree data
 // (JNode) and write out a textual representation of it; this is almost the same
 // as stringification but it is used to provide example code that traverses and
 // interperets the JNode tree data.

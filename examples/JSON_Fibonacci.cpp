@@ -1,7 +1,7 @@
 //
 // Program: JSON_Fibonacci
 //
-// Description: On each activation add the next in the fibonacci
+// Description: On each activation add the next entry in the fibonacci
 // sequence to the array stored in fibonacci.json; if the file does
 // not exist then create the intial sequence of [0,1].
 //

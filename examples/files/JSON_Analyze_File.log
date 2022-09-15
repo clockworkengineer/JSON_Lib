@@ -1,0 +1,297 @@
+﻿2022-09-15 14:49:32.721 INFO  [11656] [main@72] JSON_Analyze_File started ...
+2022-09-15 14:49:32.722 INFO  [11656] [main@73] JSON_Lib Version  0.1.0
+2022-09-15 14:49:32.723 INFO  [11656] [processJSONFile@57] Analyzing C:\Projects\JSON_Lib\build\examples\Debug\files\large-file.json
+2022-09-15 14:50:00.456 INFO  [11656] [processJSONFile@62] 
+--------------------JNode Sizes---------------------
+JNode size 8 in bytes.
+Object size 40 in bytes.
+Object Entry size 16 in bytes.
+Array size 40 in bytes.
+Number::Values size 16 in bytes.
+Number size 24 in bytes.
+String size 48 in bytes.
+Boolean size 8 in bytes.
+Null size 4 in bytes.
+------------------JSON Tree Stats------------------
+JSON Tree contains 637595 nodes.
+JSON Tree size 58157253 in bytes.
+------------------JSON Object Stats------------------
+JSON Tree contains 88593 objectEntries.
+JSON Tree max object size 68.
+JSON Tree total 615393 keys.
+JSON Tree contains 169 unique keys.
+JSON Tree max key size 20 in bytes.
+------------------JSON Array Stats------------------
+JSON Tree contains 7326 arrays.
+JSON Tree max array size 11351.
+------------------JSON String Stats------------------
+JSON Tree total 416009 strings.
+JSON Tree contains 167227 unique strings.
+JSON Tree max string size 20 in bytes.
+------------------JSON Number Stats------------------
+JSON Tree contains 75018 numbers.
+JSON Tree contains 75018 integers.
+JSON Tree contains 0 longs.
+JSON Tree contains 0 long longs.
+JSON Tree contains 0 floats.
+JSON Tree contains 0 doubles.
+JSON Tree contains 0 long doubles.
+------------------JSON Boolean Stats------------------
+JSON Tree contains 40452 booleans.
+------------------JSON Null Stats------------------
+JSON Tree contains 10197 nulls.
+----------------------------------------------------
+2022-09-15 14:50:00.457 INFO  [11656] [processJSONFile@63] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\large-file.json.
+2022-09-15 14:50:00.623 INFO  [11656] [processJSONFile@57] Analyzing C:\Projects\JSON_Lib\build\examples\Debug\files\settings.json
+2022-09-15 14:50:00.632 INFO  [11656] [processJSONFile@62] 
+--------------------JNode Sizes---------------------
+JNode size 8 in bytes.
+Object size 40 in bytes.
+Object Entry size 16 in bytes.
+Array size 40 in bytes.
+Number::Values size 16 in bytes.
+Number size 24 in bytes.
+String size 48 in bytes.
+Boolean size 8 in bytes.
+Null size 4 in bytes.
+------------------JSON Tree Stats------------------
+JSON Tree contains 105 nodes.
+JSON Tree size 7323 in bytes.
+------------------JSON Object Stats------------------
+JSON Tree contains 3 objectEntries.
+JSON Tree max object size 88.
+JSON Tree total 101 keys.
+JSON Tree contains 101 unique keys.
+JSON Tree max key size 36 in bytes.
+------------------JSON Array Stats------------------
+JSON Tree contains 1 arrays.
+JSON Tree max array size 3.
+------------------JSON String Stats------------------
+JSON Tree total 91 strings.
+JSON Tree contains 4 unique strings.
+JSON Tree max string size 36 in bytes.
+------------------JSON Number Stats------------------
+JSON Tree contains 0 numbers.
+JSON Tree contains 0 integers.
+JSON Tree contains 0 longs.
+JSON Tree contains 0 long longs.
+JSON Tree contains 0 floats.
+JSON Tree contains 0 doubles.
+JSON Tree contains 0 long doubles.
+------------------JSON Boolean Stats------------------
+JSON Tree contains 9 booleans.
+------------------JSON Null Stats------------------
+JSON Tree contains 1 nulls.
+----------------------------------------------------
+2022-09-15 14:50:00.633 INFO  [11656] [processJSONFile@63] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\settings.json.
+2022-09-15 14:50:00.634 INFO  [11656] [processJSONFile@57] Analyzing C:\Projects\JSON_Lib\build\examples\Debug\files\testfile001.json
+2022-09-15 14:50:00.636 INFO  [11656] [processJSONFile@62] 
+--------------------JNode Sizes---------------------
+JNode size 8 in bytes.
+Object size 40 in bytes.
+Object Entry size 16 in bytes.
+Array size 40 in bytes.
+Number::Values size 16 in bytes.
+Number size 24 in bytes.
+String size 48 in bytes.
+Boolean size 8 in bytes.
+Null size 4 in bytes.
+------------------JSON Tree Stats------------------
+JSON Tree contains 18 nodes.
+JSON Tree size 1333 in bytes.
+------------------JSON Object Stats------------------
+JSON Tree contains 6 objectEntries.
+JSON Tree max object size 7.
+JSON Tree total 15 keys.
+JSON Tree contains 14 unique keys.
+JSON Tree max key size 12 in bytes.
+------------------JSON Array Stats------------------
+JSON Tree contains 1 arrays.
+JSON Tree max array size 2.
+------------------JSON String Stats------------------
+JSON Tree total 11 strings.
+JSON Tree contains 9 unique strings.
+JSON Tree max string size 12 in bytes.
+------------------JSON Number Stats------------------
+JSON Tree contains 0 numbers.
+JSON Tree contains 0 integers.
+JSON Tree contains 0 longs.
+JSON Tree contains 0 long longs.
+JSON Tree contains 0 floats.
+JSON Tree contains 0 doubles.
+JSON Tree contains 0 long doubles.
+------------------JSON Boolean Stats------------------
+JSON Tree contains 0 booleans.
+------------------JSON Null Stats------------------
+JSON Tree contains 0 nulls.
+----------------------------------------------------
+2022-09-15 14:50:00.636 INFO  [11656] [processJSONFile@63] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\testfile001.json.
+2022-09-15 14:50:00.636 INFO  [11656] [processJSONFile@57] Analyzing C:\Projects\JSON_Lib\build\examples\Debug\files\testfile002.json
+2022-09-15 14:50:00.637 INFO  [11656] [processJSONFile@62] 
+--------------------JNode Sizes---------------------
+JNode size 8 in bytes.
+Object size 40 in bytes.
+Object Entry size 16 in bytes.
+Array size 40 in bytes.
+Number::Values size 16 in bytes.
+Number size 24 in bytes.
+String size 48 in bytes.
+Boolean size 8 in bytes.
+Null size 4 in bytes.
+------------------JSON Tree Stats------------------
+JSON Tree contains 23 nodes.
+JSON Tree size 1502 in bytes.
+------------------JSON Object Stats------------------
+JSON Tree contains 5 objectEntries.
+JSON Tree max object size 8.
+JSON Tree total 22 keys.
+JSON Tree contains 17 unique keys.
+JSON Tree max key size 9 in bytes.
+------------------JSON Array Stats------------------
+JSON Tree contains 0 arrays.
+JSON Tree max array size 0.
+------------------JSON String Stats------------------
+JSON Tree total 11 strings.
+JSON Tree contains 10 unique strings.
+JSON Tree max string size 41 in bytes.
+------------------JSON Number Stats------------------
+JSON Tree contains 7 numbers.
+JSON Tree contains 7 integers.
+JSON Tree contains 0 longs.
+JSON Tree contains 0 long longs.
+JSON Tree contains 0 floats.
+JSON Tree contains 0 doubles.
+JSON Tree contains 0 long doubles.
+------------------JSON Boolean Stats------------------
+JSON Tree contains 0 booleans.
+------------------JSON Null Stats------------------
+JSON Tree contains 0 nulls.
+----------------------------------------------------
+2022-09-15 14:50:00.638 INFO  [11656] [processJSONFile@63] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\testfile002.json.
+2022-09-15 14:50:00.638 INFO  [11656] [processJSONFile@57] Analyzing C:\Projects\JSON_Lib\build\examples\Debug\files\testfile003.json
+2022-09-15 14:50:00.639 INFO  [11656] [processJSONFile@62] 
+--------------------JNode Sizes---------------------
+JNode size 8 in bytes.
+Object size 40 in bytes.
+Object Entry size 16 in bytes.
+Array size 40 in bytes.
+Number::Values size 16 in bytes.
+Number size 24 in bytes.
+String size 48 in bytes.
+Boolean size 8 in bytes.
+Null size 4 in bytes.
+------------------JSON Tree Stats------------------
+JSON Tree contains 18 nodes.
+JSON Tree size 1267 in bytes.
+------------------JSON Object Stats------------------
+JSON Tree contains 4 objectEntries.
+JSON Tree max object size 7.
+JSON Tree total 15 keys.
+JSON Tree contains 11 unique keys.
+JSON Tree max key size 11 in bytes.
+------------------JSON Array Stats------------------
+JSON Tree contains 1 arrays.
+JSON Tree max array size 2.
+------------------JSON String Stats------------------
+JSON Tree total 9 strings.
+JSON Tree contains 8 unique strings.
+JSON Tree max string size 11 in bytes.
+------------------JSON Number Stats------------------
+JSON Tree contains 4 numbers.
+JSON Tree contains 4 integers.
+JSON Tree contains 0 longs.
+JSON Tree contains 0 long longs.
+JSON Tree contains 0 floats.
+JSON Tree contains 0 doubles.
+JSON Tree contains 0 long doubles.
+------------------JSON Boolean Stats------------------
+JSON Tree contains 0 booleans.
+------------------JSON Null Stats------------------
+JSON Tree contains 0 nulls.
+----------------------------------------------------
+2022-09-15 14:50:00.639 INFO  [11656] [processJSONFile@63] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\testfile003.json.
+2022-09-15 14:50:00.640 INFO  [11656] [processJSONFile@57] Analyzing C:\Projects\JSON_Lib\build\examples\Debug\files\testfile004.json
+2022-09-15 14:50:00.640 INFO  [11656] [processJSONFile@62] 
+--------------------JNode Sizes---------------------
+JNode size 8 in bytes.
+Object size 40 in bytes.
+Object Entry size 16 in bytes.
+Array size 40 in bytes.
+Number::Values size 16 in bytes.
+Number size 24 in bytes.
+String size 48 in bytes.
+Boolean size 8 in bytes.
+Null size 4 in bytes.
+------------------JSON Tree Stats------------------
+JSON Tree contains 3 nodes.
+JSON Tree size 137 in bytes.
+------------------JSON Object Stats------------------
+JSON Tree contains 1 objectEntries.
+JSON Tree max object size 2.
+JSON Tree total 2 keys.
+JSON Tree contains 2 unique keys.
+JSON Tree max key size 9 in bytes.
+------------------JSON Array Stats------------------
+JSON Tree contains 0 arrays.
+JSON Tree max array size 0.
+------------------JSON String Stats------------------
+JSON Tree total 0 strings.
+JSON Tree contains 0 unique strings.
+JSON Tree max string size 0 in bytes.
+------------------JSON Number Stats------------------
+JSON Tree contains 2 numbers.
+JSON Tree contains 0 integers.
+JSON Tree contains 0 longs.
+JSON Tree contains 0 long longs.
+JSON Tree contains 2 floats.
+JSON Tree contains 0 doubles.
+JSON Tree contains 0 long doubles.
+------------------JSON Boolean Stats------------------
+JSON Tree contains 0 booleans.
+------------------JSON Null Stats------------------
+JSON Tree contains 0 nulls.
+----------------------------------------------------
+2022-09-15 14:50:00.640 INFO  [11656] [processJSONFile@63] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\testfile004.json.
+2022-09-15 14:50:00.643 INFO  [11656] [processJSONFile@57] Analyzing C:\Projects\JSON_Lib\build\examples\Debug\files\testfile005.json
+2022-09-15 14:50:00.644 INFO  [11656] [processJSONFile@62] 
+--------------------JNode Sizes---------------------
+JNode size 8 in bytes.
+Object size 40 in bytes.
+Object Entry size 16 in bytes.
+Array size 40 in bytes.
+Number::Values size 16 in bytes.
+Number size 24 in bytes.
+String size 48 in bytes.
+Boolean size 8 in bytes.
+Null size 4 in bytes.
+------------------JSON Tree Stats------------------
+JSON Tree contains 5 nodes.
+JSON Tree size 321 in bytes.
+------------------JSON Object Stats------------------
+JSON Tree contains 1 objectEntries.
+JSON Tree max object size 4.
+JSON Tree total 4 keys.
+JSON Tree contains 4 unique keys.
+JSON Tree max key size 7 in bytes.
+------------------JSON Array Stats------------------
+JSON Tree contains 0 arrays.
+JSON Tree max array size 0.
+------------------JSON String Stats------------------
+JSON Tree total 4 strings.
+JSON Tree contains 4 unique strings.
+JSON Tree max string size 7 in bytes.
+------------------JSON Number Stats------------------
+JSON Tree contains 0 numbers.
+JSON Tree contains 0 integers.
+JSON Tree contains 0 longs.
+JSON Tree contains 0 long longs.
+JSON Tree contains 0 floats.
+JSON Tree contains 0 doubles.
+JSON Tree contains 0 long doubles.
+------------------JSON Boolean Stats------------------
+JSON Tree contains 0 booleans.
+------------------JSON Null Stats------------------
+JSON Tree contains 0 nulls.
+----------------------------------------------------
+2022-09-15 14:50:00.644 INFO  [11656] [processJSONFile@63] Finished C:\Projects\JSON_Lib\build\examples\Debug\files\testfile005.json.
+2022-09-15 14:50:00.644 INFO  [11656] [main@84] JSON_Analyze_File exited.
