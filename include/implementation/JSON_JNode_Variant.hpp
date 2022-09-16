@@ -12,7 +12,7 @@ namespace JSON_Lib {
 struct Variant
 {
   // JNode Variant Types
-  enum class Type { base = 0, object, array, number, string, boolean, null, hole };
+  enum class Type : uint8_t { base = 0, object, array, number, string, boolean, null, hole };
   // Constructors/Destructors
   explicit Variant(Variant::Type nodeType = Variant::Type::base) : m_type(nodeType) {}
   Variant(const Variant &other) = delete;
