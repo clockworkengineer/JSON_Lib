@@ -2,9 +2,9 @@
 // =======
 // C++ STL
 // =======
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ====
 // Base
@@ -15,12 +15,13 @@ struct Variant
   enum class Type { base = 0, object, array, number, string, boolean, null, hole };
   // Constructors/Destructors
   explicit Variant(Variant::Type nodeType = Variant::Type::base) : m_type(nodeType) {}
-  [[nodiscard]] Variant::Type getType() const { return (m_type); }
   Variant(const Variant &other) = delete;
   Variant &operator=(const Variant &other) = delete;
   Variant(Variant &&other) = default;
   Variant &operator=(Variant &&other) = default;
   ~Variant() = default;
+  // Get variant type
+  [[nodiscard]] Variant::Type getType() const { return (m_type); }
 
 private:
   Variant::Type m_type;

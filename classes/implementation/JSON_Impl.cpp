@@ -13,9 +13,9 @@
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ===========================
 // PRIVATE TYPES AND CONSTANTS

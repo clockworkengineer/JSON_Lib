@@ -5,9 +5,9 @@
 // =======
 #include <stdexcept>
 #include <string>
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ==========
 // JSON Error

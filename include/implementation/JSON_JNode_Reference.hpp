@@ -2,9 +2,9 @@
 // =======
 // C++ STL
 // =======
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // =========================
 // JNode reference converter

@@ -3,14 +3,15 @@
 // C++ STL
 // =======
 #include <string>
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // =======================================
 // Interface for utf8 <-> uft16 conversion
 // =======================================
-class IConverter {
+class IConverter
+{
 public:
   // ========================
   // Constructors/destructors
@@ -24,10 +25,10 @@ public:
   // ==================
   // From utf8 to utf16
   // ==================
-  [[nodiscard]] virtual std::u16string toUtf16(const std::string &utf8) const  = 0;
+  [[nodiscard]] virtual std::u16string toUtf16(const std::string &utf8) const = 0;
   // ==================
   // From utf16 to utf8
   // ==================
   [[nodiscard]] virtual std::string toUtf8(const std::u16string &utf16) const = 0;
 };
-} // namespace JSON_Lib
+}// namespace JSON_Lib

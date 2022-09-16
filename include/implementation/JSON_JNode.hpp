@@ -6,9 +6,9 @@
 #include <stdexcept>
 #include <string>
 #include <variant>
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // =========================================================
 // JNode forward declarations for interfaces/classes/structs

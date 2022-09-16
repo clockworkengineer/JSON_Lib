@@ -14,9 +14,9 @@
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ===========================
 // PRIVATE TYPES AND CONSTANTS
@@ -102,8 +102,8 @@ JNode JSON_Impl::parseNumber(ISource &source)
   std::string string;
   for (; source.more() && !endOfNumber(source); source.next()) { string += source.current(); }
   Number number{ string };
-  if (number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>()
-      || number.is<double>() || number.is<long double>()) {
+  if (number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>() || number.is<double>()
+      || number.is<long double>()) {
     return (Number::make(number));
   }
   throw Error(source.getPosition(), "Invalid numeric value.");

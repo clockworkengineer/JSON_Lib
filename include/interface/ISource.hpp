@@ -4,9 +4,9 @@
 // =======
 #include <string>
 #include <stdexcept>
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ========================
 // JSON character constants

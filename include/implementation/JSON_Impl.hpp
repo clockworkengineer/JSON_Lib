@@ -24,9 +24,9 @@
 #include "JSON_Sources.hpp"
 #include "JSON_Translator.hpp"
 #include "JSON_Types.hpp"
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ================
 // CLASS DEFINITION

@@ -3,21 +3,22 @@
 // C++ STL
 // =======
 #include <string>
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ========================
 // Unicode surrogate ranges
 // ========================
-constexpr char16_t kHighSurrogatesBegin{0xD800};
-constexpr char16_t kHighSurrogatesEnd{0xDBFF};
-constexpr char16_t kLowSurrogatesBegin{0xDC00};
-constexpr char16_t kLowSurrogatesEnd{0xDFFF};
+constexpr char16_t kHighSurrogatesBegin{ 0xD800 };
+constexpr char16_t kHighSurrogatesEnd{ 0xDBFF };
+constexpr char16_t kLowSurrogatesBegin{ 0xDC00 };
+constexpr char16_t kLowSurrogatesEnd{ 0xDFFF };
 // =========================
 // JSON translator interface
 // =========================
-class ITranslator {
+class ITranslator
+{
 public:
   // ========================
   // Constructors/destructors
@@ -50,14 +51,13 @@ protected:
   // this is meant to be an error but from searching the web I have not found a
   // definitive answer.
   //===========================================================================
-  bool unpairedSurrogatesInBuffer(const std::u16string &utf16Buffer) {
+  bool unpairedSurrogatesInBuffer(const std::u16string &utf16Buffer)
+  {
     int index = 0;
     while (index <= (static_cast<int>(utf16Buffer.size()) - 1)) {
-      if (isValidSurrogateUpper(utf16Buffer[index]) &&
-          isValidSurrogateLower(utf16Buffer[index + 1])) {
+      if (isValidSurrogateUpper(utf16Buffer[index]) && isValidSurrogateLower(utf16Buffer[index + 1])) {
         index++;
-      } else if (isValidSurrogateUpper(utf16Buffer[index]) ||
-                 isValidSurrogateLower(utf16Buffer[index + 1])) {
+      } else if (isValidSurrogateUpper(utf16Buffer[index]) || isValidSurrogateLower(utf16Buffer[index + 1])) {
         return (true);
       }
       index++;
@@ -69,16 +69,16 @@ private:
   // ======================================================
   // Return true if a character is a valid upper surrogate.
   // ======================================================
-  bool isValidSurrogateUpper(char16_t c) {
-    return ((c >= static_cast<char16_t>(kHighSurrogatesBegin)) &&
-            (c <= static_cast<char16_t>(kHighSurrogatesEnd)));
+  bool isValidSurrogateUpper(char16_t c)
+  {
+    return ((c >= static_cast<char16_t>(kHighSurrogatesBegin)) && (c <= static_cast<char16_t>(kHighSurrogatesEnd)));
   }
   // ======================================================
   // Return true if a character is a valid lower surrogate.
   // ======================================================
-  bool isValidSurrogateLower(char16_t c) {
-    return ((c >= static_cast<char16_t>(kLowSurrogatesBegin)) &&
-            (c <= static_cast<char16_t>(kLowSurrogatesEnd)));
+  bool isValidSurrogateLower(char16_t c)
+  {
+    return ((c >= static_cast<char16_t>(kLowSurrogatesBegin)) && (c <= static_cast<char16_t>(kLowSurrogatesEnd)));
   }
 };
-} // namespace JSON_Lib
+}// namespace JSON_Lib

@@ -4,9 +4,9 @@
 // =======
 #include <string>
 #include <vector>
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // =====
 // Array

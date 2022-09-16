@@ -4,21 +4,22 @@
 // =======
 #include <string>
 #include <stdexcept>
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ====================================================================
 // Interface for writing destination stream during JSON stringification
 // ====================================================================
-class IDestination {
+class IDestination
+{
 public:
   // ==================
   // IDestination Error
   // ==================
-  struct Error : public std::runtime_error {
-    explicit Error(const std::string &message)
-        : std::runtime_error("IDestination Error: " + message) {}
+  struct Error : public std::runtime_error
+  {
+    explicit Error(const std::string &message) : std::runtime_error("IDestination Error: " + message) {}
   };
   // ========================
   // Constructors/destructors
@@ -42,4 +43,4 @@ public:
   // ===========================
   virtual void clear() = 0;
 };
-} // namespace JSON_Lib
+}// namespace JSON_Lib

@@ -5,9 +5,9 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ======
 // Object

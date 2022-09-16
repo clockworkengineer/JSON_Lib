@@ -12,22 +12,23 @@
 // ===============================
 #include "IConverter.hpp"
 #include "ITranslator.hpp"
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ================
 // CLASS DEFINITION
 // ================
-class JSON_Translator : public ITranslator {
+class JSON_Translator : public ITranslator
+{
 public:
   // ==========================
   // PUBLIC TYPES AND CONSTANTS
   // ==========================
   // JSON translator error
-  struct Error : public std::runtime_error {
-    explicit Error(const std::string &message)
-        : std::runtime_error("JSON Translator Error: " + message) {}
+  struct Error : public std::runtime_error
+  {
+    explicit Error(const std::string &message) : std::runtime_error("JSON Translator Error: " + message) {}
   };
   // ======================
   // CONSTRUCTOR/DESTRUCTOR
@@ -67,4 +68,4 @@ private:
   std::unordered_map<char, char16_t> m_fromEscape;
   std::unordered_map<char16_t, char> m_toEscape;
 };
-} // namespace JSON_Lib
+}// namespace JSON_Lib

@@ -9,9 +9,9 @@
 // Source interface
 // ================
 #include "ISource.hpp"
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ================
 // CLASS DEFINITION

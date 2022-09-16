@@ -12,9 +12,9 @@
 #include "JSON_Destinations.hpp"
 #include "JSON_Types.hpp"
 #include "IAction.hpp"
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ==================
 // JSON Tree Analysis

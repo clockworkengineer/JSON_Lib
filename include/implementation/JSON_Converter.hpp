@@ -3,14 +3,15 @@
 // Converter interface
 // ===================
 #include "IConverter.hpp"
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ================
 // CLASS DEFINITION
 // ================
-class JSON_Converter : public IConverter {
+class JSON_Converter : public IConverter
+{
 public:
   // ==========================
   // PUBLIC TYPES AND CONSTANTS
@@ -37,4 +38,4 @@ private:
   // PRIVATE VARIABLES
   // =================
 };
-} // namespace JSON_Lib
+}// namespace JSON_Lib

@@ -8,9 +8,9 @@
 // JSON
 // ====
 #include "JSON_Types.hpp"
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ==========================================================
 // Interface for the action events during JSON tree traversal

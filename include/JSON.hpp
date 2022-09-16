@@ -7,9 +7,9 @@
 #include <string>
 #include <vector>
 #include <variant>
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ========================================================
 // JSON forward declarations for interfaces/classes/structs

@@ -8,9 +8,9 @@
 // Destination interface
 // =====================
 #include "IDestination.hpp"
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ================
 // CLASS DEFINITION

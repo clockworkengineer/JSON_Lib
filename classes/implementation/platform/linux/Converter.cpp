@@ -17,9 +17,9 @@
 // ====================
 // CLASS IMPLEMENTATION
 // ====================
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ===========================
 // PRIVATE TYPES AND CONSTANTS
@@ -43,12 +43,6 @@ static std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> m_UTF16
 /// <summary>
 /// Convert utf8 <-> utf16 strings.
 /// </summary>
-std::u16string JSON_Converter::toUtf16(const std::string &utf8) const
-{
-  return (m_UTF16.from_bytes(utf8));
-}
-std::string JSON_Converter::toUtf8(const std::u16string &utf16) const
-{
-  return (m_UTF16.to_bytes(utf16));
-}
+std::u16string JSON_Converter::toUtf16(const std::string &utf8) const { return (m_UTF16.from_bytes(utf8)); }
+std::string JSON_Converter::toUtf8(const std::u16string &utf16) const { return (m_UTF16.to_bytes(utf16)); }
 }// namespace JSON_Lib

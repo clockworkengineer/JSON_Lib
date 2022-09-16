@@ -3,9 +3,9 @@
 // C++ STL
 // =======
 #include <string>
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ====
 // Hole

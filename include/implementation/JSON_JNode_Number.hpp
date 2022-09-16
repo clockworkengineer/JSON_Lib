@@ -8,9 +8,9 @@
 #include <string>
 #include <cerrno>
 // #include <variant>
-// =========
-// NAMESPACE
-// =========
+// =================
+// LIBRARY NAMESPACE
+// =================
 namespace JSON_Lib {
 // ================
 // Number concepts
