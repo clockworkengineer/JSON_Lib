@@ -19,6 +19,7 @@ struct Hole : Variant
   Hole(Hole &&other) = default;
   Hole &operator=(Hole &&other) = default;
   ~Hole() = default;
+  // Return string representation of value
   [[nodiscard]] std::string toString() const { return ("null"); }
   // Make Hole JNode
   static JNode make() { return (JNode{ std::make_unique<Hole>(Hole()) }); }

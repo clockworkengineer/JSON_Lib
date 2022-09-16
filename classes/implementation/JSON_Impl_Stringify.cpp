@@ -121,9 +121,9 @@ void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination, lo
   if (!JRef<Array>(jNode).getArrayEntries().empty()) {
     size_t commaCount = JRef<Array>(jNode).getArrayEntries().size() - 1;
     if (indent != 0) { destination.add('\n'); };
-    for (auto &node : JRef<Array>(jNode).getArrayEntries()) {
+    for (auto &entry : JRef<Array>(jNode).getArrayEntries()) {
       if (indent != 0) { destination.add(std::string(indent, ' ')); };
-      stringifyJNodes(node, destination, (indent != 0) ? (indent + m_indent) : 0);
+      stringifyJNodes(entry, destination, (indent != 0) ? (indent + m_indent) : 0);
       if (commaCount-- > 0) {
         destination.add(",");
         if (indent != 0) { destination.add('\n'); }

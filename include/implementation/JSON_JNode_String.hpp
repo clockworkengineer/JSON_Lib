@@ -23,7 +23,7 @@ struct String : Variant
   // Return reference to string
   [[nodiscard]] std::string &getString() { return (m_string); }
   [[nodiscard]] const std::string &getString() const { return (m_string); }
-  // Convert string representation to a string
+  // Return string representation of value
   [[nodiscard]] std::string toString() const { return (m_string); }
   // Make String JNode
   static JNode make(const std::string &string) { return (JNode{ std::make_unique<String>(String{ string }) }); }

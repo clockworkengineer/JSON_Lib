@@ -158,7 +158,7 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
     break;
   case Variant::Type::array:
     action.onArray(JRef<Array>(jNode));
-    for (auto &node : JRef<Array>(jNode).getArrayEntries()) { traverseJNodes(node, action); }
+    for (auto &entry : JRef<Array>(jNode).getArrayEntries()) { traverseJNodes(entry, action); }
     break;
   default:
     throw Error("Unknown JNode type encountered during stringification.");

@@ -23,7 +23,7 @@ struct Boolean : Variant
   // Return reference boolean value
   [[nodiscard]] bool &getBoolean() { return (m_boolean); }
   [[nodiscard]] const bool &getBoolean() const { return (m_boolean); }
-  // Return string representation of boolean value
+  // Return string representation of value
   [[nodiscard]] std::string toString() const { return (m_boolean ? "true" : "false"); }
   // Make Boolean JNode
   static JNode make(bool boolean) { return (JNode{ std::make_unique<Boolean>(Boolean{ boolean }) }); }

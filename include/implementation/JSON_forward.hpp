@@ -1,3 +1,4 @@
+#pragma once
 // ========================================================
 // JSON forward declarations for interfaces/classes/structs
 // ========================================================

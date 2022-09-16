@@ -100,7 +100,7 @@ struct Number : Variant
   template<typename T> [[nodiscard]] T get() const { return (convertType<T>()); }
   // Set numbers value to int/long/long long/float/double/long double
   template<typename T> void set(T number) { *this = Number(number); }
-  // Get numeric string value
+  // Return string representation of value
   [[nodiscard]] std::string toString() const
   {
     if (auto pInteger = std::get_if<int>(&m_values)) {
