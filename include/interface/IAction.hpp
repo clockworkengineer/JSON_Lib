@@ -33,37 +33,40 @@ public:
   // ============================
   // JNode encountered so process
   // ============================
-  virtual void onJNode([[maybe_unused]] JNode &jNode) {}
-  virtual void onJNode([[maybe_unused]] const JNode &jNode) {}
+  virtual void onJNode([[maybe_unused]] JNode &jNode) { throwDefaultHandlerError(); }
+  virtual void onJNode([[maybe_unused]] const JNode &jNode) { throwDefaultHandlerError(); }
   // =============================
   // String encountered so process
   // =============================
-  virtual void onString([[maybe_unused]] JNode &jNodeString) {}
-  virtual void onString([[maybe_unused]] const JNode &jNodeString) {}
+  virtual void onString([[maybe_unused]] JNode &jNodeString) { throwDefaultHandlerError(); }
+  virtual void onString([[maybe_unused]] const JNode &jNodeString) { throwDefaultHandlerError(); }
   // =============================
   // Number encountered so process
   // =============================
-  virtual void onNumber([[maybe_unused]] JNode &jNodeNumber) {}
-  virtual void onNumber([[maybe_unused]] const JNode &jNodeNumber) {}
+  virtual void onNumber([[maybe_unused]] JNode &jNodeNumber) { throwDefaultHandlerError(); }
+  virtual void onNumber([[maybe_unused]] const JNode &jNodeNumber) { throwDefaultHandlerError(); }
   // ==============================
   // Boolean encountered so process
   // ==============================
-  virtual void onBoolean([[maybe_unused]] JNode &jNodeBoolean) {}
-  virtual void onBoolean([[maybe_unused]] const JNode &jNodeBoolean) {}
+  virtual void onBoolean([[maybe_unused]] JNode &jNodeBoolean) { throwDefaultHandlerError(); }
+  virtual void onBoolean([[maybe_unused]] const JNode &jNodeBoolean) { throwDefaultHandlerError(); }
   // ===========================
   // Null encountered so process
   // ===========================
-  virtual void onNull([[maybe_unused]] JNode &jNodeNull) {}
-  virtual void onNull([[maybe_unused]] const JNode &jNodeNull) {}
+  virtual void onNull([[maybe_unused]] JNode &jNodeNull) { throwDefaultHandlerError(); }
+  virtual void onNull([[maybe_unused]] const JNode &jNodeNull) { throwDefaultHandlerError(); }
   // ============================
   // Array encountered so process
   // ============================
-  virtual void onArray([[maybe_unused]] JNode &jNodeArray) {}
-  virtual void onArray([[maybe_unused]] const JNode &jNodeArray) {}
+  virtual void onArray([[maybe_unused]] JNode &jNodeArray) { throwDefaultHandlerError(); }
+  virtual void onArray([[maybe_unused]] const JNode &jNodeArray) { throwDefaultHandlerError(); }
   // =============================
   // Object encountered so process
   // =============================
-  virtual void onObject([[maybe_unused]] JNode &jNodeObject) {}
-  virtual void onObject([[maybe_unused]] const JNode &jNodeObject) {}
+  virtual void onObject([[maybe_unused]] JNode &jNodeObject) { throwDefaultHandlerError(); }
+  virtual void onObject([[maybe_unused]] const JNode &jNodeObject) { throwDefaultHandlerError(); }
+
+private:
+  void throwDefaultHandlerError() { throw Error("Trying to execute default action handler."); }
 };
 }// namespace JSON_Lib
