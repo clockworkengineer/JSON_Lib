@@ -5,48 +5,42 @@
 #include <set>
 #include <sstream>
 // ====
-// JSON
+// JSON 
 // ====
 #include "JSON.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Types.hpp"
 #include "IAction.hpp"
-// =================
-// LIBRARY NAMESPACE
-// =================
-namespace JSON_Lib {
 // ==================
 // JSON Tree Analysis
 // ==================
-class JSON_Analyzer : public IAction
+class JSON_Analyzer : public JSON_Lib::IAction
 {
 public:
   // ========================
   // Constructors/destructors
   // ========================
   JSON_Analyzer() = default;
-  JSON_Analyzer(const JSON_Analyzer &other) = delete;
-  JSON_Analyzer &operator=(const JSON_Analyzer &other) = delete;
-  JSON_Analyzer(IAction &&JNodeDetails) = delete;
-  JSON_Analyzer &operator=(JSON_Analyzer &&other) = delete;
   virtual ~JSON_Analyzer() = default;
   // Add JNode details to analysis
-  virtual void onJNode([[maybe_unused]] const JNode &jNode) override { totalNodes++; }
+  virtual void onJNode([[maybe_unused]] const JSON_Lib::JNode &jNode) override { totalNodes++; }
   // Add string details to analysis
-  virtual void onString(const String &jNodeString) override
+  virtual void onString(const JSON_Lib::JNode &jNode) override
   {
+    const JSON_Lib::String &jNodeString = JRef<JSON_Lib::String>(jNode);
     totalStrings++;
-    sizeInBytes += sizeof(String);
+    sizeInBytes += sizeof(JSON_Lib::String);
     sizeInBytes += jNodeString.getString().size();
     maxStringSize = std::max(jNodeString.getString().size(), maxKeySize);
     uniqueStrings.insert(jNodeString.getString());
   }
   // Add number details to analysis
-  virtual void onNumber([[maybe_unused]] const Number &jNodeNumber) override
+  virtual void onNumber(const JSON_Lib::JNode &jNode) override
   {
+    const JSON_Lib::Number &jNodeNumber = JRef<JSON_Lib::Number>(jNode);
     totalNumbers++;
-    sizeInBytes += sizeof(Number);
+    sizeInBytes += sizeof(JSON_Lib::Number);
     if (jNodeNumber.is<int>()) {
       totalInteger++;
     } else if (jNodeNumber.is<long>()) {
@@ -61,38 +55,39 @@ public:
       totalLongDouble++;
     }
   }
-  virtual void onBoolean([[maybe_unused]] const Boolean &jNodeBoolean) override
+  virtual void onBoolean([[maybe_unused]] const JSON_Lib::JNode &jNode) override
   {
     totalBoolean++;
-    sizeInBytes += sizeof(Boolean);
+    sizeInBytes += sizeof(JSON_Lib::Boolean);
   }
   // Add null details to analysis
-  virtual void onNull([[maybe_unused]] const Null &jNodeNull) override
+  virtual void onNull([[maybe_unused]] const JSON_Lib::JNode &jNode) override
   {
     totalNull++;
-    sizeInBytes += sizeof(Null);
+    sizeInBytes += sizeof(JSON_Lib::Null);
   }
   // Add array details to analysis
-  virtual void onArray(const Array &jNodeArray) override
+  virtual void onArray(const JSON_Lib::JNode &jNode) override
   {
+    const JSON_Lib::Array &jNodeArray = JRef<JSON_Lib::Array>(jNode);
     totalArrays++;
-    sizeInBytes += sizeof(Array);
+    sizeInBytes += sizeof(JSON_Lib::Array);
     maxArraySize = std::max(jNodeArray.size(), maxArraySize);
-    for ([[maybe_unused]] auto &jNodeEntry : jNodeArray.getArrayEntries()) { sizeInBytes += sizeof(JNode); }
+    for ([[maybe_unused]] auto &jNodeEntry : jNodeArray.getArrayEntries()) { sizeInBytes += sizeof(JSON_Lib::JNode); }
   }
   // Add object details to analysis
-  virtual void onObject(const Object &jNodeObject) override
+  virtual void onObject(const JSON_Lib::JNode &jNode) override
   {
+    const JSON_Lib::Object &jNodeObject = JRef<JSON_Lib::Object>(jNode);
     totalObjects++;
-    sizeInBytes += sizeof(Object);
+    sizeInBytes += sizeof(JSON_Lib::Object);
     maxObjectSize = std::max(jNodeObject.getObjectEntries().size(), maxObjectSize);
-
     for (auto &entry : jNodeObject.getObjectEntries()) {
-      auto &key = JSON_Lib::JRef<String>(entry.getKey()).getString();
+      auto &key = JSON_Lib::JRef<JSON_Lib::String>(entry.getKey()).getString();
       uniqueKeys.insert(key);
       maxKeySize = std::max(key.size(), maxKeySize);
       sizeInBytes += key.size();
-      sizeInBytes += sizeof(Object::Entry);
+      sizeInBytes += sizeof(JSON_Lib::Object::Entry);
       totalKeys++;
     }
   }
@@ -100,33 +95,33 @@ public:
   std::string dump()
   {
     std::stringstream os;
-    os << "\n--------------------JNode Sizes---------------------\n";
-    os << "JNode size " << sizeof(JNode) << " in bytes.\n";
-    os << "Object size " << sizeof(Object) << " in bytes.\n";
-    os << "Object Entry size " << sizeof(Object::Entry) << " in bytes.\n";
-    os << "Array size " << sizeof(Array) << " in bytes.\n";
-    os << "Number::Values size " << sizeof(Number::Values) << " in bytes.\n";
-    os << "Number size " << sizeof(Number) << " in bytes.\n";
-    os << "String size " << sizeof(String) << " in bytes.\n";
-    os << "Boolean size " << sizeof(Boolean) << " in bytes.\n";
-    os << "Null size " << sizeof(Null) << " in bytes.\n";
+    os << "\n--------------------JSON_Lib::JNode Sizes---------------------\n";
+    os << "JSON_Lib::JNode size " << sizeof(JSON_Lib::JNode) << " in bytes.\n";
+    os << "JSON_Lib::Object size " << sizeof(JSON_Lib::Object) << " in bytes.\n";
+    os << "JSON_Lib::Object Entry size " << sizeof(JSON_Lib::Object::Entry) << " in bytes.\n";
+    os << "JSON_Lib::Array size " << sizeof(JSON_Lib::Array) << " in bytes.\n";
+    os << "JSON_Lib::Number::Values size " << sizeof(JSON_Lib::Number::Values) << " in bytes.\n";
+    os << "JSON_Lib::Number size " << sizeof(JSON_Lib::Number) << " in bytes.\n";
+    os << "JSON_Lib::String size " << sizeof(JSON_Lib::String) << " in bytes.\n";
+    os << "JSON_Lib::Boolean size " << sizeof(JSON_Lib::Boolean) << " in bytes.\n";
+    os << "JSON_Lib::Null size " << sizeof(JSON_Lib::Null) << " in bytes.\n";
     os << "------------------JSON Tree Stats------------------\n";
     os << "JSON Tree contains " << totalNodes << " nodes.\n";
     os << "JSON Tree size " << sizeInBytes << " in bytes.\n";
-    os << "------------------JSON Object Stats------------------\n";
+    os << "------------------JSON JSON_Lib::Object Stats------------------\n";
     os << "JSON Tree contains " << totalObjects << " objectEntries.\n";
     os << "JSON Tree max object size " << maxObjectSize << ".\n";
     os << "JSON Tree total " << totalKeys << " keys.\n";
     os << "JSON Tree contains " << uniqueKeys.size() << " unique keys.\n";
     os << "JSON Tree max key size " << maxKeySize << " in bytes.\n";
-    os << "------------------JSON Array Stats------------------\n";
+    os << "------------------JSON JSON_Lib::Array Stats------------------\n";
     os << "JSON Tree contains " << totalArrays << " arrays.\n";
     os << "JSON Tree max array size " << maxArraySize << ".\n";
-    os << "------------------JSON String Stats------------------\n";
+    os << "------------------JSON JSON_Lib::String Stats------------------\n";
     os << "JSON Tree total " << totalStrings << " strings.\n";
     os << "JSON Tree contains " << uniqueStrings.size() << " unique strings.\n";
     os << "JSON Tree max string size " << maxStringSize << " in bytes.\n";
-    os << "------------------JSON Number Stats------------------\n";
+    os << "------------------JSON JSON_Lib::Number Stats------------------\n";
     os << "JSON Tree contains " << totalNumbers << " numbers.\n";
     os << "JSON Tree contains " << totalInteger << " integers.\n";
     os << "JSON Tree contains " << totalLong << " longs.\n";
@@ -134,33 +129,32 @@ public:
     os << "JSON Tree contains " << totalFloat << " floats.\n";
     os << "JSON Tree contains " << totalDouble << " doubles.\n";
     os << "JSON Tree contains " << totalLongDouble << " long doubles.\n";
-    os << "------------------JSON Boolean Stats------------------\n";
+    os << "------------------JSON JSON_Lib::Boolean Stats------------------\n";
     os << "JSON Tree contains " << totalBoolean << " booleans.\n";
-    os << "------------------JSON Null Stats------------------\n";
+    os << "------------------JSON JSON_Lib::Null Stats------------------\n";
     os << "JSON Tree contains " << totalNull << " nulls.\n";
     os << "----------------------------------------------------";
     return (os.str());
   }
-
 private:
   // JSON analysis data
   // Node
   int64_t totalNodes{};
   size_t sizeInBytes{};
-  // Object
+  // JSON_Lib::Object
   int64_t totalObjects{};
   size_t maxObjectSize{};
   int64_t totalKeys{};
   size_t maxKeySize{};
   std::set<std::string> uniqueKeys{};
-  // Array
+  // JSON_Lib::Array
   size_t maxArraySize{};
   int64_t totalArrays{};
-  // String
+  // JSON_Lib::String
   int64_t totalStrings{};
   std::set<std::string> uniqueStrings{};
   size_t maxStringSize{};
-  // Number
+  // JSON_Lib::Number
   int64_t totalNumbers{};
   int64_t totalInteger{};
   int64_t totalLong{};
@@ -168,9 +162,8 @@ private:
   int64_t totalFloat{};
   int64_t totalDouble{};
   int64_t totalLongDouble{};
-  // Boolean
+  // JSON_Lib::Boolean
   int64_t totalBoolean{};
-  // Null
+  // JSON_Lib::Null
   int64_t totalNull{};
 };
-}// namespace JSON_Lib

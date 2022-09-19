@@ -1,8 +1,8 @@
 //
-// Program: JSON_Analyze_File
+// Program: JSON_Convert_Numbers
 //
-// Description: For a each JSON file in a directory parse it, then analyze its
-// JSON tree and produce a output report of the analysis.
+// Description: For a each JSON file in a directory parse it, convert all
+// numbers to strings and save the result.
 //
 // Dependencies: C20++, PLOG, JSON_Lib.
 //
@@ -16,10 +16,10 @@
 #include <iostream>
 #include <string>
 #include <vector>
-// =============
-// JSON Analyzer
-// =============
-#include "JSON_Analyzer.hpp"
+// ==============
+// JSON Converter
+// ==============
+#include "JSON_Convert_Numbers.hpp"
 // =======
 // Logging
 // =======
@@ -49,17 +49,17 @@ std::vector<std::string> readJSONFileList()
   return (fileList);
 }
 /// <summary>
-/// Parse JSON file and analyze its JSON tree.
+/// Parse JSON file and convert numbers into strings in its JSON tree.
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName)
 {
-  PLOG_INFO << "Analyzing " << fileName;
-  const json::JSON json;
-  JSON_Analyzer jsonAnalyzer;
+  PLOG_INFO << "Converting Numbers ... " << fileName;
+  JSON_Convert_Numbers jsonConverter;
+  json::JSON json;
   json.parse(json::FileSource{ fileName });
-  json.traverse(jsonAnalyzer);
-  PLOG_INFO << jsonAnalyzer.dump();
+  json.traverse(jsonConverter);
+  json.print(json::FileDestination{ fileName + ".new" });
   PLOG_INFO << "Finished " << fileName << ".";
 }
 // ============================
@@ -68,19 +68,19 @@ void processJSONFile(const std::string &fileName)
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   // Initialise logging.
-  plog::init(plog::debug, "JSON_Analyze_File.log");
-  PLOG_INFO << "JSON_Analyze_File started ...";
+  plog::init(plog::debug, "JSON_Convert_Numbers.log");
+  PLOG_INFO << "JSON_Convert_Numbers started ...";
   PLOG_INFO << json::JSON().version();
-  // Analyze JSON files.
+  // Convert JSON files.
   for (auto &fileName : readJSONFileList()) {
     try {
-      std::cout << "Analyzing " << fileName << "\n";
+      std::cout << "Converting Numbers ... " << fileName << "\n";
       processJSONFile(fileName);
       std::cout << "Finished " << fileName << ".\n";
     } catch (std::exception &ex) {
       std::cout << ex.what() << "\n";
     }
   }
-  PLOG_INFO << "JSON_Analyze_File exited.";
+  PLOG_INFO << "JSON_Convert_Numbers exited.";
   exit(EXIT_SUCCESS);
 }

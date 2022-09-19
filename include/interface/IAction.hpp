@@ -29,10 +29,6 @@ public:
   // Constructors/destructors
   // ========================
   IAction() = default;
-  IAction(const IAction &other) = delete;
-  IAction &operator=(const IAction &other) = delete;
-  IAction(IAction &&IAction) = delete;
-  IAction &operator=(IAction &&other) = delete;
   virtual ~IAction() = default;
   // ============================
   // JNode encountered so process
@@ -42,32 +38,32 @@ public:
   // =============================
   // String encountered so process
   // =============================
-  virtual void onString([[maybe_unused]] String &jNodeString) {}
-  virtual void onString([[maybe_unused]] const String &jNodeString) {}
+  virtual void onString([[maybe_unused]] JNode &jNodeString) {}
+  virtual void onString([[maybe_unused]] const JNode &jNodeString) {}
   // =============================
   // Number encountered so process
   // =============================
-  virtual void onNumber([[maybe_unused]] Number &jNodeNumber) {}
-  virtual void onNumber([[maybe_unused]] const Number &jNodeNumber) {}
+  virtual void onNumber([[maybe_unused]] JNode &jNodeNumber) {}
+  virtual void onNumber([[maybe_unused]] const JNode &jNodeNumber) {}
   // ==============================
   // Boolean encountered so process
   // ==============================
-  virtual void onBoolean([[maybe_unused]] Boolean &jNodeBoolean) {}
-  virtual void onBoolean([[maybe_unused]] const Boolean &jNodeBoolean) {}
+  virtual void onBoolean([[maybe_unused]] JNode &jNodeBoolean) {}
+  virtual void onBoolean([[maybe_unused]] const JNode &jNodeBoolean) {}
   // ===========================
   // Null encountered so process
   // ===========================
-  virtual void onNull([[maybe_unused]] Null &jNodeNull) {}
-  virtual void onNull([[maybe_unused]] const Null &jNodeNull) {}
+  virtual void onNull([[maybe_unused]] JNode &jNodeNull) {}
+  virtual void onNull([[maybe_unused]] const JNode &jNodeNull) {}
   // ============================
   // Array encountered so process
   // ============================
-  virtual void onArray([[maybe_unused]] Array &jNodeArray) {}
-  virtual void onArray([[maybe_unused]] const Array &jNodeArray) {}
+  virtual void onArray([[maybe_unused]] JNode &jNodeArray) {}
+  virtual void onArray([[maybe_unused]] const JNode &jNodeArray) {}
   // =============================
   // Object encountered so process
   // =============================
-  virtual void onObject([[maybe_unused]] Object &jNodeObject) {}
-  virtual void onObject([[maybe_unused]] const Object &jNodeObject) {}
+  virtual void onObject([[maybe_unused]] JNode &jNodeObject) {}
+  virtual void onObject([[maybe_unused]] const JNode &jNodeObject) {}
 };
 }// namespace JSON_Lib
