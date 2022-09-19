@@ -15,23 +15,29 @@
 // ==================
 // JSON Tree Analysis
 // ==================
-class JSON_Convert_Numbers : public JSON_Lib::IAction
+class JSON_Convert : public JSON_Lib::IAction
 {
 public:
   // ========================
   // Constructors/destructors
   // ========================
-  JSON_Convert_Numbers() = default;
-  virtual ~JSON_Convert_Numbers() = default;
+  JSON_Convert() = default;
+  virtual ~JSON_Convert() = default;
+  // Convert Number/Null/Boolean to String
   virtual void onJNode([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
   virtual void onString([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onNumber([[maybe_unused]] JSON_Lib::JNode &jNode) override
+  virtual void onNumber(JSON_Lib::JNode &jNode) override
   {
-    std::string string = JRef<JSON_Lib::Number>(jNode).toString();
-    jNode = JSON_Lib::String::make(string);
+    jNode = JSON_Lib::String::make(JRef<JSON_Lib::Number>(jNode).toString());
   }
-  virtual void onBoolean([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onNull([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
+  virtual void onBoolean(JSON_Lib::JNode &jNode) override
+  {
+    jNode = JSON_Lib::String::make(JRef<JSON_Lib::Boolean>(jNode).toString());
+  }
+  virtual void onNull(JSON_Lib::JNode &jNode) override
+  {
+    jNode = JSON_Lib::String::make(JRef<JSON_Lib::Null>(jNode).toString());
+  }
   virtual void onArray([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
   virtual void onObject([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
 

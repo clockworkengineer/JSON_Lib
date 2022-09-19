@@ -1,8 +1,8 @@
 //
-// Program: JSON_Convert_Numbers
+// Program: JSON_Convert_File
 //
 // Description: For a each JSON file in a directory parse it, convert all
-// numbers to strings and save the result.
+// numbers, booleans and nulls to strings and save the result.
 //
 // Dependencies: C20++, PLOG, JSON_Lib.
 //
@@ -19,7 +19,7 @@
 // ==============
 // JSON Converter
 // ==============
-#include "JSON_Convert_Numbers.hpp"
+#include "JSON_Convert.hpp"
 // =======
 // Logging
 // =======
@@ -54,8 +54,8 @@ std::vector<std::string> readJSONFileList()
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName)
 {
-  PLOG_INFO << "Converting Numbers ... " << fileName;
-  JSON_Convert_Numbers jsonConverter;
+  PLOG_INFO << "Converting ... " << fileName;
+  JSON_Convert jsonConverter;
   json::JSON json;
   json.parse(json::FileSource{ fileName });
   json.traverse(jsonConverter);
@@ -68,19 +68,19 @@ void processJSONFile(const std::string &fileName)
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   // Initialise logging.
-  plog::init(plog::debug, "JSON_Convert_Numbers.log");
-  PLOG_INFO << "JSON_Convert_Numbers started ...";
+  plog::init(plog::debug, "JSON_Convert_File.log");
+  PLOG_INFO << "JSON_Convert_File started ...";
   PLOG_INFO << json::JSON().version();
   // Convert JSON files.
   for (auto &fileName : readJSONFileList()) {
     try {
-      std::cout << "Converting Numbers ... " << fileName << "\n";
+      std::cout << "Converting ... " << fileName << "\n";
       processJSONFile(fileName);
       std::cout << "Finished " << fileName << ".\n";
     } catch (std::exception &ex) {
       std::cout << ex.what() << "\n";
     }
   }
-  PLOG_INFO << "JSON_Convert_Numbers exited.";
+  PLOG_INFO << "JSON_Convert_File exited.";
   exit(EXIT_SUCCESS);
 }
