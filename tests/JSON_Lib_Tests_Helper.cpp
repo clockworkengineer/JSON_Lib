@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSON_Lib
+// Unit Tests: JSON_Lib_Tests_Helper
 //
 // Description: JSON unit test helper functions.
 //

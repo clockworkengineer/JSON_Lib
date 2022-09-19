@@ -42,7 +42,7 @@ set(TEST_SOURCES
     JSON_Lib_Tests_Helper.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
-target_include_directories(${TEST_EXECUTABLE} PUBLIC ${PROJECT_CURRENT_SOURCE_DIR}/include)
+target_include_directories(${TEST_EXECUTABLE} PUBLIC ${PROJECT_CURRENT_SOURCE_DIR}/include ./include)
 target_link_libraries(${TEST_EXECUTABLE} ${JSON_LIBRARY_NAME} Catch2::Catch2WithMain)
 
 add_test(NAME ${TEST_EXECUTABLE} COMMAND ${TEST_EXECUTABLE})
