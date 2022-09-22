@@ -5,7 +5,7 @@
 #include <set>
 #include <sstream>
 // ====
-// JSON 
+// JSON
 // ====
 #include "JSON.hpp"
 #include "JSON_Sources.hpp"
@@ -95,17 +95,7 @@ public:
   std::string dump()
   {
     std::stringstream os;
-    os << "\n--------------------JSON_Lib::JNode Sizes---------------------\n";
-    os << "JSON_Lib::JNode size " << sizeof(JSON_Lib::JNode) << " in bytes.\n";
-    os << "JSON_Lib::Object size " << sizeof(JSON_Lib::Object) << " in bytes.\n";
-    os << "JSON_Lib::Object Entry size " << sizeof(JSON_Lib::Object::Entry) << " in bytes.\n";
-    os << "JSON_Lib::Array size " << sizeof(JSON_Lib::Array) << " in bytes.\n";
-    os << "JSON_Lib::Number::Values size " << sizeof(JSON_Lib::Number::Values) << " in bytes.\n";
-    os << "JSON_Lib::Number size " << sizeof(JSON_Lib::Number) << " in bytes.\n";
-    os << "JSON_Lib::String size " << sizeof(JSON_Lib::String) << " in bytes.\n";
-    os << "JSON_Lib::Boolean size " << sizeof(JSON_Lib::Boolean) << " in bytes.\n";
-    os << "JSON_Lib::Null size " << sizeof(JSON_Lib::Null) << " in bytes.\n";
-    os << "------------------JSON Tree Stats------------------\n";
+    os << "\n------------------JSON Tree Stats------------------\n";
     os << "JSON Tree contains " << totalNodes << " nodes.\n";
     os << "JSON Tree size " << sizeInBytes << " in bytes.\n";
     os << "------------------JSON JSON_Lib::Object Stats------------------\n";
@@ -136,6 +126,22 @@ public:
     os << "----------------------------------------------------";
     return (os.str());
   }
+  static std::string dumpJNodeSizes()
+  {
+    std::stringstream os;
+    os << "\n--------------------JSON_Lib::JNode Sizes---------------------\n";
+    os << "JSON_Lib::JNode size " << sizeof(JSON_Lib::JNode) << " in bytes.\n";
+    os << "JSON_Lib::Object size " << sizeof(JSON_Lib::Object) << " in bytes.\n";
+    os << "JSON_Lib::Object Entry size " << sizeof(JSON_Lib::Object::Entry) << " in bytes.\n";
+    os << "JSON_Lib::Array size " << sizeof(JSON_Lib::Array) << " in bytes.\n";
+    os << "JSON_Lib::Number::Values size " << sizeof(JSON_Lib::Number::Values) << " in bytes.\n";
+    os << "JSON_Lib::Number size " << sizeof(JSON_Lib::Number) << " in bytes.\n";
+    os << "JSON_Lib::String size " << sizeof(JSON_Lib::String) << " in bytes.\n";
+    os << "JSON_Lib::Boolean size " << sizeof(JSON_Lib::Boolean) << " in bytes.\n";
+    os << "JSON_Lib::Null size " << sizeof(JSON_Lib::Null) << " in bytes.\n";
+    return (os.str());
+  }
+
 private:
   // JSON analysis data
   // Node
