@@ -91,6 +91,14 @@ public:
       totalKeys++;
     }
   }
+  // Non-const api not used
+  virtual void onNumber([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
+  virtual void onBoolean([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
+  virtual void onNull([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
+  virtual void onArray([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
+  virtual void onObject([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
+  virtual void onJNode([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
+  virtual void onString([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
   // Output analysis details
   std::string dump()
   {
@@ -139,6 +147,18 @@ public:
     os << "JSON_Lib::String size " << sizeof(JSON_Lib::String) << " in bytes.\n";
     os << "JSON_Lib::Boolean size " << sizeof(JSON_Lib::Boolean) << " in bytes.\n";
     os << "JSON_Lib::Null size " << sizeof(JSON_Lib::Null) << " in bytes.\n";
+    return (os.str());
+  }
+  static std::string dumpNumericSizes()
+  {
+    std::stringstream os;
+    os << "\n--------------------System Numeric Sizes---------------------\n";
+    os << "Short size " << sizeof(short) << " in bytes.\n";
+    os << "Int size " << sizeof(int) << " in bytes.\n";
+    os << "Long Long size " << sizeof(long long) << " in bytes.\n";
+    os << "Float size " << sizeof(float) << " in bytes.\n";
+    os << "Double size " << sizeof(double) << " in bytes.\n";
+    os << "Long Double size " << sizeof(long double) << " in bytes.\n";
     return (os.str());
   }
 

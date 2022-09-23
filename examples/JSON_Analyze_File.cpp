@@ -70,7 +70,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   // Initialise logging.
   plog::init(plog::debug, "JSON_Analyze_File.log");
   PLOG_INFO << "JSON_Analyze_File started ...";
+  // Output JSON Lib version and data structure metrics
   PLOG_INFO << json::JSON().version();
+  PLOG_INFO << JSON_Analyzer::dumpNumericSizes();
   PLOG_INFO << JSON_Analyzer::dumpJNodeSizes();
   // Analyze JSON files.
   for (auto &fileName : readJSONFileList()) {
