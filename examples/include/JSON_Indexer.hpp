@@ -33,8 +33,11 @@ public:
   {
     for (auto &entry : JSON_Lib::JRef<JSON_Lib::Object>(jNode).getObjectEntries()) {
       auto &key = JSON_Lib::JRef<JSON_Lib::String>(entry.getKey()).getString();
-      if (!m_index.contains(key)) { m_index[key] = m_currentIndex++; }
-      entry.getKey() = std::to_string(m_currentIndex);
+      if (!m_index.contains(key)) {
+        m_index[key] = m_currentIndex;
+        m_array[m_currentIndex++] = key;
+      }
+      entry.getKey() = std::to_string(m_index[key]);
     }
   }
   virtual void onJNode([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
@@ -47,11 +50,12 @@ public:
   virtual void onObject([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
   virtual void onJNode([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
   virtual void onString([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  // Save away index to JSON file
-  void save([[maybe_unused]] JSON_Lib::JNode &jNode) {}
+  // Save away index to file
+  void save() { m_array.stringify(JSON_Lib::FileDestination{ m_fileName + ".idx" }); }
 
 private:
   std::string m_fileName;
   int m_currentIndex{};
   std::unordered_map<std::string, int> m_index;
+  JSON_Lib::JSON m_array;
 };

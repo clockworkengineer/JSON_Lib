@@ -56,11 +56,11 @@ void processJSONFile(const std::string &fileName)
 {
   PLOG_INFO << "Indexing " << fileName;
   json::JSON json;
-  JSON_Indexer jsonIndexer{ fileName + ".idx" };
+  JSON_Indexer jsonIndexer{ fileName };
   json.parse(json::FileSource{ fileName });
   json.traverse(jsonIndexer);
-  // jsonIndexer.save(json.root());
-  json.stringify(json::FileDestination{ fileName + ".idx" });
+  json.stringify(json::FileDestination{ fileName + ".new" });
+  jsonIndexer.save();
   PLOG_INFO << "Finished " << fileName << ".";
 }
 // ============================
