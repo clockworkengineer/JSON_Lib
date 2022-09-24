@@ -71,11 +71,16 @@ void processJSONFile(const std::string &fileName)
   json.parse(json::FileSource{ fileName });
   auto stop = chrono::high_resolution_clock::now();
   PLOG_INFO << elapsedTime(start, stop) << " microseconds to parse from file.";
-  // Stringify
+  // Stringify to file
+  start = chrono::high_resolution_clock::now();
+  json.stringify(json::FileDestination{ fileName + ".new" });
+  stop = chrono::high_resolution_clock::now();
+  PLOG_INFO << elapsedTime(start, stop) << " microseconds to stringify to file.";
+  // Stringify to buffer
   start = chrono::high_resolution_clock::now();
   json.stringify(jsonDestination);
   stop = chrono::high_resolution_clock::now();
-  PLOG_INFO << elapsedTime(start, stop) << " microseconds to stringify.";
+  PLOG_INFO << elapsedTime(start, stop) << " microseconds to stringify to buffer.";
   // Parse from buffer
   start = chrono::high_resolution_clock::now();
   json.parse(json::BufferSource{ jsonDestination.getBuffer() });
