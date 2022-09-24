@@ -59,11 +59,11 @@ TEST_CASE("Check JSON stringification of simple types to buffer and check values
 // ======================================================
 // Stringification of simple types to file and validation
 // ======================================================
-TEST_CASE("Check JSON stringification of simple types to file and check values.", "[JSON][Stringify][Simple][File][Validate]")
+TEST_CASE("Check JSON stringification of simple types to file and check values.",
+  "[JSON][Stringify][Simple][File][Validate]")
 {
   const JSON json;
-  SECTION(
-    "Stringify a string (Test string) to file and check its value.", "[JSON][Stringify][Simple][File][Validate]")
+  SECTION("Stringify a string (Test string) to file and check its value.", "[JSON][Stringify][Simple][File][Validate]")
   {
     const std::string expected{ R"("Test string.")" };
     const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
@@ -71,6 +71,7 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
+    jsonDestination.close();
     REQUIRE(crlfTolf(readFromFile(generatedFileName)) == expected);
   }
   SECTION("Stringify a boolean (true) to file and check its value.", "[JSON][Stringify][Simple][File][Validate]")
@@ -81,6 +82,7 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
+    jsonDestination.close();
     REQUIRE(crlfTolf(readFromFile(generatedFileName)) == expected);
   }
   SECTION("Stringify a number (98345) to file and check its value.", "[JSON][Stringify][Simple][File][Validate]")
@@ -91,6 +93,7 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
+    jsonDestination.close();
     REQUIRE(crlfTolf(readFromFile(generatedFileName)) == expected);
   }
   SECTION("Stringify a null to file and check its value.", "[JSON][Stringify][Simple][File][Validate]")
@@ -101,6 +104,7 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
+    jsonDestination.close();
     REQUIRE(crlfTolf(readFromFile(generatedFileName)) == expected);
   }
 }

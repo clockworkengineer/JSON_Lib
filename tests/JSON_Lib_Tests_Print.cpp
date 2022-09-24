@@ -146,6 +146,7 @@ TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
+    jsonDestination.close();
     REQUIRE(crlfTolf(readFromFile(generatedFileName)) == expected);
   }
   SECTION("Print a simple object to a file.", "[JSON][Print][Object][File]")
@@ -161,6 +162,7 @@ TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
+    jsonDestination.close();
     REQUIRE(crlfTolf(readFromFile(generatedFileName)) == expected);
   }
   SECTION("Print a nested array to a file.", "[JSON][Print][Array][File]")
@@ -191,6 +193,7 @@ TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
+    jsonDestination.close();
     REQUIRE(crlfTolf(readFromFile(generatedFileName)) == expected);
   }
   SECTION("Print a nested object to a file.", "[JSON][Print][Object][File]")
@@ -211,6 +214,7 @@ TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
+    jsonDestination.close();
     REQUIRE(crlfTolf(readFromFile(generatedFileName)) == expected);
   }
   SECTION("Print a complex JSON object to a file.", "[JSON][Print][Object][File]")
@@ -245,6 +249,7 @@ TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
+    jsonDestination.close();
     REQUIRE(crlfTolf(readFromFile(generatedFileName)) == expected);
   }
 }
@@ -292,6 +297,7 @@ TEST_CASE("Check Check setting of print indentation.", "[JSON][Print][Indent]")
     json.setIndent(8);
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
+    jsonDestination.close();
     REQUIRE(crlfTolf(readFromFile(generatedFileName)) == expected);
   }
   SECTION("Set ident to 0 and print JSON to a buffer (result same as stringify).", "[JSON][Print][Ident]")
@@ -339,6 +345,7 @@ TEST_CASE("Check JSON print of list of example JSON files.", "[JSON][Print]")
     FileDestination jsonDestination{ generatedFileName };
     json.parse(jsonSource);
     json.print(jsonDestination);
+    jsonDestination.close();
     REQUIRE(readFromFile(generatedFileName) == jsonFileBuffer);
   }
 }

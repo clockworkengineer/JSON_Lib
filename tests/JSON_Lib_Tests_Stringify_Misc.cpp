@@ -41,6 +41,7 @@ TEST_CASE("Check JSON stringification of a list of example JSON files.", "[JSON]
     FileDestination jsonDestination{ generatedFileName };
     json.parse(jsonSource);
     json.stringify(jsonDestination);
+    jsonDestination.close();
     REQUIRE(readFromFile(generatedFileName) == stripWhiteSpace(jsonFileBuffer));
   }
 }

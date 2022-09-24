@@ -96,6 +96,7 @@ TEST_CASE("Check IDestination (File) interface.", "[JSON][IDestination][File]")
     FileDestination file{ testFileName };
     std::filesystem::path filePath{ testFileName };
     file.add('t');
+    file.close();
     REQUIRE(std::filesystem::file_size(filePath) == 1);
   }
   SECTION("Create FileDestination, add an integer string and check result.", "[JSON][IDestination][File][Add]")
@@ -104,6 +105,7 @@ TEST_CASE("Check IDestination (File) interface.", "[JSON][IDestination][File]")
     FileDestination file{ testFileName };
     std::filesystem::path filePath{ testFileName };
     file.add("65767");
+    file.close();
     REQUIRE(std::filesystem::file_size(filePath) == 5);
     REQUIRE(readFromFile(testFileName) == "65767");
   }
@@ -114,11 +116,13 @@ TEST_CASE("Check IDestination (File) interface.", "[JSON][IDestination][File]")
     FileDestination file{ testFileName };
     std::filesystem::path filePath{ testFileName };
     file.add("65767");
+    file.close();
     REQUIRE(std::filesystem::file_size(filePath) == 5);
     REQUIRE(readFromFile(testFileName) == ("65767"));
     file.clear();
     REQUIRE(std::filesystem::file_size(filePath) == 0);
     file.add("65767");
+    file.close();
     REQUIRE(std::filesystem::file_size(filePath) == 5);
     REQUIRE(readFromFile(testFileName) == ("65767"));
   }
@@ -130,6 +134,7 @@ TEST_CASE("Check IDestination (File) interface.", "[JSON][IDestination][File]")
     file.add("65767\n");
     file.add("22222\n");
     file.add("33333\n");
+    file.close();
     REQUIRE(std::filesystem::file_size(filePath) == 21);
     REQUIRE(readFromFile(testFileName) == ("65767\r\n22222\r\n33333\r\n"));
   }

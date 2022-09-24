@@ -105,6 +105,7 @@ TEST_CASE("Check whitespace stripping with escape characters.", "[JSON][Parse][S
     jsonSource.reset();
     FileDestination strippedDestination{ generatedFileName };
     json.strip(jsonSource, strippedDestination);
+    strippedDestination.close();
     REQUIRE(jsonDestination.getBuffer() == readFromFile(generatedFileName));
   }
 }
@@ -137,6 +138,7 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
     jsonSource.reset();
     FileDestination strippedDestination{ generatedFileName };
     json.strip(jsonSource, strippedDestination);
+    strippedDestination.close();
     REQUIRE(jsonDestination.getBuffer() == readFromFile(generatedFileName));
   }
 }

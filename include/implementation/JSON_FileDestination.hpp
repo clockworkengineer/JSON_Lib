@@ -44,18 +44,20 @@ public:
     } else {
       m_destination.put(ch);
     }
-    m_destination.flush();
   }
   virtual void add(const std::string &bytes) override
   {
     for (auto ch : bytes) { add(ch); }
-    m_destination.flush();
   }
   virtual void clear() override
   {
     if (m_destination.is_open()) { m_destination.close(); }
     m_destination.open(m_filename.c_str(), std::ios_base::binary | std::ios_base::trunc);
     if (!m_destination.is_open()) { throw Error("File output stream failed to open or could not be created."); }
+  }
+  virtual void close() override 
+  {
+    m_destination.flush();
   }
   // ================
   // PUBLIC VARIABLES
