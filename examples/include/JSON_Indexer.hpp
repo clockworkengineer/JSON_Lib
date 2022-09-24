@@ -25,11 +25,8 @@ public:
   JSON_Indexer() = default;
   explicit JSON_Indexer(const std::string &fileName) : m_fileName(fileName) {}
   virtual ~JSON_Indexer() = default;
-  virtual void onNumber([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onBoolean([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onNull([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onArray([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onObject([[maybe_unused]] JSON_Lib::JNode &jNode) override
+  // Create index to object key mapping and modify object key to use index
+  virtual void onObject(JSON_Lib::JNode &jNode) override
   {
     for (auto &entry : JSON_Lib::JRef<JSON_Lib::Object>(jNode).getObjectEntries()) {
       auto &key = JSON_Lib::JRef<JSON_Lib::String>(entry.getKey()).getString();
@@ -40,6 +37,10 @@ public:
       entry.getKey() = std::to_string(m_index[key]);
     }
   }
+  virtual void onNumber([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
+  virtual void onBoolean([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
+  virtual void onNull([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
+  virtual void onArray([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
   virtual void onJNode([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
   virtual void onString([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
   // Const api not used
@@ -50,7 +51,7 @@ public:
   virtual void onObject([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
   virtual void onJNode([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
   virtual void onString([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  // Save away index to file
+  // Save away index (JSON array) to file
   void save() { m_array.stringify(JSON_Lib::FileDestination{ m_fileName + ".idx" }); }
 
 private:
