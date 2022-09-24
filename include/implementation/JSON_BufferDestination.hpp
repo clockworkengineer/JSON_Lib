@@ -40,7 +40,6 @@ public:
   virtual void add(const char ch) override { m_buffer.push_back(ch); }
   virtual void clear() override { m_buffer.clear(); }
   [[nodiscard]] const std::string &getBuffer() const { return (m_buffer); }
-  virtual void close() override {}
   // ================
   // PUBLIC VARIABLES
   // ================

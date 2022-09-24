@@ -42,9 +42,5 @@ public:
   // Clear the curent destination
   // ===========================
   virtual void clear() = 0;
-  // =================
-  // Close destination
-  // =================
-  virtual void close() = 0;
 };
 }// namespace JSON_Lib

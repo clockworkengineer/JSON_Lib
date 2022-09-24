@@ -55,10 +55,7 @@ public:
     m_destination.open(m_filename.c_str(), std::ios_base::binary | std::ios_base::trunc);
     if (!m_destination.is_open()) { throw Error("File output stream failed to open or could not be created."); }
   }
-  virtual void close() override 
-  {
-    m_destination.flush();
-  }
+  void close() { m_destination.flush(); }
   // ================
   // PUBLIC VARIABLES
   // ================
