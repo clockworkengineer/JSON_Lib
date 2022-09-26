@@ -14,10 +14,8 @@
 // =======
 // C++ STL
 // =======
-#include <chrono>
-#include <cstdlib>
 #include <filesystem>
-#include <iostream>
+#include <string>
 #include <stdexcept>
 // ====
 // JSON
@@ -115,8 +113,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     // Loop and process each top level entry
     PLOG_INFO << "Displaying settings ...";
     for (const auto &entry : json::JRef<json::Object>(settingsRoot).getObjectEntries()) { processEntry(entry); }
-  } catch (std::exception &e) {
-    PLOG_ERROR << "Error: " << e.what();
+  } catch (std::exception &ex) {
+    PLOG_ERROR << "Error: " << ex.what();
   }
   PLOG_INFO << "JSON_Display_Settings exited.";
   exit(EXIT_SUCCESS);

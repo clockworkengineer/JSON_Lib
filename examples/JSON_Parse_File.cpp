@@ -13,10 +13,11 @@
 // =======
 // C++ STL
 // =======
-#include <chrono>
-#include <cstdlib>
 #include <filesystem>
-#include <iostream>
+#include <string>
+#include <vector>
+#include <stdexcept>
+#include <chrono>
 // ====
 // JSON
 // ====
@@ -105,11 +106,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   // For each json parse it, stringify it and display unless its to large.
   for (auto &fileName : readJSONFileList()) {
     try {
-      std::cout << "Processing " << fileName << "\n";
       processJSONFile(fileName);
-      std::cout << "Finished " << fileName << ".\n";
     } catch (std::exception &ex) {
-      std::cout << ex.what() << "\n";
+      PLOG_ERROR << "Error: " << ex.what();
     }
   }
   exit(EXIT_SUCCESS);

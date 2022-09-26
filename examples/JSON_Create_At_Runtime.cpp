@@ -9,6 +9,10 @@
 // =============
 // INCLUDE FILES
 // =============
+// =======
+// C++ STL
+// =======
+#include <stdexcept>
 // ====
 // JSON
 // ====
@@ -76,8 +80,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
       { "object", json::JNode{ { "currency", "USD" }, { "value", json::JNode{ 23.22, 33, 55, 99.99 } } } } };
     json2.stringify(destination);
     PLOG_INFO << destination.getBuffer();
-  } catch (std::exception &e) {
-    PLOG_ERROR << "Error: " << e.what();
+  } catch (std::exception &ex) {
+    PLOG_ERROR << "Error: " << ex.what();
   }
   PLOG_INFO << "JSON_Create_At_Runtime exited.";
   exit(EXIT_SUCCESS);

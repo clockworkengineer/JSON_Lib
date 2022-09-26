@@ -13,9 +13,9 @@
 // C++ STL
 // =======
 #include <filesystem>
-#include <iostream>
 #include <string>
 #include <vector>
+#include <stdexcept>
 // ==============
 // JSON Converter
 // ==============
@@ -74,9 +74,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   // Convert JSON files.
   for (auto &fileName : readJSONFileList()) {
     try {
-      std::cout << "Converting ... " << fileName << "\n";
       processJSONFile(fileName);
-      std::cout << "Finished " << fileName << ".\n";
     } catch (std::exception &ex) {
       std::cout << ex.what() << "\n";
     }

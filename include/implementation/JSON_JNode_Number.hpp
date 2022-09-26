@@ -148,7 +148,7 @@ private:
         }
         if (end != number.size()) { return (false); }
         *this = Number(value);
-      } catch ([[maybe_unused]] const std::exception &e) {
+      } catch ([[maybe_unused]] const std::exception &ex) {
         return (false);
       }
       return (true);

@@ -1,8 +1,10 @@
 //
 // Program: JSON_Index_File
 //
-// Description: For a each JSON file in a directory parse it, then analyze its
-// JSON tree and produce a output report of the analysis.
+// Description: For a each JSON file in a directory parse it, then create a JSON
+// array of all its keys, write them away to an index file and create a new JSON file
+// using indexes instead of key values (note the index are just numeric string values
+// starting at "0" and incementing by one for each new key).
 //
 // Dependencies: C20++, PLOG, JSON_Lib.
 //
@@ -13,9 +15,9 @@
 // C++ STL
 // =======
 #include <filesystem>
-#include <iostream>
 #include <string>
 #include <vector>
+#include <stdexcept>
 // =============
 // JSON Analyzer
 // =============
@@ -49,7 +51,10 @@ std::vector<std::string> readJSONFileList()
   return (fileList);
 }
 /// <summary>
-/// Parse JSON file and analyze its JSON tree.
+/// Parse JSON file, travserse its JSON tree to produce an index of
+/// object keys, modify the object keys to be these index values and
+/// write away JSON array of key values to .idx file plus the modified
+/// JSON with index values to a file with extenstion ".new".
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName)
@@ -75,9 +80,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   // Analyze JSON files.
   for (auto &fileName : readJSONFileList()) {
     try {
-      std::cout << "Indexing " << fileName << "\n";
       processJSONFile(fileName);
-      std::cout << "Finished " << fileName << ".\n";
     } catch (std::exception &ex) {
       std::cout << ex.what() << "\n";
     }

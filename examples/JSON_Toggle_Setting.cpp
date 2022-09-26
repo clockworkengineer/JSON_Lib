@@ -12,10 +12,8 @@
 // =======
 // C++ STL
 // =======
-#include <chrono>
-#include <cstdlib>
 #include <filesystem>
-#include <iostream>
+#include <string>
 // ====
 // JSON
 // ====
@@ -71,8 +69,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     enabled = !enabled;
     // Write back settings with toggled flag
     json.print(json::FileDestination{ jsonSettingsFile() });
-  } catch (std::exception &e) {
-    PLOG_ERROR << "Error: " << e.what();
+  } catch (std::exception &ex) {
+    PLOG_ERROR << "Error: " << ex.what();
   }
   PLOG_INFO << "JSON_Toggle_Setting exited.";
   exit(EXIT_SUCCESS);

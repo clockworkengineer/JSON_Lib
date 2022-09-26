@@ -13,6 +13,12 @@
 // =======
 // C++ STL
 // =======
+// =======
+// C++ STL
+// =======
+#include <filesystem>
+#include <string>
+#include <stdexcept>
 // ====
 // JSON
 // ====
@@ -78,8 +84,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     PLOG_INFO << json::JSON().version();
     // Update current sequence
     nextFibonacci();
-  } catch (std::exception &e) {
-    PLOG_ERROR << "Error: " << e.what();
+  } catch (std::exception &ex) {
+    PLOG_ERROR << "Error: " << ex.what();
   }
   PLOG_INFO << "JSON_Fibonacci exited.";
   exit(EXIT_SUCCESS);
