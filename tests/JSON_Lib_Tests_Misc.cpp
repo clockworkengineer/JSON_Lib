@@ -91,7 +91,7 @@ TEST_CASE("Check whitespace stripping with escape characters.", "[JSON][Parse][S
     BufferSource jsonSource{ R"(   [  "fffgh \/ \n\t \p \w \u1234 "  ]       )" };
     BufferDestination strippedDestination;
     json.strip(jsonSource, strippedDestination);
-    REQUIRE(strippedDestination.getBuffer() == "[\"fffgh / \\n\\t p w \\u1234 \"]");
+    REQUIRE(strippedDestination.getBuffer() == "[\"fffgh \\/ \\n\\t \\p \\w \\u1234 \"]");
   }
   TEST_FILE_LIST(testFile);
   SECTION("Stripped (File) should be the same as parsed then stringified JSON.", "[JSON][Parse][Strip]")

@@ -33,6 +33,7 @@ namespace JSON_Lib {
 // ===============
 // PRIVATE METHODS
 // ===============
+
 /// <summary>
 /// Has the end of a number been reached in source stream ?
 /// </summary>
@@ -47,10 +48,9 @@ bool JSON_Impl::endOfNumber(ISource &source)
 /// Extract a string from a JSON encoded source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
-/// <param name="translate">== true and escapes found then they need
 /// translating.</param>
 /// <returns>Extracted string</returns>
-std::string JSON_Impl::extractString(ISource &source, bool translate)
+std::string JSON_Impl::extractString(ISource &source)
 {
   bool translateEscapes = false;
   if (source.current() != '"') { throw Error(source.getPosition(), "Missing opening '\"' on string."); }
@@ -60,15 +60,15 @@ std::string JSON_Impl::extractString(ISource &source, bool translate)
     if (source.current() == '\\') {
       extracted += '\\';
       source.next();
-      if (!translate && !m_translator->validEscape(source.current())) { extracted.pop_back(); }
-      translateEscapes = translate;
+      if (!JSON_Impl::m_translator->validEscape(source.current())) { extracted.pop_back(); }
+      translateEscapes = true;
     }
     extracted += source.current();
     source.next();
   }
   if (source.current() != '"') { throw Error(source.getPosition(), "Missing closing '\"' on string."); }
   // Need to translate escapes to UTF8
-  if (translateEscapes) { extracted = m_translator->fromJSON(extracted); }
+  if (translateEscapes) { extracted = JSON_Impl::m_translator->fromJSON(extracted); }
   source.next();
   return (extracted);
 }

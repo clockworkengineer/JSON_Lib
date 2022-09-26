@@ -44,9 +44,17 @@ void JSON_Impl::stripWhitespace(ISource &source, IDestination &destination)
     if (!source.isWS()) {
       destination.add(source.current());
       if (source.current() == '"') {
-        destination.add(extractString(source, false));
-        destination.add('"');
-        continue;
+        source.next();
+        while (source.more() && source.current() != '"') {
+          if (source.current() == '\\') {
+            destination.add(source.current());
+            source.next();
+          }
+          destination.add(source.current());
+          source.next();
+        }
+        if (source.current() != '"') { throw Error(source.getPosition(), "Missing closing '\"' on string."); }
+        destination.add(source.current());
       }
     }
     source.next();

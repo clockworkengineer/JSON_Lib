@@ -93,7 +93,7 @@ private:
   // Has end of number been reached ?
   static bool endOfNumber(ISource &source);
   // Parse JSON
-  static std::string extractString(ISource &source, bool translate = true);
+  static std::string extractString(ISource &source);
   static Object::Entry parseKeyValuePair(ISource &source);
   static JNode parseString(ISource &source);
   static JNode parseNumber(ISource &source);
