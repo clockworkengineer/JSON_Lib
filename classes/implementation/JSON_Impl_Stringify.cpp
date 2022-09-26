@@ -31,6 +31,9 @@ namespace JSON_Lib {
 // =======================
 // PUBLIC STATIC VARIABLES
 // =======================
+// =================
+// PRIVATE FUNCTIONS
+// =================
 // ===============
 // PRIVATE METHODS
 // ===============

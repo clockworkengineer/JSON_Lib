@@ -30,26 +30,16 @@ namespace JSON_Lib {
 // =======================
 // PUBLIC STATIC VARIABLES
 // =======================
-// ===============
-// PRIVATE METHODS
-// ===============
-/// <summary>
-/// Has the end of a number been reached in source stream ?
-/// </summary>
-/// <param name="source">Source of JSON.</param>
-/// translating.</param>
-/// <returns>==true on end of number</returns>
-bool JSON_Impl::endOfNumber(ISource &source)
-{
-  return (source.isWS() || source.current() == ',' || source.current() == ']' || source.current() == '}');
-}
+// =================
+// PRIVATE FUNCTIONS
+// =================
 /// <summary>
 /// Extract a string from a JSON encoded source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
-/// translating.</param>
+///  <param name="translator">String translator.</param>
 /// <returns>Extracted string</returns>
-std::string JSON_Impl::extractString(ISource &source)
+std::string extractString(ISource &source, ITranslator &translator)
 {
   bool translateEscapes = false;
   if (source.current() != '"') { throw Error(source.getPosition(), "Missing opening '\"' on string."); }
@@ -59,7 +49,7 @@ std::string JSON_Impl::extractString(ISource &source)
     if (source.current() == '\\') {
       extracted += '\\';
       source.next();
-      if (!m_translator->validEscape(source.current())) { extracted.pop_back(); }
+      if (!translator.validEscape(source.current())) { extracted.pop_back(); }
       translateEscapes = true;
     }
     extracted += source.current();
@@ -67,10 +57,22 @@ std::string JSON_Impl::extractString(ISource &source)
   }
   if (source.current() != '"') { throw Error(source.getPosition(), "Missing closing '\"' on string."); }
   // Need to translate escapes to UTF8
-  if (translateEscapes) { extracted = m_translator->fromJSON(extracted); }
+  if (translateEscapes) { extracted = translator.fromJSON(extracted); }
   source.next();
   return (extracted);
 }
+/// <summary>
+/// Has the end of a number been reached in source stream ?
+/// </summary>
+/// <param name="source">Source of JSON.</param>
+/// <returns>==true on end of number</returns>
+bool endOfNumber(ISource &source)
+{
+  return (source.isWS() || source.current() == ',' || source.current() == ']' || source.current() == '}');
+}
+// ===============
+// PRIVATE METHODS
+// ===============
 /// <summary>
 /// Parse a Object key/value pair from a JSON encoded source stream.
 /// </summary>
@@ -79,7 +81,7 @@ std::string JSON_Impl::extractString(ISource &source)
 Object::Entry JSON_Impl::parseObjectEntry(ISource &source)
 {
   source.ignoreWS();
-  const std::string key{ extractString(source) };
+  const std::string key{ extractString(source, *m_translator) };
   source.ignoreWS();
   if (source.current() != ':') { throw Error(source.getPosition(), "Missing ':' in key value pair."); }
   source.next();
@@ -90,7 +92,7 @@ Object::Entry JSON_Impl::parseObjectEntry(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>String JNode.</returns>
-JNode JSON_Impl::parseString(ISource &source) { return (String::make(extractString(source))); }
+JNode JSON_Impl::parseString(ISource &source) { return (String::make(extractString(source, *m_translator))); }
 /// <summary>
 /// Parse a number from a JSON source stream.
 /// </summary>

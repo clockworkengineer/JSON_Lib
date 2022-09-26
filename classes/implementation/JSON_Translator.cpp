@@ -37,6 +37,9 @@ static const std::vector<std::pair<const char, const char>> escapeSequences{ { '
 // =======================
 // PUBLIC STATIC VARIABLES
 // =======================
+// =================
+// PRIVATE FUNCTIONS
+// =================
 // ===============
 // PRIVATE METHODS
 // ===============

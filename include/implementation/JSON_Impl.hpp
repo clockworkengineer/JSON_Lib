@@ -90,10 +90,6 @@ private:
   // ===============
   // PRIVATE METHODS
   // ===============
-  // Has end of number been reached ?
-  static bool endOfNumber(ISource &source);
-  // Extract string from source stream
-  static std::string extractString(ISource &source);
   // Parse JSON
   static Object::Entry parseObjectEntry(ISource &source);
   static JNode parseString(ISource &source);
@@ -102,6 +98,7 @@ private:
   static JNode parseNull(ISource &source);
   static JNode parseObject(ISource &source);
   static JNode parseArray(ISource &source);
+  // Produce JSON tree
   static JNode parseJNodes(ISource &source);
   // Stringify JSON
   static void stringifyNumber(const JNode &jNode, IDestination &destination);
@@ -113,8 +110,6 @@ private:
   static void stringifyArray(const JNode &jNode, IDestination &destination, long indent);
   // Produce JSON test string from JSON tree
   static void stringifyJNodes(const JNode &jNode, IDestination &destination, long indent);
-  // Remove JSON whitespace
-  static void stripWhitespace(ISource &source, IDestination &destination);
   // Traverse JSON tree
   template<typename T> static void traverseJNodes(T &jNode, IAction &action);
   // =================
