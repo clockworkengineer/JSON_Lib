@@ -83,38 +83,33 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value-Ref
     REQUIRE(readFromFile(generatedFileName) == stripWhiteSpace(readFromFile(testFileName)));
   }
 }
-TEST_CASE("Check whitespace stripping with escape characters.", "[JSON][Parse][Strip]")
-{
-  const JSON json;
-  SECTION("Strip JSON with escaped ascii characters.", "[JSON][Parse][Strip]")
-  {
-    BufferSource jsonSource{ R"(   [  "fffgh \/ \n\t \p \w \u1234 "  ]       )" };
-    BufferDestination strippedDestination;
-    json.strip(jsonSource, strippedDestination);
-    REQUIRE(strippedDestination.getBuffer() == "[\"fffgh \\/ \\n\\t \\p \\w \\u1234 \"]");
-  }
-  TEST_FILE_LIST(testFile);
-  SECTION("Stripped (File) should be the same as parsed then stringified JSON.", "[JSON][Parse][Strip]")
-  {
-    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
-    std::filesystem::remove(generatedFileName);
-    FileSource jsonSource{ prefixPath(testFile) };
-    BufferDestination jsonDestination;
-    json.parse(jsonSource);
-    json.stringify(jsonDestination);
-    jsonSource.reset();
-    FileDestination strippedDestination{ generatedFileName };
-    json.strip(jsonSource, strippedDestination);
-    strippedDestination.close();
-    REQUIRE(jsonDestination.getBuffer() == readFromFile(generatedFileName));
-  }
-}
 // =====================
 // Strip JSON Whitespace
 // =====================
 TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
 {
   const JSON json;
+  SECTION("Strip JSON with containing whitespace.", "[JSON][Parse][Strip]")
+  {
+    BufferSource jsonSource{ "[1,  \t 2,3,4,5,6,7  ]" };
+    BufferDestination strippedDestination;
+    json.strip(jsonSource, strippedDestination);
+    REQUIRE(strippedDestination.getBuffer() == "[1,2,3,4,5,6,7]");
+  }
+  SECTION("Strip JSON with trailing whitespace.", "[JSON][Parse][Strip]")
+  {
+    BufferSource jsonSource{ "[1,  \t 2,3,4,5,6,7  ]\t  \t" };
+    BufferDestination strippedDestination;
+    json.strip(jsonSource, strippedDestination);
+    REQUIRE(strippedDestination.getBuffer() == "[1,2,3,4,5,6,7]");
+  }
+  SECTION("Strip JSON with prefixed whitespace.", "[JSON][Parse][Strip]")
+  {
+    BufferSource jsonSource{ "\t\t   [1,  \t 2,3,4,5,6,7  ]" };
+    BufferDestination strippedDestination;
+    json.strip(jsonSource, strippedDestination);
+    REQUIRE(strippedDestination.getBuffer() == "[1,2,3,4,5,6,7]");
+  }
   TEST_FILE_LIST(testFile);
   SECTION("Stripped (Buffer) should be the same as parsed then stringified JSON.", "[JSON][Parse][Strip]")
   {
@@ -140,5 +135,12 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
     json.strip(jsonSource, strippedDestination);
     strippedDestination.close();
     REQUIRE(jsonDestination.getBuffer() == readFromFile(generatedFileName));
+  }
+  SECTION("Strip JSON with escaped ascii characters.", "[JSON][Parse][Strip]")
+  {
+    BufferSource jsonSource{ R"(   [  "fffgh \/ \n\t \p \w \u1234 "  ]       )" };
+    BufferDestination strippedDestination;
+    json.strip(jsonSource, strippedDestination);
+    REQUIRE(strippedDestination.getBuffer() == "[\"fffgh \\/ \\n\\t \\p \\w \\u1234 \"]");
   }
 }

@@ -40,6 +40,7 @@ namespace JSON_Lib {
 /// <param name="destination">Destination for stripped JSON.</param>
 void JSON_Impl::stripWhitespace(ISource &source, IDestination &destination)
 {
+  // Note: That it is assumed that the JSON on the source stream is valid with no errors.
   while (source.more()) {
     if (!source.isWS()) {
       destination.add(source.current());
@@ -53,7 +54,6 @@ void JSON_Impl::stripWhitespace(ISource &source, IDestination &destination)
           destination.add(source.current());
           source.next();
         }
-        if (source.current() != '"') { throw Error(source.getPosition(), "Missing closing '\"' on string."); }
         destination.add(source.current());
       }
     }

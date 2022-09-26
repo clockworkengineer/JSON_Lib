@@ -33,7 +33,6 @@ namespace JSON_Lib {
 // ===============
 // PRIVATE METHODS
 // ===============
-
 /// <summary>
 /// Has the end of a number been reached in source stream ?
 /// </summary>
@@ -60,7 +59,7 @@ std::string JSON_Impl::extractString(ISource &source)
     if (source.current() == '\\') {
       extracted += '\\';
       source.next();
-      if (!JSON_Impl::m_translator->validEscape(source.current())) { extracted.pop_back(); }
+      if (!m_translator->validEscape(source.current())) { extracted.pop_back(); }
       translateEscapes = true;
     }
     extracted += source.current();
@@ -68,16 +67,16 @@ std::string JSON_Impl::extractString(ISource &source)
   }
   if (source.current() != '"') { throw Error(source.getPosition(), "Missing closing '\"' on string."); }
   // Need to translate escapes to UTF8
-  if (translateEscapes) { extracted = JSON_Impl::m_translator->fromJSON(extracted); }
+  if (translateEscapes) { extracted = m_translator->fromJSON(extracted); }
   source.next();
   return (extracted);
 }
 /// <summary>
-/// Parse a key/value pair from a JSON encoded source stream.
+/// Parse a Object key/value pair from a JSON encoded source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Object key/value pair.</returns>
-Object::Entry JSON_Impl::parseKeyValuePair(ISource &source)
+Object::Entry JSON_Impl::parseObjectEntry(ISource &source)
 {
   source.ignoreWS();
   const std::string key{ extractString(source) };
@@ -140,10 +139,10 @@ JNode JSON_Impl::parseObject(ISource &source)
   source.next();
   source.ignoreWS();
   if (source.current() != '}') {
-    objectEntries.emplace_back(parseKeyValuePair(source));
+    objectEntries.emplace_back(parseObjectEntry(source));
     while (source.current() == ',') {
       source.next();
-      objectEntries.emplace_back(parseKeyValuePair(source));
+      objectEntries.emplace_back(parseObjectEntry(source));
     }
   }
   if (source.current() != '}') { throw Error(source.getPosition(), "Missing closing '}' in object definition."); }

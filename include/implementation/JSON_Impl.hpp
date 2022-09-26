@@ -92,9 +92,10 @@ private:
   // ===============
   // Has end of number been reached ?
   static bool endOfNumber(ISource &source);
-  // Parse JSON
+  // Extract string from source stream
   static std::string extractString(ISource &source);
-  static Object::Entry parseKeyValuePair(ISource &source);
+  // Parse JSON
+  static Object::Entry parseObjectEntry(ISource &source);
   static JNode parseString(ISource &source);
   static JNode parseNumber(ISource &source);
   static JNode parseBoolean(ISource &source);
