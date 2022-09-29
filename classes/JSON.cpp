@@ -52,12 +52,12 @@ JSON::JSON(ITranslator *translator, IConverter *converter) : m_implementation(st
 /// JSON constructor (array).
 /// </summary>
 /// <param name="array">Intialiser list of single values or JNode.</param>
-JSON::JSON(const std::initializer_list<InternalTypes> &array) : JSON() { this->root() = JNode(array); }
+JSON::JSON(const std::initializer_list<InternalType> &array) : JSON() { this->root() = JNode(array); }
 /// <summary>
 /// JSON constructor (object).
 /// </summary>
 /// <param name="array">Intialiser list of key/value(JNode) pairs.</param>
-JSON::JSON(const std::initializer_list<std::pair<std::string, InternalTypes>> &object) : JSON()
+JSON::JSON(const std::initializer_list<std::pair<std::string, InternalType>> &object) : JSON()
 {
   this->root() = JNode(object);
 }

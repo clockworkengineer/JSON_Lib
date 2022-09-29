@@ -158,10 +158,7 @@ JNode &JSON_Impl::operator[](const std::string &key)
     return (m_jNodeRoot[key]);
   }
 }
-const JNode &JSON_Impl::operator[](const std::string &key) const// Objec
-{
-  return ((m_jNodeRoot)[key]);
-}
+const JNode &JSON_Impl::operator[](const std::string &key) const { return ((m_jNodeRoot)[key]); }
 /// <summary>
 /// Return array entry for the passed in index creating a root array if it does not exist
 /// or a placeholder(s) for a new JNode to be created into if the index(s) do not exist.

@@ -26,18 +26,18 @@ struct JNode
   };
   // Constructors/Destructors
   JNode() = default;
-  explicit JNode(float floatingPoint);
-  explicit JNode(double floatingPoint);
-  explicit JNode(long double floatingPoint);
-  explicit JNode(int integer);
-  explicit JNode(long integer);
-  explicit JNode(long long integer);
-  explicit JNode(const char *cString);
-  explicit JNode(const std::string &string);
-  explicit JNode(bool boolean);
+  explicit JNode(float value);
+  explicit JNode(double value);
+  explicit JNode(long double value);
+  explicit JNode(int value);
+  explicit JNode(long value);
+  explicit JNode(long long value);
+  explicit JNode(const char *value);
+  explicit JNode(const std::string &value);
+  explicit JNode(bool value);
   explicit JNode(std::nullptr_t null);
-  JNode(const std::initializer_list<JSON::InternalTypes> &array);
-  JNode(const std::initializer_list<std::pair<std::string, JSON::InternalTypes>> &object);
+  JNode(const std::initializer_list<JSON::InternalType> &array);
+  JNode(const std::initializer_list<std::pair<std::string, JSON::InternalType>> &object);
   explicit JNode(std::unique_ptr<Variant> jNodeVariant) : m_variant(std::move(jNodeVariant)) {}
   JNode(const JNode &other) = delete;
   JNode &operator=(const JNode &other) = delete;
@@ -45,16 +45,16 @@ struct JNode
   JNode &operator=(JNode &&other) = default;
   ~JNode() = default;
   // Assignment operators
-  JNode &operator=(float floatingPoint);
-  JNode &operator=(double floatingPoint);
-  JNode &operator=(long double floatingPoint);
-  JNode &operator=(int integer);
-  JNode &operator=(long integer);
-  JNode &operator=(long long integer);
-  JNode &operator=(const char *cString);
-  JNode &operator=(const std::string &string);
-  JNode &operator=(bool boolean);
-  JNode &operator=(std::nullptr_t null);
+  JNode &operator=(int value) { return (*this = JNode(value)); }
+  JNode &operator=(long value) { return (*this = JNode(value)); }
+  JNode &operator=(long long value) { return (*this = JNode(value)); }
+  JNode &operator=(float value) { return (*this = JNode(value)); }
+  JNode &operator=(double value) { return (*this = JNode(value)); }
+  JNode &operator=(long double value) { return (*this = JNode(value)); }
+  JNode &operator=(const char *value) { return (*this = JNode(value)); }
+  JNode &operator=(const std::string &value) { return (*this = JNode(value)); }
+  JNode &operator=(bool value) { return (*this = JNode(value)); }
+  JNode &operator=([[maybe_unused]] std::nullptr_t value) { return (*this = JNode(value)); }
   // Interrogate variant
   [[nodiscard]] bool isEmpty() const;
   [[nodiscard]] bool isObject() const;
@@ -74,7 +74,6 @@ struct JNode
   [[nodiscard]] const Variant &getVariant() const;
 
 private:
-  JNode createJNodeFromType(const JSON::InternalTypes &type);
   std::unique_ptr<Variant> m_variant;
 };
 }// namespace JSON_Lib

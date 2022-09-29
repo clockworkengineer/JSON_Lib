@@ -40,16 +40,13 @@ static const std::vector<std::pair<const char, const char>> escapeSequences{ { '
 // =================
 // PRIVATE FUNCTIONS
 // =================
-// ===============
-// PRIVATE METHODS
-// ===============
 /// <summary>
 /// Convert \uxxxx escape sequences in a string to their correct sequence
 //  of UTF-8 characters.
 /// </summary>
 /// <param name="current">Current character position.</param>
-/// <param name="numberOfCharacters">Number of characters left in source
-/// string.</param> <returns>UTF16 character for "\uxxx".</returns>
+/// <param name="numberOfCharacters">Number of characters left in source string.</param> 
+/// <returns>UTF16 character for "\uxxxx".</returns>
 char16_t decodeUTF16(std::string::const_iterator &current, ptrdiff_t numberOfCharacters)
 {
   if (numberOfCharacters >= 4) {
@@ -69,6 +66,31 @@ char16_t decodeUTF16(std::string::const_iterator &current, ptrdiff_t numberOfCha
   }
   throw JSON_Translator::Error("Syntax error detected.");
 }
+/// <summary>
+/// Convert UTF16 character into its \uxxxx encoded escape sequence.
+/// </summary>
+/// <param name="utf16Char">UTF16 encode character.</param>
+/// <returns>Escape sequence "\uxxxx" for utf16 character.</returns>
+std::string encodeUTF16(const char16_t utf16Char)
+{
+  std::string utf8Buffer;
+  const char *digits = "0123456789ABCDEF";
+  utf8Buffer += "\\u";
+  utf8Buffer += digits[(utf16Char >> 12) & 0x0f];
+  utf8Buffer += digits[(utf16Char >> 8) & 0x0f];
+  utf8Buffer += digits[(utf16Char >> 4) & 0x0f];
+  utf8Buffer += digits[(utf16Char)&0x0f];
+  return (utf8Buffer);
+}
+/// <summary>
+/// Determine whether passed in character is vaid ASCII
+/// </summary>
+/// <param name="utf16Char">UTF16 character.</param>
+/// <returns>==true if valid ASCII.</returns>
+bool isASCII(char16_t utf16Char) { return (((utf16Char > 0x001F) && (utf16Char < 0x0080))); }
+// ===============
+// PRIVATE METHODS
+// ===============
 // ==============
 // PUBLIC METHODS
 // ==============
@@ -123,7 +145,7 @@ std::string JSON_Translator::fromJSON(const std::string &jsonString)
         utf16Buffer += decodeUTF16(current, std::distance(current, jsonString.end()));
       }
       // Escaped ASCII
-      else if (*current > 0x1F) {
+      else if (isASCII(*current)) {
         utf16Buffer += *current;
         current++;
       }
@@ -146,27 +168,22 @@ std::string JSON_Translator::fromJSON(const std::string &jsonString)
 /// <returns>JSON string with escapes.</returns>
 std::string JSON_Translator::toJSON(const std::string &utf8String)
 {
-  std::string utf8Buffer;
+  std::string jsonString;
   for (char16_t utf16Char : m_converter.toUtf16(utf8String)) {
     // Control characters
     if (m_toEscape.contains(utf16Char)) {
-      utf8Buffer += '\\';
-      utf8Buffer += m_toEscape[utf16Char];
+      jsonString += '\\';
+      jsonString += m_toEscape[utf16Char];
     }
     // ASCII
-    else if ((utf16Char > 0x1F) && (utf16Char < 0x80)) {
-      utf8Buffer += static_cast<char>(utf16Char);
+    else if (isASCII(utf16Char)) {
+      jsonString += static_cast<char>(utf16Char);
     }
     // UTF8 escaped
     else {
-      static const char *digits = "0123456789ABCDEF";
-      utf8Buffer += "\\u";
-      utf8Buffer += digits[(utf16Char >> 12) & 0x0f];
-      utf8Buffer += digits[(utf16Char >> 8) & 0x0f];
-      utf8Buffer += digits[(utf16Char >> 4) & 0x0f];
-      utf8Buffer += digits[(utf16Char)&0x0f];
+      jsonString += encodeUTF16(utf16Char);
     }
   }
-  return (utf8Buffer);
+  return (jsonString);
 }
 }// namespace JSON_Lib

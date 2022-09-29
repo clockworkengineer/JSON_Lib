@@ -34,11 +34,12 @@ namespace JSON_Lib {
 // =================
 // PRIVATE FUNCTIONS
 // =================
-// ===============
-// PRIVATE METHODS
-// ===============
-// Create JNode from passed in type
-JNode JNode::createJNodeFromType(const JSON::InternalTypes &type)
+/// <summary>
+/// Create JNode from passed in type.
+/// </summary>
+/// <param name="type">Variant encapsulating type and value to be turned into JNode.</param>
+/// <returns>JNode for passed in type.</returns>
+JNode internalTypeToJNode(const JSON::InternalType &type)
 {
   if (auto pInteger = std::get_if<int>(&type)) {
     return (Number::make(*pInteger));
@@ -63,6 +64,9 @@ JNode JNode::createJNodeFromType(const JSON::InternalTypes &type)
   }
   throw Error("JNode of non-existant type could not be created.");
 }
+// ===============
+// PRIVATE METHODS
+// ===============
 // ==============
 // PUBLIC METHODS
 // ==============
@@ -70,29 +74,29 @@ JNode JNode::createJNodeFromType(const JSON::InternalTypes &type)
 // JNode constructors
 // ==================
 // Construct JNode from raw values
-JNode::JNode(int integer) { *this = Number::make(integer); }
-JNode::JNode(long integer) { *this = Number::make(integer); }
-JNode::JNode(long long integer) { *this = Number::make(integer); }
-JNode::JNode(float floatingPoint) { *this = Number::make(floatingPoint); }
-JNode::JNode(double floatingPoint) { *this = Number::make(floatingPoint); }
-JNode::JNode(long double floatingPoint) { *this = Number::make(floatingPoint); }
-JNode::JNode(const char *cString) { *this = String::make(cString); }
-JNode::JNode(const std::string &string) { *this = String::make(string); }
-JNode::JNode(bool boolean) { *this = Boolean::make(boolean); }
-JNode::JNode([[maybe_unused]] std::nullptr_t null) { *this = Null::make(); }
+JNode::JNode(int value) { *this = Number::make(value); }
+JNode::JNode(long value) { *this = Number::make(value); }
+JNode::JNode(long long value) { *this = Number::make(value); }
+JNode::JNode(float value) { *this = Number::make(value); }
+JNode::JNode(double value) { *this = Number::make(value); }
+JNode::JNode(long double value) { *this = Number::make(value); }
+JNode::JNode(const char *value) { *this = String::make(value); }
+JNode::JNode(const std::string &value) { *this = String::make(value); }
+JNode::JNode(bool value) { *this = Boolean::make(value); }
+JNode::JNode([[maybe_unused]] std::nullptr_t value) { *this = Null::make(); }
 // Construct JNode array from initializer list
-JNode::JNode(const std::initializer_list<JSON::InternalTypes> &array)
+JNode::JNode(const std::initializer_list<JSON::InternalType> &array)
 {
   Array::ArrayList jNodeArrayList;
-  for (const auto &entry : array) { jNodeArrayList.emplace_back(createJNodeFromType(entry)); }
+  for (const auto &entry : array) { jNodeArrayList.emplace_back(internalTypeToJNode(entry)); }
   *this = Array::make(jNodeArrayList);
 }
 // Construct JNode object from initializer list
-JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::InternalTypes>> &object)
+JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::InternalType>> &object)
 {
   Object::EntryList jObjectList;
   for (const auto &entry : object) {
-    jObjectList.emplace_back(Object::Entry(entry.first, createJNodeFromType(entry.second)));
+    jObjectList.emplace_back(Object::Entry(entry.first, internalTypeToJNode(entry.second)));
   }
   *this = Object::make(jObjectList);
 }
@@ -133,19 +137,6 @@ JNode &JNode::operator[](std::size_t index)
   }
 }
 const JNode &JNode::operator[](std::size_t index) const { return (JRef<Array>(*this)[index]); }
-// ==========================
-// JNode assignment operators
-// ==========================
-JNode &JNode::operator=(int integer) { return (*this = Number::make(integer)); }
-JNode &JNode::operator=(long integer) { return (*this = Number::make(integer)); }
-JNode &JNode::operator=(long long integer) { return (*this = Number::make(integer)); }
-JNode &JNode::operator=(float floatingPoint) { return (*this = Number::make(floatingPoint)); }
-JNode &JNode::operator=(double floatingPoint) { return (*this = Number::make(floatingPoint)); }
-JNode &JNode::operator=(long double floatingPoint) { return (*this = Number::make(floatingPoint)); }
-JNode &JNode::operator=(const char *cString) { return (*this = String::make(cString)); }
-JNode &JNode::operator=(const std::string &string) { return (*this = String::make(string)); }
-JNode &JNode::operator=(bool boolean) { return (*this = Boolean::make(boolean)); }
-JNode &JNode::operator=([[maybe_unused]] std::nullptr_t null) { return (*this = Null::make()); }
 // ==============================
 // Get reference to JNode variant
 // ==============================
