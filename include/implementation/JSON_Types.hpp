@@ -13,3 +13,4 @@
 #include "JSON_JNode_Object.hpp"
 #include "JSON_JNode_Array.hpp"
 #include "JSON_JNode_Reference.hpp"
+#include "JSON_JNode_Create.hpp"

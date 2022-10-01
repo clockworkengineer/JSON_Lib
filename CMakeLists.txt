@@ -31,7 +31,6 @@ set (JSON_SOURCES
     ./classes/implementation/JSON_Impl.cpp
     ./classes/implementation/JSON_Impl_Parse.cpp
     ./classes/implementation/JSON_Impl_Stringify.cpp
-    ./classes/implementation/JSON_JNode.cpp
     ./classes/implementation/JSON_Translator.cpp)
 
 set (JSON_INCLUDES
@@ -41,7 +40,6 @@ set (JSON_INCLUDES
     ./include/implementation/JSON_Types.hpp
     ./include/implementation/JSON_Error.hpp
     ./include/implementation/JSON_JNode.hpp
-    ./include/implementation/JSON_JNode_forward.hpp
     ./include/implementation/JSON_JNode_Variant.hpp
     ./include/implementation/JSON_JNode_Hole.hpp
     ./include/implementation/JSON_JNode_Object.hpp
@@ -51,6 +49,7 @@ set (JSON_INCLUDES
     ./include/implementation/JSON_JNode_Boolean.hpp
     ./include/implementation/JSON_JNode_Null.hpp
     ./include/implementation/JSON_JNode_Reference.hpp
+    ./include/implementation/JSON_JNode_Create.hpp
     ./include/implementation/JSON_Impl.hpp
     ./include/implementation/JSON_Sources.hpp
     ./include/implementation/JSON_BufferSource.hpp
