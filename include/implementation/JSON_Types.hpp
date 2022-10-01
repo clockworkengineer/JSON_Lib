@@ -3,8 +3,8 @@
 // JSON core definitions
 // =====================
 #include "JSON_Error.hpp"
-#include "JSON_JNode.hpp"
 #include "JSON_JNode_Variant.hpp"
+#include "JSON_JNode.hpp"
 #include "JSON_JNode_Hole.hpp"
 #include "JSON_JNode_Number.hpp"
 #include "JSON_JNode_String.hpp"

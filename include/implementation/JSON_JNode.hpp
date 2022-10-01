@@ -10,10 +10,6 @@
 // LIBRARY NAMESPACE
 // =================
 namespace JSON_Lib {
-// =========================================================
-// JNode forward declarations for interfaces/classes/structs
-// =========================================================
-#include "JSON_JNode_forward.hpp"
 // =====
 // JNode
 // =====
@@ -56,14 +52,14 @@ struct JNode
   JNode &operator=(bool value) { return (*this = JNode(value)); }
   JNode &operator=([[maybe_unused]] std::nullptr_t value) { return (*this = JNode(value)); }
   // Interrogate variant
-  [[nodiscard]] bool isEmpty() const;
-  [[nodiscard]] bool isObject() const;
-  [[nodiscard]] bool isArray() const;
-  [[nodiscard]] bool isNumber() const;
-  [[nodiscard]] bool isString() const;
-  [[nodiscard]] bool isBoolean() const;
-  [[nodiscard]] bool isNull() const;
-  [[nodiscard]] bool isHole() const;
+  bool isEmpty() const { return (m_variant == nullptr); }
+  bool isObject() const { return (m_variant->getType() == Variant::Type::object); }
+  bool isArray() const { return (m_variant->getType() == Variant::Type::array); }
+  bool isNumber() const { return (m_variant->getType() == Variant::Type::number); }
+  bool isString() const { return (m_variant->getType() == Variant::Type::string); }
+  bool isBoolean() const { return (m_variant->getType() == Variant::Type::boolean); }
+  bool isNull() const { return (m_variant->getType() == Variant::Type::null); }
+  bool isHole() const { return (m_variant->getType() == Variant::Type::hole); }
   // Indexing operators
   JNode &operator[](const std::string &key);
   const JNode &operator[](const std::string &key) const;

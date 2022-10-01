@@ -42,23 +42,23 @@ namespace JSON_Lib {
 JNode internalTypeToJNode(const JSON::InternalType &type)
 {
   if (auto pInteger = std::get_if<int>(&type)) {
-    return (Number::make(*pInteger));
+    return (JNode(*pInteger));
   } else if (auto pLong = std::get_if<long>(&type)) {
-    return (Number::make(*pLong));
+    return (JNode(*pLong));
   } else if (auto pLongLong = std::get_if<long long>(&type)) {
-    return (Number::make(*pLongLong));
+    return (JNode(*pLongLong));
   } else if (auto pFLoat = std::get_if<float>(&type)) {
-    return (Number::make(*pFLoat));
+    return (JNode(*pFLoat));
   } else if (auto pDouble = std::get_if<double>(&type)) {
-    return (Number::make(*pDouble));
+    return (JNode(*pDouble));
   } else if (auto pLongDouble = std::get_if<long double>(&type)) {
-    return (Number::make(*pLongDouble));
+    return (JNode(*pLongDouble));
   } else if (auto pString = std::get_if<std::string>(&type)) {
-    return (String::make(*pString));
+    return (JNode((*pString)));
   } else if (auto pBoolean = std::get_if<bool>(&type)) {
-    return (Boolean::make(*pBoolean));
+    return (JNode((*pBoolean)));
   } else if (auto pNull = std::get_if<std::nullptr_t>(&type)) {
-    return (Null::make());
+    return (JNode(nullptr));
   } else if (auto pJNode = std::get_if<JNode>(&type)) {
     return (std::move(*const_cast<JNode *>(pJNode)));
   }
@@ -100,17 +100,6 @@ JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::InternalTy
   }
   *this = Object::make(jObjectList);
 }
-// =========================
-// Interrogate JNode variant
-// =========================
-bool JNode::isEmpty() const { return (m_variant == nullptr); }
-bool JNode::isObject() const { return (m_variant->getType() == Variant::Type::object); }
-bool JNode::isArray() const { return (m_variant->getType() == Variant::Type::array); }
-bool JNode::isNumber() const { return (m_variant->getType() == Variant::Type::number); }
-bool JNode::isString() const { return (m_variant->getType() == Variant::Type::string); }
-bool JNode::isBoolean() const { return (m_variant->getType() == Variant::Type::boolean); }
-bool JNode::isNull() const { return (m_variant->getType() == Variant::Type::null); }
-bool JNode::isHole() const { return (m_variant->getType() == Variant::Type::hole); }
 // =====================
 // JNode index overloads
 // =====================
