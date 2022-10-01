@@ -6,6 +6,25 @@
 // LIBRARY NAMESPACE
 // =================
 namespace JSON_Lib {
+/// <summary>
+/// Create JNode from passed in type.
+/// </summary>
+/// <param name="type">Variant encapsulating type and value to be turned into JNode.</param>
+/// <returns>JNode for passed in type.</returns>
+inline JNode JNode::internalTypeToJNode(const JSON::InternalType &type)
+{
+  if (auto pValue = std::get_if<int>(&type)) { return (JNode(*pValue)); }
+  if (auto pValue = std::get_if<long>(&type)) { return (JNode(*pValue)); }
+  if (auto pValue = std::get_if<long long>(&type)) { return (JNode(*pValue)); }
+  if (auto pValue = std::get_if<float>(&type)) { return (JNode(*pValue)); }
+  if (auto pValue = std::get_if<double>(&type)) { return (JNode(*pValue)); }
+  if (auto pValue = std::get_if<long double>(&type)) { return (JNode(*pValue)); }
+  if (auto pValue = std::get_if<std::string>(&type)) { return (JNode((*pValue))); }
+  if (auto pValue = std::get_if<bool>(&type)) { return (JNode((*pValue))); }
+  if (auto pValue = std::get_if<std::nullptr_t>(&type)) { return (JNode(nullptr)); }
+  if (auto pValue = std::get_if<JNode>(&type)) { return (std::move(*const_cast<JNode *>(pValue))); }
+  throw Error("JNode of non-existant type could not be created.");
+}
 // ==================
 // JNode constructors
 // ==================
