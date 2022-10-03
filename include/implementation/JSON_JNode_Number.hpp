@@ -62,32 +62,34 @@ struct Number : Variant
     return (os.str());
   }
   // Convert values to another specified type
+  template<typename T, typename U> [[nodiscard]] T convert(U value) const
+  {
+    if constexpr (std::is_same_v<T, std::string>) {
+      return (numericToString(value));
+    } else {
+      return (static_cast<T>(value));
+    }
+  }
+  // Convert values to another specified type
   template<typename T> [[nodiscard]] T convertType() const
   {
-    if (auto pInteger = std::get_if<int>(&m_values)) {
-      return (static_cast<T>(*pInteger));
-    } else if (auto pLong = std::get_if<long>(&m_values)) {
-      return (static_cast<T>(*pLong));
-    } else if (auto pLongLong = std::get_if<long long>(&m_values)) {
-      return (static_cast<T>(*pLongLong));
-    } else if (auto pFloat = std::get_if<float>(&m_values)) {
-      return (static_cast<T>(*pFloat));
-    } else if (auto pDouble = std::get_if<double>(&m_values)) {
-      return (static_cast<T>(*pDouble));
-    } else if (auto pLongDouble = std::get_if<long double>(&m_values)) {
-      return (static_cast<T>(*pLongDouble));
-    }
+    if (auto pValue = std::get_if<int>(&m_values)) { return (convert<T>(*pValue)); }
+    if (auto pValue = std::get_if<long>(&m_values)) { return (convert<T>(*pValue)); }
+    if (auto pValue = std::get_if<long long>(&m_values)) { return (convert<T>(*pValue)); }
+    if (auto pValue = std::get_if<float>(&m_values)) { return (convert<T>(*pValue)); }
+    if (auto pValue = std::get_if<double>(&m_values)) { return (convert<T>(*pValue)); }
+    if (auto pValue = std::get_if<long double>(&m_values)) { return (convert<T>(*pValue)); }
     throw Error("Could not convert unknown type.");
   }
   // Constructors/Destructors
   Number() : Variant(Variant::Type::number) {}
-  explicit Number(const std::string &number) : Variant(Variant::Type::number) { convertNumber(number); }
-  explicit Number(int integer) : Variant(Variant::Type::number), m_values(integer) {}
-  explicit Number(long integer) : Variant(Variant::Type::number), m_values(integer) {}
-  explicit Number(long long integer) : Variant(Variant::Type::number), m_values(integer) {}
-  explicit Number(float floatingPoint) : Variant(Variant::Type::number), m_values(floatingPoint) {}
-  explicit Number(double floatingPoint) : Variant(Variant::Type::number), m_values(floatingPoint) {}
-  explicit Number(long double floatingPoint) : Variant(Variant::Type::number), m_values(floatingPoint) {}
+  explicit Number(const std::string &string) : Variant(Variant::Type::number) { convertNumber(string); }
+  explicit Number(int value) : Variant(Variant::Type::number), m_values(value) {}
+  explicit Number(long value) : Variant(Variant::Type::number), m_values(value) {}
+  explicit Number(long long value) : Variant(Variant::Type::number), m_values(value) {}
+  explicit Number(float value) : Variant(Variant::Type::number), m_values(value) {}
+  explicit Number(double value) : Variant(Variant::Type::number), m_values(value) {}
+  explicit Number(long double value) : Variant(Variant::Type::number), m_values(value) {}
   Number(const Number &other) = delete;
   Number &operator=(const Number &other) = delete;
   Number(Number &&other) = default;
@@ -101,23 +103,7 @@ struct Number : Variant
   // Set numbers value to int/long/long long/float/double/long double
   template<typename T> void set(T number) { *this = Number(number); }
   // Return string representation of value
-  [[nodiscard]] std::string toString() const
-  {
-    if (auto pInteger = std::get_if<int>(&m_values)) {
-      return (numericToString(*pInteger));
-    } else if (auto pLong = std::get_if<long>(&m_values)) {
-      return (numericToString(*pLong));
-    } else if (auto pLongLong = std::get_if<long long>(&m_values)) {
-      return (numericToString(*pLongLong));
-    } else if (auto pFloat = std::get_if<float>(&m_values)) {
-      return (numericToString(*pFloat));
-    } else if (auto pDouble = std::get_if<double>(&m_values)) {
-      return (numericToString(*pDouble));
-    } else if (auto pLongDouble = std::get_if<long double>(&m_values)) {
-      return (numericToString(*pLongDouble));
-    }
-    throw Error("Could not convert unknown type.");
-  }
+  [[nodiscard]] std::string toString() const { return (get<std::string>()); }
   // Set floating point to string conversion parameters
   inline static void setPrecision(int precision) { m_precision = precision; }
   inline static void setNotation(Notation notation) { m_notation = notation; }
