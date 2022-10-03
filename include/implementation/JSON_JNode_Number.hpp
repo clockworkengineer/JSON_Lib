@@ -12,13 +12,6 @@
 // LIBRARY NAMESPACE
 // =================
 namespace JSON_Lib {
-// ================
-// Number concepts
-// ================
-template<typename T>
-concept Integer = std::is_integral<T>::value;
-template<typename T>
-concept Float = std::is_floating_point<T>::value;
 // ======
 // Number
 // ======
@@ -35,52 +28,6 @@ struct Number : Variant
   static constexpr int kStringConversionBase{ 10 };
   // Floating point notation
   enum class Notation { normal = 0, fixed, scientific };
-  // Number to string
-  template<Integer T> [[nodiscard]] std::string numericToString(const T &number) const
-  {
-    std::ostringstream os;
-    os << number;
-    return os.str();
-  }
-  template<Float T> [[nodiscard]] std::string numericToString(const T &number) const
-  {
-    std::ostringstream os;
-    switch (m_notation) {
-    case Notation::normal:
-      os << std::defaultfloat << std::setprecision(m_precision) << number;
-      break;
-    case Notation::fixed:
-      os << std::fixed << std::setprecision(m_precision) << number;
-      break;
-    case Notation::scientific:
-      os << std::scientific << std::setprecision(m_precision) << number;
-      break;
-    default:
-      os << std::setprecision(m_precision) << number;
-    }
-    if (os.str().find('.') == std::string::npos) { return (os.str() + ".0"); }
-    return (os.str());
-  }
-  // Convert values to another specified type
-  template<typename T, typename U> [[nodiscard]] T convert(U value) const
-  {
-    if constexpr (std::is_same_v<T, std::string>) {
-      return (numericToString(value));
-    } else {
-      return (static_cast<T>(value));
-    }
-  }
-  // Convert values to another specified type
-  template<typename T> [[nodiscard]] T convertType() const
-  {
-    if (auto pValue = std::get_if<int>(&m_values)) { return (convert<T>(*pValue)); }
-    if (auto pValue = std::get_if<long>(&m_values)) { return (convert<T>(*pValue)); }
-    if (auto pValue = std::get_if<long long>(&m_values)) { return (convert<T>(*pValue)); }
-    if (auto pValue = std::get_if<float>(&m_values)) { return (convert<T>(*pValue)); }
-    if (auto pValue = std::get_if<double>(&m_values)) { return (convert<T>(*pValue)); }
-    if (auto pValue = std::get_if<long double>(&m_values)) { return (convert<T>(*pValue)); }
-    throw Error("Could not convert unknown type.");
-  }
   // Constructors/Destructors
   Number() : Variant(Variant::Type::number) {}
   explicit Number(const std::string &string) : Variant(Variant::Type::number) { convertNumber(string); }
@@ -99,7 +46,7 @@ struct Number : Variant
   template<typename T> [[nodiscard]] bool is() const { return (std::get_if<T>(&m_values) != nullptr); }
   // Return numbers value int/long long/float/double/long double.
   // Note: Can still return a integer value for a floating point.
-  template<typename T> [[nodiscard]] T get() const { return (convertType<T>()); }
+  template<typename T> [[nodiscard]] T get() const { return (getAs<T>()); }
   // Set numbers value to int/long/long long/float/double/long double
   template<typename T> void set(T number) { *this = Number(number); }
   // Return string representation of value
@@ -112,34 +59,14 @@ struct Number : Variant
   template<typename T> static JNode make(T number) { return (JNode{ std::make_unique<Number>(Number{ number }) }); }
 
 private:
-  // Try to convert string to specific numeric type (returns true on success)
-  template<typename T> bool stringToNumber(const std::string &number)
-  {
-    {
-      try {
-        std::size_t end = 0;
-        T value;
-        if constexpr (std::is_same_v<T, int>) {
-          value = std::stoi(number, &end, kStringConversionBase);
-        } else if constexpr (std::is_same_v<T, long>) {
-          value = std::stol(number, &end, kStringConversionBase);
-        } else if constexpr (std::is_same_v<T, long long>) {
-          value = std::stoll(number, &end, kStringConversionBase);
-        } else if constexpr (std::is_same_v<T, float>) {
-          value = std::stof(number, &end);
-        } else if constexpr (std::is_same_v<T, double>) {
-          value = std::stod(number, &end);
-        } else if constexpr (std::is_same_v<T, long double>) {
-          value = std::stold(number, &end);
-        }
-        if (end != number.size()) { return (false); }
-        *this = Number(value);
-      } catch ([[maybe_unused]] const std::exception &ex) {
-        return (false);
-      }
-      return (true);
-    }
-  }
+  // Convert string to specific numeric type (returns true on success)
+  template<typename T> bool stringToNumber(const std::string &number);
+  // Number to string
+  template<typename T> [[nodiscard]] std::string numberToString(const T &number) const;
+  // Convert values to another specified type
+  template<typename T, typename U> [[nodiscard]] T convertTo(U value) const;
+  // Convert values to another specified type
+  template<typename T> [[nodiscard]] T getAs() const;
   // Find the smallest type that can represent a number. Note: That if it cannot be held as an
   // integer then floating point types are tried.
   void convertNumber(const std::string &number)
@@ -154,4 +81,76 @@ private:
   inline static int m_precision{ 6 };
   inline static Notation m_notation{ Notation::normal };
 };
+// Try to convert string to specific numeric type (returns true on success)
+template<typename T> bool Number::stringToNumber(const std::string &number)
+{
+  {
+    try {
+      std::size_t end = 0;
+      T value;
+      if constexpr (std::is_same_v<T, int>) {
+        value = std::stoi(number, &end, kStringConversionBase);
+      } else if constexpr (std::is_same_v<T, long>) {
+        value = std::stol(number, &end, kStringConversionBase);
+      } else if constexpr (std::is_same_v<T, long long>) {
+        value = std::stoll(number, &end, kStringConversionBase);
+      } else if constexpr (std::is_same_v<T, float>) {
+        value = std::stof(number, &end);
+      } else if constexpr (std::is_same_v<T, double>) {
+        value = std::stod(number, &end);
+      } else if constexpr (std::is_same_v<T, long double>) {
+        value = std::stold(number, &end);
+      }
+      if (end != number.size()) { return (false); }
+      *this = Number(value);
+    } catch ([[maybe_unused]] const std::exception &ex) {
+      return (false);
+    }
+    return (true);
+  }
+}
+// Number to string
+template<typename T> std::string Number::numberToString(const T &number) const
+{
+  std::ostringstream os;
+  if constexpr (std::is_floating_point_v<T>) {
+    switch (m_notation) {
+    case Notation::normal:
+      os << std::defaultfloat << std::setprecision(m_precision) << number;
+      break;
+    case Notation::fixed:
+      os << std::fixed << std::setprecision(m_precision) << number;
+      break;
+    case Notation::scientific:
+      os << std::scientific << std::setprecision(m_precision) << number;
+      break;
+    default:
+      os << std::setprecision(m_precision) << number;
+    }
+    if (os.str().find('.') == std::string::npos) { return (os.str() + ".0"); }
+  } else {
+      os << number;
+  }
+  return (os.str());
+}
+// Convert value to another specified type
+template<typename T, typename U> T Number::convertTo(U value) const
+{
+  if constexpr (std::is_same_v<T, std::string>) {
+    return (numberToString(value));
+  } else {
+    return (static_cast<T>(value));
+  }
+}
+// Convert stored number to another specified type
+template<typename T> T Number::getAs() const
+{
+  if (auto pValue = std::get_if<int>(&m_values)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<long>(&m_values)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<long long>(&m_values)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<float>(&m_values)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<double>(&m_values)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<long double>(&m_values)) { return (convertTo<T>(*pValue)); }
+  throw Error("Could not convert unknown type.");
+}
 }// namespace JSON_Lib
