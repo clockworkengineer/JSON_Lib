@@ -7,7 +7,6 @@
 #include <sstream>
 #include <string>
 #include <cerrno>
-// #include <variant>
 // =================
 // LIBRARY NAMESPACE
 // =================
@@ -29,14 +28,8 @@ struct Number : Variant
   // Floating point notation
   enum class Notation { normal = 0, fixed, scientific };
   // Constructors/Destructors
-  Number() : Variant(Variant::Type::number) {}
-  explicit Number(const std::string &string) : Variant(Variant::Type::number) { convertNumber(string); }
-  explicit Number(int value) : Variant(Variant::Type::number), m_values(value) {}
-  explicit Number(long value) : Variant(Variant::Type::number), m_values(value) {}
-  explicit Number(long long value) : Variant(Variant::Type::number), m_values(value) {}
-  explicit Number(float value) : Variant(Variant::Type::number), m_values(value) {}
-  explicit Number(double value) : Variant(Variant::Type::number), m_values(value) {}
-  explicit Number(long double value) : Variant(Variant::Type::number), m_values(value) {}
+  Number() = delete;
+  template<typename T> explicit Number(T value);
   Number(const Number &other) = delete;
   Number &operator=(const Number &other) = delete;
   Number(Number &&other) = default;
@@ -50,7 +43,7 @@ struct Number : Variant
   // Set numbers value to int/long/long long/float/double/long double
   template<typename T> void set(T number) { *this = Number(number); }
   // Return string representation of value
-  [[nodiscard]] std::string toString() const { return (get<std::string>()); }
+  [[nodiscard]] std::string toString() const { return (getAs<std::string>()); }
   // Set floating point to string conversion parameters
   inline static void setPrecision(int precision) { m_precision = precision; }
   inline static void setNotation(Notation notation) { m_notation = notation; }
@@ -81,6 +74,15 @@ private:
   inline static int m_precision{ 6 };
   inline static Notation m_notation{ Notation::normal };
 };
+// Conctruct Number from value
+template<typename T> Number::Number(T value) : Variant(Variant::Type::number)
+{
+  if constexpr (std::is_same_v<T, std::string>) {
+    convertNumber(value);
+  } else {
+    m_values = value;
+  }
+}
 // Try to convert string to specific numeric type (returns true on success)
 template<typename T> bool Number::stringToNumber(const std::string &number)
 {
@@ -129,7 +131,7 @@ template<typename T> std::string Number::numberToString(const T &number) const
     }
     if (os.str().find('.') == std::string::npos) { return (os.str() + ".0"); }
   } else {
-      os << number;
+    os << number;
   }
   return (os.str());
 }
