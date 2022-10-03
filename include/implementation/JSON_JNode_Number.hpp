@@ -74,7 +74,7 @@ private:
   inline static int m_precision{ 6 };
   inline static Notation m_notation{ Notation::normal };
 };
-// Conctruct Number from value
+// Construct Number from value
 template<typename T> Number::Number(T value) : Variant(Variant::Type::number)
 {
   if constexpr (std::is_same_v<T, std::string>) {
@@ -83,7 +83,7 @@ template<typename T> Number::Number(T value) : Variant(Variant::Type::number)
     m_values = value;
   }
 }
-// Try to convert string to specific numeric type (returns true on success)
+// Convert string to specific numeric type (returns true on success)
 template<typename T> bool Number::stringToNumber(const std::string &number)
 {
   {
