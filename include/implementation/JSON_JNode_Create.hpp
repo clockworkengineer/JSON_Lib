@@ -22,19 +22,19 @@ template<typename T> JNode::JNode(T value)
     *this = String::make(value);
   } else if constexpr (std::is_same_v<T, std::string>) {
     *this = String::make(value);
-  } else if constexpr (std::is_convertible_v <T, std::unique_ptr<Variant>>) {
+  } else if constexpr (std::is_convertible_v<T, std::unique_ptr<Variant>>) {
     m_variant = std::move(value);
-   }
+  }
 }
 // Construct JNode Array from initializer list
-inline JNode::JNode(const std::initializer_list<JSON::InternalType> &array)
+inline JNode::JNode(const JSON::ArrayInitializerList &array)
 {
   Array::ArrayList jNodeArrayList;
   for (const auto &entry : array) { jNodeArrayList.emplace_back(internalTypeToJNode(entry)); }
   *this = Array::make(jNodeArrayList);
 }
 // Construct JNode Object from initializer list
-inline JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::InternalType>> &object)
+inline JNode::JNode(const JSON::ObjectInitializerList &object)
 {
   Object::EntryList jObjectList;
   for (const auto &entry : object) {

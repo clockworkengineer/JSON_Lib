@@ -23,8 +23,8 @@ struct JNode
   // Constructors/Destructors
   JNode() = default;
   template<typename T> explicit JNode(T value);
-  JNode(const std::initializer_list<JSON::InternalType> &array);
-  JNode(const std::initializer_list<std::pair<std::string, JSON::InternalType>> &object);
+  JNode(const JSON::ArrayInitializerList &array);
+  JNode(const JSON::ObjectInitializerList &object);
   JNode(const JNode &other) = delete;
   JNode &operator=(const JNode &other) = delete;
   JNode(JNode &&other) = default;
