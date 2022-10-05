@@ -31,16 +31,7 @@ struct JNode
   JNode &operator=(JNode &&other) = default;
   ~JNode() = default;
   // Assignment operators
-  JNode &operator=(int value) { return (*this = JNode(value)); }
-  JNode &operator=(long value) { return (*this = JNode(value)); }
-  JNode &operator=(long long value) { return (*this = JNode(value)); }
-  JNode &operator=(float value) { return (*this = JNode(value)); }
-  JNode &operator=(double value) { return (*this = JNode(value)); }
-  JNode &operator=(long double value) { return (*this = JNode(value)); }
-  JNode &operator=(const char *value) { return (*this = JNode(value)); }
-  JNode &operator=(const std::string &value) { return (*this = JNode(value)); }
-  JNode &operator=(bool value) { return (*this = JNode(value)); }
-  JNode &operator=([[maybe_unused]] std::nullptr_t value) { return (*this = JNode(value)); }
+  template<typename T> JNode &operator=(T value) { return (*this = JNode(value)); }
   // Interrogate variant
   bool isEmpty() const { return (m_variant == nullptr); }
   bool isObject() const { return (m_variant->getType() == Variant::Type::object); }
