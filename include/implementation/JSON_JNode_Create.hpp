@@ -6,47 +6,34 @@
 // LIBRARY NAMESPACE
 // =================
 namespace JSON_Lib {
-/// <summary>
-/// Create JNode from passed in type.
-/// </summary>
-/// <param name="type">Variant encapsulating type and value to be turned into JNode.</param>
-/// <returns>JNode for passed in type.</returns>
-inline JNode JNode::internalTypeToJNode(const JSON::InternalType &type)
-{
-  if (auto pValue = std::get_if<int>(&type)) { return (JNode(*pValue)); }
-  if (auto pValue = std::get_if<long>(&type)) { return (JNode(*pValue)); }
-  if (auto pValue = std::get_if<long long>(&type)) { return (JNode(*pValue)); }
-  if (auto pValue = std::get_if<float>(&type)) { return (JNode(*pValue)); }
-  if (auto pValue = std::get_if<double>(&type)) { return (JNode(*pValue)); }
-  if (auto pValue = std::get_if<long double>(&type)) { return (JNode(*pValue)); }
-  if (auto pValue = std::get_if<std::string>(&type)) { return (JNode((*pValue))); }
-  if (auto pValue = std::get_if<bool>(&type)) { return (JNode((*pValue))); }
-  if (auto pValue = std::get_if<std::nullptr_t>(&type)) { return (JNode(nullptr)); }
-  if (auto pValue = std::get_if<JNode>(&type)) { return (std::move(*const_cast<JNode *>(pValue))); }
-  throw Error("JNode of non-existant type could not be created.");
-}
 // ==================
 // JNode constructors
 // ==================
 // Construct JNode from raw values
-inline JNode::JNode(int value) { *this = Number::make(value); }
-inline JNode::JNode(long value) { *this = Number::make(value); }
-inline JNode::JNode(long long value) { *this = Number::make(value); }
-inline JNode::JNode(float value) { *this = Number::make(value); }
-inline JNode::JNode(double value) { *this = Number::make(value); }
-inline JNode::JNode(long double value) { *this = Number::make(value); }
-inline JNode::JNode(const char *value) { *this = String::make(value); }
-inline JNode::JNode(const std::string &value) { *this = String::make(value); }
-inline JNode::JNode(bool value) { *this = Boolean::make(value); }
-inline JNode::JNode([[maybe_unused]] std::nullptr_t value) { *this = Null::make(); }
-// Construct JNode array from initializer list
+template<typename T> JNode::JNode(T value)
+{
+  if constexpr (std::is_same_v<T, bool>) {
+    *this = Boolean::make(value);
+  } else if constexpr (std::is_arithmetic_v<T>) {
+    *this = Number::make(value);
+  } else if constexpr (std::is_same_v<T, nullptr_t>) {
+    *this = Null::make();
+  } else if constexpr (std::is_same_v<T, const char *>) {
+    *this = String::make(value);
+  } else if constexpr (std::is_same_v<T, std::string>) {
+    *this = String::make(value);
+  } else if constexpr (std::is_convertible_v <T, std::unique_ptr<Variant>>) {
+    m_variant = std::move(value);
+   }
+}
+// Construct JNode Array from initializer list
 inline JNode::JNode(const std::initializer_list<JSON::InternalType> &array)
 {
   Array::ArrayList jNodeArrayList;
   for (const auto &entry : array) { jNodeArrayList.emplace_back(internalTypeToJNode(entry)); }
   *this = Array::make(jNodeArrayList);
 }
-// Construct JNode object from initializer list
+// Construct JNode Object from initializer list
 inline JNode::JNode(const std::initializer_list<std::pair<std::string, JSON::InternalType>> &object)
 {
   Object::EntryList jObjectList;
