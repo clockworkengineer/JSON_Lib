@@ -57,7 +57,7 @@ JSON::JSON(const ArrayInitializerList &array) : JSON() { this->root() = JNode(ar
 /// JSON constructor (object).
 /// </summary>
 /// <param name="array">Intialiser list of key/value(JNode) pairs.</param>
-JSON::JSON(const std::initializer_list<std::pair<std::string, InternalType>> &object) : JSON()
+JSON::JSON(const ObjectInitializerList &object) : JSON()
 {
   this->root() = JNode(object);
 }
