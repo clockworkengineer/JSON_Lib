@@ -29,14 +29,14 @@ template<typename T> JNode::JNode(T value)
 // Construct JNode Array from initializer list
 inline JNode::JNode(const JSON::ArrayInitializerList &array)
 {
-  Array::ArrayList jNodeArrayList;
-  for (const auto &entry : array) { jNodeArrayList.emplace_back(internalTypeToJNode(entry)); }
-  *this = Array::make(jNodeArrayList);
+  std::vector<JNode> jNodeArray;
+  for (const auto &entry : array) { jNodeArray.emplace_back(internalTypeToJNode(entry)); }
+  *this = Array::make(jNodeArray);
 }
 // Construct JNode Object from initializer list
 inline JNode::JNode(const JSON::ObjectInitializerList &object)
 {
-  Object::EntryList jObjectList;
+  std::vector<Object::Entry> jObjectList;
   for (const auto &entry : object) {
     jObjectList.emplace_back(Object::Entry(entry.first, internalTypeToJNode(entry.second)));
   }

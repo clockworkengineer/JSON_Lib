@@ -28,11 +28,9 @@ struct Object : Variant
     JNode m_key;
     JNode m_jNode;
   };
-  // Object entry list
-  using EntryList = std::vector<Object::Entry>;
   // Constructors/Destructors
   Object() : Variant(Variant::Type::object) {}
-  explicit Object(EntryList &objectEntries) : Variant(Variant::Type::object), m_object(std::move(objectEntries)) {}
+  explicit Object(std::vector<Entry> &objectEntries) : Variant(Variant::Type::object), m_object(std::move(objectEntries)) {}
   Object(const Object &other) = delete;
   Object &operator=(const Object &other) = delete;
   Object(Object &&other) = default;
@@ -54,18 +52,18 @@ struct Object : Variant
   JNode &operator[](const std::string &key) { return (findKey(key)->getJNode()); }
   const JNode &operator[](const std::string &key) const { return (findKey(key)->getJNode()); }
   // Return reference to base of object entries
-  EntryList &getObjectEntries() { return (m_object); }
-  [[nodiscard]] const EntryList &getObjectEntries() const { return (m_object); }
+  std::vector<Entry> &getObjectEntries() { return (m_object); }
+  [[nodiscard]] const std::vector<Entry> &getObjectEntries() const { return (m_object); }
   // Make Object JNode
   static JNode make() { return (JNode{ std::make_unique<Object>() }); }
-  static JNode make(Object::EntryList &objectEntries)
+  static JNode make(std::vector<Entry> &objectEntries)
   {
     return (JNode{ std::make_unique<Object>(Object{ objectEntries }) });
   }
 
 private:
   // Search for a given entry given a key and object list
-  [[nodiscard]] Object::EntryList::iterator findKey(const std::string &key)
+  [[nodiscard]] std::vector<Entry>::iterator findKey(const std::string &key)
   {
     auto entry = std::find_if(m_object.begin(), m_object.end(), [&key](Entry &entry) -> bool {
       return (static_cast<String &>(entry.getKey().getVariant()).getString() == key);
@@ -73,7 +71,7 @@ private:
     if (entry == m_object.end()) { throw JNode::Error("Invalid key used to access object."); }
     return (entry);
   }
-  [[nodiscard]] Object::EntryList::const_iterator findKey(const std::string &key) const
+  [[nodiscard]] std::vector<Entry>::const_iterator findKey(const std::string &key) const
   {
     auto entry = std::find_if(m_object.begin(), m_object.end(), [&key](const Entry &entry) -> bool {
       return (static_cast<const String &>(entry.getKey().getVariant()).getString() == key);
@@ -82,6 +80,6 @@ private:
     return (entry);
   }
   // Object entries list
-  EntryList m_object;
+  std::vector<Entry> m_object;
 };
 }// namespace JSON_Lib

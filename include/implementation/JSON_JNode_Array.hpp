@@ -13,11 +13,9 @@ namespace JSON_Lib {
 // =====
 struct Array : Variant
 {
-  // Array entry list
-  using ArrayList = std::vector<JNode>;
   // Constructors/Destructors
   Array() : Variant(Variant::Type::array) {}
-  explicit Array(ArrayList &array) : Variant(Variant::Type::array), m_array(std::move(array)) {}
+  explicit Array(std::vector<JNode> &array) : Variant(Variant::Type::array), m_array(std::move(array)) {}
   Array(const Array &other) = delete;
   Array &operator=(const Array &other) = delete;
   Array(Array &&other) = default;
@@ -26,8 +24,8 @@ struct Array : Variant
   // Return the size of array
   [[nodiscard]] std::size_t size() const { return (m_array.size()); }
   // Return reference to array base
-  ArrayList &getArrayEntries() { return (m_array); }
-  [[nodiscard]] const ArrayList &getArrayEntries() const { return (m_array); }
+  std::vector<JNode> &getArrayEntries() { return (m_array); }
+  [[nodiscard]] const std::vector<JNode> &getArrayEntries() const { return (m_array); }
   // Array indexing operators
   JNode &operator[](std::size_t index)
   {
@@ -49,10 +47,10 @@ struct Array : Variant
   }
   // Make Array JNode
   static JNode make() { return (JNode{ std::make_unique<Array>() }); }
-  static JNode make(Array::ArrayList &array) { return (JNode{ std::make_unique<Array>(Array{ array }) }); }
+  static JNode make(std::vector<JNode> &array) { return (JNode{ std::make_unique<Array>(Array{ array }) }); }
 
 private:
   // Array entries list
-  ArrayList m_array;
+  std::vector<JNode> m_array;
 };
 }// namespace JSON_Lib

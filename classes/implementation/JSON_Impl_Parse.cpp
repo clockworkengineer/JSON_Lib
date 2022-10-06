@@ -137,7 +137,7 @@ JNode JSON_Impl::parseNull(ISource &source)
 /// <returns>Object JNode (key/value pairs).</returns>
 JNode JSON_Impl::parseObject(ISource &source)
 {
-  Object::EntryList objectEntries;
+  std::vector<Object::Entry> objectEntries;
   source.next();
   source.ignoreWS();
   if (source.current() != '}') {
@@ -158,7 +158,7 @@ JNode JSON_Impl::parseObject(ISource &source)
 /// <returns>Array JNode.</returns>
 JNode JSON_Impl::parseArray(ISource &source)
 {
-  Array::ArrayList array;
+  std::vector<JNode> array;
   source.next();
   source.ignoreWS();
   if (source.current() != ']') {
