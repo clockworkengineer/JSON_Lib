@@ -158,19 +158,19 @@ JNode JSON_Impl::parseObject(ISource &source)
 /// <returns>Array JNode.</returns>
 JNode JSON_Impl::parseArray(ISource &source)
 {
-  std::vector<JNode> array;
+  std::vector<JNode> arrayEntries;
   source.next();
   source.ignoreWS();
   if (source.current() != ']') {
-    array.emplace_back(parseJNodes(source));
+    arrayEntries.emplace_back(parseJNodes(source));
     while (source.current() == ',') {
       source.next();
-      array.emplace_back(parseJNodes(source));
+      arrayEntries.emplace_back(parseJNodes(source));
     }
   }
   if (source.current() != ']') { throw Error(source.getPosition(), "Missing closing ']' in array definition."); }
   source.next();
-  return (Array::make(array));
+  return (Array::make(arrayEntries));
 }
 /// <summary>
 /// Recursively parse JSON source stream producing a JNode structure
