@@ -28,9 +28,9 @@ public:
   using InternalType =
     std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t, JNode>;
   // Array initializer list
-  using ArrayInitializerList = std::initializer_list<InternalType>;
+  using ArrayList = std::initializer_list<InternalType>;
   // Object initializer list
-  using ObjectInitializerList = std::initializer_list<std::pair<std::string, InternalType>>;
+  using ObjectList = std::initializer_list<std::pair<std::string, InternalType>>;
   // ======================
   // CONSTRUCTOR/DESTRUCTOR
   // ======================
@@ -39,9 +39,9 @@ public:
   // Pass in default JSON to parse
   explicit JSON(const std::string &jsonString);
   // Construct array
-  JSON(const ArrayInitializerList &array);
+  JSON(const ArrayList &array);
   // Construct object
-  JSON(const ObjectInitializerList &object);
+  JSON(const ObjectList &object);
   // No other constructors supported
   JSON(const JSON &other) = delete;
   JSON &operator=(const JSON &other) = delete;

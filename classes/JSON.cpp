@@ -52,15 +52,12 @@ JSON::JSON(ITranslator *translator, IConverter *converter) : m_implementation(st
 /// JSON constructor (array).
 /// </summary>
 /// <param name="array">Intialiser list of single values or JNode.</param>
-JSON::JSON(const ArrayInitializerList &array) : JSON() { this->root() = JNode(array); }
+JSON::JSON(const ArrayList &array) : JSON() { this->root() = JNode(array); }
 /// <summary>
 /// JSON constructor (object).
 /// </summary>
 /// <param name="array">Intialiser list of key/value(JNode) pairs.</param>
-JSON::JSON(const ObjectInitializerList &object) : JSON()
-{
-  this->root() = JNode(object);
-}
+JSON::JSON(const ObjectList &object) : JSON() { this->root() = JNode(object); }
 /// <summary>
 /// JSON constructor. Pass a JSON string to be initially parsed.
 /// </summary>
