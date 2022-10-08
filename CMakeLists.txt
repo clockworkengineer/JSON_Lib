@@ -36,9 +36,10 @@ set (JSON_SOURCES
 set (JSON_INCLUDES
     JSON_Config.hpp
     ./include/JSON.hpp
-    ./include/implementation/JSON_forward.hpp
-    ./include/implementation/JSON_Types.hpp
-    ./include/implementation/JSON_Error.hpp
+    ./include/implementation/core/JSON_forward.hpp
+    ./include/implementation/core/JSON_Types.hpp
+    ./include/implementation/core/JSON_Error.hpp
+    ./include/implementation/core/JSON_Impl.hpp
     ./include/implementation/variants/JSON_Variant.hpp
     ./include/implementation/variants/JSON_Hole.hpp
     ./include/implementation/variants/JSON_Object.hpp
@@ -50,7 +51,6 @@ set (JSON_INCLUDES
     ./include/implementation/jnode/JSON_JNode.hpp
     ./include/implementation/jnode/JSON_JNode_Reference.hpp
     ./include/implementation/jnode/JSON_JNode_Create.hpp
-    ./include/implementation/JSON_Impl.hpp
     ./include/implementation/io/JSON_Sources.hpp
     ./include/implementation/io/JSON_BufferSource.hpp
     ./include/implementation/io/JSON_FileSource.hpp
@@ -80,6 +80,7 @@ target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/include/interface
     ${PROJECT_SOURCE_DIR}/include/implementation
+    ${PROJECT_SOURCE_DIR}/include/implementation/core
     ${PROJECT_SOURCE_DIR}/include/implementation/jnode
     ${PROJECT_SOURCE_DIR}/include/implementation/io
     ${PROJECT_SOURCE_DIR}/include/implementation/translation
