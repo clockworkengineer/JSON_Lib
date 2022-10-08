@@ -39,26 +39,26 @@ set (JSON_INCLUDES
     ./include/implementation/JSON_forward.hpp
     ./include/implementation/JSON_Types.hpp
     ./include/implementation/JSON_Error.hpp
-    ./include/implementation/JSON_JNode.hpp
-    ./include/implementation/JSON_JNode_Variant.hpp
-    ./include/implementation/JSON_JNode_Hole.hpp
-    ./include/implementation/JSON_JNode_Object.hpp
-    ./include/implementation/JSON_JNode_Array.hpp
-    ./include/implementation/JSON_JNode_Number.hpp
-    ./include/implementation/JSON_JNode_String.hpp
-    ./include/implementation/JSON_JNode_Boolean.hpp
-    ./include/implementation/JSON_JNode_Null.hpp
-    ./include/implementation/JSON_JNode_Reference.hpp
-    ./include/implementation/JSON_JNode_Create.hpp
+    ./include/implementation/variants/JSON_Variant.hpp
+    ./include/implementation/variants/JSON_Hole.hpp
+    ./include/implementation/variants/JSON_Object.hpp
+    ./include/implementation/variants/JSON_Array.hpp
+    ./include/implementation/variants/JSON_Number.hpp
+    ./include/implementation/variants/JSON_String.hpp
+    ./include/implementation/variants/JSON_Boolean.hpp
+    ./include/implementation/variants/JSON_Null.hpp
+    ./include/implementation/jnode/JSON_JNode.hpp
+    ./include/implementation/jnode/JSON_JNode_Reference.hpp
+    ./include/implementation/jnode/JSON_JNode_Create.hpp
     ./include/implementation/JSON_Impl.hpp
-    ./include/implementation/JSON_Sources.hpp
-    ./include/implementation/JSON_BufferSource.hpp
-    ./include/implementation/JSON_FileSource.hpp
-    ./include/implementation/JSON_Destinations.hpp
-    ./include/implementation/JSON_BufferDestination.hpp
-    ./include/implementation/JSON_FileDestination.hpp
-    ./include/implementation/JSON_Translator.hpp
-    ./include/implementation/JSON_Converter.hpp
+    ./include/implementation/io/JSON_Sources.hpp
+    ./include/implementation/io/JSON_BufferSource.hpp
+    ./include/implementation/io/JSON_FileSource.hpp
+    ./include/implementation/io/JSON_Destinations.hpp
+    ./include/implementation/io/JSON_BufferDestination.hpp
+    ./include/implementation/io/JSON_FileDestination.hpp
+    ./include/implementation/translation/JSON_Translator.hpp
+    ./include/implementation/translation/JSON_Converter.hpp
     ./include/interface/IAction.hpp
     ./include/interface/ISource.hpp
     ./include/interface/IDestination.hpp
@@ -76,7 +76,16 @@ endif()
 # JSON library
 
 add_library(${JSON_LIBRARY_NAME} ${JSON_SOURCES} ${JSON_INCLUDES})
-target_include_directories(${JSON_LIBRARY_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/include/interface ${PROJECT_SOURCE_DIR}/include/implementation ${PROJECT_SOURCE_DIR}/include/external ${PROJECT_BINARY_DIR} )
+target_include_directories(${JSON_LIBRARY_NAME} PUBLIC 
+    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/include/interface
+    ${PROJECT_SOURCE_DIR}/include/implementation
+    ${PROJECT_SOURCE_DIR}/include/implementation/jnode
+    ${PROJECT_SOURCE_DIR}/include/implementation/io
+    ${PROJECT_SOURCE_DIR}/include/implementation/translation
+    ${PROJECT_SOURCE_DIR}/include/implementation/variants
+    ${PROJECT_SOURCE_DIR}/include/external
+    ${PROJECT_BINARY_DIR} )
 
 # Add tests
 

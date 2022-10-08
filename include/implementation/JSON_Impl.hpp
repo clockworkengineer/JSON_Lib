@@ -7,11 +7,6 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-// =============================
-// Source/Destination interfaces
-// =============================
-#include "ISource.hpp"
-#include "IDestination.hpp"
 // ==========================
 // Traversal action interface
 // ==========================
@@ -22,6 +17,7 @@
 #include "JSON_Config.hpp"
 #include "JSON_Converter.hpp"
 #include "JSON_Sources.hpp"
+#include "JSON_Destinations.hpp"
 #include "JSON_Translator.hpp"
 #include "JSON_Types.hpp"
 // =================
