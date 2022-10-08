@@ -21,25 +21,25 @@ enable_testing()
 set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
 set(TEST_SOURCES
-    JSON_Lib_Tests_JSON.cpp
-    JSON_Lib_Tests_JNode.cpp
-    JSON_Lib_Tests_JNode_Number.cpp
-    JSON_Lib_Tests_ISource.cpp
-    JSON_Lib_Tests_IDestination.cpp
-    JSON_Lib_Tests_Parse_Escapes.cpp
-    JSON_Lib_Tests_Parse_Misc.cpp
-    JSON_Lib_Tests_Parse_Simple.cpp
-    JSON_Lib_Tests_Parse_Collection.cpp
-    JSON_Lib_Tests_Parse_Whitespace.cpp
-    JSON_Lib_Tests_Parse_Exceptions.cpp
-    JSON_Lib_Tests_Stringify_Misc.cpp
-    JSON_Lib_Tests_Stringify_Escapes.cpp
-    JSON_Lib_Tests_Stringify_Simple.cpp
-    JSON_Lib_Tests_Stringify_Collection.cpp
-    JSON_Lib_Tests_Stringify_Exceptions.cpp
-    JSON_Lib_Tests_Print.cpp
-    JSON_Lib_Tests_Misc.cpp
-    JSON_Lib_Tests_Helper.cpp)
+    ./jnode/JSON_Lib_Tests_JNode.cpp
+    ./jnode/JSON_Lib_Tests_JNode_Number.cpp
+    ./io/JSON_Lib_Tests_ISource.cpp
+    ./io/JSON_Lib_Tests_IDestination.cpp
+    ./parse/JSON_Lib_Tests_Parse_Escapes.cpp
+    ./parse/JSON_Lib_Tests_Parse_Misc.cpp
+    ./parse/JSON_Lib_Tests_Parse_Simple.cpp
+    ./parse/JSON_Lib_Tests_Parse_Collection.cpp
+    ./parse/JSON_Lib_Tests_Parse_Whitespace.cpp
+    ./parse/JSON_Lib_Tests_Parse_Exceptions.cpp
+    ./stringify/JSON_Lib_Tests_Stringify_Misc.cpp
+    ./stringify/JSON_Lib_Tests_Stringify_Escapes.cpp
+    ./stringify/JSON_Lib_Tests_Stringify_Simple.cpp
+    ./stringify/JSON_Lib_Tests_Stringify_Collection.cpp
+    ./stringify/JSON_Lib_Tests_Stringify_Exceptions.cpp
+    ./stringify/JSON_Lib_Tests_Print.cpp
+    ./misc/JSON_Lib_Tests_JSON.cpp
+    ./misc/JSON_Lib_Tests_Misc.cpp
+    ./misc/JSON_Lib_Tests_Helper.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${PROJECT_CURRENT_SOURCE_DIR}/include ./include)
