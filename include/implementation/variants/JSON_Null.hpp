@@ -23,7 +23,6 @@ struct Null : Variant
   [[nodiscard]] void *getNull() const { return (nullptr); }
   // Return string representation of value
   [[nodiscard]] std::string toString() const { return ("null"); }
-  // Make Null JNode
-  static JNode make() { return (JNode{ std::make_unique<Null>(Null()) }); }
+
 };
 }// namespace JSON_Lib

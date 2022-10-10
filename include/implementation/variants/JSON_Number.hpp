@@ -49,7 +49,6 @@ struct Number : Variant
   inline static void setNotation(Notation notation) { m_notation = notation; }
   // Make Number JNode
   static JNode make(Number &number) { return (JNode{ std::make_unique<Number>(std::move(number)) }); }
-  template<typename T> static JNode make(T number) { return (JNode{ std::make_unique<Number>(Number{ number }) }); }
 
 private:
   // Convert string to specific numeric type (returns true on success)

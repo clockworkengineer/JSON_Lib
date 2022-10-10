@@ -13,15 +13,15 @@ namespace JSON_Lib {
 template<typename T> JNode::JNode(T value)
 {
   if constexpr (std::is_same_v<T, bool>) {
-    *this = Boolean::make(value);
+    *this = JNode::make<Boolean>(value);
   } else if constexpr (std::is_arithmetic_v<T>) {
-    *this = Number::make(value);
+    *this = JNode::make<Number>(value);
   } else if constexpr (std::is_same_v<T, nullptr_t>) {
-    *this = Null::make();
+    *this = JNode::make<Null>();
   } else if constexpr (std::is_same_v<T, const char *>) {
-    *this = String::make(value);
+    *this = JNode::make<String>(value);
   } else if constexpr (std::is_same_v<T, std::string>) {
-    *this = String::make(value);
+    *this = JNode::make<String>(value);
   } else if constexpr (std::is_convertible_v<T, std::unique_ptr<Variant>>) {
     m_variant = std::move(value);
   }
@@ -31,7 +31,7 @@ inline JNode::JNode(const JSON::ArrayList &array)
 {
   std::vector<JNode> jNodeArray;
   for (const auto &entry : array) { jNodeArray.emplace_back(internalTypeToJNode(entry)); }
-  *this = Array::make(jNodeArray);
+  *this = JNode::make<Array>(jNodeArray);
 }
 // Construct JNode Object from initializer list
 inline JNode::JNode(const JSON::ObjectList &object)
@@ -40,7 +40,7 @@ inline JNode::JNode(const JSON::ObjectList &object)
   for (const auto &entry : object) {
     jObjectList.emplace_back(Object::Entry(entry.first, internalTypeToJNode(entry.second)));
   }
-  *this = Object::make(jObjectList);
+  *this = JNode::make<Object>(jObjectList);
 }
 // =====================
 // JNode index overloads
@@ -49,8 +49,8 @@ inline JNode::JNode(const JSON::ObjectList &object)
 inline JNode &JNode::operator[](const std::string &key)
 {
   if (this->isHole()) {
-    *this = Object::make();
-    JRef<Object>(*this).getObjectEntries().emplace_back(Object::Entry(key, Hole::make()));
+    *this = JNode::make<Object>();
+    JRef<Object>(*this).getObjectEntries().emplace_back(Object::Entry(key, JNode::make<Hole>()));
     return (JRef<Object>(*this).getObjectEntries().back().getJNode());
   }
   return (JRef<Object>(*this)[key]);
@@ -60,7 +60,7 @@ inline const JNode &JNode::operator[](const std::string &key) const { return (JR
 inline JNode &JNode::operator[](std::size_t index)
 {
   try {
-    if (this->isHole()) { *this = Array::make(); }
+    if (this->isHole()) { *this = JNode::make<Array>(); }
     return (JRef<Array>(*this)[index]);
   } catch ([[maybe_unused]] const JNode::Error &error) {
     JRef<Array>(*this).resize(index);

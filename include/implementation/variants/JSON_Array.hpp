@@ -42,12 +42,9 @@ struct Array : Variant
   {
     m_array.resize(index + 1);
     for (auto &entry : m_array) {
-      if (entry.isEmpty()) { entry = Hole::make(); }
+      if (entry.isEmpty()) { entry = JNode::make<Hole>(); }
     }
   }
-  // Make Array JNode
-  static JNode make() { return (JNode{ std::make_unique<Array>() }); }
-  static JNode make(std::vector<JNode> &array) { return (JNode{ std::make_unique<Array>(Array{ array }) }); }
 
 private:
   // Array entries list

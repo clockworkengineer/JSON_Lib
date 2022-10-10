@@ -17,8 +17,8 @@ struct Object : Variant
   // Object entry
   struct Entry
   {
-    Entry(const std::string &key, JNode &jNode) : m_key(String::make(key)), m_jNode(std::move(jNode)) {}
-    Entry(const std::string &key, JNode &&jNode) : m_key(String::make(key)), m_jNode(std::move(jNode)) {}
+    Entry(const std::string &key, JNode &jNode) : m_key(JNode::make<String>(key)), m_jNode(std::move(jNode)) {}
+    Entry(const std::string &key, JNode &&jNode) : m_key(JNode::make<String>(key)), m_jNode(std::move(jNode)) {}
     JNode &getKey() { return (m_key); }
     const JNode &getKey() const { return (m_key); }
     JNode &getJNode() { return (m_jNode); }
@@ -54,12 +54,6 @@ struct Object : Variant
   // Return reference to base of object entries
   std::vector<Entry> &getObjectEntries() { return (m_object); }
   [[nodiscard]] const std::vector<Entry> &getObjectEntries() const { return (m_object); }
-  // Make Object JNode
-  static JNode make() { return (JNode{ std::make_unique<Object>() }); }
-  static JNode make(std::vector<Entry> &objectEntries)
-  {
-    return (JNode{ std::make_unique<Object>(Object{ objectEntries }) });
-  }
 
 private:
   // Search for a given entry given a key and object list

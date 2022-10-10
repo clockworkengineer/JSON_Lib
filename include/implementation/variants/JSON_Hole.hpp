@@ -21,7 +21,6 @@ struct Hole : Variant
   ~Hole() = default;
   // Return string representation of value
   [[nodiscard]] std::string toString() const { return ("null"); }
-  // Make Hole JNode
-  static JNode make() { return (JNode{ std::make_unique<Hole>(Hole()) }); }
+
 };
 }// namespace JSON_Lib

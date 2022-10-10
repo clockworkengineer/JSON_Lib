@@ -92,7 +92,7 @@ Object::Entry JSON_Impl::parseObjectEntry(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>String JNode.</returns>
-JNode JSON_Impl::parseString(ISource &source) { return (String::make(extractString(source, *m_translator))); }
+JNode JSON_Impl::parseString(ISource &source) { return (JNode::make<String>(extractString(source, *m_translator))); }
 /// <summary>
 /// Parse a number from a JSON source stream.
 /// </summary>
@@ -116,8 +116,8 @@ JNode JSON_Impl::parseNumber(ISource &source)
 /// <returns>Boolean JNode.</returns>
 JNode JSON_Impl::parseBoolean(ISource &source)
 {
-  if (source.match("true")) { return (Boolean::make(true)); }
-  if (source.match("false")) { return (Boolean::make(false)); }
+  if (source.match("true")) { return (JNode::make<Boolean>(true)); }
+  if (source.match("false")) { return (JNode::make<Boolean>(false)); }
   throw Error(source.getPosition(), "Invalid boolean value.");
 }
 /// <summary>
@@ -128,7 +128,7 @@ JNode JSON_Impl::parseBoolean(ISource &source)
 JNode JSON_Impl::parseNull(ISource &source)
 {
   if (!source.match("null")) { throw Error(source.getPosition(), "Invalid null value."); }
-  return (Null::make());
+  return (JNode::make<Null>());
 }
 /// <summary>
 /// Parse an object from a JSON source stream.
@@ -149,7 +149,7 @@ JNode JSON_Impl::parseObject(ISource &source)
   }
   if (source.current() != '}') { throw Error(source.getPosition(), "Missing closing '}' in object definition."); }
   source.next();
-  return (Object::make(objectEntries));
+  return (JNode::make<Object>(objectEntries));
 }
 /// <summary>
 /// Parse an array from a JSON source stream.
@@ -170,7 +170,7 @@ JNode JSON_Impl::parseArray(ISource &source)
   }
   if (source.current() != ']') { throw Error(source.getPosition(), "Missing closing ']' in array definition."); }
   source.next();
-  return (Array::make(arrayEntries));
+  return (JNode::make<Array>(arrayEntries));
 }
 /// <summary>
 /// Recursively parse JSON source stream producing a JNode structure

@@ -151,10 +151,10 @@ void JSON_Impl::traverse(IAction &action) const
 JNode &JSON_Impl::operator[](const std::string &key)
 {
   try {
-    if (m_jNodeRoot.isEmpty()) { m_jNodeRoot = Object::make(); }
+    if (m_jNodeRoot.isEmpty()) { m_jNodeRoot = JNode::make<Object>(); }
     return (m_jNodeRoot[key]);
   } catch ([[maybe_unused]] JNode::Error &error) {
-    JRef<Object>(m_jNodeRoot).getObjectEntries().emplace_back(Object::Entry(key, Hole::make()));
+    JRef<Object>(m_jNodeRoot).getObjectEntries().emplace_back(Object::Entry(key, JNode::make<Hole>()));
     return (m_jNodeRoot[key]);
   }
 }
@@ -167,7 +167,7 @@ const JNode &JSON_Impl::operator[](const std::string &key) const { return ((m_jN
 JNode &JSON_Impl::operator[](std::size_t index)
 {
   try {
-    if (m_jNodeRoot.isEmpty()) { m_jNodeRoot = Array::make(); }
+    if (m_jNodeRoot.isEmpty()) { m_jNodeRoot = JNode::make<Array>(); }
     return (m_jNodeRoot[index]);
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Array>(m_jNodeRoot).resize(index);
