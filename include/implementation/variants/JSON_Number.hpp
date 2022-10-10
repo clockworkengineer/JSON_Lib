@@ -28,10 +28,10 @@ struct Number : Variant
   // Floating point notation
   enum class Notation { normal = 0, fixed, scientific };
   // Constructors/Destructors
-  Number() = delete;
+  Number() : Variant(Variant::Type::number) {}
   template<typename T> explicit Number(T value);
-  Number(const Number &other) = delete;
-  Number &operator=(const Number &other) = delete;
+  Number(const Number &other) = default;
+  Number &operator=(const Number &other) = default;
   Number(Number &&other) = default;
   Number &operator=(Number &&other) = default;
   ~Number() = default;
@@ -47,8 +47,6 @@ struct Number : Variant
   // Set floating point to string conversion parameters
   inline static void setPrecision(int precision) { m_precision = precision; }
   inline static void setNotation(Notation notation) { m_notation = notation; }
-  // Make Number JNode
-  static JNode make(Number &number) { return (JNode{ std::make_unique<Number>(std::move(number)) }); }
 
 private:
   // Convert string to specific numeric type (returns true on success)

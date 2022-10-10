@@ -15,8 +15,8 @@ struct Variant
   enum class Type : uint8_t { base = 0, object, array, number, string, boolean, null, hole };
   // Constructors/Destructors
   explicit Variant(Variant::Type nodeType = Variant::Type::base) : m_type(nodeType) {}
-  Variant(const Variant &other) = delete;
-  Variant &operator=(const Variant &other) = delete;
+  Variant(const Variant &other) = default;
+  Variant &operator=(const Variant &other) = default;
   Variant(Variant &&other) = default;
   Variant &operator=(Variant &&other) = default;
   ~Variant() = default;

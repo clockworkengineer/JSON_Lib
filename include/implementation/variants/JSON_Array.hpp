@@ -16,8 +16,8 @@ struct Array : Variant
   // Constructors/Destructors
   Array() : Variant(Variant::Type::array) {}
   explicit Array(std::vector<JNode> &array) : Variant(Variant::Type::array), m_array(std::move(array)) {}
-  Array(const Array &other) = delete;
-  Array &operator=(const Array &other) = delete;
+  Array(const Array &other) = default;
+  Array &operator=(const Array &other) = default;
   Array(Array &&other) = default;
   Array &operator=(Array &&other) = default;
   ~Array() = default;

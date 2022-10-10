@@ -15,8 +15,8 @@ struct String : Variant
   // Constructors/Destructors
   String() : Variant(Variant::Type::string) {}
   explicit String(std::string string) : Variant(Variant::Type::string), m_string(std::move(string)) {}
-  String(const String &other) = delete;
-  String &operator=(const String &other) = delete;
+  String(const String &other) = default;
+  String &operator=(const String &other) = default;
   String(String &&other) = default;
   String &operator=(String &&other) = default;
   ~String() = default;

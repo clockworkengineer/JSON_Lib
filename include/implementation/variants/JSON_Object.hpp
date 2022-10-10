@@ -31,8 +31,8 @@ struct Object : Variant
   // Constructors/Destructors
   Object() : Variant(Variant::Type::object) {}
   explicit Object(std::vector<Entry> &objectEntries) : Variant(Variant::Type::object), m_object(std::move(objectEntries)) {}
-  Object(const Object &other) = delete;
-  Object &operator=(const Object &other) = delete;
+  Object(const Object &other) = default;
+  Object &operator=(const Object &other) = default;
   Object(Object &&other) = default;
   Object &operator=(Object &&other) = default;
   ~Object() = default;

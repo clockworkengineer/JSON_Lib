@@ -15,8 +15,8 @@ struct Boolean : Variant
   // Constructors/Destructors
   Boolean() : Variant(Variant::Type::boolean) {}
   explicit Boolean(bool boolean) : Variant(Variant::Type::boolean), m_boolean(boolean) {}
-  Boolean(const Boolean &other) = delete;
-  Boolean &operator=(const Boolean &other) = delete;
+  Boolean(const Boolean &other) = default;
+  Boolean &operator=(const Boolean &other) = default;
   Boolean(Boolean &&other) = default;
   Boolean &operator=(Boolean &&other) = default;
   ~Boolean() = default;

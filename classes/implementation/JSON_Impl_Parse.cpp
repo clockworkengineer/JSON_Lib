@@ -105,7 +105,7 @@ JNode JSON_Impl::parseNumber(ISource &source)
   Number number{ string };
   if (number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>() || number.is<double>()
       || number.is<long double>()) {
-    return (Number::make(number));
+    return (JNode::make<Number>(number));
   }
   throw Error(source.getPosition(), "Invalid numeric value.");
 }

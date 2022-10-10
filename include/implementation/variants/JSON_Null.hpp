@@ -14,8 +14,8 @@ struct Null : Variant
 {
   // Constructors/Destructors
   Null() : Variant(Variant::Type::null) {}
-  Null(const Null &other) = delete;
-  Null &operator=(const Null &other) = delete;
+  Null(const Null &other) = default;
+  Null &operator=(const Null &other) = default;
   Null(Null &&other) = default;
   Null &operator=(Null &&other) = default;
   ~Null() = default;
