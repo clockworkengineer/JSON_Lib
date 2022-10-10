@@ -23,6 +23,7 @@ set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 set(TEST_SOURCES
     ./jnode/JSON_Lib_Tests_JNode.cpp
     ./jnode/JSON_Lib_Tests_JNode_Number.cpp
+    ./json/JSON_Lib_Tests_JSON.cpp
     ./io/JSON_Lib_Tests_ISource.cpp
     ./io/JSON_Lib_Tests_IDestination.cpp
     ./parse/JSON_Lib_Tests_Parse_Escapes.cpp
@@ -37,7 +38,6 @@ set(TEST_SOURCES
     ./stringify/JSON_Lib_Tests_Stringify_Collection.cpp
     ./stringify/JSON_Lib_Tests_Stringify_Exceptions.cpp
     ./stringify/JSON_Lib_Tests_Print.cpp
-    ./misc/JSON_Lib_Tests_JSON.cpp
     ./misc/JSON_Lib_Tests_Misc.cpp
     ./misc/JSON_Lib_Tests_Helper.cpp)
 
