@@ -154,7 +154,7 @@ JNode &JSON_Impl::operator[](const std::string &key)
     if (m_jNodeRoot.isEmpty()) { m_jNodeRoot = JNode::make<Object>(); }
     return (m_jNodeRoot[key]);
   } catch ([[maybe_unused]] JNode::Error &error) {
-    JRef<Object>(m_jNodeRoot).getObjectEntries().emplace_back(Object::Entry(key, JNode::make<Hole>()));
+    JRef<Object>(m_jNodeRoot).add(Object::Entry(key, JNode::make<Hole>()));
     return (m_jNodeRoot[key]);
   }
 }

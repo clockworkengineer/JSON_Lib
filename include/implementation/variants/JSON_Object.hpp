@@ -30,12 +30,14 @@ struct Object : Variant
   };
   // Constructors/Destructors
   Object() : Variant(Variant::Type::object) {}
-  explicit Object(std::vector<Entry> &objectEntries) : Variant(Variant::Type::object), m_object(std::move(objectEntries)) {}
   Object(const Object &other) = default;
   Object &operator=(const Object &other) = default;
   Object(Object &&other) = default;
   Object &operator=(Object &&other) = default;
   ~Object() = default;
+  // Add array element
+  void add(Entry &entry) { m_object.emplace_back(std::move(entry)); }
+  void add(Entry &&entry) { m_object.emplace_back(std::move(entry)); }
   // Return true if an object contains a given key
   [[nodiscard]] bool contains(const std::string &key) const
   {

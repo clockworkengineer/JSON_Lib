@@ -15,12 +15,14 @@ struct Array : Variant
 {
   // Constructors/Destructors
   Array() : Variant(Variant::Type::array) {}
-  explicit Array(std::vector<JNode> &array) : Variant(Variant::Type::array), m_array(std::move(array)) {}
   Array(const Array &other) = default;
   Array &operator=(const Array &other) = default;
   Array(Array &&other) = default;
   Array &operator=(Array &&other) = default;
   ~Array() = default;
+  // Add array element
+  void add(JNode &jNode) { m_array.emplace_back(std::move(jNode)); }
+  void add(JNode &&jNode) { m_array.emplace_back(std::move(jNode)); }
   // Return the size of array
   [[nodiscard]] std::size_t size() const { return (m_array.size()); }
   // Return reference to array base

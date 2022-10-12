@@ -137,19 +137,19 @@ JNode JSON_Impl::parseNull(ISource &source)
 /// <returns>Object JNode (key/value pairs).</returns>
 JNode JSON_Impl::parseObject(ISource &source)
 {
-  std::vector<Object::Entry> objectEntries;
+  JNode jNodeObject = JNode::make<Object>();
   source.next();
   source.ignoreWS();
   if (source.current() != '}') {
-    objectEntries.emplace_back(parseObjectEntry(source));
+    JRef<Object>(jNodeObject).add(parseObjectEntry(source));
     while (source.current() == ',') {
       source.next();
-      objectEntries.emplace_back(parseObjectEntry(source));
+      JRef<Object>(jNodeObject).add(parseObjectEntry(source));
     }
   }
   if (source.current() != '}') { throw Error(source.getPosition(), "Missing closing '}' in object definition."); }
   source.next();
-  return (JNode::make<Object>(objectEntries));
+  return (jNodeObject);
 }
 /// <summary>
 /// Parse an array from a JSON source stream.
@@ -158,19 +158,19 @@ JNode JSON_Impl::parseObject(ISource &source)
 /// <returns>Array JNode.</returns>
 JNode JSON_Impl::parseArray(ISource &source)
 {
-  std::vector<JNode> arrayEntries;
+  JNode jNodeArray = JNode::make<Array>();
   source.next();
   source.ignoreWS();
   if (source.current() != ']') {
-    arrayEntries.emplace_back(parseJNodes(source));
+    JRef<Array>(jNodeArray).add(parseJNodes(source));
     while (source.current() == ',') {
       source.next();
-      arrayEntries.emplace_back(parseJNodes(source));
+      JRef<Array>(jNodeArray).add(parseJNodes(source));
     }
   }
   if (source.current() != ']') { throw Error(source.getPosition(), "Missing closing ']' in array definition."); }
   source.next();
-  return (JNode::make<Array>(arrayEntries));
+  return (jNodeArray);
 }
 /// <summary>
 /// Recursively parse JSON source stream producing a JNode structure

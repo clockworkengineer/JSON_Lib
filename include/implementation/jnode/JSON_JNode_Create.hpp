@@ -29,18 +29,16 @@ template<typename T> JNode::JNode(T value)
 // Construct JNode Array from initializer list
 inline JNode::JNode(const JSON::ArrayList &array)
 {
-  std::vector<JNode> jNodeArray;
-  for (const auto &entry : array) { jNodeArray.emplace_back(internalTypeToJNode(entry)); }
-  *this = JNode::make<Array>(jNodeArray);
+  *this = JNode::make<Array>();
+  for (const auto &entry : array) { JRef<Array>(*this).add(internalTypeToJNode(entry)); }
 }
 // Construct JNode Object from initializer list
 inline JNode::JNode(const JSON::ObjectList &object)
 {
-  std::vector<Object::Entry> jObjectList;
+  *this = JNode::make<Object>();
   for (const auto &entry : object) {
-    jObjectList.emplace_back(Object::Entry(entry.first, internalTypeToJNode(entry.second)));
+    JRef<Object>(*this).add(Object::Entry(entry.first, internalTypeToJNode(entry.second)));
   }
-  *this = JNode::make<Object>(jObjectList);
 }
 // =====================
 // JNode index overloads
@@ -50,7 +48,7 @@ inline JNode &JNode::operator[](const std::string &key)
 {
   if (this->isHole()) {
     *this = JNode::make<Object>();
-    JRef<Object>(*this).getObjectEntries().emplace_back(Object::Entry(key, JNode::make<Hole>()));
+    JRef<Object>(*this).add(Object::Entry(key, JNode::make<Hole>()));
     return (JRef<Object>(*this).getObjectEntries().back().getJNode());
   }
   return (JRef<Object>(*this)[key]);
