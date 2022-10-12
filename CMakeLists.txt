@@ -50,7 +50,7 @@ set (JSON_INCLUDES
     ./include/implementation/variants/JSON_Null.hpp
     ./include/implementation/jnode/JSON_JNode.hpp
     ./include/implementation/jnode/JSON_JNode_Reference.hpp
-    ./include/implementation/jnode/JSON_JNode_Create.hpp
+    ./include/implementation/jnode/JSON_JNode_Creation.hpp
     ./include/implementation/io/JSON_Sources.hpp
     ./include/implementation/io/JSON_BufferSource.hpp
     ./include/implementation/io/JSON_FileSource.hpp
