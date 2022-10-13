@@ -32,33 +32,6 @@ namespace JSON_Lib {
 // =================
 // PRIVATE FUNCTIONS
 // =================
-/// <summary>
-/// Strip all whitespace from a JSON source.
-/// </summary>
-/// <param name="source">Source of JSON.</param>
-/// <param name="destination">Destination for stripped JSON.</param>
-void stripWhitespace(ISource &source, IDestination &destination)
-{
-  // Note: That it is assumed that the JSON on the source stream is valid with no errors.
-  while (source.more()) {
-    if (!source.isWS()) {
-      destination.add(source.current());
-      if (source.current() == '"') {
-        source.next();
-        while (source.more() && source.current() != '"') {
-          if (source.current() == '\\') {
-            destination.add(source.current());
-            source.next();
-          }
-          destination.add(source.current());
-          source.next();
-        }
-        destination.add(source.current());
-      }
-    }
-    source.next();
-  }
-}
 // ===============
 // PRIVATE METHODS
 // ===============
@@ -128,7 +101,27 @@ void JSON_Impl::print(IDestination &destination) const
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <param name="destination">Destination for stripped JSON.</param>
-void JSON_Impl::strip(ISource &source, IDestination &destination) const { stripWhitespace(source, destination); }
+void JSON_Impl::strip(ISource &source, IDestination &destination) const
+{// Note: That it is assumed that the JSON on the source stream is valid with no errors.
+  while (source.more()) {
+    if (!source.isWS()) {
+      destination.add(source.current());
+      if (source.current() == '"') {
+        source.next();
+        while (source.more() && source.current() != '"') {
+          if (source.current() == '\\') {
+            destination.add(source.current());
+            source.next();
+          }
+          destination.add(source.current());
+          source.next();
+        }
+        destination.add(source.current());
+      }
+    }
+    source.next();
+  }
+}
 /// <summary>
 /// Recursively traverse JNode structure calling IAction methods.
 /// </summary>

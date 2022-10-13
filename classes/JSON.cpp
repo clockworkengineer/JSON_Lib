@@ -56,7 +56,7 @@ JSON::JSON(const ArrayList &array) : JSON() { this->root() = JNode(array); }
 /// <summary>
 /// JSON constructor (object).
 /// </summary>
-/// <param name="array">Intialiser list of key/value(JNode) pairs.</param>
+/// <param name="object">Intialiser list of key/value(JNode) pairs.</param>
 JSON::JSON(const ObjectList &object) : JSON() { this->root() = JNode(object); }
 /// <summary>
 /// JSON constructor. Pass a JSON string to be initially parsed.
@@ -115,13 +115,13 @@ void JSON::traverse(IAction &action) const { std::as_const(*m_implementation).tr
 /// <summary>
 /// Return object entry for the passed in key.
 /// </summary>
-/// <param name=destination>Object entry (JNode) key.</param>
+/// <param name=key>Object entry (JNode) key.</param>
 JNode &JSON::operator[](const std::string &key) { return ((*m_implementation)[key]); }
 const JNode &JSON::operator[](const std::string &key) const { return ((*m_implementation)[key]); }
 /// <summary>
 /// Return array entry for the passed in index.
 /// </summary>
-/// <param name=destination>Array entry (JNode) index.</param>
+/// <param name=index>Array entry (JNode) index.</param>
 JNode &JSON::operator[](std::size_t index) { return ((*m_implementation)[index]); }
 const JNode &JSON::operator[](std::size_t index) const { return ((*m_implementation)[index]); }
 /// <summary>
