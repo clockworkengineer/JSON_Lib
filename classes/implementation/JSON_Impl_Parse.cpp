@@ -2,7 +2,7 @@
 // Class: JSON_Impl
 //
 // Description: JSON class implementation layer that uses recursion to produce a
-// JSON tree representation of JSON string data (parse).
+// JSON tree representation (JNodes) of JSON string data (parse).
 //
 // Dependencies:   C20++ - Language standard features used.
 //

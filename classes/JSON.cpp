@@ -3,7 +3,7 @@
 //
 // Description: Perform JSON parse/stringify to/from a buffer or
 // file. For an in-depth description of the JSON specification refer
-// to its RFC at https://tools.ietf.org/html/rfc8259 and JSON grammar
+// to its RFC at https://tools.ietf.org/html/rfc8259 and the JSON grammar
 // at https://www.json.org/json-en.html.
 //
 // Dependencies:   C20++ - Language standard features used.
