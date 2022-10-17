@@ -104,7 +104,7 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
     REQUIRE(JRef<Number>(object["key1"]).get<int>() == 55);
     REQUIRE(JRef<Number>(object["key2"]).get<int>() == 26666);
   }
-  SECTION("Construct JNode(nested array).", "[JSON][JNode][Constructor][Array]")
+  SECTION("Construct JNode(array with nested array).", "[JSON][JNode][Constructor][Array]")
   {
     JNode jNode{ 1, 2, 3, 4, JNode{ 5, 6, 7, 8 } };
     REQUIRE_FALSE(!jNode.isArray());
@@ -118,7 +118,7 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
     REQUIRE(JRef<Number>(array[4][2]).get<int>() == 7);
     REQUIRE(JRef<Number>(array[4][3]).get<int>() == 8);
   }
-  SECTION("Construct JNode(nested object).", "[JSON][JNode][Constructor][Object]")
+  SECTION("Construct JNode(object with nested object).", "[JSON][JNode][Constructor][Object]")
   {
     JNode jNode{ { "key1", 55 }, { "key2", 26666 }, { "key3", JNode{ { "key4", 5555 }, { "key5", 7777 } } } };
     REQUIRE_FALSE(!jNode.isObject());
@@ -127,6 +127,30 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
     REQUIRE(JRef<Number>(object["key2"]).get<int>() == 26666);
     REQUIRE(JRef<Number>(object["key3"]["key4"]).get<int>() == 5555);
     REQUIRE(JRef<Number>(object["key3"]["key5"]).get<int>() == 7777);
+  }
+  SECTION("Construct JNode(array with nested object).", "[JSON][JNode][Constructor][Array]")
+  {
+    JNode jNode{ 1, 2, 3, 4, JNode{ { "key4", 5555 }, { "key5", 7777 } } };
+    REQUIRE_FALSE(!jNode.isArray());
+    auto &array = JRef<Array>(jNode).getArrayEntries();
+    REQUIRE(JRef<Number>(array[0]).get<int>() == 1);
+    REQUIRE(JRef<Number>(array[1]).get<int>() == 2);
+    REQUIRE(JRef<Number>(array[2]).get<int>() == 3);
+    REQUIRE(JRef<Number>(array[3]).get<int>() == 4);
+    REQUIRE(JRef<Number>(array[4]["key4"]).get<int>() == 5555);
+    REQUIRE(JRef<Number>(array[4]["key5"]).get<int>() == 7777);
+  }
+  SECTION("Construct JNode(object with nested array).", "[JSON][JNode][Constructor][Object]")
+  {
+    JNode jNode{ { "key1", 55 }, { "key2", 26666 }, { "key3", JNode{ 5, 6, 7, 8 } } };
+    REQUIRE_FALSE(!jNode.isObject());
+    auto &object = JRef<Object>(jNode);
+    REQUIRE(JRef<Number>(object["key1"]).get<int>() == 55);
+    REQUIRE(JRef<Number>(object["key2"]).get<int>() == 26666);
+    REQUIRE(JRef<Number>(object["key3"][0]).get<int>() == 5);
+    REQUIRE(JRef<Number>(object["key3"][1]).get<int>() == 6);
+    REQUIRE(JRef<Number>(object["key3"][2]).get<int>() == 7);
+    REQUIRE(JRef<Number>(object["key3"][3]).get<int>() == 8);
   }
 }
 // =================
