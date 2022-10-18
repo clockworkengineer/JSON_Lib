@@ -28,7 +28,7 @@
 // ==========
 // NAMESPACES
 // ==========
-namespace json = JSON_Lib;
+namespace js = JSON_Lib;
 namespace fs = std::filesystem;
 // =======================
 // LOCAL TYPES/DEFINITIONS
@@ -46,9 +46,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     plog::init(plog::debug, "JSON_Create_At_Runtime.log");
     PLOG_INFO << "JSON_Create_At_Runtime started ...";
     // Log version
-    PLOG_INFO << json::JSON().version();
+    PLOG_INFO << js::JSON().version();
     // create an empty structure (null)
-    json::JSON json;
+    js::JSON json;
     // add a number that is stored as double (note the implicit conversion of
     // json to an object)
     json["pi"] = 3.141;
@@ -65,19 +65,19 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     // add another object (using an initializer list of pairs)
     json["object"] = { { "currency", "USD" }, { "value", 42.99 } };
     // add another object that has a nested array (JNode{})
-    json["object2"] = { { "currency", "USD" }, { "array", json::JNode{ 23.22, 33, 55, 99.99 } } };
-    json::BufferDestination destination;
+    json["object2"] = { { "currency", "USD" }, { "array", js::JNode{ 23.22, 33, 55, 99.99 } } };
+    js::BufferDestination destination;
     json.stringify(destination);
     PLOG_INFO << destination.getBuffer();
     destination.clear();
     // create JSON using an intialiser list and nesting array/objects using JNode{}.
-    json::JSON json2 = { { "pi", 3.141 },
+    js::JSON json2 = { { "pi", 3.141 },
       { "sad", true },
       { "first_name", "Niels" },
       { "nothing", nullptr },
-      { "the_answer", json::JNode{ { "everything", 42 } } },
-      { "list", json::JNode{ 1, 0, 2 } },
-      { "object", json::JNode{ { "currency", "USD" }, { "value", json::JNode{ 23.22, 33, 55, 99.99 } } } } };
+      { "the_answer", js::JNode{ { "everything", 42 } } },
+      { "list", js::JNode{ 1, 0, 2 } },
+      { "object", js::JNode{ { "currency", "USD" }, { "value", js::JNode{ 23.22, 33, 55, 99.99 } } } } };
     json2.stringify(destination);
     PLOG_INFO << destination.getBuffer();
   } catch (std::exception &ex) {
