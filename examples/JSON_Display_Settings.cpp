@@ -32,7 +32,7 @@
 // ==========
 // NAMESPACES
 // ==========
-namespace json = JSON_Lib;
+namespace js = JSON_Lib;
 namespace fs = std::filesystem;
 // =======================
 // LOCAL TYPES/DEFINITIONS
@@ -49,45 +49,45 @@ std::string jsonSettingsFile() { return ((fs::current_path() / "files" / "settin
 /// Process settings file top level object entry. This involves jusr reading the
 /// entries JNode data and logging it to a file.
 /// </summary>
-void processEntry(const json::Object::Entry &entry)
+void processEntry(const js::Object::Entry &entry)
 {
-  auto &key = json::JRef<json::String>(entry.getKey()).getString();
+  auto &key = js::JRef<js::String>(entry.getKey()).getString();
   // Log main entry key
   std::string entryJSON{ "\n[" + key + "] = " };
   if (key == "files.exclude") {
     // Read object data (key/boolean pair) and add to log
     entryJSON += "\n{\n";
-    for (const auto &file : json::JRef<json::Object>(entry).getObjectEntries()) {
-      entryJSON += "\"" + json::JRef<json::String>(file.getKey()).getString()
-                   + "\" : " + json::JRef<json::Boolean>(file).toString() + ",\n";
+    for (const auto &file : js::JRef<js::Object>(entry).getObjectEntries()) {
+      entryJSON += "\"" + js::JRef<js::String>(file.getKey()).getString()
+                   + "\" : " + js::JRef<js::Boolean>(file).toString() + ",\n";
     }
     entryJSON.pop_back();
     entryJSON.pop_back();
     entryJSON += "\n}";
   } else if (key == "explorerExclude.backup") {
     // Read null data and add to log
-    entryJSON += json::JRef<json::Null>(entry).toString();
+    entryJSON += js::JRef<js::Null>(entry).toString();
   } else if (key == "cSpell.words") {
     // Read array of string data and add to log
     entryJSON += "[";
-    for (const auto &word : json::JRef<json::Array>(entry).getArrayEntries()) {
-      entryJSON += "\"" + json::JRef<json::String>(word).toString() + "\",";
+    for (const auto &word : js::JRef<js::Array>(entry).getArrayEntries()) {
+      entryJSON += "\"" + js::JRef<js::String>(word).toString() + "\",";
     }
     entryJSON.pop_back();
     entryJSON += "]";
   } else if (key == "files.associations") {
     // Read object data (key/string pair) and add to log
     entryJSON += "\n{\n";
-    for (const auto &file : json::JRef<json::Object>(entry).getObjectEntries()) {
-      entryJSON += "\"" + json::JRef<json::String>(file).toString() + "\" : " + "\""
-                   + json::JRef<json::String>(file).toString() + "\",\n";
+    for (const auto &file : js::JRef<js::Object>(entry).getObjectEntries()) {
+      entryJSON += "\"" + js::JRef<js::String>(file).toString() + "\" : " + "\""
+                   + js::JRef<js::String>(file).toString() + "\",\n";
     }
     entryJSON.pop_back();
     entryJSON.pop_back();
     entryJSON += "\n}";
   } else if (key == "C_Cpp.codeAnalysis.clangTidy.enabled") {
     // Read boolean data and add to log
-    entryJSON += json::JRef<json::Boolean>(entry).toString();
+    entryJSON += js::JRef<js::Boolean>(entry).toString();
   } else {
     throw std::runtime_error("Invalid JSON settings file.");
   }
@@ -103,16 +103,16 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     plog::init(plog::debug, "JSON_Display_Settings.log");
     PLOG_INFO << "JSON_Display_Settings started ...";
     // Log version
-    PLOG_INFO << json::JSON().version();
+    PLOG_INFO << js::JSON().version();
     // Parse in settings file
-    const json::JSON json;
-    json.parse(json::FileSource{ jsonSettingsFile() });
+    const js::JSON json;
+    json.parse(js::FileSource{ jsonSettingsFile() });
     auto &settingsRoot = json.root();
     // JNode root has to be an object
     if (!settingsRoot.isObject()) { throw std::runtime_error("Invalid JSON settings file."); }
     // Loop and process each top level entry
     PLOG_INFO << "Displaying settings ...";
-    for (const auto &entry : json::JRef<json::Object>(settingsRoot).getObjectEntries()) { processEntry(entry); }
+    for (const auto &entry : js::JRef<js::Object>(settingsRoot).getObjectEntries()) { processEntry(entry); }
   } catch (std::exception &ex) {
     PLOG_ERROR << "Error: " << ex.what();
   }

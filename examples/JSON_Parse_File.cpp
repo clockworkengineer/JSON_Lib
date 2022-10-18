@@ -32,7 +32,7 @@
 // ==========
 // NAMESPACES
 // ==========
-namespace json = JSON_Lib;
+namespace js = JSON_Lib;
 namespace fs = std::filesystem;
 namespace chrono = std::chrono;
 // =======================
@@ -65,16 +65,16 @@ void processJSONFile(const std::string &fileName)
     return (chrono::duration_cast<chrono::microseconds>(stop - start).count());
   };
   PLOG_INFO << "Processing " << fileName;
-  const json::JSON json;
-  json::BufferDestination jsonDestination;
+  const js::JSON json;
+  js::BufferDestination jsonDestination;
   // Parse from file
   auto start = chrono::high_resolution_clock::now();
-  json.parse(json::FileSource{ fileName });
+  json.parse(js::FileSource{ fileName });
   auto stop = chrono::high_resolution_clock::now();
   PLOG_INFO << elapsedTime(start, stop) << " microseconds to parse from file.";
   // Stringify to file
   start = chrono::high_resolution_clock::now();
-  json.stringify(json::FileDestination{ fileName + ".new" });
+  json.stringify(js::FileDestination{ fileName + ".new" });
   stop = chrono::high_resolution_clock::now();
   PLOG_INFO << elapsedTime(start, stop) << " microseconds to stringify to file.";
   // Stringify to buffer
@@ -84,7 +84,7 @@ void processJSONFile(const std::string &fileName)
   PLOG_INFO << elapsedTime(start, stop) << " microseconds to stringify to buffer.";
   // Parse from buffer
   start = chrono::high_resolution_clock::now();
-  json.parse(json::BufferSource{ jsonDestination.getBuffer() });
+  json.parse(js::BufferSource{ jsonDestination.getBuffer() });
   stop = chrono::high_resolution_clock::now();
   PLOG_INFO << elapsedTime(start, stop) << " microseconds to parse from buffer.";
   // Display contents
@@ -102,7 +102,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   // Initialise logging.
   plog::init(plog::debug, "JSON_Parse_Files.log");
   PLOG_INFO << "JSON_Parse_Files started ...";
-  PLOG_INFO << json::JSON().version();
+  PLOG_INFO << js::JSON().version();
   // For each json parse it, stringify it and display unless its to large.
   for (auto &fileName : readJSONFileList()) {
     try {

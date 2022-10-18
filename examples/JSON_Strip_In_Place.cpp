@@ -1,8 +1,7 @@
 //
-// Program: JSON_Convert_File
+// Program: JSON_Strip_In_Place
 //
-// Description: For a each JSON file in a directory parse it, convert all
-// numbers, booleans and nulls to strings and save the result.
+// Description: For a each JSON file in a directory.
 //
 // Dependencies: C20++, PLOG, JSON_Lib.
 //
@@ -16,10 +15,13 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
-// ==============
-// JSON Converter
-// ==============
-#include "JSON_Convert.hpp"
+// ====
+// JSON
+// ====
+#include "JSON.hpp"
+#include "JSON_Types.hpp"
+#include "JSON_Sources.hpp"
+#include "JSON_Destinations.hpp"
 // =======
 // Logging
 // =======
@@ -49,17 +51,14 @@ std::vector<std::string> readJSONFileList()
   return (fileList);
 }
 /// <summary>
-/// Parse JSON file and convert numbers into strings in its JSON tree.
+/// Parse JSON file and analyze its JSON tree.
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName)
 {
-  PLOG_INFO << "Converting ... " << fileName;
-  JSON_Convert jsonConverter;
-  js::JSON json;
-  json.parse(js::FileSource{ fileName });
-  json.traverse(jsonConverter);
-  json.print(js::FileDestination{ fileName + ".new" });
+  PLOG_INFO << "Stripping " << fileName;
+  const js::JSON json;
+  json.strip(js::FileSource{ fileName }, js::FileDestination{ fileName+".stripped" });
   PLOG_INFO << "Finished " << fileName << ".";
 }
 // ============================
@@ -68,10 +67,11 @@ void processJSONFile(const std::string &fileName)
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   // Initialise logging.
-  plog::init(plog::debug, "JSON_Convert_File.log");
-  PLOG_INFO << "JSON_Convert_File started ...";
+  plog::init(plog::debug, "JSON_Strip_In_Place.log");
+  PLOG_INFO << "JSON_Strip_In_Place started ...";
+  // Output JSON Lib version
   PLOG_INFO << js::JSON().version();
-  // Convert JSON files.
+  // Strip JSON files.
   for (auto &fileName : readJSONFileList()) {
     try {
       processJSONFile(fileName);
@@ -79,6 +79,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
       std::cout << ex.what() << "\n";
     }
   }
-  PLOG_INFO << "JSON_Convert_File exited.";
+  PLOG_INFO << "JSON_Strip_In_Place exited.";
   exit(EXIT_SUCCESS);
 }

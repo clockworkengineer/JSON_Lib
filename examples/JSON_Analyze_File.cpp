@@ -28,7 +28,7 @@
 // ==========
 // NAMESPACES
 // ==========
-namespace json = JSON_Lib;
+namespace js = JSON_Lib;
 namespace fs = std::filesystem;
 // =======================
 // LOCAL TYPES/DEFINITIONS
@@ -55,9 +55,9 @@ std::vector<std::string> readJSONFileList()
 void processJSONFile(const std::string &fileName)
 {
   PLOG_INFO << "Analyzing " << fileName;
-  const json::JSON json;
+  const js::JSON json;
   JSON_Analyzer jsonAnalyzer;
-  json.parse(json::FileSource{ fileName });
+  json.parse(js::FileSource{ fileName });
   json.traverse(jsonAnalyzer);
   PLOG_INFO << jsonAnalyzer.dump();
   PLOG_INFO << "Finished " << fileName << ".";
@@ -71,7 +71,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   plog::init(plog::debug, "JSON_Analyze_File.log");
   PLOG_INFO << "JSON_Analyze_File started ...";
   // Output JSON Lib version and data structure metrics
-  PLOG_INFO << json::JSON().version();
+  PLOG_INFO << js::JSON().version();
   PLOG_INFO << JSON_Analyzer::dumpNumericSizes();
   PLOG_INFO << JSON_Analyzer::dumpJNodeSizes();
   // Analyze JSON files.

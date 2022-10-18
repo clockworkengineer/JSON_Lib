@@ -29,7 +29,7 @@
 // ==========
 // NAMESPACES
 // ==========
-namespace json = JSON_Lib;
+namespace js = JSON_Lib;
 namespace fs = std::filesystem;
 // =======================
 // LOCAL TYPES/DEFINITIONS
@@ -52,23 +52,23 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     plog::init(plog::debug, "JSON_Toggle_Setting.log");
     PLOG_INFO << "JSON_Toggle_Setting started ...";
     // Log version
-    PLOG_INFO << json::JSON().version();
+    PLOG_INFO << js::JSON().version();
     // Parse in settings file
-    json::JSON json;
-    json.parse(json::FileSource{ jsonSettingsFile() });
+    js::JSON json;
+    json.parse(js::FileSource{ jsonSettingsFile() });
     auto &settingsRoot = json.root();
     // JNode root has to be an object
     if (!settingsRoot.isObject()) { throw std::runtime_error("Invalid JSON settings file."); }
     // Check key exists
-    if (!json::JRef<json::Object>(settingsRoot).contains("C_Cpp.codeAnalysis.clangTidy.enabled")) {
+    if (!js::JRef<js::Object>(settingsRoot).contains("C_Cpp.codeAnalysis.clangTidy.enabled")) {
       throw std::runtime_error("Object missing key 'C_Cpp.codeAnalysis.clangTidy.enabled' .");
     }
     // Reference code analysis enabled flag
-    auto &enabled = json::JRef<json::Boolean>(settingsRoot["C_Cpp.codeAnalysis.clangTidy.enabled"]).getBoolean();
+    auto &enabled = js::JRef<js::Boolean>(settingsRoot["C_Cpp.codeAnalysis.clangTidy.enabled"]).getBoolean();
     // Toggle it
     enabled = !enabled;
     // Write back settings with toggled flag
-    json.print(json::FileDestination{ jsonSettingsFile() });
+    json.print(js::FileDestination{ jsonSettingsFile() });
   } catch (std::exception &ex) {
     PLOG_ERROR << "Error: " << ex.what();
   }

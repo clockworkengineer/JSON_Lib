@@ -30,7 +30,7 @@
 // ==========
 // NAMESPACES
 // ==========
-namespace json = JSON_Lib;
+namespace js = JSON_Lib;
 namespace fs = std::filesystem;
 // =======================
 // LOCAL TYPES/DEFINITIONS
@@ -60,11 +60,11 @@ std::vector<std::string> readJSONFileList()
 void processJSONFile(const std::string &fileName)
 {
   PLOG_INFO << "Indexing " << fileName;
-  json::JSON json;
+  js::JSON json;
   JSON_Indexer jsonIndexer{ fileName };
-  json.parse(json::FileSource{ fileName });
+  json.parse(js::FileSource{ fileName });
   json.traverse(jsonIndexer);
-  json.stringify(json::FileDestination{ fileName + ".new" });
+  json.stringify(js::FileDestination{ fileName + ".new" });
   jsonIndexer.save();
   PLOG_INFO << "Finished " << fileName << ".";
 }
@@ -76,7 +76,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   // Initialise logging.
   plog::init(plog::debug, "JSON_Index_File.log");
   PLOG_INFO << "JSON_Index_File started ...";
-  PLOG_INFO << json::JSON().version();
+  PLOG_INFO << js::JSON().version();
   // Analyze JSON files.
   for (auto &fileName : readJSONFileList()) {
     try {
