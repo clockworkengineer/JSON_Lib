@@ -73,7 +73,7 @@ TEST_CASE("Check JSON stringification of collection types to a file and check va
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
     jsonDestination.close();
-    REQUIRE(readFromFile(generatedFileName) == expected);
+    REQUIRE(JSON::fromFile(generatedFileName) == expected);
   }
   SECTION(R"(Stringify an array ([999,"Time",null,true] to a file and check its value.)", "[JSON][Stringify][File]")
   {
@@ -83,7 +83,7 @@ TEST_CASE("Check JSON stringification of collection types to a file and check va
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
     jsonDestination.close();
-    REQUIRE(readFromFile(generatedFileName) == expected);
+    REQUIRE(JSON::fromFile(generatedFileName) == expected);
   }
   SECTION(R"(Stringify an nested object ({"City":"London","Population":[1,2,3,4,5]}) to a file and check its value.)",
     "[JSON][Stringify][File]")
@@ -94,7 +94,7 @@ TEST_CASE("Check JSON stringification of collection types to a file and check va
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
     jsonDestination.close();
-    REQUIRE(readFromFile(generatedFileName) == expected);
+    REQUIRE(JSON::fromFile(generatedFileName) == expected);
   }
   SECTION(R"(Stringify a nested array ([true,"Out of time",7.89043e+18,{"key":4444}]) to a file and check its value.)",
     "[JSON][Stringify][File]")
@@ -105,6 +105,6 @@ TEST_CASE("Check JSON stringification of collection types to a file and check va
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
     jsonDestination.close();
-    REQUIRE(readFromFile(generatedFileName) == expected);
+    REQUIRE(JSON::fromFile(generatedFileName) == expected);
   }
 }

@@ -80,7 +80,7 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value-Ref
     std::filesystem::remove(generatedFileName);
     json.parse(FileSource{ testFileName });
     json.stringify(FileDestination{ generatedFileName });
-    REQUIRE(readFromFile(generatedFileName) == stripWhiteSpace(readFromFile(testFileName)));
+    REQUIRE(JSON::fromFile(generatedFileName) == stripWhiteSpace(JSON::fromFile(testFileName)));
   }
 }
 // =====================
@@ -113,7 +113,7 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
   TEST_FILE_LIST(testFile);
   SECTION("Stripped (Buffer) should be the same as parsed then stringified JSON.", "[JSON][Parse][Strip]")
   {
-    BufferSource jsonSource{ readFromFile(prefixPath(testFile)) };
+    BufferSource jsonSource{ JSON::fromFile(prefixPath(testFile)) };
     BufferDestination jsonDestination;
     json.parse(jsonSource);
     json.stringify(jsonDestination);
@@ -134,7 +134,7 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
     FileDestination strippedDestination{ generatedFileName };
     json.strip(jsonSource, strippedDestination);
     strippedDestination.close();
-    REQUIRE(jsonDestination.getBuffer() == readFromFile(generatedFileName));
+    REQUIRE(jsonDestination.getBuffer() == JSON::fromFile(generatedFileName));
   }
   SECTION("Strip JSON with escaped ascii characters.", "[JSON][Parse][Strip]")
   {

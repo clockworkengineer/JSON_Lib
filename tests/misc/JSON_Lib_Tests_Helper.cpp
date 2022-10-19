@@ -28,7 +28,7 @@ const std::string prefixPath(const std::string &jsonFileName)
 /// </summary>
 /// <param name="jsonBuffer">JSON string buffer</param>
 /// <returns>Translated JSON string</returns>
-std::string crlfTolf(const std::string &jsonBuffer)
+const std::string crlfTolf(const std::string &jsonBuffer)
 {
   std::string translated{ jsonBuffer };
   size_t pos = translated.find(kCRLF);
@@ -37,34 +37,6 @@ std::string crlfTolf(const std::string &jsonBuffer)
     pos = translated.find(kCRLF, pos + 1);
   }
   return (translated);
-}
-/// <summary>
-/// Open a JSON file, read its contents into a string buffer and return
-/// the buffer.
-/// </summary>
-/// <param name="jsonFileName">JSON file name</param>
-/// <returns>JSON string.</returns>
-std::string readFromFile(const std::string &jsonFileName)
-{
-  std::ifstream jsonFile;
-  jsonFile.open(jsonFileName, std::ios_base::binary);
-  std::ostringstream jsonFileBuffer;
-  jsonFileBuffer << jsonFile.rdbuf();
-  return (jsonFileBuffer.str());
-}
-/// <summary>
-/// Create an JSON file and write JSON.
-/// </summary>
-/// <param name="jsonFileName">JSON file name</param>
-/// <param name="jsonString">JSON string</param>
-/// <returns></returns>
-void writeToFile(const std::string &jsonFileName, const std::string &jsonString)
-{
-  std::remove(jsonFileName.c_str());
-  std::ofstream jsonFile;
-  jsonFile.open(jsonFileName, std::ios::binary);
-  jsonFile << jsonString;
-  jsonFile.close();
 }
 /// <summary>
 /// Verify that an JNode Array has the correct parsed format.

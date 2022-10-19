@@ -24,7 +24,7 @@ TEST_CASE("Check JSON stringification of a list of example JSON files.", "[JSON]
   TEST_FILE_LIST(testFile);
   SECTION("Stringify to  buffer and check value.", "[JSON][Stringify][Buffer]")
   {
-    const std::string jsonFileBuffer{ readFromFile(prefixPath(testFile)) };
+    const std::string jsonFileBuffer{ JSON::fromFile(prefixPath(testFile)) };
     BufferSource jsonSource{ jsonFileBuffer };
     BufferDestination jsonDestination;
     json.parse(jsonSource);
@@ -36,12 +36,12 @@ TEST_CASE("Check JSON stringification of a list of example JSON files.", "[JSON]
     const std::string testFileName{ prefixPath(testFile) };
     const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
-    std::string jsonFileBuffer{ readFromFile(testFileName) };
+    std::string jsonFileBuffer{ JSON::fromFile(testFileName) };
     BufferSource jsonSource{ jsonFileBuffer };
     FileDestination jsonDestination{ generatedFileName };
     json.parse(jsonSource);
     json.stringify(jsonDestination);
     jsonDestination.close();
-    REQUIRE(readFromFile(generatedFileName) == stripWhiteSpace(jsonFileBuffer));
+    REQUIRE(JSON::fromFile(generatedFileName) == stripWhiteSpace(jsonFileBuffer));
   }
 }

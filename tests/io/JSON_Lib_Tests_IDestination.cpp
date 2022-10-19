@@ -107,7 +107,7 @@ TEST_CASE("Check IDestination (File) interface.", "[JSON][IDestination][File]")
     file.add("65767");
     file.close();
     REQUIRE(std::filesystem::file_size(filePath) == 5);
-    REQUIRE(readFromFile(testFileName) == "65767");
+    REQUIRE(JSON::fromFile(testFileName) == "65767");
   }
   SECTION("Create FileDestination, add to it, clear file and then add to it again and check result.",
     "[JSON][IDestination][File][Clear]")
@@ -118,13 +118,13 @@ TEST_CASE("Check IDestination (File) interface.", "[JSON][IDestination][File]")
     file.add("65767");
     file.close();
     REQUIRE(std::filesystem::file_size(filePath) == 5);
-    REQUIRE(readFromFile(testFileName) == ("65767"));
+    REQUIRE(JSON::fromFile(testFileName) == ("65767"));
     file.clear();
     REQUIRE(std::filesystem::file_size(filePath) == 0);
     file.add("65767");
     file.close();
     REQUIRE(std::filesystem::file_size(filePath) == 5);
-    REQUIRE(readFromFile(testFileName) == ("65767"));
+    REQUIRE(JSON::fromFile(testFileName) == ("65767"));
   }
   SECTION("Create FileDestination and and add content with linefeeds.", "[JSON][IDestination][Buffer][Linefeed]")
   {
@@ -136,6 +136,6 @@ TEST_CASE("Check IDestination (File) interface.", "[JSON][IDestination][File]")
     file.add("33333\n");
     file.close();
     REQUIRE(std::filesystem::file_size(filePath) == 21);
-    REQUIRE(readFromFile(testFileName) == ("65767\r\n22222\r\n33333\r\n"));
+    REQUIRE(JSON::fromFile(testFileName) == ("65767\r\n22222\r\n33333\r\n"));
   }
 }

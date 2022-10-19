@@ -24,7 +24,7 @@ TEST_CASE("Check JSON parsing of a list of example JSON files.", "[JSON][Parse][
   TEST_FILE_LIST(testFile);
   SECTION("Parse from buffer.", "[JSON][Parse][Examples][Buffer]")
   {
-    BufferSource jsonSource{ readFromFile(prefixPath(testFile)) };
+    BufferSource jsonSource{ JSON::fromFile(prefixPath(testFile)) };
     REQUIRE_NOTHROW(json.parse(jsonSource));
     jsonSource.reset();
     json.parse(jsonSource);

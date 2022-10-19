@@ -22,7 +22,7 @@ using namespace JSON_Lib;
 TEST_CASE("Check ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
 {
   const std::string testFileName{ prefixPath(kSingleJSONFile) };// Uses file testfile001.json
-  const std::string buffer{ crlfTolf(readFromFile(testFileName)) };
+  const std::string buffer{ crlfTolf(JSON::fromFile(testFileName)) };
   SECTION("Create BufferSource.", "[JSON][ISource][Buffer][Construct]") { REQUIRE_NOTHROW(BufferSource(buffer)); }
   SECTION("Check that BufferSource position() works correctly.", "[JSON][ISource][Buffer][Position]")
   {
@@ -143,7 +143,7 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
   SECTION("Check that File position() works correctly.", "[JSON][ISource][File][Position]")
   {
     std::filesystem::remove(kGeneratedJSONFile);
-    writeToFile(kGeneratedJSONFile, R"([true  , "Out of time",  7.89043e+18, true])");
+    JSON::toFile(kGeneratedJSONFile, R"([true  , "Out of time",  7.89043e+18, true])");
     FileSource source{ kGeneratedJSONFile };
     while (source.more() && !source.match("time")) { source.next(); }
     REQUIRE(source.position() == 21);
@@ -181,7 +181,7 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
   SECTION("Check that FileSource is ignoring whitespace correctly.", "[JSON][ISource][File][Whitespace]")
   {
     std::filesystem::remove(kGeneratedJSONFile);
-    writeToFile(kGeneratedJSONFile, "{    \"Name\" \t\t\t\r\r\r\r\r\r:\r\n       \"Pete\"   \r\r\r\r}");
+    JSON::toFile(kGeneratedJSONFile, "{    \"Name\" \t\t\t\r\r\r\r\r\r:\r\n       \"Pete\"   \r\r\r\r}");
     FileSource source{ kGeneratedJSONFile };
     std::string strippedJSON;
     while (source.more()) {
@@ -196,7 +196,7 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
     "[JSON][ISource][File][Whitespace]")
   {
     std::filesystem::remove(kGeneratedJSONFile);
-    writeToFile(kGeneratedJSONFile, "{    \"Name\" \t\t\t\r\r\r\r\r\r:\r\n       \"Pete\"   \r\r\r\r}");
+    JSON::toFile(kGeneratedJSONFile, "{    \"Name\" \t\t\t\r\r\r\r\r\r:\r\n       \"Pete\"   \r\r\r\r}");
     FileSource source{ kGeneratedJSONFile };
     while (source.more()) { source.next(); }
     REQUIRE_NOTHROW(source.ignoreWS());
@@ -207,7 +207,7 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
     "[JSON][ISource][File][Match]")
   {
     std::filesystem::remove(kGeneratedJSONFile);
-    writeToFile(kGeneratedJSONFile, R"([true  , "Out of time",  7.89043e+18, true])");
+    JSON::toFile(kGeneratedJSONFile, R"([true  , "Out of time",  7.89043e+18, true])");
     FileSource source{ kGeneratedJSONFile };
     REQUIRE_FALSE(source.match("[trap"));// Not there
     REQUIRE_FALSE(!source.match("[true"));// Match
@@ -244,7 +244,7 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
   {
     std::string result;
     std::filesystem::remove(kGeneratedJSONFile);
-    writeToFile(kGeneratedJSONFile, "[true\n,\"Out of time\"\n,7.89043e+18\n,true\n]");
+    JSON::toFile(kGeneratedJSONFile, "[true\n,\"Out of time\"\n,7.89043e+18\n,true\n]");
     FileSource source{ kGeneratedJSONFile };
     while (source.more()) {
       result.push_back(source.current());
@@ -258,7 +258,7 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
   {
     std::string result;
     std::filesystem::remove(kGeneratedJSONFile);
-    writeToFile(kGeneratedJSONFile, "[true\r\n,\"Out of time\"\r\n,7.89043e+18\r\n,true\r\n]");
+    JSON::toFile(kGeneratedJSONFile, "[true\r\n,\"Out of time\"\r\n,7.89043e+18\r\n,true\r\n]");
     FileSource source{ kGeneratedJSONFile };
     while (source.more()) {
       result.push_back(source.current());
