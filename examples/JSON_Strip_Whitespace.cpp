@@ -1,7 +1,8 @@
 //
-// Program: JSON_Strip_In_Place
+// Program: JSON_Strip_Whitespace
 //
-// Description: For a each JSON file in a directory.
+// Description: For a each JSON file in a directory strip its white space characters
+// temporary file and then overwrite the existing file by renaming the temporary file.
 //
 // Dependencies: C20++, PLOG, JSON_Lib.
 //
@@ -51,14 +52,15 @@ std::vector<std::string> readJSONFileList()
   return (fileList);
 }
 /// <summary>
-/// Parse JSON file and analyze its JSON tree.
+/// Strip a JSON file of all its whitespace.
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName)
 {
   PLOG_INFO << "Stripping " << fileName;
   const js::JSON json;
-  json.strip(js::FileSource{ fileName }, js::FileDestination{ fileName+".stripped" });
+  json.strip(js::FileSource{ fileName }, js::FileDestination{ fileName + ".stripped" });
+  fs::rename(fileName + ".stripped", fileName);
   PLOG_INFO << "Finished " << fileName << ".";
 }
 // ============================
@@ -67,8 +69,8 @@ void processJSONFile(const std::string &fileName)
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   // Initialise logging.
-  plog::init(plog::debug, "JSON_Strip_In_Place.log");
-  PLOG_INFO << "JSON_Strip_In_Place started ...";
+  plog::init(plog::debug, "JSON_Strip_Whitespace.log");
+  PLOG_INFO << "JSON_Strip_Whitespace started ...";
   // Output JSON Lib version
   PLOG_INFO << js::JSON().version();
   // Strip JSON files.
@@ -79,6 +81,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
       std::cout << ex.what() << "\n";
     }
   }
-  PLOG_INFO << "JSON_Strip_In_Place exited.";
+  PLOG_INFO << "JSON_Strip_Whitespace exited.";
   exit(EXIT_SUCCESS);
 }
