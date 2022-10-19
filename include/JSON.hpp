@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 #include <variant>
+#include <fstream>
+#include <sstream>
 // =================
 // LIBRARY NAMESPACE
 // =================
@@ -82,6 +84,9 @@ public:
   // Get JSON array element at index
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
+  // Read/Write JSON from file
+  static const std::string toFile(const std::string &jsonFileName);
+  static void fromFile(const std::string &jsonFileName, const std::string &jsonString);
   // ================
   // PUBLIC VARIABLES
   // ================
@@ -98,4 +103,31 @@ private:
   // JSON implementation
   const std::unique_ptr<JSON_Impl> m_implementation;
 };
+/// <summary>
+/// Open a JSON file, read its contents into a string buffer and return
+/// the buffer.
+/// </summary>
+/// <param name="jsonFileName">JSON file name</param>
+/// <returns>JSON string.</returns>
+inline const std::string JSON::toFile(const std::string &jsonFileName)
+{
+  std::ifstream jsonFile;
+  jsonFile.open(jsonFileName, std::ios_base::binary);
+  std::ostringstream jsonFileBuffer;
+  jsonFileBuffer << jsonFile.rdbuf();
+  return (jsonFileBuffer.str());
+}
+/// <summary>
+/// Create an JSON file and write JSON string to it.
+/// </summary>
+/// <param name="jsonFileName">JSON file name</param>
+/// <param name="jsonString">JSON string</param>
+inline void JSON::fromFile(const std::string &jsonFileName, const std::string &jsonString)
+{
+  std::remove(jsonFileName.c_str());
+  std::ofstream jsonFile;
+  jsonFile.open(jsonFileName, std::ios::binary);
+  jsonFile << jsonString;
+  jsonFile.close();
+}
 }// namespace JSON_Lib
