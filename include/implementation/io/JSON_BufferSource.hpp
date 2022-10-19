@@ -28,7 +28,7 @@ public:
   {
     if (buffer.empty()) { throw Error("Empty source buffer passed to be parsed."); }
   }
-  BufferSource() = delete;
+  BufferSource() = default;
   BufferSource(const BufferSource &other) = delete;
   BufferSource &operator=(const BufferSource &other) = delete;
   BufferSource(BufferSource &&other) = delete;
