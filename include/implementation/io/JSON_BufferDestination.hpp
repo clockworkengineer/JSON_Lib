@@ -40,24 +40,6 @@ public:
   virtual void add(const char ch) override { m_buffer.push_back(ch); }
   virtual void clear() override { m_buffer.clear(); }
   [[nodiscard]] const std::string &getBuffer() const { return (m_buffer); }
-  /// <summary>
-  /// Create an JSON file and write JSON from buffer to it.
-  /// </summary>
-  /// <param name="jsonFileName">JSON file name</param>
-  /// <returns></returns>
-  void toFile(const std::string &jsonFileName)
-  {
-    std::remove(jsonFileName.c_str());
-    std::ofstream jsonFile; 
-    jsonFile.open(jsonFileName, std::ios::binary);
-    jsonFile << m_buffer;
-    jsonFile.close();
-  }
-  /// <summary>
-  /// Return reference to buffer base.
-  /// </summary>
-  /// <returns>Reference to start of buffer.</returns>
-  const std::string &buffer() { return (m_buffer); }
   // ================
   // PUBLIC VARIABLES
   // ================

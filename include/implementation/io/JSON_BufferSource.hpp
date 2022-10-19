@@ -22,13 +22,14 @@ public:
   // ==========================
   // PUBLIC TYPES AND CONSTANTS
   // ==========================
+  // ======================
   // CONSTRUCTOR/DESTRUCTOR
   // ======================
   explicit BufferSource(const std::string &buffer) : m_buffer(buffer)
   {
     if (buffer.empty()) { throw Error("Empty source buffer passed to be parsed."); }
   }
-  BufferSource() = default;
+  BufferSource() = delete;
   BufferSource(const BufferSource &other) = delete;
   BufferSource &operator=(const BufferSource &other) = delete;
   BufferSource(BufferSource &&other) = delete;
@@ -60,23 +61,6 @@ public:
     m_column = 1;
   }
   virtual [[nodiscard]] std::size_t position() const override { return (m_position); }
-  /// <summary>
-  /// Open a JSON file and read its contents into the buffer.
-  /// </summary>
-  /// <param name="jsonFileName">JSON file name</param>
-  void fromFile(const std::string &jsonFileName)
-  {
-    std::ifstream jsonFile;
-    jsonFile.open(jsonFileName, std::ios_base::binary);
-    std::ostringstream jsonFileBuffer;
-    jsonFileBuffer << jsonFile.rdbuf();
-    m_buffer = jsonFileBuffer.str();
-  }
-  /// <summary>
-  /// Return reference to buffer base.
-  /// </summary>
-  /// <returns>Reference to start of buffer.</returns>
-  const std::string &buffer() { return (m_buffer); }
   // ================
   // PUBLIC VARIABLES
   // ================
