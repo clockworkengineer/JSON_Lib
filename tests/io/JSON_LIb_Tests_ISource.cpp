@@ -22,7 +22,7 @@ using namespace JSON_Lib;
 TEST_CASE("Check ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
 {
   const std::string testFileName{ prefixPath(kSingleJSONFile) };// Uses file testfile001.json
-  const std::string buffer{ crlfTolf(JSON::fromFile(testFileName)) };
+  const std::string buffer{ JSON::fromFile(testFileName) };
   SECTION("Create BufferSource.", "[JSON][ISource][Buffer][Construct]") { REQUIRE_NOTHROW(BufferSource(buffer)); }
   SECTION("Check that BufferSource position() works correctly.", "[JSON][ISource][Buffer][Position]")
   {

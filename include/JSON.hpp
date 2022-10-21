@@ -85,7 +85,7 @@ public:
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
   // Read/Write JSON from file
-  static const std::string fromFile(const std::string &jsonFileName);
+  static const std::string fromFile(const std::string &jsonFileName, bool translate);
   static void toFile(const std::string &jsonFileName, const std::string &jsonString);
   // ================
   // PUBLIC VARIABLES
@@ -109,12 +109,23 @@ private:
 /// </summary>
 /// <param name="jsonFileName">JSON file name</param>
 /// <returns>JSON string.</returns>
-inline const std::string JSON::fromFile(const std::string &jsonFileName)
+inline const std::string JSON::fromFile(const std::string &jsonFileName, bool translate = true)
 {
+  const char *kCRLF = "\x0D\x0A";
+  const char *kLF = "\x0A";
   std::ifstream jsonFile;
   jsonFile.open(jsonFileName, std::ios_base::binary);
   std::ostringstream jsonFileBuffer;
   jsonFileBuffer << jsonFile.rdbuf();
+  if (translate) {
+    std::string translated{ jsonFileBuffer.str() };
+    size_t pos = translated.find(kCRLF);
+    while (pos != std::string::npos) {
+      translated.replace(pos, 2, kLF);
+      pos = translated.find(kCRLF, pos + 1);
+    }
+    return (translated);
+  }
   return (jsonFileBuffer.str());
 }
 /// <summary>

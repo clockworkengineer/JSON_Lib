@@ -24,21 +24,6 @@ const std::string prefixPath(const std::string &jsonFileName)
   return ((std::filesystem::current_path() / "files" / jsonFileName).string());
 }
 /// <summary>
-/// Convert any <CR><LF> to just <LF>.
-/// </summary>
-/// <param name="jsonBuffer">JSON string buffer</param>
-/// <returns>Translated JSON string</returns>
-const std::string crlfTolf(const std::string &jsonBuffer)
-{
-  std::string translated{ jsonBuffer };
-  size_t pos = translated.find(kCRLF);
-  while (pos != std::string::npos) {
-    translated.replace(pos, 2, kLF);
-    pos = translated.find(kCRLF, pos + 1);
-  }
-  return (translated);
-}
-/// <summary>
 /// Verify that an JNode Array has the correct parsed format.
 /// </summary>
 /// <param name="jNode">Pointer to JNode Array</param>

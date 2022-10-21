@@ -72,7 +72,7 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
     jsonDestination.close();
-    REQUIRE(crlfTolf(JSON::fromFile(generatedFileName)) == expected);
+    REQUIRE(JSON::fromFile(generatedFileName) == expected);
   }
   SECTION("Stringify a boolean (true) to file and check its value.", "[JSON][Stringify][Simple][File][Validate]")
   {
@@ -83,7 +83,7 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
     jsonDestination.close();
-    REQUIRE(crlfTolf(JSON::fromFile(generatedFileName)) == expected);
+    REQUIRE(JSON::fromFile(generatedFileName) == expected);
   }
   SECTION("Stringify a number (98345) to file and check its value.", "[JSON][Stringify][Simple][File][Validate]")
   {
@@ -94,7 +94,7 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
     jsonDestination.close();
-    REQUIRE(crlfTolf(JSON::fromFile(generatedFileName)) == expected);
+    REQUIRE(JSON::fromFile(generatedFileName) == expected);
   }
   SECTION("Stringify a null to file and check its value.", "[JSON][Stringify][Simple][File][Validate]")
   {
@@ -105,6 +105,6 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
     jsonDestination.close();
-    REQUIRE(crlfTolf(JSON::fromFile(generatedFileName)) == expected);
+    REQUIRE(JSON::fromFile(generatedFileName) == expected);
   }
 }

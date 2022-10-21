@@ -136,6 +136,6 @@ TEST_CASE("Check IDestination (File) interface.", "[JSON][IDestination][File]")
     file.add("33333\n");
     file.close();
     REQUIRE(std::filesystem::file_size(filePath) == 21);
-    REQUIRE(JSON::fromFile(testFileName) == ("65767\r\n22222\r\n33333\r\n"));
+    REQUIRE(JSON::fromFile(testFileName, false) == ("65767\r\n22222\r\n33333\r\n"));
   }
 }
