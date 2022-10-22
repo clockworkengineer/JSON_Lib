@@ -85,7 +85,7 @@ public:
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
   // Read/Write JSON from file
-  static const std::string fromFile(const std::string &jsonFileName, bool translate);
+  static const std::string fromFile(const std::string &jsonFileName);
   static void toFile(const std::string &jsonFileName, const std::string &jsonString);
   // ================
   // PUBLIC VARIABLES
@@ -105,28 +105,29 @@ private:
 };
 /// <summary>
 /// Open a JSON file, read its contents into a string buffer and return
-/// the buffer.
+/// the buffer. Note any CRLF in the source file are translated to just a
+/// LF internally.
 /// </summary>
 /// <param name="jsonFileName">JSON file name</param>
+/// <param name="translate">==true translate all CRLF to LF</param>
 /// <returns>JSON string.</returns>
-inline const std::string JSON::fromFile(const std::string &jsonFileName, bool translate = true)
+inline const std::string JSON::fromFile(const std::string &jsonFileName)
 {
   const char *kCRLF = "\x0D\x0A";
   const char *kLF = "\x0A";
+  // Read in JSON
   std::ifstream jsonFile;
   jsonFile.open(jsonFileName, std::ios_base::binary);
   std::ostringstream jsonFileBuffer;
   jsonFileBuffer << jsonFile.rdbuf();
-  if (translate) {
-    std::string translated{ jsonFileBuffer.str() };
-    size_t pos = translated.find(kCRLF);
-    while (pos != std::string::npos) {
-      translated.replace(pos, 2, kLF);
-      pos = translated.find(kCRLF, pos + 1);
-    }
-    return (translated);
+  // Translate CRLF -> LF
+  std::string translated{ jsonFileBuffer.str() };
+  size_t pos = translated.find(kCRLF);
+  while (pos != std::string::npos) {
+    translated.replace(pos, 2, kLF);
+    pos = translated.find(kCRLF, pos + 1);
   }
-  return (jsonFileBuffer.str());
+  return (translated);
 }
 /// <summary>
 /// Create an JSON file and write JSON string to it.

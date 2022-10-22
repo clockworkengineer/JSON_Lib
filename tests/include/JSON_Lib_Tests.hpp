@@ -24,8 +24,6 @@
 // ===================
 // Unit test constants
 // ===================
-// inline static const char *kCRLF = "\x0D\x0A";
-// inline static const char *kLF = "\x0A";
 inline static const char *kGeneratedJSONFile = "generated.json";
 inline static const char *kSingleJSONFile = "testfile001.json";
 inline static const char *kNonExistantJSONFile = "doesntexist.json";
@@ -33,9 +31,9 @@ inline static const char *kNonExistantJSONFile = "doesntexist.json";
 // Unit test helper functions
 // ==========================
 const std::string prefixPath(const std::string &jsonFileName);
+std::string stripWhiteSpace(const std::string &jsonBuffer);
 void checkObject(const JSON_Lib::JNode &jNode);
 void checkArray(const JSON_Lib::JNode &jNode);
-std::string stripWhiteSpace(const std::string &jsonBuffer);
 // ================
 // Test files macro
 // ================
