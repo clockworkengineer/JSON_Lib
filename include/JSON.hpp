@@ -81,7 +81,7 @@ public:
   // Search for JSON object entry with a given key
   JNode &operator[](const std::string &key);
   const JNode &operator[](const std::string &key) const;
-  // Get JSON array element at index
+  // Get JSON array entry at index
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
   // Read/Write JSON from file
