@@ -109,7 +109,6 @@ private:
 /// LF internally.
 /// </summary>
 /// <param name="jsonFileName">JSON file name</param>
-/// <param name="translate">==true translate all CRLF to LF</param>
 /// <returns>JSON string.</returns>
 inline const std::string JSON::fromFile(const std::string &jsonFileName)
 {
