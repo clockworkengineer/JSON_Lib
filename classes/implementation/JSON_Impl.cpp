@@ -168,4 +168,42 @@ JNode &JSON_Impl::operator[](std::size_t index)
   }
 }
 const JNode &JSON_Impl::operator[](std::size_t index) const { return ((m_jNodeRoot)[index]); }
+/// <summary>
+/// Open a JSON file, read its contents into a string buffer and return
+/// the buffer. Note any CRLF in the source file are translated to just a
+/// LF internally.
+/// </summary>
+/// <param name="jsonFileName">JSON file name</param>
+/// <returns>JSON string.</returns>
+const std::string JSON_Impl::fromFile(const std::string &jsonFileName)
+{
+  const char *kCRLF = "\x0D\x0A";
+  const char *kLF = "\x0A";
+  // Read in JSON
+  std::ifstream jsonFile;
+  jsonFile.open(jsonFileName, std::ios_base::binary);
+  std::ostringstream jsonFileBuffer;
+  jsonFileBuffer << jsonFile.rdbuf();
+  // Translate CRLF -> LF
+  std::string translated{ jsonFileBuffer.str() };
+  size_t pos = translated.find(kCRLF);
+  while (pos != std::string::npos) {
+    translated.replace(pos, 2, kLF);
+    pos = translated.find(kCRLF, pos + 1);
+  }
+  return (translated);
+}
+/// <summary>
+/// Create an JSON file and write JSON string to it.
+/// </summary>
+/// <param name="jsonFileName">JSON file name</param>
+/// <param name="jsonString">JSON string</param>
+void JSON_Impl::toFile(const std::string &jsonFileName, const std::string &jsonString)
+{
+  std::remove(jsonFileName.c_str());
+  std::ofstream jsonFile;
+  jsonFile.open(jsonFileName, std::ios::binary);
+  jsonFile << jsonString;
+  jsonFile.close();
+}
 }// namespace JSON_Lib

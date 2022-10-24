@@ -4,5 +4,3 @@ Parse JSON into an internal JSON Object (generating an exception if it is found 
 Stringification occurs with no whitespace being produced but if well formatted (indented) JSON is required then use the print and setIndent methods instead. The JSON tree once created can also be traversed and an action method (IAction interface) called for each type of node traversed to either read its details or modify it.
 
 The examples folder contains a series of programs that use for library interface for the parsing, modification and stringification  of JSON back to text.For an in-depth description of the JSON specification refer to its RFC at web address https://tools.ietf.org/html/rfc8259.
-
-Please note that this is still very much a work in progress.

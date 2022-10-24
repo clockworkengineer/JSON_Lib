@@ -76,6 +76,9 @@ public:
     if (indent < 0) { throw Error("Invalid print indentation value."); };
     m_indent = indent;
   }
+  // Read/Write JSON from file
+  static const std::string fromFile(const std::string &jsonFileName);
+  static void toFile(const std::string &jsonFileName, const std::string &jsonString);
   // ================
   // PUBLIC VARIABLES
   // ================

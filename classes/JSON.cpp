@@ -130,4 +130,20 @@ const JNode &JSON::operator[](std::size_t index) const { return ((*m_implementat
 /// <returns>Root of JSON tree.</returns>
 JNode &JSON::root() { return (m_implementation->root()); }
 const JNode &JSON::root() const { return (m_implementation->root()); }
+/// <summary>
+/// Open a JSON file, read its contents into a string buffer and return
+/// the buffer.
+/// </summary>
+/// <param name="jsonFileName">JSON file name</param>
+/// <returns>JSON string.</returns>
+const std::string JSON::fromFile(const std::string &jsonFileName) { return (JSON_Impl::fromFile(jsonFileName)); }
+/// <summary>
+/// Create an JSON file and write JSON string to it.
+/// </summary>
+/// <param name="jsonFileName">JSON file name</param>
+/// <param name="jsonString">JSON string</param>
+void JSON::toFile(const std::string &jsonFileName, const std::string &jsonString)
+{
+  JSON_Impl::toFile(jsonFileName, jsonString);
+}
 }// namespace JSON_Lib
