@@ -14,9 +14,9 @@ constexpr char16_t kHighSurrogatesBegin{ 0xD800 };
 constexpr char16_t kHighSurrogatesEnd{ 0xDBFF };
 constexpr char16_t kLowSurrogatesBegin{ 0xDC00 };
 constexpr char16_t kLowSurrogatesEnd{ 0xDFFF };
-// =========================
-// JSON translator interface
-// =========================
+// =========================================================
+// Interface for translation to/from JSON escaped characters
+// =========================================================
 class ITranslator
 {
 public:
