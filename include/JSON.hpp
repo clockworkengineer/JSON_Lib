@@ -33,6 +33,8 @@ public:
   using ArrayList = std::initializer_list<InternalType>;
   // Object initializer list
   using ObjectList = std::initializer_list<std::pair<std::string, InternalType>>;
+  // JSON file formats
+  enum class Format : uint8_t { utf8=0, utf8BOM, utf8BE, utf8LE, utf16BE, utf16LE, utf32BE, utf32LE };
   // ======================
   // CONSTRUCTOR/DESTRUCTOR
   // ======================
@@ -87,6 +89,8 @@ public:
   // Read/Write JSON from file
   static const std::string fromFile(const std::string &jsonFileName);
   static void toFile(const std::string &jsonFileName, const std::string &jsonString);
+  // Get JSON file format
+  static Format getFileFormat(const std::string &jsonFileName);
   // ================
   // PUBLIC VARIABLES
   // ================
@@ -103,42 +107,4 @@ private:
   // JSON implementation
   const std::unique_ptr<JSON_Impl> m_implementation;
 };
-// /// <summary>
-// /// Open a JSON file, read its contents into a string buffer and return
-// /// the buffer. Note any CRLF in the source file are translated to just a
-// /// LF internally.
-// /// </summary>
-// /// <param name="jsonFileName">JSON file name</param>
-// /// <returns>JSON string.</returns>
-// inline const std::string JSON::fromFile(const std::string &jsonFileName)
-// {
-//   const char *kCRLF = "\x0D\x0A";
-//   const char *kLF = "\x0A";
-//   // Read in JSON
-//   std::ifstream jsonFile;
-//   jsonFile.open(jsonFileName, std::ios_base::binary);
-//   std::ostringstream jsonFileBuffer;
-//   jsonFileBuffer << jsonFile.rdbuf();
-//   // Translate CRLF -> LF
-//   std::string translated{ jsonFileBuffer.str() };
-//   size_t pos = translated.find(kCRLF);
-//   while (pos != std::string::npos) {
-//     translated.replace(pos, 2, kLF);
-//     pos = translated.find(kCRLF, pos + 1);
-//   }
-//   return (translated);
-// }
-// /// <summary>
-// /// Create an JSON file and write JSON string to it.
-// /// </summary>
-// /// <param name="jsonFileName">JSON file name</param>
-// /// <param name="jsonString">JSON string</param>
-// inline void JSON::toFile(const std::string &jsonFileName, const std::string &jsonString)
-// {
-//   std::remove(jsonFileName.c_str());
-//   std::ofstream jsonFile;
-//   jsonFile.open(jsonFileName, std::ios::binary);
-//   jsonFile << jsonString;
-//   jsonFile.close();
-// }
 }// namespace JSON_Lib

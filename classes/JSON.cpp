@@ -146,4 +146,10 @@ void JSON::toFile(const std::string &jsonFileName, const std::string &jsonString
 {
   JSON_Impl::toFile(jsonFileName, jsonString);
 }
+/// <summary>
+/// Return format of JSON file.
+/// </summary>
+/// <param name="jsonFileName">JSON file name</param>
+/// <returns>JSON file format.</returns>
+JSON::Format JSON::getFileFormat(const std::string &jsonFileName) { return (JSON_Impl::getFileFormat(jsonFileName)); }
 }// namespace JSON_Lib

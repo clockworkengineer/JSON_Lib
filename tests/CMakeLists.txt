@@ -26,6 +26,7 @@ set(TEST_SOURCES
     ./json/JSON_Lib_Tests_JSON.cpp
     ./io/JSON_Lib_Tests_ISource.cpp
     ./io/JSON_Lib_Tests_IDestination.cpp
+    ./io/JSON_Lib_Tests_File.cpp
     ./parse/JSON_Lib_Tests_Parse_Escapes.cpp
     ./parse/JSON_Lib_Tests_Parse_Misc.cpp
     ./parse/JSON_Lib_Tests_Parse_Simple.cpp

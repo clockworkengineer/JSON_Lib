@@ -169,6 +169,31 @@ JNode &JSON_Impl::operator[](std::size_t index)
 }
 const JNode &JSON_Impl::operator[](std::size_t index) const { return ((m_jNodeRoot)[index]); }
 /// <summary>
+/// Return format of JSON file.
+/// </summary>
+/// <param name="jsonFileName">JSON file name</param>
+/// <returns>JSON file format.</returns>
+JSON::Format JSON_Impl::getFileFormat(const std::string &jsonFileName)
+{
+  unsigned char BOMHeader[4];
+  std::ifstream jsonFile;
+  jsonFile.open(jsonFileName, std::ios_base::binary);
+  BOMHeader[0] = static_cast<char>(jsonFile.get());
+  BOMHeader[1] = static_cast<char>(jsonFile.get());
+  BOMHeader[2] = static_cast<char>(jsonFile.get());
+  BOMHeader[3] = static_cast<char>(jsonFile.get());
+  if ((BOMHeader[0] == 0x00) && (BOMHeader[1] == 0x00) && (BOMHeader[2] == 0xFE) && (BOMHeader[3] == 0xFF)) {
+    return (JSON::Format::utf32BE);
+  }
+  if ((BOMHeader[0] == 0xFF) && (BOMHeader[1] == 0xFE) && (BOMHeader[2] == 0x00) && (BOMHeader[3] == 0x00)) {
+    return (JSON::Format::utf32LE);
+  }
+  if ((BOMHeader[0] == 0xEF) && (BOMHeader[1] == 0xBB) && (BOMHeader[2] == 0xBF)) { return (JSON::Format::utf8BOM); }
+  if ((BOMHeader[0] == 0xFE) && (BOMHeader[1] == 0xFF)) { return (JSON::Format::utf16BE); }
+  if ((BOMHeader[0] == 0xFF) && (BOMHeader[1] == 0xFE)) { return (JSON::Format::utf16LE); }
+  return (JSON::Format::utf8);
+}
+/// <summary>
 /// Open a JSON file, read its contents into a string buffer and return
 /// the buffer. Note any CRLF in the source file are translated to just a
 /// LF internally.
