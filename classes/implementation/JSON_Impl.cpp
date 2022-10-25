@@ -175,22 +175,18 @@ const JNode &JSON_Impl::operator[](std::size_t index) const { return ((m_jNodeRo
 /// <returns>JSON file format.</returns>
 JSON::Format JSON_Impl::getFileFormat(const std::string &jsonFileName)
 {
-  unsigned char BOM[4];
+  uint32_t bom;
   std::ifstream jsonFile;
   jsonFile.open(jsonFileName, std::ios_base::binary);
-  BOM[0] = static_cast<unsigned char>(jsonFile.get());
-  BOM[1] = static_cast<unsigned char>(jsonFile.get());
-  BOM[2] = static_cast<unsigned char>(jsonFile.get());
-  BOM[3] = static_cast<unsigned char>(jsonFile.get());
-  if ((BOM[0] == 0x00) && (BOM[1] == 0x00) && (BOM[2] == 0xFE) && (BOM[3] == 0xFF)) {
-    return (JSON::Format::utf32BE);
-  }
-  if ((BOM[0] == 0xFF) && (BOM[1] == 0xFE) && (BOM[2] == 0x00) && (BOM[3] == 0x00)) {
-    return (JSON::Format::utf32LE);
-  }
-  if ((BOM[0] == 0xEF) && (BOM[1] == 0xBB) && (BOM[2] == 0xBF)) { return (JSON::Format::utf8BOM); }
-  if ((BOM[0] == 0xFE) && (BOM[1] == 0xFF)) { return (JSON::Format::utf16BE); }
-  if ((BOM[0] == 0xFF) && (BOM[1] == 0xFE)) { return (JSON::Format::utf16LE); }
+  bom = static_cast<unsigned char>(jsonFile.get()) << 24;
+  bom |= static_cast<unsigned char>(jsonFile.get()) << 16;
+  bom |= static_cast<unsigned char>(jsonFile.get()) << 8;
+  bom |= static_cast<unsigned char>(jsonFile.get());
+  if (bom == 0x0000FEFF) { return (JSON::Format::utf32BE); }
+  if (bom == 0xFFFE0000) { return (JSON::Format::utf32LE); }
+  if ((bom & 0xFFFFFF00) == 0xEFBBBF00) { return (JSON::Format::utf8BOM); }
+  if ((bom & 0xFFFF0000) == 0xFEFF0000) { return (JSON::Format::utf16BE); }
+  if ((bom & 0xFFFF0000) == 0xFFFE0000) { return (JSON::Format::utf16LE); }
   return (JSON::Format::utf8);
 }
 /// <summary>
