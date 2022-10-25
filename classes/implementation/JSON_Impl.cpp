@@ -175,22 +175,22 @@ const JNode &JSON_Impl::operator[](std::size_t index) const { return ((m_jNodeRo
 /// <returns>JSON file format.</returns>
 JSON::Format JSON_Impl::getFileFormat(const std::string &jsonFileName)
 {
-  unsigned char BOMHeader[4];
+  unsigned char BOM[4];
   std::ifstream jsonFile;
   jsonFile.open(jsonFileName, std::ios_base::binary);
-  BOMHeader[0] = static_cast<char>(jsonFile.get());
-  BOMHeader[1] = static_cast<char>(jsonFile.get());
-  BOMHeader[2] = static_cast<char>(jsonFile.get());
-  BOMHeader[3] = static_cast<char>(jsonFile.get());
-  if ((BOMHeader[0] == 0x00) && (BOMHeader[1] == 0x00) && (BOMHeader[2] == 0xFE) && (BOMHeader[3] == 0xFF)) {
+  BOM[0] = static_cast<unsigned char>(jsonFile.get());
+  BOM[1] = static_cast<unsigned char>(jsonFile.get());
+  BOM[2] = static_cast<unsigned char>(jsonFile.get());
+  BOM[3] = static_cast<unsigned char>(jsonFile.get());
+  if ((BOM[0] == 0x00) && (BOM[1] == 0x00) && (BOM[2] == 0xFE) && (BOM[3] == 0xFF)) {
     return (JSON::Format::utf32BE);
   }
-  if ((BOMHeader[0] == 0xFF) && (BOMHeader[1] == 0xFE) && (BOMHeader[2] == 0x00) && (BOMHeader[3] == 0x00)) {
+  if ((BOM[0] == 0xFF) && (BOM[1] == 0xFE) && (BOM[2] == 0x00) && (BOM[3] == 0x00)) {
     return (JSON::Format::utf32LE);
   }
-  if ((BOMHeader[0] == 0xEF) && (BOMHeader[1] == 0xBB) && (BOMHeader[2] == 0xBF)) { return (JSON::Format::utf8BOM); }
-  if ((BOMHeader[0] == 0xFE) && (BOMHeader[1] == 0xFF)) { return (JSON::Format::utf16BE); }
-  if ((BOMHeader[0] == 0xFF) && (BOMHeader[1] == 0xFE)) { return (JSON::Format::utf16LE); }
+  if ((BOM[0] == 0xEF) && (BOM[1] == 0xBB) && (BOM[2] == 0xBF)) { return (JSON::Format::utf8BOM); }
+  if ((BOM[0] == 0xFE) && (BOM[1] == 0xFF)) { return (JSON::Format::utf16BE); }
+  if ((BOM[0] == 0xFF) && (BOM[1] == 0xFE)) { return (JSON::Format::utf16LE); }
   return (JSON::Format::utf8);
 }
 /// <summary>

@@ -14,7 +14,7 @@ using namespace JSON_Lib;
 // ==========
 // Test cases
 // ==========
-TEST_CASE("Checks for getFileFormat() api", "[JSON][fromFile]")
+TEST_CASE("Checks for getFileFormat() api", "[JSON][getFileFormat]")
 {
   SECTION("Check that getFileFormat() works with UTF8.", "[JSON][getFileFormat][UTF8]")
   {
