@@ -34,7 +34,7 @@ public:
   // Object initializer list
   using ObjectList = std::initializer_list<std::pair<std::string, InternalType>>;
   // JSON file formats
-  enum class Format : uint8_t { utf8=0, utf8BOM, utf8BE, utf8LE, utf16BE, utf16LE, utf32BE, utf32LE };
+  enum class Format : uint8_t { utf8=0, utf8BOM, utf16BE, utf16LE, utf32BE, utf32LE };
   // ======================
   // CONSTRUCTOR/DESTRUCTOR
   // ======================

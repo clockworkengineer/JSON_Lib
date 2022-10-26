@@ -203,10 +203,47 @@ const std::string JSON_Impl::fromFile(const std::string &jsonFileName)
   // Read in JSON
   std::ifstream jsonFile;
   jsonFile.open(jsonFileName, std::ios_base::binary);
-  std::ostringstream jsonFileBuffer;
-  jsonFileBuffer << jsonFile.rdbuf();
+  std::string translated;
+  JSON::Format fileFormat = JSON::getFileFormat(jsonFileName);
+  if (fileFormat == JSON::Format::utf8BOM) {
+    std::ostringstream jsonFileBuffer;
+    jsonFile.get();
+    jsonFile.get();
+    jsonFile.get();
+    jsonFileBuffer << jsonFile.rdbuf();
+    translated = jsonFileBuffer.str();
+  } else if ((fileFormat == JSON::Format::utf16BE) || (fileFormat == JSON::Format::utf16LE)) {
+    std::u16string utf16String;
+    jsonFile.get();
+    jsonFile.get();
+    char16_t first = (jsonFile.get() << 8) | jsonFile.get();
+    if ((first == '[') || (first == '{')) {
+      utf16String.push_back(first);
+      while (!jsonFile.eof()) {
+        first = (jsonFile.get() << 8) | jsonFile.get();
+        utf16String.push_back(first);
+      }
+      utf16String.pop_back();
+    } else {
+      jsonFile.unget();
+      jsonFile.unget();
+      first = jsonFile.get() | jsonFile.get() << 8;
+      utf16String.push_back(first);
+      while (!jsonFile.eof()) {
+        first = jsonFile.get() | jsonFile.get() << 8;
+        utf16String.push_back(first);
+      }
+      utf16String.pop_back();
+    }
+    translated = m_converter->toUtf8(utf16String);
+  } else if (fileFormat == JSON::Format::utf8) {
+    std::ostringstream jsonFileBuffer;
+    jsonFileBuffer << jsonFile.rdbuf();
+    translated = jsonFileBuffer.str();
+  } else {
+    throw Error("Unsupported JSON file format encountered.");
+  }
   // Translate CRLF -> LF
-  std::string translated{ jsonFileBuffer.str() };
   size_t pos = translated.find(kCRLF);
   while (pos != std::string::npos) {
     translated.replace(pos, 2, kLF);
