@@ -216,24 +216,24 @@ const std::string JSON_Impl::fromFile(const std::string &jsonFileName)
     std::u16string utf16String;
     jsonFile.get();
     jsonFile.get();
-    char16_t first = (jsonFile.get() << 8) | jsonFile.get();
-    if ((first == '[') || (first == '{')) {
-      utf16String.push_back(first);
-      while (!jsonFile.eof()) {
-        first = (jsonFile.get() << 8) | jsonFile.get();
-        utf16String.push_back(first);
+    char16_t char16Bit = (jsonFile.get() << 8) | jsonFile.get();
+    if ((char16Bit == '[') || (char16Bit == '{')) {
+      utf16String.push_back(char16Bit);
+      while (true) {
+        char16Bit = (jsonFile.get() << 8) | jsonFile.get();
+        if (jsonFile.eof()) break;
+        utf16String.push_back(char16Bit);
       }
-      utf16String.pop_back();
     } else {
       jsonFile.unget();
       jsonFile.unget();
-      first = jsonFile.get() | jsonFile.get() << 8;
-      utf16String.push_back(first);
-      while (!jsonFile.eof()) {
-        first = jsonFile.get() | jsonFile.get() << 8;
-        utf16String.push_back(first);
+      char16Bit = jsonFile.get() | jsonFile.get() << 8;
+      utf16String.push_back(char16Bit);
+      while (true) {
+        char16Bit = jsonFile.get() | jsonFile.get() << 8;
+        if (jsonFile.eof()) break;
+        utf16String.push_back(char16Bit);
       }
-      utf16String.pop_back();
     }
     translated = m_converter->toUtf8(utf16String);
   } else if (fileFormat == JSON::Format::utf8) {
@@ -241,7 +241,7 @@ const std::string JSON_Impl::fromFile(const std::string &jsonFileName)
     jsonFileBuffer << jsonFile.rdbuf();
     translated = jsonFileBuffer.str();
   } else {
-    throw Error("Unsupported JSON file format encountered.");
+    throw Error("Unsupported JSON file format (Byte Order Mark) encountered.");
   }
   // Translate CRLF -> LF
   size_t pos = translated.find(kCRLF);
