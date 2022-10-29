@@ -34,7 +34,7 @@ public:
   // Object initializer list
   using ObjectList = std::initializer_list<std::pair<std::string, InternalType>>;
   // JSON file formats
-  enum class Format : uint8_t { utf8=0, utf8BOM, utf16BE, utf16LE, utf32BE, utf32LE };
+  enum class Format : uint8_t { utf8 = 0, utf8BOM, utf16BE, utf16LE, utf32BE, utf32LE };
   // ======================
   // CONSTRUCTOR/DESTRUCTOR
   // ======================
@@ -88,7 +88,7 @@ public:
   const JNode &operator[](std::size_t index) const;
   // Read/Write JSON from file
   static const std::string fromFile(const std::string &jsonFileName);
-  static void toFile(const std::string &jsonFileName, const std::string &jsonString);
+  static void toFile(const std::string &jsonFileName, const std::string &jsonString, Format fileFromat = Format::utf8);
   // Get JSON file format
   static Format getFileFormat(const std::string &jsonFileName);
   // ================

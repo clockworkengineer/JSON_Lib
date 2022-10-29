@@ -78,7 +78,7 @@ public:
   }
   // Read/Write JSON from file
   static const std::string fromFile(const std::string &jsonFileName);
-  static void toFile(const std::string &jsonFileName, const std::string &jsonString);
+  static void toFile(const std::string &jsonFileName, const std::string &jsonString, JSON::Format fileFromat);
   // Get JSON file format
   static JSON::Format getFileFormat(const std::string &jsonFileName);
   // ================

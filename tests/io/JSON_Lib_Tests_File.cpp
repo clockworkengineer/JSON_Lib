@@ -16,6 +16,7 @@ using namespace JSON_Lib;
 // ==========
 TEST_CASE("Checks for getFileFormat() api", "[JSON][getFileFormat]")
 {
+  const JSON json;
   SECTION("Check that getFileFormat() works with UTF8.", "[JSON][getFileFormat][UTF8]")
   {
     REQUIRE(JSON::getFileFormat(prefixPath("testfile021.json")) == JSON::Format::utf8);
@@ -80,5 +81,57 @@ TEST_CASE("Checks for fromFile() api", "[JSON][fromFile]")
     std::string expected{ R"([true  , "Out of time",  7.89043e+18, true])" };
     REQUIRE_THROWS_WITH(
       JSON::fromFile(testFile), "JSON Error: Unsupported JSON file format (Byte Order Mark) encountered.");
+  }
+  // SECTION("Check that fromFile() works with UTF16LE and leading spaces.", "[JSON][fromFile][UTF16LE][Whitespace]")
+  // {
+  //   std::string testFile{ prefixPath("testfile027.json") };
+  //   std::string expected{ R"(   [true  , "Out of time",  7.89043e+18, true])" };
+  //   REQUIRE(JSON::fromFile(testFile) == expected);
+  // }
+}
+TEST_CASE("Checks for toFile() api", "[JSON][toFile]")
+{
+  const JSON json;
+  SECTION("Check that toFile() works with UTF8.", "[JSON][toFile][UTF8]")
+  {
+    std::string testFile{ prefixPath(kGeneratedJSONFile) };
+    std::string expected{ R"([true  , "Out of time",  7.89043e+18, true])" };
+    JSON::toFile(testFile, expected);
+    REQUIRE(JSON::fromFile(testFile) == expected);
+  }
+  SECTION("Check that toFile() works with UTF8BOM.", "[JSON][toFile][UTF8BOM]")
+  {
+    std::string testFile{ prefixPath(kGeneratedJSONFile) };
+    std::string expected{ R"([true  , "Out of time",  7.89043e+18, true])" };
+    JSON::toFile(testFile, expected, JSON::Format::utf8BOM);
+    REQUIRE(JSON::fromFile(testFile) == expected);
+  }
+  SECTION("Check that toFile() works with UTF16BE.", "[JSON][toFile][UTF16BE]")
+  {
+    std::string testFile{ prefixPath(kGeneratedJSONFile) };
+    std::string expected{ R"([true  , "Out of time",  7.89043e+18, true])" };
+    JSON::toFile(testFile, expected, JSON::Format::utf16BE);
+    REQUIRE(JSON::fromFile(testFile) == expected);
+  }
+  SECTION("Check that toFile() works with UTF16BLE.", "[JSON][toFile][UTF16LE]")
+  {
+    std::string testFile{ prefixPath(kGeneratedJSONFile) };
+    std::string expected{ R"([true  , "Out of time",  7.89043e+18, true])" };
+    JSON::toFile(testFile, expected, JSON::Format::utf16LE);
+    REQUIRE(JSON::fromFile(testFile) == expected);
+  }
+  SECTION("Check that toFile() works with UTF32BE.", "[JSON][toFile][UTF32BE]")
+  {
+    std::string testFile{ prefixPath(kGeneratedJSONFile) };
+    std::string expected{ R"([true  , "Out of time",  7.89043e+18, true])" };
+    REQUIRE_THROWS_WITH(JSON::toFile(testFile, expected, JSON::Format::utf32BE),
+      "JSON Error: Unsupported JSON file format (Byte Order Mark) specified.");
+  }
+  SECTION("Check that toFile() works with UTF32LE.", "[JSON][toFile][UTF32LE]")
+  {
+    std::string testFile{ prefixPath(kGeneratedJSONFile) };
+    std::string expected{ R"([true  , "Out of time",  7.89043e+18, true])" };
+    REQUIRE_THROWS_WITH(JSON::toFile(testFile, expected, JSON::Format::utf32LE),
+      "JSON Error: Unsupported JSON file format (Byte Order Mark) specified.");
   }
 }

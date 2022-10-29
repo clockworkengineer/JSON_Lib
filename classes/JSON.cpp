@@ -142,9 +142,10 @@ const std::string JSON::fromFile(const std::string &jsonFileName) { return (JSON
 /// </summary>
 /// <param name="jsonFileName">JSON file name</param>
 /// <param name="jsonString">JSON string</param>
-void JSON::toFile(const std::string &jsonFileName, const std::string &jsonString)
+/// <param name="fileFromat">JSON file format</param>
+void JSON::toFile(const std::string &jsonFileName, const std::string &jsonString, JSON::Format fileFromat)
 {
-  JSON_Impl::toFile(jsonFileName, jsonString);
+  JSON_Impl::toFile(jsonFileName, jsonString, fileFromat);
 }
 /// <summary>
 /// Return format of JSON file.

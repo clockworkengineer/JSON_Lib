@@ -169,7 +169,9 @@ JNode &JSON_Impl::operator[](std::size_t index)
 }
 const JNode &JSON_Impl::operator[](std::size_t index) const { return ((m_jNodeRoot)[index]); }
 /// <summary>
-/// Return format of JSON file.
+/// Return format of JSON file after checking for any byte order marks at
+/// the beginning of the JSON file. For more information on byte marks and their
+/// meaning check out link https://en.wikipedia.org/wiki/Byte_order_mark.
 /// </summary>
 /// <param name="jsonFileName">JSON file name</param>
 /// <returns>JSON file format.</returns>
@@ -256,12 +258,44 @@ const std::string JSON_Impl::fromFile(const std::string &jsonFileName)
 /// </summary>
 /// <param name="jsonFileName">JSON file name</param>
 /// <param name="jsonString">JSON string</param>
-void JSON_Impl::toFile(const std::string &jsonFileName, const std::string &jsonString)
+/// <param name="fileFromat">JSON file format</param>
+void JSON_Impl::toFile(const std::string &jsonFileName, const std::string &jsonString, JSON::Format fileFromat)
 {
   std::remove(jsonFileName.c_str());
   std::ofstream jsonFile;
+  std::u16string jsonBuffer;
   jsonFile.open(jsonFileName, std::ios::binary);
-  jsonFile << jsonString;
+  switch (fileFromat) {
+  case JSON::Format::utf8:
+    jsonFile << jsonString;
+    break;
+  case JSON::Format::utf8BOM:
+    jsonFile << static_cast<unsigned char>(0xEF);
+    jsonFile << static_cast<unsigned char>(0xBB);
+    jsonFile << static_cast<unsigned char>(0xBF);
+    jsonFile << jsonString;
+    break;
+  case JSON::Format::utf16BE:
+    jsonFile << static_cast<unsigned char>(0xFE);
+    jsonFile << static_cast<unsigned char>(0xFF);
+    jsonBuffer = m_converter->toUtf16(jsonString);
+    for (auto ch : jsonBuffer) {
+      jsonFile.put(static_cast<unsigned char>(ch >> 8));
+      jsonFile.put(static_cast<unsigned char>(ch & 0xFF));
+    }
+    break;
+  case JSON::Format::utf16LE:
+    jsonFile << static_cast<unsigned char>(0xFF);
+    jsonFile << static_cast<unsigned char>(0xFE);
+    jsonBuffer = m_converter->toUtf16(jsonString);
+    for (auto ch : jsonBuffer) {
+      jsonFile.put(static_cast<unsigned char>(ch & 0xFF));
+      jsonFile.put(static_cast<unsigned char>(ch >> 8));
+    }
+    break;
+  default:
+    throw Error("Unsupported JSON file format (Byte Order Mark) specified.");
+  }
   jsonFile.close();
 }
 }// namespace JSON_Lib
