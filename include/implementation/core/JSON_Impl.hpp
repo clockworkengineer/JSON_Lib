@@ -91,6 +91,9 @@ private:
   // ===============
   // PRIVATE METHODS
   // ===============
+  // Initialize converter/translator
+  static void intializeConverter();
+  static void intializeTranslator();
   // Parse JSON
   static Object::Entry parseObjectEntry(ISource &source);
   static JNode parseString(ISource &source);

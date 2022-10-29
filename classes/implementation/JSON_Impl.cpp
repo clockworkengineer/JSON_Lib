@@ -35,6 +35,20 @@ namespace JSON_Lib {
 // ===============
 // PRIVATE METHODS
 // ===============
+/// <summary>
+/// Initialize character converter.
+/// </summary>
+void JSON_Impl::intializeConverter()
+{
+  if (m_converter == nullptr) { m_converter = std::make_unique<JSON_Converter>(); }
+}
+/// <summary>
+/// Initialize JSON escape translator.
+/// </summary>
+void JSON_Impl::intializeTranslator()
+{
+  if (m_translator == nullptr) { m_translator = std::make_unique<JSON_Translator>(*m_converter); }
+}
 // ==============
 // PUBLIC METHODS
 // ==============
@@ -54,7 +68,7 @@ std::string JSON_Impl::version() const
 void JSON_Impl::translator(ITranslator *translator)
 {
   if (translator == nullptr) {
-    m_translator = std::make_unique<JSON_Translator>(*m_converter);
+    intializeTranslator();
   } else {
     m_translator.reset(translator);
   }
@@ -66,7 +80,7 @@ void JSON_Impl::translator(ITranslator *translator)
 void JSON_Impl::converter(IConverter *converter)
 {
   if (converter == nullptr) {
-    m_converter = std::make_unique<JSON_Converter>();
+    intializeConverter();
   } else {
     m_converter.reset(converter);
   }
@@ -202,6 +216,8 @@ const std::string JSON_Impl::fromFile(const std::string &jsonFileName)
 {
   const char *kCRLF = "\x0D\x0A";
   const char *kLF = "\x0A";
+  // Initialise converter
+  intializeConverter();
   // Read in JSON
   std::ifstream jsonFile;
   jsonFile.open(jsonFileName, std::ios_base::binary);
@@ -261,6 +277,9 @@ const std::string JSON_Impl::fromFile(const std::string &jsonFileName)
 /// <param name="fileFromat">JSON file format</param>
 void JSON_Impl::toFile(const std::string &jsonFileName, const std::string &jsonString, JSON::Format fileFromat)
 {
+  // Initialise converter
+  intializeConverter();
+  // Remove old JSON file if exists
   std::remove(jsonFileName.c_str());
   std::ofstream jsonFile;
   std::u16string jsonBuffer;
