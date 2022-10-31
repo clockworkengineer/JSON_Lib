@@ -230,28 +230,24 @@ const std::string JSON_Impl::fromFile(const std::string &fileName)
     jsonFile.get();
     jsonFileBuffer << jsonFile.rdbuf();
     translated = jsonFileBuffer.str();
-  } else if ((fileFormat == JSON::Format::utf16BE) || (fileFormat == JSON::Format::utf16LE)) {
+  } else if (fileFormat == JSON::Format::utf16BE) {
     std::u16string utf16String;
     jsonFile.get();
     jsonFile.get();
-    char16_t char16Bit = static_cast<char16_t>((jsonFile.get() << 8) | jsonFile.get());
-    if ((char16Bit == '[') || (char16Bit == '{')) {
+    while (true) {
+      char16_t char16Bit = static_cast<char16_t>((jsonFile.get() << 8) | jsonFile.get());
+      if (jsonFile.eof()) break;
       utf16String.push_back(char16Bit);
-      while (true) {
-        char16Bit = static_cast<char16_t>((jsonFile.get() << 8) | jsonFile.get());
-        if (jsonFile.eof()) break;
-        utf16String.push_back(char16Bit);
-      }
-    } else {
-      jsonFile.unget();
-      jsonFile.unget();
-      char16Bit = static_cast<char16_t>(jsonFile.get() | jsonFile.get() << 8);
+    }
+    translated = m_converter->toUtf8(utf16String);
+  } else if (fileFormat == JSON::Format::utf16LE) {
+    std::u16string utf16String;
+    jsonFile.get();
+    jsonFile.get();
+    while (true) {
+      char16_t char16Bit = static_cast<char16_t>(jsonFile.get() | jsonFile.get() << 8);
+      if (jsonFile.eof()) break;
       utf16String.push_back(char16Bit);
-      while (true) {
-        char16Bit = static_cast<char16_t>(jsonFile.get() | jsonFile.get() << 8);
-        if (jsonFile.eof()) break;
-        utf16String.push_back(char16Bit);
-      }
     }
     translated = m_converter->toUtf8(utf16String);
   } else if (fileFormat == JSON::Format::utf8) {
