@@ -1,8 +1,8 @@
 //
 // Class: JSON_Impl_File
 //
-// Description: JSON class implementation layer to read and write 
-// JSON files in a number of different formats. Note that these 
+// Description: JSON class implementation layer to read and write
+// JSON files in a number of different formats. Note that these
 // methods are all static and do not need a JSON object to invoke.
 // For more information on byte marks and their meaning check out link
 // https://en.wikipedia.org/wiki/Byte_order_mark.
@@ -36,6 +36,32 @@ namespace JSON_Lib {
 // =================
 // PRIVATE FUNCTIONS
 // =================
+std::string getJSONString(std::ifstream &jsonFile)
+{
+  std::ostringstream jsonFileBuffer;
+  jsonFileBuffer << jsonFile.rdbuf();
+  return (jsonFileBuffer.str());
+}
+std::u16string getJSONString(std::ifstream &jsonFile, JSON::Format format)
+{
+  std::u16string utf16String;
+  // Move past byte order mark
+  jsonFile.seekg(2);
+  if (format == JSON::Format::utf16BE)
+    while (true) {
+      char16_t char16Bit = static_cast<char16_t>((jsonFile.get() << 8) | jsonFile.get());
+      if (jsonFile.eof()) break;
+      utf16String.push_back(char16Bit);
+    }
+  else if (format == JSON::Format::utf16LE) {
+    while (true) {
+      char16_t char16Bit = static_cast<char16_t>(jsonFile.get() | jsonFile.get() << 8);
+      if (jsonFile.eof()) break;
+      utf16String.push_back(char16Bit);
+    }
+  }
+  return (utf16String);
+}
 // ===============
 // PRIVATE METHODS
 // ===============
@@ -44,14 +70,14 @@ namespace JSON_Lib {
 // ==============
 /// <summary>
 /// Return format of JSON file after checking for any byte order marks at
-/// the beginning of the JSON file. 
+/// the beginning of the JSON file.
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 /// <returns>JSON file format.</returns>
 JSON::Format JSON_Impl::getFileFormat(const std::string &fileName)
 {
   uint32_t byteOrderMark;
-  std::ifstream jsonFile {fileName, std::ios_base::binary};
+  std::ifstream jsonFile{ fileName, std::ios_base::binary };
   byteOrderMark = static_cast<unsigned char>(jsonFile.get()) << 24;
   byteOrderMark |= static_cast<unsigned char>(jsonFile.get()) << 16;
   byteOrderMark |= static_cast<unsigned char>(jsonFile.get()) << 8;
@@ -81,39 +107,15 @@ const std::string JSON_Impl::fromFile(const std::string &fileName)
   // Read in JSON
   std::ifstream jsonFile{ fileName, std::ios_base::binary };
   std::string translated;
-  std::ostringstream jsonFileBuffer;
-  std::u16string utf16String;
   switch (format) {
   case JSON::Format::utf8BOM:
-    jsonFile.get();
-    jsonFile.get();
-    jsonFile.get();
-    jsonFileBuffer << jsonFile.rdbuf();
-    translated = jsonFileBuffer.str();
+    jsonFile.seekg(3);   // Move past byte order mark
+  case JSON::Format::utf8:
+    translated = getJSONString(jsonFile);
     break;
   case JSON::Format::utf16BE:
-    jsonFile.get();
-    jsonFile.get();
-    while (true) {
-      char16_t char16Bit = static_cast<char16_t>((jsonFile.get() << 8) | jsonFile.get());
-      if (jsonFile.eof()) break;
-      utf16String.push_back(char16Bit);
-    }
-    translated = m_converter->toUtf8(utf16String);
-    break;
   case JSON::Format::utf16LE:
-    jsonFile.get();
-    jsonFile.get();
-    while (true) {
-      char16_t char16Bit = static_cast<char16_t>(jsonFile.get() | jsonFile.get() << 8);
-      if (jsonFile.eof()) break;
-      utf16String.push_back(char16Bit);
-    }
-    translated = m_converter->toUtf8(utf16String);
-    break;
-  case JSON::Format::utf8:
-    jsonFileBuffer << jsonFile.rdbuf();
-    translated = jsonFileBuffer.str();
+    translated = m_converter->toUtf8(getJSONString(jsonFile, format));
     break;
   default:
     throw Error("Unsupported JSON file format (Byte Order Mark) encountered.");
