@@ -36,6 +36,23 @@ namespace JSON_Lib {
 // =================
 // PRIVATE FUNCTIONS
 // =================
+void putJSONString(std::ofstream &jsonFile, const std::string &jsonString) { jsonFile << jsonString; }
+void putJSONString(std::ofstream &jsonFile, const std::u16string &jsonString, JSON::Format format)
+{
+  if (format == JSON::Format::utf16BE) {
+    jsonFile << static_cast<unsigned char>(0xFE) << static_cast<unsigned char>(0xFF);
+    for (auto ch : jsonString) {
+      jsonFile.put(static_cast<unsigned char>(ch >> 8));
+      jsonFile.put(static_cast<unsigned char>(ch & 0xFF));
+    }
+  } else if (format == JSON::Format::utf16LE) {
+    jsonFile << static_cast<unsigned char>(0xFF) << static_cast<unsigned char>(0xFE);
+    for (auto ch : jsonString) {
+      jsonFile.put(static_cast<unsigned char>(ch & 0xFF));
+      jsonFile.put(static_cast<unsigned char>(ch >> 8));
+    }
+  }
+}
 std::string getJSONString(std::ifstream &jsonFile)
 {
   std::ostringstream jsonFileBuffer;
@@ -140,26 +157,15 @@ void JSON_Impl::toFile(const std::string &fileName, const std::string &jsonStrin
   intializeConverter();
   std::ofstream jsonFile{ fileName, std::ios::binary };
   switch (format) {
-  case JSON::Format::utf8:
-    jsonFile << jsonString;
-    break;
   case JSON::Format::utf8BOM:
-    jsonFile << static_cast<unsigned char>(0xEF) << static_cast<unsigned char>(0xBB) << static_cast<unsigned char>(0xBF)
-             << jsonString;
+    jsonFile << static_cast<unsigned char>(0xEF) << static_cast<unsigned char>(0xBB)
+             << static_cast<unsigned char>(0xBF);
+  case JSON::Format::utf8:
+    putJSONString(jsonFile, jsonString);
     break;
   case JSON::Format::utf16BE:
-    jsonFile << static_cast<unsigned char>(0xFE) << static_cast<unsigned char>(0xFF);
-    for (auto ch :  m_converter->toUtf16(jsonString)) {
-      jsonFile.put(static_cast<unsigned char>(ch >> 8));
-      jsonFile.put(static_cast<unsigned char>(ch & 0xFF));
-    }
-    break;
   case JSON::Format::utf16LE:
-    jsonFile << static_cast<unsigned char>(0xFF) << static_cast<unsigned char>(0xFE);
-    for (auto ch :  m_converter->toUtf16(jsonString)) {
-      jsonFile.put(static_cast<unsigned char>(ch & 0xFF));
-      jsonFile.put(static_cast<unsigned char>(ch >> 8));
-    }
+    putJSONString(jsonFile, m_converter->toUtf16(jsonString), format);
     break;
   default:
     throw Error("Unsupported JSON file format (Byte Order Mark) specified.");
