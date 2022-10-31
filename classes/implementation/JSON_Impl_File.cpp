@@ -36,8 +36,14 @@ namespace JSON_Lib {
 // =================
 // PRIVATE FUNCTIONS
 // =================
-void putJSONString(std::ofstream &jsonFile, const std::string &jsonString) { jsonFile << jsonString; }
-void putJSONString(std::ofstream &jsonFile, const std::u16string &jsonString, JSON::Format format)
+/// <summary>
+/// Write JSON string to a file stream.
+/// </summary>
+/// <param name="jsonFile">JSON file stream</param>
+/// <param name="jsonString">JSON string</param>
+/// <param name="format">JSON file format</param>
+void writeJSONString(std::ofstream &jsonFile, const std::string &jsonString) { jsonFile << jsonString; }
+void writeJSONString(std::ofstream &jsonFile, const std::u16string &jsonString, JSON::Format format)
 {
   if (format == JSON::Format::utf16BE) {
     jsonFile << static_cast<unsigned char>(0xFE) << static_cast<unsigned char>(0xFF);
@@ -53,13 +59,19 @@ void putJSONString(std::ofstream &jsonFile, const std::u16string &jsonString, JS
     }
   }
 }
-std::string getJSONString(std::ifstream &jsonFile)
+/// <summary>
+/// Read JSON string from a file stream.
+/// </summary>
+/// <param name="jsonFile">JSON file stream</param>
+/// <param name="format">JSON file format</param>
+/// <returns>JSON string.</returns>
+std::string readJSONString(std::ifstream &jsonFile)
 {
   std::ostringstream jsonFileBuffer;
   jsonFileBuffer << jsonFile.rdbuf();
   return (jsonFileBuffer.str());
 }
-const std::u16string getJSONString(std::ifstream &jsonFile, JSON::Format format)
+const std::u16string readJSONString(std::ifstream &jsonFile, JSON::Format format)
 {
   std::u16string utf16String;
   // Move past byte order mark
@@ -128,11 +140,11 @@ const std::string JSON_Impl::fromFile(const std::string &fileName)
   case JSON::Format::utf8BOM:
     jsonFile.seekg(3);// Move past byte order mark
   case JSON::Format::utf8:
-    translated = getJSONString(jsonFile);
+    translated = readJSONString(jsonFile);
     break;
   case JSON::Format::utf16BE:
   case JSON::Format::utf16LE:
-    translated = m_converter->toUtf8(getJSONString(jsonFile, format));
+    translated = m_converter->toUtf8(readJSONString(jsonFile, format));
     break;
   default:
     throw Error("Unsupported JSON file format (Byte Order Mark) encountered.");
@@ -161,11 +173,11 @@ void JSON_Impl::toFile(const std::string &fileName, const std::string &jsonStrin
     jsonFile << static_cast<unsigned char>(0xEF) << static_cast<unsigned char>(0xBB)
              << static_cast<unsigned char>(0xBF);
   case JSON::Format::utf8:
-    putJSONString(jsonFile, jsonString);
+    writeJSONString(jsonFile, jsonString);
     break;
   case JSON::Format::utf16BE:
   case JSON::Format::utf16LE:
-    putJSONString(jsonFile, m_converter->toUtf16(jsonString), format);
+    writeJSONString(jsonFile, m_converter->toUtf16(jsonString), format);
     break;
   default:
     throw Error("Unsupported JSON file format (Byte Order Mark) specified.");
