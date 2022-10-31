@@ -87,10 +87,10 @@ public:
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
   // Read/Write JSON from file
-  static const std::string fromFile(const std::string &jsonFileName);
-  static void toFile(const std::string &jsonFileName, const std::string &jsonString, Format fileFromat = Format::utf8);
+  static const std::string fromFile(const std::string &fileName);
+  static void toFile(const std::string &fileName, const std::string &jsonString, Format format = Format::utf8);
   // Get JSON file format
-  static Format getFileFormat(const std::string &jsonFileName);
+  static Format getFileFormat(const std::string &fileName);
   // ================
   // PUBLIC VARIABLES
   // ================

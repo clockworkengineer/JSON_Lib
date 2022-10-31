@@ -77,10 +77,10 @@ public:
     m_indent = indent;
   }
   // Read/Write JSON from file
-  static const std::string fromFile(const std::string &jsonFileName);
-  static void toFile(const std::string &jsonFileName, const std::string &jsonString, JSON::Format fileFromat);
+  static const std::string fromFile(const std::string &fileName);
+  static void toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format);
   // Get JSON file format
-  static JSON::Format getFileFormat(const std::string &jsonFileName);
+  static JSON::Format getFileFormat(const std::string &fileName);
   // ================
   // PUBLIC VARIABLES
   // ================

@@ -134,23 +134,23 @@ const JNode &JSON::root() const { return (m_implementation->root()); }
 /// Open a JSON file, read its contents into a string buffer and return
 /// the buffer.
 /// </summary>
-/// <param name="jsonFileName">JSON file name</param>
+/// <param name="fileName">JSON file name</param>
 /// <returns>JSON string.</returns>
-const std::string JSON::fromFile(const std::string &jsonFileName) { return (JSON_Impl::fromFile(jsonFileName)); }
+const std::string JSON::fromFile(const std::string &fileName) { return (JSON_Impl::fromFile(fileName)); }
 /// <summary>
 /// Create an JSON file and write JSON string to it.
 /// </summary>
-/// <param name="jsonFileName">JSON file name</param>
+/// <param name="fileName">JSON file name</param>
 /// <param name="jsonString">JSON string</param>
-/// <param name="fileFromat">JSON file format</param>
-void JSON::toFile(const std::string &jsonFileName, const std::string &jsonString, JSON::Format fileFromat)
+/// <param name="format">JSON file format</param>
+void JSON::toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format)
 {
-  JSON_Impl::toFile(jsonFileName, jsonString, fileFromat);
+  JSON_Impl::toFile(fileName, jsonString, format);
 }
 /// <summary>
 /// Return format of JSON file.
 /// </summary>
-/// <param name="jsonFileName">JSON file name</param>
+/// <param name="fileName">JSON file name</param>
 /// <returns>JSON file format.</returns>
-JSON::Format JSON::getFileFormat(const std::string &jsonFileName) { return (JSON_Impl::getFileFormat(jsonFileName)); }
+JSON::Format JSON::getFileFormat(const std::string &fileName) { return (JSON_Impl::getFileFormat(fileName)); }
 }// namespace JSON_Lib

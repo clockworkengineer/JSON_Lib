@@ -187,13 +187,13 @@ const JNode &JSON_Impl::operator[](std::size_t index) const { return ((m_jNodeRo
 /// the beginning of the JSON file. For more information on byte marks and their
 /// meaning check out link https://en.wikipedia.org/wiki/Byte_order_mark.
 /// </summary>
-/// <param name="jsonFileName">JSON file name</param>
+/// <param name="fileName">JSON file name</param>
 /// <returns>JSON file format.</returns>
-JSON::Format JSON_Impl::getFileFormat(const std::string &jsonFileName)
+JSON::Format JSON_Impl::getFileFormat(const std::string &fileName)
 {
   uint32_t bom;
   std::ifstream jsonFile;
-  jsonFile.open(jsonFileName, std::ios_base::binary);
+  jsonFile.open(fileName, std::ios_base::binary);
   bom = static_cast<unsigned char>(jsonFile.get()) << 24;
   bom |= static_cast<unsigned char>(jsonFile.get()) << 16;
   bom |= static_cast<unsigned char>(jsonFile.get()) << 8;
@@ -210,9 +210,9 @@ JSON::Format JSON_Impl::getFileFormat(const std::string &jsonFileName)
 /// the buffer. Note any CRLF in the source file are translated to just a
 /// LF internally.
 /// </summary>
-/// <param name="jsonFileName">JSON file name</param>
+/// <param name="fileName">JSON file name</param>
 /// <returns>JSON string.</returns>
-const std::string JSON_Impl::fromFile(const std::string &jsonFileName)
+const std::string JSON_Impl::fromFile(const std::string &fileName)
 {
   const char *kCRLF = "\x0D\x0A";
   const char *kLF = "\x0A";
@@ -220,9 +220,9 @@ const std::string JSON_Impl::fromFile(const std::string &jsonFileName)
   intializeConverter();
   // Read in JSON
   std::ifstream jsonFile;
-  jsonFile.open(jsonFileName, std::ios_base::binary);
+  jsonFile.open(fileName, std::ios_base::binary);
   std::string translated;
-  JSON::Format fileFormat = JSON::getFileFormat(jsonFileName);
+  JSON::Format fileFormat = JSON::getFileFormat(fileName);
   if (fileFormat == JSON::Format::utf8BOM) {
     std::ostringstream jsonFileBuffer;
     jsonFile.get();
@@ -234,21 +234,21 @@ const std::string JSON_Impl::fromFile(const std::string &jsonFileName)
     std::u16string utf16String;
     jsonFile.get();
     jsonFile.get();
-    char16_t char16Bit = (jsonFile.get() << 8) | jsonFile.get();
+    char16_t char16Bit = static_cast<char16_t>((jsonFile.get() << 8) | jsonFile.get());
     if ((char16Bit == '[') || (char16Bit == '{')) {
       utf16String.push_back(char16Bit);
       while (true) {
-        char16Bit = (jsonFile.get() << 8) | jsonFile.get();
+        char16Bit = static_cast<char16_t>((jsonFile.get() << 8) | jsonFile.get());
         if (jsonFile.eof()) break;
         utf16String.push_back(char16Bit);
       }
     } else {
       jsonFile.unget();
       jsonFile.unget();
-      char16Bit = jsonFile.get() | jsonFile.get() << 8;
+      char16Bit = static_cast<char16_t>(jsonFile.get() | jsonFile.get() << 8);
       utf16String.push_back(char16Bit);
       while (true) {
-        char16Bit = jsonFile.get() | jsonFile.get() << 8;
+        char16Bit = static_cast<char16_t>(jsonFile.get() | jsonFile.get() << 8);
         if (jsonFile.eof()) break;
         utf16String.push_back(char16Bit);
       }
@@ -272,19 +272,19 @@ const std::string JSON_Impl::fromFile(const std::string &jsonFileName)
 /// <summary>
 /// Create an JSON file and write JSON string to it.
 /// </summary>
-/// <param name="jsonFileName">JSON file name</param>
+/// <param name="fileName">JSON file name</param>
 /// <param name="jsonString">JSON string</param>
-/// <param name="fileFromat">JSON file format</param>
-void JSON_Impl::toFile(const std::string &jsonFileName, const std::string &jsonString, JSON::Format fileFromat)
+/// <param name="format">JSON file format</param>
+void JSON_Impl::toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format)
 {
   // Initialise converter
   intializeConverter();
   // Remove old JSON file if exists
-  std::remove(jsonFileName.c_str());
+  std::remove(fileName.c_str());
   std::ofstream jsonFile;
   std::u16string jsonBuffer;
-  jsonFile.open(jsonFileName, std::ios::binary);
-  switch (fileFromat) {
+  jsonFile.open(fileName, std::ios::binary);
+  switch (format) {
   case JSON::Format::utf8:
     jsonFile << jsonString;
     break;
