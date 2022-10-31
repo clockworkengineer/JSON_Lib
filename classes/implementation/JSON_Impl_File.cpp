@@ -42,7 +42,7 @@ std::string getJSONString(std::ifstream &jsonFile)
   jsonFileBuffer << jsonFile.rdbuf();
   return (jsonFileBuffer.str());
 }
-std::u16string getJSONString(std::ifstream &jsonFile, JSON::Format format)
+const std::u16string getJSONString(std::ifstream &jsonFile, JSON::Format format)
 {
   std::u16string utf16String;
   // Move past byte order mark
@@ -109,7 +109,7 @@ const std::string JSON_Impl::fromFile(const std::string &fileName)
   std::string translated;
   switch (format) {
   case JSON::Format::utf8BOM:
-    jsonFile.seekg(3);   // Move past byte order mark
+    jsonFile.seekg(3);// Move past byte order mark
   case JSON::Format::utf8:
     translated = getJSONString(jsonFile);
     break;
@@ -138,34 +138,25 @@ void JSON_Impl::toFile(const std::string &fileName, const std::string &jsonStrin
 {
   // Initialise converter
   intializeConverter();
-  // Remove old JSON file if exists
-  std::remove(fileName.c_str());
   std::ofstream jsonFile{ fileName, std::ios::binary };
-  std::u16string jsonBuffer;
   switch (format) {
   case JSON::Format::utf8:
     jsonFile << jsonString;
     break;
   case JSON::Format::utf8BOM:
-    jsonFile << static_cast<unsigned char>(0xEF);
-    jsonFile << static_cast<unsigned char>(0xBB);
-    jsonFile << static_cast<unsigned char>(0xBF);
-    jsonFile << jsonString;
+    jsonFile << static_cast<unsigned char>(0xEF) << static_cast<unsigned char>(0xBB) << static_cast<unsigned char>(0xBF)
+             << jsonString;
     break;
   case JSON::Format::utf16BE:
-    jsonFile << static_cast<unsigned char>(0xFE);
-    jsonFile << static_cast<unsigned char>(0xFF);
-    jsonBuffer = m_converter->toUtf16(jsonString);
-    for (auto ch : jsonBuffer) {
+    jsonFile << static_cast<unsigned char>(0xFE) << static_cast<unsigned char>(0xFF);
+    for (auto ch :  m_converter->toUtf16(jsonString)) {
       jsonFile.put(static_cast<unsigned char>(ch >> 8));
       jsonFile.put(static_cast<unsigned char>(ch & 0xFF));
     }
     break;
   case JSON::Format::utf16LE:
-    jsonFile << static_cast<unsigned char>(0xFF);
-    jsonFile << static_cast<unsigned char>(0xFE);
-    jsonBuffer = m_converter->toUtf16(jsonString);
-    for (auto ch : jsonBuffer) {
+    jsonFile << static_cast<unsigned char>(0xFF) << static_cast<unsigned char>(0xFE);
+    for (auto ch :  m_converter->toUtf16(jsonString)) {
       jsonFile.put(static_cast<unsigned char>(ch & 0xFF));
       jsonFile.put(static_cast<unsigned char>(ch >> 8));
     }
