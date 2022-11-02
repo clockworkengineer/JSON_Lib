@@ -120,6 +120,7 @@ JSON::Format JSON_Impl::getFileFormat(const std::string &fileName)
   if ((byteOrderMark & 0xFFFFFF00) == 0xEFBBBF00) { return (JSON::Format::utf8BOM); }
   if ((byteOrderMark & 0xFFFF0000) == 0xFEFF0000) { return (JSON::Format::utf16BE); }
   if ((byteOrderMark & 0xFFFF0000) == 0xFFFE0000) { return (JSON::Format::utf16LE); }
+  jsonFile.close();
   return (JSON::Format::utf8);
 }
 /// <summary>
@@ -153,6 +154,7 @@ const std::string JSON_Impl::fromFile(const std::string &fileName)
   default:
     throw Error("Unsupported JSON file format (Byte Order Mark) encountered.");
   }
+  jsonFile.close();
   // Translate CRLF -> LF
   size_t pos = translated.find(kCRLF);
   while (pos != std::string::npos) {
