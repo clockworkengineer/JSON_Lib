@@ -49,12 +49,12 @@ void writeJSONString(std::ofstream &jsonFile, const std::u16string &jsonString, 
     jsonFile << static_cast<unsigned char>(0xFE) << static_cast<unsigned char>(0xFF);
     for (auto ch : jsonString) {
       jsonFile.put(static_cast<unsigned char>(ch >> 8));
-      jsonFile.put(static_cast<unsigned char>(ch & 0xFF));
+      jsonFile.put(static_cast<unsigned char>(ch));
     }
   } else if (format == JSON::Format::utf16LE) {
     jsonFile << static_cast<unsigned char>(0xFF) << static_cast<unsigned char>(0xFE);
     for (auto ch : jsonString) {
-      jsonFile.put(static_cast<unsigned char>(ch & 0xFF));
+      jsonFile.put(static_cast<unsigned char>(ch));
       jsonFile.put(static_cast<unsigned char>(ch >> 8));
     }
   } else {
@@ -80,13 +80,15 @@ const std::u16string readJSONString(std::ifstream &jsonFile, JSON::Format format
   jsonFile.seekg(2);
   if (format == JSON::Format::utf16BE)
     while (true) {
-      char16_t ch16 = static_cast<char16_t>((jsonFile.get() << 8) | jsonFile.get());
+      char16_t ch16 = static_cast<unsigned char>(jsonFile.get()) << 8;
+      ch16 |= static_cast<unsigned char>(jsonFile.get());
       if (jsonFile.eof()) break;
       utf16String.push_back(ch16);
     }
   else if (format == JSON::Format::utf16LE) {
     while (true) {
-      char16_t ch16 = static_cast<char16_t>(jsonFile.get() | jsonFile.get() << 8);
+      char16_t ch16 = static_cast<unsigned char>(jsonFile.get());
+      ch16 |= static_cast<unsigned char>(jsonFile.get()) << 8;
       if (jsonFile.eof()) break;
       utf16String.push_back(ch16);
     }
