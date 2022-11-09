@@ -37,7 +37,7 @@ set (JSON_SOURCES
 set (JSON_INCLUDES
     JSON_Config.hpp
     ./include/JSON.hpp
-    ./include/implementation/core/JSON_forward.hpp
+    ./include/implementation/core/JSON_Forward.hpp
     ./include/implementation/core/JSON_Types.hpp
     ./include/implementation/core/JSON_Error.hpp
     ./include/implementation/core/JSON_Impl.hpp

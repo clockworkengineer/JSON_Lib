@@ -16,7 +16,7 @@ namespace JSON_Lib {
 // ========================================================
 // JSON forward declarations for interfaces/classes/structs
 // ========================================================
-#include "JSON_forward.hpp"
+#include "JSON_Forward.hpp"
 // ================
 // CLASS DEFINITION
 // ================
