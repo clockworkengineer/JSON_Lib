@@ -21,7 +21,7 @@
 // JSON
 // ====
 #include "JSON.hpp"
-#include "JSON_Types.hpp"
+#include "JSON_Core.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 // =======
@@ -79,8 +79,8 @@ void processEntry(const js::Object::Entry &entry)
     // Read object data (key/string pair) and add to log
     entryJSON += "\n{\n";
     for (const auto &file : js::JRef<js::Object>(entry).getObjectEntries()) {
-      entryJSON += "\"" + js::JRef<js::String>(file).toString() + "\" : " + "\""
-                   + js::JRef<js::String>(file).toString() + "\",\n";
+      entryJSON +=
+        "\"" + js::JRef<js::String>(file).toString() + "\" : " + "\"" + js::JRef<js::String>(file).toString() + "\",\n";
     }
     entryJSON.pop_back();
     entryJSON.pop_back();

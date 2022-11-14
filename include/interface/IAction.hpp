@@ -7,7 +7,7 @@
 // ====
 // JSON
 // ====
-#include "JSON_Types.hpp"
+#include "JSON_Core.hpp"
 // =================
 // LIBRARY NAMESPACE
 // =================

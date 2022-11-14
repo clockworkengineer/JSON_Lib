@@ -23,7 +23,7 @@
 // JSON
 // ====
 #include "JSON.hpp"
-#include "JSON_Types.hpp"
+#include "JSON_Core.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 // =======

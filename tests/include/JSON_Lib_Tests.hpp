@@ -11,7 +11,7 @@
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Translator.hpp"
-#include "JSON_Types.hpp"
+#include "JSON_Core.hpp"
 // =======
 // C++ STL
 // =======
