@@ -152,20 +152,32 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
   }
   SECTION("Large positive integer conversion.", "[JSON][JNode][Number][Long Long]")
   {
-    BufferSource jsonSource{ "877994604561387500" };
+    BufferSource jsonSource{ "9223372036854775807" };
     json.parse(jsonSource);
     REQUIRE_FALSE(JRef<Number>(json.root()).is<int>());
-    REQUIRE_FALSE(JRef<Number>(json.root()).is<long>());
-    REQUIRE_FALSE(!JRef<Number>(json.root()).is<long long>());
-    REQUIRE(JRef<Number>(json.root()).get<long long>() == 877994604561387500ll);
+    // If long and long long same size then int never stored in long long
+    if constexpr(sizeof(long long) > sizeof(long)) {
+      REQUIRE_FALSE(JRef<Number>(json.root()).is<long>());
+      REQUIRE_FALSE(!JRef<Number>(json.root()).is<long long>());
+    } else {
+      REQUIRE_FALSE(!JRef<Number>(json.root()).is<long>());
+      REQUIRE_FALSE(JRef<Number>(json.root()).is<long long>());
+    }
+    REQUIRE(JRef<Number>(json.root()).get<long long>() == 9223372036854775807ll);
   }
   SECTION("Large negative integer conversion.", "[JSON][JNode][Number][Long Long]")
   {
     BufferSource jsonSource{ "-877994604561387500" };
     json.parse(jsonSource);
     REQUIRE_FALSE(JRef<Number>(json.root()).is<int>());
-    REQUIRE_FALSE(JRef<Number>(json.root()).is<long>());
-    REQUIRE_FALSE(!JRef<Number>(json.root()).is<long long>());
+    // If long and long long same size then int never stored in long long
+    if constexpr(sizeof(long long) > sizeof(long)) {
+      REQUIRE_FALSE(JRef<Number>(json.root()).is<long>());
+      REQUIRE_FALSE(!JRef<Number>(json.root()).is<long long>());
+    } else {
+      REQUIRE_FALSE(!JRef<Number>(json.root()).is<long>());
+      REQUIRE_FALSE(JRef<Number>(json.root()).is<long long>());
+    }
     REQUIRE(JRef<Number>(json.root()).get<long long>() == -877994604561387500ll);
   }
   SECTION("Positive integer overflow conversion.", "[JSON][JNode][Number][Long Long]")

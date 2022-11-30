@@ -39,7 +39,7 @@ public:
   // ==============
   // PUBLIC METHODS
   // ==============
-  virtual [[nodiscard]] char current() const override { return (static_cast<char>(m_source.peek())); }
+  virtual  char current() const override { return (static_cast<char>(m_source.peek())); }
   virtual void next() override
   {
     if (!more()) { throw Error("Tried to read past end of file."); }
@@ -62,7 +62,7 @@ public:
     m_source.clear();
     m_source.seekg(0, std::ios_base::beg);
   }
-  virtual [[nodiscard]] std::size_t position() const override
+  virtual std::size_t position() const override
   {
     if (more()) { return (static_cast<std::size_t>(m_source.tellg())); }
     return (std::filesystem::file_size(m_filename));

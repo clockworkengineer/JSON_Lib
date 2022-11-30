@@ -38,7 +38,7 @@ public:
   // ==============
   // PUBLIC METHODS
   // ==============
-  virtual [[nodiscard]] char current() const override
+  virtual char current() const override
   {
     if (more()) { return (m_buffer[m_position]); }
     return (EOF);
@@ -53,14 +53,14 @@ public:
       m_column = 1;
     }
   }
-  virtual [[nodiscard]] bool more() const override { return (m_position < m_buffer.size()); }
+  virtual bool more() const override { return (m_position < m_buffer.size()); }
   virtual void reset() override
   {
     m_position = 0;
     m_lineNo = 1;
     m_column = 1;
   }
-  virtual [[nodiscard]] std::size_t position() const override { return (m_position); }
+  virtual  std::size_t position() const override { return (m_position); }
   // ================
   // PUBLIC VARIABLES
   // ================

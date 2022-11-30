@@ -16,7 +16,7 @@ template<typename T> JNode::JNode(T value)
     *this = JNode::make<Boolean>(value);
   } else if constexpr (std::is_arithmetic_v<T>) {
     *this = JNode::make<Number>(value);
-  } else if constexpr (std::is_same_v<T, nullptr_t>) {
+  } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
     *this = JNode::make<Null>();
   } else if constexpr (std::is_same_v<T, const char *>) {
     *this = JNode::make<String>(value);
@@ -81,7 +81,7 @@ inline JNode JNode::internalTypeToJNode(const JSON::InternalType &type)
   if (auto pValue = std::get_if<long double>(&type)) { return (JNode(*pValue)); }
   if (auto pValue = std::get_if<std::string>(&type)) { return (JNode((*pValue))); }
   if (auto pValue = std::get_if<bool>(&type)) { return (JNode((*pValue))); }
-  if (auto pValue = std::get_if<std::nullptr_t>(&type)) { return (JNode(nullptr)); }
+  if ([[maybe_unused]] auto pValue = std::get_if<std::nullptr_t>(&type)) { return (JNode(nullptr)); }
   if (auto pValue = std::get_if<JNode>(&type)) { return (std::move(*const_cast<JNode *>(pValue))); }
   throw Error("JNode of non-existant type could not be created.");
 }

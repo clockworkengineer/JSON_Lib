@@ -31,12 +31,12 @@ struct Array : Variant
   // Array indexing operators
   JNode &operator[](std::size_t index)
   {
-    if ((index >= 0) && (index < (static_cast<int>(m_array.size())))) { return (m_array[index]); }
+    if ((index >= 0) && (index < (static_cast<std::size_t>(m_array.size())))) { return (m_array[index]); }
     throw JNode::Error("Invalid index used to access array.");
   }
   const JNode &operator[](std::size_t index) const
   {
-    if ((index >= 0) && (index < (static_cast<int>(m_array.size())))) { return (m_array[index]); }
+    if ((index >= 0) && (index < (static_cast<std::size_t>(m_array.size())))) { return (m_array[index]); }
     throw JNode::Error("Invalid index used to access array.");
   }
   // Resize Array
