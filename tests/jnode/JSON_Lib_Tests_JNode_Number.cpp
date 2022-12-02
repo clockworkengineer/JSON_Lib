@@ -155,8 +155,9 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     BufferSource jsonSource{ "9223372036854775807" };
     json.parse(jsonSource);
     REQUIRE_FALSE(JRef<Number>(json.root()).is<int>());
-    // If long and long long same size then int never stored in long long
-    if constexpr(sizeof(long long) > sizeof(long)) {
+    // If long and long long same size then integer never stored in long long
+    // but you can fetch it as a long long
+    if constexpr (sizeof(long long) > sizeof(long)) {
       REQUIRE_FALSE(JRef<Number>(json.root()).is<long>());
       REQUIRE_FALSE(!JRef<Number>(json.root()).is<long long>());
     } else {
@@ -170,8 +171,9 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     BufferSource jsonSource{ "-877994604561387500" };
     json.parse(jsonSource);
     REQUIRE_FALSE(JRef<Number>(json.root()).is<int>());
-    // If long and long long same size then int never stored in long long
-    if constexpr(sizeof(long long) > sizeof(long)) {
+    // If long and long long same size then integer never stored in long long
+    // but you can fetch it as a long long
+    if constexpr (sizeof(long long) > sizeof(long)) {
       REQUIRE_FALSE(JRef<Number>(json.root()).is<long>());
       REQUIRE_FALSE(!JRef<Number>(json.root()).is<long long>());
     } else {
@@ -188,8 +190,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long long>());
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<float>());
-    REQUIRE_FALSE(
-      !equalFloatingPoint(JRef<Number>(json.root()).get<float>(), 9223372036854775808.0f, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).get<float>(), 9223372036854775808.0f, 0.0001));
   }
   SECTION("Negative integer overflow conversion.", "[JSON][JNode][Number][Long Long]")
   {
@@ -199,8 +200,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long long>());
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<float>());
-    REQUIRE_FALSE(
-      !equalFloatingPoint(JRef<Number>(json.root()).get<float>(), -9223372036854775808.0f, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).get<float>(), -9223372036854775808.0f, 0.0001));
   }
 }
 // =====================================
@@ -221,7 +221,7 @@ TEST_CASE("Check JNode Number floating point precision.", "[JSON][JNode][Number]
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.0683,"longitude":-70.7416})");
   }
-  SECTION("Floating point precision to 7 (default).", "[JSON][JNode][Number][Float][Precision]")
+  SECTION("Floating point precision to 7.", "[JSON][JNode][Number][Float][Precision]")
   {
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };
@@ -234,7 +234,7 @@ TEST_CASE("Check JNode Number floating point precision.", "[JSON][JNode][Number]
     Number::setPrecision(6);
     REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.06834,"longitude":-70.74162})");
   }
-  SECTION("Floating point precision to 8 (default).", "[JSON][JNode][Number][Float][Precision]")
+  SECTION("Floating point precision to 8.", "[JSON][JNode][Number][Float][Precision]")
   {
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };
@@ -258,7 +258,11 @@ TEST_CASE("Check JNode Number floating point precision.", "[JSON][JNode][Number]
     Number::setPrecision(std::numeric_limits<long double>::digits10 + 1);
     json.stringify(jsonDestination);
     Number::setPrecision(6);
-    REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.06834030151367,"longitude":-70.74161529541016})");
+    if constexpr ((std::numeric_limits<long double>::digits10 + 1) == 16) {
+      REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.06834030151367,"longitude":-70.74161529541016})");
+    } else if constexpr ((std::numeric_limits<long double>::digits10 + 1) == 19) {
+      REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.06834030151367188,"longitude":-70.74161529541015625})");
+    }
   }
 }
 // ====================================

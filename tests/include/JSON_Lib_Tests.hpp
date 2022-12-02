@@ -24,9 +24,9 @@
 // ===================
 // Unit test constants
 // ===================
-inline static const char *kGeneratedJSONFile = "generated.json";
-inline static const char *kSingleJSONFile = "testfile001.json";
-inline static const char *kNonExistantJSONFile = "doesntexist.json";
+constexpr char kGeneratedJSONFile[] = "generated.json";
+constexpr char kSingleJSONFile[] = "testfile001.json";
+constexpr char kNonExistantJSONFile[] = "doesntexist.json";
 // ==========================
 // Unit test helper functions
 // ==========================
