@@ -50,8 +50,10 @@ struct JNode
   Variant &getVariant() { return (*m_variant); }
   const Variant &getVariant() const { return (*m_variant); }
   // Make JNode
-  template<typename T, typename U> static JNode make(U &&value) { return (JNode{ std::make_unique<T>(T{ value }) }); }
-  template<typename T> static JNode make() { return (JNode{ std::make_unique<T>() }); }
+  template<typename T, typename... Args> static auto make(Args &&...args)
+  {
+    return (JNode{ std::make_unique<T>(std::forward<Args>(args)...) });
+  }
 
 private:
   static JNode internalTypeToJNode(const JSON::InternalType &type);
