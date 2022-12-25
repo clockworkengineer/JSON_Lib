@@ -12,8 +12,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(MSVC)
   add_compile_options(/W4)
+  set(PLATFORM "windows")
 elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   add_compile_options(-Wall -Werror -pedantic)
+  set(PLATFORM "linux")
 endif()
 
 # Setup library version
@@ -68,11 +70,7 @@ set (JSON_INCLUDES
 
 # Platform specific
 
-if(MSVC)
-  list (APPEND JSON_SOURCES "./classes/implementation/platform/windows/Converter.cpp")
-else()
-  list (APPEND JSON_SOURCES "./classes/implementation/platform/linux/Converter.cpp")
-endif()
+list (APPEND JSON_SOURCES "./classes/implementation/platform/${PLATFORM}/Converter.cpp")
 
 # JSON library
 
