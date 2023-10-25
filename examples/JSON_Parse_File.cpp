@@ -5,7 +5,7 @@
 // it back into text form and then parse the buffer created; timing each
 // step in turn for each file.
 //
-// Dependencies: C20++, PLOG, JSON_Lib.
+// Dependencies: C++20, PLOG, JSON_Lib.
 //
 // =============
 // INCLUDE FILES

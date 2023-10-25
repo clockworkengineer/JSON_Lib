@@ -3,68 +3,31 @@
 //
 // Description: High level entry points in JSON class implementation layer.
 //
-// Dependencies:   C20++ - Language standard features used.
+// Dependencies:   C++20 - Language standard features used.
 //
-// =================
-// CLASS DEFINITIONS
-// =================
+
 #include "JSON.hpp"
 #include "JSON_Impl.hpp"
-// ====================
-// CLASS IMPLEMENTATION
-// ====================
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
-// ===========================
-// PRIVATE TYPES AND CONSTANTS
-// ===========================
-// ==========================
-// PUBLIC TYPES AND CONSTANTS
-// ==========================
-// ========================
-// PRIVATE STATIC VARIABLES
-// ========================
-// =======================
-// PUBLIC STATIC VARIABLES
-// =======================
-// =================
-// PRIVATE FUNCTIONS
-// =================
-// ===============
-// PRIVATE METHODS
-// ===============
-/// <summary>
-/// Initialize character converter.
-/// </summary>
+
 void JSON_Impl::intializeConverter()
 {
   if (m_converter == nullptr) { m_converter = std::make_unique<JSON_Converter>(); }
 }
-/// <summary>
-/// Initialize JSON escape translator.
-/// </summary>
+
 void JSON_Impl::intializeTranslator()
 {
   if (m_translator == nullptr) { m_translator = std::make_unique<JSON_Translator>(*m_converter); }
 }
-// ==============
-// PUBLIC METHODS
-// ==============
-/// <summary>
-///  Get JSON_Lib version.
-/// </summary>
+
 std::string JSON_Impl::version() const
 {
   std::stringstream versionString;
   versionString << "JSON_Lib Version  " << JSON_VERSION_MAJOR << "." << JSON_VERSION_MINOR << "." << JSON_VERSION_PATCH;
   return (versionString.str());
 }
-/// <summary>
-/// Set translator for JSON strings.
-/// </summary>
-/// <param name=translator>Custom JSON string translator.</param>
+
 void JSON_Impl::translator(ITranslator *translator)
 {
   if (translator == nullptr) {
@@ -73,10 +36,7 @@ void JSON_Impl::translator(ITranslator *translator)
     m_translator.reset(translator);
   }
 }
-/// <summary>
-/// Set converter for JSON strings.
-/// </summary>
-/// <param name=converter>Custom JSON string translator.</param>
+
 void JSON_Impl::converter(IConverter *converter)
 {
   if (converter == nullptr) {
@@ -85,36 +45,21 @@ void JSON_Impl::converter(IConverter *converter)
     m_converter.reset(converter);
   }
 }
-/// <summary>
-/// Create JNode structure by recursively parsing JSON on the source stream.
-/// </summary>
-/// <param name="source">Source of JSON.</param>
+
 void JSON_Impl::parse(ISource &source) { m_jNodeRoot = parseJNodes(source); }
-/// <summary>
-/// Recursively parse JNode tree structure and building its JSON string (no whitespace)
-/// in destination stream.
-/// </summary>
-/// <param name=destination>Destination stream for stringified JSON.</param>
+
 void JSON_Impl::stringify(IDestination &destination) const
 {
   if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to stringify."); }
   stringifyJNodes(m_jNodeRoot, destination, 0);
 }
-/// <summary>
-/// Recursively parse JNode tree structure and building its JSON string (pretty printed)
-/// in destination stream.
-/// </summary>
-/// <param name=destination>Destination stream for printed JSON.</param>
+
 void JSON_Impl::print(IDestination &destination) const
 {
   if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to print."); }
   stringifyJNodes(m_jNodeRoot, destination, m_indent);
 }
-/// <summary>
-/// Strip all whitespace from a JSON source.
-/// </summary>
-/// <param name="source">Source of JSON.</param>
-/// <param name="destination">Destination for stripped JSON.</param>
+
 void JSON_Impl::strip(ISource &source, IDestination &destination) const
 {// Note: That it is assumed that the JSON on the source stream is valid with no errors.
   while (source.more()) {
@@ -136,10 +81,7 @@ void JSON_Impl::strip(ISource &source, IDestination &destination) const
     source.next();
   }
 }
-/// <summary>
-/// Recursively traverse JNode structure calling IAction methods.
-/// </summary>
-/// <param name=action>Action methods to call during traversal.</param>
+
 void JSON_Impl::traverse(IAction &action)
 {
   if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
@@ -150,11 +92,7 @@ void JSON_Impl::traverse(IAction &action) const
   if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
   traverseJNodes(m_jNodeRoot, action);
 }
-/// <summary>
-/// Return object entry for the passed in key creating a root object if it does not exist
-/// or a placeholder for a new JNode to be created into if the key does not exist.
-/// </summary>
-/// <param name=key>Object entry (JNode) key.</param>
+
 JNode &JSON_Impl::operator[](const std::string &key)
 {
   try {
@@ -166,11 +104,7 @@ JNode &JSON_Impl::operator[](const std::string &key)
   }
 }
 const JNode &JSON_Impl::operator[](const std::string &key) const { return ((m_jNodeRoot)[key]); }
-/// <summary>
-/// Return array entry for the passed in index creating a root array if it does not exist
-/// or a placeholder(s) for a new JNode to be created into if the index(s) do not exist.
-/// </summary>
-/// <param name=index>Array entry (JNode) index.</param>
+
 JNode &JSON_Impl::operator[](std::size_t index)
 {
   try {
@@ -182,4 +116,5 @@ JNode &JSON_Impl::operator[](std::size_t index)
   }
 }
 const JNode &JSON_Impl::operator[](std::size_t index) const { return ((m_jNodeRoot)[index]); }
+
 }// namespace JSON_Lib

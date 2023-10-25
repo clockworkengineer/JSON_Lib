@@ -7,7 +7,7 @@
 // For more information on byte marks and their meaning check out link
 // https://en.wikipedia.org/wiki/Byte_order_mark.
 //
-// Dependencies:   C20++ - Language standard features used.
+// Dependencies:   C++20 - Language standard features used.
 //
 // =================
 // CLASS DEFINITIONS

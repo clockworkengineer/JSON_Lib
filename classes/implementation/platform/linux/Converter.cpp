@@ -3,7 +3,7 @@
 //
 // Description: Convert characters to/from UTF8 and UTF16.
 //
-// Dependencies:   C20++ - Language standard features used.
+// Dependencies:   C++20 - Language standard features used.
 //
 // =======
 // C++ STL

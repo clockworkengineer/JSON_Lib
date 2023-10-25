@@ -4,7 +4,7 @@
 // Description: For a each JSON file in a directory parse it, convert all
 // numbers, booleans and nulls to strings and save the result.
 //
-// Dependencies: C20++, PLOG, JSON_Lib.
+// Dependencies: C++20, PLOG, JSON_Lib.
 //
 // =============
 // INCLUDE FILES

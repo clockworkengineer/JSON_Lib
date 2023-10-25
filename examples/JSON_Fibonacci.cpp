@@ -5,7 +5,7 @@
 // sequence to the array stored in fibonacci.json; if the file does
 // not exist then create the initial sequence of [0,1].
 //
-// Dependencies: C20++, PLOG, JSON_Lib.
+// Dependencies: C++20, PLOG, JSON_Lib.
 //
 // =============
 // INCLUDE FILES

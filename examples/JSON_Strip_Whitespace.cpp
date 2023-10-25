@@ -4,7 +4,7 @@
 // Description: For a each JSON file in a directory strip its white space characters
 // temporary file and then overwrite the existing file by renaming the temporary file.
 //
-// Dependencies: C20++, PLOG, JSON_Lib.
+// Dependencies: C++20, PLOG, JSON_Lib.
 //
 // =============
 // INCLUDE FILES

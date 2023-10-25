@@ -6,7 +6,7 @@
 // using indexes instead of key values (note the index are just numeric string values
 // starting at "0" and incementing by one for each new key).
 //
-// Dependencies: C20++, PLOG, JSON_Lib.
+// Dependencies: C++20, PLOG, JSON_Lib.
 //
 // =============
 // INCLUDE FILES

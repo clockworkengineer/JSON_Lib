@@ -5,7 +5,7 @@
 // strings. This is the default translator but is possible to write
 // a custom one and pass it to the JSON class constructor to be used.
 //
-// Dependencies:   C20++ - Language standard features used.
+// Dependencies:   C++20 - Language standard features used.
 //
 // =================
 // CLASS DEFINITIONS
@@ -45,7 +45,7 @@ static const std::vector<std::pair<const char, const char>> escapeSequences{ { '
 //  of UTF-8 characters.
 /// </summary>
 /// <param name="current">Current character position.</param>
-/// <param name="numberOfCharacters">Number of characters left in source string.</param> 
+/// <param name="numberOfCharacters">Number of characters left in source string.</param>
 /// <returns>UTF16 character for "\uxxxx".</returns>
 char16_t decodeUTF16(std::string::const_iterator &current, ptrdiff_t numberOfCharacters)
 {

@@ -4,7 +4,7 @@
 // Description: Parse JSON example settings file and toggle the clang-tidy
 // enabled setting before writing it back to the settings file.
 //
-// Dependencies: C20++, PLOG, JSON_Lib.
+// Dependencies: C++20, PLOG, JSON_Lib.
 //
 // =============
 // INCLUDE FILES

@@ -4,7 +4,7 @@
 // Description: For a each JSON file in a directory parse it, then analyze its
 // JSON tree and produce a output report of the analysis.
 //
-// Dependencies: C20++, PLOG, JSON_Lib.
+// Dependencies: C++20, PLOG, JSON_Lib.
 //
 // =============
 // INCLUDE FILES

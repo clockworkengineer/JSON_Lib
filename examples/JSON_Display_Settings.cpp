@@ -6,7 +6,7 @@
 // as stringification but it is used to provide example code that traverses and
 // interperets the JNode tree data.
 //
-// Dependencies: C20++, PLOG, JSON_Lib.
+// Dependencies: C++20, PLOG, JSON_Lib.
 //
 // =============
 // INCLUDE FILES
