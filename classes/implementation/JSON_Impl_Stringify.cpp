@@ -8,7 +8,6 @@
 // Dependencies: C++20 - Language standard features used.
 //
 
-// =================
 #include "JSON.hpp"
 #include "JSON_Impl.hpp"
 
