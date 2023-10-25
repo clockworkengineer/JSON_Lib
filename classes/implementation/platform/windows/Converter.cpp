@@ -5,36 +5,13 @@
 //
 // Dependencies:  Windows - character conversion API.
 //
-// =======
-// Windows
-// =======
+
 #include "Windows.h"
-// =================
-// CLASS DEFINITIONS
-// =================
+
 #include "JSON_Converter.hpp"
-// ====================
-// CLASS IMPLEMENTATION
-// ====================
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
-// ===========================
-// PRIVATE TYPES AND CONSTANTS
-// ===========================
-// ==========================
-// PUBLIC TYPES AND CONSTANTS
-// ==========================
-// ========================
-// PRIVATE STATIC VARIABLES
-// ========================
-// =======================
-// PUBLIC STATIC VARIABLES
-// =======================
-// ===============
-// PRIVATE METHODS
-// ===============
+
 // ============================================================
 // Windows API for converting between byte and wide characters.
 // ============================================================
@@ -46,9 +23,7 @@ int BytesToWideChar(const char *bytes, int length, wchar_t *sideString = nullptr
 {
   return (MultiByteToWideChar(CP_UTF8, 0, bytes, length, sideString, wideStringLength));
 }
-// ==============
-// PUBLIC METHODS
-// ==============
+
 /// <summary>
 /// Convert utf8 <-> utf16 strings.
 /// </summary>
@@ -58,6 +33,7 @@ std::u16string JSON_Converter::toUtf16(const std::string &utf8) const
   BytesToWideChar(utf8.c_str(), static_cast<int>(utf8.length()), &wideString[0], static_cast<int>(wideString.length()));
   return (std::u16string{ wideString.begin(), wideString.end() });
 }
+
 std::string JSON_Converter::toUtf8(const std::u16string &utf16) const
 {
   std::wstring wideString{ utf16.begin(), utf16.end() };

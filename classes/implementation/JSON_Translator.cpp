@@ -5,28 +5,13 @@
 // strings. This is the default translator but is possible to write
 // a custom one and pass it to the JSON class constructor to be used.
 //
-// Dependencies:   C++20 - Language standard features used.
+// Dependencies: C++20 - Language standard features used.
 //
-// =================
-// CLASS DEFINITIONS
-// =================
+
 #include "JSON_Translator.hpp"
-// ====================
-// CLASS IMPLEMENTATION
-// ====================
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
-// ===========================
-// PRIVATE TYPES AND CONSTANTS
-// ===========================
-// ==========================
-// PUBLIC TYPES AND CONSTANTS
-// ==========================
-// ========================
-// PRIVATE STATIC VARIABLES
-// ========================
+
 static const std::vector<std::pair<const char, const char>> escapeSequences{ { '\\', '\\' },
   { 't', '\t' },
   { '"', '\"' },
@@ -34,12 +19,7 @@ static const std::vector<std::pair<const char, const char>> escapeSequences{ { '
   { 'f', '\f' },
   { 'n', '\n' },
   { 'r', '\r' } };
-// =======================
-// PUBLIC STATIC VARIABLES
-// =======================
-// =================
-// PRIVATE FUNCTIONS
-// =================
+
 /// <summary>
 /// Convert \uxxxx escape sequences in a string to their correct sequence
 //  of UTF-8 characters.
@@ -66,6 +46,7 @@ char16_t decodeUTF16(std::string::const_iterator &current, ptrdiff_t numberOfCha
   }
   throw JSON_Translator::Error("Syntax error detected.");
 }
+
 /// <summary>
 /// Convert UTF16 character into its \uxxxx encoded escape sequence.
 /// </summary>
@@ -82,18 +63,14 @@ std::string encodeUTF16(const char16_t utf16Char)
   utf8Buffer += digits[(utf16Char)&0x0f];
   return (utf8Buffer);
 }
+
 /// <summary>
 /// Determine whether passed in character is vaid ASCII
 /// </summary>
 /// <param name="utf16Char">UTF16 character.</param>
 /// <returns>==true if valid ASCII.</returns>
 bool isASCII(char16_t utf16Char) { return (((utf16Char > 0x001F) && (utf16Char < 0x0080))); }
-// ===============
-// PRIVATE METHODS
-// ===============
-// ==============
-// PUBLIC METHODS
-// ==============
+
 /// <summary>
 /// JSON translator constructor.
 /// </summary>
@@ -106,6 +83,7 @@ JSON_Translator::JSON_Translator(const IConverter &converter) : m_converter(conv
     m_toEscape[value] = key;
   }
 }
+
 /// <summary>
 /// Check whether character is avalid escaped character or is just
 /// normal escaped ASCII character. Only a few characters are valid
@@ -116,6 +94,7 @@ JSON_Translator::JSON_Translator(const IConverter &converter) : m_converter(conv
 /// <param name="escape">Escaped character.</param>
 /// <returns>==true then character is a valid escape character.</returns>
 bool JSON_Translator::validEscape(char escape) { return (m_fromEscape.contains(escape) || (escape == 'u')); }
+
 /// <summary>
 /// Convert any escape sequences in a string to their correct sequence
 //  of UTF-8 characters. If input string contains any unpaired surrogates
@@ -160,6 +139,7 @@ std::string JSON_Translator::fromJSON(const std::string &jsonString)
   if (unpairedSurrogatesInBuffer(utf16Buffer)) { throw Error("Unpaired surrogate found."); }
   return (m_converter.toUtf8(utf16Buffer));
 }
+
 /// <summary>
 /// Convert a string from raw charater values (UTF8) so that it has character
 /// escapes where applicable for its JSON form.

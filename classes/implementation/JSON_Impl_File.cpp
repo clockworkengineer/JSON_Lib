@@ -7,35 +7,14 @@
 // For more information on byte marks and their meaning check out link
 // https://en.wikipedia.org/wiki/Byte_order_mark.
 //
-// Dependencies:   C++20 - Language standard features used.
+// Dependencies: C++20 - Language standard features used.
 //
-// =================
-// CLASS DEFINITIONS
-// =================
+
 #include "JSON.hpp"
 #include "JSON_Impl.hpp"
-// ====================
-// CLASS IMPLEMENTATION
-// ====================
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
-// ===========================
-// PRIVATE TYPES AND CONSTANTS
-// ===========================
-// ==========================
-// PUBLIC TYPES AND CONSTANTS
-// ==========================
-// ========================
-// PRIVATE STATIC VARIABLES
-// ========================
-// =======================
-// PUBLIC STATIC VARIABLES
-// =======================
-// =================
-// PRIVATE FUNCTIONS
-// =================
+
 /// <summary>
 /// Write JSON string to a file stream.
 /// </summary>
@@ -61,6 +40,7 @@ void writeJSONString(std::ofstream &jsonFile, const std::u16string &jsonString, 
     throw Error("Unsupported JSON file format (Byte Order Mark) specified in call to writeJSONString().");
   }
 }
+
 /// <summary>
 /// Read JSON string from a file stream.
 /// </summary>
@@ -97,12 +77,7 @@ const std::u16string readJSONString(std::ifstream &jsonFile, JSON::Format format
   }
   return (utf16String);
 }
-// ===============
-// PRIVATE METHODS
-// ===============
-// ==============
-// PUBLIC METHODS
-// ==============
+
 /// <summary>
 /// Return format of JSON file after checking for any byte order marks at
 /// the beginning of the JSON file.
@@ -165,6 +140,7 @@ const std::string JSON_Impl::fromFile(const std::string &fileName)
   }
   return (translated);
 }
+
 /// <summary>
 /// Create an JSON file and write JSON string to it.
 /// </summary>

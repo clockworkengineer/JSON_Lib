@@ -3,7 +3,7 @@
 //
 // Description: High level entry points in JSON class implementation layer.
 //
-// Dependencies:   C++20 - Language standard features used.
+// Dependencies: C++20 - Language standard features used.
 //
 
 #include "JSON.hpp"

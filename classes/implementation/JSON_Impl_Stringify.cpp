@@ -5,38 +5,15 @@
 // the JSON tree presentation back into raw JSON string without any whitespace
 // (stringification) or with indentation and whitespace pretty print.
 //
-// Dependencies:   C++20 - Language standard features used.
+// Dependencies: C++20 - Language standard features used.
 //
-// =================
-// CLASS DEFINITIONS
+
 // =================
 #include "JSON.hpp"
 #include "JSON_Impl.hpp"
-// ====================
-// CLASS IMPLEMENTATION
-// ====================
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
-// ===========================
-// PRIVATE TYPES AND CONSTANTS
-// ===========================
-// ==========================
-// PUBLIC TYPES AND CONSTANTS
-// ==========================
-// ========================
-// PRIVATE STATIC VARIABLES
-// ========================
-// =======================
-// PUBLIC STATIC VARIABLES
-// =======================
-// =================
-// PRIVATE FUNCTIONS
-// =================
-// ===============
-// PRIVATE METHODS
-// ===============
+
 /// <summary>
 /// Convert Number JNode to JSON on destination stream.
 /// </summary>
@@ -46,6 +23,7 @@ void JSON_Impl::stringifyNumber(const JNode &jNode, IDestination &destination)
 {
   destination.add(JRef<Number>(jNode).toString());
 }
+
 /// <summary>
 /// Convert String JNode to JSON on destination stream.
 /// </summary>
@@ -57,6 +35,7 @@ void JSON_Impl::stringifyString(const JNode &jNode, IDestination &destination)
   destination.add(m_translator->toJSON(JRef<String>(jNode).toString()));
   destination.add('"');
 }
+
 /// <summary>
 /// Convert Boolean JNode to JSON on destination stream.
 /// </summary>
@@ -66,6 +45,7 @@ void JSON_Impl::stringifyBoolean(const JNode &jNode, IDestination &destination)
 {
   destination.add(JRef<Boolean>(jNode).toString());
 }
+
 /// <summary>
 /// Convert Null JNode to JSON on destination stream.
 /// </summary>
@@ -75,6 +55,7 @@ void JSON_Impl::stringifyNull(const JNode &jNode, IDestination &destination)
 {
   destination.add(JRef<Null>(jNode).toString());
 }
+
 /// <summary>
 /// Convert Hole JNode to JSON on destination stream.
 /// </summary>
@@ -84,6 +65,7 @@ void JSON_Impl::stringifyHole(const JNode &jNode, IDestination &destination)
 {
   destination.add(JRef<Hole>(jNode).toString());
 }
+
 /// <summary>
 /// Convert Object JNode to JSON on destination stream.
 /// </summary>
@@ -112,6 +94,7 @@ void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination, l
   }
   destination.add("}");
 }
+
 /// <summary>
 /// Convert Array JNode to JSON on destination stream.
 /// </summary>
@@ -139,6 +122,7 @@ void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination, lo
   }
   destination.add("]");
 }
+
 /// <summary>
 /// Recursively traverse JNode structure encoding it into JSON string on
 /// the destination stream passed in.

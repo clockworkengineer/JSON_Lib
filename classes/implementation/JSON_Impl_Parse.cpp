@@ -4,35 +4,14 @@
 // Description: JSON class implementation layer that uses recursion to produce a
 // JSON tree representation (JNodes) of JSON string data (parse).
 //
-// Dependencies:   C++20 - Language standard features used.
+// Dependencies: C++20 - Language standard features used.
 //
-// =================
-// CLASS DEFINITIONS
-// =================
+
 #include "JSON.hpp"
 #include "JSON_Impl.hpp"
-// ====================
-// CLASS IMPLEMENTATION
-// ====================
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
-// ===========================
-// PRIVATE TYPES AND CONSTANTS
-// ===========================
-// ==========================
-// PUBLIC TYPES AND CONSTANTS
-// ==========================
-// ========================
-// PRIVATE STATIC VARIABLES
-// ========================
-// =======================
-// PUBLIC STATIC VARIABLES
-// =======================
-// =================
-// PRIVATE FUNCTIONS
-// =================
+
 /// <summary>
 /// Extract a string from a JSON encoded source stream.
 /// </summary>
@@ -61,6 +40,7 @@ std::string extractString(ISource &source, ITranslator &translator)
   source.next();
   return (extracted);
 }
+
 /// <summary>
 /// Has the end of a number been reached in source stream ?
 /// </summary>
@@ -70,9 +50,7 @@ bool endOfNumber(ISource &source)
 {
   return (source.isWS() || source.current() == ',' || source.current() == ']' || source.current() == '}');
 }
-// ===============
-// PRIVATE METHODS
-// ===============
+
 /// <summary>
 /// Parse a Object key/value pair from a JSON encoded source stream.
 /// </summary>
@@ -87,12 +65,14 @@ Object::Entry JSON_Impl::parseObjectEntry(ISource &source)
   source.next();
   return (Object::Entry(key, parseJNodes(source)));
 }
+
 /// <summary>
 /// Parse a string from a JSON source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>String JNode.</returns>
 JNode JSON_Impl::parseString(ISource &source) { return (JNode::make<String>(extractString(source, *m_translator))); }
+
 /// <summary>
 /// Parse a number from a JSON source stream.
 /// </summary>
@@ -109,6 +89,7 @@ JNode JSON_Impl::parseNumber(ISource &source)
   }
   throw Error(source.getPosition(), "Invalid numeric value.");
 }
+
 /// <summary>
 /// Parse a boolean from a JSON source stream.
 /// </summary>
@@ -120,6 +101,7 @@ JNode JSON_Impl::parseBoolean(ISource &source)
   if (source.match("false")) { return (JNode::make<Boolean>(false)); }
   throw Error(source.getPosition(), "Invalid boolean value.");
 }
+
 /// <summary>
 /// Parse a null from a JSON source stream.
 /// </summary>
@@ -130,6 +112,7 @@ JNode JSON_Impl::parseNull(ISource &source)
   if (!source.match("null")) { throw Error(source.getPosition(), "Invalid null value."); }
   return (JNode::make<Null>());
 }
+
 /// <summary>
 /// Parse an object from a JSON source stream.
 /// </summary>
@@ -151,6 +134,7 @@ JNode JSON_Impl::parseObject(ISource &source)
   source.next();
   return (jNodeObject);
 }
+
 /// <summary>
 /// Parse an array from a JSON source stream.
 /// </summary>
@@ -172,6 +156,7 @@ JNode JSON_Impl::parseArray(ISource &source)
   source.next();
   return (jNodeArray);
 }
+
 /// <summary>
 /// Recursively parse JSON source stream producing a JNode structure
 /// representation  of it. Note: If no obvious match is found for

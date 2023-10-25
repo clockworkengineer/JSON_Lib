@@ -6,7 +6,7 @@
 // to its RFC at https://tools.ietf.org/html/rfc8259 and the JSON grammar
 // at https://www.json.org/json-en.html.
 //
-// Dependencies:   C++20 - Language standard features used.
+// Dependencies: C++20 - Language standard features used.
 //
 
 #include "JSON.hpp"
