@@ -5,17 +5,11 @@
 // using the Catch2 test framework. Note: These tests use more
 // modern raw literal strings to represent JSON.
 //
-// ================
-// Test definitions
-// =================
+
 #include "JSON_Lib_Tests.hpp"
-// ======================
-// JSON library namespace
-// ======================
+
 using namespace JSON_Lib;
-// ==========
-// Test cases
-// ==========
+
 // =======================
 // Parse simple JSON types
 // =======================

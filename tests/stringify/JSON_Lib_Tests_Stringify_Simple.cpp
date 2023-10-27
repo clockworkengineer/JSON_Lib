@@ -4,17 +4,11 @@
 // Description: JSON stringification of simple types unit
 // tests for JSON class using the Catch2 test framework.
 //
-// ================
-// Test definitions
-// =================
+
 #include "JSON_Lib_Tests.hpp"
-// ======================
-// JSON library namespace
-// ======================
+
 using namespace JSON_Lib;
-// ==========
-// Test cases
-// ==========
+
 // ========================================================
 // Stringification of simple types to buffer and validation
 // ========================================================

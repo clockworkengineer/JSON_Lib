@@ -1,27 +1,18 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <set>
 #include <sstream>
 #include <unordered_map>
-// ====
-// JSON
-// ====
+
 #include "JSON.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Core.hpp"
 #include "IAction.hpp"
-// ==================
-// JSON Tree Analysis
-// ==================
+
 class JSON_Indexer : public JSON_Lib::IAction
 {
 public:
-  // ========================
-  // Constructors/destructors
-  // ========================
   JSON_Indexer() = default;
   explicit JSON_Indexer(const std::string &fileName) : m_fileName(fileName) {}
   virtual ~JSON_Indexer() = default;

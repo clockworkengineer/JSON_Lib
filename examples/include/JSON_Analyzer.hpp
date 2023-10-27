@@ -1,12 +1,8 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <set>
 #include <sstream>
-// ====
-// JSON
-// ====
+
 #include "JSON.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
@@ -18,9 +14,7 @@
 class JSON_Analyzer : public JSON_Lib::IAction
 {
 public:
-  // ========================
-  // Constructors/destructors
-  // ========================
+
   JSON_Analyzer() = default;
   virtual ~JSON_Analyzer() = default;
   // Add JNode details to analysis

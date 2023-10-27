@@ -100,6 +100,7 @@ JSON::Format JSON_Impl::getFileFormat(const std::string &fileName)
   jsonFile.close();
   return (JSON::Format::utf8);
 }
+
 /// <summary>
 /// Open a JSON file, read its contents into a string buffer and return
 /// the buffer. Note any CRLF in the source file are translated to just a

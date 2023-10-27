@@ -5,17 +5,11 @@
 // Catch2 test framework. At present the only supported source streams
 // are buffer and file.
 //
-// ================
-// Test definitions
-// =================
+
 #include "JSON_Lib_Tests.hpp"
-// ======================
-// JSON library namespace
-// ======================
+
 using namespace JSON_Lib;
-// ==========
-// Test cases
-// ==========
+
 // ======
 // Buffer
 // ======

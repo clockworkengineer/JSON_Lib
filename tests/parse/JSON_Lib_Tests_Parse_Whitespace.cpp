@@ -4,17 +4,11 @@
 // Description: JSON parse whitespace unit tests for JSON class
 // using the Catch2 test framework.
 //
-// ================
-// Test definitions
-// =================
+
 #include "JSON_Lib_Tests.hpp"
-// ======================
-// JSON library namespace
-// ======================
+
 using namespace JSON_Lib;
-// ==========
-// Test cases
-// ==========
+
 // ==========================
 // Parse JSON with Whitespace
 // ==========================
@@ -29,8 +23,7 @@ TEST_CASE("Check JSON parsing of various whitespace characters are ignored.", "[
     json.parse(jsonSource);
     checkArray(json.root());
   }
-  SECTION(R"(Parse object {"City":"Southampton","Population":500000} with no whitespace.)",
-    "[JSON][Parse][Whitespace]")
+  SECTION(R"(Parse object {"City":"Southampton","Population":500000} with no whitespace.)", "[JSON][Parse][Whitespace]")
   {
     BufferSource jsonSource{ ws + "{" + ws + R"("City")" + ws + ":" + ws + R"("Southampton")" + ws + "," + ws
                              + R"("Population")" + ws + ":" + ws + "500000" + ws + "}" };
@@ -61,8 +54,8 @@ TEST_CASE("Check JSON parsing of various whitespace characters are ignored.", "[
     json.parse(jsonSource);
     checkArray(json.root());
   }
-  SECTION(R"(Parse object {"City":"Southampton","Population":500000} with whitespace ' \t'.)",
-    "[JSON][Parse][Whitespace]")
+  SECTION(
+    R"(Parse object {"City":"Southampton","Population":500000} with whitespace ' \t'.)", "[JSON][Parse][Whitespace]")
   {
     BufferSource jsonSource{ ws + "{" + ws + R"("City")" + ws + ":" + ws + R"("Southampton")" + ws + "," + ws
                              + R"("Population")" + ws + ":" + ws + "500000" + ws + "}" };

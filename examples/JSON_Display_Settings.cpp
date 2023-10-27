@@ -8,38 +8,23 @@
 //
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
-// =============
-// INCLUDE FILES
-// =============
-// =======
-// C++ STL
+
 // =======
 #include <filesystem>
 #include <string>
 #include <stdexcept>
-// ====
-// JSON
-// ====
+
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
-// =======
-// Logging
-// =======
+
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "plog/Log.h"
-// ==========
-// NAMESPACES
-// ==========
+
 namespace js = JSON_Lib;
 namespace fs = std::filesystem;
-// =======================
-// LOCAL TYPES/DEFINITIONS
-// =======================
-// ===============
-// LOCAL FUNCTIONS
-// ===============
+
 /// <summary>
 /// Return settings json file name.
 /// </summary>
@@ -93,9 +78,7 @@ void processEntry(const js::Object::Entry &entry)
   }
   PLOG_INFO << entryJSON;
 }
-// ============================
-// ===== MAIN ENTRY POINT =====
-// ============================
+
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   try {

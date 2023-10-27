@@ -1,20 +1,14 @@
 #pragma once
-// =====================
-// Catch2 Test framework
-// =====================
+
 #include "catch2/catch_all.hpp"
-// ====
-// JSON
-// ====
+
 #include "JSON.hpp"
 #include "JSON_Converter.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Translator.hpp"
 #include "JSON_Core.hpp"
-// =======
-// C++ STL
-// =======
+
 #include <climits>
 #include <filesystem>
 #include <limits>

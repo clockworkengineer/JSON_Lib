@@ -1,26 +1,18 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <set>
 #include <sstream>
-// ====
-// JSON
-// ====
+
 #include "JSON.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Core.hpp"
 #include "IAction.hpp"
-// ==================
-// JSON Tree Analysis
-// ==================
+
 class JSON_Convert : public JSON_Lib::IAction
 {
 public:
-  // ========================
-  // Constructors/destructors
-  // ========================
+
   JSON_Convert() = default;
   virtual ~JSON_Convert() = default;
   // Convert Number/Null/Boolean to String

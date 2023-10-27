@@ -7,41 +7,26 @@
 //
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
-// =============
-// INCLUDE FILES
-// =============
-// =======
-// C++ STL
-// =======
+
 #include <filesystem>
 #include <string>
 #include <vector>
 #include <stdexcept>
 #include <chrono>
-// ====
-// JSON
-// ====
+
 #include "JSON.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
-// =======
-// Logging
-// =======
+
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "plog/Log.h"
-// ==========
-// NAMESPACES
-// ==========
+
 namespace js = JSON_Lib;
 namespace fs = std::filesystem;
 namespace chrono = std::chrono;
-// =======================
-// LOCAL TYPES/DEFINITIONS
-// =======================
+
 static constexpr size_t kMaxFileLengthToDisplay = 16 * 1024;
-// ===============
-// LOCAL FUNCTIONS
-// ===============
+
 /// <summary>
 /// Return a vector of JSON files to analyze.
 /// </summary>
@@ -94,9 +79,7 @@ void processJSONFile(const std::string &fileName)
   PLOG_INFO << "--------------------FILE PROCESSED OK--------------------";
   PLOG_INFO << "Finished " << fileName << ".";
 }
-// ============================
-// ===== MAIN ENTRY POINT =====
-// ============================
+
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   // Initialise logging.

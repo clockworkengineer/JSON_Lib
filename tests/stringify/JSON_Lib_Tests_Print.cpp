@@ -4,17 +4,11 @@
 // Description: JSON pretty print unit tests for JSON class using
 // the Catch2 test framework.
 //
-// ================
-// Test definitions
-// =================
+
 #include "JSON_Lib_Tests.hpp"
-// ======================
-// JSON library namespace
-// ======================
+
 using namespace JSON_Lib;
-// ==========
-// Test cases
-// ==========
+
 // ==========================================
 // Pretty printing of sample JSON to a buffer
 // ==========================================
@@ -250,7 +244,7 @@ TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
     jsonDestination.close();
-    REQUIRE(JSON::fromFile(generatedFileName)== expected);
+    REQUIRE(JSON::fromFile(generatedFileName) == expected);
   }
 }
 // =========================

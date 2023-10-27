@@ -4,17 +4,11 @@
 // Description: JSON stringification of escapeds characters
 // unit tests for JSON class using the Catch2 test framework.
 //
-// ================
-// Test definitions
-// =================
+
 #include "JSON_Lib_Tests.hpp"
-// ======================
-// JSON library namespace
-// ======================
+
 using namespace JSON_Lib;
-// ==========
-// Test cases
-// ==========
+
 
 // =====================================
 // Stringification of escaped characters

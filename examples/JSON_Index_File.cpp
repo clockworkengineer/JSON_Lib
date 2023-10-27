@@ -8,36 +8,20 @@
 //
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
-// =============
-// INCLUDE FILES
-// =============
-// =======
-// C++ STL
-// =======
+
 #include <filesystem>
 #include <string>
 #include <vector>
 #include <stdexcept>
-// =============
-// JSON Analyzer
-// =============
+
 #include "JSON_Indexer.hpp"
-// =======
-// Logging
-// =======
+
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "plog/Log.h"
-// ==========
-// NAMESPACES
-// ==========
+
 namespace js = JSON_Lib;
 namespace fs = std::filesystem;
-// =======================
-// LOCAL TYPES/DEFINITIONS
-// =======================
-// ===============
-// LOCAL FUNCTIONS
-// ===============
+
 /// <summary>
 /// Return a vector of JSON files to analyze.
 /// </summary>
@@ -68,9 +52,7 @@ void processJSONFile(const std::string &fileName)
   jsonIndexer.save();
   PLOG_INFO << "Finished " << fileName << ".";
 }
-// ============================
-// ===== MAIN ENTRY POINT =====
-// ============================
+
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   // Initialise logging.

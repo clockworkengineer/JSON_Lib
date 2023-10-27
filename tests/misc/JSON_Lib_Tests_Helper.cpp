@@ -3,13 +3,9 @@
 //
 // Description: JSON unit test helper functions.
 //
-// ================
-// Test definitions
-// =================
+
 #include "JSON_Lib_Tests.hpp"
-// ======================
-// JSON library namespace
-// ======================
+
 using namespace JSON_Lib;
 // ==========================
 // Unit test helper functions

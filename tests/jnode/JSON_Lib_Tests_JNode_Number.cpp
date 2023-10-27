@@ -4,17 +4,11 @@
 // Description: JNode Number/Number class unit tests for JSON class
 // using the Catch2 test framework.
 //
-// ================
-// Test definitions
-// =================
+
 #include "JSON_Lib_Tests.hpp"
-// ======================
-// JSON library namespace
-// ======================
+
 using namespace JSON_Lib;
-// ==========
-// Test cases
-// ==========
+
 // =======================
 // JNode Number assignment
 // =======================
