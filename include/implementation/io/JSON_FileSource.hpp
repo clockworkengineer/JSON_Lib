@@ -1,30 +1,16 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <filesystem>
 #include <fstream>
 #include <string>
-// ================
-// Source interface
-// ================
+
 #include "ISource.hpp"
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
-// ================
-// CLASS DEFINITION
-// ================
+
 class FileSource : public ISource
 {
 public:
-  // ==========================
-  // PUBLIC TYPES AND CONSTANTS
-  // ==========================
-  // ======================
-  // CONSTRUCTOR/DESTRUCTOR
-  // ======================
   explicit FileSource(const std::string &filename) : m_filename(filename)
   {
     m_source.open(filename.c_str(), std::ios_base::binary);
@@ -36,10 +22,8 @@ public:
   FileSource(FileSource &&other) = delete;
   FileSource &operator=(FileSource &&other) = delete;
   virtual ~FileSource() = default;
-  // ==============
-  // PUBLIC METHODS
-  // ==============
-  virtual  char current() const override { return (static_cast<char>(m_source.peek())); }
+
+  virtual char current() const override { return (static_cast<char>(m_source.peek())); }
   virtual void next() override
   {
     if (!more()) { throw Error("Tried to read past end of file."); }
@@ -67,24 +51,14 @@ public:
     if (more()) { return (static_cast<std::size_t>(m_source.tellg())); }
     return (std::filesystem::file_size(m_filename));
   }
-  // ================
-  // PUBLIC VARIABLES
-  // ================
+
 private:
-  // ===========================
-  // PRIVATE TYPES AND CONSTANTS
-  // ===========================
-  // ===============
-  // PRIVATE METHODS
-  // ===============
   virtual void backup(unsigned long length) override
   {
     m_source.clear();
     m_source.seekg(-static_cast<long>(length), std::ios_base::cur);
   }
-  // =================
-  // PRIVATE VARIABLES
-  // =================
+
   mutable std::ifstream m_source;
   std::string m_filename;
 };

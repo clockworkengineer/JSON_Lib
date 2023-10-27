@@ -1,29 +1,15 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <fstream>
 #include <string>
-// =====================
-// Destination interface
-// =====================
+
 #include "IDestination.hpp"
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
-// ================
-// CLASS DEFINITION
-// ================
+
 class FileDestination : public IDestination
 {
 public:
-  // ==========================
-  // PUBLIC TYPES AND CONSTANTS
-  // ==========================
-  // ======================
-  // CONSTRUCTOR/DESTRUCTOR
-  // ======================
   explicit FileDestination(const std::string &filename) : m_filename(filename)
   {
     m_destination.open(filename.c_str(), std::ios_base::binary | std::ios_base::trunc);
@@ -34,9 +20,7 @@ public:
   FileDestination(FileDestination &&other) = delete;
   FileDestination &operator=(FileDestination &&other) = delete;
   virtual ~FileDestination() = default;
-  // ==============
-  // PUBLIC METHODS
-  // ==============
+
   virtual void add(const char ch) override
   {
     if (ch == '\n') {
@@ -56,19 +40,8 @@ public:
     if (!m_destination.is_open()) { throw Error("File output stream failed to open or could not be created."); }
   }
   void close() { m_destination.flush(); }
-  // ================
-  // PUBLIC VARIABLES
-  // ================
+
 private:
-  // ===========================
-  // PRIVATE TYPES AND CONSTANTS
-  // ===========================
-  // ===============
-  // PRIVATE METHODS
-  // ===============
-  // =================
-  // PRIVATE VARIABLES
-  // =================
   std::ofstream m_destination;
   std::string m_filename;
 };

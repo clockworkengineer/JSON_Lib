@@ -1,13 +1,9 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <string>
 #include <unordered_map>
 #include <vector>
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
 // ======
 // Object

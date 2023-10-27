@@ -1,15 +1,11 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <cerrno>
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
 // ======
 // Number

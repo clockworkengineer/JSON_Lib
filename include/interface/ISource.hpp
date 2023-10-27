@@ -1,12 +1,8 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <string>
 #include <stdexcept>
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
 // ========================
 // JSON character constants

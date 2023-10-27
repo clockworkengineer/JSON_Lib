@@ -1,11 +1,7 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <string>
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
 // =======================================
 // Interface for utf8 <-> uft16 conversion

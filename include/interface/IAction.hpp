@@ -1,16 +1,10 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <stdexcept>
 #include <string>
-// ====
-// JSON
-// ====
+
 #include "JSON_Core.hpp"
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
 // ==========================================================
 // Interface for the action events during JSON tree traversal

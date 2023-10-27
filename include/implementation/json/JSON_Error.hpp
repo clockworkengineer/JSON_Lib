@@ -1,13 +1,9 @@
 
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <stdexcept>
 #include <string>
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
 // ==========
 // JSON Error

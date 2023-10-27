@@ -1,14 +1,10 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <memory>
 #include <stdexcept>
 #include <string>
 #include <variant>
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
 // =====
 // JNode

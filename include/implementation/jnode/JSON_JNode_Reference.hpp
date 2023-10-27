@@ -1,10 +1,5 @@
 #pragma once
-// =======
-// C++ STL
-// =======
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
 // =========================
 // JNode reference converter

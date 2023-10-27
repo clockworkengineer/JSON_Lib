@@ -1,12 +1,8 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <string>
 #include <vector>
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
 // =====
 // Array

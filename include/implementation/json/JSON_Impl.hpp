@@ -1,50 +1,33 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <set>
 #include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
-// ==========================
-// Traversal action interface
-// ==========================
+
 #include "IAction.hpp"
-// ====
-// JSON
-// ====
+
 #include "JSON_Config.hpp"
 #include "JSON_Converter.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Translator.hpp"
 #include "JSON_Core.hpp"
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
-// ================
-// CLASS DEFINITION
-// ================
+
 class JSON_Impl
 {
 public:
-  // ==========================
-  // PUBLIC TYPES AND CONSTANTS
-  // ==========================
-  // ======================
-  // CONSTRUCTOR/DESTRUCTOR
-  // ======================
+
   JSON_Impl() = default;
   JSON_Impl(const JSON_Impl &other) = delete;
   JSON_Impl &operator=(const JSON_Impl &other) = delete;
   JSON_Impl(JSON_Impl &&other) = delete;
   JSON_Impl &operator=(JSON_Impl &&other) = delete;
   ~JSON_Impl() = default;
-  // ==============
-  // PUBLIC METHODS
-  // ==============
+
   // Get JSON_Lib version
   std::string version() const;
   // Parse JSON into tree
@@ -81,16 +64,9 @@ public:
   static void toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format);
   // Get JSON file format
   static JSON::Format getFileFormat(const std::string &fileName);
-  // ================
-  // PUBLIC VARIABLES
-  // ================
+
 private:
-  // ===========================
-  // PRIVATE TYPES AND CONSTANTS
-  // ===========================
-  // ===============
-  // PRIVATE METHODS
-  // ===============
+
   // Initialize converter/translator
   static void intializeConverter();
   static void intializeTranslator();
@@ -116,9 +92,6 @@ private:
   static void stringifyJNodes(const JNode &jNode, IDestination &destination, long indent);
   // Traverse JSON tree
   template<typename T> static void traverseJNodes(T &jNode, IAction &action);
-  // =================
-  // PRIVATE VARIABLES
-  // =================
   // Root of JSON tree
   JNode m_jNodeRoot;
   // Pointer to JSON translator interface

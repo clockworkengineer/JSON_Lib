@@ -1,10 +1,4 @@
 #pragma once
-// =======
-// C++ STL
-// =======
-// =================
-// LIBRARY NAMESPACE
-// =================
 namespace JSON_Lib {
 // ====
 // Base

@@ -1,7 +1,5 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -9,23 +7,14 @@
 #include <variant>
 #include <fstream>
 #include <sstream>
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
-// ========================================================
-// JSON forward declarations for interfaces/classes/structs
-// ========================================================
+
 #include "JSON_Forward.hpp"
-// ================
-// CLASS DEFINITION
-// ================
+
 class JSON
 {
 public:
-  // ==========================
-  // PUBLIC TYPES AND CONSTANTS
-  // ==========================
   // Possible JSON Node internal value types
   using InternalType =
     std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t, JNode>;
@@ -35,9 +24,6 @@ public:
   using ObjectList = std::initializer_list<std::pair<std::string, InternalType>>;
   // JSON file formats
   enum class Format : uint8_t { utf8 = 0, utf8BOM, utf16BE, utf16LE, utf32BE, utf32LE };
-  // ======================
-  // CONSTRUCTOR/DESTRUCTOR
-  // ======================
   // Pass any user defined translator/converter here
   explicit JSON(ITranslator *translator = nullptr, IConverter *converter = nullptr);
   // Pass in default JSON to parse
@@ -53,9 +39,7 @@ public:
   JSON &operator=(JSON &&other) = delete;
   // Provide own destructor
   ~JSON();
-  // ==============
-  // PUBLIC METHODS
-  // ==============
+
   // Get JSON library version
   [[nodiscard]] std::string version() const;
   // Parse JSON into tree
@@ -91,19 +75,8 @@ public:
   static void toFile(const std::string &fileName, const std::string &jsonString, Format format = Format::utf8);
   // Get JSON file format
   static Format getFileFormat(const std::string &fileName);
-  // ================
-  // PUBLIC VARIABLES
-  // ================
+
 private:
-  // ===========================
-  // PRIVATE TYPES AND CONSTANTS
-  // ===========================
-  // ===============
-  // PRIVATE METHODS
-  // ===============
-  // =================
-  // PRIVATE VARIABLES
-  // =================
   // JSON implementation
   const std::unique_ptr<JSON_Impl> m_implementation;
 };

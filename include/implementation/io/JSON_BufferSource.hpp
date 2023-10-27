@@ -1,30 +1,16 @@
 #pragma once
-// =======
-// C++ STL
-// =======
+
 #include <filesystem>
 #include <fstream>
 #include <string>
-// ================
-// Source interface
-// ================
+
 #include "ISource.hpp"
-// =================
-// LIBRARY NAMESPACE
-// =================
+
 namespace JSON_Lib {
-// ================
-// CLASS DEFINITION
-// ================
+
 class BufferSource : public ISource
 {
 public:
-  // ==========================
-  // PUBLIC TYPES AND CONSTANTS
-  // ==========================
-  // ======================
-  // CONSTRUCTOR/DESTRUCTOR
-  // ======================
   explicit BufferSource(const std::string &buffer) : m_buffer(buffer)
   {
     if (buffer.empty()) { throw Error("Empty source buffer passed to be parsed."); }
@@ -35,9 +21,7 @@ public:
   BufferSource(BufferSource &&other) = delete;
   BufferSource &operator=(BufferSource &&other) = delete;
   virtual ~BufferSource() = default;
-  // ==============
-  // PUBLIC METHODS
-  // ==============
+
   virtual char current() const override
   {
     if (more()) { return (m_buffer[m_position]); }
@@ -60,21 +44,11 @@ public:
     m_lineNo = 1;
     m_column = 1;
   }
-  virtual  std::size_t position() const override { return (m_position); }
-  // ================
-  // PUBLIC VARIABLES
-  // ================
+  virtual std::size_t position() const override { return (m_position); }
+
 private:
-  // ===========================
-  // PRIVATE TYPES AND CONSTANTS
-  // ===========================
-  // ===============
-  // PRIVATE METHODS
-  // ===============
   virtual void backup(unsigned long length) override { m_position -= length; }
-  // =================
-  // PRIVATE VARIABLES
-  // =================
+
   std::size_t m_position = 0;
   std::string m_buffer;
 };
