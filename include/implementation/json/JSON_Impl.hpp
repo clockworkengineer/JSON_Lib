@@ -41,8 +41,8 @@ public:
   void translator(ITranslator *translator);
   void converter(IConverter *converter);
   // Get root of JSON tree
-  [[nodiscard]] JNode &root() { return (m_jNodeRoot); }
-  [[nodiscard]] const JNode &root() const { return (m_jNodeRoot); }
+  [[nodiscard]] JNode &root() { return (jNodeRoot); }
+  [[nodiscard]] const JNode &root() const { return (jNodeRoot); }
   // Search for JSON object entry with a given key
   JNode &operator[](const std::string &key);
   const JNode &operator[](const std::string &key) const;
@@ -91,7 +91,7 @@ private:
   // Traverse JSON tree
   template<typename T> static void traverseJNodes(T &jNode, IAction &action);
   // Root of JSON tree
-  JNode m_jNodeRoot;
+  JNode jNodeRoot;
   // Pointer to JSON translator interface
   inline static std::unique_ptr<ITranslator> jsonTranslator;
   // Pointer to character conversion interface

@@ -46,18 +46,18 @@ void JSON_Impl::converter(IConverter *converter)
   }
 }
 
-void JSON_Impl::parse(ISource &source) { m_jNodeRoot = parseJNodes(source); }
+void JSON_Impl::parse(ISource &source) { jNodeRoot = parseJNodes(source); }
 
 void JSON_Impl::stringify(IDestination &destination) const
 {
-  if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to stringify."); }
-  stringifyJNodes(m_jNodeRoot, destination, 0);
+  if (jNodeRoot.isEmpty()) { throw Error("No JSON to stringify."); }
+  stringifyJNodes(jNodeRoot, destination, 0);
 }
 
 void JSON_Impl::print(IDestination &destination) const
 {
-  if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to print."); }
-  stringifyJNodes(m_jNodeRoot, destination, printIndent);
+  if (jNodeRoot.isEmpty()) { throw Error("No JSON to print."); }
+  stringifyJNodes(jNodeRoot, destination, printIndent);
 }
 
 void JSON_Impl::strip(ISource &source, IDestination &destination) const
@@ -84,37 +84,37 @@ void JSON_Impl::strip(ISource &source, IDestination &destination) const
 
 void JSON_Impl::traverse(IAction &action)
 {
-  if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
-  traverseJNodes(m_jNodeRoot, action);
+  if (jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
+  traverseJNodes(jNodeRoot, action);
 }
 void JSON_Impl::traverse(IAction &action) const
 {
-  if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
-  traverseJNodes(m_jNodeRoot, action);
+  if (jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
+  traverseJNodes(jNodeRoot, action);
 }
 
 JNode &JSON_Impl::operator[](const std::string &key)
 {
   try {
-    if (m_jNodeRoot.isEmpty()) { m_jNodeRoot = JNode::make<Object>(); }
-    return (m_jNodeRoot[key]);
+    if (jNodeRoot.isEmpty()) { jNodeRoot = JNode::make<Object>(); }
+    return (jNodeRoot[key]);
   } catch ([[maybe_unused]] JNode::Error &error) {
-    JRef<Object>(m_jNodeRoot).add(Object::Entry(key, JNode::make<Hole>()));
-    return (m_jNodeRoot[key]);
+    JRef<Object>(jNodeRoot).add(Object::Entry(key, JNode::make<Hole>()));
+    return (jNodeRoot[key]);
   }
 }
-const JNode &JSON_Impl::operator[](const std::string &key) const { return ((m_jNodeRoot)[key]); }
+const JNode &JSON_Impl::operator[](const std::string &key) const { return ((jNodeRoot)[key]); }
 
 JNode &JSON_Impl::operator[](std::size_t index)
 {
   try {
-    if (m_jNodeRoot.isEmpty()) { m_jNodeRoot = JNode::make<Array>(); }
-    return (m_jNodeRoot[index]);
+    if (jNodeRoot.isEmpty()) { jNodeRoot = JNode::make<Array>(); }
+    return (jNodeRoot[index]);
   } catch ([[maybe_unused]] JNode::Error &error) {
-    JRef<Array>(m_jNodeRoot).resize(index);
-    return (m_jNodeRoot[index]);
+    JRef<Array>(jNodeRoot).resize(index);
+    return (jNodeRoot[index]);
   }
 }
-const JNode &JSON_Impl::operator[](std::size_t index) const { return ((m_jNodeRoot)[index]); }
+const JNode &JSON_Impl::operator[](std::size_t index) const { return ((jNodeRoot)[index]); }
 
 }// namespace JSON_Lib

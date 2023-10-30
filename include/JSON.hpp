@@ -78,6 +78,6 @@ public:
 
 private:
   // JSON implementation
-  const std::unique_ptr<JSON_Impl> m_implementation;
+  const std::unique_ptr<JSON_Impl> implementation;
 };
 }// namespace JSON_Lib

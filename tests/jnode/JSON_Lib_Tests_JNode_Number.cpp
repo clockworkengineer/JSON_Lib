@@ -275,7 +275,7 @@ TEST_CASE("Check JNode Number floating point notation.", "[JSON][JNode][Number][
     REQUIRE_FALSE(!JRef<Number>(json["latitude"]).is<float>());
     REQUIRE_FALSE(!JRef<Number>(json["longitude"]).is<float>());
     BufferDestination jsonDestination;
-    Number::setNotation(Number::Notation::normal);
+    Number::setNotation(Number::numberNotation::normal);
     Number::setPrecision(6);
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.0683,"longitude":-70.7416})");
@@ -288,10 +288,10 @@ TEST_CASE("Check JNode Number floating point notation.", "[JSON][JNode][Number][
     REQUIRE_FALSE(!JRef<Number>(json["latitude"]).is<float>());
     REQUIRE_FALSE(!JRef<Number>(json["longitude"]).is<float>());
     BufferDestination jsonDestination;
-    Number::setNotation(Number::Notation::fixed);
+    Number::setNotation(Number::numberNotation::fixed);
     jsonDestination.clear();
     json.stringify(jsonDestination);
-    Number::setNotation(Number::Notation::normal);
+    Number::setNotation(Number::numberNotation::normal);
     REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.068340,"longitude":-70.741615})");
   }
   SECTION("Floating point notation to scientific.", "[JSON][JNode][Number][Float][Notation]")
@@ -302,10 +302,10 @@ TEST_CASE("Check JNode Number floating point notation.", "[JSON][JNode][Number][
     REQUIRE_FALSE(!JRef<Number>(json["latitude"]).is<float>());
     REQUIRE_FALSE(!JRef<Number>(json["longitude"]).is<float>());
     BufferDestination jsonDestination;
-    Number::setNotation(Number::Notation::scientific);
+    Number::setNotation(Number::numberNotation::scientific);
     jsonDestination.clear();
     json.stringify(jsonDestination);
-    Number::setNotation(Number::Notation::normal);
+    Number::setNotation(Number::numberNotation::normal);
     REQUIRE(jsonDestination.getBuffer() == R"({"latitude":3.906834e+01,"longitude":-7.074162e+01})");
   }
 }

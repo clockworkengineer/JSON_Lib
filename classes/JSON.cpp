@@ -19,10 +19,10 @@ namespace JSON_Lib {
 /// </summary>
 /// <param name="translator">Pointer to translator interface.</param>
 /// <param name="converter">Pointer to converter interface.</param>
-JSON::JSON(ITranslator *translator, IConverter *converter) : m_implementation(std::make_unique<JSON_Impl>())
+JSON::JSON(ITranslator *translator, IConverter *converter) : implementation(std::make_unique<JSON_Impl>())
 {
-  m_implementation->converter(converter);
-  m_implementation->translator(translator);
+  implementation->converter(converter);
+  implementation->translator(translator);
 }
 
 /// <summary>
@@ -51,44 +51,44 @@ JSON::~JSON() {}
 /// <summary>
 /// Get JSON library version.
 /// </summary>
-std::string JSON::version() const { return (m_implementation->version()); }
+std::string JSON::version() const { return (implementation->version()); }
 
 /// <summary>
 /// Strip all whitespace from a JSON source.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <param name="destination">Destination for stripped JSON.</param>
-void JSON::strip(ISource &source, IDestination &destination) const { m_implementation->strip(source, destination); }
-void JSON::strip(ISource &source, IDestination &&destination) const { m_implementation->strip(source, destination); }
-void JSON::strip(ISource &&source, IDestination &destination) const { m_implementation->strip(source, destination); }
-void JSON::strip(ISource &&source, IDestination &&destination) const { m_implementation->strip(source, destination); }
+void JSON::strip(ISource &source, IDestination &destination) const { implementation->strip(source, destination); }
+void JSON::strip(ISource &source, IDestination &&destination) const { implementation->strip(source, destination); }
+void JSON::strip(ISource &&source, IDestination &destination) const { implementation->strip(source, destination); }
+void JSON::strip(ISource &&source, IDestination &&destination) const { implementation->strip(source, destination); }
 
 /// <summary>
 /// Create JNode structure by parsing JSON on the source stream.
 /// </summary>
 /// <param name="source">Source for JSON encoded bytes.</param>
-void JSON::parse(ISource &source) const { m_implementation->parse(source); }
-void JSON::parse(ISource &&source) const { m_implementation->parse(source); }
+void JSON::parse(ISource &source) const { implementation->parse(source); }
+void JSON::parse(ISource &&source) const { implementation->parse(source); }
 
 /// <summary>
 /// Traverse JNode structure and build its JSON string (no whitespace) on destination stream.
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
-void JSON::stringify(IDestination &destination) const { m_implementation->stringify(destination); }
-void JSON::stringify(IDestination &&destination) const { m_implementation->stringify(destination); }
+void JSON::stringify(IDestination &destination) const { implementation->stringify(destination); }
+void JSON::stringify(IDestination &&destination) const { implementation->stringify(destination); }
 
 /// <summary>
 /// Traverse JNode structure and build its JSON string (pretty printed) on destination stream.
 /// </summary>
 /// <param name=destination>Destination stream for stringified JSON.</param>
-void JSON::print(IDestination &destination) const { m_implementation->print(destination); }
-void JSON::print(IDestination &&destination) const { m_implementation->print(destination); }
+void JSON::print(IDestination &destination) const { implementation->print(destination); }
+void JSON::print(IDestination &&destination) const { implementation->print(destination); }
 
 /// <summary>
 /// Set print indent value.
 /// </summary>
 /// <param name=indent>Pretty print indent value.</param>
-void JSON::setIndent(long indent) const { m_implementation->setIndent(indent); }
+void JSON::setIndent(long indent) const { implementation->setIndent(indent); }
 
 /// <summary>
 /// Recursively traverse JNode structure calling IAction methods (read only)
@@ -96,30 +96,30 @@ void JSON::setIndent(long indent) const { m_implementation->setIndent(indent); }
 /// </summary>
 /// <param name=action>Action methods to call during traversal.</param>
 // Traverse using non-const JSON so can change JSON tree
-void JSON::traverse(IAction &action) { m_implementation->traverse(action); }
+void JSON::traverse(IAction &action) { implementation->traverse(action); }
 // Traverse using const JSON so cannot change JSON tree
-void JSON::traverse(IAction &action) const { std::as_const(*m_implementation).traverse(action); }
+void JSON::traverse(IAction &action) const { std::as_const(*implementation).traverse(action); }
 
 /// <summary>
 /// Return object entry for the passed in key.
 /// </summary>
 /// <param name=key>Object entry (JNode) key.</param>
-JNode &JSON::operator[](const std::string &key) { return ((*m_implementation)[key]); }
-const JNode &JSON::operator[](const std::string &key) const { return ((*m_implementation)[key]); }
+JNode &JSON::operator[](const std::string &key) { return ((*implementation)[key]); }
+const JNode &JSON::operator[](const std::string &key) const { return ((*implementation)[key]); }
 
 /// <summary>
 /// Return array entry for the passed in index.
 /// </summary>
 /// <param name=index>Array entry (JNode) index.</param>
-JNode &JSON::operator[](std::size_t index) { return ((*m_implementation)[index]); }
-const JNode &JSON::operator[](std::size_t index) const { return ((*m_implementation)[index]); }
+JNode &JSON::operator[](std::size_t index) { return ((*implementation)[index]); }
+const JNode &JSON::operator[](std::size_t index) const { return ((*implementation)[index]); }
 
 /// <summary>
 /// Return root of JSON tree.
 /// </summary>
 /// <returns>Root of JSON tree.</returns>
-JNode &JSON::root() { return (m_implementation->root()); }
-const JNode &JSON::root() const { return (m_implementation->root()); }
+JNode &JSON::root() { return (implementation->root()); }
+const JNode &JSON::root() const { return (implementation->root()); }
 
 /// <summary>
 /// Open a JSON file, read its contents into a string buffer and return

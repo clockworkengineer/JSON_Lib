@@ -22,7 +22,7 @@ struct Number : Variant
   // All string conversions are for base 10
   static constexpr int kStringConversionBase{ 10 };
   // Floating point notation
-  enum class Notation { normal = 0, fixed, scientific };
+  enum class numberNotation { normal = 0, fixed, scientific };
   // Constructors/Destructors
   Number() : Variant(Variant::Type::number) {}
   template<typename T> explicit Number(T value);
@@ -32,7 +32,7 @@ struct Number : Variant
   Number &operator=(Number &&other) = default;
   ~Number() = default;
   // Is number a int/long/long long/float/double/long double ?
-  template<typename T> [[nodiscard]] bool is() const { return (std::get_if<T>(&m_values) != nullptr); }
+  template<typename T> [[nodiscard]] bool is() const { return (std::get_if<T>(&numberValues) != nullptr); }
   // Return numbers value int/long long/float/double/long double.
   // Note: Can still return a integer value for a floating point.
   template<typename T> [[nodiscard]] T get() const { return (getAs<T>()); }
@@ -41,8 +41,8 @@ struct Number : Variant
   // Return string representation of value
   [[nodiscard]] std::string toString() const { return (getAs<std::string>()); }
   // Set floating point to string conversion parameters
-  inline static void setPrecision(int precision) { m_precision = precision; }
-  inline static void setNotation(Notation notation) { m_notation = notation; }
+  inline static void setPrecision(int precision) { numberPrecision = precision; }
+  inline static void setNotation(numberNotation notation) { numberNotation = notation; }
 
 private:
   // Convert string to specific numeric type (returns true on success)
@@ -62,10 +62,10 @@ private:
                                || stringToNumber<double>(number) || stringToNumber<long double>(number);
   }
   // Number values (variant)
-  Values m_values;
+  Values numberValues;
   // Floating point to string parameters
-  inline static int m_precision{ 6 };
-  inline static Notation m_notation{ Notation::normal };
+  inline static int numberPrecision{ 6 };
+  inline static numberNotation numberNotation{ numberNotation::normal };
 };
 // Construct Number from value
 template<typename T> Number::Number(T value) : Variant(Variant::Type::number)
@@ -73,7 +73,7 @@ template<typename T> Number::Number(T value) : Variant(Variant::Type::number)
   if constexpr (std::is_same_v<T, std::string>) {
     convertNumber(value);
   } else {
-    m_values = value;
+    numberValues = value;
   }
 }
 // Convert string to specific numeric type (returns true on success)
@@ -109,18 +109,18 @@ template<typename T> std::string Number::numberToString(const T &number) const
 {
   std::ostringstream os;
   if constexpr (std::is_floating_point_v<T>) {
-    switch (m_notation) {
-    case Notation::normal:
-      os << std::defaultfloat << std::setprecision(m_precision) << number;
+    switch (numberNotation) {
+    case numberNotation::normal:
+      os << std::defaultfloat << std::setprecision(numberPrecision) << number;
       break;
-    case Notation::fixed:
-      os << std::fixed << std::setprecision(m_precision) << number;
+    case numberNotation::fixed:
+      os << std::fixed << std::setprecision(numberPrecision) << number;
       break;
-    case Notation::scientific:
-      os << std::scientific << std::setprecision(m_precision) << number;
+    case numberNotation::scientific:
+      os << std::scientific << std::setprecision(numberPrecision) << number;
       break;
     default:
-      os << std::setprecision(m_precision) << number;
+      os << std::setprecision(numberPrecision) << number;
     }
     if (os.str().find('.') == std::string::npos) { return (os.str() + ".0"); }
   } else {
@@ -140,12 +140,12 @@ template<typename T, typename U> T Number::convertTo(U value) const
 // Convert stored number to another specified type
 template<typename T> T Number::getAs() const
 {
-  if (auto pValue = std::get_if<int>(&m_values)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<long>(&m_values)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<long long>(&m_values)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<float>(&m_values)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<double>(&m_values)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<long double>(&m_values)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<int>(&numberValues)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<long>(&numberValues)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<long long>(&numberValues)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<float>(&numberValues)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<double>(&numberValues)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<long double>(&numberValues)) { return (convertTo<T>(*pValue)); }
   throw Error("Could not convert unknown type.");
 }
 }// namespace JSON_Lib
