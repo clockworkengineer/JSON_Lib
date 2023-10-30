@@ -8,13 +8,10 @@
 #include "JSON_Destinations.hpp"
 #include "JSON_Core.hpp"
 #include "IAction.hpp"
-// ==================
-// JSON Tree Analysis
-// ==================
+
 class JSON_Analyzer : public JSON_Lib::IAction
 {
 public:
-
   JSON_Analyzer() = default;
   virtual ~JSON_Analyzer() = default;
   // Add JNode details to analysis
