@@ -74,13 +74,13 @@ bool isASCII(char16_t utf16Char) { return (((utf16Char > 0x001F) && (utf16Char <
 /// <summary>
 /// JSON translator constructor.
 /// </summary>
-JSON_Translator::JSON_Translator(const IConverter &converter) : m_converter(converter)
+JSON_Translator::JSON_Translator(const IConverter &converter) : jsonConverter(converter)
 {
   // Initialise tables used to convert to/from single character
   // escape sequences within a JSON string.
   for (const auto &[key, value] : escapeSequences) {
-    m_fromEscape[key] = value;
-    m_toEscape[value] = key;
+    fromEscape[key] = value;
+    toEscape[value] = key;
   }
 }
 
@@ -93,7 +93,7 @@ JSON_Translator::JSON_Translator(const IConverter &converter) : m_converter(conv
 /// </summary>
 /// <param name="escape">Escaped character.</param>
 /// <returns>==true then character is a valid escape character.</returns>
-bool JSON_Translator::validEscape(char escape) { return (m_fromEscape.contains(escape) || (escape == 'u')); }
+bool JSON_Translator::validEscape(char escape) { return (fromEscape.contains(escape) || (escape == 'u')); }
 
 /// <summary>
 /// Convert any escape sequences in a string to their correct sequence
@@ -115,8 +115,8 @@ std::string JSON_Translator::fromJSON(const std::string &jsonString)
     // Check escape sequence if characters to process
     if (current != jsonString.end()) {
       // Single character
-      if (m_fromEscape.contains(static_cast<char>(*current))) {
-        utf16Buffer += m_fromEscape[static_cast<char>(*current)];
+      if (fromEscape.contains(static_cast<char>(*current))) {
+        utf16Buffer += fromEscape[static_cast<char>(*current)];
         current++;
       }
       // UTF16 "\uxxxx"
@@ -137,7 +137,7 @@ std::string JSON_Translator::fromJSON(const std::string &jsonString)
     }
   }
   if (unpairedSurrogatesInBuffer(utf16Buffer)) { throw Error("Unpaired surrogate found."); }
-  return (m_converter.toUtf8(utf16Buffer));
+  return (jsonConverter.toUtf8(utf16Buffer));
 }
 
 /// <summary>
@@ -149,11 +149,11 @@ std::string JSON_Translator::fromJSON(const std::string &jsonString)
 std::string JSON_Translator::toJSON(const std::string &utf8String)
 {
   std::string jsonString;
-  for (char16_t utf16Char : m_converter.toUtf16(utf8String)) {
+  for (char16_t utf16Char : jsonConverter.toUtf16(utf8String)) {
     // Control characters
-    if (m_toEscape.contains(utf16Char)) {
+    if (toEscape.contains(utf16Char)) {
       jsonString += '\\';
-      jsonString += m_toEscape[utf16Char];
+      jsonString += toEscape[utf16Char];
     }
     // ASCII
     else if (isASCII(utf16Char)) {

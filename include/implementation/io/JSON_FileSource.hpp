@@ -11,10 +11,10 @@ namespace JSON_Lib {
 class FileSource : public ISource
 {
 public:
-  explicit FileSource(const std::string &filename) : m_filename(filename)
+  explicit FileSource(const std::string &filename) : filename(filename)
   {
-    m_source.open(filename.c_str(), std::ios_base::binary);
-    if (!m_source.is_open()) { throw Error("File input stream failed to open or does not exist."); }
+    source.open(filename.c_str(), std::ios_base::binary);
+    if (!source.is_open()) { throw Error("File input stream failed to open or does not exist."); }
   }
   FileSource() = delete;
   FileSource(const FileSource &other) = delete;
@@ -23,14 +23,14 @@ public:
   FileSource &operator=(FileSource &&other) = delete;
   virtual ~FileSource() = default;
 
-  virtual char current() const override { return (static_cast<char>(m_source.peek())); }
+  virtual char current() const override { return (static_cast<char>(source.peek())); }
   virtual void next() override
   {
     if (!more()) { throw Error("Tried to read past end of file."); }
-    m_source.get();
+    source.get();
     if (current() == kCarriageReturn) {
-      m_source.get();
-      if (current() != kLineFeed) { m_source.unget(); }
+      source.get();
+      if (current() != kLineFeed) { source.unget(); }
     }
     m_column++;
     if (current() == kLineFeed) {
@@ -38,28 +38,28 @@ public:
       m_column = 1;
     }
   }
-  virtual bool more() const override { return (m_source.peek() != EOF); }
+  virtual bool more() const override { return (source.peek() != EOF); }
   virtual void reset() override
   {
     m_lineNo = 1;
     m_column = 1;
-    m_source.clear();
-    m_source.seekg(0, std::ios_base::beg);
+    source.clear();
+    source.seekg(0, std::ios_base::beg);
   }
   virtual std::size_t position() const override
   {
-    if (more()) { return (static_cast<std::size_t>(m_source.tellg())); }
-    return (std::filesystem::file_size(m_filename));
+    if (more()) { return (static_cast<std::size_t>(source.tellg())); }
+    return (std::filesystem::file_size(filename));
   }
 
 private:
   virtual void backup(unsigned long length) override
   {
-    m_source.clear();
-    m_source.seekg(-static_cast<long>(length), std::ios_base::cur);
+    source.clear();
+    source.seekg(-static_cast<long>(length), std::ios_base::cur);
   }
 
-  mutable std::ifstream m_source;
-  std::string m_filename;
+  mutable std::ifstream source;
+  std::string filename;
 };
 }// namespace JSON_Lib

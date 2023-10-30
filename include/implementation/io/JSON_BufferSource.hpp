@@ -11,7 +11,7 @@ namespace JSON_Lib {
 class BufferSource : public ISource
 {
 public:
-  explicit BufferSource(const std::string &buffer) : m_buffer(buffer)
+  explicit BufferSource(const std::string &buffer) : buffer(buffer)
   {
     if (buffer.empty()) { throw Error("Empty source buffer passed to be parsed."); }
   }
@@ -24,32 +24,32 @@ public:
 
   virtual char current() const override
   {
-    if (more()) { return (m_buffer[m_position]); }
+    if (more()) { return (buffer[bufferPosition]); }
     return (EOF);
   }
   virtual void next() override
   {
     if (!more()) { throw Error("Tried to read past and of buffer."); }
-    m_position++;
+    bufferPosition++;
     m_column++;
     if (current() == kLineFeed) {
       m_lineNo++;
       m_column = 1;
     }
   }
-  virtual bool more() const override { return (m_position < m_buffer.size()); }
+  virtual bool more() const override { return (bufferPosition < buffer.size()); }
   virtual void reset() override
   {
-    m_position = 0;
+    bufferPosition = 0;
     m_lineNo = 1;
     m_column = 1;
   }
-  virtual std::size_t position() const override { return (m_position); }
+  virtual std::size_t position() const override { return (bufferPosition); }
 
 private:
-  virtual void backup(unsigned long length) override { m_position -= length; }
+  virtual void backup(unsigned long length) override { bufferPosition -= length; }
 
-  std::size_t m_position = 0;
-  std::string m_buffer;
+  std::size_t bufferPosition = 0;
+  std::string buffer;
 };
 }// namespace JSON_Lib

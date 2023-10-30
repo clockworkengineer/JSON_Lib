@@ -18,7 +18,7 @@ template<typename T> JNode::JNode(T value)
   } else if constexpr (std::is_same_v<T, std::string>) {
     *this = JNode::make<String>(value);
   } else if constexpr (std::is_convertible_v<T, std::unique_ptr<Variant>>) {
-    m_variant = std::move(value);
+    variant = std::move(value);
   }
 }
 // Construct JNode Array from initializer list

@@ -127,7 +127,7 @@ const std::string JSON_Impl::fromFile(const std::string &fileName)
     break;
   case JSON::Format::utf16BE:
   case JSON::Format::utf16LE:
-    translated = m_converter->toUtf8(readJSONString(jsonFile, format));
+    translated = jsonConverter->toUtf8(readJSONString(jsonFile, format));
     break;
   default:
     throw Error("Unsupported JSON file format (Byte Order Mark) encountered.");
@@ -162,7 +162,7 @@ void JSON_Impl::toFile(const std::string &fileName, const std::string &jsonStrin
     break;
   case JSON::Format::utf16BE:
   case JSON::Format::utf16LE:
-    writeJSONString(jsonFile, m_converter->toUtf16(jsonString), format);
+    writeJSONString(jsonFile, jsonConverter->toUtf16(jsonString), format);
     break;
   default:
     throw Error("Unsupported JSON file format (Byte Order Mark) specified.");

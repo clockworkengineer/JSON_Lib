@@ -56,7 +56,7 @@ public:
   void setIndent(long indent)
   {
     if (indent < 0) { throw Error("Invalid print indentation value."); };
-    m_indent = indent;
+    printIndent = indent;
   }
   // Read/Write JSON from file
   static const std::string fromFile(const std::string &fileName);
@@ -93,11 +93,11 @@ private:
   // Root of JSON tree
   JNode m_jNodeRoot;
   // Pointer to JSON translator interface
-  inline static std::unique_ptr<ITranslator> m_translator;
+  inline static std::unique_ptr<ITranslator> jsonTranslator;
   // Pointer to character conversion interface
-  inline static std::unique_ptr<IConverter> m_converter;
+  inline static std::unique_ptr<IConverter> jsonConverter;
   // Current print indent value
-  inline static long m_indent{ 4 };
+  inline static long printIndent{ 4 };
 };
 /// <summary>
 /// Recursively traverse JNode tree calling IAction methods and possibly

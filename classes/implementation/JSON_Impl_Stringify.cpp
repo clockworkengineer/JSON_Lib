@@ -31,7 +31,7 @@ void JSON_Impl::stringifyNumber(const JNode &jNode, IDestination &destination)
 void JSON_Impl::stringifyString(const JNode &jNode, IDestination &destination)
 {
   destination.add('"');
-  destination.add(m_translator->toJSON(JRef<String>(jNode).toString()));
+  destination.add(jsonTranslator->toJSON(JRef<String>(jNode).toString()));
   destination.add('"');
 }
 
@@ -81,7 +81,7 @@ void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination, l
     stringifyString(entry.getKey(), destination);
     destination.add(":");
     if (indent != 0) { destination.add(" "); }
-    stringifyJNodes(entry.getJNode(), destination, (indent != 0) ? (indent + m_indent) : 0);
+    stringifyJNodes(entry.getJNode(), destination, (indent != 0) ? (indent + printIndent) : 0);
     if (commaCount-- > 0) {
       destination.add(",");
       if (indent != 0) { destination.add('\n'); }
@@ -89,7 +89,7 @@ void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination, l
   }
   if (indent != 0) {
     destination.add('\n');
-    destination.add(std::string(indent - m_indent, ' '));
+    destination.add(std::string(indent - printIndent, ' '));
   }
   destination.add("}");
 }
@@ -108,7 +108,7 @@ void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination, lo
     if (indent != 0) { destination.add('\n'); };
     for (auto &entry : JRef<Array>(jNode).getArrayEntries()) {
       if (indent != 0) { destination.add(std::string(indent, ' ')); };
-      stringifyJNodes(entry, destination, (indent != 0) ? (indent + m_indent) : 0);
+      stringifyJNodes(entry, destination, (indent != 0) ? (indent + printIndent) : 0);
       if (commaCount-- > 0) {
         destination.add(",");
         if (indent != 0) { destination.add('\n'); }
@@ -116,7 +116,7 @@ void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination, lo
     }
     if (indent != 0) {
       destination.add('\n');
-      destination.add(std::string(indent - m_indent, ' '));
+      destination.add(std::string(indent - printIndent, ' '));
     }
   }
   destination.add("]");

@@ -59,7 +59,7 @@ bool endOfNumber(ISource &source)
 Object::Entry JSON_Impl::parseObjectEntry(ISource &source)
 {
   source.ignoreWS();
-  const std::string key{ extractString(source, *m_translator) };
+  const std::string key{ extractString(source, *jsonTranslator) };
   source.ignoreWS();
   if (source.current() != ':') { throw Error(source.getPosition(), "Missing ':' in key value pair."); }
   source.next();
@@ -71,7 +71,7 @@ Object::Entry JSON_Impl::parseObjectEntry(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>String JNode.</returns>
-JNode JSON_Impl::parseString(ISource &source) { return (JNode::make<String>(extractString(source, *m_translator))); }
+JNode JSON_Impl::parseString(ISource &source) { return (JNode::make<String>(extractString(source, *jsonTranslator))); }
 
 /// <summary>
 /// Parse a number from a JSON source stream.

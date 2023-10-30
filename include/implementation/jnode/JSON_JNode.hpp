@@ -29,22 +29,22 @@ struct JNode
   // Assignment operators
   template<typename T> JNode &operator=(T value) { return (*this = JNode(value)); }
   // Interrogate variant
-  bool isEmpty() const { return (m_variant == nullptr); }
-  bool isObject() const { return (m_variant->getType() == Variant::Type::object); }
-  bool isArray() const { return (m_variant->getType() == Variant::Type::array); }
-  bool isNumber() const { return (m_variant->getType() == Variant::Type::number); }
-  bool isString() const { return (m_variant->getType() == Variant::Type::string); }
-  bool isBoolean() const { return (m_variant->getType() == Variant::Type::boolean); }
-  bool isNull() const { return (m_variant->getType() == Variant::Type::null); }
-  bool isHole() const { return (m_variant->getType() == Variant::Type::hole); }
+  bool isEmpty() const { return (variant == nullptr); }
+  bool isObject() const { return (variant->getType() == Variant::Type::object); }
+  bool isArray() const { return (variant->getType() == Variant::Type::array); }
+  bool isNumber() const { return (variant->getType() == Variant::Type::number); }
+  bool isString() const { return (variant->getType() == Variant::Type::string); }
+  bool isBoolean() const { return (variant->getType() == Variant::Type::boolean); }
+  bool isNull() const { return (variant->getType() == Variant::Type::null); }
+  bool isHole() const { return (variant->getType() == Variant::Type::hole); }
   // Indexing operators
   JNode &operator[](const std::string &key);
   const JNode &operator[](const std::string &key) const;
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
   // Get reference to JNode variant
-  Variant &getVariant() { return (*m_variant); }
-  const Variant &getVariant() const { return (*m_variant); }
+  Variant &getVariant() { return (*variant); }
+  const Variant &getVariant() const { return (*variant); }
   // Make JNode
   template<typename T, typename... Args> static auto make(Args &&...args)
   {
@@ -53,6 +53,6 @@ struct JNode
 
 private:
   static JNode internalTypeToJNode(const JSON::InternalType &type);
-  std::unique_ptr<Variant> m_variant;
+  std::unique_ptr<Variant> variant;
 };
 }// namespace JSON_Lib

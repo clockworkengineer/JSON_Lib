@@ -13,12 +13,12 @@ namespace JSON_Lib {
 
 void JSON_Impl::intializeConverter()
 {
-  if (m_converter == nullptr) { m_converter = std::make_unique<JSON_Converter>(); }
+  if (jsonConverter == nullptr) { jsonConverter = std::make_unique<JSON_Converter>(); }
 }
 
 void JSON_Impl::intializeTranslator()
 {
-  if (m_translator == nullptr) { m_translator = std::make_unique<JSON_Translator>(*m_converter); }
+  if (jsonTranslator == nullptr) { jsonTranslator = std::make_unique<JSON_Translator>(*jsonConverter); }
 }
 
 std::string JSON_Impl::version() const
@@ -33,7 +33,7 @@ void JSON_Impl::translator(ITranslator *translator)
   if (translator == nullptr) {
     intializeTranslator();
   } else {
-    m_translator.reset(translator);
+    jsonTranslator.reset(translator);
   }
 }
 
@@ -42,7 +42,7 @@ void JSON_Impl::converter(IConverter *converter)
   if (converter == nullptr) {
     intializeConverter();
   } else {
-    m_converter.reset(converter);
+    jsonConverter.reset(converter);
   }
 }
 
@@ -57,7 +57,7 @@ void JSON_Impl::stringify(IDestination &destination) const
 void JSON_Impl::print(IDestination &destination) const
 {
   if (m_jNodeRoot.isEmpty()) { throw Error("No JSON to print."); }
-  stringifyJNodes(m_jNodeRoot, destination, m_indent);
+  stringifyJNodes(m_jNodeRoot, destination, printIndent);
 }
 
 void JSON_Impl::strip(ISource &source, IDestination &destination) const

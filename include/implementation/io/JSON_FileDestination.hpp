@@ -10,9 +10,9 @@ namespace JSON_Lib {
 class FileDestination : public IDestination
 {
 public:
-  explicit FileDestination(const std::string &filename) : m_filename(filename)
+  explicit FileDestination(const std::string &filename) : filename(filename)
   {
-    m_destination.open(filename.c_str(), std::ios_base::binary | std::ios_base::trunc);
+    destination.open(filename.c_str(), std::ios_base::binary | std::ios_base::trunc);
   }
   FileDestination() = delete;
   FileDestination(const FileDestination &other) = delete;
@@ -24,9 +24,9 @@ public:
   virtual void add(const char ch) override
   {
     if (ch == '\n') {
-      m_destination.write("\r\n", 2);
+      destination.write("\r\n", 2);
     } else {
-      m_destination.put(ch);
+      destination.put(ch);
     }
   }
   virtual void add(const std::string &bytes) override
@@ -35,14 +35,14 @@ public:
   }
   virtual void clear() override
   {
-    if (m_destination.is_open()) { m_destination.close(); }
-    m_destination.open(m_filename.c_str(), std::ios_base::binary | std::ios_base::trunc);
-    if (!m_destination.is_open()) { throw Error("File output stream failed to open or could not be created."); }
+    if (destination.is_open()) { destination.close(); }
+    destination.open(filename.c_str(), std::ios_base::binary | std::ios_base::trunc);
+    if (!destination.is_open()) { throw Error("File output stream failed to open or could not be created."); }
   }
-  void close() { m_destination.flush(); }
+  void close() { destination.flush(); }
 
 private:
-  std::ofstream m_destination;
-  std::string m_filename;
+  std::ofstream destination;
+  std::string filename;
 };
 }// namespace JSON_Lib

@@ -37,9 +37,9 @@ public:
 
 private:
   // Character converter
-  const IConverter &m_converter;
+  const IConverter &jsonConverter;
   // To/From escape sequence lookup maps
-  std::unordered_map<char, char16_t> m_fromEscape;
-  std::unordered_map<char16_t, char> m_toEscape;
+  std::unordered_map<char, char16_t> fromEscape;
+  std::unordered_map<char16_t, char> toEscape;
 };
 }// namespace JSON_Lib

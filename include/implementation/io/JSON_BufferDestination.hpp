@@ -19,12 +19,12 @@ public:
 
   virtual void add(const std::string &bytes) override
   {
-    for (auto b : bytes) { m_buffer.push_back(b); }
+    for (auto b : bytes) { buffer.push_back(b); }
   }
-  virtual void add(const char ch) override { m_buffer.push_back(ch); }
-  virtual void clear() override { m_buffer.clear(); }
-  [[nodiscard]] const std::string &getBuffer() const { return (m_buffer); }
+  virtual void add(const char ch) override { buffer.push_back(ch); }
+  virtual void clear() override { buffer.clear(); }
+  [[nodiscard]] const std::string &getBuffer() const { return (buffer); }
 
-  std::string m_buffer;
+  std::string buffer;
 };
 }// namespace JSON_Lib
