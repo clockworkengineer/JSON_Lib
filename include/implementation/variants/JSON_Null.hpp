@@ -18,6 +18,5 @@ struct Null : Variant
   [[nodiscard]] void *getNull() const { return (nullptr); }
   // Return string representation of value
   [[nodiscard]] std::string toString() const { return ("null"); }
-
 };
 }// namespace JSON_Lib

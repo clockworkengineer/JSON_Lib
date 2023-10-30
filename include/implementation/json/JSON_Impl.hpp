@@ -20,7 +20,6 @@ namespace JSON_Lib {
 class JSON_Impl
 {
 public:
-
   JSON_Impl() = default;
   JSON_Impl(const JSON_Impl &other) = delete;
   JSON_Impl &operator=(const JSON_Impl &other) = delete;
@@ -66,7 +65,6 @@ public:
   static JSON::Format getFileFormat(const std::string &fileName);
 
 private:
-
   // Initialize converter/translator
   static void intializeConverter();
   static void intializeTranslator();

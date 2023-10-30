@@ -16,6 +16,5 @@ struct Hole : Variant
   ~Hole() = default;
   // Return string representation of value
   [[nodiscard]] std::string toString() const { return ("null"); }
-
 };
 }// namespace JSON_Lib

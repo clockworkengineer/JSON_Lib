@@ -1,46 +1,44 @@
 cmake_minimum_required(VERSION 3.22.1)
 
-project("JSON_Lib Unit Tests" VERSION 0.1.0 DESCRIPTION "JSON C++ Library Catch Unit Tests" LANGUAGES CXX)
+project("JSON_Lib Unit Tests" VERSION 1.0.0 DESCRIPTION "JSON C++ Library Catch Unit Tests" LANGUAGES CXX)
 
 # Get Catch2 from repository
-
 Include(FetchContent)
 
 FetchContent_Declare(
   Catch2
   GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG        v3.4.0
+  GIT_TAG v3.4.0
 )
 
 FetchContent_MakeAvailable(Catch2)
 
 # Enable unit tests
-
 enable_testing()
 
 set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
 set(TEST_SOURCES
-    ./jnode/JSON_Lib_Tests_JNode.cpp
-    ./jnode/JSON_Lib_Tests_JNode_Number.cpp
-    ./json/JSON_Lib_Tests_JSON.cpp
-    ./io/JSON_Lib_Tests_ISource.cpp
-    ./io/JSON_Lib_Tests_IDestination.cpp
-    ./io/JSON_Lib_Tests_File.cpp
-    ./parse/JSON_Lib_Tests_Parse_Escapes.cpp
-    ./parse/JSON_Lib_Tests_Parse_Misc.cpp
-    ./parse/JSON_Lib_Tests_Parse_Simple.cpp
-    ./parse/JSON_Lib_Tests_Parse_Collection.cpp
-    ./parse/JSON_Lib_Tests_Parse_Whitespace.cpp
-    ./parse/JSON_Lib_Tests_Parse_Exceptions.cpp
-    ./stringify/JSON_Lib_Tests_Stringify_Misc.cpp
-    ./stringify/JSON_Lib_Tests_Stringify_Escapes.cpp
-    ./stringify/JSON_Lib_Tests_Stringify_Simple.cpp
-    ./stringify/JSON_Lib_Tests_Stringify_Collection.cpp
-    ./stringify/JSON_Lib_Tests_Stringify_Exceptions.cpp
-    ./stringify/JSON_Lib_Tests_Print.cpp
-    ./misc/JSON_Lib_Tests_Misc.cpp
-    ./misc/JSON_Lib_Tests_Helper.cpp)
+  ./jnode/JSON_Lib_Tests_JNode.cpp
+  ./jnode/JSON_Lib_Tests_JNode_Number.cpp
+  ./json/JSON_Lib_Tests_JSON.cpp
+  ./io/JSON_Lib_Tests_ISource.cpp
+  ./io/JSON_Lib_Tests_IDestination.cpp
+  ./io/JSON_Lib_Tests_File.cpp
+  ./parse/JSON_Lib_Tests_Parse_Escapes.cpp
+  ./parse/JSON_Lib_Tests_Parse_Misc.cpp
+  ./parse/JSON_Lib_Tests_Parse_Simple.cpp
+  ./parse/JSON_Lib_Tests_Parse_Collection.cpp
+  ./parse/JSON_Lib_Tests_Parse_Whitespace.cpp
+  ./parse/JSON_Lib_Tests_Parse_Exceptions.cpp
+  ./stringify/JSON_Lib_Tests_Stringify_Misc.cpp
+  ./stringify/JSON_Lib_Tests_Stringify_Escapes.cpp
+  ./stringify/JSON_Lib_Tests_Stringify_Simple.cpp
+  ./stringify/JSON_Lib_Tests_Stringify_Collection.cpp
+  ./stringify/JSON_Lib_Tests_Stringify_Exceptions.cpp
+  ./stringify/JSON_Lib_Tests_Print.cpp
+  ./misc/JSON_Lib_Tests_Misc.cpp
+  ./misc/JSON_Lib_Tests_Helper.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${PROJECT_CURRENT_SOURCE_DIR}/include ./include)
