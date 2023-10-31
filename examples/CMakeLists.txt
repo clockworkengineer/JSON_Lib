@@ -20,9 +20,11 @@ else()
 endif()
 
 # Get example program list
+
 file(GLOB EXAMPLE_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
 # Build each program
+
 foreach(EXAMPLE_PROGRAM ${EXAMPLE_SOURCES})
   string(REPLACE ".cpp" "" EXAMPLE_TARGET ${EXAMPLE_PROGRAM})
   add_executable(${EXAMPLE_TARGET} ${EXAMPLE_PROGRAM})
