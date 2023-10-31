@@ -85,7 +85,7 @@ public:
   // ==================================
   // Get current source stream position
   // ==================================
-  std::pair<long, long> getPosition() const { return (std::make_pair(m_lineNo, m_column)); }
+  std::pair<long, long> getPosition() const { return (std::make_pair(lineNo, column)); }
 
 protected:
   // ========================
@@ -95,7 +95,7 @@ protected:
   // ========================================
   // Current line and column on source stream
   // ========================================
-  long m_lineNo = 1;
-  long m_column = 1;
+  long lineNo = 1;
+  long column = 1;
 };
 }// namespace JSON_Lib

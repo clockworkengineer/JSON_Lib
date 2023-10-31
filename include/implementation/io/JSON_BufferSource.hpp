@@ -31,18 +31,18 @@ public:
   {
     if (!more()) { throw Error("Tried to read past and of buffer."); }
     bufferPosition++;
-    m_column++;
+    column++;
     if (current() == kLineFeed) {
-      m_lineNo++;
-      m_column = 1;
+      lineNo++;
+      column = 1;
     }
   }
   virtual bool more() const override { return (bufferPosition < buffer.size()); }
   virtual void reset() override
   {
     bufferPosition = 0;
-    m_lineNo = 1;
-    m_column = 1;
+    lineNo = 1;
+    column = 1;
   }
   virtual std::size_t position() const override { return (bufferPosition); }
 

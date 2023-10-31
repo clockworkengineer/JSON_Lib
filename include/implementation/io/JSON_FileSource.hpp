@@ -32,17 +32,17 @@ public:
       source.get();
       if (current() != kLineFeed) { source.unget(); }
     }
-    m_column++;
+    column++;
     if (current() == kLineFeed) {
-      m_lineNo++;
-      m_column = 1;
+      lineNo++;
+      column = 1;
     }
   }
   virtual bool more() const override { return (source.peek() != EOF); }
   virtual void reset() override
   {
-    m_lineNo = 1;
-    m_column = 1;
+    lineNo = 1;
+    column = 1;
     source.clear();
     source.seekg(0, std::ios_base::beg);
   }

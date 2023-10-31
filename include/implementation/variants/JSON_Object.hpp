@@ -13,16 +13,16 @@ struct Object : Variant
   // Object entry
   struct Entry
   {
-    Entry(const std::string &key, JNode &jNode) : m_key(JNode::make<String>(key)), m_jNode(std::move(jNode)) {}
-    Entry(const std::string &key, JNode &&jNode) : m_key(JNode::make<String>(key)), m_jNode(std::move(jNode)) {}
-    JNode &getKey() { return (m_key); }
-    const JNode &getKey() const { return (m_key); }
-    JNode &getJNode() { return (m_jNode); }
-    const JNode &getJNode() const { return (m_jNode); }
+    Entry(const std::string &key, JNode &jNode) : key(JNode::make<String>(key)), jNode(std::move(jNode)) {}
+    Entry(const std::string &key, JNode &&jNode) : key(JNode::make<String>(key)), jNode(std::move(jNode)) {}
+    JNode &getKey() { return (key); }
+    const JNode &getKey() const { return (key); }
+    JNode &getJNode() { return (jNode); }
+    const JNode &getJNode() const { return (jNode); }
 
   private:
-    JNode m_key;
-    JNode m_jNode;
+    JNode key;
+    JNode jNode;
   };
   // Constructors/Destructors
   Object() : Variant(Variant::Type::object) {}
