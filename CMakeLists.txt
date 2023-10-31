@@ -16,6 +16,9 @@ if(MSVC)
 elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   add_compile_options(-Wall -Werror -pedantic)
   set(PLATFORM "linux")
+else()
+  add_compile_options(-Wall -Werror -pedantic)
+  set(PLATFORM "linux")
 endif()
 
 # Setup library version
