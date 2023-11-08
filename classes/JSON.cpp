@@ -21,8 +21,8 @@ namespace JSON_Lib {
 /// <param name="converter">Pointer to converter interface.</param>
 JSON::JSON(ITranslator *translator, IConverter *converter) : implementation(std::make_unique<JSON_Impl>())
 {
-  implementation->converter(converter);
-  implementation->translator(translator);
+  implementation->setConverter(converter);
+  implementation->setTranslator(translator);
 }
 
 /// <summary>

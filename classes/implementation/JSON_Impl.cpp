@@ -28,7 +28,7 @@ std::string JSON_Impl::version() const
   return (versionString.str());
 }
 
-void JSON_Impl::translator(ITranslator *translator)
+void JSON_Impl::setTranslator(ITranslator *translator)
 {
   if (translator == nullptr) {
     intializeTranslator();
@@ -37,7 +37,7 @@ void JSON_Impl::translator(ITranslator *translator)
   }
 }
 
-void JSON_Impl::converter(IConverter *converter)
+void JSON_Impl::setConverter(IConverter *converter)
 {
   if (converter == nullptr) {
     intializeConverter();

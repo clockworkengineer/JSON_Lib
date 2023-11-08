@@ -38,8 +38,8 @@ public:
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   // Set JSON translator/converter
-  void translator(ITranslator *translator);
-  void converter(IConverter *converter);
+  void setTranslator(ITranslator *translator);
+  void setConverter(IConverter *converter);
   // Get root of JSON tree
   [[nodiscard]] JNode &root() { return (jNodeRoot); }
   [[nodiscard]] const JNode &root() const { return (jNodeRoot); }
