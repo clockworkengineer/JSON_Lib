@@ -3,13 +3,11 @@ cmake_minimum_required(VERSION 3.18.1)
 project("JSON_Lib" VERSION 1.0.0 DESCRIPTION "JSON C++ Library" LANGUAGES CXX)
 
 # C++ options
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF) 
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Compiler options
-
 if(MSVC)
   add_compile_options(/W4)
   set(PLATFORM "windows")
@@ -22,85 +20,73 @@ else()
 endif()
 
 # Setup library version
-
 configure_file(JSON_Config.h.in JSON_Config.hpp)
 
 # Library name
-
 set(JSON_LIBRARY_NAME ${PROJECT_NAME})
 
 # JSON sources and includes
+set(JSON_SOURCES
+  ./classes/JSON.cpp
+  ./classes/implementation/JSON_Impl.cpp
+  ./classes/implementation/JSON_Impl_File.cpp
+  ./classes/implementation/JSON_Impl_Parse.cpp
+  ./classes/implementation/JSON_Impl_Stringify.cpp
+  ./classes/implementation/JSON_Translator.cpp)
 
-set (JSON_SOURCES
-    ./classes/JSON.cpp
-    ./classes/implementation/JSON_Impl.cpp
-    ./classes/implementation/JSON_Impl_File.cpp
-    ./classes/implementation/JSON_Impl_Parse.cpp
-    ./classes/implementation/JSON_Impl_Stringify.cpp
-    ./classes/implementation/JSON_Translator.cpp)
-
-set (JSON_INCLUDES
-    JSON_Config.hpp
-    ./include/JSON.hpp
-    ./include/implementation/json/JSON_Forward.hpp
-    ./include/implementation/json/JSON_Core.hpp
-    ./include/implementation/json/JSON_Error.hpp
-    ./include/implementation/json/JSON_Impl.hpp
-    ./include/implementation/variants/JSON_Variant.hpp
-    ./include/implementation/variants/JSON_Hole.hpp
-    ./include/implementation/variants/JSON_Object.hpp
-    ./include/implementation/variants/JSON_Array.hpp
-    ./include/implementation/variants/JSON_Number.hpp
-    ./include/implementation/variants/JSON_String.hpp
-    ./include/implementation/variants/JSON_Boolean.hpp
-    ./include/implementation/variants/JSON_Null.hpp
-    ./include/implementation/jnode/JSON_JNode.hpp
-    ./include/implementation/jnode/JSON_JNode_Reference.hpp
-    ./include/implementation/jnode/JSON_JNode_Creation.hpp
-    ./include/implementation/io/JSON_Sources.hpp
-    ./include/implementation/io/JSON_BufferSource.hpp
-    ./include/implementation/io/JSON_FileSource.hpp
-    ./include/implementation/io/JSON_Destinations.hpp
-    ./include/implementation/io/JSON_BufferDestination.hpp
-    ./include/implementation/io/JSON_FileDestination.hpp
-    ./include/implementation/translation/JSON_Translator.hpp
-    ./include/implementation/translation/JSON_Converter.hpp
-    ./include/interface/IAction.hpp
-    ./include/interface/ISource.hpp
-    ./include/interface/IDestination.hpp
-    ./include/interface/ITranslator.hpp
-    ./include/interface/IConverter.hpp)
+set(JSON_INCLUDES
+  JSON_Config.hpp
+  ./include/JSON.hpp
+  ./include/JSON_Forward.hpp
+  ./include/implementation/JSON_Core.hpp
+  ./include/implementation/JSON_Impl.hpp
+  ./include/implementation/variants/JSON_Variant.hpp
+  ./include/implementation/variants/JSON_Hole.hpp
+  ./include/implementation/variants/JSON_Object.hpp
+  ./include/implementation/variants/JSON_Array.hpp
+  ./include/implementation/variants/JSON_Number.hpp
+  ./include/implementation/variants/JSON_String.hpp
+  ./include/implementation/variants/JSON_Boolean.hpp
+  ./include/implementation/variants/JSON_Null.hpp
+  ./include/implementation/jnode/JSON_JNode.hpp
+  ./include/implementation/jnode/JSON_JNode_Reference.hpp
+  ./include/implementation/jnode/JSON_JNode_Creation.hpp
+  ./include/implementation/io/JSON_Sources.hpp
+  ./include/implementation/io/JSON_BufferSource.hpp
+  ./include/implementation/io/JSON_FileSource.hpp
+  ./include/implementation/io/JSON_Destinations.hpp
+  ./include/implementation/io/JSON_BufferDestination.hpp
+  ./include/implementation/io/JSON_FileDestination.hpp
+  ./include/implementation/translation/JSON_Translator.hpp
+  ./include/implementation/translation/JSON_Converter.hpp
+  ./include/interface/IAction.hpp
+  ./include/interface/ISource.hpp
+  ./include/interface/IDestination.hpp
+  ./include/interface/ITranslator.hpp
+  ./include/interface/IConverter.hpp)
 
 # Platform specific
-
-list (APPEND JSON_SOURCES "./classes/implementation/platform/${PLATFORM}/Converter.cpp")
+list(APPEND JSON_SOURCES "./classes/implementation/platform/${PLATFORM}/Converter.cpp")
 
 # JSON library
-
 add_library(${JSON_LIBRARY_NAME} ${JSON_SOURCES} ${JSON_INCLUDES})
-target_include_directories(${JSON_LIBRARY_NAME} PUBLIC 
-    ${PROJECT_SOURCE_DIR}/include
-    ${PROJECT_SOURCE_DIR}/include/interface
-    ${PROJECT_SOURCE_DIR}/include/implementation
-    ${PROJECT_SOURCE_DIR}/include/implementation/json
-    ${PROJECT_SOURCE_DIR}/include/implementation/jnode
-    ${PROJECT_SOURCE_DIR}/include/implementation/io
-    ${PROJECT_SOURCE_DIR}/include/implementation/translation
-    ${PROJECT_SOURCE_DIR}/include/implementation/variants
-    ${PROJECT_SOURCE_DIR}/include/external
-    ${PROJECT_BINARY_DIR} )
+target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
+  ${PROJECT_SOURCE_DIR}/include
+  ${PROJECT_SOURCE_DIR}/include/interface
+  ${PROJECT_SOURCE_DIR}/include/implementation
+  ${PROJECT_SOURCE_DIR}/include/implementation/jnode
+  ${PROJECT_SOURCE_DIR}/include/implementation/io
+  ${PROJECT_SOURCE_DIR}/include/implementation/translation
+  ${PROJECT_SOURCE_DIR}/include/implementation/variants
+  ${PROJECT_SOURCE_DIR}/include/external
+  ${PROJECT_BINARY_DIR})
 
 # Add tests
-
 add_subdirectory(tests)
 
 # Add exmaples
-
 add_subdirectory(examples)
 
 # install
-
 install(TARGETS ${JSON_LIBRARY_NAME} DESTINATION lib)
-install(FILES  ${JSON_INCLUDES} DESTINATION include)
-
-
+install(FILES ${JSON_INCLUDES} DESTINATION include)
