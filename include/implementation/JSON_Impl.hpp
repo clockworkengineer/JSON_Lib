@@ -55,7 +55,7 @@ public:
   // Set print ident value
   void setIndent(long indent)
   {
-    if (indent < 0) { throw Error("Invalid print indentation value."); };
+    if (indent < 0) { throw JSON::Error("Invalid print indentation value."); };
     printIndent = indent;
   }
   // Read/Write JSON from file
@@ -132,7 +132,7 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
     for (auto &entry : JRef<Array>(jNode).getArrayEntries()) { traverseJNodes(entry, action); }
     break;
   default:
-    throw Error("Unknown JNode type encountered during stringification.");
+    throw JSON::Error("Unknown JNode type encountered during stringification.");
   }
 }
 }// namespace JSON_Lib

@@ -12,18 +12,26 @@ namespace JSON_Lib {
 
 #include "JSON_Forward.hpp"
 
-struct Error : public std::runtime_error
-{
-  explicit Error(const std::string &message) : std::runtime_error("JSON Error: " + message) {}
-  explicit Error(const std::pair<long, long> &position, const std::string &message = "")
-    : std::runtime_error("JSON Error [Line: " + std::to_string(position.first)
-                         + " Column: " + std::to_string(position.second) + "]: " + message)
-  {}
-};
+// struct Error : public std::runtime_error
+// {
+//   explicit Error(const std::string &message) : std::runtime_error("JSON Error: " + message) {}
+//   explicit Error(const std::pair<long, long> &position, const std::string &message = "")
+//     : std::runtime_error("JSON Error [Line: " + std::to_string(position.first)
+//                          + " Column: " + std::to_string(position.second) + "]: " + message)
+//   {}
+// };
 
 class JSON
 {
 public:
+  struct Error : public std::runtime_error
+  {
+    explicit Error(const std::string &message) : std::runtime_error("JSON Error: " + message) {}
+    explicit Error(const std::pair<long, long> &position, const std::string &message = "")
+      : std::runtime_error("JSON Error [Line: " + std::to_string(position.first)
+                           + " Column: " + std::to_string(position.second) + "]: " + message)
+    {}
+  };
   // Possible JSON Node internal value types
   using InternalType =
     std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t, JNode>;

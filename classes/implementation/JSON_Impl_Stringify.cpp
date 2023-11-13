@@ -154,7 +154,7 @@ void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination, l
     stringifyArray(jNode, destination, indent);
     break;
   default:
-    throw Error("Unknown JNode type encountered during stringification.");
+    throw JSON::Error("Unknown JNode type encountered during stringification.");
   }
 }
 }// namespace JSON_Lib
