@@ -9,12 +9,8 @@
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
 
-#include <filesystem>
-#include <string>
-#include <vector>
-#include <stdexcept>
-
 #include "Utility.hpp"
+
 #include "JSON_Indexer.hpp"
 
 #include "plog/Initializers/RollingFileInitializer.h"

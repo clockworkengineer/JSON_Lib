@@ -8,11 +8,8 @@
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
 
-#include <filesystem>
-#include <string>
-#include <stdexcept>
-
 #include "Utility.hpp"
+
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "JSON_Sources.hpp"
@@ -22,13 +19,12 @@
 #include "plog/Log.h"
 
 namespace js = JSON_Lib;
-namespace fs = std::filesystem;
 
 /// <summary>
 /// Return Fibonaci json file name.
 /// </summary>
 /// <returns>JSON settings file name.</returns>
-std::string jsonFibonacciFile() { return ((fs::current_path() / "files" / "fibonacci.json").string()); }
+std::string jsonFibonacciFile() { return ((std::filesystem::current_path() / "files" / "fibonacci.json").string()); }
 /// <summary>
 /// Read in current fibonacci sequence from JSON file, calculate the
 //  next in sequence and write back to JSON file.
@@ -36,7 +32,7 @@ std::string jsonFibonacciFile() { return ((fs::current_path() / "files" / "fibon
 void nextFibonacci()
 {
   js::JSON json;
-  if (!fs::exists(jsonFibonacciFile())) {
+  if (!std::filesystem::exists(jsonFibonacciFile())) {
     // If JSON file does not exist create intial sequence
     json.parse(js::BufferSource{ "[0, 1]" });
   } else {

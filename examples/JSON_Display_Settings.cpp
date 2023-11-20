@@ -9,12 +9,8 @@
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
 
-// =======
-#include <filesystem>
-#include <string>
-#include <stdexcept>
-
 #include "Utility.hpp"
+
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "JSON_Sources.hpp"
@@ -24,13 +20,12 @@
 #include "plog/Log.h"
 
 namespace js = JSON_Lib;
-namespace fs = std::filesystem;
 
 /// <summary>
 /// Return settings json file name.
 /// </summary>
 /// <returns>JSON settings file name.</returns>
-std::string jsonSettingsFile() { return ((fs::current_path() / "files" / "settings.json").string()); }
+std::string jsonSettingsFile() { return ((std::filesystem::current_path() / "files" / "settings.json").string()); }
 /// <summary>
 /// Process settings file top level object entry. This involves jusr reading the
 /// entries JNode data and logging it to a file.

@@ -7,9 +7,9 @@
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
 
-#include <stdexcept>
 
 #include "Utility.hpp"
+
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "JSON_Sources.hpp"

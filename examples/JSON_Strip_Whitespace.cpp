@@ -7,12 +7,8 @@
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
 
-#include <filesystem>
-#include <string>
-#include <vector>
-#include <stdexcept>
-
 #include "Utility.hpp"
+
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "JSON_Sources.hpp"
@@ -22,7 +18,6 @@
 #include "plog/Log.h"
 
 namespace js = JSON_Lib;
-namespace fs = std::filesystem;
 
 /// <summary>
 /// Strip a JSON file of all its whitespace.
@@ -33,7 +28,7 @@ void processJSONFile(const std::string &fileName)
   PLOG_INFO << "Stripping " << fileName;
   const js::JSON json;
   json.strip(js::FileSource{ fileName }, js::FileDestination{ fileName + ".stripped" });
-  fs::rename(fileName + ".stripped", fileName);
+  std::filesystem::rename(fileName + ".stripped", fileName);
   PLOG_INFO << "Finished " << fileName << ".";
 }
 
