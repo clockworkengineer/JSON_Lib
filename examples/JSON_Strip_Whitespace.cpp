@@ -12,6 +12,7 @@
 #include <vector>
 #include <stdexcept>
 
+#include "Utility.hpp"
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "JSON_Sources.hpp"
@@ -23,18 +24,6 @@
 namespace js = JSON_Lib;
 namespace fs = std::filesystem;
 
-/// <summary>
-/// Return a vector of JSON files to analyze.
-/// </summary>
-/// <returns>Vector of JSON file names</returns>
-std::vector<std::string> readJSONFileList()
-{
-  std::vector<std::string> fileList;
-  for (auto &file : fs::directory_iterator(fs::current_path() / "files")) {
-    if (const auto fileName = file.path().string(); fileName.ends_with(".json")) { fileList.push_back(fileName); }
-  }
-  return (fileList);
-}
 /// <summary>
 /// Strip a JSON file of all its whitespace.
 /// </summary>
@@ -56,7 +45,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   // Output JSON Lib version
   PLOG_INFO << js::JSON().version();
   // Strip JSON files.
-  for (auto &fileName : readJSONFileList()) {
+  for (auto &fileName : Utility::createTorrentFileList()) {
     try {
       processJSONFile(fileName);
     } catch (std::exception &ex) {

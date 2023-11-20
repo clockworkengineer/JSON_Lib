@@ -14,6 +14,7 @@
 #include <stdexcept>
 #include <chrono>
 
+#include "Utility.hpp"
 #include "JSON.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
@@ -22,23 +23,10 @@
 #include "plog/Log.h"
 
 namespace js = JSON_Lib;
-namespace fs = std::filesystem;
 namespace chrono = std::chrono;
 
 static constexpr size_t kMaxFileLengthToDisplay = 16 * 1024;
 
-/// <summary>
-/// Return a vector of JSON files to analyze.
-/// </summary>
-/// <returns>Vector of JSON file names</returns>
-std::vector<std::string> readJSONFileList()
-{
-  std::vector<std::string> fileList;
-  for (auto &file : fs::directory_iterator(fs::current_path() / "files")) {
-    if (const auto fileName = file.path().string(); fileName.ends_with(".json")) { fileList.push_back(fileName); }
-  }
-  return (fileList);
-}
 /// <summary>
 /// Parse JSON file, stringify and parse JSON from buffer whilst timing each
 /// step.
@@ -87,7 +75,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   PLOG_INFO << "JSON_Parse_Files started ...";
   PLOG_INFO << js::JSON().version();
   // For each json parse it, stringify it and display unless its to large.
-  for (auto &fileName : readJSONFileList()) {
+  for (auto &fileName : Utility::createTorrentFileList()) {
     try {
       processJSONFile(fileName);
     } catch (std::exception &ex) {

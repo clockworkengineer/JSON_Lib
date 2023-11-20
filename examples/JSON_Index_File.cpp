@@ -14,26 +14,14 @@
 #include <vector>
 #include <stdexcept>
 
+#include "Utility.hpp"
 #include "JSON_Indexer.hpp"
 
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "plog/Log.h"
 
 namespace js = JSON_Lib;
-namespace fs = std::filesystem;
 
-/// <summary>
-/// Return a vector of JSON files to analyze.
-/// </summary>
-/// <returns>Vector of JSON file names</returns>
-std::vector<std::string> readJSONFileList()
-{
-  std::vector<std::string> fileList;
-  for (auto &file : fs::directory_iterator(fs::current_path() / "files")) {
-    if (const auto fileName = file.path().string(); fileName.ends_with(".json")) { fileList.push_back(fileName); }
-  }
-  return (fileList);
-}
 /// <summary>
 /// Parse JSON file, travserse its JSON tree to produce an index of
 /// object keys, modify the object keys to be these index values and
@@ -60,7 +48,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   PLOG_INFO << "JSON_Index_File started ...";
   PLOG_INFO << js::JSON().version();
   // Analyze JSON files.
-  for (auto &fileName : readJSONFileList()) {
+  for (auto &fileName : Utility::createTorrentFileList()) {
     try {
       processJSONFile(fileName);
     } catch (std::exception &ex) {
