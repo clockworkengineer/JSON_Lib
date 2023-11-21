@@ -8,7 +8,6 @@
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Core.hpp"
-#include "IAction.hpp"
 
 class JSON_Indexer : public JSON_Lib::IAction
 {

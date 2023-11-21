@@ -40,6 +40,7 @@ set(JSON_INCLUDES
   ./include/JSON_Forward.hpp
   ./include/implementation/JSON_Core.hpp
   ./include/implementation/JSON_Impl.hpp
+  ./include/implementation/JSON_Interfaces.hpp
   ./include/implementation/variants/JSON_Variant.hpp
   ./include/implementation/variants/JSON_Hole.hpp
   ./include/implementation/variants/JSON_Object.hpp
