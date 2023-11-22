@@ -39,7 +39,6 @@ set(JSON_INCLUDES
   ./include/JSON.hpp
   ./include/JSON_Forward.hpp
   ./include/JSON_Core.hpp
-  ./include/JSON_Interfaces.hpp
   ./include/implementation/JSON_Impl.hpp
   ./include/implementation/variants/JSON_Variant.hpp
   ./include/implementation/variants/JSON_Hole.hpp
@@ -60,6 +59,7 @@ set(JSON_INCLUDES
   ./include/implementation/io/JSON_FileDestination.hpp
   ./include/implementation/translation/JSON_Translator.hpp
   ./include/implementation/translation/JSON_Converter.hpp
+  ./include/interface/JSON_Interfaces.hpp
   ./include/interface/IAction.hpp
   ./include/interface/ISource.hpp
   ./include/interface/IDestination.hpp
