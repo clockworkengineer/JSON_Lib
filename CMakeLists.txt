@@ -38,9 +38,9 @@ set(JSON_INCLUDES
   JSON_Config.hpp
   ./include/JSON.hpp
   ./include/JSON_Forward.hpp
-  ./include/implementation/JSON_Core.hpp
+  ./include/JSON_Core.hpp
+  ./include/JSON_Interfaces.hpp
   ./include/implementation/JSON_Impl.hpp
-  ./include/implementation/JSON_Interfaces.hpp
   ./include/implementation/variants/JSON_Variant.hpp
   ./include/implementation/variants/JSON_Hole.hpp
   ./include/implementation/variants/JSON_Object.hpp
