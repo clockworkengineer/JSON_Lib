@@ -58,35 +58,35 @@ public:
     printIndent = indent;
   }
   // Read/Write JSON from file
-  static const std::string fromFile(const std::string &fileName);
-  static void toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format);
+   static const std::string fromFile(const std::string &fileName);
+   static void toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format);
   // Get JSON file format
-  static JSON::Format getFileFormat(const std::string &fileName);
+   static JSON::Format getFileFormat(const std::string &fileName);
 
 private:
   // Initialize converter/translator
-  static void intializeConverter();
-  static void intializeTranslator();
+   static void intializeConverter();
+   static void intializeTranslator();
   // Parse JSON
-  static Object::Entry parseObjectEntry(ISource &source);
-  static JNode parseString(ISource &source);
-  static JNode parseNumber(ISource &source);
-  static JNode parseBoolean(ISource &source);
-  static JNode parseNull(ISource &source);
-  static JNode parseObject(ISource &source);
-  static JNode parseArray(ISource &source);
+   Object::Entry parseObjectEntry(ISource &source);
+   JNode parseString(ISource &source);
+   JNode parseNumber(ISource &source);
+   JNode parseBoolean(ISource &source);
+   JNode parseNull(ISource &source);
+   JNode parseObject(ISource &source);
+   JNode parseArray(ISource &source);
   // Produce JSON tree
-  static JNode parseJNodes(ISource &source);
+   JNode parseJNodes(ISource &source);
   // Stringify JSON
-  static void stringifyNumber(const JNode &jNode, IDestination &destination);
-  static void stringifyString(const JNode &jNode, IDestination &destination);
-  static void stringifyBoolean(const JNode &jNode, IDestination &destination);
-  static void stringifyNull(const JNode &jNode, IDestination &destination);
-  static void stringifyHole(const JNode &jNode, IDestination &destination);
-  static void stringifyObject(const JNode &jNode, IDestination &destination, long indent);
-  static void stringifyArray(const JNode &jNode, IDestination &destination, long indent);
+   void stringifyNumber(const JNode &jNode, IDestination &destination)const ;
+   void stringifyString(const JNode &jNode, IDestination &destination)const;
+   void stringifyBoolean(const JNode &jNode, IDestination &destination)const;
+   void stringifyNull(const JNode &jNode, IDestination &destination)const ;
+   void stringifyHole(const JNode &jNode, IDestination &destination)const;
+   void stringifyObject(const JNode &jNode, IDestination &destination, long indent)const;
+   void stringifyArray(const JNode &jNode, IDestination &destination, long indent)const;
   // Produce JSON test string from JSON tree
-  static void stringifyJNodes(const JNode &jNode, IDestination &destination, long indent);
+   void stringifyJNodes(const JNode &jNode, IDestination &destination, long indent)const;
   // Traverse JSON tree
   template<typename T> static void traverseJNodes(T &jNode, IAction &action);
   // Root of JSON tree

@@ -18,7 +18,7 @@ namespace JSON_Lib {
 /// </summary>
 /// <param name="jNode">Number JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyNumber(const JNode &jNode, IDestination &destination)
+void JSON_Impl::stringifyNumber(const JNode &jNode, IDestination &destination) const
 {
   destination.add(JRef<Number>(jNode).toString());
 }
@@ -28,7 +28,7 @@ void JSON_Impl::stringifyNumber(const JNode &jNode, IDestination &destination)
 /// </summary>
 /// <param name="jNode">String JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyString(const JNode &jNode, IDestination &destination)
+void JSON_Impl::stringifyString(const JNode &jNode, IDestination &destination) const
 {
   destination.add('"');
   destination.add(jsonTranslator->toJSON(JRef<String>(jNode).toString()));
@@ -40,7 +40,7 @@ void JSON_Impl::stringifyString(const JNode &jNode, IDestination &destination)
 /// </summary>
 /// <param name="jNode">Boolean JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyBoolean(const JNode &jNode, IDestination &destination)
+void JSON_Impl::stringifyBoolean(const JNode &jNode, IDestination &destination) const
 {
   destination.add(JRef<Boolean>(jNode).toString());
 }
@@ -50,7 +50,7 @@ void JSON_Impl::stringifyBoolean(const JNode &jNode, IDestination &destination)
 /// </summary>
 /// <param name="jNode">Null JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyNull(const JNode &jNode, IDestination &destination)
+void JSON_Impl::stringifyNull(const JNode &jNode, IDestination &destination) const
 {
   destination.add(JRef<Null>(jNode).toString());
 }
@@ -60,7 +60,7 @@ void JSON_Impl::stringifyNull(const JNode &jNode, IDestination &destination)
 /// </summary>
 /// <param name="jNode">Hole JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyHole(const JNode &jNode, IDestination &destination)
+void JSON_Impl::stringifyHole(const JNode &jNode, IDestination &destination) const
 {
   destination.add(JRef<Hole>(jNode).toString());
 }
@@ -71,7 +71,7 @@ void JSON_Impl::stringifyHole(const JNode &jNode, IDestination &destination)
 /// <param name="jNode">Object JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination, long indent)
+void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const
 {
   size_t commaCount = JRef<Object>(jNode).getObjectEntries().size() - 1;
   destination.add('{');
@@ -100,7 +100,7 @@ void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination, l
 /// <param name="jNode">Array JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination, long indent)
+void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const
 {
   destination.add('[');
   if (!JRef<Array>(jNode).getArrayEntries().empty()) {
@@ -129,7 +129,7 @@ void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination, lo
 /// <param name=jNode>JNode structure to be traversed.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination, long indent)
+void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination, long indent) const
 {
   switch (jNode.getVariant().getType()) {
   case Variant::Type::number:

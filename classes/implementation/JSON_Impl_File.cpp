@@ -115,7 +115,7 @@ const std::string JSON_Impl::fromFile(const std::string &fileName)
   // Initialise converter
   intializeConverter();
   // Get file format
-  JSON::Format format = JSON::getFileFormat(fileName);
+  JSON::Format format = getFileFormat(fileName);
   // Read in JSON
   std::ifstream jsonFile{ fileName, std::ios_base::binary };
   std::string translated;
