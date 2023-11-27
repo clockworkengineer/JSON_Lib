@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 namespace JSON_Lib {
+  
 // ====================================================================
 // Interface for writing destination stream during JSON stringification
 // ====================================================================

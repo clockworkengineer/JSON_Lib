@@ -64,7 +64,8 @@ set(JSON_INCLUDES
   ./include/interface/ISource.hpp
   ./include/interface/IDestination.hpp
   ./include/interface/ITranslator.hpp
-  ./include/interface/IConverter.hpp)
+  ./include/interface/IConverter.hpp
+  ./include/interface/IParser.hpp)
 
 # Platform specific
 list(APPEND JSON_SOURCES "./classes/implementation/platform/${PLATFORM}/Converter.cpp")

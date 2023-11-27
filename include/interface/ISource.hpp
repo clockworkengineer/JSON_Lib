@@ -4,11 +4,13 @@
 #include <stdexcept>
 
 namespace JSON_Lib {
+  
 // ========================
 // JSON character constants
 // ========================
 constexpr char kCarriageReturn{ 0x0D };
 constexpr char kLineFeed{ 0x0A };
+
 // =======================================================
 // Interface for reading source stream during JSON parsing
 // =======================================================

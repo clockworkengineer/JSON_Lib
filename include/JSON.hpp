@@ -80,10 +80,10 @@ public:
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
   // Read/Write JSON from file
-   static const std::string fromFile(const std::string &fileName);
+  static const std::string fromFile(const std::string &fileName);
   static void toFile(const std::string &fileName, const std::string &jsonString, Format format = Format::utf8);
   // Get JSON file format
-   static Format getFileFormat(const std::string &fileName);
+  static Format getFileFormat(const std::string &fileName);
 
 private:
   // JSON implementation

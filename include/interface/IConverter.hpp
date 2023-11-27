@@ -1,14 +1,23 @@
 #pragma once
 
 #include <string>
+#include <stdexcept>
 
 namespace JSON_Lib {
+
 // =======================================
 // Interface for utf8 <-> uft16 conversion
 // =======================================
 class IConverter
 {
 public:
+  // ================
+  // IConverter Error
+  // ================
+  struct Error : public std::runtime_error
+  {
+    explicit Error(const std::string &message) : std::runtime_error("IConverter Error: " + message) {}
+  };
   // ========================
   // Constructors/destructors
   // ========================

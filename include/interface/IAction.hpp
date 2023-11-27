@@ -3,9 +3,14 @@
 #include <stdexcept>
 #include <string>
 
-// #include "JSON_Core.hpp"
-
 namespace JSON_Lib {
+
+// ====================
+// Forward declarations
+// ====================
+
+struct JNode;
+
 // ==========================================================
 // Interface for the action events during JSON tree traversal
 // ==========================================================

@@ -1,21 +1,32 @@
 #pragma once
 
 #include <string>
+#include <stdexcept>
 
 namespace JSON_Lib {
+
 // ========================
 // Unicode surrogate ranges
 // ========================
+
 constexpr char16_t kHighSurrogatesBegin{ 0xD800 };
 constexpr char16_t kHighSurrogatesEnd{ 0xDBFF };
 constexpr char16_t kLowSurrogatesBegin{ 0xDC00 };
 constexpr char16_t kLowSurrogatesEnd{ 0xDFFF };
+
 // =========================================================
 // Interface for translation to/from JSON escaped characters
 // =========================================================
 class ITranslator
 {
 public:
+  // =============
+  // ITranslator Error
+  // =============
+  struct Error : public std::runtime_error
+  {
+    explicit Error(const std::string &message) : std::runtime_error("ITranslator Error: " + message) {}
+  };
   // ========================
   // Constructors/destructors
   // ========================

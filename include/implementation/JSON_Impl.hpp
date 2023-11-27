@@ -96,7 +96,7 @@ private:
   // Pointer to character conversion interface
   inline static std::unique_ptr<IConverter> jsonConverter;
   // Current print indent value
-  inline static long printIndent{ 4 };
+  inline static long printIndent{ 4 }; 
 };
 /// <summary>
 /// Recursively traverse JNode tree calling IAction methods and possibly
