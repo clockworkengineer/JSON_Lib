@@ -9,12 +9,12 @@ namespace JSON_Lib {
 // Forward declarations
 // ====================
 
-struct ISource;
+class ISource;
 struct JNode;
 
-// =====================
-// Interface JSON parser
-// =====================
+// =========================
+// Interface for JSON parser
+// =========================
 class IParser
 {
 public:
