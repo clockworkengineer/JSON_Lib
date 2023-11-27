@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 
-
 #include "JSON_Config.hpp"
 #include "JSON_Converter.hpp"
 #include "JSON_Sources.hpp"

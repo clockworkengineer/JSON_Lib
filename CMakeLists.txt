@@ -32,7 +32,8 @@ set(JSON_SOURCES
   ./classes/implementation/JSON_Impl_File.cpp
   ./classes/implementation/JSON_Impl_Parse.cpp
   ./classes/implementation/JSON_Impl_Stringify.cpp
-  ./classes/implementation/JSON_Translator.cpp)
+  ./classes/implementation/JSON_Translator.cpp
+  ./classes/implementation/parser/Default_Parser.cpp)
 
 set(JSON_INCLUDES
   JSON_Config.hpp
@@ -59,6 +60,7 @@ set(JSON_INCLUDES
   ./include/implementation/io/JSON_FileDestination.hpp
   ./include/implementation/translation/JSON_Translator.hpp
   ./include/implementation/translation/JSON_Converter.hpp
+  ./include/implementation/parser/Default_Parser.hpp
   ./include/interface/JSON_Interfaces.hpp
   ./include/interface/IAction.hpp
   ./include/interface/ISource.hpp
@@ -80,6 +82,7 @@ target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
   ${PROJECT_SOURCE_DIR}/include/implementation/io
   ${PROJECT_SOURCE_DIR}/include/implementation/translation
   ${PROJECT_SOURCE_DIR}/include/implementation/variants
+  ${PROJECT_SOURCE_DIR}/include/implementation/parser
   ${PROJECT_SOURCE_DIR}/include/external
   ${PROJECT_BINARY_DIR})
 
