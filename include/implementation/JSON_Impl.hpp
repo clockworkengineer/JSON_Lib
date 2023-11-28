@@ -36,8 +36,8 @@ public:
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   // Set JSON translator/converter
-  void setTranslator(ITranslator *translator);
-  void setConverter(IConverter *converter);
+  static void setTranslator(ITranslator *translator);
+  static void setConverter(IConverter *converter);
   // Get root of JSON tree
   [[nodiscard]] JNode &root() { return (jNodeRoot); }
   [[nodiscard]] const JNode &root() const { return (jNodeRoot); }
@@ -66,16 +66,6 @@ private:
   // Initialize converter/translator
    static void intializeConverter();
    static void intializeTranslator();
-  // Parse JSON
-   Object::Entry parseObjectEntry(ISource &source);
-   JNode parseString(ISource &source);
-   JNode parseNumber(ISource &source);
-   JNode parseBoolean(ISource &source);
-   JNode parseNull(ISource &source);
-   JNode parseObject(ISource &source);
-   JNode parseArray(ISource &source);
-  // Produce JSON tree
-   JNode parseJNodes(ISource &source);
   // Stringify JSON
    void stringifyNumber(const JNode &jNode, IDestination &destination)const ;
    void stringifyString(const JNode &jNode, IDestination &destination)const;

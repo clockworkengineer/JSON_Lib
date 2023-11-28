@@ -20,7 +20,6 @@ void JSON_Impl::intializeConverter()
 void JSON_Impl::intializeTranslator()
 {
   if (jsonTranslator == nullptr) { jsonTranslator = std::make_unique<JSON_Translator>(*jsonConverter); }
-  jsonParser = std::make_unique<Default_Parser>(*jsonTranslator);
 }
 
 std::string JSON_Impl::version() const
@@ -33,16 +32,17 @@ std::string JSON_Impl::version() const
 void JSON_Impl::setTranslator(ITranslator *translator)
 {
   if (translator == nullptr) {
-    intializeTranslator();
+    jsonTranslator = std::make_unique<JSON_Translator>(*jsonConverter);
   } else {
     jsonTranslator.reset(translator);
   }
+  jsonParser = std::make_unique<Default_Parser>(*jsonTranslator);
 }
 
 void JSON_Impl::setConverter(IConverter *converter)
 {
   if (converter == nullptr) {
-    intializeConverter();
+    jsonConverter = std::make_unique<JSON_Converter>();
   } else {
     jsonConverter.reset(converter);
   }
