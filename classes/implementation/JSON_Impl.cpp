@@ -30,7 +30,7 @@ std::string JSON_Impl::version() const
 }
 
 void JSON_Impl::setTranslator(ITranslator *translator)
-{
+{ 
   if (translator == nullptr) {
     jsonTranslator = std::make_unique<JSON_Translator>(*jsonConverter);
   } else {
