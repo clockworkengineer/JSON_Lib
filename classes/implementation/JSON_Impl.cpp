@@ -12,16 +12,6 @@
 
 namespace JSON_Lib {
 
-void JSON_Impl::intializeConverter()
-{
-  if (jsonConverter == nullptr) { jsonConverter = std::make_unique<JSON_Converter>(); }
-}
-
-void JSON_Impl::intializeTranslator()
-{
-  if (jsonTranslator == nullptr) { jsonTranslator = std::make_unique<JSON_Translator>(*jsonConverter); }
-}
-
 std::string JSON_Impl::version() const
 {
   std::stringstream versionString;

@@ -36,8 +36,8 @@ public:
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   // Set JSON translator/converter
-  static void setTranslator(ITranslator *translator);
-  static void setConverter(IConverter *converter);
+  static void setTranslator(ITranslator *translator=nullptr);
+  static void setConverter(IConverter *converter=nullptr);
   // Get root of JSON tree
   [[nodiscard]] JNode &root() { return (jNodeRoot); }
   [[nodiscard]] const JNode &root() const { return (jNodeRoot); }
@@ -63,9 +63,6 @@ public:
    static JSON::Format getFileFormat(const std::string &fileName);
 
 private:
-  // Initialize converter/translator
-   static void intializeConverter();
-   static void intializeTranslator();
   // Stringify JSON
    void stringifyNumber(const JNode &jNode, IDestination &destination)const ;
    void stringifyString(const JNode &jNode, IDestination &destination)const;
@@ -80,6 +77,7 @@ private:
   template<typename T> static void traverseJNodes(T &jNode, IAction &action);
   // Root of JSON tree
   JNode jNodeRoot;
+  // Pointer to JSON parser interface
   inline static std::unique_ptr<IParser> jsonParser;
   // Pointer to JSON translator interface
   inline static std::unique_ptr<ITranslator> jsonTranslator;

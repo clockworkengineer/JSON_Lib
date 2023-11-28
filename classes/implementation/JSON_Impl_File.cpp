@@ -112,8 +112,8 @@ const std::string JSON_Impl::fromFile(const std::string &fileName)
 {
   const char *kCRLF = "\x0D\x0A";
   const char *kLF = "\x0A";
-  // Initialise converter
-  intializeConverter();
+  // Initialise translator
+  setTranslator();
   // Get file format
   JSON::Format format = getFileFormat(fileName);
   // Read in JSON
@@ -151,7 +151,7 @@ const std::string JSON_Impl::fromFile(const std::string &fileName)
 void JSON_Impl::toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format)
 {
   // Initialise converter
-  intializeConverter();
+  setConverter();
   std::ofstream jsonFile{ fileName, std::ios::binary };
   switch (format) {
   case JSON::Format::utf8BOM:
