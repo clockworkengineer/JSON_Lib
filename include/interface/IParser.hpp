@@ -37,6 +37,6 @@ public:
   // =================
   // Parse JSON source
   // =================
-  [[nodiscard]] virtual JNode parse(ISource &source) const = 0;
+virtual JNode parse(ISource &source) = 0;
 };
 }// namespace JSON_Lib

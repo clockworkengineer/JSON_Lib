@@ -8,6 +8,7 @@
 
 #include "JSON.hpp"
 #include "JSON_Impl.hpp"
+#include "Default_Parser.hpp"
 
 namespace JSON_Lib {
 
@@ -19,6 +20,7 @@ void JSON_Impl::intializeConverter()
 void JSON_Impl::intializeTranslator()
 {
   if (jsonTranslator == nullptr) { jsonTranslator = std::make_unique<JSON_Translator>(*jsonConverter); }
+  jsonParser = std::make_unique<Default_Parser>(*jsonTranslator);
 }
 
 std::string JSON_Impl::version() const
@@ -46,7 +48,7 @@ void JSON_Impl::setConverter(IConverter *converter)
   }
 }
 
-void JSON_Impl::parse(ISource &source) { jNodeRoot = parseJNodes(source); }
+void JSON_Impl::parse(ISource &source) { jNodeRoot = jsonParser->parse(source); }
 
 void JSON_Impl::stringify(IDestination &destination) const
 {

@@ -90,6 +90,7 @@ private:
   template<typename T> static void traverseJNodes(T &jNode, IAction &action);
   // Root of JSON tree
   JNode jNodeRoot;
+  inline static std::unique_ptr<IParser> jsonParser;
   // Pointer to JSON translator interface
   inline static std::unique_ptr<ITranslator> jsonTranslator;
   // Pointer to character conversion interface
