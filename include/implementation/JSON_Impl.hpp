@@ -18,13 +18,13 @@ namespace JSON_Lib {
 class JSON_Impl
 {
 public:
+  // Constructors/Destructors
   JSON_Impl() = default;
   JSON_Impl(const JSON_Impl &other) = delete;
   JSON_Impl &operator=(const JSON_Impl &other) = delete;
   JSON_Impl(JSON_Impl &&other) = delete;
   JSON_Impl &operator=(JSON_Impl &&other) = delete;
   ~JSON_Impl() = default;
-
   // Get JSON_Lib version
   std::string version() const;
   // Parse JSON into tree
@@ -53,7 +53,6 @@ public:
   // Set print ident value
   void setIndent(long indent)
   {
-    if (indent < 0) { throw JSON::Error("Invalid print indentation value."); };
     jsonStringify->setIndent(indent);
   }
   // Read/Write JSON from file
@@ -110,7 +109,7 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
     for (auto &entry : JRef<Array>(jNode).getArrayEntries()) { traverseJNodes(entry, action); }
     break;
   default:
-    throw JSON::Error("Unknown JNode type encountered during stringification.");
+    throw JSON::Error("Unknown JNode type encountered during tree traversal.");
   }
 }
 }// namespace JSON_Lib

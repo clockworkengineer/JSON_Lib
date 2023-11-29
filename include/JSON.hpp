@@ -57,7 +57,6 @@ public:
   JSON &operator=(JSON &&other) = delete;
   // Provide own destructor
   ~JSON();
-
   // Get JSON library version
   [[nodiscard]] std::string version() const;
   // Parse JSON into tree
