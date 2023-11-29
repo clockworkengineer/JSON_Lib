@@ -6,3 +6,4 @@
 #include "ISource.hpp"
 #include "ITranslator.hpp"
 #include "IParser.hpp"
+#include "IStringify.hpp"

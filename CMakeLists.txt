@@ -30,9 +30,9 @@ set(JSON_SOURCES
   ./classes/JSON.cpp
   ./classes/implementation/JSON_Impl.cpp
   ./classes/implementation/JSON_Impl_File.cpp
-  ./classes/implementation/JSON_Impl_Stringify.cpp
   ./classes/implementation/JSON_Translator.cpp
-  ./classes/implementation/parser/Default_Parser.cpp)
+  ./classes/implementation/parser/Default_Parser.cpp
+  ./classes/implementation/stringify/Default_Stringify.cpp)
 
 set(JSON_INCLUDES
   JSON_Config.hpp
@@ -59,13 +59,15 @@ set(JSON_INCLUDES
   ./include/implementation/translation/JSON_Translator.hpp
   ./include/implementation/translation/JSON_Converter.hpp
   ./include/implementation/parser/Default_Parser.hpp
+  ./include/implementation/stringify/Default_Stringify.hpp
   ./include/interface/JSON_Interfaces.hpp
   ./include/interface/IAction.hpp
   ./include/interface/ISource.hpp
   ./include/interface/IDestination.hpp
   ./include/interface/ITranslator.hpp
   ./include/interface/IConverter.hpp
-  ./include/interface/IParser.hpp)
+  ./include/interface/IParser.hpp
+  ./include/interface/IStringify.hpp)
 
 # Platform specific
 list(APPEND JSON_SOURCES "./classes/implementation/platform/${PLATFORM}/Converter.cpp")
@@ -81,6 +83,7 @@ target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
   ${PROJECT_SOURCE_DIR}/include/implementation/translation
   ${PROJECT_SOURCE_DIR}/include/implementation/variants
   ${PROJECT_SOURCE_DIR}/include/implementation/parser
+  ${PROJECT_SOURCE_DIR}/include/implementation/stringify
   ${PROJECT_SOURCE_DIR}/include/external
   ${PROJECT_BINARY_DIR})
 

@@ -9,6 +9,7 @@
 #include "JSON.hpp"
 #include "JSON_Impl.hpp"
 #include "Default_Parser.hpp"
+#include "Default_Stringify.hpp"
 
 namespace JSON_Lib {
 
@@ -20,13 +21,14 @@ std::string JSON_Impl::version() const
 }
 
 void JSON_Impl::setTranslator(ITranslator *translator)
-{ 
+{
   if (translator == nullptr) {
     jsonTranslator = std::make_unique<JSON_Translator>(*jsonConverter);
   } else {
     jsonTranslator.reset(translator);
   }
   jsonParser = std::make_unique<Default_Parser>(*jsonTranslator);
+  jsonStringify = std::make_unique<Default_Stringify>(*jsonTranslator);
 }
 
 void JSON_Impl::setConverter(IConverter *converter)
@@ -43,13 +45,13 @@ void JSON_Impl::parse(ISource &source) { jNodeRoot = jsonParser->parse(source); 
 void JSON_Impl::stringify(IDestination &destination) const
 {
   if (jNodeRoot.isEmpty()) { throw JSON::Error("No JSON to stringify."); }
-  stringifyJNodes(jNodeRoot, destination, 0);
+  jsonStringify->stringify(jNodeRoot, destination, 0);
 }
 
 void JSON_Impl::print(IDestination &destination) const
 {
   if (jNodeRoot.isEmpty()) { throw JSON::Error("No JSON to print."); }
-  stringifyJNodes(jNodeRoot, destination, printIndent);
+  jsonStringify->stringify(jNodeRoot, destination, jsonStringify->getIndent());
 }
 
 void JSON_Impl::strip(ISource &source, IDestination &destination) const

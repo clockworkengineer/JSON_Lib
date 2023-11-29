@@ -1,15 +1,15 @@
 //
-// Class: JSON_Impl
+// Class: Default_Stringify
 //
-// Description: JSON class implementation layer that uses recursion to reconstitute
-// the JSON tree presentation back into raw JSON string without any whitespace
-// (stringification) or with indentation and whitespace pretty print.
+// Description: 
 //
 // Dependencies: C++20 - Language standard features used.
 //
 
 #include "JSON.hpp"
-#include "JSON_Impl.hpp"
+#include "JSON_Core.hpp"
+
+#include "Default_Stringify.hpp"
 
 namespace JSON_Lib {
 
@@ -18,7 +18,7 @@ namespace JSON_Lib {
 /// </summary>
 /// <param name="jNode">Number JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyNumber(const JNode &jNode, IDestination &destination) const
+void Default_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination) const
 {
   destination.add(JRef<Number>(jNode).toString());
 }
@@ -28,10 +28,10 @@ void JSON_Impl::stringifyNumber(const JNode &jNode, IDestination &destination) c
 /// </summary>
 /// <param name="jNode">String JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyString(const JNode &jNode, IDestination &destination) const
+void Default_Stringify::stringifyString(const JNode &jNode, IDestination &destination) const
 {
   destination.add('"');
-  destination.add(jsonTranslator->toJSON(JRef<String>(jNode).toString()));
+  destination.add(jsonTranslator.toJSON(JRef<String>(jNode).toString()));
   destination.add('"');
 }
 
@@ -40,7 +40,7 @@ void JSON_Impl::stringifyString(const JNode &jNode, IDestination &destination) c
 /// </summary>
 /// <param name="jNode">Boolean JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyBoolean(const JNode &jNode, IDestination &destination) const
+void Default_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination) const
 {
   destination.add(JRef<Boolean>(jNode).toString());
 }
@@ -50,7 +50,7 @@ void JSON_Impl::stringifyBoolean(const JNode &jNode, IDestination &destination) 
 /// </summary>
 /// <param name="jNode">Null JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyNull(const JNode &jNode, IDestination &destination) const
+void Default_Stringify::stringifyNull(const JNode &jNode, IDestination &destination) const
 {
   destination.add(JRef<Null>(jNode).toString());
 }
@@ -60,7 +60,7 @@ void JSON_Impl::stringifyNull(const JNode &jNode, IDestination &destination) con
 /// </summary>
 /// <param name="jNode">Hole JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Impl::stringifyHole(const JNode &jNode, IDestination &destination) const
+void Default_Stringify::stringifyHole(const JNode &jNode, IDestination &destination) const
 {
   destination.add(JRef<Hole>(jNode).toString());
 }
@@ -71,7 +71,7 @@ void JSON_Impl::stringifyHole(const JNode &jNode, IDestination &destination) con
 /// <param name="jNode">Object JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const
+void Default_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const
 {
   size_t commaCount = JRef<Object>(jNode).getObjectEntries().size() - 1;
   destination.add('{');
@@ -81,7 +81,7 @@ void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination, l
     stringifyString(entry.getKey(), destination);
     destination.add(":");
     if (indent != 0) { destination.add(" "); }
-    stringifyJNodes(entry.getJNode(), destination, (indent != 0) ? (indent + printIndent) : 0);
+    stringify(entry.getJNode(), destination, (indent != 0) ? (indent + printIndent) : 0);
     if (commaCount-- > 0) {
       destination.add(",");
       if (indent != 0) { destination.add('\n'); }
@@ -100,7 +100,7 @@ void JSON_Impl::stringifyObject(const JNode &jNode, IDestination &destination, l
 /// <param name="jNode">Array JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const
+void Default_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const
 {
   destination.add('[');
   if (!JRef<Array>(jNode).getArrayEntries().empty()) {
@@ -108,7 +108,7 @@ void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination, lo
     if (indent != 0) { destination.add('\n'); };
     for (auto &entry : JRef<Array>(jNode).getArrayEntries()) {
       if (indent != 0) { destination.add(std::string(indent, ' ')); };
-      stringifyJNodes(entry, destination, (indent != 0) ? (indent + printIndent) : 0);
+      stringify(entry, destination, (indent != 0) ? (indent + printIndent) : 0);
       if (commaCount-- > 0) {
         destination.add(",");
         if (indent != 0) { destination.add('\n'); }
@@ -129,7 +129,7 @@ void JSON_Impl::stringifyArray(const JNode &jNode, IDestination &destination, lo
 /// <param name=jNode>JNode structure to be traversed.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void JSON_Impl::stringifyJNodes(const JNode &jNode, IDestination &destination, long indent) const
+void Default_Stringify::stringify(const JNode &jNode, IDestination &destination, long indent) const
 {
   switch (jNode.getVariant().getType()) {
   case Variant::Type::number:

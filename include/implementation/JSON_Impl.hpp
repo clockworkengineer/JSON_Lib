@@ -36,8 +36,8 @@ public:
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   // Set JSON translator/converter
-  static void setTranslator(ITranslator *translator=nullptr);
-  static void setConverter(IConverter *converter=nullptr);
+  static void setTranslator(ITranslator *translator = nullptr);
+  static void setConverter(IConverter *converter = nullptr);
   // Get root of JSON tree
   [[nodiscard]] JNode &root() { return (jNodeRoot); }
   [[nodiscard]] const JNode &root() const { return (jNodeRoot); }
@@ -54,37 +54,28 @@ public:
   void setIndent(long indent)
   {
     if (indent < 0) { throw JSON::Error("Invalid print indentation value."); };
-    printIndent = indent;
+    jsonStringify->setIndent(indent);
   }
   // Read/Write JSON from file
-   static const std::string fromFile(const std::string &fileName);
-   static void toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format);
+  static const std::string fromFile(const std::string &fileName);
+  static void toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format);
   // Get JSON file format
-   static JSON::Format getFileFormat(const std::string &fileName);
+  static JSON::Format getFileFormat(const std::string &fileName);
 
 private:
-  // Stringify JSON
-   void stringifyNumber(const JNode &jNode, IDestination &destination)const ;
-   void stringifyString(const JNode &jNode, IDestination &destination)const;
-   void stringifyBoolean(const JNode &jNode, IDestination &destination)const;
-   void stringifyNull(const JNode &jNode, IDestination &destination)const ;
-   void stringifyHole(const JNode &jNode, IDestination &destination)const;
-   void stringifyObject(const JNode &jNode, IDestination &destination, long indent)const;
-   void stringifyArray(const JNode &jNode, IDestination &destination, long indent)const;
-  // Produce JSON test string from JSON tree
-   void stringifyJNodes(const JNode &jNode, IDestination &destination, long indent)const;
   // Traverse JSON tree
   template<typename T> static void traverseJNodes(T &jNode, IAction &action);
   // Root of JSON tree
   JNode jNodeRoot;
   // Pointer to JSON parser interface
   inline static std::unique_ptr<IParser> jsonParser;
+  // Pointer to JSON stringify interface
+  inline static std::unique_ptr<IStringify> jsonStringify;
   // Pointer to JSON translator interface
   inline static std::unique_ptr<ITranslator> jsonTranslator;
   // Pointer to character conversion interface
   inline static std::unique_ptr<IConverter> jsonConverter;
-  // Current print indent value
-  inline static long printIndent{ 4 }; 
+
 };
 /// <summary>
 /// Recursively traverse JNode tree calling IAction methods and possibly
