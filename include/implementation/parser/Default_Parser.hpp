@@ -36,12 +36,9 @@ private:
   JNode parseNull(ISource &source);
   JNode parseObject(ISource &source);
   JNode parseArray(ISource &source);
-  // Produce JSON tree
-  JNode parseJNodes(ISource &source);
 
   // Pointer to JSON translator interface
   ITranslator &jsonTranslator;
-
 };
 
 }// namespace JSON_Lib

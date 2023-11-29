@@ -8,6 +8,7 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
+
 #include "Default_Parser.hpp"
 
 namespace JSON_Lib {
@@ -63,7 +64,7 @@ Object::Entry Default_Parser::parseObjectEntry(ISource &source)
   source.ignoreWS();
   if (source.current() != ':') { throw JSON::Error(source.getPosition(), "Missing ':' in key value pair."); }
   source.next();
-  return (Object::Entry(key, parseJNodes(source)));
+  return (Object::Entry(key, parse(source)));
 }
 
 /// <summary>
@@ -71,7 +72,10 @@ Object::Entry Default_Parser::parseObjectEntry(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>String JNode.</returns>
-JNode Default_Parser::parseString(ISource &source) { return (JNode::make<String>(extractString(source, jsonTranslator))); }
+JNode Default_Parser::parseString(ISource &source)
+{
+  return (JNode::make<String>(extractString(source, jsonTranslator)));
+}
 
 /// <summary>
 /// Parse a number from a JSON source stream.
@@ -146,10 +150,10 @@ JNode Default_Parser::parseArray(ISource &source)
   source.next();
   source.ignoreWS();
   if (source.current() != ']') {
-    JRef<Array>(jNodeArray).add(parseJNodes(source));
+    JRef<Array>(jNodeArray).add(parse(source));
     while (source.current() == ',') {
       source.next();
-      JRef<Array>(jNodeArray).add(parseJNodes(source));
+      JRef<Array>(jNodeArray).add(parse(source));
     }
   }
   if (source.current() != ']') { throw JSON::Error(source.getPosition(), "Missing closing ']' in array definition."); }
@@ -164,7 +168,7 @@ JNode Default_Parser::parseArray(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Pointer to JNode.</returns>
-JNode Default_Parser::parseJNodes(ISource &source)
+JNode Default_Parser::parse(ISource &source)
 {
   JNode jNode;
   source.ignoreWS();
@@ -206,8 +210,4 @@ JNode Default_Parser::parseJNodes(ISource &source)
   return (jNode);
 }
 
-JNode Default_Parser::parse(ISource &source) 
-{
-    return(parseJNodes(source));
-}
 }// namespace JSON_Lib
