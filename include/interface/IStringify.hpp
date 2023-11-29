@@ -29,9 +29,9 @@ public:
   // Constructors/destructors
   // ========================
   virtual ~IStringify() = default;
-  // =================
-  // Parse JSON source
-  // =================
+  // ====================
+  // Stringify JNode tree
+  // ====================
   virtual void stringify(const JNode &jNode, IDestination &destination, long indent) const = 0;
   // =========================
   // Set/Get print indentation
