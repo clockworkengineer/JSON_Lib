@@ -27,11 +27,6 @@ public:
   // ========================
   // Constructors/destructors
   // ========================
-  IAction() = default;
-  IAction(const IAction &other) = delete;
-  IAction &operator=(const IAction &other) = delete;
-  IAction(IAction &&other) = delete;
-  IAction &operator=(IAction &&other) = delete;
   virtual ~IAction() = default;
   // ============================
   // JNode encountered so process

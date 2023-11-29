@@ -28,11 +28,6 @@ public:
   // ========================
   // Constructors/destructors
   // ========================
-  IParser() = default;
-  IParser(const IParser &other) = delete;
-  IParser &operator=(const IParser &other) = delete;
-  IParser(IParser &&other) = delete;
-  IParser &operator=(IParser &&other) = delete;
   virtual ~IParser() = default;
   // =================
   // Parse JSON source

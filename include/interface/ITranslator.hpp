@@ -30,11 +30,6 @@ public:
   // ========================
   // Constructors/destructors
   // ========================
-  ITranslator() = default;
-  ITranslator(const ITranslator &other) = delete;
-  ITranslator &operator=(const ITranslator &other) = delete;
-  ITranslator(ITranslator &&other) = delete;
-  ITranslator &operator=(ITranslator &&other) = delete;
   virtual ~ITranslator() = default;
   // =====================================================================
   // Convert any escape sequences in a string to their correct sequence

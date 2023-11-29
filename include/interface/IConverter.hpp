@@ -21,11 +21,6 @@ public:
   // ========================
   // Constructors/destructors
   // ========================
-  IConverter() = default;
-  IConverter(const IConverter &other) = delete;
-  IConverter &operator=(const IConverter &other) = delete;
-  IConverter(IConverter &&other) = delete;
-  IConverter &operator=(IConverter &&other) = delete;
   virtual ~IConverter() = default;
   // ==================
   // From utf8 to utf16
