@@ -70,7 +70,7 @@ set(JSON_INCLUDES
   ./include/interface/IStringify.hpp)
 
 # Platform specific
-list(APPEND JSON_SOURCES "./classes/implementation/platform/${PLATFORM}/Converter.cpp")
+list(APPEND JSON_SOURCES "./classes/implementation/platform/${PLATFORM}/JSON_Converter.cpp")
 
 # JSON library
 add_library(${JSON_LIBRARY_NAME} ${JSON_SOURCES} ${JSON_INCLUDES})
