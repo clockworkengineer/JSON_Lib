@@ -1,7 +1,7 @@
 //
-// Class: Default_Stringify
+// Class: JSON_Stringify
 //
-// Description: 
+// Description:
 //
 // Dependencies: C++20 - Language standard features used.
 //
@@ -9,7 +9,7 @@
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 
-#include "Default_Stringify.hpp"
+#include "JSON_Stringify.hpp"
 
 namespace JSON_Lib {
 
@@ -18,7 +18,7 @@ namespace JSON_Lib {
 /// </summary>
 /// <param name="jNode">Number JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void Default_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination) const
+void JSON_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination) const
 {
   destination.add(JRef<Number>(jNode).toString());
 }
@@ -28,7 +28,7 @@ void Default_Stringify::stringifyNumber(const JNode &jNode, IDestination &destin
 /// </summary>
 /// <param name="jNode">String JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void Default_Stringify::stringifyString(const JNode &jNode, IDestination &destination) const
+void JSON_Stringify::stringifyString(const JNode &jNode, IDestination &destination) const
 {
   destination.add('"');
   destination.add(jsonTranslator.toJSON(JRef<String>(jNode).toString()));
@@ -40,7 +40,7 @@ void Default_Stringify::stringifyString(const JNode &jNode, IDestination &destin
 /// </summary>
 /// <param name="jNode">Boolean JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void Default_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination) const
+void JSON_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination) const
 {
   destination.add(JRef<Boolean>(jNode).toString());
 }
@@ -50,7 +50,7 @@ void Default_Stringify::stringifyBoolean(const JNode &jNode, IDestination &desti
 /// </summary>
 /// <param name="jNode">Null JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void Default_Stringify::stringifyNull(const JNode &jNode, IDestination &destination) const
+void JSON_Stringify::stringifyNull(const JNode &jNode, IDestination &destination) const
 {
   destination.add(JRef<Null>(jNode).toString());
 }
@@ -60,7 +60,7 @@ void Default_Stringify::stringifyNull(const JNode &jNode, IDestination &destinat
 /// </summary>
 /// <param name="jNode">Hole JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void Default_Stringify::stringifyHole(const JNode &jNode, IDestination &destination) const
+void JSON_Stringify::stringifyHole(const JNode &jNode, IDestination &destination) const
 {
   destination.add(JRef<Hole>(jNode).toString());
 }
@@ -71,7 +71,7 @@ void Default_Stringify::stringifyHole(const JNode &jNode, IDestination &destinat
 /// <param name="jNode">Object JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void Default_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const
+void JSON_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const
 {
   size_t commaCount = JRef<Object>(jNode).getObjectEntries().size() - 1;
   destination.add('{');
@@ -100,7 +100,7 @@ void Default_Stringify::stringifyObject(const JNode &jNode, IDestination &destin
 /// <param name="jNode">Array JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void Default_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const
+void JSON_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const
 {
   destination.add('[');
   if (!JRef<Array>(jNode).getArrayEntries().empty()) {
@@ -129,7 +129,7 @@ void Default_Stringify::stringifyArray(const JNode &jNode, IDestination &destina
 /// <param name=jNode>JNode structure to be traversed.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void Default_Stringify::stringify(const JNode &jNode, IDestination &destination, long indent) const
+void JSON_Stringify::stringify(const JNode &jNode, IDestination &destination, long indent) const
 {
   switch (jNode.getVariant().getType()) {
   case Variant::Type::number:

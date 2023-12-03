@@ -15,15 +15,15 @@
 
 namespace JSON_Lib {
 
-class Default_Parser : public IParser
+class JSON_Parser : public IParser
 {
 public:
-  explicit Default_Parser(ITranslator &translator) : jsonTranslator(translator) {}
-  Default_Parser(const Default_Parser &other) = delete;
-  Default_Parser &operator=(const Default_Parser &other) = delete;
-  Default_Parser(Default_Parser &&other) = delete;
-  Default_Parser &operator=(Default_Parser &&other) = delete;
-  ~Default_Parser() = default;
+  explicit JSON_Parser(ITranslator &translator) : jsonTranslator(translator) {}
+  JSON_Parser(const JSON_Parser &other) = delete;
+  JSON_Parser &operator=(const JSON_Parser &other) = delete;
+  JSON_Parser(JSON_Parser &&other) = delete;
+  JSON_Parser &operator=(JSON_Parser &&other) = delete;
+  ~JSON_Parser() = default;
 
   virtual JNode parse(ISource &source);
 

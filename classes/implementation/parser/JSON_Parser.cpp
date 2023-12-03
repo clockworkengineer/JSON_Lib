@@ -1,5 +1,5 @@
 //
-// Class: Default_Parser
+// Class: JSON_Parser
 //
 // Description:
 //
@@ -9,7 +9,7 @@
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 
-#include "Default_Parser.hpp"
+#include "JSON_Parser.hpp"
 
 namespace JSON_Lib {
 
@@ -57,7 +57,7 @@ bool endOfNumber(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Object key/value pair.</returns>
-Object::Entry Default_Parser::parseObjectEntry(ISource &source)
+Object::Entry JSON_Parser::parseObjectEntry(ISource &source)
 {
   source.ignoreWS();
   const std::string key{ extractString(source, jsonTranslator) };
@@ -72,17 +72,14 @@ Object::Entry Default_Parser::parseObjectEntry(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>String JNode.</returns>
-JNode Default_Parser::parseString(ISource &source)
-{
-  return (JNode::make<String>(extractString(source, jsonTranslator)));
-}
+JNode JSON_Parser::parseString(ISource &source) { return (JNode::make<String>(extractString(source, jsonTranslator))); }
 
 /// <summary>
 /// Parse a number from a JSON source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Number JNode.</returns>
-JNode Default_Parser::parseNumber(ISource &source)
+JNode JSON_Parser::parseNumber(ISource &source)
 {
   std::string string;
   for (; source.more() && !endOfNumber(source); source.next()) { string += source.current(); }
@@ -99,7 +96,7 @@ JNode Default_Parser::parseNumber(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Boolean JNode.</returns>
-JNode Default_Parser::parseBoolean(ISource &source)
+JNode JSON_Parser::parseBoolean(ISource &source)
 {
   if (source.match("true")) { return (JNode::make<Boolean>(true)); }
   if (source.match("false")) { return (JNode::make<Boolean>(false)); }
@@ -111,7 +108,7 @@ JNode Default_Parser::parseBoolean(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Null JNode.</returns>
-JNode Default_Parser::parseNull(ISource &source)
+JNode JSON_Parser::parseNull(ISource &source)
 {
   if (!source.match("null")) { throw JSON::Error(source.getPosition(), "Invalid null value."); }
   return (JNode::make<Null>());
@@ -122,7 +119,7 @@ JNode Default_Parser::parseNull(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Object JNode (key/value pairs).</returns>
-JNode Default_Parser::parseObject(ISource &source)
+JNode JSON_Parser::parseObject(ISource &source)
 {
   JNode jNodeObject = JNode::make<Object>();
   source.next();
@@ -144,7 +141,7 @@ JNode Default_Parser::parseObject(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Array JNode.</returns>
-JNode Default_Parser::parseArray(ISource &source)
+JNode JSON_Parser::parseArray(ISource &source)
 {
   JNode jNodeArray = JNode::make<Array>();
   source.next();
@@ -168,7 +165,7 @@ JNode Default_Parser::parseArray(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Pointer to JNode.</returns>
-JNode Default_Parser::parse(ISource &source)
+JNode JSON_Parser::parse(ISource &source)
 {
   JNode jNode;
   source.ignoreWS();

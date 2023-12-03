@@ -31,8 +31,8 @@ set(JSON_SOURCES
   ./classes/implementation/JSON_Impl.cpp
   ./classes/implementation/JSON_Impl_File.cpp
   ./classes/implementation/JSON_Translator.cpp
-  ./classes/implementation/parser/Default_Parser.cpp
-  ./classes/implementation/stringify/Default_Stringify.cpp)
+  ./classes/implementation/parser/JSON_Parser.cpp
+  ./classes/implementation/stringify/JSON_Stringify.cpp)
 
 set(JSON_INCLUDES
   JSON_Config.hpp
@@ -58,8 +58,8 @@ set(JSON_INCLUDES
   ./include/implementation/io/JSON_FileDestination.hpp
   ./include/implementation/translation/JSON_Translator.hpp
   ./include/implementation/translation/JSON_Converter.hpp
-  ./include/implementation/parser/Default_Parser.hpp
-  ./include/implementation/stringify/Default_Stringify.hpp
+  ./include/implementation/parser/JSON_Parser.hpp
+  ./include/implementation/stringify/JSON_Stringify.hpp
   ./include/interface/JSON_Interfaces.hpp
   ./include/interface/IAction.hpp
   ./include/interface/ISource.hpp

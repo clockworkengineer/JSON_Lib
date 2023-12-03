@@ -15,15 +15,15 @@
 
 namespace JSON_Lib {
 
-class Default_Stringify : public IStringify
+class JSON_Stringify : public IStringify
 {
 public:
-  explicit Default_Stringify(ITranslator &translator) : jsonTranslator(translator) {}
-  Default_Stringify(const Default_Stringify &other) = delete;
-  Default_Stringify &operator=(const Default_Stringify &other) = delete;
-  Default_Stringify(Default_Stringify &&other) = delete;
-  Default_Stringify &operator=(Default_Stringify &&other) = delete;
-  ~Default_Stringify() = default;
+  explicit JSON_Stringify(ITranslator &translator) : jsonTranslator(translator) {}
+  JSON_Stringify(const JSON_Stringify &other) = delete;
+  JSON_Stringify &operator=(const JSON_Stringify &other) = delete;
+  JSON_Stringify(JSON_Stringify &&other) = delete;
+  JSON_Stringify &operator=(JSON_Stringify &&other) = delete;
+  ~JSON_Stringify() = default;
 
   virtual void stringify(const JNode &jNode, IDestination &destination, long indent) const;
 

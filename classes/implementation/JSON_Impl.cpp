@@ -9,8 +9,8 @@
 #include "JSON.hpp"
 #include "JSON_Impl.hpp"
 
-#include "Default_Parser.hpp"
-#include "Default_Stringify.hpp"
+#include "JSON_Parser.hpp"
+#include "JSON_Stringify.hpp"
 
 namespace JSON_Lib {
 
@@ -28,8 +28,8 @@ void JSON_Impl::setTranslator(ITranslator *translator)
   } else {
     jsonTranslator.reset(translator);
   }
-  jsonParser = std::make_unique<Default_Parser>(*jsonTranslator);
-  jsonStringify = std::make_unique<Default_Stringify>(*jsonTranslator);
+  jsonParser = std::make_unique<JSON_Parser>(*jsonTranslator);
+  jsonStringify = std::make_unique<JSON_Stringify>(*jsonTranslator);
 }
 
 void JSON_Impl::setConverter(IConverter *converter)
