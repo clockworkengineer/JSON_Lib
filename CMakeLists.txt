@@ -29,8 +29,8 @@ set(JSON_LIBRARY_NAME ${PROJECT_NAME})
 set(JSON_SOURCES
   ./classes/JSON.cpp
   ./classes/implementation/JSON_Impl.cpp
-  ./classes/implementation/JSON_Impl_File.cpp
-  ./classes/implementation/JSON_Translator.cpp
+  ./classes/implementation/file/JSON_Impl_File.cpp
+  ./classes/implementation/translator/JSON_Translator.cpp
   ./classes/implementation/parser/JSON_Parser.cpp
   ./classes/implementation/stringify/JSON_Stringify.cpp)
 
@@ -70,7 +70,7 @@ set(JSON_INCLUDES
   ./include/interface/IStringify.hpp)
 
 # Platform specific
-list(APPEND JSON_SOURCES "./classes/implementation/platform/${PLATFORM}/JSON_Converter.cpp")
+list(APPEND JSON_SOURCES "./classes/implementation/translator/${PLATFORM}/JSON_Converter.cpp")
 
 # JSON library
 add_library(${JSON_LIBRARY_NAME} ${JSON_SOURCES} ${JSON_INCLUDES})
