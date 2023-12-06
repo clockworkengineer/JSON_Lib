@@ -24,7 +24,7 @@ std::string JSON_Impl::version() const
 void JSON_Impl::setParser(IParser *parser)
 {
   if (parser == nullptr) {
-  jsonParser = std::make_unique<JSON_Parser>(*jsonTranslator);
+    jsonParser = std::make_unique<JSON_Parser>(*jsonTranslator);
   } else {
     jsonParser.reset(parser);
   }
@@ -33,7 +33,7 @@ void JSON_Impl::setParser(IParser *parser)
 void JSON_Impl::setStringify(IStringify *stringify)
 {
   if (stringify == nullptr) {
-  jsonStringify = std::make_unique<JSON_Stringify>(*jsonTranslator);
+    jsonStringify = std::make_unique<JSON_Stringify>(*jsonTranslator);
   } else {
     jsonStringify.reset(stringify);
   }
