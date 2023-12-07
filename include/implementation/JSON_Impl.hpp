@@ -35,6 +35,9 @@ public:
   void print(IDestination &destination) const;
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
+  // Set JSON Parser/Stringify
+  static void setParser(IParser * parser = nullptr);
+  static void setStringify(IStringify *stringify = nullptr);
   // Set JSON translator/converter
   static void setTranslator(ITranslator *translator = nullptr);
   static void setConverter(IConverter *converter = nullptr);

@@ -21,6 +21,24 @@ std::string JSON_Impl::version() const
   return (versionString.str());
 }
 
+void JSON_Impl::setParser(IParser *parser)
+{
+  if (parser == nullptr) {
+    jsonParser = std::make_unique<JSON_Parser>(*jsonTranslator);
+  } else {
+    jsonParser.reset(parser);
+  }
+}
+
+void JSON_Impl::setStringify(IStringify *stringify)
+{
+  if (stringify == nullptr) {
+    jsonStringify = std::make_unique<JSON_Stringify>(*jsonTranslator);
+  } else {
+    jsonStringify.reset(stringify);
+  }
+}
+
 void JSON_Impl::setTranslator(ITranslator *translator)
 {
   if (translator == nullptr) {
@@ -28,8 +46,8 @@ void JSON_Impl::setTranslator(ITranslator *translator)
   } else {
     jsonTranslator.reset(translator);
   }
-  jsonParser = std::make_unique<JSON_Parser>(*jsonTranslator);
-  jsonStringify = std::make_unique<JSON_Stringify>(*jsonTranslator);
+  setParser();
+  setStringify();
 }
 
 void JSON_Impl::setConverter(IConverter *converter)
