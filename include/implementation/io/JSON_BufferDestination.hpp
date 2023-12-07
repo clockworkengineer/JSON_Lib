@@ -25,6 +25,7 @@ public:
   virtual void clear() override { buffer.clear(); }
   [[nodiscard]] const std::string &getBuffer() const { return (buffer); }
 
+private:
   std::string buffer;
 };
 }// namespace JSON_Lib

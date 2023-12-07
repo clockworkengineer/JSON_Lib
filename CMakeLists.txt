@@ -37,7 +37,7 @@ set(JSON_SOURCES
 set(JSON_INCLUDES
   JSON_Config.hpp
   ./include/JSON.hpp
-  ./include/JSON_Core.hpp
+  ./include/implementation/JSON_Core.hpp
   ./include/implementation/JSON_Impl.hpp
   ./include/implementation/variants/JSON_Variant.hpp
   ./include/implementation/variants/JSON_Hole.hpp

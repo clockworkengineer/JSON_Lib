@@ -8,7 +8,6 @@ namespace JSON_Lib {
 // ====================
 // Forward declarations
 // ====================
-
 class IDestination;
 struct JNode;
 
