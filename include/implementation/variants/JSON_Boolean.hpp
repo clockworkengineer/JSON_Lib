@@ -18,8 +18,8 @@ struct Boolean : Variant
   Boolean &operator=(Boolean &&other) = default;
   ~Boolean() = default;
   // Return reference boolean value
-  [[nodiscard]] bool &getBoolean() { return (jNodeBoolean); }
-  [[nodiscard]] const bool &getBoolean() const { return (jNodeBoolean); }
+  [[nodiscard]] bool &value() { return (jNodeBoolean); }
+  [[nodiscard]] const bool &value() const { return (jNodeBoolean); }
   // Return string representation of value
   [[nodiscard]] std::string toString() const { return (jNodeBoolean ? "true" : "false"); }
 

@@ -50,15 +50,15 @@ struct Object : Variant
   JNode &operator[](const std::string &key) { return (findKey(key)->getJNode()); }
   const JNode &operator[](const std::string &key) const { return (findKey(key)->getJNode()); }
   // Return reference to base of object entries
-  std::vector<Entry> &getObjectEntries() { return (jNodeObject); }
-  [[nodiscard]] const std::vector<Entry> &getObjectEntries() const { return (jNodeObject); }
+  std::vector<Entry> &value() { return (jNodeObject); }
+  [[nodiscard]] const std::vector<Entry> &value() const { return (jNodeObject); }
 
 private:
   // Search for a given entry given a key and object list
   [[nodiscard]] std::vector<Entry>::iterator findKey(const std::string &key)
   {
     auto entry = std::find_if(jNodeObject.begin(), jNodeObject.end(), [&key](Entry &entry) -> bool {
-      return (static_cast<String &>(entry.getKey().getVariant()).getString() == key);
+      return (static_cast<String &>(entry.getKey().getVariant()).value() == key);
     });
     if (entry == jNodeObject.end()) { throw JNode::Error("Invalid key used to access object."); }
     return (entry);
@@ -66,7 +66,7 @@ private:
   [[nodiscard]] std::vector<Entry>::const_iterator findKey(const std::string &key) const
   {
     auto entry = std::find_if(jNodeObject.begin(), jNodeObject.end(), [&key](const Entry &entry) -> bool {
-      return (static_cast<const String &>(entry.getKey().getVariant()).getString() == key);
+      return (static_cast<const String &>(entry.getKey().getVariant()).value() == key);
     });
     if (entry == jNodeObject.end()) { throw JNode::Error("Invalid key used to access object."); }
     return (entry);

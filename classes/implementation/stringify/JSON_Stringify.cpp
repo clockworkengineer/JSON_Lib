@@ -73,10 +73,10 @@ void JSON_Stringify::stringifyHole(const JNode &jNode, IDestination &destination
 /// <param name="indent">Current print indentation.</param>
 void JSON_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const
 {
-  size_t commaCount = JRef<Object>(jNode).getObjectEntries().size() - 1;
+  size_t commaCount = JRef<Object>(jNode).value().size() - 1;
   destination.add('{');
   if (indent != 0) { destination.add('\n'); };
-  for (auto &entry : JRef<Object>(jNode).getObjectEntries()) {
+  for (auto &entry : JRef<Object>(jNode).value()) {
     if (indent != 0) { destination.add(std::string(indent, ' ')); };
     stringifyString(entry.getKey(), destination);
     destination.add(":");

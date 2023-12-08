@@ -44,7 +44,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
       throw std::runtime_error("Object missing key 'C_Cpp.codeAnalysis.clangTidy.enabled' .");
     }
     // Reference code analysis enabled flag
-    auto &enabled = js::JRef<js::Boolean>(settingsRoot["C_Cpp.codeAnalysis.clangTidy.enabled"]).getBoolean();
+    auto &enabled = js::JRef<js::Boolean>(settingsRoot["C_Cpp.codeAnalysis.clangTidy.enabled"]).value();
     // Toggle it
     enabled = !enabled;
     // Write back settings with toggled flag

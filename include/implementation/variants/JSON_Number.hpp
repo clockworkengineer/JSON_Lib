@@ -35,7 +35,7 @@ struct Number : Variant
   template<typename T> [[nodiscard]] bool is() const { return (std::get_if<T>(&jNodeNumber) != nullptr); }
   // Return numbers value int/long long/float/double/long double.
   // Note: Can still return a integer value for a floating point.
-  template<typename T> [[nodiscard]] T get() const { return (getAs<T>()); }
+  template<typename T> [[nodiscard]] T value() const { return (getAs<T>()); }
   // Set numbers value to int/long/long long/float/double/long double
   template<typename T> void set(T number) { *this = Number(number); }
   // Return string representation of value

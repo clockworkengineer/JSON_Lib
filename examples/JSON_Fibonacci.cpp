@@ -41,8 +41,8 @@ void nextFibonacci()
     // Get index of last element
     auto last = js::JRef<js::Array>(json.root()).size() - 1;
     // Next is sum of last two entries
-    auto next = js::JRef<js::Number>(json[last]).get<int>();
-    next += js::JRef<js::Number>(json[last - 1]).get<int>();
+    auto next = js::JRef<js::Number>(json[last]).value<int>();
+    next += js::JRef<js::Number>(json[last - 1]).value<int>();
     // Expand array by one and add next in sequence
     json[last + 1] = next;
   }

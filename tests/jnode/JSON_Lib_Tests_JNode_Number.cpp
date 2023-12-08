@@ -19,42 +19,42 @@ TEST_CASE("Check JNode Number assignment/creation.", "[JSON][JNode][Number][Assi
     JNode jNode;
     jNode = 666;
     REQUIRE_FALSE(!JRef<Number>(jNode).is<int>());
-    REQUIRE(JRef<Number>(jNode).get<int>() == 666);
+    REQUIRE(JRef<Number>(jNode).value<int>() == 666);
   }
   SECTION("Create JNode with long assigment.", "[JSON][JNode][Number][Long][Assignment]")
   {
     JNode jNode;
     jNode = 666l;
     REQUIRE_FALSE(!JRef<Number>(jNode).is<long>());
-    REQUIRE(JRef<Number>(jNode).get<long>() == 666l);
+    REQUIRE(JRef<Number>(jNode).value<long>() == 666l);
   }
   SECTION("Create JNode with long long assigment.", "[JSON][JNode][Number][Long Long][Assignment]")
   {
     JNode jNode;
     jNode = 666ll;
     REQUIRE_FALSE(!JRef<Number>(jNode).is<long long>());
-    REQUIRE(JRef<Number>(jNode).get<long>() == 666ll);
+    REQUIRE(JRef<Number>(jNode).value<long>() == 666ll);
   }
   SECTION("Create JNode with float assigment.", "[JSON][JNode][Number][Float][Assignment]")
   {
     JNode jNode;
     jNode = 666.666f;
     REQUIRE_FALSE(!JRef<Number>(jNode).is<float>());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).get<float>(), 666.666f, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).value<float>(), 666.666f, 0.0001));
   }
   SECTION("Create JNode with double assigment.", "[JSON][JNode][Number][Double][Assignment]")
   {
     JNode jNode;
     jNode = 666.666;
     REQUIRE_FALSE(!JRef<Number>(jNode).is<double>());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).get<double>(), 666.666, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).value<double>(), 666.666, 0.0001));
   }
   SECTION("Create JNode with long double assigment.", "[JSON][JNode][Number][Long Double][Assignment]")
   {
     JNode jNode;
     jNode = 666.666l;
     REQUIRE_FALSE(!JRef<Number>(jNode).is<long double>());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).get<long double>(), 666.666l, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).value<long double>(), 666.666l, 0.0001));
   }
 }
 // =======================
@@ -70,7 +70,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     json.parse(jsonSource);
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<float>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<int>());
-    REQUIRE(JRef<Number>(json.root()).get<int>() == 6788889);
+    REQUIRE(JRef<Number>(json.root()).value<int>() == 6788889);
   }
   SECTION("Float converted to long.", "[JSON][JNode][Number][Float]")
   {
@@ -78,7 +78,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     json.parse(jsonSource);
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<float>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long>());
-    REQUIRE(JRef<Number>(json.root()).get<long>() == 6788889);
+    REQUIRE(JRef<Number>(json.root()).value<long>() == 6788889);
   }
   SECTION("Float converted to long long.", "[JSON][JNode][Number][Float]")
   {
@@ -86,7 +86,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     json.parse(jsonSource);
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<float>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long long>());
-    REQUIRE(JRef<Number>(json.root()).get<long long>() == 6788889ll);
+    REQUIRE(JRef<Number>(json.root()).value<long long>() == 6788889ll);
   }
   SECTION("Float converted to double.", "[JSON][JNode][Number][Float]")
   {
@@ -94,7 +94,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     json.parse(jsonSource);
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<float>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<double>());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).get<double>(), 678.8990, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).value<double>(), 678.8990, 0.0001));
   }
   SECTION("Float converted to long double.", "[JSON][JNode][Number][Float]")
   {
@@ -102,7 +102,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     json.parse(jsonSource);
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<float>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long double>());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).get<long double>(), 678.8990l, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).value<long double>(), 678.8990l, 0.0001));
   }
   SECTION("Int converted to long.", "[JSON][JNode][Number][Int]")
   {
@@ -110,7 +110,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     json.parse(jsonSource);
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<int>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long>());
-    REQUIRE(JRef<Number>(json.root()).get<long>() == 78989);
+    REQUIRE(JRef<Number>(json.root()).value<long>() == 78989);
   }
   SECTION("Int converted to long long.", "[JSON][JNode][Number][Int]")
   {
@@ -118,7 +118,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     json.parse(jsonSource);
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<int>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long long>());
-    REQUIRE(JRef<Number>(json.root()).get<long long>() == 78989ll);
+    REQUIRE(JRef<Number>(json.root()).value<long long>() == 78989ll);
   }
   SECTION("Int converted to float.", "[JSON][JNode][Number][Int]")
   {
@@ -126,7 +126,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     json.parse(jsonSource);
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<int>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<float>());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).get<float>(), 78989.0f, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).value<float>(), 78989.0f, 0.0001));
   }
   SECTION("Int converted to double.", "[JSON][JNode][Number][Int]")
   {
@@ -134,7 +134,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     json.parse(jsonSource);
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<int>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<double>());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).get<double>(), 78989.0, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).value<double>(), 78989.0, 0.0001));
   }
   SECTION("Int converted to long double.", "[JSON][JNode][Number][Int]")
   {
@@ -142,7 +142,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     json.parse(jsonSource);
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<int>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long double>());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).get<long double>(), 78989.0l, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).value<long double>(), 78989.0l, 0.0001));
   }
   SECTION("Large positive integer conversion.", "[JSON][JNode][Number][Long Long]")
   {
@@ -158,7 +158,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
       REQUIRE_FALSE(!JRef<Number>(json.root()).is<long>());
       REQUIRE_FALSE(JRef<Number>(json.root()).is<long long>());
     }
-    REQUIRE(JRef<Number>(json.root()).get<long long>() == 9223372036854775807ll);
+    REQUIRE(JRef<Number>(json.root()).value<long long>() == 9223372036854775807ll);
   }
   SECTION("Large negative integer conversion.", "[JSON][JNode][Number][Long Long]")
   {
@@ -174,7 +174,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
       REQUIRE_FALSE(!JRef<Number>(json.root()).is<long>());
       REQUIRE_FALSE(JRef<Number>(json.root()).is<long long>());
     }
-    REQUIRE(JRef<Number>(json.root()).get<long long>() == -877994604561387500ll);
+    REQUIRE(JRef<Number>(json.root()).value<long long>() == -877994604561387500ll);
   }
   SECTION("Positive integer overflow conversion.", "[JSON][JNode][Number][Long Long]")
   {
@@ -184,7 +184,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long long>());
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<float>());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).get<float>(), 9223372036854775808.0f, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).value<float>(), 9223372036854775808.0f, 0.0001));
   }
   SECTION("Negative integer overflow conversion.", "[JSON][JNode][Number][Long Long]")
   {
@@ -194,7 +194,7 @@ TEST_CASE("Check JNode Number conversion.", "[JSON][JNode][Number]")
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long>());
     REQUIRE_FALSE(JRef<Number>(json.root()).is<long long>());
     REQUIRE_FALSE(!JRef<Number>(json.root()).is<float>());
-    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).get<float>(), -9223372036854775808.0f, 0.0001));
+    REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()).value<float>(), -9223372036854775808.0f, 0.0001));
   }
 }
 // =====================================
@@ -368,17 +368,17 @@ TEST_CASE("Check JNode Number API(s) for all supported number types.", "[JSON][J
     json.stringify(destinationBuffer);
     REQUIRE(destinationBuffer.getBuffer() == R"({"root":[1,1,1,1.0,1.0,1.0]})");
     Number &integerRef = JRef<Number>(json["root"][0]);
-    REQUIRE_NOTHROW(integerRef.set(integerRef.get<int>() + 1));
+    REQUIRE_NOTHROW(integerRef.set(integerRef.value<int>() + 1));
     Number &longRef = JRef<Number>(json["root"][1]);
-    REQUIRE_NOTHROW(longRef.set(longRef.get<long>() + 1));
+    REQUIRE_NOTHROW(longRef.set(longRef.value<long>() + 1));
     Number &longLongRef = JRef<Number>(json["root"][2]);
-    REQUIRE_NOTHROW(longLongRef.set(longLongRef.get<long long>() + 1));
+    REQUIRE_NOTHROW(longLongRef.set(longLongRef.value<long long>() + 1));
     Number &floatRef = JRef<Number>(json["root"][3]);
-    REQUIRE_NOTHROW(floatRef.set(floatRef.get<float>() + 1.0f));
+    REQUIRE_NOTHROW(floatRef.set(floatRef.value<float>() + 1.0f));
     Number &doubleRef = JRef<Number>(json["root"][4]);
-    REQUIRE_NOTHROW(doubleRef.set(doubleRef.get<double>() + 1.0));
+    REQUIRE_NOTHROW(doubleRef.set(doubleRef.value<double>() + 1.0));
     Number &longDoubleRef = JRef<Number>(json["root"][5]);
-    REQUIRE_NOTHROW(longDoubleRef.set(longDoubleRef.get<long double>() + 1.0));
+    REQUIRE_NOTHROW(longDoubleRef.set(longDoubleRef.value<long double>() + 1.0));
     destinationBuffer.clear();
     json.stringify(destinationBuffer);
     REQUIRE(destinationBuffer.getBuffer() == R"({"root":[2,2,2,2.0,2.0,2.0]})");

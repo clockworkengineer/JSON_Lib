@@ -21,9 +21,9 @@ public:
     const JSON_Lib::String &jNodeString = JRef<JSON_Lib::String>(jNode);
     totalStrings++;
     sizeInBytes += sizeof(JSON_Lib::String);
-    sizeInBytes += jNodeString.getString().size();
-    maxStringSize = std::max(jNodeString.getString().size(), maxKeySize);
-    uniqueStrings.insert(jNodeString.getString());
+    sizeInBytes += jNodeString.value().size();
+    maxStringSize = std::max(jNodeString.value().size(), maxKeySize);
+    uniqueStrings.insert(jNodeString.value());
   }
   // Add number details to analysis
   virtual void onNumber(const JSON_Lib::JNode &jNode) override
@@ -71,9 +71,9 @@ public:
     const JSON_Lib::Object &jNodeObject = JRef<JSON_Lib::Object>(jNode);
     totalObjects++;
     sizeInBytes += sizeof(JSON_Lib::Object);
-    maxObjectSize = std::max(jNodeObject.getObjectEntries().size(), maxObjectSize);
-    for (auto &entry : jNodeObject.getObjectEntries()) {
-      auto &key = JSON_Lib::JRef<JSON_Lib::String>(entry.getKey()).getString();
+    maxObjectSize = std::max(jNodeObject.value().size(), maxObjectSize);
+    for (auto &entry : jNodeObject.value()) {
+      auto &key = JSON_Lib::JRef<JSON_Lib::String>(entry.getKey()).value();
       uniqueKeys.insert(key);
       maxKeySize = std::max(key.size(), maxKeySize);
       sizeInBytes += key.size();

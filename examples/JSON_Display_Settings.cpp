@@ -32,15 +32,15 @@ std::string jsonSettingsFile() { return ((std::filesystem::current_path() / "fil
 /// </summary>
 void processEntry(const js::Object::Entry &entry)
 {
-  auto &key = js::JRef<js::String>(entry.getKey()).getString();
+  auto &key = js::JRef<js::String>(entry.getKey()).value();
   // Log main entry key
   std::string entryJSON{ "\n[" + key + "] = " };
   if (key == "files.exclude") {
     // Read object data (key/boolean pair) and add to log
     entryJSON += "\n{\n";
-    for (const auto &file : js::JRef<js::Object>(entry).getObjectEntries()) {
-      entryJSON += "\"" + js::JRef<js::String>(file.getKey()).getString()
-                   + "\" : " + js::JRef<js::Boolean>(file).toString() + ",\n";
+    for (const auto &file : js::JRef<js::Object>(entry).value()) {
+      entryJSON +=
+        "\"" + js::JRef<js::String>(file.getKey()).value() + "\" : " + js::JRef<js::Boolean>(file).toString() + ",\n";
     }
     entryJSON.pop_back();
     entryJSON.pop_back();
@@ -59,7 +59,7 @@ void processEntry(const js::Object::Entry &entry)
   } else if (key == "files.associations") {
     // Read object data (key/string pair) and add to log
     entryJSON += "\n{\n";
-    for (const auto &file : js::JRef<js::Object>(entry).getObjectEntries()) {
+    for (const auto &file : js::JRef<js::Object>(entry).value()) {
       entryJSON +=
         "\"" + js::JRef<js::String>(file).toString() + "\" : " + "\"" + js::JRef<js::String>(file).toString() + "\",\n";
     }
@@ -91,7 +91,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     if (!settingsRoot.isObject()) { throw std::runtime_error("Invalid JSON settings file."); }
     // Loop and process each top level entry
     PLOG_INFO << "Displaying settings ...";
-    for (const auto &entry : js::JRef<js::Object>(settingsRoot).getObjectEntries()) { processEntry(entry); }
+    for (const auto &entry : js::JRef<js::Object>(settingsRoot).value()) { processEntry(entry); }
   } catch (std::exception &ex) {
     PLOG_ERROR << "Error: " << ex.what();
   }

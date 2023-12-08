@@ -105,7 +105,7 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
     break;
   case Variant::Type::object:
     action.onObject(jNode);
-    for (auto &entry : JRef<Object>(jNode).getObjectEntries()) { traverseJNodes(entry.getJNode(), action); }
+    for (auto &entry : JRef<Object>(jNode).value()) { traverseJNodes(entry.getJNode(), action); }
     break;
   case Variant::Type::array:
     action.onArray(jNode);

@@ -18,8 +18,8 @@ public:
   // Create index to object key mapping and modify object key to use index
   virtual void onObject(JSON_Lib::JNode &jNode) override
   {
-    for (auto &entry : JSON_Lib::JRef<JSON_Lib::Object>(jNode).getObjectEntries()) {
-      auto &key = JSON_Lib::JRef<JSON_Lib::String>(entry.getKey()).getString();
+    for (auto &entry : JSON_Lib::JRef<JSON_Lib::Object>(jNode).value()) {
+      auto &key = JSON_Lib::JRef<JSON_Lib::String>(entry.getKey()).value();
       if (!index.contains(key)) {
         index[key] = currentIndex;
         array[currentIndex++] = key;

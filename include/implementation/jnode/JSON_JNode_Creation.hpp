@@ -44,7 +44,7 @@ inline JNode &JNode::operator[](const std::string &key)
   if (this->isHole()) {
     *this = JNode::make<Object>();
     JRef<Object>(*this).add(Object::Entry(key, JNode::make<Hole>()));
-    return (JRef<Object>(*this).getObjectEntries().back().getJNode());
+    return (JRef<Object>(*this).value().back().getJNode());
   }
   return (JRef<Object>(*this)[key]);
 }
