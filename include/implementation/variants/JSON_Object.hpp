@@ -32,8 +32,8 @@ struct Object : Variant
   Object &operator=(Object &&other) = default;
   ~Object() = default;
   // Add array element
-  void add(Entry &entry) { object.emplace_back(std::move(entry)); }
-  void add(Entry &&entry) { object.emplace_back(std::move(entry)); }
+  void add(Entry &entry) { jNodeObject.emplace_back(std::move(entry)); }
+  void add(Entry &&entry) { jNodeObject.emplace_back(std::move(entry)); }
   // Return true if an object contains a given key
   [[nodiscard]] bool contains(const std::string &key) const
   {
@@ -45,33 +45,33 @@ struct Object : Variant
     return (true);
   }
   // Return number of entries in an object
-  [[nodiscard]] int size() const { return (static_cast<int>(object.size())); }
+  [[nodiscard]] int size() const { return (static_cast<int>(jNodeObject.size())); }
   // Return object entry for a given key
   JNode &operator[](const std::string &key) { return (findKey(key)->getJNode()); }
   const JNode &operator[](const std::string &key) const { return (findKey(key)->getJNode()); }
   // Return reference to base of object entries
-  std::vector<Entry> &getObjectEntries() { return (object); }
-  [[nodiscard]] const std::vector<Entry> &getObjectEntries() const { return (object); }
+  std::vector<Entry> &getObjectEntries() { return (jNodeObject); }
+  [[nodiscard]] const std::vector<Entry> &getObjectEntries() const { return (jNodeObject); }
 
 private:
   // Search for a given entry given a key and object list
   [[nodiscard]] std::vector<Entry>::iterator findKey(const std::string &key)
   {
-    auto entry = std::find_if(object.begin(), object.end(), [&key](Entry &entry) -> bool {
+    auto entry = std::find_if(jNodeObject.begin(), jNodeObject.end(), [&key](Entry &entry) -> bool {
       return (static_cast<String &>(entry.getKey().getVariant()).getString() == key);
     });
-    if (entry == object.end()) { throw JNode::Error("Invalid key used to access object."); }
+    if (entry == jNodeObject.end()) { throw JNode::Error("Invalid key used to access object."); }
     return (entry);
   }
   [[nodiscard]] std::vector<Entry>::const_iterator findKey(const std::string &key) const
   {
-    auto entry = std::find_if(object.begin(), object.end(), [&key](const Entry &entry) -> bool {
+    auto entry = std::find_if(jNodeObject.begin(), jNodeObject.end(), [&key](const Entry &entry) -> bool {
       return (static_cast<const String &>(entry.getKey().getVariant()).getString() == key);
     });
-    if (entry == object.end()) { throw JNode::Error("Invalid key used to access object."); }
+    if (entry == jNodeObject.end()) { throw JNode::Error("Invalid key used to access object."); }
     return (entry);
   }
   // Object entries list
-  std::vector<Entry> object;
+  std::vector<Entry> jNodeObject;
 };
 }// namespace JSON_Lib

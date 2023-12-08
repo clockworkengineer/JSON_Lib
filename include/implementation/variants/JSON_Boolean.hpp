@@ -11,19 +11,19 @@ struct Boolean : Variant
 {
   // Constructors/Destructors
   Boolean() : Variant(Variant::Type::boolean) {}
-  explicit Boolean(bool boolean) : Variant(Variant::Type::boolean), boolean(boolean) {}
+  explicit Boolean(bool boolean) : Variant(Variant::Type::boolean), jNodeBoolean(boolean) {}
   Boolean(const Boolean &other) = default;
   Boolean &operator=(const Boolean &other) = default;
   Boolean(Boolean &&other) = default;
   Boolean &operator=(Boolean &&other) = default;
   ~Boolean() = default;
   // Return reference boolean value
-  [[nodiscard]] bool &getBoolean() { return (boolean); }
-  [[nodiscard]] const bool &getBoolean() const { return (boolean); }
+  [[nodiscard]] bool &getBoolean() { return (jNodeBoolean); }
+  [[nodiscard]] const bool &getBoolean() const { return (jNodeBoolean); }
   // Return string representation of value
-  [[nodiscard]] std::string toString() const { return (boolean ? "true" : "false"); }
+  [[nodiscard]] std::string toString() const { return (jNodeBoolean ? "true" : "false"); }
 
 private:
-  bool boolean{};
+  bool jNodeBoolean{};
 };
 }// namespace JSON_Lib

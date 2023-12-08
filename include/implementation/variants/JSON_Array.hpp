@@ -17,35 +17,35 @@ struct Array : Variant
   Array &operator=(Array &&other) = default;
   ~Array() = default;
   // Add array element
-  void add(JNode &jNode) { array.emplace_back(std::move(jNode)); }
-  void add(JNode &&jNode) { array.emplace_back(std::move(jNode)); }
+  void add(JNode &jNode) { jNodeArray.emplace_back(std::move(jNode)); }
+  void add(JNode &&jNode) { jNodeArray.emplace_back(std::move(jNode)); }
   // Return the size of array
-  [[nodiscard]] std::size_t size() const { return (array.size()); }
+  [[nodiscard]] std::size_t size() const { return (jNodeArray.size()); }
   // Return reference to array base
-  std::vector<JNode> &getArrayEntries() { return (array); }
-  [[nodiscard]] const std::vector<JNode> &getArrayEntries() const { return (array); }
+  std::vector<JNode> &getArrayEntries() { return (jNodeArray); }
+  [[nodiscard]] const std::vector<JNode> &getArrayEntries() const { return (jNodeArray); }
   // Array indexing operators
   JNode &operator[](std::size_t index)
   {
-    if ((index >= 0) && (index < (static_cast<std::size_t>(array.size())))) { return (array[index]); }
+    if ((index >= 0) && (index < (static_cast<std::size_t>(jNodeArray.size())))) { return (jNodeArray[index]); }
     throw JNode::Error("Invalid index used to access array.");
   }
   const JNode &operator[](std::size_t index) const
   {
-    if ((index >= 0) && (index < (static_cast<std::size_t>(array.size())))) { return (array[index]); }
+    if ((index >= 0) && (index < (static_cast<std::size_t>(jNodeArray.size())))) { return (jNodeArray[index]); }
     throw JNode::Error("Invalid index used to access array.");
   }
   // Resize Array
   void resize(std::size_t index)
   {
-    array.resize(index + 1);
-    for (auto &entry : array) {
+    jNodeArray.resize(index + 1);
+    for (auto &entry : jNodeArray) {
       if (entry.isEmpty()) { entry = JNode::make<Hole>(); }
     }
   }
 
 private:
   // Array entries list
-  std::vector<JNode> array;
+  std::vector<JNode> jNodeArray;
 };
 }// namespace JSON_Lib

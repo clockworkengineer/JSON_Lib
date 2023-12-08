@@ -32,7 +32,7 @@ struct Number : Variant
   Number &operator=(Number &&other) = default;
   ~Number() = default;
   // Is number a int/long/long long/float/double/long double ?
-  template<typename T> [[nodiscard]] bool is() const { return (std::get_if<T>(&numberValues) != nullptr); }
+  template<typename T> [[nodiscard]] bool is() const { return (std::get_if<T>(&jNodeNumber) != nullptr); }
   // Return numbers value int/long long/float/double/long double.
   // Note: Can still return a integer value for a floating point.
   template<typename T> [[nodiscard]] T get() const { return (getAs<T>()); }
@@ -62,7 +62,7 @@ private:
                                || stringToNumber<double>(number) || stringToNumber<long double>(number);
   }
   // Number values (variant)
-  Values numberValues;
+  Values jNodeNumber;
   // Floating point to string parameters
   inline static int numberPrecision{ 6 };
   inline static numberNotation numberNotation{ numberNotation::normal };
@@ -73,7 +73,7 @@ template<typename T> Number::Number(T value) : Variant(Variant::Type::number)
   if constexpr (std::is_same_v<T, std::string>) {
     convertNumber(value);
   } else {
-    numberValues = value;
+    jNodeNumber = value;
   }
 }
 // Convert string to specific numeric type (returns true on success)
@@ -140,12 +140,12 @@ template<typename T, typename U> T Number::convertTo(U value) const
 // Convert stored number to another specified type
 template<typename T> T Number::getAs() const
 {
-  if (auto pValue = std::get_if<int>(&numberValues)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<long>(&numberValues)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<long long>(&numberValues)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<float>(&numberValues)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<double>(&numberValues)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<long double>(&numberValues)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<int>(&jNodeNumber)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<long>(&jNodeNumber)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<long long>(&jNodeNumber)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<float>(&jNodeNumber)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<double>(&jNodeNumber)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<long double>(&jNodeNumber)) { return (convertTo<T>(*pValue)); }
   throw Error("Could not convert unknown type.");
 }
 }// namespace JSON_Lib
