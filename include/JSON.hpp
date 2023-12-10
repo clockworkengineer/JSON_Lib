@@ -8,8 +8,10 @@
 #include <fstream>
 #include <sstream>
 
+#include "JSON_Config.hpp"
+
 namespace JSON_Lib {
-  
+
 // ========================================================
 // JSON forward declarations for interfaces/classes/structs
 // ========================================================
