@@ -51,7 +51,7 @@ void processEntry(const js::Object::Entry &entry)
   } else if (key == "cSpell.words") {
     // Read array of string data and add to log
     entryJSON += "[";
-    for (const auto &word : js::JRef<js::Array>(entry).getArrayEntries()) {
+    for (const auto &word : js::JRef<js::Array>(entry).value()) {
       entryJSON += "\"" + js::JRef<js::String>(word).toString() + "\",";
     }
     entryJSON.pop_back();

@@ -22,8 +22,8 @@ struct Array : Variant
   // Return the size of array
   [[nodiscard]] std::size_t size() const { return (jNodeArray.size()); }
   // Return reference to array base
-  std::vector<JNode> &getArrayEntries() { return (jNodeArray); }
-  [[nodiscard]] const std::vector<JNode> &getArrayEntries() const { return (jNodeArray); }
+  std::vector<JNode> &value() { return (jNodeArray); }
+  [[nodiscard]] const std::vector<JNode> &value() const { return (jNodeArray); }
   // Array indexing operators
   JNode &operator[](std::size_t index)
   {

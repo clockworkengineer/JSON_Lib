@@ -84,7 +84,7 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
   {
     JNode jNode{ 1, 2, 3, 4 };
     REQUIRE_FALSE(!jNode.isArray());
-    auto &array = JRef<Array>(jNode).getArrayEntries();
+    auto &array = JRef<Array>(jNode).value();
     REQUIRE(JRef<Number>(array[0]).value<int>() == 1);
     REQUIRE(JRef<Number>(array[1]).value<int>() == 2);
     REQUIRE(JRef<Number>(array[2]).value<int>() == 3);
@@ -102,7 +102,7 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
   {
     JNode jNode{ 1, 2, 3, 4, JNode{ 5, 6, 7, 8 } };
     REQUIRE_FALSE(!jNode.isArray());
-    auto &array = JRef<Array>(jNode).getArrayEntries();
+    auto &array = JRef<Array>(jNode).value();
     REQUIRE(JRef<Number>(array[0]).value<int>() == 1);
     REQUIRE(JRef<Number>(array[1]).value<int>() == 2);
     REQUIRE(JRef<Number>(array[2]).value<int>() == 3);
@@ -126,7 +126,7 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
   {
     JNode jNode{ 1, 2, 3, 4, JNode{ { "key4", 5555 }, { "key5", 7777 } } };
     REQUIRE_FALSE(!jNode.isArray());
-    auto &array = JRef<Array>(jNode).getArrayEntries();
+    auto &array = JRef<Array>(jNode).value();
     REQUIRE(JRef<Number>(array[0]).value<int>() == 1);
     REQUIRE(JRef<Number>(array[1]).value<int>() == 2);
     REQUIRE(JRef<Number>(array[2]).value<int>() == 3);
@@ -223,7 +223,7 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
   {
     jNode = { 1, 2, 3, 4 };
     REQUIRE_FALSE(!jNode.isArray());
-    auto &array = JRef<Array>(jNode).getArrayEntries();
+    auto &array = JRef<Array>(jNode).value();
     REQUIRE(JRef<Number>(array[0]).value<int>() == 1);
     REQUIRE(JRef<Number>(array[1]).value<int>() == 2);
     REQUIRE(JRef<Number>(array[2]).value<int>() == 3);
@@ -241,7 +241,7 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
   {
     jNode = { 1, 2, 3, 4, JNode{ 5, 6, 7, 8 } };
     REQUIRE_FALSE(!jNode.isArray());
-    auto &array = JRef<Array>(jNode).getArrayEntries();
+    auto &array = JRef<Array>(jNode).value();
     REQUIRE(JRef<Number>(array[0]).value<int>() == 1);
     REQUIRE(JRef<Number>(array[1]).value<int>() == 2);
     REQUIRE(JRef<Number>(array[2]).value<int>() == 3);
@@ -265,7 +265,7 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
   {
     jNode = { 1, 2, 3, 4, JNode{ { "key4", 5555 }, { "key5", 7777 } } };
     REQUIRE_FALSE(!jNode.isArray());
-    auto &array = JRef<Array>(jNode).getArrayEntries();
+    auto &array = JRef<Array>(jNode).value();
     REQUIRE(JRef<Number>(array[0]).value<int>() == 1);
     REQUIRE(JRef<Number>(array[1]).value<int>() == 2);
     REQUIRE(JRef<Number>(array[2]).value<int>() == 3);

@@ -103,10 +103,10 @@ void JSON_Stringify::stringifyObject(const JNode &jNode, IDestination &destinati
 void JSON_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const
 {
   destination.add('[');
-  if (!JRef<Array>(jNode).getArrayEntries().empty()) {
-    size_t commaCount = JRef<Array>(jNode).getArrayEntries().size() - 1;
+  if (!JRef<Array>(jNode).value().empty()) {
+    size_t commaCount = JRef<Array>(jNode).value().size() - 1;
     if (indent != 0) { destination.add('\n'); };
-    for (auto &entry : JRef<Array>(jNode).getArrayEntries()) {
+    for (auto &entry : JRef<Array>(jNode).value()) {
       if (indent != 0) { destination.add(std::string(indent, ' ')); };
       stringify(entry, destination, (indent != 0) ? (indent + printIndent) : 0);
       if (commaCount-- > 0) {

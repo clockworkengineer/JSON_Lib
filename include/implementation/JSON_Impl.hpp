@@ -109,7 +109,7 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
     break;
   case Variant::Type::array:
     action.onArray(jNode);
-    for (auto &entry : JRef<Array>(jNode).getArrayEntries()) { traverseJNodes(entry, action); }
+    for (auto &entry : JRef<Array>(jNode).value()) { traverseJNodes(entry, action); }
     break;
   default:
     throw JSON::Error("Unknown JNode type encountered during tree traversal.");

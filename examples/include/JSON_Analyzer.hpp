@@ -63,7 +63,7 @@ public:
     totalArrays++;
     sizeInBytes += sizeof(JSON_Lib::Array);
     maxArraySize = std::max(jNodeArray.size(), maxArraySize);
-    for ([[maybe_unused]] auto &jNodeEntry : jNodeArray.getArrayEntries()) { sizeInBytes += sizeof(JSON_Lib::JNode); }
+    for ([[maybe_unused]] auto &jNodeEntry : jNodeArray.value()) { sizeInBytes += sizeof(JSON_Lib::JNode); }
   }
   // Add object details to analysis
   virtual void onObject(const JSON_Lib::JNode &jNode) override
