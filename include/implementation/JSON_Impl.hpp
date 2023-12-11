@@ -8,6 +8,10 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
+#include "JSON_Parser.hpp"
+#include "JSON_Stringify.hpp"
+#include "JSON_Sources.hpp"
+#include "JSON_Destinations.hpp"
 
 namespace JSON_Lib {
 
@@ -23,7 +27,7 @@ public:
   ~JSON_Impl() = default;
   // Get JSON_Lib version
   std::string version() const;
-  // Parse JSON into tree
+  // Parse JSON into JNode tree
   void parse(ISource &source);
   // Create JSON text string (no white space) from JNode tree
   void stringify(IDestination &destination) const;
@@ -32,7 +36,7 @@ public:
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
   // Set JSON Parser/Stringify
-  static void setParser(IParser * parser = nullptr);
+  static void setParser(IParser *parser = nullptr);
   static void setStringify(IStringify *stringify = nullptr);
   // Set JSON translator/converter
   static void setTranslator(ITranslator *translator = nullptr);
@@ -50,10 +54,7 @@ public:
   void traverse(IAction &action);
   void traverse(IAction &action) const;
   // Set print ident value
-  void setIndent(long indent)
-  {
-    jsonStringify->setIndent(indent);
-  }
+  void setIndent(long indent) { jsonStringify->setIndent(indent); }
   // Read/Write JSON from file
   static const std::string fromFile(const std::string &fileName);
   static void toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format);
@@ -73,7 +74,6 @@ private:
   inline static std::unique_ptr<ITranslator> jsonTranslator;
   // Pointer to character conversion interface
   inline static std::unique_ptr<IConverter> jsonConverter;
-
 };
 /// <summary>
 /// Recursively traverse JNode tree calling IAction methods and possibly

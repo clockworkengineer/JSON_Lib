@@ -9,9 +9,6 @@
 #include "JSON.hpp"
 #include "JSON_Impl.hpp"
 
-#include "JSON_Parser.hpp"
-#include "JSON_Stringify.hpp"
-
 namespace JSON_Lib {
 
 std::string JSON_Impl::version() const
