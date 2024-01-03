@@ -35,13 +35,13 @@ public:
                            + " Column: " + std::to_string(position.second) + "]: " + message)
     {}
   };
-  // Possible JSON Node internal value types
-  using InternalType =
+  // Possible JSON Node initializer list types
+  using intializerListTypes =
     std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t, JNode>;
   // Array initializer list
-  using ArrayList = std::initializer_list<InternalType>;
+  using ArrayInitializer = std::initializer_list<intializerListTypes>;
   // Object initializer list
-  using ObjectList = std::initializer_list<std::pair<std::string, InternalType>>;
+  using Objectintializer = std::initializer_list<std::pair<std::string, intializerListTypes>>;
   // JSON file formats
   enum class Format : uint8_t { utf8 = 0, utf8BOM, utf16BE, utf16LE, utf32BE, utf32LE };
   // Pass any user defined translator/converter here
@@ -49,9 +49,9 @@ public:
   // Pass in default JSON to parse
   explicit JSON(const std::string &jsonString);
   // Construct array
-  JSON(const ArrayList &arrayList);
+  JSON(const ArrayInitializer &arrayList);
   // Construct object
-  JSON(const ObjectList &objectList);
+  JSON(const Objectintializer &objectList);
   // No other constructors supported
   JSON(const JSON &other) = delete;
   JSON &operator=(const JSON &other) = delete;

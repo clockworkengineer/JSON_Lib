@@ -19,8 +19,8 @@ struct JNode
   // Constructors/Destructors
   JNode() = default;
   template<typename T> explicit JNode(T value);
-  JNode(const JSON::ArrayList &arrayList);
-  JNode(const JSON::ObjectList &objectList);
+  JNode(const JSON::ArrayInitializer &arrayList);
+  JNode(const JSON::Objectintializer &objectList);
   JNode(const JNode &other) = delete;
   JNode &operator=(const JNode &other) = delete;
   JNode(JNode &&other) = default;
@@ -52,7 +52,7 @@ struct JNode
   }
 
 private:
-  static JNode internalTypeToJNode(const JSON::InternalType &type);
+  static JNode typeToJNode(const JSON::intializerListTypes &type);
   std::unique_ptr<Variant> variant;
 };
 }// namespace JSON_Lib
