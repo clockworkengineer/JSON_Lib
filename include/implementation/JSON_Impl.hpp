@@ -84,30 +84,21 @@ private:
 template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
 {
   action.onJNode(jNode);
-  switch (jNode.getVariant().getType()) {
-  case Variant::Type::number:
+  if (jNode.isNumber()) {
     action.onNumber(jNode);
-    break;
-  case Variant::Type::string:
+  } else if (jNode.isString()) {
     action.onString(jNode);
-    break;
-  case Variant::Type::boolean:
+  } else if (jNode.isBoolean()) {
     action.onBoolean(jNode);
-    break;
-  case Variant::Type::null:
+  } else if (jNode.isNull()) {
     action.onNull(jNode);
-    break;
-  case Variant::Type::hole:
-    break;
-  case Variant::Type::object:
+  } else if (jNode.isObject()) {
     action.onObject(jNode);
     for (auto &entry : JRef<Object>(jNode).value()) { traverseJNodes(entry.getJNode(), action); }
-    break;
-  case Variant::Type::array:
+  } else if (jNode.isArray()) {
     action.onArray(jNode);
     for (auto &entry : JRef<Array>(jNode).value()) { traverseJNodes(entry, action); }
-    break;
-  default:
+  } else if (!jNode.isHole()) {
     throw JSON::Error("Unknown JNode type encountered during tree traversal.");
   }
 }

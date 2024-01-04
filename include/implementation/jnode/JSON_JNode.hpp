@@ -19,8 +19,8 @@ struct JNode
   // Constructors/Destructors
   JNode() = default;
   template<typename T> explicit JNode(T value);
-  JNode(const JSON::ArrayInitializer &arrayList);
-  JNode(const JSON::Objectintializer &objectList);
+  JNode(const JSON::ArrayInitializer &array);
+  JNode(const JSON::Objectintializer &object);
   JNode(const JNode &other) = delete;
   JNode &operator=(const JNode &other) = delete;
   JNode(JNode &&other) = default;
@@ -29,22 +29,22 @@ struct JNode
   // Assignment operators
   template<typename T> JNode &operator=(T value) { return (*this = JNode(value)); }
   // Interrogate variant
-  bool isEmpty() const { return (variant == nullptr); }
-  bool isObject() const { return (variant->getType() == Variant::Type::object); }
-  bool isArray() const { return (variant->getType() == Variant::Type::array); }
-  bool isNumber() const { return (variant->getType() == Variant::Type::number); }
-  bool isString() const { return (variant->getType() == Variant::Type::string); }
-  bool isBoolean() const { return (variant->getType() == Variant::Type::boolean); }
-  bool isNull() const { return (variant->getType() == Variant::Type::null); }
-  bool isHole() const { return (variant->getType() == Variant::Type::hole); }
+  [[nodiscard]] bool isEmpty() const { return (jNodeVariant == nullptr); }
+  [[nodiscard]] bool isObject() const { return (jNodeVariant->isObject()); }
+  [[nodiscard]] bool isArray() const { return (jNodeVariant->isArray()); }
+  [[nodiscard]] bool isNumber() const { return (jNodeVariant->isNumber()); }
+  [[nodiscard]] bool isString() const { return (jNodeVariant->isString()); }
+  [[nodiscard]] bool isBoolean() const { return (jNodeVariant->isBoolean()); }
+  [[nodiscard]] bool isNull() const { return (jNodeVariant->isNull()); }
+  [[nodiscard]] bool isHole() const { return (jNodeVariant->isHole()); }
   // Indexing operators
   JNode &operator[](const std::string &key);
   const JNode &operator[](const std::string &key) const;
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
   // Get reference to JNode variant
-  Variant &getVariant() { return (*variant); }
-  const Variant &getVariant() const { return (*variant); }
+  Variant &getVariant() { return (*jNodeVariant); }
+  const Variant &getVariant() const { return (*jNodeVariant); }
   // Make JNode
   template<typename T, typename... Args> static auto make(Args &&...args)
   {
@@ -52,7 +52,7 @@ struct JNode
   }
 
 private:
-  static JNode typeToJNode(const JSON::intializerListTypes &type);
-  std::unique_ptr<Variant> variant;
+  JNode typeToJNode(const JSON::intializerListTypes &type);
+  std::unique_ptr<Variant> jNodeVariant;
 };
 }// namespace JSON_Lib

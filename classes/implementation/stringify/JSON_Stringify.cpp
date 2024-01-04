@@ -131,29 +131,21 @@ void JSON_Stringify::stringifyArray(const JNode &jNode, IDestination &destinatio
 /// <param name="indent">Current print indentation.</param>
 void JSON_Stringify::stringify(const JNode &jNode, IDestination &destination, long indent) const
 {
-  switch (jNode.getVariant().getType()) {
-  case Variant::Type::number:
+  if (jNode.isNumber()) {
     stringifyNumber(jNode, destination);
-    break;
-  case Variant::Type::string:
+  } else if (jNode.isString()) {
     stringifyString(jNode, destination);
-    break;
-  case Variant::Type::boolean:
+  } else if (jNode.isBoolean()) {
     stringifyBoolean(jNode, destination);
-    break;
-  case Variant::Type::null:
+  } else if (jNode.isNull()) {
     stringifyNull(jNode, destination);
-    break;
-  case Variant::Type::hole:
+  } else if (jNode.isHole()) {
     stringifyHole(jNode, destination);
-    break;
-  case Variant::Type::object:
+  } else if (jNode.isObject()) {
     stringifyObject(jNode, destination, indent);
-    break;
-  case Variant::Type::array:
+  } else if (jNode.isArray()) {
     stringifyArray(jNode, destination, indent);
-    break;
-  default:
+  } else {
     throw JSON::Error("Unknown JNode type encountered during stringification.");
   }
 }

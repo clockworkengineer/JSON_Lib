@@ -49,9 +49,9 @@ public:
   // Pass in default JSON to parse
   explicit JSON(const std::string &jsonString);
   // Construct array
-  JSON(const ArrayInitializer &arrayList);
+  JSON(const ArrayInitializer &array);
   // Construct object
-  JSON(const Objectintializer &objectList);
+  JSON(const Objectintializer &object);
   // No other constructors supported
   JSON(const JSON &other) = delete;
   JSON &operator=(const JSON &other) = delete;
