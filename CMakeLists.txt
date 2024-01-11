@@ -48,6 +48,7 @@ set(JSON_INCLUDES
   ./include/implementation/variants/JSON_Boolean.hpp
   ./include/implementation/variants/JSON_Null.hpp
   ./include/implementation/jnode/JSON_JNode.hpp
+  ./include/implementation/jnode/JSON_JNode_Index.hpp
   ./include/implementation/jnode/JSON_JNode_Reference.hpp
   ./include/implementation/jnode/JSON_JNode_Creation.hpp
   ./include/implementation/io/JSON_Sources.hpp
