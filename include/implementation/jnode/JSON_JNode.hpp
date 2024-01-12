@@ -6,9 +6,7 @@
 #include <variant>
 
 namespace JSON_Lib {
-// =====
-// JNode
-// =====
+
 struct JNode
 {
   // JNode Error

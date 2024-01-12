@@ -38,7 +38,8 @@ set(TEST_SOURCES
   ./stringify/JSON_Lib_Tests_Stringify_Exceptions.cpp
   ./stringify/JSON_Lib_Tests_Print.cpp
   ./misc/JSON_Lib_Tests_Misc.cpp
-  ./misc/JSON_Lib_Tests_Helper.cpp)
+  ./misc/JSON_Lib_Tests_Helper.cpp
+  ./traverse/JSON_Lib_Tests_Traverse.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${PROJECT_CURRENT_SOURCE_DIR}/include ./include)
