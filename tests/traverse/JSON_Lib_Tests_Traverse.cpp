@@ -217,7 +217,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     REQUIRE(analyzer.totalStrings == 0);
     REQUIRE(analyzer.totalArrays == 0);
   }
-  SECTION("Decode a string (\"test\") and traverse", "[JSON][Traverse][string]")
+  SECTION("Decode a string (\"test\") and traverse", "[JSON][Traverse][String]")
   {
     BufferSource source{ "\"test\"" };
     bEncode.parse(source);
@@ -256,7 +256,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     REQUIRE(analyzer.totalStrings == 0);
     REQUIRE(analyzer.totalArrays == 0);
   }
-  SECTION("Decode a null (null) and traverse", "[JSON][Traverse][Null]")
+  SECTION("Decode a null and traverse", "[JSON][Traverse][Null]")
   {
     BufferSource source{ "null" };
     bEncode.parse(source);
