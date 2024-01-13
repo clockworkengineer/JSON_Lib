@@ -1,5 +1,5 @@
 //
-// Unit Tests: JSON_Lib_Tests_Travsere
+// Unit Tests: JSON_Lib_Tests_Traverse
 //
 // Description: JSON traversal of unit tests for JSON class
 // using the Catch2 test framework.
@@ -9,19 +9,19 @@
 
 using namespace JSON_Lib;
 
-class JSON_Analyzer : public JSON_Lib::IAction
+class JSON_Analyzer : public IAction
 {
 public:
   JSON_Analyzer() = default;
   virtual ~JSON_Analyzer() = default;
   // Add JNode details to analysis
-  virtual void onJNode([[maybe_unused]] const JSON_Lib::JNode &jNode) override { totalNodes++; }
+  virtual void onJNode([[maybe_unused]] const JNode &jNode) override { totalNodes++; }
   // Add string details to analysis
-  virtual void onString([[maybe_unused]] const JSON_Lib::JNode &jNode) override { totalStrings++; }
+  virtual void onString([[maybe_unused]] const JNode &jNode) override { totalStrings++; }
   // Add number details to analysis
-  virtual void onNumber(const JSON_Lib::JNode &jNode) override
+  virtual void onNumber(const JNode &jNode) override
   {
-    const JSON_Lib::Number &jNodeNumber = JRef<JSON_Lib::Number>(jNode);
+    const Number &jNodeNumber = JRef<Number>(jNode);
     totalNumbers++;
 
     if (jNodeNumber.is<int>()) {
@@ -38,32 +38,32 @@ public:
       totalLongDouble++;
     }
   }
-  virtual void onBoolean([[maybe_unused]] const JSON_Lib::JNode &jNode) override { totalBoolean++; }
+  virtual void onBoolean([[maybe_unused]] const JNode &jNode) override { totalBoolean++; }
   // Add null details to analysis
-  virtual void onNull([[maybe_unused]] const JSON_Lib::JNode &jNode) override { totalNull++; }
+  virtual void onNull([[maybe_unused]] const JNode &jNode) override { totalNull++; }
   // Add array details to analysis
-  virtual void onArray([[maybe_unused]] const JSON_Lib::JNode &jNode) override { totalArrays++; }
+  virtual void onArray([[maybe_unused]] const JNode &jNode) override { totalArrays++; }
   // Add object details to analysis
-  virtual void onObject([[maybe_unused]] const JSON_Lib::JNode &jNode) override { totalObjects++; }
+  virtual void onObject([[maybe_unused]] const JNode &jNode) override { totalObjects++; }
   // Non-const api not used
-  virtual void onNumber([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onBoolean([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onNull([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onArray([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onObject([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onJNode([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onString([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
+  virtual void onNumber([[maybe_unused]] JNode &jNode) override {}
+  virtual void onBoolean([[maybe_unused]] JNode &jNode) override {}
+  virtual void onNull([[maybe_unused]] JNode &jNode) override {}
+  virtual void onArray([[maybe_unused]] JNode &jNode) override {}
+  virtual void onObject([[maybe_unused]] JNode &jNode) override {}
+  virtual void onJNode([[maybe_unused]] JNode &jNode) override {}
+  virtual void onString([[maybe_unused]] JNode &jNode) override {}
 
   // JSON analysis data
   // Node
   int64_t totalNodes{};
-  // JSON_Lib::Object
+  // Object
   int64_t totalObjects{};
-  // JSON_Lib::Array
+  // Array
   int64_t totalArrays{};
-  // JSON_Lib::String
+  // String
   int64_t totalStrings{};
-  // JSON_Lib::Number
+  // Number
   int64_t totalNumbers{};
   int64_t totalInteger{};
   int64_t totalLong{};
@@ -71,9 +71,9 @@ public:
   int64_t totalFloat{};
   int64_t totalDouble{};
   int64_t totalLongDouble{};
-  // JSON_Lib::Boolean
+  // Boolean
   int64_t totalBoolean{};
-  // JSON_Lib::Null
+  // Null
   int64_t totalNull{};
 };
 
@@ -161,6 +161,113 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     REQUIRE(analyzer.totalNumbers == 1);
     REQUIRE(analyzer.totalObjects == 0);
     REQUIRE(analyzer.totalStrings == 0);
+    REQUIRE(analyzer.totalArrays == 0);
+  }
+  SECTION("Decode an float (32.11999) and traverse", "[JSON][Traverse][Float]")
+  {
+    BufferSource source{ "32.11999" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 1);
+    REQUIRE(analyzer.totalFloat == 1);
+    REQUIRE(analyzer.totalNumbers == 1);
+    REQUIRE(analyzer.totalObjects == 0);
+    REQUIRE(analyzer.totalStrings == 0);
+    REQUIRE(analyzer.totalArrays == 0);
+  }
+  SECTION("Decode an double (3.402823466e+39) and traverse", "[JSON][Traverse][Double]")
+  {
+    BufferSource source{ "3.402823466e+39" };
+    bEncode.parse(source);// sizeof(doble) == sizeof(long double)
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 1);
+    REQUIRE(analyzer.totalFloat == 0);
+    REQUIRE(analyzer.totalDouble == 1);
+    REQUIRE(analyzer.totalNumbers == 1);
+    REQUIRE(analyzer.totalObjects == 0);
+    REQUIRE(analyzer.totalStrings == 0);
+    REQUIRE(analyzer.totalArrays == 0);
+  }
+  SECTION("Decode an long double (1.7976931348623158e+308) and traverse", "[JSON][Traverse][LongDouble]")
+  {
+    BufferSource source{ "1.7976931348623158e+308" };
+    bEncode.parse(source);// sizeof(doble) == sizeof(long double)
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 1);
+    REQUIRE(analyzer.totalFloat == 0);
+    REQUIRE(analyzer.totalDouble == 1);
+    REQUIRE(analyzer.totalNumbers == 1);
+    REQUIRE(analyzer.totalObjects == 0);
+    REQUIRE(analyzer.totalStrings == 0);
+    REQUIRE(analyzer.totalArrays == 0);
+  }
+  SECTION("Decode a bool (true) and traverse", "[JSON][Traverse][Boolean]")
+  {
+    BufferSource source{ "true" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 1);
+    REQUIRE(analyzer.totalBoolean == 1);
+    REQUIRE(analyzer.totalNumbers == 0);
+    REQUIRE(analyzer.totalObjects == 0);
+    REQUIRE(analyzer.totalStrings == 0);
+    REQUIRE(analyzer.totalArrays == 0);
+  }
+  SECTION("Decode a string (\"test\") and traverse", "[JSON][Traverse][string]")
+  {
+    BufferSource source{ "\"test\"" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 1);
+    REQUIRE(analyzer.totalBoolean == 0);
+    REQUIRE(analyzer.totalNumbers == 0);
+    REQUIRE(analyzer.totalObjects == 0);
+    REQUIRE(analyzer.totalStrings == 1);
+    REQUIRE(analyzer.totalArrays == 0);
+  }
+  SECTION("Decode a array ([1,2,3,4]) and traverse", "[JSON][Traverse][Array]")
+  {
+    BufferSource source{ "[1,2,3,4]" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 5);
+    REQUIRE(analyzer.totalBoolean == 0);
+    REQUIRE(analyzer.totalNumbers == 4);
+    REQUIRE(analyzer.totalObjects == 0);
+    REQUIRE(analyzer.totalStrings == 0);
+    REQUIRE(analyzer.totalArrays == 1);
+  }
+  SECTION("Decode a object({\"one\" : 1, \"two\" : 2, \"three\" : 3 })) and traverse", "[JSON][Traverse][Object]")
+  {
+    BufferSource source{ "{\"one\" : 1, \"two\" : 2, \"three\" : 3 }" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 4);
+    REQUIRE(analyzer.totalBoolean == 0);
+    REQUIRE(analyzer.totalNumbers == 3);
+    REQUIRE(analyzer.totalObjects == 1);
+    REQUIRE(analyzer.totalStrings == 0);
+    REQUIRE(analyzer.totalArrays == 0);
+  }
+  SECTION("Decode a null (null) and traverse", "[JSON][Traverse][Null]")
+  {
+    BufferSource source{ "null" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 1);
+    REQUIRE(analyzer.totalBoolean == 0);
+    REQUIRE(analyzer.totalNumbers == 0);
+    REQUIRE(analyzer.totalObjects == 0);
+    REQUIRE(analyzer.totalStrings == 0);
+    REQUIRE(analyzer.totalNull == 1);
     REQUIRE(analyzer.totalArrays == 0);
   }
 }
