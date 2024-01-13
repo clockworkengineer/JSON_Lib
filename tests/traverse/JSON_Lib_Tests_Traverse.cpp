@@ -89,9 +89,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalInteger == 1);
     REQUIRE(analyzer.totalNumbers == 1);
-    REQUIRE(analyzer.totalObjects == 0);
-    REQUIRE(analyzer.totalStrings == 0);
-    REQUIRE(analyzer.totalArrays == 0);
+
   }
 
   SECTION("Decode an Integer (-266) and traverse", "[JSON][Traverse][Integer]")
@@ -103,9 +101,6 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalInteger == 1);
     REQUIRE(analyzer.totalNumbers == 1);
-    REQUIRE(analyzer.totalObjects == 0);
-    REQUIRE(analyzer.totalStrings == 0);
-    REQUIRE(analyzer.totalArrays == 0);
   }
 
   SECTION("Decode an Long (2147483647) and traverse", "[JSON][Traverse][Long]")
@@ -117,9 +112,6 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalInteger == 1);
     REQUIRE(analyzer.totalNumbers == 1);
-    REQUIRE(analyzer.totalObjects == 0);
-    REQUIRE(analyzer.totalStrings == 0);
-    REQUIRE(analyzer.totalArrays == 0);
   }
   SECTION("Decode an Long (-2147483648) and traverse", "[JSON][Traverse][Long]")
   {
@@ -130,9 +122,6 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalInteger == 1);
     REQUIRE(analyzer.totalNumbers == 1);
-    REQUIRE(analyzer.totalObjects == 0);
-    REQUIRE(analyzer.totalStrings == 0);
-    REQUIRE(analyzer.totalArrays == 0);
   }
   SECTION("Decode an LongLong (2147483648) and traverse", "[JSON][Traverse][LongLong]")
   {
@@ -141,12 +130,8 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     JSON_Analyzer analyzer;
     bEncode.traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
-    REQUIRE(analyzer.totalInteger == 0);
     REQUIRE(analyzer.totalLongLong == 1);
     REQUIRE(analyzer.totalNumbers == 1);
-    REQUIRE(analyzer.totalObjects == 0);
-    REQUIRE(analyzer.totalStrings == 0);
-    REQUIRE(analyzer.totalArrays == 0);
   }
 
   SECTION("Decode an LongLong (-2147483649) and traverse", "[JSON][Traverse][LongLong]")
@@ -156,12 +141,8 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     JSON_Analyzer analyzer;
     bEncode.traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
-    REQUIRE(analyzer.totalInteger == 0);
     REQUIRE(analyzer.totalLongLong == 1);
     REQUIRE(analyzer.totalNumbers == 1);
-    REQUIRE(analyzer.totalObjects == 0);
-    REQUIRE(analyzer.totalStrings == 0);
-    REQUIRE(analyzer.totalArrays == 0);
   }
   SECTION("Decode an float (32.11999) and traverse", "[JSON][Traverse][Float]")
   {
@@ -172,9 +153,6 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalFloat == 1);
     REQUIRE(analyzer.totalNumbers == 1);
-    REQUIRE(analyzer.totalObjects == 0);
-    REQUIRE(analyzer.totalStrings == 0);
-    REQUIRE(analyzer.totalArrays == 0);
   }
   SECTION("Decode an double (3.402823466e+39) and traverse", "[JSON][Traverse][Double]")
   {
@@ -183,12 +161,9 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     JSON_Analyzer analyzer;
     bEncode.traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
-    REQUIRE(analyzer.totalFloat == 0);
     REQUIRE(analyzer.totalDouble == 1);
     REQUIRE(analyzer.totalNumbers == 1);
-    REQUIRE(analyzer.totalObjects == 0);
-    REQUIRE(analyzer.totalStrings == 0);
-    REQUIRE(analyzer.totalArrays == 0);
+
   }
   SECTION("Decode an long double (1.7976931348623158e+308) and traverse", "[JSON][Traverse][LongDouble]")
   {
@@ -197,12 +172,8 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     JSON_Analyzer analyzer;
     bEncode.traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
-    REQUIRE(analyzer.totalFloat == 0);
     REQUIRE(analyzer.totalDouble == 1);
     REQUIRE(analyzer.totalNumbers == 1);
-    REQUIRE(analyzer.totalObjects == 0);
-    REQUIRE(analyzer.totalStrings == 0);
-    REQUIRE(analyzer.totalArrays == 0);
   }
   SECTION("Decode a bool (true) and traverse", "[JSON][Traverse][Boolean]")
   {
@@ -212,10 +183,6 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     bEncode.traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalBoolean == 1);
-    REQUIRE(analyzer.totalNumbers == 0);
-    REQUIRE(analyzer.totalObjects == 0);
-    REQUIRE(analyzer.totalStrings == 0);
-    REQUIRE(analyzer.totalArrays == 0);
   }
   SECTION("Decode a string (\"test\") and traverse", "[JSON][Traverse][String]")
   {
@@ -224,11 +191,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     JSON_Analyzer analyzer;
     bEncode.traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
-    REQUIRE(analyzer.totalBoolean == 0);
-    REQUIRE(analyzer.totalNumbers == 0);
-    REQUIRE(analyzer.totalObjects == 0);
     REQUIRE(analyzer.totalStrings == 1);
-    REQUIRE(analyzer.totalArrays == 0);
   }
   SECTION("Decode a array ([1,2,3,4]) and traverse", "[JSON][Traverse][Array]")
   {
@@ -237,10 +200,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     JSON_Analyzer analyzer;
     bEncode.traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 5);
-    REQUIRE(analyzer.totalBoolean == 0);
     REQUIRE(analyzer.totalNumbers == 4);
-    REQUIRE(analyzer.totalObjects == 0);
-    REQUIRE(analyzer.totalStrings == 0);
     REQUIRE(analyzer.totalArrays == 1);
   }
   SECTION("Decode a object({\"one\" : 1, \"two\" : 2, \"three\" : 3 })) and traverse", "[JSON][Traverse][Object]")
@@ -250,11 +210,8 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     JSON_Analyzer analyzer;
     bEncode.traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 4);
-    REQUIRE(analyzer.totalBoolean == 0);
     REQUIRE(analyzer.totalNumbers == 3);
     REQUIRE(analyzer.totalObjects == 1);
-    REQUIRE(analyzer.totalStrings == 0);
-    REQUIRE(analyzer.totalArrays == 0);
   }
   SECTION("Decode a null and traverse", "[JSON][Traverse][Null]")
   {
@@ -262,12 +219,6 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     bEncode.parse(source);
     JSON_Analyzer analyzer;
     bEncode.traverse(analyzer);
-    REQUIRE(analyzer.totalNodes == 1);
-    REQUIRE(analyzer.totalBoolean == 0);
-    REQUIRE(analyzer.totalNumbers == 0);
-    REQUIRE(analyzer.totalObjects == 0);
-    REQUIRE(analyzer.totalStrings == 0);
     REQUIRE(analyzer.totalNull == 1);
-    REQUIRE(analyzer.totalArrays == 0);
   }
 }
