@@ -89,7 +89,6 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalInteger == 1);
     REQUIRE(analyzer.totalNumbers == 1);
-
   }
 
   SECTION("Decode an Integer (-266) and traverse", "[JSON][Traverse][Integer]")
@@ -163,7 +162,6 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalDouble == 1);
     REQUIRE(analyzer.totalNumbers == 1);
-
   }
   SECTION("Decode an long double (1.7976931348623158e+308) and traverse", "[JSON][Traverse][LongDouble]")
   {
@@ -220,5 +218,32 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     JSON_Analyzer analyzer;
     bEncode.traverse(analyzer);
     REQUIRE(analyzer.totalNull == 1);
+  }
+  SECTION(
+    "Decode a nested array ({\"City\":\"London\",\"Population\":[1,2,3,4,5]}) and traverse", "[JSON][Traverse][Array]")
+  {
+    BufferSource source{ "{\"City\":\"London\",\"Population\":[1,2,3,4,5]}" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 8);
+    REQUIRE(analyzer.totalObjects == 1);
+    REQUIRE(analyzer.totalArrays == 1);
+    REQUIRE(analyzer.totalStrings == 1);
+    REQUIRE(analyzer.totalNumbers == 5);
+  }
+  SECTION("Decode a nested object ([true,\"Out of time\",7.89043e+18,{\"key\":4444}]) and traverse",
+    "[JSON][Traverse][Object]")
+  {
+    BufferSource source{ "[true,\"Out of time\",7.89043e+18,{\"key\":4444}]" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 6);
+    REQUIRE(analyzer.totalObjects == 1);
+    REQUIRE(analyzer.totalArrays == 1);
+    REQUIRE(analyzer.totalStrings == 1);
+    REQUIRE(analyzer.totalNumbers == 2);
+    REQUIRE(analyzer.totalBoolean == 1);
   }
 }
