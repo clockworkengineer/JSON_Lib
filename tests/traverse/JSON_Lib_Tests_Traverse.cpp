@@ -129,7 +129,11 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     JSON_Analyzer analyzer;
     bEncode.traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
-    REQUIRE(analyzer.totalLongLong == 1);
+    if constexpr (sizeof(int) == sizeof(long)) {
+      REQUIRE(analyzer.totalLongLong == 1);
+    } else {
+      REQUIRE(analyzer.totalLong == 1);
+    }
     REQUIRE(analyzer.totalNumbers == 1);
   }
 
@@ -140,7 +144,11 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     JSON_Analyzer analyzer;
     bEncode.traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
-    REQUIRE(analyzer.totalLongLong == 1);
+    if constexpr (sizeof(int) == sizeof(long)) {
+      REQUIRE(analyzer.totalLongLong == 1);
+    } else {
+      REQUIRE(analyzer.totalLong == 1);
+    }
     REQUIRE(analyzer.totalNumbers == 1);
   }
   SECTION("Decode an float (32.11999) and traverse", "[JSON][Traverse][Float]")

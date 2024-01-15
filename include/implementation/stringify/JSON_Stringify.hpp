@@ -28,13 +28,13 @@ public:
   virtual void stringify(const JNode &jNode, IDestination &destination, long indent) const override;
 
   // Set print ident value
-  void setIndent(long indent)
+  void setIndent(long indent) override
   {
     if (indent < 0) { throw JSON::Error("Invalid print indentation value."); };
     printIndent = indent;
   }
 
-  long getIndent() const { return (printIndent); }
+  long getIndent() const override { return (printIndent); }
 
 private:
   // Stringify JSON
