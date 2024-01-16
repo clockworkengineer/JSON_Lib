@@ -1,7 +1,7 @@
 //
 // Unit Tests: JSON_Lib_Tests_Traverse
 //
-// Description: JSON traversal of unit tests for JSON class
+// Description: Traversal unit tests for JSON class
 // using the Catch2 test framework.
 //
 

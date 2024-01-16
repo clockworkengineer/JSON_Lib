@@ -36,6 +36,7 @@ set(TEST_SOURCES
   ./stringify/JSON_Lib_Tests_Stringify_Simple.cpp
   ./stringify/JSON_Lib_Tests_Stringify_Collection.cpp
   ./stringify/JSON_Lib_Tests_Stringify_Exceptions.cpp
+  ./stringify/JSON_Lib_Tests_Stringify_Bencode.cpp
   ./stringify/JSON_Lib_Tests_Print.cpp
   ./misc/JSON_Lib_Tests_Misc.cpp
   ./misc/JSON_Lib_Tests_Helper.cpp
