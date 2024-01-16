@@ -11,95 +11,51 @@
 using namespace JSON_Lib;
 
 // ========================================================
-// Stringification of simple types to buffer and validation
+// Stringification of simple types to Bencode and validation
 // ========================================================
-TEST_CASE("Check JSON stringification to Bencode of simple types to buffer and check values.",
-  "[JSON][Stringify][Simple][Buffer][Validate]")
+TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stringify][Simple][Bencode]")
 {
-//   const JSON json(std::make_unique<Bencode_Stringify>().release());
-//   SECTION(
-//     "Stringify a string (Test string) to buffer as Bencode and check its value.", "[JSON][Stringify][Simple][Bencode]")
-//   {
-//     const std::string expected{ R"("Test string.")" };
-//     BufferDestination jsonDestination;
-//     json.parse(BufferSource{ expected });
-//     json.stringify(jsonDestination);
-//     REQUIRE(jsonDestination.getBuffer() == expected); 
-//   }
-//   SECTION("Stringify a boolean (true) to buffer and check its value.", "[JSON][Stringify][Simple][Buffer][Validate]")
-//   {
-//     const std::string expected{ "true" };
-//     BufferDestination jsonDestination;
-//     json.parse(BufferSource{ expected });
-//     json.stringify(jsonDestination);
-//     REQUIRE(jsonDestination.getBuffer() == expected);
-//   }
-//   SECTION("Stringify a number (98345) to buffer and check its value.", "[JSON][Stringify][Simple][Buffer][Validate]")
-//   {
-//     const std::string expected{ "98345" };
-//     BufferDestination jsonDestination;
-//     json.parse(BufferSource{ expected });
-//     json.stringify(jsonDestination);
-//     REQUIRE(jsonDestination.getBuffer() == expected);
-//   }
-//   SECTION("Stringify a null to buffer  and check its value.", "[JSON][Stringify][Simple][Buffer][Validate]")
-//   {
-//     const std::string expected{ "null" };
-//     BufferDestination jsonDestination;
-//     json.parse(BufferSource{ expected });
-//     json.stringify(jsonDestination);
-//     REQUIRE(jsonDestination.getBuffer() == expected);
-//   }
+  const JSON json(std::make_unique<Bencode_Stringify>().release());
+  SECTION("Stringify a string (Test string) to Bencode and check its value.", "[JSON][Stringify][String][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"("Test string.")" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == "12:Test string.");
+  }
+  SECTION("Stringify a boolean (true) to Bencode and check its value.", "[JSON][Stringify][Boolean][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "true" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == "4:True");
+  }
+  SECTION("Stringify a boolean (false) to Bencode and check its value.", "[JSON][Stringify][Boolean][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "false" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == "5:False");
+  }
+  SECTION("Stringify a integer (98345) to Bencode and check its value.", "[JSON][Stringify][Integer][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "98345" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == "i98345e");
+  }
+  SECTION("Stringify a floating point (55.6667) to Bencode and check its value.", "[JSON][Stringify][Float][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "55.6667" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == "i55e");
+  }
+  SECTION("Stringify a null to Bencode and check its value.", "[JSON][Stringify][Simple][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ { "null" } });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == "4:null");
+  }
 }
-// ======================================================
-// Stringification of simple types to file and validation
-// ======================================================
-// TEST_CASE("Check JSON stringification of simple types to file and check values.",
-//   "[JSON][Stringify][Simple][File][Validate]")
-// {
-//   const JSON json;
-//   SECTION("Stringify a string (Test string) to file and check its value.", "[JSON][Stringify][Simple][File][Validate]")
-//   {
-//     const std::string expected{ R"("Test string.")" };
-//     const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
-//     std::filesystem::remove(generatedFileName);
-//     FileDestination jsonDestination{ generatedFileName };
-//     json.parse(BufferSource{ expected });
-//     json.print(jsonDestination);
-//     jsonDestination.close();
-//     REQUIRE(JSON::fromFile(generatedFileName) == expected);
-//   }
-//   SECTION("Stringify a boolean (true) to file and check its value.", "[JSON][Stringify][Simple][File][Validate]")
-//   {
-//     const std::string expected{ "true" };
-//     const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
-//     std::filesystem::remove(generatedFileName);
-//     FileDestination jsonDestination{ generatedFileName };
-//     json.parse(BufferSource{ expected });
-//     json.print(jsonDestination);
-//     jsonDestination.close();
-//     REQUIRE(JSON::fromFile(generatedFileName) == expected);
-//   }
-//   SECTION("Stringify a number (98345) to file and check its value.", "[JSON][Stringify][Simple][File][Validate]")
-//   {
-//     const std::string expected{ "98345" };
-//     const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
-//     std::filesystem::remove(generatedFileName);
-//     FileDestination jsonDestination{ generatedFileName };
-//     json.parse(BufferSource{ expected });
-//     json.print(jsonDestination);
-//     jsonDestination.close();
-//     REQUIRE(JSON::fromFile(generatedFileName) == expected);
-//   }
-//   SECTION("Stringify a null to file and check its value.", "[JSON][Stringify][Simple][File][Validate]")
-//   {
-//     const std::string expected{ "null" };
-//     const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
-//     std::filesystem::remove(generatedFileName);
-//     FileDestination jsonDestination{ generatedFileName };
-//     json.parse(BufferSource{ expected });
-//     json.print(jsonDestination);
-//     jsonDestination.close();
-//     REQUIRE(JSON::fromFile(generatedFileName) == expected);
-//   }
-// }

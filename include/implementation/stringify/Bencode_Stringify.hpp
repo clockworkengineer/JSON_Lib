@@ -25,6 +25,8 @@ public:
   ~Bencode_Stringify() = default;
 
   virtual void stringify(const JNode &jNode, IDestination &destination, long indent) const override;
+  virtual long getIndent() const override;
+  virtual void setIndent(long indent) override;
 
 private:
   // Stringify Bencode

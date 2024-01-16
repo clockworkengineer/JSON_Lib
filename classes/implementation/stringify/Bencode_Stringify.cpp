@@ -18,28 +18,45 @@ namespace JSON_Lib {
 /// </summary>
 /// <param name="jNode">Number JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void Bencode_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination) const {}
+void Bencode_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination) const
+{
+
+  destination.add("i" + std::to_string(JRef<Number>(jNode).value<int>()) + "e");
+}
 
 /// <summary>
 /// Convert String JNode to JSON on destination stream.
 /// </summary>
 /// <param name="jNode">String JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void Bencode_Stringify::stringifyString(const JNode &jNode, IDestination &destination) const {}
+void Bencode_Stringify::stringifyString(const JNode &jNode, IDestination &destination) const
+{
+  destination.add(
+    std::to_string(static_cast<int>(JRef<String>(jNode).value().length())) + ":" + JRef<String>(jNode).value());
+}
 
 /// <summary>
 /// Convert Boolean JNode to JSON on destination stream.
 /// </summary>
 /// <param name="jNode">Boolean JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void Bencode_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination) const {}
+void Bencode_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination) const
+{
+  if (JRef<Boolean>(jNode).value()) {
+    destination.add("4:True");
+  } else {
+    destination.add("5:False");
+  }
+}
 
 /// <summary>
 /// Convert Null JNode to JSON on destination stream.
 /// </summary>
 /// <param name="jNode">Null JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void Bencode_Stringify::stringifyNull(const JNode &jNode, IDestination &destination) const {}
+void Bencode_Stringify::stringifyNull(const JNode &jNode, IDestination &destination) const {
+  destination.add("4:null");
+}
 
 /// <summary>
 /// Convert Hole JNode to JSON on destination stream.
@@ -91,4 +108,6 @@ void Bencode_Stringify::stringify(const JNode &jNode, IDestination &destination,
     throw JSON::Error("Unknown JNode type encountered during stringification.");
   }
 }
+long Bencode_Stringify::getIndent() const { return (0); }
+void Bencode_Stringify::setIndent(long indent) {}
 }// namespace JSON_Lib
