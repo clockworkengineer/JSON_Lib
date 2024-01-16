@@ -1,7 +1,7 @@
 //
 // Class: Bencode_Stringify
 //
-// Description:
+// Description: Stringify JNode tree to Bencode on destination stream.
 //
 // Dependencies: C++20 - Language standard features used.
 //
@@ -14,21 +14,21 @@
 namespace JSON_Lib {
 
 /// <summary>
-/// Convert Number JNode to JSON on destination stream.
+/// Convert Number JNode to Bencode on destination stream.
 /// </summary>
 /// <param name="jNode">Number JNode.</param>
-/// <param name="destination">Destination stream for JSON.</param>
+/// <param name="destination">Destination stream for Bencode.</param>
 void Bencode_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination) const
 {
-
+  // All numbers to rounded integers
   destination.add("i" + std::to_string(JRef<Number>(jNode).value<int>()) + "e");
 }
 
 /// <summary>
-/// Convert String JNode to JSON on destination stream.
+/// Convert String JNode to Bencode on destination stream.
 /// </summary>
 /// <param name="jNode">String JNode.</param>
-/// <param name="destination">Destination stream for JSON.</param>
+/// <param name="destination">Destination stream for Bencode.</param>
 void Bencode_Stringify::stringifyString(const JNode &jNode, IDestination &destination) const
 {
   destination.add(
@@ -36,10 +36,10 @@ void Bencode_Stringify::stringifyString(const JNode &jNode, IDestination &destin
 }
 
 /// <summary>
-/// Convert Boolean JNode to JSON on destination stream.
+/// Convert Boolean JNode to Bencode on destination stream.
 /// </summary>
 /// <param name="jNode">Boolean JNode.</param>
-/// <param name="destination">Destination stream for JSON.</param>
+/// <param name="destination">Destination stream for Bencode.</param>
 void Bencode_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination) const
 {
   if (JRef<Boolean>(jNode).value()) {
@@ -50,34 +50,35 @@ void Bencode_Stringify::stringifyBoolean(const JNode &jNode, IDestination &desti
 }
 
 /// <summary>
-/// Convert Null JNode to JSON on destination stream.
+/// Convert Null JNode to Bencode on destination stream.
 /// </summary>
 /// <param name="jNode">Null JNode.</param>
-/// <param name="destination">Destination stream for JSON.</param>
-void Bencode_Stringify::stringifyNull(const JNode &jNode, IDestination &destination) const {
+/// <param name="destination">Destination stream for Bencode.</param>
+void Bencode_Stringify::stringifyNull(const JNode &jNode, IDestination &destination) const
+{
   destination.add("4:null");
 }
 
 /// <summary>
-/// Convert Hole JNode to JSON on destination stream.
+/// Convert Hole JNode to Bencode on destination stream.
 /// </summary>
 /// <param name="jNode">Hole JNode.</param>
-/// <param name="destination">Destination stream for JSON.</param>
+/// <param name="destination">Destination stream for Bencode.</param>
 void Bencode_Stringify::stringifyHole(const JNode &jNode, IDestination &destination) const {}
 
 /// <summary>
-/// Convert Object JNode to JSON on destination stream.
+/// Convert Object JNode to Bencode on destination stream.
 /// </summary>
 /// <param name="jNode">Object JNode.</param>
-/// <param name="destination">Destination stream for JSON.</param>
+/// <param name="destination">Destination stream for Bencode.</param>
 /// <param name="indent">Current print indentation.</param>
 void Bencode_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const {}
 
 /// <summary>
-/// Convert Array JNode to JSON on destination stream.
+/// Convert Array JNode to Bencode on destination stream.
 /// </summary>
 /// <param name="jNode">Array JNode.</param>
-/// <param name="destination">Destination stream for JSON.</param>
+/// <param name="destination">Destination stream for Bencode.</param>
 /// <param name="indent">Current print indentation.</param>
 void Bencode_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const {}
 
