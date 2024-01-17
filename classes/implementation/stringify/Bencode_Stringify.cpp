@@ -72,7 +72,15 @@ void Bencode_Stringify::stringifyHole(const JNode &jNode, IDestination &destinat
 /// <param name="jNode">Object JNode.</param>
 /// <param name="destination">Destination stream for Bencode.</param>
 /// <param name="indent">Current print indentation.</param>
-void Bencode_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const {}
+void Bencode_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const
+{
+  destination.add('d');
+  for (auto &entry : JRef<Object>(jNode).value()) {
+    stringifyString(entry.getKey(), destination);
+    stringify(entry.getJNode(), destination, 0);
+  }
+  destination.add("e");
+}
 
 /// <summary>
 /// Convert Array JNode to Bencode on destination stream.
