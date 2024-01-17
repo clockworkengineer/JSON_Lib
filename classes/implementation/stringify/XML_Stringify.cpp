@@ -1,7 +1,7 @@
 //
 // Class: XML_Stringify
 //
-// Description: Stringify JNode tree to Bencode on destination stream.
+// Description: Stringify JNode tree to XML on destination stream.
 //
 // Dependencies: C++20 - Language standard features used.
 //
@@ -14,10 +14,10 @@
 namespace JSON_Lib {
 
 /// <summary>
-/// Convert Number JNode to Bencode on destination stream.
+/// Convert Number JNode to XML on destination stream.
 /// </summary>
 /// <param name="jNode">Number JNode.</param>
-/// <param name="destination">Destination stream for Bencode.</param>
+/// <param name="destination">Destination stream for XML.</param>
 void XML_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination) const
 {
   // All numbers to rounded integers
@@ -25,76 +25,72 @@ void XML_Stringify::stringifyNumber(const JNode &jNode, IDestination &destinatio
 }
 
 /// <summary>
-/// Convert String JNode to Bencode on destination stream.
+/// Convert String JNode to XML on destination stream.
 /// </summary>
 /// <param name="jNode">String JNode.</param>
-/// <param name="destination">Destination stream for Bencode.</param>
+/// <param name="destination">Destination stream for XML.</param>
 void XML_Stringify::stringifyString(const JNode &jNode, IDestination &destination) const
 {
-  destination.add(
-    std::to_string(static_cast<int>(JRef<String>(jNode).value().length())) + ":" + JRef<String>(jNode).value());
+  destination.add(JRef<String>(jNode).value());
 }
 
 /// <summary>
-/// Convert Boolean JNode to Bencode on destination stream.
+/// Convert Boolean JNode to XML on destination stream.
 /// </summary>
 /// <param name="jNode">Boolean JNode.</param>
-/// <param name="destination">Destination stream for Bencode.</param>
+/// <param name="destination">Destination stream for XML.</param>
 void XML_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination) const
 {
-  if (JRef<Boolean>(jNode).value()) {
-    destination.add("4:True");
-  } else {
-    destination.add("5:False");
-  }
+  // if (JRef<Boolean>(jNode).value()) {
+  //   destination.add("4:True");
+  // } else {
+  //   destination.add("5:False");
+  // }
 }
 
 /// <summary>
-/// Convert Null JNode to Bencode on destination stream.
+/// Convert Null JNode to XML on destination stream.
 /// </summary>
 /// <param name="jNode">Null JNode.</param>
-/// <param name="destination">Destination stream for Bencode.</param>
-void XML_Stringify::stringifyNull(const JNode &jNode, IDestination &destination) const
-{
-  destination.add("4:null");
-}
+/// <param name="destination">Destination stream for XML.</param>
+void XML_Stringify::stringifyNull(const JNode &jNode, IDestination &destination) const { destination.add("4:null"); }
 
 /// <summary>
-/// Convert Hole JNode to Bencode on destination stream.
+/// Convert Hole JNode to XML on destination stream.
 /// </summary>
 /// <param name="jNode">Hole JNode.</param>
-/// <param name="destination">Destination stream for Bencode.</param>
+/// <param name="destination">Destination stream for XML.</param>
 void XML_Stringify::stringifyHole(const JNode &jNode, IDestination &destination) const {}
 
 /// <summary>
-/// Convert Object JNode to Bencode on destination stream.
+/// Convert Object JNode to XML on destination stream.
 /// </summary>
 /// <param name="jNode">Object JNode.</param>
-/// <param name="destination">Destination stream for Bencode.</param>
+/// <param name="destination">Destination stream for XML.</param>
 /// <param name="indent">Current print indentation.</param>
 void XML_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const
 {
-  destination.add('d');
-  for (auto &entry : JRef<Object>(jNode).value()) {
-    stringifyString(entry.getKey(), destination);
-    stringify(entry.getJNode(), destination, 0);
-  }
-  destination.add("e");
+  // destination.add('d');
+  // for (auto &entry : JRef<Object>(jNode).value()) {
+  //   stringifyString(entry.getKey(), destination);
+  //   stringifyXML(entry.getJNode(), destination, 0);
+  // }
+  // destination.add("e");
 }
 
 /// <summary>
-/// Convert Array JNode to Bencode on destination stream.
+/// Convert Array JNode to XML on destination stream.
 /// </summary>
 /// <param name="jNode">Array JNode.</param>
-/// <param name="destination">Destination stream for Bencode.</param>
+/// <param name="destination">Destination stream for XML.</param>
 /// <param name="indent">Current print indentation.</param>
 void XML_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const
 {
-  destination.add('l');
-  if (!JRef<Array>(jNode).value().empty()) {
-    for (auto &entry : JRef<Array>(jNode).value()) { stringify(entry, destination, 0); }
-  }
-  destination.add("e");
+  // destination.add('l');
+  // if (!JRef<Array>(jNode).value().empty()) {
+  //   for (auto &entry : JRef<Array>(jNode).value()) { stringifyXML(entry, destination, 0); }
+  // }
+  // destination.add("e");
 }
 
 /// <summary>
@@ -104,7 +100,7 @@ void XML_Stringify::stringifyArray(const JNode &jNode, IDestination &destination
 /// <param name=jNode>JNode structure to be traversed.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void XML_Stringify::stringify(const JNode &jNode, IDestination &destination, long indent) const
+void XML_Stringify::stringifyXML(const JNode &jNode, IDestination &destination, long indent) const
 {
   if (jNode.isNumber()) {
     stringifyNumber(jNode, destination);
@@ -123,6 +119,21 @@ void XML_Stringify::stringify(const JNode &jNode, IDestination &destination, lon
   } else {
     throw JSON::Error("Unknown JNode type encountered during stringification.");
   }
+}
+
+/// <summary>
+/// Recursively traverse JNode structure encoding it into JSON string on
+/// the destination stream passed in.
+/// </summary>
+/// <param name=jNode>JNode structure to be traversed.</param>
+/// <param name=destination>Destination stream for stringified JSON.</param>
+/// <param name="indent">Current print indentation.</param>
+void XML_Stringify::stringify(const JNode &jNode, IDestination &destination, long indent) const
+{
+  destination.add("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+  destination.add("<root>");
+  stringifyXML(jNode, destination, 0);
+  destination.add("</root>");
 }
 
 long XML_Stringify::getIndent() const { return (0); }

@@ -36,6 +36,7 @@ private:
   void stringifyHole(const JNode &jNode, IDestination &destination) const;
   void stringifyObject(const JNode &jNode, IDestination &destination, long indent) const;
   void stringifyArray(const JNode &jNode, IDestination &destination, long indent) const;
+    void stringifyXML(const JNode &jNode, IDestination &destination, long indent) const;
 };
 
 }// namespace JSON_Lib
