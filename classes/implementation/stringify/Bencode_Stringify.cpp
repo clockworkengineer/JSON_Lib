@@ -80,7 +80,14 @@ void Bencode_Stringify::stringifyObject(const JNode &jNode, IDestination &destin
 /// <param name="jNode">Array JNode.</param>
 /// <param name="destination">Destination stream for Bencode.</param>
 /// <param name="indent">Current print indentation.</param>
-void Bencode_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const {}
+void Bencode_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const
+{
+  destination.add('l');
+  if (!JRef<Array>(jNode).value().empty()) {
+    for (auto &entry : JRef<Array>(jNode).value()) { stringify(entry, destination, 0); }
+  }
+  destination.add("e");
+}
 
 /// <summary>
 /// Recursively traverse JNode structure encoding it into JSON string on

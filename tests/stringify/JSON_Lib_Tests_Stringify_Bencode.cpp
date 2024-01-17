@@ -58,4 +58,11 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == "4:null");
   }
+  SECTION("Stringify an array to Bencode and check its value.", "[JSON][Stringify][Array][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ { "[1,444,555,666,67.99]" } });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == "li1ei444ei555ei666ei67ee");
+  }
 }
