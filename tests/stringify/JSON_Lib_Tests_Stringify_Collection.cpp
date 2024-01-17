@@ -32,7 +32,7 @@ TEST_CASE("Check JSON stringification of collection types to a buffer and check 
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
-  SECTION(R"(Stringify an nested object ({"City":"London","Population":[1,2,3,4,5]}) to a buffer and check its value.)",
+  SECTION(R"(Stringify an nested array ({"City":"London","Population":[1,2,3,4,5]}) to a buffer and check its value.)",
     "[JSON][Stringify][Buffer]")
   {
     const std::string expected{ R"({"City":"London","Population":[1,2,3,4,5]})" };
@@ -42,7 +42,7 @@ TEST_CASE("Check JSON stringification of collection types to a buffer and check 
     REQUIRE(jsonDestination.getBuffer() == expected);
   }
   SECTION(
-    R"(Stringify a nested array ([true,"Out of time",7.89043e+18,{"key":4444}]) to a buffer and check its value.)",
+    R"(Stringify a nested object ([true,"Out of time",7.89043e+18,{"key":4444}]) to a buffer and check its value.)",
     "[JSON][Stringify][Buffer]")
   {
     const std::string expected{ R"([true,"Out of time",7.89043e+18,{"key":4444}])" };

@@ -124,6 +124,9 @@ void Bencode_Stringify::stringify(const JNode &jNode, IDestination &destination,
     throw JSON::Error("Unknown JNode type encountered during stringification.");
   }
 }
+
 long Bencode_Stringify::getIndent() const { return (0); }
+
 void Bencode_Stringify::setIndent(long indent) {}
+
 }// namespace JSON_Lib

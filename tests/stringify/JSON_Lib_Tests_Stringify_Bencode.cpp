@@ -1,7 +1,7 @@
 //
-// Unit Tests: JSON_Lib_Tests_Stringify_Simple
+// Unit Tests: JSON_Lib_Tests_Bencode_Stringify
 //
-// Description: Bencode stringification of simple types unit
+// Description: Bencode stringification of simple/collection types unit
 // tests for JSON class using the Catch2 test framework.
 //
 
@@ -10,9 +10,9 @@
 
 using namespace JSON_Lib;
 
-// ========================================================
+// =========================================================
 // Stringification of simple types to Bencode and validation
-// ========================================================
+// =========================================================
 TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stringify][Simple][Bencode]")
 {
   const JSON json(std::make_unique<Bencode_Stringify>().release());
@@ -68,8 +68,25 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
   SECTION("Stringify an object to Bencode and check its value.", "[JSON][Stringify][Object][Bencode]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ {R"({"Age":77,"Name":"Rob"})" } });
+    json.parse(BufferSource{ { R"({"Age":77,"Name":"Rob"})" } });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.getBuffer() == "d3:Agei77e4:Name3:Robe");
+  }
+  SECTION(R"(Stringify an nested array ({"City":"London","Population":[1,2,3,4,5]}) to Bencode and check its value.)",
+    "[JSON][Stringify][Array][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"City":"London","Population":[1,2,3,4,5]})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == "d4:City6:London10:Populationli1ei2ei3ei4ei5eee");
+  }
+  SECTION(
+    R"(Stringify a nested object ([true,"Out of time",7.89043e+18,{"key":4444}]) to a buffer and check its value.)",
+    "[JSON][Stringify][Object][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"([true,"Out of time",7.89043e+18,{"key":4444}])" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer() == "l4:True11:Out of timei-2147483648ed3:keyi4444eee");
   }
 }
