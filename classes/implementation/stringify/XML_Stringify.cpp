@@ -70,13 +70,13 @@ void XML_Stringify::stringifyHole(const JNode &jNode, IDestination &destination)
 /// <param name="indent">Current print indentation.</param>
 void XML_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const
 {
-      for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
-        auto elementName = JRef<String>(jNodeNext.getKey()).value();
-        std::replace(elementName.begin(), elementName.end(), ' ', '-');
-        destination.add("<" + elementName + ">");
-        stringifyXML(jNodeNext.getJNode(), destination, 0);
-        destination.add("</" + elementName + ">");
-      }
+  for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
+    auto elementName = JRef<String>(jNodeNext.getKey()).value();
+    std::replace(elementName.begin(), elementName.end(), ' ', '-');
+    destination.add("<" + elementName + ">");
+    stringifyXML(jNodeNext.getJNode(), destination, 0);
+    destination.add("</" + elementName + ">");
+  }
 }
 
 /// <summary>
@@ -87,13 +87,11 @@ void XML_Stringify::stringifyObject(const JNode &jNode, IDestination &destinatio
 /// <param name="indent">Current print indentation.</param>
 void XML_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const
 {
-  long index = 0;
   if (JRef<Array>(jNode).value().size() > 1) {
     for (const auto &bNodeNext : JRef<Array>(jNode).value()) {
-      destination.add("<Array" + std::to_string(index) + ">");
+      destination.add("<Row>");
       stringifyXML(bNodeNext, destination, 0);
-      destination.add("</Array" + std::to_string(index) + ">");
-      index++;
+      destination.add("</Row>");
     }
   }
 }

@@ -65,7 +65,7 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
     json.stringify(jsonDestination);
     REQUIRE(
       jsonDestination.getBuffer()
-      == R"(<?xml version="1.0" encoding="UTF-8"?><root><Array0>1</Array0><Array1>444</Array1><Array2>555</Array2><Array3>666</Array3><Array4>67</Array4></root>)");
+      == R"(<?xml version="1.0" encoding="UTF-8"?><root><Row>1</Row><Row>444</Row><Row>555</Row><Row>666</Row><Row>67</Row></root>)");
   }
   SECTION("Stringify an object to XML and check its value.", "[JSON][Stringify][Object][XML]")
   {
@@ -83,7 +83,7 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
     json.stringify(jsonDestination);
     REQUIRE(
       jsonDestination.getBuffer()
-      == R"(<?xml version="1.0" encoding="UTF-8"?><root><City>London</City><Population><Array0>1</Array0><Array1>2</Array1><Array2>3</Array2><Array3>4</Array3><Array4>5</Array4></Population></root>)");
+      == R"(<?xml version="1.0" encoding="UTF-8"?><root><City>London</City><Population><Row>1</Row><Row>2</Row><Row>3</Row><Row>4</Row><Row>5</Row></Population></root>)");
   }
   SECTION(
     R"(Stringify a nested object ([true,"Out of time",7.89043e+18,{"key":4444}]) to a buffer and check its
@@ -95,6 +95,6 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
     json.stringify(jsonDestination);
     REQUIRE(
       jsonDestination.getBuffer()
-      == R"(<?xml version="1.0" encoding="UTF-8"?><root><Array0>True</Array0><Array1>Out of time</Array1><Array2>-2147483648</Array2><Array3><key>4444</key></Array3></root>)");
+      == R"(<?xml version="1.0" encoding="UTF-8"?><root><Row>True</Row><Row>Out of time</Row><Row>-2147483648</Row><Row><key>4444</key></Row></root>)");
   }
 }
