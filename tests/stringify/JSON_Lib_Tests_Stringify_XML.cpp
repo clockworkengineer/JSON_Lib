@@ -67,29 +67,34 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
       jsonDestination.getBuffer()
       == R"(<?xml version="1.0" encoding="UTF-8"?><root><Array0>1</Array0><Array1>444</Array1><Array2>555</Array2><Array3>666</Array3><Array4>67</Array4></root>)");
   }
-  //   SECTION("Stringify an object to XML and check its value.", "[JSON][Stringify][Object][XML]")
-  //   {
-  //     BufferDestination jsonDestination;
-  //     json.parse(BufferSource{ { R"({"Age":77,"Name":"Rob"})" } });
-  //     json.stringify(jsonDestination);
-  //     REQUIRE(jsonDestination.getBuffer() == "d3:Agei77e4:Name3:Robe");
-  //   }
-  //   SECTION(R"(Stringify an nested array ({"City":"London","Population":[1,2,3,4,5]}) to XML and check its value.)",
-  //     "[JSON][Stringify][Array][XML]")
-  //   {
-  //     BufferDestination jsonDestination;
-  //     json.parse(BufferSource{ R"({"City":"London","Population":[1,2,3,4,5]})" });
-  //     json.stringify(jsonDestination);
-  //     REQUIRE(jsonDestination.getBuffer() == "d4:City6:London10:Populationli1ei2ei3ei4ei5eee");
-  //   }
-  //   SECTION(
-  //     R"(Stringify a nested object ([true,"Out of time",7.89043e+18,{"key":4444}]) to a buffer and check its
-  //     value.)",
-  //     "[JSON][Stringify][Object][XML]")
-  //   {
-  //     BufferDestination jsonDestination;
-  //     json.parse(BufferSource{ R"([true,"Out of time",7.89043e+18,{"key":4444}])" });
-  //     json.stringify(jsonDestination);
-  //     REQUIRE(jsonDestination.getBuffer() == "l4:True11:Out of timei-2147483648ed3:keyi4444eee");
-  //   }
+  SECTION("Stringify an object to XML and check its value.", "[JSON][Stringify][Object][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ { R"({"Age":77,"Name":"Rob"})" } });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.getBuffer()
+            == R"(<?xml version="1.0" encoding="UTF-8"?><root><Age>77</Age><Name>Rob</Name></root>)");
+  }
+  SECTION(R"(Stringify an nested array ({"City":"London","Population":[1,2,3,4,5]}) to XML and check its value.)",
+    "[JSON][Stringify][Array][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"City":"London","Population":[1,2,3,4,5]})" });
+    json.stringify(jsonDestination);
+    REQUIRE(
+      jsonDestination.getBuffer()
+      == R"(<?xml version="1.0" encoding="UTF-8"?><root><City>London</City><Population><Array0>1</Array0><Array1>2</Array1><Array2>3</Array2><Array3>4</Array3><Array4>5</Array4></Population></root>)");
+  }
+  SECTION(
+    R"(Stringify a nested object ([true,"Out of time",7.89043e+18,{"key":4444}]) to a buffer and check its
+      value.)",
+    "[JSON][Stringify][Object][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"([true,"Out of time",7.89043e+18,{"key":4444}])" });
+    json.stringify(jsonDestination);
+    REQUIRE(
+      jsonDestination.getBuffer()
+      == R"(<?xml version="1.0" encoding="UTF-8"?><root><Array0>True</Array0><Array1>Out of time</Array1><Array2>-2147483648</Array2><Array3><key>4444</key></Array3></root>)");
+  }
 }

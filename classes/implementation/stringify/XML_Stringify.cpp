@@ -70,12 +70,13 @@ void XML_Stringify::stringifyHole(const JNode &jNode, IDestination &destination)
 /// <param name="indent">Current print indentation.</param>
 void XML_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const
 {
-  // destination.add('d');
-  // for (auto &entry : JRef<Object>(jNode).value()) {
-  //   stringifyString(entry.getKey(), destination);
-  //   stringifyXML(entry.getJNode(), destination, 0);
-  // }
-  // destination.add("e");
+      for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
+        auto elementName = JRef<String>(jNodeNext.getKey()).value();
+        std::replace(elementName.begin(), elementName.end(), ' ', '-');
+        destination.add("<" + elementName + ">");
+        stringifyXML(jNodeNext.getJNode(), destination, 0);
+        destination.add("</" + elementName + ">");
+      }
 }
 
 /// <summary>
