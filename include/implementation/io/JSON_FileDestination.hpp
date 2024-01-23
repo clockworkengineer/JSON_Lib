@@ -25,8 +25,10 @@ public:
   {
     if (ch == '\n') {
       destination.write("\r\n", 2);
+      fileSize += 2;
     } else {
       destination.put(ch);
+      fileSize++;
     }
   }
   virtual void add(const std::string &bytes) override
@@ -38,11 +40,15 @@ public:
     if (destination.is_open()) { destination.close(); }
     destination.open(filename.c_str(), std::ios_base::binary | std::ios_base::trunc);
     if (!destination.is_open()) { throw Error("File output stream failed to open or could not be created."); }
+    fileSize = 0;
   }
   void close() { destination.flush(); }
+
+  std::size_t size() { return (fileSize); }
 
 private:
   std::ofstream destination;
   std::string filename;
+  std::size_t fileSize{};
 };
 }// namespace JSON_Lib
