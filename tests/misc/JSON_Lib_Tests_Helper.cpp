@@ -64,5 +64,5 @@ std::string stripWhiteSpace(const std::string &jsonBuffer)
   const JSON_Lib::JSON json;
   BufferDestination destination;
   json.strip(BufferSource{ jsonBuffer }, destination);
-  return (destination.getBuffer());
+  return (destination.toString());
 }

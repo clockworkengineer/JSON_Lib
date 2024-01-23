@@ -54,13 +54,11 @@ void processJSONFile(const std::string &fileName)
   PLOG_INFO << elapsedTime(start, stop) << " microseconds to stringify to buffer.";
   // Parse from buffer
   start = chrono::high_resolution_clock::now();
-  json.parse(js::BufferSource{ jsonDestination.getBuffer() });
+  json.parse(js::BufferSource{ jsonDestination.toString() });
   stop = chrono::high_resolution_clock::now();
   PLOG_INFO << elapsedTime(start, stop) << " microseconds to parse from buffer.";
   // Display contents
-  if (jsonDestination.getBuffer().size() < kMaxFileLengthToDisplay) {
-    PLOG_INFO << "[" << jsonDestination.getBuffer() << "]";
-  }
+  if (jsonDestination.size() < kMaxFileLengthToDisplay) { PLOG_INFO << "[" << jsonDestination.toString() << "]"; }
   PLOG_INFO << "--------------------FILE PROCESSED OK--------------------";
   PLOG_INFO << "Finished " << fileName << ".";
 }

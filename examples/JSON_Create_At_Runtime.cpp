@@ -50,7 +50,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     json["object2"] = { { "currency", "USD" }, { "array", js::JNode{ 23.22, 33, 55, 99.99 } } };
     js::BufferDestination destination;
     json.stringify(destination);
-    PLOG_INFO << destination.getBuffer();
+    PLOG_INFO << destination.toString();
     destination.clear();
     // create JSON using an intialiser list and nesting array/objects using JNode{}.
     js::JSON json2 = { { "pi", 3.141 },
@@ -61,7 +61,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
       { "list", js::JNode{ 1, 0, 2 } },
       { "object", js::JNode{ { "currency", "USD" }, { "value", js::JNode{ 23.22, 33, 55, 99.99 } } } } };
     json2.stringify(destination);
-    PLOG_INFO << destination.getBuffer();
+    PLOG_INFO << destination.toString();
   } catch (std::exception &ex) {
     PLOG_ERROR << "Error: " << ex.what();
   }

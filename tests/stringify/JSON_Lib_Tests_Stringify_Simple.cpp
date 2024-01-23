@@ -23,7 +23,7 @@ TEST_CASE("Check JSON stringification of simple types to buffer and check values
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION("Stringify a boolean (true) to buffer and check its value.", "[JSON][Stringify][Simple][Buffer][Validate]")
   {
@@ -31,7 +31,7 @@ TEST_CASE("Check JSON stringification of simple types to buffer and check values
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION("Stringify a number (98345) to buffer and check its value.", "[JSON][Stringify][Simple][Buffer][Validate]")
   {
@@ -39,7 +39,7 @@ TEST_CASE("Check JSON stringification of simple types to buffer and check values
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION("Stringify a null to buffer  and check its value.", "[JSON][Stringify][Simple][Buffer][Validate]")
   {
@@ -47,7 +47,7 @@ TEST_CASE("Check JSON stringification of simple types to buffer and check values
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
 }
 // ======================================================

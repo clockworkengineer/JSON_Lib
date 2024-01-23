@@ -22,33 +22,33 @@ TEST_CASE("Check IDestination (Buffer) interface.", "[JSON][IDestination][Buffer
   SECTION("Create BufferDestination and get buffer which should be empty.", "[JSON][IDestination][Buffer][Construct]")
   {
     BufferDestination buffer;
-    REQUIRE_FALSE(!buffer.getBuffer().empty());
+    REQUIRE_FALSE(!buffer.size()==0);
   }
   SECTION("Create BufferDestination and add one character.", "[JSON][IDestination][Buffer][Add]")
   {
     BufferDestination buffer;
     buffer.add('i');
-    REQUIRE(buffer.getBuffer().size() == 1);
+    REQUIRE(buffer.size() == 1);
   }
   SECTION("Create BufferDestination and add an integer string and check result.", "[JSON][IDestination][Buffer][Add]")
   {
     BufferDestination buffer;
     buffer.add("65767");
-    REQUIRE(buffer.getBuffer().size() == 5);
-    REQUIRE(buffer.getBuffer() == ("65767"));
+    REQUIRE(buffer.size() == 5);
+    REQUIRE(buffer.toString() == ("65767"));
   }
   SECTION("Create BufferDestination, add to it, clear buffer and then add to it again and check result.",
     "[JSON][IDestination][Buffer][Clear]")
   {
     BufferDestination buffer;
     buffer.add("65767");
-    REQUIRE(buffer.getBuffer().size() == 5);
-    REQUIRE(buffer.getBuffer() == ("65767"));
+    REQUIRE(buffer.size() == 5);
+    REQUIRE(buffer.toString() == ("65767"));
     buffer.clear();
-    REQUIRE(buffer.getBuffer().size() == 0);
+    REQUIRE(buffer.size() == 0);
     buffer.add("65767");
-    REQUIRE(buffer.getBuffer().size() == 5);
-    REQUIRE(buffer.getBuffer() == ("65767"));
+    REQUIRE(buffer.size() == 5);
+    REQUIRE(buffer.toString() == ("65767"));
   }
   SECTION("Create BufferDestination and and add content with linefeeds.", "[JSON][IDestination][Buffer][Linefeed]")
   {
@@ -56,8 +56,8 @@ TEST_CASE("Check IDestination (Buffer) interface.", "[JSON][IDestination][Buffer
     buffer.add("65767\n");
     buffer.add("22222\n");
     buffer.add("33333\n");
-    REQUIRE(buffer.getBuffer().size() == 18);
-    REQUIRE(buffer.getBuffer() == "65767\n22222\n33333\n");
+    REQUIRE(buffer.size() == 18);
+    REQUIRE(buffer.toString() == "65767\n22222\n33333\n");
   }
 }
 // ====

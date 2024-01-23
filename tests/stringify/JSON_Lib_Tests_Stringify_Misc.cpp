@@ -23,7 +23,7 @@ TEST_CASE("Check JSON stringification of a list of example JSON files.", "[JSON]
     BufferDestination jsonDestination;
     json.parse(jsonSource);
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == stripWhiteSpace(jsonFileBuffer));
+    REQUIRE(jsonDestination.toString() == stripWhiteSpace(jsonFileBuffer));
   }
   SECTION("Stringify to file and check value.", "[JSON][Stringify][File]")
   {

@@ -98,7 +98,7 @@ TEST_CASE("Check JSON object creation api.", "[JSON][Create][Object]")
     REQUIRE(JRef<Null>(json.root()["nothing"]["extra"]["more"]).getNull() == nullptr);
     BufferDestination destinationBuffer;
     REQUIRE_NOTHROW(json.stringify(destinationBuffer));
-    REQUIRE(destinationBuffer.getBuffer() == R"({"nothing":{"extra":{"more":null}}})");
+    REQUIRE(destinationBuffer.toString() == R"({"nothing":{"extra":{"more":null}}})");
   }
 }
 TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
@@ -195,7 +195,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
     REQUIRE(JRef<Null>(json.root()[0][0]).getNull() == nullptr);
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
-    REQUIRE(jsonDestination.getBuffer() == R"([[null]])");
+    REQUIRE(jsonDestination.toString() == R"([[null]])");
   }
   SECTION("Create array with free spaces string at the base and stringify.", "[JSON][Create][Array][null]")
   {
@@ -205,7 +205,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
     REQUIRE(JRef<String>(json.root()[5]).value() == "test");
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
-    REQUIRE(jsonDestination.getBuffer() == R"([null,null,null,null,null,"test"])");
+    REQUIRE(jsonDestination.toString() == R"([null,null,null,null,null,"test"])");
   }
   SECTION("Create array with free spaces add an number at the base and stringify.", "[JSON][Create][Array][null]")
   {
@@ -218,7 +218,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
     REQUIRE(JRef<Number>(json.root()[3]).value<int>() == 15);
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
-    REQUIRE(jsonDestination.getBuffer() == R"([null,null,null,15,null,"test"])");
+    REQUIRE(jsonDestination.toString() == R"([null,null,null,15,null,"test"])");
   }
   SECTION("Create array with initializer list assignment.", "[JSON][Create][Array][initializer]")
   {
@@ -243,7 +243,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
     REQUIRE(JRef<Null>(json[5][7]).getNull() == nullptr);
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
-    REQUIRE(jsonDestination.getBuffer()
+    REQUIRE(jsonDestination.toString()
             == R"([null,null,null,null,null,[1.0,2.0,3,4.333,"5.0","test test test test",false,null]])");
   }
 }
@@ -258,7 +258,7 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
     json["nothing"] = nullptr;
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
-    REQUIRE(jsonDestination.getBuffer() == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null})");
+    REQUIRE(jsonDestination.toString() == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null})");
   }
   SECTION("A two level object.", "[JSON][Create][Complex]")
   {
@@ -270,7 +270,7 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
     json["answer"]["everything"] = 42;
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
-    REQUIRE(jsonDestination.getBuffer()
+    REQUIRE(jsonDestination.toString()
             == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42}})");
   }
   SECTION("A three level object.", "[JSON][Create][Complex]")
@@ -284,7 +284,7 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
     REQUIRE(
-      jsonDestination.getBuffer()
+      jsonDestination.toString()
       == R"({"pi":3.141,"happy":true,"name":[null,null,null,null,null,"Niels"],"nothing":null,"answer":{"everything":[null,null,null,null,null,42]}})");
   }
   SECTION("Object with sub array/object create using initializer list.", "[JSON][Create][Complex]")
@@ -300,7 +300,7 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
     REQUIRE(
-      jsonDestination.getBuffer()
+      jsonDestination.toString()
       == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2],"object":{"currency":"USD","value":42.99}})");
   }
   SECTION(
@@ -319,7 +319,7 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
     REQUIRE(
-      jsonDestination.getBuffer()
+      jsonDestination.toString()
       == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2],"object":{"currency":"USD","value":[1,2,3,4,5]}})");
   }
   SECTION(
@@ -338,7 +338,7 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
     REQUIRE(
-      jsonDestination.getBuffer()
+      jsonDestination.toString()
       == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2],"object":{"currency":"USD","value":{"key1":22,"key2":99.899}}})");
   }
   SECTION("Array creation completely using a initializer list.", "[JSON][Create][Complex][Initializer")
@@ -346,14 +346,14 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
     JSON json = { 1, 2, 3, 4 };
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
-    REQUIRE(jsonDestination.getBuffer() == R"([1,2,3,4])");
+    REQUIRE(jsonDestination.toString() == R"([1,2,3,4])");
   }
   SECTION("Object creation completely using a initializer list.", "[JSON][Create][Complex][Initializer")
   {
     JSON json = { { "currency", "USD" }, { "value", 42.99 } };
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
-    REQUIRE(jsonDestination.getBuffer() == R"({"currency":"USD","value":42.99})");
+    REQUIRE(jsonDestination.toString() == R"({"currency":"USD","value":42.99})");
   }
   SECTION("Object creation completely using a nested initializer list.", "[JSON][Create][Complex][Initializer")
   {
@@ -369,7 +369,7 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
     REQUIRE(
-      jsonDestination.getBuffer()
+      jsonDestination.toString()
       == R"({"pi":3.141,"happy":true,"name":"Niels","nothing":null,"answer":{"everything":42},"list":[1,0,2],"object":{"currency":"USD","value":42.99}})");
   }
 }

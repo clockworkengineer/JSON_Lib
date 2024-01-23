@@ -27,7 +27,7 @@ TEST_CASE("Check Check printing of JSON to a buffer.", "[JSON][Print][Buffer]")
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION("Print a simple object to a buffer.", "[JSON][Print][Object][Buffer]")
   {
@@ -40,7 +40,7 @@ TEST_CASE("Check Check printing of JSON to a buffer.", "[JSON][Print][Buffer]")
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION("Print a nested array to a buffer.", "[JSON][Print][Array][Buffer]")
   {
@@ -67,7 +67,7 @@ TEST_CASE("Check Check printing of JSON to a buffer.", "[JSON][Print][Buffer]")
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION("Print a nested object to a buffer.", "[JSON][Print][Object][Buffer]")
   {
@@ -85,7 +85,7 @@ TEST_CASE("Check Check printing of JSON to a buffer.", "[JSON][Print][Buffer]")
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION("Print a complex JSON object to a buffer.", "[JSON][Print][Object][Buffer]")
   {
@@ -117,7 +117,7 @@ TEST_CASE("Check Check printing of JSON to a buffer.", "[JSON][Print][Buffer]")
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
 }
 // ========================================
@@ -270,7 +270,7 @@ TEST_CASE("Check Check setting of print indentation.", "[JSON][Print][Indent]")
     json.setIndent(8);
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION("Set ident to 8 and print JSON to a file.", "[JSON][Print][Ident][File]")
   {
@@ -303,7 +303,7 @@ TEST_CASE("Check Check setting of print indentation.", "[JSON][Print][Indent]")
     json.setIndent(0);
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION("Set ident to -4 and trigger invalid indent expection.", "[JSON][Print][Ident][Exception]")
   {
@@ -326,7 +326,7 @@ TEST_CASE("Check JSON print of list of example JSON files.", "[JSON][Print]")
     BufferDestination jsonDestination;
     json.parse(jsonSource);
     json.print(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == jsonFileBuffer);
+    REQUIRE(jsonDestination.toString() == jsonFileBuffer);
   }
   SECTION("Print to file and check value.", "[JSON][Print][File]")
   {

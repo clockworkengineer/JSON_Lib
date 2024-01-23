@@ -23,7 +23,7 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     json.parse(BufferSource{ expected });
     REQUIRE(JRef<String>(json.root()).value() == "Test String / \t ");
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION(R"(Stringify JSON string with escapes '\t' to buffer and check value.)", "[JSON][Stringify][Escapes]")
   {
@@ -31,7 +31,7 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION(R"(Stringify JSON string with escapes '\"' to buffer and check value.)", "[JSON][Stringify][Escapes]")
   {
@@ -39,7 +39,7 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION(R"(Stringify JSON string with escapes '\\' to buffer and check value.)", "[JSON][Stringify][Escapes]")
   {
@@ -47,7 +47,7 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION(R"(Stringify JSON string with escapes '\b' to buffer and check value.)", "[JSON][Stringify][Escapes]")
   {
@@ -55,7 +55,7 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION(R"(Stringify JSON string with escapes '\/' to buffer and check value.)", "[JSON][Stringify][Escapes]")
   {
@@ -64,7 +64,7 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == R"("Test String / ")");
+    REQUIRE(jsonDestination.toString() == R"("Test String / ")");
   }
   SECTION("Stringify JSON string with escapes '\\f' to buffer and check value.", "[JSON][Stringify][Escapes]")
   {
@@ -72,7 +72,7 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION(R"(Stringify JSON string with escapes '\n' to buffer and check value.)", "[JSON][Stringify][Escapes]")
   {
@@ -80,7 +80,7 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION(R"(Stringify JSON string with escapes '\r' to buffer and check value.)", "[JSON][Stringify][Escapes]")
   {
@@ -88,7 +88,7 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION(R"(Stringify JSON string with escapes '\t' to buffer and check value.)", "[JSON][Stringify][Escapes]")
   {
@@ -96,7 +96,7 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION(R"(Stringify JSON string with escapes '\u0123' to buffer and check value.)", "[JSON][Stringify][Escapes]")
   {
@@ -104,7 +104,7 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION(
     R"(Stringify JSON string with escapes '\u0123 \u0456' to buffer and check value.)", "[JSON][Stringify][Escapes]")
@@ -113,6 +113,6 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
 }

@@ -21,56 +21,56 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     BufferDestination jsonDestination;
     json.parse(BufferSource{ R"("Test string.")" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == "12:Test string.");
+    REQUIRE(jsonDestination.toString() == "12:Test string.");
   }
   SECTION("Stringify a boolean (true) to Bencode and check its value.", "[JSON][Stringify][Boolean][Bencode]")
   {
     BufferDestination jsonDestination;
     json.parse(BufferSource{ "true" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == "4:True");
+    REQUIRE(jsonDestination.toString() == "4:True");
   }
   SECTION("Stringify a boolean (false) to Bencode and check its value.", "[JSON][Stringify][Boolean][Bencode]")
   {
     BufferDestination jsonDestination;
     json.parse(BufferSource{ "false" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == "5:False");
+    REQUIRE(jsonDestination.toString() == "5:False");
   }
   SECTION("Stringify a integer (98345) to Bencode and check its value.", "[JSON][Stringify][Integer][Bencode]")
   {
     BufferDestination jsonDestination;
     json.parse(BufferSource{ "98345" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == "i98345e");
+    REQUIRE(jsonDestination.toString() == "i98345e");
   }
   SECTION("Stringify a floating point (55.6667) to Bencode and check its value.", "[JSON][Stringify][Float][Bencode]")
   {
     BufferDestination jsonDestination;
     json.parse(BufferSource{ "55.6667" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == "i55e");
+    REQUIRE(jsonDestination.toString() == "i55e");
   }
   SECTION("Stringify a null to Bencode and check its value.", "[JSON][Stringify][Simple][Bencode]")
   {
     BufferDestination jsonDestination;
     json.parse(BufferSource{ { "null" } });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == "4:null");
+    REQUIRE(jsonDestination.toString() == "4:null");
   }
   SECTION("Stringify an array to Bencode and check its value.", "[JSON][Stringify][Array][Bencode]")
   {
     BufferDestination jsonDestination;
     json.parse(BufferSource{ { "[1,444,555,666,67.99]" } });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == "li1ei444ei555ei666ei67ee");
+    REQUIRE(jsonDestination.toString() == "li1ei444ei555ei666ei67ee");
   }
   SECTION("Stringify an object to Bencode and check its value.", "[JSON][Stringify][Object][Bencode]")
   {
     BufferDestination jsonDestination;
     json.parse(BufferSource{ { R"({"Age":77,"Name":"Rob"})" } });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == "d3:Agei77e4:Name3:Robe");
+    REQUIRE(jsonDestination.toString() == "d3:Agei77e4:Name3:Robe");
   }
   SECTION(R"(Stringify an nested array ({"City":"London","Population":[1,2,3,4,5]}) to Bencode and check its value.)",
     "[JSON][Stringify][Array][Bencode]")
@@ -78,7 +78,7 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     BufferDestination jsonDestination;
     json.parse(BufferSource{ R"({"City":"London","Population":[1,2,3,4,5]})" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == "d4:City6:London10:Populationli1ei2ei3ei4ei5eee");
+    REQUIRE(jsonDestination.toString() == "d4:City6:London10:Populationli1ei2ei3ei4ei5eee");
   }
   SECTION(
     R"(Stringify a nested object ([true,"Out of time",7.89043e+18,{"key":4444}]) to a buffer and check its value.)",
@@ -87,6 +87,6 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     BufferDestination jsonDestination;
     json.parse(BufferSource{ R"([true,"Out of time",7.89043e+18,{"key":4444}])" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == "l4:True11:Out of timei-2147483648ed3:keyi4444eee");
+    REQUIRE(jsonDestination.toString() == "l4:True11:Out of timei-2147483648ed3:keyi4444eee");
   }
 }

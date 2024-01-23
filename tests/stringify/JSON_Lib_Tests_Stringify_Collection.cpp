@@ -22,7 +22,7 @@ TEST_CASE("Check JSON stringification of collection types to a buffer and check 
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION(R"(Stringify an array ([999,"Time",null,true] to a buffer and check its value.)", "[JSON][Stringify][Buffer]")
   {
@@ -30,7 +30,7 @@ TEST_CASE("Check JSON stringification of collection types to a buffer and check 
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION(R"(Stringify an nested array ({"City":"London","Population":[1,2,3,4,5]}) to a buffer and check its value.)",
     "[JSON][Stringify][Buffer]")
@@ -39,7 +39,7 @@ TEST_CASE("Check JSON stringification of collection types to a buffer and check 
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
   SECTION(
     R"(Stringify a nested object ([true,"Out of time",7.89043e+18,{"key":4444}]) to a buffer and check its value.)",
@@ -49,7 +49,7 @@ TEST_CASE("Check JSON stringification of collection types to a buffer and check 
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == expected);
+    REQUIRE(jsonDestination.toString() == expected);
   }
 }
 // ============================================================

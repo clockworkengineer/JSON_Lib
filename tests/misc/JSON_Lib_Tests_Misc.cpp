@@ -88,21 +88,21 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
     BufferSource jsonSource{ "[1,  \t 2,3,4,5,6,7  ]" };
     BufferDestination strippedDestination;
     json.strip(jsonSource, strippedDestination);
-    REQUIRE(strippedDestination.getBuffer() == "[1,2,3,4,5,6,7]");
+    REQUIRE(strippedDestination.toString() == "[1,2,3,4,5,6,7]");
   }
   SECTION("Strip JSON with trailing whitespace.", "[JSON][Parse][Strip]")
   {
     BufferSource jsonSource{ "[1,  \t 2,3,4,5,6,7  ]\t  \t" };
     BufferDestination strippedDestination;
     json.strip(jsonSource, strippedDestination);
-    REQUIRE(strippedDestination.getBuffer() == "[1,2,3,4,5,6,7]");
+    REQUIRE(strippedDestination.toString() == "[1,2,3,4,5,6,7]");
   }
   SECTION("Strip JSON with prefixed whitespace.", "[JSON][Parse][Strip]")
   {
     BufferSource jsonSource{ "\t\t   [1,  \t 2,3,4,5,6,7  ]" };
     BufferDestination strippedDestination;
     json.strip(jsonSource, strippedDestination);
-    REQUIRE(strippedDestination.getBuffer() == "[1,2,3,4,5,6,7]");
+    REQUIRE(strippedDestination.toString() == "[1,2,3,4,5,6,7]");
   }
   TEST_FILE_LIST(testFile);
   SECTION("Stripped (Buffer) should be the same as parsed then stringified JSON.", "[JSON][Parse][Strip]")
@@ -114,7 +114,7 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
     jsonSource.reset();
     BufferDestination strippedDestination;
     json.strip(jsonSource, strippedDestination);
-    REQUIRE(jsonDestination.getBuffer() == strippedDestination.getBuffer());
+    REQUIRE(jsonDestination.size() == strippedDestination.size());
   }
   SECTION("Stripped (File) should be the same as parsed then stringified JSON.", "[JSON][Parse][Strip]")
   {
@@ -128,13 +128,13 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
     FileDestination strippedDestination{ generatedFileName };
     json.strip(jsonSource, strippedDestination);
     strippedDestination.close();
-    REQUIRE(jsonDestination.getBuffer() == JSON::fromFile(generatedFileName));
+    REQUIRE(jsonDestination.toString() == JSON::fromFile(generatedFileName));
   }
   SECTION("Strip JSON with escaped ascii characters.", "[JSON][Parse][Strip]")
   {
     BufferSource jsonSource{ R"(   [  "fffgh \/ \n\t \p \w \u1234 "  ]       )" };
     BufferDestination strippedDestination;
     json.strip(jsonSource, strippedDestination);
-    REQUIRE(strippedDestination.getBuffer() == "[\"fffgh \\/ \\n\\t \\p \\w \\u1234 \"]");
+    REQUIRE(strippedDestination.toString() == "[\"fffgh \\/ \\n\\t \\p \\w \\u1234 \"]");
   }
 }

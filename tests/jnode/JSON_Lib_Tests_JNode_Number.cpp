@@ -213,7 +213,7 @@ TEST_CASE("Check JNode Number floating point precision.", "[JSON][JNode][Number]
     BufferDestination jsonDestination;
     Number::setPrecision(6);
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.0683,"longitude":-70.7416})");
+    REQUIRE(jsonDestination.toString() == R"({"latitude":39.0683,"longitude":-70.7416})");
   }
   SECTION("Floating point precision to 7.", "[JSON][JNode][Number][Float][Precision]")
   {
@@ -226,7 +226,7 @@ TEST_CASE("Check JNode Number floating point precision.", "[JSON][JNode][Number]
     Number::setPrecision(7);
     json.stringify(jsonDestination);
     Number::setPrecision(6);
-    REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.06834,"longitude":-70.74162})");
+    REQUIRE(jsonDestination.toString() == R"({"latitude":39.06834,"longitude":-70.74162})");
   }
   SECTION("Floating point precision to 8.", "[JSON][JNode][Number][Float][Precision]")
   {
@@ -239,7 +239,7 @@ TEST_CASE("Check JNode Number floating point precision.", "[JSON][JNode][Number]
     Number::setPrecision(8);
     json.stringify(jsonDestination);
     Number::setPrecision(6);
-    REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.06834,"longitude":-70.741615})");
+    REQUIRE(jsonDestination.toString() == R"({"latitude":39.06834,"longitude":-70.741615})");
   }
   SECTION("Floating point precision to maximum.", "[JSON][JNode][Number][Float][Precision]")
   {
@@ -253,9 +253,9 @@ TEST_CASE("Check JNode Number floating point precision.", "[JSON][JNode][Number]
     json.stringify(jsonDestination);
     Number::setPrecision(6);
     if constexpr ((std::numeric_limits<long double>::digits10 + 1) == 16) {
-      REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.06834030151367,"longitude":-70.74161529541016})");
+      REQUIRE(jsonDestination.toString() == R"({"latitude":39.06834030151367,"longitude":-70.74161529541016})");
     } else if constexpr ((std::numeric_limits<long double>::digits10 + 1) == 19) {
-      REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.06834030151367188,"longitude":-70.74161529541015625})");
+      REQUIRE(jsonDestination.toString() == R"({"latitude":39.06834030151367188,"longitude":-70.74161529541015625})");
     } else {
       REQUIRE_FALSE(true);
     }
@@ -278,7 +278,7 @@ TEST_CASE("Check JNode Number floating point notation.", "[JSON][JNode][Number][
     Number::setNotation(Number::numberNotation::normal);
     Number::setPrecision(6);
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.0683,"longitude":-70.7416})");
+    REQUIRE(jsonDestination.toString() == R"({"latitude":39.0683,"longitude":-70.7416})");
   }
   SECTION("Floating point notation to fixed.", "[JSON][JNode][Number][Float][Notation]")
   {
@@ -292,7 +292,7 @@ TEST_CASE("Check JNode Number floating point notation.", "[JSON][JNode][Number][
     jsonDestination.clear();
     json.stringify(jsonDestination);
     Number::setNotation(Number::numberNotation::normal);
-    REQUIRE(jsonDestination.getBuffer() == R"({"latitude":39.068340,"longitude":-70.741615})");
+    REQUIRE(jsonDestination.toString() == R"({"latitude":39.068340,"longitude":-70.741615})");
   }
   SECTION("Floating point notation to scientific.", "[JSON][JNode][Number][Float][Notation]")
   {
@@ -306,7 +306,7 @@ TEST_CASE("Check JNode Number floating point notation.", "[JSON][JNode][Number][
     jsonDestination.clear();
     json.stringify(jsonDestination);
     Number::setNotation(Number::numberNotation::normal);
-    REQUIRE(jsonDestination.getBuffer() == R"({"latitude":3.906834e+01,"longitude":-7.074162e+01})");
+    REQUIRE(jsonDestination.toString() == R"({"latitude":3.906834e+01,"longitude":-7.074162e+01})");
   }
 }
 // ==================================
@@ -353,7 +353,7 @@ TEST_CASE("Check JNode Number API(s) for all supported number types.", "[JSON][J
     json["root"] = { 1, 1l, 1ll, 1.0f, 1.0, 1.0l };
     BufferDestination destinationBuffer;
     json.stringify(destinationBuffer);
-    REQUIRE(destinationBuffer.getBuffer() == R"({"root":[1,1,1,1.0,1.0,1.0]})");
+    REQUIRE(destinationBuffer.toString() == R"({"root":[1,1,1,1.0,1.0,1.0]})");
     REQUIRE_FALSE(!JRef<Number>(json["root"][0]).is<int>());
     REQUIRE_FALSE(!JRef<Number>(json["root"][1]).is<long>());
     REQUIRE_FALSE(!JRef<Number>(json["root"][2]).is<long long>());
@@ -366,7 +366,7 @@ TEST_CASE("Check JNode Number API(s) for all supported number types.", "[JSON][J
     json["root"] = { 1, 1l, 1l, 1.0f, 1.0, 1.0l };
     BufferDestination destinationBuffer;
     json.stringify(destinationBuffer);
-    REQUIRE(destinationBuffer.getBuffer() == R"({"root":[1,1,1,1.0,1.0,1.0]})");
+    REQUIRE(destinationBuffer.toString() == R"({"root":[1,1,1,1.0,1.0,1.0]})");
     Number &integerRef = JRef<Number>(json["root"][0]);
     REQUIRE_NOTHROW(integerRef.set(integerRef.value<int>() + 1));
     Number &longRef = JRef<Number>(json["root"][1]);
@@ -381,14 +381,14 @@ TEST_CASE("Check JNode Number API(s) for all supported number types.", "[JSON][J
     REQUIRE_NOTHROW(longDoubleRef.set(longDoubleRef.value<long double>() + 1.0));
     destinationBuffer.clear();
     json.stringify(destinationBuffer);
-    REQUIRE(destinationBuffer.getBuffer() == R"({"root":[2,2,2,2.0,2.0,2.0]})");
+    REQUIRE(destinationBuffer.toString() == R"({"root":[2,2,2,2.0,2.0,2.0]})");
   }
   SECTION("Change types and values.", "[JSON][JNode][Number][Reset]")
   {
     json["root"] = { 1, 1l, 1ll, 1.0f, 1.0, 1.0l };
     BufferDestination destinationBuffer;
     json.stringify(destinationBuffer);
-    REQUIRE(destinationBuffer.getBuffer() == R"({"root":[1,1,1,1.0,1.0,1.0]})");
+    REQUIRE(destinationBuffer.toString() == R"({"root":[1,1,1,1.0,1.0,1.0]})");
     REQUIRE_FALSE(!JRef<Number>(json["root"][0]).is<int>());
     REQUIRE_FALSE(!JRef<Number>(json["root"][1]).is<long>());
     REQUIRE_FALSE(!JRef<Number>(json["root"][2]).is<long long>());
@@ -399,11 +399,11 @@ TEST_CASE("Check JNode Number API(s) for all supported number types.", "[JSON][J
     REQUIRE_FALSE(!JRef<Number>(json["root"][1]).is<double>());
     destinationBuffer.clear();
     json.stringify(destinationBuffer);
-    REQUIRE(destinationBuffer.getBuffer() == R"({"root":[1,3.0,1,1.0,1.0,1.0]})");
+    REQUIRE(destinationBuffer.toString() == R"({"root":[1,3.0,1,1.0,1.0,1.0]})");
     REQUIRE_NOTHROW(JRef<Number>(json["root"][5]).set(445l));
     REQUIRE_FALSE(!JRef<Number>(json["root"][5]).is<long>());
     destinationBuffer.clear();
     json.stringify(destinationBuffer);
-    REQUIRE(destinationBuffer.getBuffer() == R"({"root":[1,3.0,1,1.0,1.0,445]})");
+    REQUIRE(destinationBuffer.toString() == R"({"root":[1,3.0,1,1.0,1.0,445]})");
   }
 }
