@@ -8,7 +8,6 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-
 #include "XML_Stringify.hpp"
 
 namespace JSON_Lib {

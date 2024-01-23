@@ -8,7 +8,6 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-
 #include "Bencode_Stringify.hpp"
 
 namespace JSON_Lib {

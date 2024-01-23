@@ -8,7 +8,6 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-
 #include "JSON_Stringify.hpp"
 
 namespace JSON_Lib {
@@ -132,8 +131,7 @@ void JSON_Stringify::stringifyArray(const JNode &jNode, IDestination &destinatio
 void JSON_Stringify::stringify(const JNode &jNode, IDestination &destination, long indent) const
 {
   if (jNode.isNumber()) {
-    stringifyNumber(jNode, destination);
-  } else if (jNode.isString()) {
+    stringifyNumber(jNode, destination);  } else if (jNode.isString()) {
     stringifyString(jNode, destination);
   } else if (jNode.isBoolean()) {
     stringifyBoolean(jNode, destination);
