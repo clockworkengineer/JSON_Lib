@@ -59,8 +59,8 @@ set(JSON_INCLUDES
   ./include/implementation/io/JSON_Destinations.hpp
   ./include/implementation/io/JSON_BufferDestination.hpp
   ./include/implementation/io/JSON_FileDestination.hpp
-  ./include/implementation/translation/JSON_Translator.hpp
-  ./include/implementation/translation/JSON_Converter.hpp
+  ./include/implementation/translator/JSON_Translator.hpp
+  ./include/implementation/translator/JSON_Converter.hpp
   ./include/implementation/parser/JSON_Parser.hpp
   ./include/implementation/stringify/JSON_Stringify.hpp
   ./include/implementation/stringify/Bencode_Stringify.hpp
@@ -84,7 +84,7 @@ target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
   ${PROJECT_SOURCE_DIR}/include/implementation
   ${PROJECT_SOURCE_DIR}/include/implementation/jnode
   ${PROJECT_SOURCE_DIR}/include/implementation/io
-  ${PROJECT_SOURCE_DIR}/include/implementation/translation
+  ${PROJECT_SOURCE_DIR}/include/implementation/translator
   ${PROJECT_SOURCE_DIR}/include/implementation/variants
   ${PROJECT_SOURCE_DIR}/include/implementation/parser
   ${PROJECT_SOURCE_DIR}/include/implementation/stringify
