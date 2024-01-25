@@ -44,7 +44,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   PLOG_INFO << "JSON_Index_File started ...";
   PLOG_INFO << js::JSON().version();
   // Analyze JSON files.
-  for (auto &fileName : Utility::createTorrentFileList()) {
+  for (auto &fileName : Utility::createJSONFileList()) {
     try {
       processJSONFile(fileName);
     } catch (std::exception &ex) {

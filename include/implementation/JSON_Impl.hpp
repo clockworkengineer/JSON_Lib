@@ -19,7 +19,7 @@ class JSON_Impl
 {
 public:
   // Constructors/Destructors
-  JSON_Impl() = default;
+  JSON_Impl();
   JSON_Impl(const JSON_Impl &other) = delete;
   JSON_Impl &operator=(const JSON_Impl &other) = delete;
   JSON_Impl(JSON_Impl &&other) = delete;

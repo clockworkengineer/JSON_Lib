@@ -40,7 +40,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   // Output JSON Lib version
   PLOG_INFO << js::JSON().version();
   // Strip JSON files.
-  for (auto &fileName : Utility::createTorrentFileList()) {
+  for (auto &fileName : Utility::createJSONFileList()) {
     try {
       processJSONFile(fileName);
     } catch (std::exception &ex) {

@@ -41,7 +41,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   PLOG_INFO << JSON_Analyzer::dumpNumericSizes();
   PLOG_INFO << JSON_Analyzer::dumpJNodeSizes();
   // Analyze JSON files.
-  for (auto &fileName : Utility::createTorrentFileList()) {
+  for (auto &fileName : Utility::createJSONFileList()) {
     try {
       processJSONFile(fileName);
     } catch (std::exception &ex) {

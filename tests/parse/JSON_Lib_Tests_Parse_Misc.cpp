@@ -14,10 +14,11 @@ using namespace JSON_Lib;
 // ========================
 TEST_CASE("Check JSON parsing of a list of example JSON files.", "[JSON][Parse][Examples]")
 {
-  const JSON json;
+  // JSON json;
   TEST_FILE_LIST(testFile);
   SECTION("Parse from buffer.", "[JSON][Parse][Examples][Buffer]")
   {
+       JSON json;
     BufferSource jsonSource{ JSON::fromFile(prefixPath(testFile)) };
     REQUIRE_NOTHROW(json.parse(jsonSource));
     jsonSource.reset();
@@ -26,6 +27,7 @@ TEST_CASE("Check JSON parsing of a list of example JSON files.", "[JSON][Parse][
   }
   SECTION("Parse from file directly.", "[JSON][Parse][Examples][File]")
   {
+       JSON json;
     FileSource jsonSource{ prefixPath(testFile) };
     REQUIRE_NOTHROW(json.parse(jsonSource));
     jsonSource.reset();
