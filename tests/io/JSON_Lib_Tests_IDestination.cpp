@@ -22,7 +22,7 @@ TEST_CASE("Check IDestination (Buffer) interface.", "[JSON][IDestination][Buffer
   SECTION("Create BufferDestination and get buffer which should be empty.", "[JSON][IDestination][Buffer][Construct]")
   {
     BufferDestination buffer;
-    REQUIRE_FALSE(!buffer.size()==0);
+    REQUIRE(buffer.size()==0);
   }
   SECTION("Create BufferDestination and add one character.", "[JSON][IDestination][Buffer][Add]")
   {
