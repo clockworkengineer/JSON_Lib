@@ -22,7 +22,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     // Initialise logging.
     plog::init(plog::debug, "JSON_Files_To_Bencode.log");
     PLOG_INFO << "JSON_Files_To_Bencode started ...";
-    PLOG_INFO << JSON_Lib::JSON().version();
+    PLOG_INFO << json.version();
     for (const auto &jsonFileName : Utility::createJSONFileList()) {
       json.parse(JSON_Lib::FileSource(jsonFileName));
       json.stringify(JSON_Lib::FileDestination(Utility::createFileName(jsonFileName, ".ben")));
