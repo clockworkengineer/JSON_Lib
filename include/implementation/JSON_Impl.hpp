@@ -19,7 +19,7 @@ class JSON_Impl
 {
 public:
   // Constructors/Destructors
-  JSON_Impl();
+  JSON_Impl(IStringify *stringify, IParser *parser, ITranslator *translator, IConverter *converter);
   JSON_Impl(const JSON_Impl &other) = delete;
   JSON_Impl &operator=(const JSON_Impl &other) = delete;
   JSON_Impl(JSON_Impl &&other) = delete;
@@ -35,12 +35,6 @@ public:
   void print(IDestination &destination) const;
   // Strip whitespace from JSON string
   void strip(ISource &source, IDestination &destination) const;
-  // Set JSON Parser/Stringify
-  static void setParser(IParser *parser = nullptr);
-  static void setStringify(IStringify *stringify = nullptr);
-  // Set JSON translator/converter
-  static void setTranslator(ITranslator *translator = nullptr);
-  static void setConverter(IConverter *converter = nullptr);
   // Get root of JSON tree
   [[nodiscard]] JNode &root() { return (jNodeRoot); }
   [[nodiscard]] const JNode &root() const { return (jNodeRoot); }

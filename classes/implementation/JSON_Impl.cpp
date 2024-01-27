@@ -11,38 +11,22 @@
 
 namespace JSON_Lib {
 
-JSON_Impl::JSON_Impl()
+JSON_Impl::JSON_Impl(IStringify *stringify, IParser *parser, ITranslator *translator, IConverter *converter)
 {
   jsonConverter = std::make_unique<JSON_Converter>();
   jsonTranslator = std::make_unique<JSON_Translator>(*jsonConverter);
   jsonParser = std::make_unique<JSON_Parser>(*jsonTranslator);
-  jsonStringify = std::make_unique<JSON_Stringify>(*jsonTranslator);
+  if (stringify == nullptr) {
+    jsonStringify = std::make_unique<JSON_Stringify>(*jsonTranslator);
+  } else {
+    jsonStringify.reset(stringify);
+  }
 }
 std::string JSON_Impl::version() const
 {
   std::stringstream versionString;
   versionString << "JSON_Lib Version  " << JSON_VERSION_MAJOR << "." << JSON_VERSION_MINOR << "." << JSON_VERSION_PATCH;
   return (versionString.str());
-}
-
-void JSON_Impl::setParser(IParser *parser)
-{
-  if (parser != nullptr) { jsonParser.reset(parser); }
-}
-
-void JSON_Impl::setStringify(IStringify *stringify)
-{
-  if (stringify != nullptr) { jsonStringify.reset(stringify); }
-}
-
-void JSON_Impl::setTranslator(ITranslator *translator)
-{
-  if (translator != nullptr) { jsonTranslator.reset(translator); }
-}
-
-void JSON_Impl::setConverter(IConverter *converter)
-{
-  if (converter != nullptr) { jsonConverter.reset(converter); }
 }
 
 void JSON_Impl::parse(ISource &source) { jNodeRoot = jsonParser->parse(source); }
