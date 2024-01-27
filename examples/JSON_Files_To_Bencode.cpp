@@ -4,28 +4,29 @@
 // Description: Use JSON_Lib to read in torrent file then write
 // it out as JSON using a custom encoder.
 //
-// Dependencies: C++20, JSON_Lib.
+// Dependencies: C++20, PLOG, JSON_Lib.
 //
 
-#include <stdexcept>
-
 #include "Utility.hpp"
+
 #include "Bencode_Stringify.hpp"
 
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "plog/Log.h"
 
+namespace js = JSON_Lib;
+
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   try {
-    JSON_Lib::JSON json(std::make_unique<JSON_Lib::Bencode_Stringify>().release());
+    js::JSON json(std::make_unique<js::Bencode_Stringify>().release());
     // Initialise logging.
     plog::init(plog::debug, "JSON_Files_To_Bencode.log");
     PLOG_INFO << "JSON_Files_To_Bencode started ...";
     PLOG_INFO << json.version();
     for (const auto &jsonFileName : Utility::createJSONFileList()) {
-      json.parse(JSON_Lib::FileSource(jsonFileName));
-      json.stringify(JSON_Lib::FileDestination(Utility::createFileName(jsonFileName, ".ben")));
+      json.parse(js::FileSource(jsonFileName));
+      json.stringify(js::FileDestination(Utility::createFileName(jsonFileName, ".ben")));
       PLOG_INFO << "Created file " << Utility::createFileName(jsonFileName, ".ben") << " from " << jsonFileName;
     }
   } catch (const std::exception &ex) {
