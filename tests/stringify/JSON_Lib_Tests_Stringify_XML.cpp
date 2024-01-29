@@ -23,6 +23,32 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root>Test string.</root>)");
   }
+  SECTION("Stringify a string (Test string. &<>'\") to XML with default character escapes and check its value.",
+    "[JSON][Stringify][String][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"("Test string. &<>'\"")" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString()
+            == R"(<?xml version="1.0" encoding="UTF-8"?><root>Test string. &amp;&lt;&gt;&apos;&quot;</root>)");
+  }
+  SECTION(
+    "XML encode an string with unprintable characters "
+    "('abcdefghijklmnopqrstuvwxyz') and check its value ",
+    "[Bencode][Encode][JSON][String]")
+  {
+    std::string escaped{ R"("Test string.)" };
+    escaped += static_cast<char>(0);
+    escaped += static_cast<char>(1);
+    escaped += static_cast<char>(2);
+    escaped += '"';
+    BufferSource source{ escaped };
+    BufferDestination destination;
+    json.parse(source);
+    json.stringify(destination);
+    REQUIRE(destination.toString()
+            == R"(<?xml version="1.0" encoding="UTF-8"?><root>Test string.&#x0000;&#x0001;&#x0002;</root>)");
+  }
   SECTION("Stringify a boolean (true) to XML and check its value.", "[JSON][Stringify][Boolean][XML]")
   {
     BufferDestination jsonDestination;
@@ -72,8 +98,8 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
     BufferDestination jsonDestination;
     json.parse(BufferSource{ { R"({"Age":77,"Name":"Rob"})" } });
     json.stringify(jsonDestination);
-    REQUIRE(
-      jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root><Age>77</Age><Name>Rob</Name></root>)");
+    REQUIRE(jsonDestination.toString()
+            == R"(<?xml version="1.0" encoding="UTF-8"?><root><Age>77</Age><Name>Rob</Name></root>)");
   }
   SECTION(R"(Stringify an nested array ({"City":"London","Population":[1,2,3,4,5]}) to XML and check its value.)",
     "[JSON][Stringify][Array][XML]")

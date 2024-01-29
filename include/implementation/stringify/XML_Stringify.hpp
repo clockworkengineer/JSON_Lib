@@ -28,7 +28,7 @@ public:
   virtual void setIndent(long indent) override;
 
 private:
-  // Stringify Bencode
+  // Stringify Bencode to XML
   void stringifyNumber(const JNode &jNode, IDestination &destination) const;
   void stringifyString(const JNode &jNode, IDestination &destination) const;
   void stringifyBoolean(const JNode &jNode, IDestination &destination) const;
@@ -36,7 +36,7 @@ private:
   void stringifyHole(const JNode &jNode, IDestination &destination) const;
   void stringifyObject(const JNode &jNode, IDestination &destination, long indent) const;
   void stringifyArray(const JNode &jNode, IDestination &destination, long indent) const;
-    void stringifyXML(const JNode &jNode, IDestination &destination, long indent) const;
+  void stringifyXML(const JNode &jNode, IDestination &destination, long indent) const;
 };
 
 }// namespace JSON_Lib
