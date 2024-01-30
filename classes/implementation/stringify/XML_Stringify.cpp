@@ -169,6 +169,6 @@ void XML_Stringify::stringify(const JNode &jNode, IDestination &destination, [[m
 
 long XML_Stringify::getIndent() const { return (0); }
 
-void XML_Stringify::setIndent(long indent) {}
+void XML_Stringify::setIndent([[maybe_unused]] long indent) {}
 
 }// namespace JSON_Lib
