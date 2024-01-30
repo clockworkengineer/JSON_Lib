@@ -79,14 +79,16 @@ void XML_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destinati
 /// </summary>
 /// <param name="jNode">Null JNode.</param>
 /// <param name="destination">Destination stream for XML.</param>
-void XML_Stringify::stringifyNull(const JNode &jNode, IDestination &destination) const {}
+void XML_Stringify::stringifyNull([[maybe_unused]] const JNode &jNode, [[maybe_unused]] IDestination &destination) const
+{}
 
 /// <summary>
 /// Convert Hole JNode to XML on destination stream.
 /// </summary>
 /// <param name="jNode">Hole JNode.</param>
 /// <param name="destination">Destination stream for XML.</param>
-void XML_Stringify::stringifyHole(const JNode &jNode, IDestination &destination) const {}
+void XML_Stringify::stringifyHole([[maybe_unused]] const JNode &jNode, [[maybe_unused]] IDestination &destination) const
+{}
 
 /// <summary>
 /// Convert Object JNode to XML on destination stream.
@@ -94,7 +96,7 @@ void XML_Stringify::stringifyHole(const JNode &jNode, IDestination &destination)
 /// <param name="jNode">Object JNode.</param>
 /// <param name="destination">Destination stream for XML.</param>
 /// <param name="indent">Current print indentation.</param>
-void XML_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const
+void XML_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] long indent) const
 {
   for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
     auto elementName = JRef<String>(jNodeNext.getKey()).value();
@@ -111,7 +113,7 @@ void XML_Stringify::stringifyObject(const JNode &jNode, IDestination &destinatio
 /// <param name="jNode">Array JNode.</param>
 /// <param name="destination">Destination stream for XML.</param>
 /// <param name="indent">Current print indentation.</param>
-void XML_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const
+void XML_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, [[maybe_unused]] long indent) const
 {
   if (JRef<Array>(jNode).value().size() > 1) {
     for (const auto &bNodeNext : JRef<Array>(jNode).value()) {
@@ -157,7 +159,7 @@ void XML_Stringify::stringifyXML(const JNode &jNode, IDestination &destination, 
 /// <param name=jNode>JNode structure to be traversed.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void XML_Stringify::stringify(const JNode &jNode, IDestination &destination, long indent) const
+void XML_Stringify::stringify(const JNode &jNode, IDestination &destination, [[maybe_unused]] long indent) const
 {
   destination.add("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
   destination.add("<root>");

@@ -53,7 +53,7 @@ void Bencode_Stringify::stringifyBoolean(const JNode &jNode, IDestination &desti
 /// </summary>
 /// <param name="jNode">Null JNode.</param>
 /// <param name="destination">Destination stream for Bencode.</param>
-void Bencode_Stringify::stringifyNull(const JNode &jNode, IDestination &destination) const
+void Bencode_Stringify::stringifyNull([[maybe_unused]] const JNode &jNode, IDestination &destination) const
 {
   destination.add("4:null");
 }
@@ -63,7 +63,9 @@ void Bencode_Stringify::stringifyNull(const JNode &jNode, IDestination &destinat
 /// </summary>
 /// <param name="jNode">Hole JNode.</param>
 /// <param name="destination">Destination stream for Bencode.</param>
-void Bencode_Stringify::stringifyHole(const JNode &jNode, IDestination &destination) const {}
+void Bencode_Stringify::stringifyHole([[maybe_unused]] const JNode &jNode,
+  [[maybe_unused]] IDestination &destination) const
+{}
 
 /// <summary>
 /// Convert Object JNode to Bencode on destination stream.
@@ -71,7 +73,9 @@ void Bencode_Stringify::stringifyHole(const JNode &jNode, IDestination &destinat
 /// <param name="jNode">Object JNode.</param>
 /// <param name="destination">Destination stream for Bencode.</param>
 /// <param name="indent">Current print indentation.</param>
-void Bencode_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const
+void Bencode_Stringify::stringifyObject(const JNode &jNode,
+  IDestination &destination,
+  [[maybe_unused]] long indent) const
 {
   destination.add('d');
   for (auto &entry : JRef<Object>(jNode).value()) {
@@ -87,7 +91,9 @@ void Bencode_Stringify::stringifyObject(const JNode &jNode, IDestination &destin
 /// <param name="jNode">Array JNode.</param>
 /// <param name="destination">Destination stream for Bencode.</param>
 /// <param name="indent">Current print indentation.</param>
-void Bencode_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const
+void Bencode_Stringify::stringifyArray(const JNode &jNode,
+  IDestination &destination,
+  [[maybe_unused]] long indent) const
 {
   destination.add('l');
   if (!JRef<Array>(jNode).value().empty()) {
@@ -126,6 +132,6 @@ void Bencode_Stringify::stringify(const JNode &jNode, IDestination &destination,
 
 long Bencode_Stringify::getIndent() const { return (0); }
 
-void Bencode_Stringify::setIndent(long indent) {}
+void Bencode_Stringify::setIndent([[maybe_unused]] long indent) {}
 
 }// namespace JSON_Lib
