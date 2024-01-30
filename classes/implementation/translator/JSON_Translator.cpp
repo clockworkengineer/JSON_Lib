@@ -65,6 +65,48 @@ std::string encodeUTF16(const char16_t utf16Char)
 }
 
 /// <summary>
+/// Return true if a character is a valid upper surrogate.
+/// </summary>
+/// <param name="utf16Char">UTF16 character.</param>
+/// <returns>==true if valid upper surrogate.</returns>
+bool isValidSurrogateUpper(char16_t utf16Char)
+{
+  return ((utf16Char >= static_cast<char16_t>(kHighSurrogatesBegin))
+          && (utf16Char <= static_cast<char16_t>(kHighSurrogatesEnd)));
+}
+/// <summary>
+/// Return true if a character is a valid lower surrogate.
+/// </summary>
+/// <param name="utf16Char">UTF16 character.</param>
+/// <returns>==true if valid lower surrogate.</returns>
+bool isValidSurrogateLower(char16_t utf16Char)
+{
+  return ((utf16Char >= static_cast<char16_t>(kLowSurrogatesBegin))
+          && (utf16Char <= static_cast<char16_t>(kLowSurrogatesEnd)));
+}
+
+/// <summary>
+// Check that there are no single unpaired UTF-16 surrogates.From what I see
+// this is meant to be an error but from searching the web I have not found a
+// definitive answer.
+/// </summary>
+/// <param name="utf16Char">UTF16 strinf.</param>
+/// <returns>==false if string contains an unpaired surrogate.</returns>
+bool unpairedSurrogatesInBuffer(const std::u16string &utf16Buffer)
+{
+  int index = 0;
+  while (index <= (static_cast<int>(utf16Buffer.size()) - 1)) {
+    if (isValidSurrogateUpper(utf16Buffer[index]) && isValidSurrogateLower(utf16Buffer[index + 1])) {
+      index++;
+    } else if (isValidSurrogateUpper(utf16Buffer[index]) || isValidSurrogateLower(utf16Buffer[index + 1])) {
+      return (true);
+    }
+    index++;
+  }
+  return (false);
+}
+
+/// <summary>
 /// Determine whether passed in character is vaid ASCII
 /// </summary>
 /// <param name="utf16Char">UTF16 character.</param>
@@ -102,7 +144,7 @@ bool JSON_Translator::validEscape(char escape) { return (fromEscape.contains(esc
 /// </summary>
 /// <param name="jsonString">JSON string to process.</param>
 /// <returns>String with escapes translated.</returns>
-std::string JSON_Translator::fromJSON(const std::string &jsonString)
+std::string JSON_Translator::from(const std::string &jsonString)
 {
   std::u16string utf16Buffer;
   for (auto current = jsonString.begin(); current != jsonString.end();) {
@@ -146,7 +188,7 @@ std::string JSON_Translator::fromJSON(const std::string &jsonString)
 /// </summary>
 /// <param name="utf8String">String to convert.</param>
 /// <returns>JSON string with escapes.</returns>
-std::string JSON_Translator::toJSON(const std::string &utf8String)
+std::string JSON_Translator::to(const std::string &utf8String)
 {
   std::string jsonString;
   for (char16_t utf16Char : jsonConverter.toUtf16(utf8String)) {

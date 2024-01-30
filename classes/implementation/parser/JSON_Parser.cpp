@@ -37,7 +37,7 @@ std::string extractString(ISource &source, ITranslator &translator)
   }
   if (source.current() != '"') { throw JSON::Error(source.getPosition(), "Missing closing '\"' on string."); }
   // Need to translate escapes to UTF8
-  if (translateEscapes) { extracted = translator.fromJSON(extracted); }
+  if (translateEscapes) { extracted = translator.from(extracted); }
   source.next();
   return (extracted);
 }

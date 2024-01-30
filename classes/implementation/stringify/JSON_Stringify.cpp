@@ -30,7 +30,7 @@ void JSON_Stringify::stringifyNumber(const JNode &jNode, IDestination &destinati
 void JSON_Stringify::stringifyString(const JNode &jNode, IDestination &destination) const
 {
   destination.add('"');
-  destination.add(jsonTranslator.toJSON(JRef<String>(jNode).toString()));
+  destination.add(jsonTranslator.to(JRef<String>(jNode).toString()));
   destination.add('"');
 }
 
