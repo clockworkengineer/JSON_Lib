@@ -14,6 +14,21 @@
 namespace JSON_Lib {
 
 /// <summary>
+/// Check whether character is avalid escaped character or is just
+/// normal escaped ASCII character. Only a few characters are valid
+/// escaped characters such as '\t' or '\"' but normal ASCII characters
+/// may still be can still have a '\' prefix and be escaped though not
+/// proper escaped sense.
+/// </summary>
+/// <param name="escape">Escaped character.</param>
+/// <returns>==true then character is a valid escape character.</returns>
+bool validEscape(char escape)
+{
+  return (escape == '\\' || escape == 't' || escape == '"' || escape == 'b' || escape == 'f' || escape == 'n'
+          || escape == 'r' || (escape == 'u'));
+}
+
+/// <summary>
 /// Extract a string from a JSON encoded source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
@@ -29,7 +44,7 @@ std::string extractString(ISource &source, ITranslator &translator)
     if (source.current() == '\\') {
       extracted += '\\';
       source.next();
-      if (!translator.validEscape(source.current())) { extracted.pop_back(); }
+      if (!validEscape(source.current())) { extracted.pop_back(); }
       translateEscapes = true;
     }
     extracted += source.current();

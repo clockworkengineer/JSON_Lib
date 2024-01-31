@@ -32,9 +32,6 @@ public:
   // Convert to/from JSON escaped characters
   std::string from(const std::string &jsonString) override;
   std::string to(const std::string &utf8String) override;
-  
-  // Return true if character is a valid escape character
-  bool validEscape(char escape);
 
 private:
   // Character converter

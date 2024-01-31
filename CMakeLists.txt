@@ -61,6 +61,7 @@ set(JSON_INCLUDES
   ./include/implementation/io/JSON_FileDestination.hpp
   ./include/implementation/translator/JSON_Translator.hpp
   ./include/implementation/translator/JSON_Converter.hpp
+  ./include/implementation/translator/XML_Translator.hpp
   ./include/implementation/parser/JSON_Parser.hpp
   ./include/implementation/stringify/JSON_Stringify.hpp
   ./include/implementation/stringify/Bencode_Stringify.hpp

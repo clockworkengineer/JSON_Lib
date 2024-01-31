@@ -42,9 +42,5 @@ public:
   // escapes where applicable for its JSON form.
   // =========================================================================
   virtual std::string to(const std::string &utf8String) = 0;
-  // =======================================================
-  // Return true if a character is a valid escaped character
-  // =======================================================
-  virtual bool validEscape(char escape) = 0;
 };
 }// namespace JSON_Lib
