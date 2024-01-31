@@ -1,17 +1,12 @@
 #pragma once
 
-#include <set>
-#include <sstream>
-#include <stdexcept>
-#include <string>
-#include <vector>
 
 #include "JSON.hpp"
+#include "JSON_Core.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Converter.hpp"
 #include "JSON_Translator.hpp"
-#include "JSON_Core.hpp"
 
 namespace JSON_Lib {
 
