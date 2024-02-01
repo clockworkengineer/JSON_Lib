@@ -26,7 +26,7 @@ public:
   // Convert to/from XML escaped characters
   std::string from([[maybe_unused]] const std::string &jsonString) override { return (""); }
 
-  std::string to(const  std::string &utf8String) override
+  std::string to(const std::string &utf8String) override
   {
     std::string translated;
     for (unsigned char ch : utf8String) {
@@ -54,8 +54,8 @@ public:
           translated += ch;
         }
       }
-      return (translated);
     }
+    return (translated);
   };
 
 private:
