@@ -19,7 +19,7 @@ class JSON_Impl
 {
 public:
   // Constructors/Destructors
-  JSON_Impl(IStringify *stringify, IParser *parser, ITranslator *translator, IConverter *converter);
+  JSON_Impl(IStringify *stringify, IParser *parser);
   JSON_Impl(const JSON_Impl &other) = delete;
   JSON_Impl &operator=(const JSON_Impl &other) = delete;
   JSON_Impl(JSON_Impl &&other) = delete;

@@ -47,7 +47,7 @@ public:
   // JSON file formats
   enum class Format : uint8_t { utf8 = 0, utf8BOM, utf16BE, utf16LE, utf32BE, utf32LE };
   // Pass any user defined translator/converter here
-  explicit JSON(IStringify *stringify=nullptr, IParser *parser= nullptr, ITranslator *translator = nullptr, IConverter *converter = nullptr);
+  explicit JSON(IStringify *stringify=nullptr, IParser *parser= nullptr);
   // Pass in default JSON to parse
   explicit JSON(const std::string &jsonString);
   // Construct array
