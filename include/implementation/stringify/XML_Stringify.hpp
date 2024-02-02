@@ -4,13 +4,15 @@
 #include "JSON_Core.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
+#include "XML_Translator.hpp"
 
 namespace JSON_Lib {
 
 class XML_Stringify : public IStringify
 {
 public:
-  XML_Stringify() = default;
+  explicit XML_Stringify(ITranslator &translator) : xmlTranslator(translator) {}
+  explicit XML_Stringify(ITranslator &&translator) : xmlTranslator(translator) {}
   XML_Stringify(const XML_Stringify &other) = delete;
   XML_Stringify &operator=(const XML_Stringify &other) = delete;
   XML_Stringify(XML_Stringify &&other) = delete;
@@ -31,6 +33,9 @@ private:
   void stringifyObject(const JNode &jNode, IDestination &destination, long indent) const;
   void stringifyArray(const JNode &jNode, IDestination &destination, long indent) const;
   void stringifyXML(const JNode &jNode, IDestination &destination, long indent) const;
+
+  ITranslator &xmlTranslator;
+  
 };
 
 }// namespace JSON_Lib

@@ -9,7 +9,6 @@
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "XML_Stringify.hpp"
-#include "XML_Translator.hpp"
 
 namespace JSON_Lib {
 
@@ -31,8 +30,7 @@ void XML_Stringify::stringifyNumber(const JNode &jNode, IDestination &destinatio
 /// <param name="destination">Destination stream for XML.</param>
 void XML_Stringify::stringifyString(const JNode &jNode, IDestination &destination) const
 {
-  XML_Translator trans;
-  destination.add(trans.to(JRef<String>(jNode).value()));
+  destination.add(xmlTranslator.to(JRef<String>(jNode).value()));
 }
 
 /// <summary>

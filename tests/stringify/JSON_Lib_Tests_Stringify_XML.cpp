@@ -7,6 +7,7 @@
 
 #include "JSON_Lib_Tests.hpp"
 #include "XML_Stringify.hpp"
+#include "XML_Translator.hpp"
 
 using namespace JSON_Lib;
 
@@ -15,7 +16,7 @@ using namespace JSON_Lib;
 // ================================================================
 TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringify][Simple][XML]")
 {
-  const JSON json(std::make_unique<XML_Stringify>().release());
+  const JSON json(std::make_unique<XML_Stringify>(XML_Translator()).release());
   SECTION("Stringify a string (Test string) to XML and check its value.", "[JSON][Stringify][String][XML]")
   {
     BufferDestination jsonDestination;
