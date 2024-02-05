@@ -16,12 +16,13 @@ using namespace JSON_Lib;
 TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stringify][Simple][Bencode]")
 {
   const JSON json(std::make_unique<Bencode_Stringify>().release());
-  SECTION("Stringify a string (Test string) to Bencode and check its value.", "[JSON][Stringify][String][Bencode]")
+  SECTION("Stringify a string (abcdefghijklmnopqrstuvwxyz) to Bencode and check its value.",
+    "[JSON][Stringify][String][Bencode]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ R"("Test string.")" });
+    json.parse(BufferSource{ R"("abcdefghijklmnopqrstuvwxyz")" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.toString() == "12:Test string.");
+    REQUIRE(jsonDestination.toString() == "26:abcdefghijklmnopqrstuvwxyz");
   }
   SECTION("Stringify a boolean (true) to Bencode and check its value.", "[JSON][Stringify][Boolean][Bencode]")
   {

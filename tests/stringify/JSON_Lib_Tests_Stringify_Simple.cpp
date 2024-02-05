@@ -16,10 +16,10 @@ TEST_CASE("Check JSON stringification of simple types to buffer and check values
   "[JSON][Stringify][Simple][Buffer][Validate]")
 {
   const JSON json;
-  SECTION(
-    "Stringify a string (Test string) to buffer and check its value.", "[JSON][Stringify][Simple][Buffer][Validate]")
+  SECTION("Stringify a string (abcdefghijklmnopqrstuvwxyz) to buffer and check its value.",
+    "[JSON][Stringify][Simple][Buffer][Validate]")
   {
-    const std::string expected{ R"("Test string.")" };
+    const std::string expected{ R"("abcdefghijklmnopqrstuvwxyz")" };
     BufferDestination jsonDestination;
     json.parse(BufferSource{ expected });
     json.stringify(jsonDestination);
@@ -57,9 +57,10 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
   "[JSON][Stringify][Simple][File][Validate]")
 {
   const JSON json;
-  SECTION("Stringify a string (Test string) to file and check its value.", "[JSON][Stringify][Simple][File][Validate]")
+  SECTION("Stringify a string (abcdefghijklmnopqrstuvwxyz) to file and check its value.",
+    "[JSON][Stringify][Simple][File][Validate]")
   {
-    const std::string expected{ R"("Test string.")" };
+    const std::string expected{ R"("abcdefghijklmnopqrstuvwxyz")" };
     const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
     FileDestination jsonDestination{ generatedFileName };

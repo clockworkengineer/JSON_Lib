@@ -17,28 +17,33 @@ using namespace JSON_Lib;
 TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringify][Simple][XML]")
 {
   const JSON json(std::make_unique<XML_Stringify>(XML_Translator()).release());
-  SECTION("Stringify a string (Test string) to XML and check its value.", "[JSON][Stringify][String][XML]")
+  SECTION(
+    "Stringify a string (abcdefghijklmnopqrstuvwxyz) to XML and check its value.", "[JSON][Stringify][String][XML]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ R"("Test string.")" });
+    json.parse(BufferSource{ R"("abcdefghijklmnopqrstuvwxyz")" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root>Test string.</root>)");
+    REQUIRE(
+      jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz</root>)");
   }
-  SECTION("Stringify a string (Test string. &<>'\") to XML with default character escapes and check its value.",
+  SECTION(
+    "Stringify a string (abcdefghijklmnopqrstuvwxyz &<>'\") to XML with default character escapes and check its value.",
     "[JSON][Stringify][String][XML]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ R"("Test string. &<>'\"")" });
+    json.parse(BufferSource{ R"("abcdefghijklmnopqrstuvwxyz &<>'\"")" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.toString()
-            == R"(<?xml version="1.0" encoding="UTF-8"?><root>Test string. &amp;&lt;&gt;&apos;&quot;</root>)");
+    REQUIRE(
+      jsonDestination.toString()
+      == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz &amp;&lt;&gt;&apos;&quot;</root>)");
   }
   SECTION(
     "XML encode an string with unprintable characters "
     "('abcdefghijklmnopqrstuvwxyz') and check its value ",
-    "[Bencode][Encode][JSON][String]")
+    "[JSON][Encode][XML][String]")
   {
-    std::string escaped{ R"("Test string.)" };
+    std::string escaped;
+    escaped += "\"abcdefghijklmnopqrstuvwxyz";
     escaped += static_cast<char>(0);
     escaped += static_cast<char>(1);
     escaped += static_cast<char>(2);
@@ -47,8 +52,9 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
     BufferDestination destination;
     json.parse(source);
     json.stringify(destination);
-    REQUIRE(destination.toString()
-            == R"(<?xml version="1.0" encoding="UTF-8"?><root>Test string.&#x0000;&#x0001;&#x0002;</root>)");
+    REQUIRE(
+      destination.toString()
+      == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz&#x0000;&#x0001;&#x0002;</root>)");
   }
   SECTION("Stringify a boolean (true) to XML and check its value.", "[JSON][Stringify][Boolean][XML]")
   {
