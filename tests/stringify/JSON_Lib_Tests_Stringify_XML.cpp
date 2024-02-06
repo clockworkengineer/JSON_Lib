@@ -40,7 +40,7 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
   SECTION(
     "XML encode an string with unprintable characters "
     "('abcdefghijklmnopqrstuvwxyz') and check its value ",
-    "[JSON][Encode][XML][String]")
+    "[JSON][Stringify][XML][String]")
   {
     std::string escaped;
     escaped += "\"abcdefghijklmnopqrstuvwxyz";
@@ -59,10 +59,9 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
   SECTION(
     "XML encode an string with unprintable characters (0-255) "
     "('abcdefghijklmnopqrstuvwxyz') and check its value ",
-    "[JSON][Encode][XML][String]")
+    "[JSON][Stringify][XML][String]")
   {
-    std::string escaped;
-    escaped += "\"abcdefghijklmnopqrstuvwxyz";
+    std::string escaped { "\"abcdefghijklmnopqrstuvwxyz" };
     // Add all ASCII except '"' and '\'
     for (int ch = 0; ch < 255; ch++) {
       if ((static_cast<char>(ch) != '"') && (static_cast<char>(ch) != '\\')) { escaped += static_cast<char>(ch); }
