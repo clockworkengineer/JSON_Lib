@@ -59,8 +59,9 @@ set(JSON_INCLUDES
   ./include/implementation/io/JSON_Destinations.hpp
   ./include/implementation/io/JSON_BufferDestination.hpp
   ./include/implementation/io/JSON_FileDestination.hpp
+  ./include/implementation/converter/JSON_Converter.hpp
   ./include/implementation/translator/JSON_Translator.hpp
-  ./include/implementation/translator/JSON_Converter.hpp
+  ./include/implementation/translator/Bencode_Translator.hpp
   ./include/implementation/translator/XML_Translator.hpp
   ./include/implementation/parser/JSON_Parser.hpp
   ./include/implementation/stringify/JSON_Stringify.hpp
@@ -75,7 +76,7 @@ set(JSON_INCLUDES
   ./include/interface/IStringify.hpp)
 
 # Platform specific
-list(APPEND JSON_SOURCES "./classes/implementation/translator/${PLATFORM}/JSON_Converter.cpp")
+list(APPEND JSON_SOURCES "./classes/implementation/converter/${PLATFORM}/JSON_Converter.cpp")
 
 # JSON library
 add_library(${JSON_LIBRARY_NAME} ${JSON_SOURCES} ${JSON_INCLUDES})
@@ -85,6 +86,7 @@ target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
   ${PROJECT_SOURCE_DIR}/include/implementation
   ${PROJECT_SOURCE_DIR}/include/implementation/jnode
   ${PROJECT_SOURCE_DIR}/include/implementation/io
+  ${PROJECT_SOURCE_DIR}/include/implementation/converter
   ${PROJECT_SOURCE_DIR}/include/implementation/translator
   ${PROJECT_SOURCE_DIR}/include/implementation/variants
   ${PROJECT_SOURCE_DIR}/include/implementation/parser

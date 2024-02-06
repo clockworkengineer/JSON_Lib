@@ -24,7 +24,7 @@ public:
   ~XML_Translator() override = default;
 
   // Convert to/from XML escaped characters
-  std::string from([[maybe_unused]] const std::string &jsonString) override { return (""); }
+  std::string from([[maybe_unused]] const std::string &jsonString) override { return (jsonString); }
 
   std::string to(const std::string &utf8String) override
   {
