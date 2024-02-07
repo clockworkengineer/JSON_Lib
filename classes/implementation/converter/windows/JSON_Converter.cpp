@@ -29,6 +29,7 @@ int BytesToWideChar(const char *bytes, int length, wchar_t *sideString = nullptr
 /// </summary>
 std::u16string JSON_Converter::toUtf16(const std::string &utf8) const
 {
+  if (utf8.find('\0') != std::string::npos) { throw Error("Tried to convert a null character."); }
   std::wstring wideString(BytesToWideChar(utf8.c_str(), static_cast<int>(utf8.length())), 0);
   BytesToWideChar(utf8.c_str(), static_cast<int>(utf8.length()), &wideString[0], static_cast<int>(wideString.length()));
   return (std::u16string{ wideString.begin(), wideString.end() });
@@ -36,6 +37,7 @@ std::u16string JSON_Converter::toUtf16(const std::string &utf8) const
 
 std::string JSON_Converter::toUtf8(const std::u16string &utf16) const
 {
+  if (utf16.find('\0') != std::string::npos) { throw Error("Tried to convert a null character."); }
   std::wstring wideString{ utf16.begin(), utf16.end() };
   std::string bytes(WideCharToBytes(&wideString[0], static_cast<int>(wideString.length())), 0);
   WideCharToBytes(&wideString[0], -1, &bytes[0], static_cast<int>(bytes.length()));
