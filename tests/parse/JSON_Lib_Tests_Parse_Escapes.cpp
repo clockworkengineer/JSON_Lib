@@ -90,7 +90,7 @@ TEST_CASE("Check JSON object for decoding of strings with escape characters.", "
     std::u8string expected{ u8"abcdefghijklmnopqrstuvwxyz  \U0001D11E " };
     REQUIRE(JRef<String>(json.root()).value() == std::string{ expected.begin(), expected.end() });
   }
-  SECTION("Parse JSON string with escapes '\\u0000 \\0001 \\0002 \\0003' to buffer and check value.",
+  SECTION("Parse JSON string with escapes '\\u0005 \\u0004 \\u0003 \\u0002 \\u0001' to buffer and check value.",
     "[JSON][Parse][Escapes]")
   {
     BufferSource jsonSource{ R"("abcdefghijklmnopqrstuvwxyz \u0005 \u0004 \u0003 \u0002 \u0001")" };
@@ -98,5 +98,12 @@ TEST_CASE("Check JSON object for decoding of strings with escape characters.", "
     std::u8string expected{ u8"abcdefghijklmnopqrstuvwxyz \u0005 \u0004 \u0003 \u0002 \u0001" };
     auto test = JRef<String>(json.root()).value();
     REQUIRE(JRef<String>(json.root()).value() == std::string{ expected.begin(), expected.end() });
+  }
+  SECTION("Parse JSON string with escapes '\\u0000' to buffer and expect exception.",
+    "[JSON][Parse][Escapes]")
+  {
+    BufferSource jsonSource{ R"("abcdefghijklmnopqrstuvwxyz \u0000")" };
+    REQUIRE_THROWS_AS(json.parse(jsonSource), IConverter::Error);
+
   }
 }
