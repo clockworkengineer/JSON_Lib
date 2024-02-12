@@ -147,4 +147,33 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
       jsonDestination.toString()
       == R"(<?xml version="1.0" encoding="UTF-8"?><root><Row>True</Row><Row>Out of time</Row><Row>-2147483648</Row><Row><key>4444</key></Row></root>)");
   }
+  SECTION(R"(Stringify XML string with escapes '\u007F (non-printable ASCII)' to buffer and check value.)",
+    "[JSON][Stringify][XML][Escapes]")
+  {
+    const std::string source{ R"("abcdefghijklmnopqrstuvwxyz \u007F")" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ source });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString()
+            == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz &#x007f;</root>)");
+  }
+  SECTION(R"(Stringify XML string with escapes (1-255)' to buffer and check value.)", "[JSON][Stringify][XML][Escapes]")
+  {
+    std::string source{ R"("abcdefghijklmnopqrstuvwxyz )" };
+    for (char16_t utf16Char = 1; utf16Char < 255; utf16Char++) {
+      const char *digits = "0123456789ABCDEF";
+      source += "\\u";
+      source += digits[(utf16Char >> 12) & 0x0f];
+      source += digits[(utf16Char >> 8) & 0x0f];
+      source += digits[(utf16Char >> 4) & 0x0f];
+      source += digits[(utf16Char)&0x0f];
+    }
+    source += "\"";
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ source });
+    json.stringify(jsonDestination);
+    REQUIRE(
+      jsonDestination.toString()
+      == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz &#x0001;&#x0002;&#x0003;&#x0004;&#x0005;&#x0006;&#x0007;&#x0008;&#x0009;&#x000a;&#x000b;&#x000c;&#x000d;&#x000e;&#x000f;&#x0010;&#x0011;&#x0012;&#x0013;&#x0014;&#x0015;&#x0016;&#x0017;&#x0018;&#x0019;&#x001a;&#x001b;&#x001c;&#x001d;&#x001e;&#x001f; !&quot;#$%&amp;&apos;()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~&#x007f;&#x00c2;&#x0080;&#x00c2;&#x0081;&#x00c2;&#x0082;&#x00c2;&#x0083;&#x00c2;&#x0084;&#x00c2;&#x0085;&#x00c2;&#x0086;&#x00c2;&#x0087;&#x00c2;&#x0088;&#x00c2;&#x0089;&#x00c2;&#x008a;&#x00c2;&#x008b;&#x00c2;&#x008c;&#x00c2;&#x008d;&#x00c2;&#x008e;&#x00c2;&#x008f;&#x00c2;&#x0090;&#x00c2;&#x0091;&#x00c2;&#x0092;&#x00c2;&#x0093;&#x00c2;&#x0094;&#x00c2;&#x0095;&#x00c2;&#x0096;&#x00c2;&#x0097;&#x00c2;&#x0098;&#x00c2;&#x0099;&#x00c2;&#x009a;&#x00c2;&#x009b;&#x00c2;&#x009c;&#x00c2;&#x009d;&#x00c2;&#x009e;&#x00c2;&#x009f;&#x00c2;&#x00a0;&#x00c2;&#x00a1;&#x00c2;&#x00a2;&#x00c2;&#x00a3;&#x00c2;&#x00a4;&#x00c2;&#x00a5;&#x00c2;&#x00a6;&#x00c2;&#x00a7;&#x00c2;&#x00a8;&#x00c2;&#x00a9;&#x00c2;&#x00aa;&#x00c2;&#x00ab;&#x00c2;&#x00ac;&#x00c2;&#x00ad;&#x00c2;&#x00ae;&#x00c2;&#x00af;&#x00c2;&#x00b0;&#x00c2;&#x00b1;&#x00c2;&#x00b2;&#x00c2;&#x00b3;&#x00c2;&#x00b4;&#x00c2;&#x00b5;&#x00c2;&#x00b6;&#x00c2;&#x00b7;&#x00c2;&#x00b8;&#x00c2;&#x00b9;&#x00c2;&#x00ba;&#x00c2;&#x00bb;&#x00c2;&#x00bc;&#x00c2;&#x00bd;&#x00c2;&#x00be;&#x00c2;&#x00bf;&#x00c3;&#x0080;&#x00c3;&#x0081;&#x00c3;&#x0082;&#x00c3;&#x0083;&#x00c3;&#x0084;&#x00c3;&#x0085;&#x00c3;&#x0086;&#x00c3;&#x0087;&#x00c3;&#x0088;&#x00c3;&#x0089;&#x00c3;&#x008a;&#x00c3;&#x008b;&#x00c3;&#x008c;&#x00c3;&#x008d;&#x00c3;&#x008e;&#x00c3;&#x008f;&#x00c3;&#x0090;&#x00c3;&#x0091;&#x00c3;&#x0092;&#x00c3;&#x0093;&#x00c3;&#x0094;&#x00c3;&#x0095;&#x00c3;&#x0096;&#x00c3;&#x0097;&#x00c3;&#x0098;&#x00c3;&#x0099;&#x00c3;&#x009a;&#x00c3;&#x009b;&#x00c3;&#x009c;&#x00c3;&#x009d;&#x00c3;&#x009e;&#x00c3;&#x009f;&#x00c3;&#x00a0;&#x00c3;&#x00a1;&#x00c3;&#x00a2;&#x00c3;&#x00a3;&#x00c3;&#x00a4;&#x00c3;&#x00a5;&#x00c3;&#x00a6;&#x00c3;&#x00a7;&#x00c3;&#x00a8;&#x00c3;&#x00a9;&#x00c3;&#x00aa;&#x00c3;&#x00ab;&#x00c3;&#x00ac;&#x00c3;&#x00ad;&#x00c3;&#x00ae;&#x00c3;&#x00af;&#x00c3;&#x00b0;&#x00c3;&#x00b1;&#x00c3;&#x00b2;&#x00c3;&#x00b3;&#x00c3;&#x00b4;&#x00c3;&#x00b5;&#x00c3;&#x00b6;&#x00c3;&#x00b7;&#x00c3;&#x00b8;&#x00c3;&#x00b9;&#x00c3;&#x00ba;&#x00c3;&#x00bb;&#x00c3;&#x00bc;&#x00c3;&#x00bd;&#x00c3;&#x00be;</root>)");
+  }
 }
