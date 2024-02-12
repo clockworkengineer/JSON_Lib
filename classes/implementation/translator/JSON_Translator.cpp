@@ -187,7 +187,7 @@ std::string JSON_Translator::to(const std::string &utf8String)
       jsonString += toEscape[utf16Char];
     }
     // ASCII
-    else if (isASCII(utf16Char)) {
+    else if (isASCII(utf16Char) && std::isprint(utf16Char)) {
       jsonString += static_cast<char>(utf16Char);
     }
     // UTF8 escaped

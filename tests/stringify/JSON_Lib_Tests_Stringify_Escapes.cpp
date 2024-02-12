@@ -115,4 +115,13 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == expected);
   }
+  SECTION(
+    R"(Stringify JSON string with escapes '\u007F (non-printable ASCII)' to buffer and check value.)", "[JSON][Stringify][Escapes]")
+  {
+    const std::string expected{ R"("abcdefghijklmnopqrstuvwxyz \u007F")" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == expected);
+  }
 }
