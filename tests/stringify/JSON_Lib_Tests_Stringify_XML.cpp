@@ -176,4 +176,14 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
       jsonDestination.toString()
       == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz &#x0001;&#x0002;&#x0003;&#x0004;&#x0005;&#x0006;&#x0007;&#x0008;&#x0009;&#x000a;&#x000b;&#x000c;&#x000d;&#x000e;&#x000f;&#x0010;&#x0011;&#x0012;&#x0013;&#x0014;&#x0015;&#x0016;&#x0017;&#x0018;&#x0019;&#x001a;&#x001b;&#x001c;&#x001d;&#x001e;&#x001f; !&quot;#$%&amp;&apos;()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~&#x007f;</root>)");
   }
+  SECTION(R"(Stringify XML string with escapes '\u0080 (non-printable ASCII)' to buffer and check value.)",
+    "[JSON][Stringify][XML][Escapes]")
+  {
+    const std::string source{ R"("abcdefghijklmnopqrstuvwxyz \u0080")" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ source });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString()
+            == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz &#x0080;</root>)");
+  }
 }
