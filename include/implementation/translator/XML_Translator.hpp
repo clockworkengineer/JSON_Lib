@@ -15,7 +15,7 @@ public:
   };
 
   // Pass in user defined converter here
-  explicit XML_Translator(const IConverter &converter) : jsonConverter(converter) {}
+  explicit XML_Translator(const IConverter &converter) : xmlConverter(converter) {}
   // No other constructors supported
   XML_Translator(const XML_Translator &other) = delete;
   XML_Translator &operator=(const XML_Translator &other) = delete;
@@ -29,7 +29,7 @@ public:
   std::string to(const std::string &utf8String) override
   {
     std::string translated;
-    for (unsigned char ch : utf8String) {
+    for (char16_t ch : xmlConverter.toUtf16(utf8String)) {
       if (!isprint(ch)) {
         char escaped[5];
         translated += "&#x";
@@ -51,7 +51,7 @@ public:
         } else if (ch == '"') {
           translated += "&quot;";
         } else {
-          translated += ch;
+          translated += static_cast<unsigned char>(ch);
         }
       }
     }
@@ -60,6 +60,6 @@ public:
 
 private:
   // Character converter
-  const IConverter &jsonConverter;
+  const IConverter &xmlConverter;
 };
 }// namespace JSON_Lib
