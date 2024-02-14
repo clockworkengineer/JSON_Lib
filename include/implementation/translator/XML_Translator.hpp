@@ -30,16 +30,7 @@ public:
   {
     std::string translated;
     for (char16_t ch : xmlConverter.toUtf16(utf8String)) {
-      if (!isprint(ch)) {
-        char escaped[5];
-        translated += "&#x";
-        sprintf_s(escaped, "%04x", ch);
-        translated += escaped[0];
-        translated += escaped[1];
-        translated += escaped[2];
-        translated += escaped[3];
-        translated += ";";
-      } else {
+      if (isASCII(ch) && std::isprint(ch)) {
         if (ch == '&') {
           translated += "&amp;";
         } else if (ch == '<') {
@@ -53,6 +44,15 @@ public:
         } else {
           translated += static_cast<unsigned char>(ch);
         }
+      } else {
+        translated += "&#x";
+        std::string utf8Buffer;
+        const char *digits = "0123456789ABCDEF";
+        translated += digits[(ch >> 12) & 0x0f];
+        translated += digits[(ch >> 8) & 0x0f];
+        translated += digits[(ch >> 4) & 0x0f];
+        translated += digits[(ch)&0x0f];
+        translated += ";";
       }
     }
     return (translated);
@@ -61,5 +61,12 @@ public:
 private:
   // Character converter
   const IConverter &xmlConverter;
+
+  /// <summary>
+  /// Determine whether passed in character is vaid ASCII
+  /// </summary>
+  /// <param name="utf16Char">UTF16 character.</param>
+  /// <returns>==true if valid ASCII.</returns>
+  bool isASCII(char16_t utf16Char) { return (((utf16Char > 0x001F) && (utf16Char < 0x0080))); }
 };
 }// namespace JSON_Lib
