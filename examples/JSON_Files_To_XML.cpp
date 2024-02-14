@@ -11,6 +11,7 @@
 
 #include "XML_Stringify.hpp"
 #include "XML_Translator.hpp"
+#include "JSON_Converter.hpp"
 
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "plog/Log.h"
@@ -20,7 +21,7 @@ namespace js = JSON_Lib;
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   try {
-    js::JSON json(std::make_unique<js::XML_Stringify>(js::XML_Translator()).release());
+    js::JSON json(std::make_unique<js::XML_Stringify>(js::XML_Translator(js::JSON_Converter())).release());
     // Initialise logging.
     plog::init(plog::debug, "JSON_Files_To_XML.log");
     PLOG_INFO << "JSON_Files_To_XML started ...";

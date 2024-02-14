@@ -15,7 +15,7 @@ public:
   };
 
   // Pass in user defined converter here
-  XML_Translator() = default;
+  explicit XML_Translator(const IConverter &converter) : jsonConverter(converter) {}
   // No other constructors supported
   XML_Translator(const XML_Translator &other) = delete;
   XML_Translator &operator=(const XML_Translator &other) = delete;
@@ -59,5 +59,7 @@ public:
   };
 
 private:
+  // Character converter
+  const IConverter &jsonConverter;
 };
 }// namespace JSON_Lib
