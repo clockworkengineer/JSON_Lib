@@ -77,15 +77,15 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
     "XML encode an string with unprintable characters (128) and check its value ", "[JSON][Stringify][XML][String]")
   {
     std::string escaped{ "\"abcdefghijklmnopqrstuvwxyz" };
-    // Add all ASCII except '"' and '\'
-    escaped += 128;
+    escaped += static_cast<unsigned char>(128);
     escaped += '"';
     BufferSource source{ escaped };
     BufferDestination destination;
     json.parse(source);
     json.stringify(destination);
     REQUIRE(destination.toString()
-            == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz&#x0080;</root>)");
+            == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz&#xFFFD;</root>)");
+    // 0xFFFD means no such character in UTF8 (generated for 128-255; but can use syntax \u0080 etc).
   }
   SECTION("Stringify a boolean (true) to XML and check its value.", "[JSON][Stringify][Boolean][XML]")
   {
@@ -199,5 +199,25 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString()
             == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz &#x0080;</root>)");
+  }
+  SECTION(
+    R"(Stringify XML string with escapes (128-255)' to buffer and check value.)", "[JSON][Stringify][XML][Escapes]")
+  {
+    std::string source{ R"("abcdefghijklmnopqrstuvwxyz )" };
+    for (char16_t utf16Char = 128; utf16Char < 256; utf16Char++) {
+      const char *digits = "0123456789ABCDEF";
+      source += "\\u";
+      source += digits[(utf16Char >> 12) & 0x0f];
+      source += digits[(utf16Char >> 8) & 0x0f];
+      source += digits[(utf16Char >> 4) & 0x0f];
+      source += digits[(utf16Char)&0x0f];
+    }
+    source += "\"";
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ source });
+    json.stringify(jsonDestination);
+    REQUIRE(
+      jsonDestination.toString()
+      == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz &#x0080;&#x0081;&#x0082;&#x0083;&#x0084;&#x0085;&#x0086;&#x0087;&#x0088;&#x0089;&#x008A;&#x008B;&#x008C;&#x008D;&#x008E;&#x008F;&#x0090;&#x0091;&#x0092;&#x0093;&#x0094;&#x0095;&#x0096;&#x0097;&#x0098;&#x0099;&#x009A;&#x009B;&#x009C;&#x009D;&#x009E;&#x009F;&#x00A0;&#x00A1;&#x00A2;&#x00A3;&#x00A4;&#x00A5;&#x00A6;&#x00A7;&#x00A8;&#x00A9;&#x00AA;&#x00AB;&#x00AC;&#x00AD;&#x00AE;&#x00AF;&#x00B0;&#x00B1;&#x00B2;&#x00B3;&#x00B4;&#x00B5;&#x00B6;&#x00B7;&#x00B8;&#x00B9;&#x00BA;&#x00BB;&#x00BC;&#x00BD;&#x00BE;&#x00BF;&#x00C0;&#x00C1;&#x00C2;&#x00C3;&#x00C4;&#x00C5;&#x00C6;&#x00C7;&#x00C8;&#x00C9;&#x00CA;&#x00CB;&#x00CC;&#x00CD;&#x00CE;&#x00CF;&#x00D0;&#x00D1;&#x00D2;&#x00D3;&#x00D4;&#x00D5;&#x00D6;&#x00D7;&#x00D8;&#x00D9;&#x00DA;&#x00DB;&#x00DC;&#x00DD;&#x00DE;&#x00DF;&#x00E0;&#x00E1;&#x00E2;&#x00E3;&#x00E4;&#x00E5;&#x00E6;&#x00E7;&#x00E8;&#x00E9;&#x00EA;&#x00EB;&#x00EC;&#x00ED;&#x00EE;&#x00EF;&#x00F0;&#x00F1;&#x00F2;&#x00F3;&#x00F4;&#x00F5;&#x00F6;&#x00F7;&#x00F8;&#x00F9;&#x00FA;&#x00FB;&#x00FC;&#x00FD;&#x00FE;&#x00FF;</root>)");
   }
 }
