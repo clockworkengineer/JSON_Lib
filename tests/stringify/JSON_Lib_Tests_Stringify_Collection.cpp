@@ -52,9 +52,9 @@ TEST_CASE("Check JSON stringification of collection types to a buffer and check 
     REQUIRE(jsonDestination.toString() == expected);
   }
 }
-// ============================================================
-// Stringification of collection types to a buffer and validation
-// ============================================================
+// =============================================================
+// Stringification of collection types to a file and validation
+// =============================================================
 TEST_CASE("Check JSON stringification of collection types to a file and check values.", "[JSON][Stringify][File]")
 {
   const JSON json;
