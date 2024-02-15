@@ -45,7 +45,6 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
   {
     std::string escaped;
     escaped += "\"abcdefghijklmnopqrstuvwxyz";
-    // escaped += static_cast<char>(0);
     escaped += static_cast<char>(1);
     escaped += static_cast<char>(2);
     escaped += '"';
