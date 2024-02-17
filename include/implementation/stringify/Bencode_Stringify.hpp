@@ -4,13 +4,15 @@
 #include "JSON_Core.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
+#include "Bencode_Translator.hpp"
 
 namespace JSON_Lib {
 
 class Bencode_Stringify : public IStringify
 {
 public:
-  Bencode_Stringify() = default;
+  explicit Bencode_Stringify(ITranslator &translator) : bencodeTranslator(translator) {}
+  explicit Bencode_Stringify(ITranslator &&translator) : bencodeTranslator(translator) {}
   Bencode_Stringify(const Bencode_Stringify &other) = delete;
   Bencode_Stringify &operator=(const Bencode_Stringify &other) = delete;
   Bencode_Stringify(Bencode_Stringify &&other) = delete;
@@ -30,6 +32,9 @@ private:
   void stringifyHole(const JNode &jNode, IDestination &destination) const;
   void stringifyObject(const JNode &jNode, IDestination &destination, long indent) const;
   void stringifyArray(const JNode &jNode, IDestination &destination, long indent) const;
+
+  ITranslator &bencodeTranslator;
 };
+
 
 }// namespace JSON_Lib

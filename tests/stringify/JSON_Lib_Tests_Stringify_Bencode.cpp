@@ -7,6 +7,7 @@
 
 #include "JSON_Lib_Tests.hpp"
 #include "Bencode_Stringify.hpp"
+#include "JSON_Converter.hpp"
 
 using namespace JSON_Lib;
 
@@ -15,7 +16,7 @@ using namespace JSON_Lib;
 // =========================================================
 TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stringify][Simple][Bencode]")
 {
-  const JSON json(std::make_unique<Bencode_Stringify>().release());
+  const JSON json(std::make_unique<Bencode_Stringify>(Bencode_Translator(JSON_Converter())).release());
   SECTION("Stringify a string (abcdefghijklmnopqrstuvwxyz) to Bencode and check its value.",
     "[JSON][Stringify][String][Bencode]")
   {
