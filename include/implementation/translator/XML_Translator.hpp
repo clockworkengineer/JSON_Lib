@@ -29,7 +29,7 @@ public:
   std::string to(const std::string &utf8String) override
   {
     std::string translated;
-    for (char16_t ch : xmlConverter.toUtf16(utf8String)) {
+     for (char16_t ch : xmlConverter.toUtf16(utf8String)) {
       if (isASCII(ch) && std::isprint(ch)) {
         if (ch == '&') {
           translated += "&amp;";

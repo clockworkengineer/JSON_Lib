@@ -15,7 +15,7 @@ public:
   };
 
   // Pass in user defined converter here
-  Bencode_Translator() = default;
+  explicit Bencode_Translator(const IConverter &converter) : bencodeConverter(converter) {}
   // No other constructors supported
   Bencode_Translator(const Bencode_Translator &other) = delete;
   Bencode_Translator &operator=(const Bencode_Translator &other) = delete;
@@ -28,5 +28,7 @@ public:
   std::string to(const std::string &utf8String) override { return (utf8String); };
 
 private:
+  // Character converter
+  const IConverter &bencodeConverter;
 };
 }// namespace JSON_Lib
