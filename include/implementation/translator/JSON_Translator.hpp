@@ -1,10 +1,6 @@
 #pragma once
 
-#include <array>
-#include <stdexcept>
-#include <string>
 #include <unordered_map>
-#include <vector>
 
 #include "IConverter.hpp"
 #include "ITranslator.hpp"
