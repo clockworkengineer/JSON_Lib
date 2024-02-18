@@ -177,14 +177,7 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
   SECTION(R"(Stringify XML string with escapes (1-127)' to buffer and check value.)", "[JSON][Stringify][XML][Escapes]")
   {
     std::string source{ R"("abcdefghijklmnopqrstuvwxyz )" };
-    for (char16_t utf16Char = 1; utf16Char < 128; utf16Char++) {
-      const char *digits = "0123456789ABCDEF";
-      source += "\\u";
-      source += digits[(utf16Char >> 12) & 0x0f];
-      source += digits[(utf16Char >> 8) & 0x0f];
-      source += digits[(utf16Char >> 4) & 0x0f];
-      source += digits[(utf16Char)&0x0f];
-    }
+    source += generateEscapes(1, 127);
     source += "\"";
     BufferDestination jsonDestination;
     json.parse(BufferSource{ source });
@@ -207,14 +200,7 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
     R"(Stringify XML string with escapes (128-255)' to buffer and check value.)", "[JSON][Stringify][XML][Escapes]")
   {
     std::string source{ R"("abcdefghijklmnopqrstuvwxyz )" };
-    for (char16_t utf16Char = 128; utf16Char < 256; utf16Char++) {
-      const char *digits = "0123456789ABCDEF";
-      source += "\\u";
-      source += digits[(utf16Char >> 12) & 0x0f];
-      source += digits[(utf16Char >> 8) & 0x0f];
-      source += digits[(utf16Char >> 4) & 0x0f];
-      source += digits[(utf16Char)&0x0f];
-    }
+    source += generateEscapes(128, 255);
     source += "\"";
     BufferDestination jsonDestination;
     json.parse(BufferSource{ source });

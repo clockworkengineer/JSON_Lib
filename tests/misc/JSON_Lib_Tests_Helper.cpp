@@ -66,3 +66,17 @@ std::string stripWhiteSpace(const std::string &jsonBuffer)
   json.strip(BufferSource{ jsonBuffer }, destination);
   return (destination.toString());
 }
+
+std::string generateEscapes(unsigned char first, unsigned char last)
+{
+  std::string result;
+  for (char16_t utf16Char = first; utf16Char < last + 1; utf16Char++) {
+    const char *digits = "0123456789ABCDEF";
+    result += "\\u";
+    result += digits[(utf16Char >> 12) & 0x0f];
+    result += digits[(utf16Char >> 8) & 0x0f];
+    result += digits[(utf16Char >> 4) & 0x0f];
+    result += digits[(utf16Char)&0x0f];
+  }
+  return (result);
+}
