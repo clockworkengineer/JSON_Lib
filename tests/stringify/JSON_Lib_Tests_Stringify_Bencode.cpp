@@ -46,12 +46,26 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "i98345e");
   }
+    SECTION("Stringify a integer (-98345) to Bencode and check its value.", "[JSON][Stringify][Integer][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "-98345" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "i-98345e");
+  }
   SECTION("Stringify a floating point (55.6667) to Bencode and check its value.", "[JSON][Stringify][Float][Bencode]")
   {
     BufferDestination jsonDestination;
     json.parse(BufferSource{ "55.6667" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "i55e");
+  }
+  SECTION("Stringify a floating point (-55.6667) to Bencode and check its value.", "[JSON][Stringify][Float][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "-55.6667" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "i-55e");
   }
   SECTION("Stringify a null to Bencode and check its value.", "[JSON][Stringify][Simple][Bencode]")
   {
