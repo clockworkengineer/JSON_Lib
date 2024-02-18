@@ -46,7 +46,7 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "i98345e");
   }
-    SECTION("Stringify a integer (-98345) to Bencode and check its value.", "[JSON][Stringify][Integer][Bencode]")
+  SECTION("Stringify a integer (-98345) to Bencode and check its value.", "[JSON][Stringify][Integer][Bencode]")
   {
     BufferDestination jsonDestination;
     json.parse(BufferSource{ "-98345" });
@@ -81,12 +81,26 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "li1ei444ei555ei666ei67ee");
   }
+  SECTION("Stringify an empty array to Bencode and check its value.", "[JSON][Stringify][Array][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ { "[]" } });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "le");
+  }
   SECTION("Stringify an object to Bencode and check its value.", "[JSON][Stringify][Object][Bencode]")
   {
     BufferDestination jsonDestination;
     json.parse(BufferSource{ { R"({"Age":77,"Name":"Rob"})" } });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "d3:Agei77e4:Name3:Robe");
+  }
+    SECTION("Stringify an empty object to Bencode and check its value.", "[JSON][Stringify][Object][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ { R"({})" } });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "de");
   }
   SECTION(R"(Stringify an nested array ({"City":"London","Population":[1,2,3,4,5]}) to Bencode and check its value.)",
     "[JSON][Stringify][Array][Bencode]")
