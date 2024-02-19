@@ -9,9 +9,12 @@
 
 #include "Utility.hpp"
 
+#include "JSON_Sources.hpp"
+#include "JSON_Destinations.hpp"
+#include "JSON_Converter.hpp"
+
 #include "XML_Stringify.hpp"
 #include "XML_Translator.hpp"
-#include "JSON_Converter.hpp"
 
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "plog/Log.h"
