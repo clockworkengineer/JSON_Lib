@@ -119,4 +119,31 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "l4:True11:Out of timei-2147483648ed3:keyi4444eee");
   }
+  SECTION(
+    R"(Stringify [{},{},{}] to a buffer and check its value.)",
+    "[JSON][Stringify][Object][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"([{},{},{}])" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "ldededee");
+  }
+  SECTION(
+    R"(Stringify [[], [],[]] to a buffer and check its value.)",
+    "[JSON][Stringify][Object][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"([[], [],[]])" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "llelelee");
+  }
+    SECTION(
+    R"(Stringify {"Test" : [[],[],[]]} to a buffer and check its value.)",
+    "[JSON][Stringify][Object][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"Test" : [[],[],[]]})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "d4:Testlleleleee");
+  }
 }
