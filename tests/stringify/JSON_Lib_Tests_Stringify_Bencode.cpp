@@ -111,7 +111,7 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     REQUIRE(jsonDestination.toString() == "d4:City6:London10:Populationli1ei2ei3ei4ei5eee");
   }
   SECTION(
-    R"(Stringify a nested object ([true,"Out of time",7.89043e+18,{"key":4444}]) to a buffer and check its value.)",
+    R"(Stringify a nested object ([true,"Out of time",7.89043e+18,{"key":4444}]) to a Bencode and check its value.)",
     "[JSON][Stringify][Object][Bencode]")
   {
     BufferDestination jsonDestination;
@@ -120,7 +120,7 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     REQUIRE(jsonDestination.toString() == "l4:True11:Out of timei-2147483648ed3:keyi4444eee");
   }
   SECTION(
-    R"(Stringify [{},{},{}] to a buffer and check its value.)",
+    R"(Stringify [{},{},{}] to a Bencode and check its value.)",
     "[JSON][Stringify][Object][Bencode]")
   {
     BufferDestination jsonDestination;
@@ -129,7 +129,7 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     REQUIRE(jsonDestination.toString() == "ldededee");
   }
   SECTION(
-    R"(Stringify [[], [],[]] to a buffer and check its value.)",
+    R"(Stringify [[], [],[]] to a Bencode and check its value.)",
     "[JSON][Stringify][Object][Bencode]")
   {
     BufferDestination jsonDestination;
@@ -138,7 +138,7 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     REQUIRE(jsonDestination.toString() == "llelelee");
   }
     SECTION(
-    R"(Stringify {"Test" : [[],[],[]]} to a buffer and check its value.)",
+    R"(Stringify {"Test" : [[],[],[]]} to a Bencode and check its value.)",
     "[JSON][Stringify][Object][Bencode]")
   {
     BufferDestination jsonDestination;
