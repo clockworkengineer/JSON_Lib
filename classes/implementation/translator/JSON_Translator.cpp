@@ -131,12 +131,12 @@ JSON_Translator::JSON_Translator(const IConverter &converter) : jsonConverter(co
 //  of UTF-8 characters. If input string contains any unpaired surrogates
 //  then this is deemed as a syntax error and an error is duly thrown.
 /// </summary>
-/// <param name="jsonString">JSON string to process.</param>
+/// <param name="escapedString">JSON string to process.</param>
 /// <returns>String with escapes translated.</returns>
-std::string JSON_Translator::from(const std::string &jsonString)
+std::string JSON_Translator::from(const std::string &escapedString)
 {
   std::u16string utf16Buffer;
-  for (auto current = jsonString.begin(); current != jsonString.end();) {
+  for (auto current = escapedString.begin(); current != escapedString.end();) {
     // Normal character
     if (*current != '\\') {
       utf16Buffer += *current++;
@@ -144,7 +144,7 @@ std::string JSON_Translator::from(const std::string &jsonString)
     }
     current++;
     // Check escape sequence if characters to process
-    if (current != jsonString.end()) {
+    if (current != escapedString.end()) {
       // Single character
       if (fromEscape.contains(static_cast<char>(*current))) {
         utf16Buffer += fromEscape[static_cast<char>(*current)];
@@ -152,7 +152,7 @@ std::string JSON_Translator::from(const std::string &jsonString)
       }
       // UTF16 "\uxxxx"
       else if (*current == 'u') {
-        utf16Buffer += decodeUTF16(current, std::distance(current, jsonString.end()));
+        utf16Buffer += decodeUTF16(current, std::distance(current, escapedString.end()));
       }
       // Escaped ASCII
       else if (isASCII(*current)) {
@@ -175,26 +175,26 @@ std::string JSON_Translator::from(const std::string &jsonString)
 /// Convert a string from raw charater values (UTF8) so that it has character
 /// escapes where applicable for its JSON form.
 /// </summary>
-/// <param name="utf8String">String to convert.</param>
+/// <param name="rawString">String to convert.</param>
 /// <returns>JSON string with escapes.</returns>
-std::string JSON_Translator::to(const std::string &utf8String)
+std::string JSON_Translator::to(const std::string &rawString)
 {
-  std::string jsonString;
-  for (char16_t utf16Char : jsonConverter.toUtf16(utf8String)) {
+  std::string escapedString;
+  for (char16_t utf16Char : jsonConverter.toUtf16(rawString)) {
     // Control characters
     if (toEscape.contains(utf16Char)) {
-      jsonString += '\\';
-      jsonString += toEscape[utf16Char];
+      escapedString += '\\';
+      escapedString += toEscape[utf16Char];
     }
     // ASCII
     else if (isASCII(utf16Char) && std::isprint(utf16Char)) {
-      jsonString += static_cast<char>(utf16Char);
+      escapedString += static_cast<char>(utf16Char);
     }
     // UTF8 escaped
     else {
-      jsonString += encodeUTF16(utf16Char);
+      escapedString += encodeUTF16(utf16Char);
     }
   }
-  return (jsonString);
+  return (escapedString);
 }
 }// namespace JSON_Lib

@@ -24,12 +24,12 @@ public:
   ~XML_Translator() override = default;
 
   // Convert to/from XML escaped characters
-  std::string from([[maybe_unused]] const std::string &jsonString) override { return (jsonString); }
+  std::string from([[maybe_unused]] const std::string &escapedString) override { return (escapedString); }
 
-  std::string to(const std::string &utf8String) override
+  std::string to(const std::string &rawString) override
   {
     std::string translated;
-     for (char16_t ch : xmlConverter.toUtf16(utf8String)) {
+    for (char16_t ch : xmlConverter.toUtf16(rawString)) {
       if (isASCII(ch) && std::isprint(ch)) {
         if (ch == '&') {
           translated += "&amp;";

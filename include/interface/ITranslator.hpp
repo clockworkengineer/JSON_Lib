@@ -6,18 +6,9 @@
 
 namespace JSON_Lib {
 
-// ========================
-// Unicode surrogate ranges
-// ========================
-
-constexpr char16_t kHighSurrogatesBegin{ 0xD800 };
-constexpr char16_t kHighSurrogatesEnd{ 0xDBFF };
-constexpr char16_t kLowSurrogatesBegin{ 0xDC00 };
-constexpr char16_t kLowSurrogatesEnd{ 0xDFFF };
-
-// =========================================================
-// Interface for translation to/from JSON escaped characters
-// =========================================================
+// ====================================================
+// Interface for translation to/from escaped characters
+// ====================================================
 class ITranslator
 {
 public:
@@ -34,14 +25,13 @@ public:
   virtual ~ITranslator() = default;
   // =====================================================================
   // Convert any escape sequences in a string to their correct sequence
-  // of UTF-8 characters. If input string contains any unpaired surrogates
-  // then this is deemed as a syntax error and an error is duly thrown.
+  // of UTF-8 characters.
   // =====================================================================
-  virtual std::string from(const std::string &jsonString) = 0;
+  virtual std::string from(const std::string &escapedString) = 0;
   // =========================================================================
-  // Convert a string from raw charater values (UTF8) so that it has character
-  // escapes where applicable for its JSON form.
+  // Convert a string from raw character values (UTF8) so that it has character
+  // escapes where applicable for its form.
   // =========================================================================
-  virtual std::string to(const std::string &utf8String) = 0;
+  virtual std::string to(const std::string &rawString) = 0;
 };
 }// namespace JSON_Lib

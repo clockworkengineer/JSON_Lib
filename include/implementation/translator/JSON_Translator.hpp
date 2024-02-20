@@ -7,6 +7,15 @@
 
 namespace JSON_Lib {
 
+// ========================
+// Unicode surrogate ranges
+// ========================
+
+constexpr char16_t kHighSurrogatesBegin{ 0xD800 };
+constexpr char16_t kHighSurrogatesEnd{ 0xDBFF };
+constexpr char16_t kLowSurrogatesBegin{ 0xDC00 };
+constexpr char16_t kLowSurrogatesEnd{ 0xDFFF };
+
 class JSON_Translator : public ITranslator
 {
 public:
@@ -26,8 +35,8 @@ public:
   ~JSON_Translator() override = default;
 
   // Convert to/from JSON escaped characters
-  std::string from(const std::string &jsonString) override;
-  std::string to(const std::string &utf8String) override;
+  std::string from(const std::string &escapedString) override;
+  std::string to(const std::string &rawString) override;
 
 private:
   // Character converter
