@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18.1)
 
-project("JSON_Lib" VERSION 1.0.0 DESCRIPTION "JSON C++ Library" LANGUAGES CXX)
+project("JSON_Lib" VERSION 1.1.0 DESCRIPTION "JSON C++ Library" LANGUAGES CXX)
 
 # C++ options
 set(CMAKE_CXX_STANDARD 20)
