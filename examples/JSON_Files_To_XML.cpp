@@ -9,8 +9,8 @@
 
 #include "Utility.hpp"
 
-#include "JSON_Sources.hpp"
-#include "JSON_Destinations.hpp"
+#include "JSON.hpp"
+#include "JSON_Core.hpp"
 #include "JSON_Converter.hpp"
 
 #include "XML_Stringify.hpp"

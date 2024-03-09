@@ -4,8 +4,6 @@
 #include <sstream>
 
 #include "JSON.hpp"
-#include "JSON_Sources.hpp"
-#include "JSON_Destinations.hpp"
 #include "JSON_Core.hpp"
 
 class JSON_Analyzer : public JSON_Lib::IAction
