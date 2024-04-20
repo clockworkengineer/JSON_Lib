@@ -11,7 +11,6 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-#include "JSON_Converter.hpp"
 
 #include "XML_Stringify.hpp"
 #include "XML_Translator.hpp"
@@ -24,7 +23,7 @@ namespace js = JSON_Lib;
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   try {
-    js::JSON json(std::make_unique<js::XML_Stringify>(js::XML_Translator(js::JSON_Converter())).release());
+    js::JSON json(std::make_unique<js::XML_Stringify>(js::XML_Translator()).release());
     // Initialise logging.
     plog::init(plog::debug, "JSON_Files_To_XML.log");
     PLOG_INFO << "JSON_Files_To_XML started ...";

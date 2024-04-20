@@ -1,7 +1,7 @@
 #pragma once
 
-#include "IConverter.hpp"
 #include "ITranslator.hpp"
+#include "JSON_Converter.hpp"
 
 namespace JSON_Lib {
 
@@ -14,9 +14,7 @@ public:
     explicit Error(const std::string &message) : std::runtime_error("XML Translator Error: " + message) {}
   };
 
-  // Pass in user defined converter here
-  explicit XML_Translator(const IConverter &converter) : xmlConverter(converter) {}
-  // No other constructors supported
+  XML_Translator() = default;
   XML_Translator(const XML_Translator &other) = delete;
   XML_Translator &operator=(const XML_Translator &other) = delete;
   XML_Translator(XML_Translator &&other) = delete;
@@ -29,7 +27,7 @@ public:
   std::string to(const std::string &rawString) override
   {
     std::string translated;
-    for (char16_t ch : xmlConverter.toUtf16(rawString)) {
+    for (char16_t ch : toUtf16(rawString)) {
       if (isASCII(ch) && std::isprint(ch)) {
         if (ch == '&') {
           translated += "&amp;";
@@ -59,8 +57,6 @@ public:
   };
 
 private:
-  // Character converter
-  const IConverter &xmlConverter;
 
   /// <summary>
   /// Determine whether passed in character is vaid ASCII

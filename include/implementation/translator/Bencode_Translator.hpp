@@ -1,6 +1,5 @@
 #pragma once
 
-#include "IConverter.hpp"
 #include "ITranslator.hpp"
 
 namespace JSON_Lib {
@@ -14,9 +13,7 @@ public:
     explicit Error(const std::string &message) : std::runtime_error("Bencode Translator Error: " + message) {}
   };
 
-  // Pass in user defined converter here
-  explicit Bencode_Translator(const IConverter &converter) : bencodeConverter(converter) {}
-  // No other constructors supported
+  Bencode_Translator() = default;
   Bencode_Translator(const Bencode_Translator &other) = delete;
   Bencode_Translator &operator=(const Bencode_Translator &other) = delete;
   Bencode_Translator(Bencode_Translator &&other) = delete;
@@ -28,7 +25,5 @@ public:
   std::string to(const std::string &rawString) override { return (rawString); };
 
 private:
-  // Character converter
-  const IConverter &bencodeConverter;
 };
 }// namespace JSON_Lib

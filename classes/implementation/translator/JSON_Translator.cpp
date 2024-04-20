@@ -116,7 +116,7 @@ bool isASCII(char16_t utf16Char) { return (((utf16Char > 0x001F) && (utf16Char <
 /// <summary>
 /// JSON translator constructor.
 /// </summary>
-JSON_Translator::JSON_Translator(const IConverter &converter) : jsonConverter(converter)
+JSON_Translator::JSON_Translator()
 {
   // Initialise tables used to convert to/from single character
   // escape sequences within a JSON string.
@@ -168,7 +168,7 @@ std::string JSON_Translator::from(const std::string &escapedString)
     }
   }
   if (unpairedSurrogatesInBuffer(utf16Buffer)) { throw Error("Unpaired surrogate found."); }
-  return (jsonConverter.toUtf8(utf16Buffer));
+  return (toUtf8(utf16Buffer));
 }
 
 /// <summary>
@@ -180,7 +180,7 @@ std::string JSON_Translator::from(const std::string &escapedString)
 std::string JSON_Translator::to(const std::string &rawString)
 {
   std::string escapedString;
-  for (char16_t utf16Char : jsonConverter.toUtf16(rawString)) {
+  for (char16_t utf16Char : toUtf16(rawString)) {
     // Control characters
     if (toEscape.contains(utf16Char)) {
       escapedString += '\\';

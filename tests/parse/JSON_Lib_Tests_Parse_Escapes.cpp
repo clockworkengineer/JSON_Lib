@@ -103,7 +103,7 @@ TEST_CASE("Check JSON object for decoding of strings with escape characters.", "
     "[JSON][Parse][Escapes]")
   {
     BufferSource jsonSource{ R"("abcdefghijklmnopqrstuvwxyz \u0000")" };
-    REQUIRE_THROWS_AS(json.parse(jsonSource), IConverter::Error);
+    REQUIRE_THROWS_AS(json.parse(jsonSource), JSON_Lib::Error);
 
   }
 }

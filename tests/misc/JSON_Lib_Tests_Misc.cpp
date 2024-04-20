@@ -14,8 +14,7 @@ using namespace JSON_Lib;
 // ===============
 TEST_CASE("Check translation of surrogate pairs.", "[JSON][Translator]")
 {
-  JSON_Converter converter;
-  JSON_Translator translator(converter);
+  JSON_Translator translator;
   SECTION("Translate from escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value.",
     "[JSON][Translator]")
   {

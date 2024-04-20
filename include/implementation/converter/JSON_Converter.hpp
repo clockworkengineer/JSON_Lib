@@ -1,15 +1,15 @@
 #pragma once
 
-#include "IConverter.hpp"
+#include <string>
+#include <algorithm>
+#include <stdexcept>
+#include <string>
 
 namespace JSON_Lib {
-
-class JSON_Converter : public IConverter
+struct Error : public std::runtime_error
 {
-public:
-  [[nodiscard]] std::u16string toUtf16(const std::string &utf8) const override;
-  [[nodiscard]] std::string toUtf8(const std::u16string &utf16) const override;
-
-private:
+  explicit Error(const std::string &message) : std::runtime_error("JSON_Converter Error: " + message) {}
 };
+[[nodiscard]] std::u16string toUtf16(const std::string &utf8);
+[[nodiscard]] std::string toUtf8(const std::u16string &utf16);
 }// namespace JSON_Lib

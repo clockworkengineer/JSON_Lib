@@ -2,8 +2,8 @@
 
 #include <unordered_map>
 
-#include "IConverter.hpp"
 #include "ITranslator.hpp"
+#include "JSON_Converter.hpp"
 
 namespace JSON_Lib {
 
@@ -26,7 +26,7 @@ public:
   };
 
   // Pass in user defined converter here
-  explicit JSON_Translator(const IConverter &converter);
+  explicit JSON_Translator();
   // No other constructors supported
   JSON_Translator(const JSON_Translator &other) = delete;
   JSON_Translator &operator=(const JSON_Translator &other) = delete;
@@ -39,8 +39,6 @@ public:
   std::string to(const std::string &rawString) override;
 
 private:
-  // Character converter
-  const IConverter &jsonConverter;
   // To/From escape sequence lookup maps
   std::unordered_map<char, char16_t> fromEscape;
   std::unordered_map<char16_t, char> toEscape;

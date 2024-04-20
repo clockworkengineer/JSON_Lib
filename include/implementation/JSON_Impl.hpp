@@ -64,8 +64,6 @@ private:
   inline static std::unique_ptr<IStringify> jsonStringify;
   // Pointer to JSON translator interface
   inline static std::unique_ptr<ITranslator> jsonTranslator;
-  // Pointer to character conversion interface
-  inline static std::unique_ptr<IConverter> jsonConverter;
 };
 /// <summary>
 /// Recursively traverse JNode tree calling IAction methods and possibly

@@ -17,3 +17,4 @@
 #include "JSON_Interfaces.hpp"
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
+#include "JSON_Converter.hpp"
