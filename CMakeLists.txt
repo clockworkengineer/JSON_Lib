@@ -41,6 +41,7 @@ set(JSON_INCLUDES
   ./include/JSON.hpp
   ./include/implementation/JSON_Core.hpp
   ./include/implementation/JSON_Impl.hpp
+  ./include/implementation/common/JSON_Error.hpp
   ./include/implementation/variants/JSON_Variant.hpp
   ./include/implementation/variants/JSON_Hole.hpp
   ./include/implementation/variants/JSON_Object.hpp
@@ -84,6 +85,7 @@ target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
   ${PROJECT_SOURCE_DIR}/include
   ${PROJECT_SOURCE_DIR}/include/interface
   ${PROJECT_SOURCE_DIR}/include/implementation
+  ${PROJECT_SOURCE_DIR}/include/implementation/common
   ${PROJECT_SOURCE_DIR}/include/implementation/jnode
   ${PROJECT_SOURCE_DIR}/include/implementation/io
   ${PROJECT_SOURCE_DIR}/include/implementation/converter

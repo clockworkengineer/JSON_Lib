@@ -22,7 +22,7 @@ public:
   // Set print ident value
   void setIndent(long indent) override
   {
-    if (indent < 0) { throw JSON::Error("Invalid print indentation value."); };
+    if (indent < 0) { throw JSON_Lib::Error("Invalid print indentation value."); };
     printIndent = indent;
   }
 

@@ -307,7 +307,7 @@ TEST_CASE("Check Check setting of print indentation.", "[JSON][Print][Indent]")
   }
   SECTION("Set ident to -4 and trigger invalid indent expection.", "[JSON][Print][Ident][Exception]")
   {
-    REQUIRE_THROWS_AS(json.setIndent(-4), JSON_Lib::JSON::Error);
+    REQUIRE_THROWS_AS(json.setIndent(-4), JSON_Lib::Error);
     REQUIRE_THROWS_WITH(json.setIndent(-4), "JSON Error: Invalid print indentation value.");
   }
 }

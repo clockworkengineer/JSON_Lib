@@ -9,6 +9,7 @@
 #include "Windows.h"
 
 #include "JSON_Converter.hpp"
+#include "JSON_Error.hpp"
 
 namespace JSON_Lib {
 

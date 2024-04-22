@@ -89,7 +89,7 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
     action.onArray(jNode);
     for (auto &entry : JRef<Array>(jNode).value()) { traverseJNodes(entry, action); }
   } else if (!jNode.isHole()) {
-    throw JSON::Error("Unknown JNode type encountered during tree traversal.");
+    throw Error("Unknown JNode type encountered during tree traversal.");
   }
 }
 }// namespace JSON_Lib

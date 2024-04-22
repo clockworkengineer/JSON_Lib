@@ -18,3 +18,4 @@
 #include "JSON_Sources.hpp"
 #include "JSON_Destinations.hpp"
 #include "JSON_Converter.hpp"
+#include "JSON_Error.hpp"

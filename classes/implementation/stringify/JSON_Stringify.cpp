@@ -145,7 +145,7 @@ void JSON_Stringify::stringify(const JNode &jNode, IDestination &destination, lo
   } else if (jNode.isArray()) {
     stringifyArray(jNode, destination, indent);
   } else {
-    throw JSON::Error("Unknown JNode type encountered during stringification.");
+    throw Error("Unknown JNode type encountered during stringification.");
   }
 }
 }// namespace JSON_Lib

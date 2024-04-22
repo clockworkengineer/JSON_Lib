@@ -37,13 +37,13 @@ void JSON_Impl::parse(ISource &source) { jNodeRoot = jsonParser->parse(source); 
 
 void JSON_Impl::stringify(IDestination &destination) const
 {
-  if (jNodeRoot.isEmpty()) { throw JSON::Error("No JSON to stringify."); }
+  if (jNodeRoot.isEmpty()) { throw Error("No JSON to stringify."); }
   jsonStringify->stringify(jNodeRoot, destination, 0);
 }
 
 void JSON_Impl::print(IDestination &destination) const
 {
-  if (jNodeRoot.isEmpty()) { throw JSON::Error("No JSON to print."); }
+  if (jNodeRoot.isEmpty()) { throw Error("No JSON to print."); }
   jsonStringify->stringify(jNodeRoot, destination, jsonStringify->getIndent());
 }
 
@@ -71,12 +71,12 @@ void JSON_Impl::strip(ISource &source, IDestination &destination) const
 
 void JSON_Impl::traverse(IAction &action)
 {
-  if (jNodeRoot.isEmpty()) { throw JSON::Error("No JSON to traverse."); }
+  if (jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
   traverseJNodes(jNodeRoot, action);
 }
 void JSON_Impl::traverse(IAction &action) const
 {
-  if (jNodeRoot.isEmpty()) { throw JSON::Error("No JSON to traverse."); }
+  if (jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
   traverseJNodes(jNodeRoot, action);
 }
 

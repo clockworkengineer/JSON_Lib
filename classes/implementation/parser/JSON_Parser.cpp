@@ -37,7 +37,7 @@ bool validEscape(char escape)
 std::string extractString(ISource &source, ITranslator &translator)
 {
   bool translateEscapes = false;
-  if (source.current() != '"') { throw JSON::Error(source.getPosition(), "Missing opening '\"' on string."); }
+  if (source.current() != '"') { throw JSON_Lib::Error(source.getPosition(), "Missing opening '\"' on string."); }
   source.next();
   std::string extracted;
   while (source.more() && source.current() != '"') {
@@ -50,7 +50,7 @@ std::string extractString(ISource &source, ITranslator &translator)
     extracted += source.current();
     source.next();
   }
-  if (source.current() != '"') { throw JSON::Error(source.getPosition(), "Missing closing '\"' on string."); }
+  if (source.current() != '"') { throw JSON_Lib::Error(source.getPosition(), "Missing closing '\"' on string."); }
   // Need to translate escapes to UTF8
   if (translateEscapes) { extracted = translator.from(extracted); }
   source.next();
@@ -77,7 +77,7 @@ Object::Entry JSON_Parser::parseObjectEntry(ISource &source)
   source.ignoreWS();
   const std::string key{ extractString(source, jsonTranslator) };
   source.ignoreWS();
-  if (source.current() != ':') { throw JSON::Error(source.getPosition(), "Missing ':' in key value pair."); }
+  if (source.current() != ':') { throw JSON_Lib::Error(source.getPosition(), "Missing ':' in key value pair."); }
   source.next();
   return (Object::Entry(key, parse(source)));
 }
@@ -103,7 +103,7 @@ JNode JSON_Parser::parseNumber(ISource &source)
       || number.is<long double>()) {
     return (JNode::make<Number>(number));
   }
-  throw JSON::Error(source.getPosition(), "Invalid numeric value.");
+  throw JSON_Lib::Error(source.getPosition(), "Invalid numeric value.");
 }
 
 /// <summary>
@@ -115,7 +115,7 @@ JNode JSON_Parser::parseBoolean(ISource &source)
 {
   if (source.match("true")) { return (JNode::make<Boolean>(true)); }
   if (source.match("false")) { return (JNode::make<Boolean>(false)); }
-  throw JSON::Error(source.getPosition(), "Invalid boolean value.");
+  throw JSON_Lib::Error(source.getPosition(), "Invalid boolean value.");
 }
 
 /// <summary>
@@ -125,7 +125,7 @@ JNode JSON_Parser::parseBoolean(ISource &source)
 /// <returns>Null JNode.</returns>
 JNode JSON_Parser::parseNull(ISource &source)
 {
-  if (!source.match("null")) { throw JSON::Error(source.getPosition(), "Invalid null value."); }
+  if (!source.match("null")) { throw JSON_Lib::Error(source.getPosition(), "Invalid null value."); }
   return (JNode::make<Null>());
 }
 
@@ -146,7 +146,7 @@ JNode JSON_Parser::parseObject(ISource &source)
       JRef<Object>(jNodeObject).add(parseObjectEntry(source));
     }
   }
-  if (source.current() != '}') { throw JSON::Error(source.getPosition(), "Missing closing '}' in object definition."); }
+  if (source.current() != '}') { throw JSON_Lib::Error(source.getPosition(), "Missing closing '}' in object definition."); }
   source.next();
   return (jNodeObject);
 }
@@ -168,7 +168,7 @@ JNode JSON_Parser::parseArray(ISource &source)
       JRef<Array>(jNodeArray).add(parse(source));
     }
   }
-  if (source.current() != ']') { throw JSON::Error(source.getPosition(), "Missing closing ']' in array definition."); }
+  if (source.current() != ']') { throw JSON_Lib::Error(source.getPosition(), "Missing closing ']' in array definition."); }
   source.next();
   return (jNodeArray);
 }
@@ -216,7 +216,7 @@ JNode JSON_Parser::parse(ISource &source)
     jNode = parseNumber(source);
     break;
   default:
-    throw JSON::Error(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null.");
+    throw JSON_Lib::Error(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null.");
   }
   source.ignoreWS();
   return (jNode);

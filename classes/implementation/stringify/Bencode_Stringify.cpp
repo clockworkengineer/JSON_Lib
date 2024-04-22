@@ -126,7 +126,7 @@ void Bencode_Stringify::stringify(const JNode &jNode, IDestination &destination,
   } else if (jNode.isArray()) {
     stringifyArray(jNode, destination, indent);
   } else {
-    throw JSON::Error("Unknown JNode type encountered during stringification.");
+    throw Error("Unknown JNode type encountered during stringification.");
   }
 }
 
