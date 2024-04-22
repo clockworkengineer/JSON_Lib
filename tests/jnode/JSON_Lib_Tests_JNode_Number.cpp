@@ -318,9 +318,9 @@ TEST_CASE("Check JNode Number conversion exceptions.", "[JSON][JNode][Number][Ex
   SECTION("Check integer with invalid characters.", "[JSON][JNode][Number][Exceptions]")
   {
     BufferSource jsonSource{ "4345u334u" };
-    REQUIRE_THROWS_AS(json.parse(jsonSource), JSON_Lib::Error);
+    REQUIRE_THROWS_AS(json.parse(jsonSource), SyntaxError);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 10]: Invalid numeric value.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Syntax Error [Line: 1 Column: 10]: Invalid numeric value.");
   }
   SECTION("Check floating point with exponent.", "[JSON][JNode][Number][Exceptions]")
   {
@@ -330,16 +330,16 @@ TEST_CASE("Check JNode Number conversion exceptions.", "[JSON][JNode][Number][Ex
   SECTION("Check floating point with invalid exponent.", "[JSON][JNode][Number][Exceptions]")
   {
     BufferSource jsonSource{ "78.e43e-2" };
-    REQUIRE_THROWS_AS(json.parse(jsonSource), JSON_Lib::Error);
+    REQUIRE_THROWS_AS(json.parse(jsonSource), SyntaxError);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 10]: Invalid numeric value.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Syntax Error [Line: 1 Column: 10]: Invalid numeric value.");
   }
   SECTION("Check floating point with multiple decimal points.", "[JSON][JNode][Number][Exceptions]")
   {
     BufferSource jsonSource{ "78.5454.545" };
-    REQUIRE_THROWS_AS(json.parse(jsonSource), JSON_Lib::Error);
+    REQUIRE_THROWS_AS(json.parse(jsonSource), SyntaxError);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Error [Line: 1 Column: 12]: Invalid numeric value.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Syntax Error [Line: 1 Column: 12]: Invalid numeric value.");
   }
 }
 // ===============================
