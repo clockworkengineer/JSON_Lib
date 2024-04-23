@@ -11,7 +11,6 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-#include "JSON_Converter.hpp"
 #include "JSON_Translator.hpp"
 
 // ===================

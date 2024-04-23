@@ -8,7 +8,6 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-
 #include "JSON_Parser.hpp"
 
 namespace JSON_Lib {
