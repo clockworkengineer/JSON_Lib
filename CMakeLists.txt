@@ -29,7 +29,7 @@ set(JSON_LIBRARY_NAME ${PROJECT_NAME})
 set(JSON_SOURCES
   ./classes/JSON.cpp
   ./classes/implementation/JSON_Impl.cpp
-  ./classes/implementation/file/JSON_Impl_File.cpp
+  ./classes/implementation/file/JSON_File.cpp
   ./classes/implementation/translator/JSON_Translator.cpp
   ./classes/implementation/parser/JSON_Parser.cpp
   ./classes/implementation/stringify/JSON_Stringify.cpp
