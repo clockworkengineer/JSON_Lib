@@ -10,6 +10,7 @@
 #include <locale>
 
 #include "JSON_Converter.hpp"
+#include "JSON_Error.hpp"
 
 namespace JSON_Lib {
 
@@ -18,12 +19,12 @@ static std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> utf16Co
 /// <summary>
 /// Convert utf8 <-> utf16 strings.
 /// </summary>
-std::u16string JSON_Converter::toUtf16(const std::string &utf8) const
+std::u16string toUtf16(const std::string &utf8) 
 {
   if (utf8.find('\0') != std::string::npos) { throw Error("Tried to convert a null character."); }
   return (utf16Converter.from_bytes(utf8));
 }
-std::string JSON_Converter::toUtf8(const std::u16string &utf16) const
+std::string toUtf8(const std::u16string &utf16) 
 {
   if (utf16.find('\0') != std::string::npos) { throw Error("Tried to convert a null character."); }
   return (utf16Converter.to_bytes(utf16));
