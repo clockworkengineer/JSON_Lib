@@ -16,7 +16,7 @@ using namespace JSON_Lib;
 // =========================================================
 TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stringify][Simple][Bencode]")
 {
-  const JSON json(std::make_unique<Bencode_Stringify>(Bencode_Translator()).release());
+  const JSON json(std::make_unique<Bencode_Stringify>().release());
   SECTION("Stringify a string (abcdefghijklmnopqrstuvwxyz) to Bencode.", "[JSON][Stringify][String][Bencode]")
   {
     BufferDestination jsonDestination;

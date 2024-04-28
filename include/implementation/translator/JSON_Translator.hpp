@@ -27,7 +27,7 @@ public:
   };
 
   // Pass in user defined converter here
-  explicit JSON_Translator();
+  JSON_Translator();
   // No other constructors supported
   JSON_Translator(const JSON_Translator &other) = delete;
   JSON_Translator &operator=(const JSON_Translator &other) = delete;
@@ -36,12 +36,12 @@ public:
   ~JSON_Translator() override = default;
 
   // Convert to/from JSON escaped characters
-  std::string from(const std::string &escapedString) override;
-  std::string to(const std::string &rawString) override;
+  std::string from(const std::string &escapedString) const override;
+  std::string to(const std::string &rawString) const override;
 
 private:
   // To/From escape sequence lookup maps
-  std::unordered_map<char, char16_t> fromEscape;
-  std::unordered_map<char16_t, char> toEscape;
+  mutable std::unordered_map<char, char16_t> fromEscape;
+  mutable std::unordered_map<char16_t, char> toEscape;
 };
 }// namespace JSON_Lib

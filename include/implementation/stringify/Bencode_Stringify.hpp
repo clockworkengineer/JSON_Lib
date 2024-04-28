@@ -9,9 +9,7 @@ namespace JSON_Lib {
 class Bencode_Stringify : public IStringify
 {
 public:
-  explicit Bencode_Stringify(ITranslator &translator) : bencodeTranslator(translator) {}
-  explicit Bencode_Stringify(ITranslator &&translator) : bencodeTranslator(translator) {}
-  Bencode_Stringify(const Bencode_Stringify &other) = delete;
+  Bencode_Stringify() = default;
   Bencode_Stringify &operator=(const Bencode_Stringify &other) = delete;
   Bencode_Stringify(Bencode_Stringify &&other) = delete;
   Bencode_Stringify &operator=(Bencode_Stringify &&other) = delete;
@@ -31,7 +29,7 @@ private:
   void stringifyObject(const JNode &jNode, IDestination &destination, long indent) const;
   void stringifyArray(const JNode &jNode, IDestination &destination, long indent) const;
 
-  ITranslator &bencodeTranslator;
+  Bencode_Translator bencodeTranslator;
 };
 
 

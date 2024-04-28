@@ -133,7 +133,7 @@ JSON_Translator::JSON_Translator()
 /// </summary>
 /// <param name="escapedString">JSON string to process.</param>
 /// <returns>String with escapes translated.</returns>
-std::string JSON_Translator::from(const std::string &escapedString)
+std::string JSON_Translator::from(const std::string &escapedString) const
 {
   std::u16string utf16Buffer;
   for (auto current = escapedString.begin(); current != escapedString.end();) {
@@ -177,7 +177,7 @@ std::string JSON_Translator::from(const std::string &escapedString)
 /// </summary>
 /// <param name="rawString">String to convert.</param>
 /// <returns>JSON string with escapes.</returns>
-std::string JSON_Translator::to(const std::string &rawString)
+std::string JSON_Translator::to(const std::string &rawString) const
 {
   std::string escapedString;
   for (char16_t utf16Char : toUtf16(rawString)) {

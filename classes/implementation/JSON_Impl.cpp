@@ -20,7 +20,7 @@ JSON_Impl::JSON_Impl(IStringify *stringify, IParser *parser)
     jsonParser.reset(parser);
   }
   if (stringify == nullptr) {
-    jsonStringify = std::make_unique<JSON_Stringify>(*jsonTranslator);
+    jsonStringify = std::make_unique<JSON_Stringify>();
   } else {
     jsonStringify.reset(stringify);
   }

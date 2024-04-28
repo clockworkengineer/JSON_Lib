@@ -23,7 +23,7 @@ namespace js = JSON_Lib;
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   try {
-    js::JSON json(std::make_unique<js::XML_Stringify>(js::XML_Translator()).release());
+    js::JSON json(std::make_unique<js::XML_Stringify>().release());
     // Initialise logging.
     plog::init(plog::debug, "JSON_Files_To_XML.log");
     PLOG_INFO << "JSON_Files_To_XML started ...";

@@ -10,7 +10,7 @@ namespace JSON_Lib {
 class JSON_Stringify : public IStringify
 {
 public:
-  explicit JSON_Stringify(ITranslator &translator) : jsonTranslator(translator) {}
+  JSON_Stringify() = default;
   JSON_Stringify(const JSON_Stringify &other) = delete;
   JSON_Stringify &operator=(const JSON_Stringify &other) = delete;
   JSON_Stringify(JSON_Stringify &&other) = delete;
@@ -38,7 +38,7 @@ private:
   void stringifyObject(const JNode &jNode, IDestination &destination, long indent) const;
   void stringifyArray(const JNode &jNode, IDestination &destination, long indent) const;
 
-  ITranslator &jsonTranslator;
+  JSON_Translator jsonTranslator;
 
   inline static long printIndent{ 4 };
 };

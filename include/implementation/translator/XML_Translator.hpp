@@ -22,9 +22,9 @@ public:
   ~XML_Translator() override = default;
 
   // Convert to/from XML escaped characters
-  std::string from([[maybe_unused]] const std::string &escapedString) override { return (escapedString); }
+  std::string from([[maybe_unused]] const std::string &escapedString) const override { return (escapedString); }
 
-  std::string to(const std::string &rawString) override
+  std::string to(const std::string &rawString) const override
   {
     std::string translated;
     for (char16_t ch : toUtf16(rawString)) {
@@ -63,6 +63,6 @@ private:
   /// </summary>
   /// <param name="utf16Char">UTF16 character.</param>
   /// <returns>==true if valid ASCII.</returns>
-  bool isASCII(char16_t utf16Char) { return (((utf16Char > 0x001F) && (utf16Char < 0x0080))); }
+  bool isASCII(char16_t utf16Char) const { return (((utf16Char > 0x001F) && (utf16Char < 0x0080))); }
 };
 }// namespace JSON_Lib

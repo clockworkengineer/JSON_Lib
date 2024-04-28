@@ -11,8 +11,7 @@ namespace JSON_Lib {
 class XML_Stringify : public IStringify
 {
 public:
-  explicit XML_Stringify(ITranslator &translator) : xmlTranslator(translator) {}
-  explicit XML_Stringify(ITranslator &&translator) : xmlTranslator(translator) {}
+  XML_Stringify() = default;
   XML_Stringify(const XML_Stringify &other) = delete;
   XML_Stringify &operator=(const XML_Stringify &other) = delete;
   XML_Stringify(XML_Stringify &&other) = delete;
@@ -34,7 +33,7 @@ private:
   void stringifyArray(const JNode &jNode, IDestination &destination, long indent) const;
   void stringifyXML(const JNode &jNode, IDestination &destination, long indent) const;
 
-  ITranslator &xmlTranslator;
+  XML_Translator xmlTranslator;
   
 };
 
