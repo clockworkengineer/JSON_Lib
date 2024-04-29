@@ -9,8 +9,8 @@
 
 #include "Utility.hpp"
 
-#include "JSON_Converter.hpp"
-
+#include "JSON.hpp"
+#include "JSON_Core.hpp"
 #include "Bencode_Stringify.hpp"
 
 #include "plog/Initializers/RollingFileInitializer.h"
@@ -21,7 +21,7 @@ namespace js = JSON_Lib;
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   try {
-    js::JSON json(std::make_unique<js::Bencode_Stringify>().release());
+    js::JSON json(js::makeStringify<js::Bencode_Stringify>());
     // Initialise logging.
     plog::init(plog::debug, "JSON_Files_To_Bencode.log");
     PLOG_INFO << "JSON_Files_To_Bencode started ...";

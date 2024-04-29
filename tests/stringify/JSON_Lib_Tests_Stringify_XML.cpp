@@ -17,7 +17,7 @@ using namespace JSON_Lib;
 // ================================================================
 TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringify][Simple][XML]")
 {
-  const JSON json(std::make_unique<XML_Stringify>().release());
+  const JSON json(makeStringify<XML_Stringify>());
   SECTION("Stringify a string (abcdefghijklmnopqrstuvwxyz) to XML.", "[JSON][Stringify][String][XML]")
   {
     BufferDestination jsonDestination;
