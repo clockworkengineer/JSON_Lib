@@ -7,12 +7,8 @@
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
 
-#include "Utility.hpp"
-
+#include "JSON_Utility.hpp"
 #include "JSON_Analyzer.hpp"
-
-#include "plog/Initializers/RollingFileInitializer.h"
-#include "plog/Log.h"
 
 namespace js = JSON_Lib;
 

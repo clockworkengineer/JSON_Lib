@@ -10,13 +10,9 @@
 
 #include <chrono>
 
-#include "Utility.hpp"
-
+#include "JSON_Utility.hpp"
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-
-#include "plog/Initializers/RollingFileInitializer.h"
-#include "plog/Log.h"
 
 namespace js = JSON_Lib;
 namespace chrono = std::chrono;
