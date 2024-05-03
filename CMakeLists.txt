@@ -72,7 +72,6 @@ set(JSON_INCLUDES
   ./include/interface/ISource.hpp
   ./include/interface/IDestination.hpp
   ./include/interface/ITranslator.hpp
-  ./include/interface/IConverter.hpp
   ./include/interface/IParser.hpp
   ./include/interface/IStringify.hpp)
 
