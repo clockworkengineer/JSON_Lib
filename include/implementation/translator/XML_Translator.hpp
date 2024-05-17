@@ -44,7 +44,6 @@ public:
         }
       } else {
         translated += "&#x";
-        std::string utf8Buffer;
         const char *digits = "0123456789ABCDEF";
         translated += digits[(ch >> 12) & 0x0f];
         translated += digits[(ch >> 8) & 0x0f];

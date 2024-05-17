@@ -19,7 +19,8 @@ public:
 
   virtual void add(const std::string &bytes) override
   {
-    for (auto b : bytes) { buffer.push_back(b); }
+    // for (auto b : bytes) { buffer.push_back(b); }
+    std::copy(bytes.begin(), bytes.end(), std::back_inserter(buffer));
   }
   virtual void add(const char ch) override { buffer.push_back(ch); }
   virtual void clear() override { buffer.clear(); }
