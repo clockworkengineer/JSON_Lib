@@ -32,16 +32,16 @@ char16_t decodeUTF16(std::string::const_iterator &current, ptrdiff_t numberOfCha
   if (numberOfCharacters >= 4) {
     char16_t utf16value{};
     // Hex digits will be ascii so can throw away high order byte of char
-    std::array<char, 5> hexDigits{ static_cast<char>(current[1]),
-      static_cast<char>(current[2]),
-      static_cast<char>(current[3]),
-      static_cast<char>(current[4]),
+    std::array<char, 5> hexDigits{ (current[1]),
+      (current[2]),
+      (current[3]),
+      (current[4]),
       '\0' };
     char *end;
     utf16value += static_cast<char16_t>(std::strtol(hexDigits.data(), &end, 16));
     if (*end == '\0') {
       current += hexDigits.size();
-      return (utf16value);
+      return utf16value;
     }
   }
   throw JSON_Translator::Error("Syntax error detected.");
@@ -57,11 +57,11 @@ std::string encodeUTF16(const char16_t utf16Char)
   std::string utf8Buffer;
   const char *digits = "0123456789ABCDEF";
   utf8Buffer += "\\u";
-  utf8Buffer += digits[(utf16Char >> 12) & 0x0f];
-  utf8Buffer += digits[(utf16Char >> 8) & 0x0f];
-  utf8Buffer += digits[(utf16Char >> 4) & 0x0f];
-  utf8Buffer += digits[(utf16Char)&0x0f];
-  return (utf8Buffer);
+  utf8Buffer += digits[utf16Char >> 12 & 0x0f];
+  utf8Buffer += digits[utf16Char >> 8 & 0x0f];
+  utf8Buffer += digits[utf16Char >> 4 & 0x0f];
+  utf8Buffer += digits[utf16Char&0x0f];
+  return utf8Buffer;
 }
 
 /// <summary>
@@ -71,8 +71,8 @@ std::string encodeUTF16(const char16_t utf16Char)
 /// <returns>==true if valid upper surrogate.</returns>
 bool isValidSurrogateUpper(char16_t utf16Char)
 {
-  return ((utf16Char >= static_cast<char16_t>(kHighSurrogatesBegin))
-          && (utf16Char <= static_cast<char16_t>(kHighSurrogatesEnd)));
+  return utf16Char >= static_cast<char16_t>(kHighSurrogatesBegin)
+         && utf16Char <= static_cast<char16_t>(kHighSurrogatesEnd);
 }
 /// <summary>
 /// Return true if a character is a valid lower surrogate.
@@ -81,8 +81,8 @@ bool isValidSurrogateUpper(char16_t utf16Char)
 /// <returns>==true if valid lower surrogate.</returns>
 bool isValidSurrogateLower(char16_t utf16Char)
 {
-  return ((utf16Char >= static_cast<char16_t>(kLowSurrogatesBegin))
-          && (utf16Char <= static_cast<char16_t>(kLowSurrogatesEnd)));
+  return utf16Char >= static_cast<char16_t>(kLowSurrogatesBegin)
+         && utf16Char <= static_cast<char16_t>(kLowSurrogatesEnd);
 }
 
 /// <summary>
@@ -95,15 +95,15 @@ bool isValidSurrogateLower(char16_t utf16Char)
 bool unpairedSurrogatesInBuffer(const std::u16string &utf16Buffer)
 {
   int index = 0;
-  while (index <= (static_cast<int>(utf16Buffer.size()) - 1)) {
+  while (index <= static_cast<int>(utf16Buffer.size()) - 1) {
     if (isValidSurrogateUpper(utf16Buffer[index]) && isValidSurrogateLower(utf16Buffer[index + 1])) {
       index++;
     } else if (isValidSurrogateUpper(utf16Buffer[index]) || isValidSurrogateLower(utf16Buffer[index + 1])) {
-      return (true);
+      return true;
     }
     index++;
   }
-  return (false);
+  return false;
 }
 
 /// <summary>
@@ -111,7 +111,7 @@ bool unpairedSurrogatesInBuffer(const std::u16string &utf16Buffer)
 /// </summary>
 /// <param name="utf16Char">UTF16 character.</param>
 /// <returns>==true if valid ASCII.</returns>
-bool isASCII(char16_t utf16Char) { return (((utf16Char > 0x001F) && (utf16Char < 0x0080))); }
+bool isASCII(char16_t utf16Char) { return utf16Char > 0x001F && utf16Char < 0x0080; }
 
 /// <summary>
 /// JSON translator constructor.
@@ -146,7 +146,7 @@ std::string JSON_Translator::from(const std::string &escapedString) const
     // Check escape sequence if characters to process
     if (current != escapedString.end()) {
       // Single character
-      if (fromEscape.contains(static_cast<char>(*current))) {
+      if (fromEscape.contains(*current)) {
         utf16Buffer += fromEscape[static_cast<char>(*current)];
         current++;
       }
@@ -168,7 +168,7 @@ std::string JSON_Translator::from(const std::string &escapedString) const
     }
   }
   if (unpairedSurrogatesInBuffer(utf16Buffer)) { throw Error("Unpaired surrogate found."); }
-  return (toUtf8(utf16Buffer));
+  return toUtf8(utf16Buffer);
 }
 
 /// <summary>
@@ -195,6 +195,6 @@ std::string JSON_Translator::to(const std::string &rawString) const
       escapedString += encodeUTF16(utf16Char);
     }
   }
-  return (escapedString);
+  return escapedString;
 }
 }// namespace JSON_Lib

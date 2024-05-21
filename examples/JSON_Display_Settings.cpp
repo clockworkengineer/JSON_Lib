@@ -19,7 +19,7 @@ namespace js = JSON_Lib;
 /// Return settings json file name.
 /// </summary>
 /// <returns>JSON settings file name.</returns>
-std::string jsonSettingsFile() { return ((std::filesystem::current_path() / "files" / "settings.json").string()); }
+std::string jsonSettingsFile() { return (std::filesystem::current_path() / "files" / "settings.json").string(); }
 /// <summary>
 /// Process settings file top level object entry. This involves jusr reading the
 /// entries JNode data and logging it to a file.

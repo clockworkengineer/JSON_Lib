@@ -26,7 +26,7 @@ public:
     printIndent = indent;
   }
 
-  long getIndent() const override { return (printIndent); }
+  long getIndent() const override { return printIndent; }
 
 private:
   // Stringify JSON

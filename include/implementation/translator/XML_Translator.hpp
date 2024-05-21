@@ -22,7 +22,7 @@ public:
   ~XML_Translator() override = default;
 
   // Convert to/from XML escaped characters
-  std::string from([[maybe_unused]] const std::string &escapedString) const override { return (escapedString); }
+  std::string from([[maybe_unused]] const std::string &escapedString) const override { return escapedString; }
 
   std::string to(const std::string &rawString) const override
   {
@@ -45,14 +45,14 @@ public:
       } else {
         translated += "&#x";
         const char *digits = "0123456789ABCDEF";
-        translated += digits[(ch >> 12) & 0x0f];
-        translated += digits[(ch >> 8) & 0x0f];
-        translated += digits[(ch >> 4) & 0x0f];
-        translated += digits[(ch)&0x0f];
+        translated += digits[ch >> 12 & 0x0f];
+        translated += digits[ch >> 8 & 0x0f];
+        translated += digits[ch >> 4 & 0x0f];
+        translated += digits[ch&0x0f];
         translated += ";";
       }
     }
-    return (translated);
+    return translated;
   };
 
 private:
@@ -62,6 +62,6 @@ private:
   /// </summary>
   /// <param name="utf16Char">UTF16 character.</param>
   /// <returns>==true if valid ASCII.</returns>
-  bool isASCII(char16_t utf16Char) const { return (((utf16Char > 0x001F) && (utf16Char < 0x0080))); }
+  bool isASCII(char16_t utf16Char) const { return utf16Char > 0x001F && utf16Char < 0x0080; }
 };
 }// namespace JSON_Lib

@@ -30,7 +30,7 @@ std::string JSON_Impl::version() const
 {
   std::stringstream versionString;
   versionString << "JSON_Lib Version  " << JSON_VERSION_MAJOR << "." << JSON_VERSION_MINOR << "." << JSON_VERSION_PATCH;
-  return (versionString.str());
+  return versionString.str();
 }
 
 void JSON_Impl::parse(ISource &source) { jNodeRoot = jsonParser->parse(source); }
@@ -84,24 +84,24 @@ JNode &JSON_Impl::operator[](const std::string &key)
 {
   try {
     if (jNodeRoot.isEmpty()) { jNodeRoot = JNode::make<Object>(); }
-    return (jNodeRoot[key]);
+    return jNodeRoot[key];
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Object>(jNodeRoot).add(Object::Entry(key, JNode::make<Hole>()));
-    return (jNodeRoot[key]);
+    return jNodeRoot[key];
   }
 }
-const JNode &JSON_Impl::operator[](const std::string &key) const { return ((jNodeRoot)[key]); }
+const JNode &JSON_Impl::operator[](const std::string &key) const { return jNodeRoot[key]; }
 
 JNode &JSON_Impl::operator[](std::size_t index)
 {
   try {
     if (jNodeRoot.isEmpty()) { jNodeRoot = JNode::make<Array>(); }
-    return (jNodeRoot[index]);
+    return jNodeRoot[index];
   } catch ([[maybe_unused]] JNode::Error &error) {
     JRef<Array>(jNodeRoot).resize(index);
-    return (jNodeRoot[index]);
+    return jNodeRoot[index];
   }
 }
-const JNode &JSON_Impl::operator[](std::size_t index) const { return ((jNodeRoot)[index]); }
+const JNode &JSON_Impl::operator[](std::size_t index) const { return jNodeRoot[index]; }
 
 }// namespace JSON_Lib

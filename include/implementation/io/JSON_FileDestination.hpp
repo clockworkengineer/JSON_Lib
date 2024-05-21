@@ -44,7 +44,7 @@ public:
   }
   void close() { destination.flush(); }
 
-  std::size_t size() { return (fileSize); }
+  std::size_t size() { return fileSize; }
 
 private:
   std::ofstream destination;

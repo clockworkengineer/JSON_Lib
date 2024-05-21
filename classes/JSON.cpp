@@ -49,7 +49,7 @@ JSON::~JSON() {}
 /// <summary>
 /// Get JSON library version.
 /// </summary>
-std::string JSON::version() const { return (implementation->version()); }
+std::string JSON::version() const { return implementation->version(); }
 
 /// <summary>
 /// Strip all whitespace from a JSON source.
@@ -102,22 +102,22 @@ void JSON::traverse(IAction &action) const { std::as_const(*implementation).trav
 /// Return object entry for the passed in key.
 /// </summary>
 /// <param name=key>Object entry (JNode) key.</param>
-JNode &JSON::operator[](const std::string &key) { return ((*implementation)[key]); }
-const JNode &JSON::operator[](const std::string &key) const { return ((*implementation)[key]); }
+JNode &JSON::operator[](const std::string &key) { return (*implementation)[key]; }
+const JNode &JSON::operator[](const std::string &key) const { return (*implementation)[key]; }
 
 /// <summary>
 /// Return array entry for the passed in index.
 /// </summary>
 /// <param name=index>Array entry (JNode) index.</param>
-JNode &JSON::operator[](std::size_t index) { return ((*implementation)[index]); }
-const JNode &JSON::operator[](std::size_t index) const { return ((*implementation)[index]); }
+JNode &JSON::operator[](std::size_t index) { return (*implementation)[index]; }
+const JNode &JSON::operator[](std::size_t index) const { return (*implementation)[index]; }
 
 /// <summary>
 /// Return root of JSON tree.
 /// </summary>
 /// <returns>Root of JSON tree.</returns>
-JNode &JSON::root() { return (implementation->root()); }
-const JNode &JSON::root() const { return (implementation->root()); }
+JNode &JSON::root() { return implementation->root(); }
+const JNode &JSON::root() const { return implementation->root(); }
 
 /// <summary>
 /// Open a JSON file, read its contents into a string buffer and return
@@ -125,7 +125,7 @@ const JNode &JSON::root() const { return (implementation->root()); }
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 /// <returns>JSON string.</returns>
-const std::string JSON::fromFile(const std::string &fileName) { return (JSON_Impl::fromFile(fileName)); }
+const std::string JSON::fromFile(const std::string &fileName) { return JSON_Impl::fromFile(fileName); }
 
 /// <summary>
 /// Create an JSON file and write JSON string to it.
@@ -143,6 +143,6 @@ void JSON::toFile(const std::string &fileName, const std::string &jsonString, JS
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 /// <returns>JSON file format.</returns>
-JSON::Format JSON::getFileFormat(const std::string &fileName) { return (JSON_Impl::getFileFormat(fileName)); }
+JSON::Format JSON::getFileFormat(const std::string &fileName) { return JSON_Impl::getFileFormat(fileName); }
 
 }// namespace JSON_Lib

@@ -32,14 +32,14 @@ struct Number : Variant
   Number &operator=(Number &&other) = default;
   ~Number() = default;
   // Is number a int/long/long long/float/double/long double ?
-  template<typename T> [[nodiscard]] bool is() const { return (std::get_if<T>(&jNodeNumber) != nullptr); }
+  template<typename T> [[nodiscard]] bool is() const { return std::get_if<T>(&jNodeNumber) != nullptr; }
   // Return numbers value int/long long/float/double/long double.
   // Note: Can still return a integer value for a floating point.
-  template<typename T> [[nodiscard]] T value() const { return (getAs<T>()); }
+  template<typename T> [[nodiscard]] T value() const { return getAs<T>(); }
   // Set numbers value to int/long/long long/float/double/long double
   template<typename T> void set(T number) { *this = Number(number); }
   // Return string representation of value
-  [[nodiscard]] std::string toString() const { return (getAs<std::string>()); }
+  [[nodiscard]] std::string toString() const { return getAs<std::string>(); }
   // Set floating point to string conversion parameters
   inline static void setPrecision(int precision) { numberPrecision = precision; }
   inline static void setNotation(numberNotation notation) { numberNotation = notation; }
@@ -96,12 +96,12 @@ template<typename T> bool Number::stringToNumber(const std::string &number)
       } else if constexpr (std::is_same_v<T, long double>) {
         value = std::stold(number, &end);
       }
-      if (end != number.size()) { return (false); }
+      if (end != number.size()) { return false; }
       *this = Number(value);
     } catch ([[maybe_unused]] const std::exception &ex) {
-      return (false);
+      return false;
     }
-    return (true);
+    return true;
   }
 }
 // Number to string
@@ -122,30 +122,30 @@ template<typename T> std::string Number::numberToString(const T &number) const
     default:
       os << std::setprecision(numberPrecision) << number;
     }
-    if (os.str().find('.') == std::string::npos) { return (os.str() + ".0"); }
+    if (os.str().find('.') == std::string::npos) { return os.str() + ".0"; }
   } else {
     os << number;
   }
-  return (os.str());
+  return os.str();
 }
 // Convert value to another specified type
 template<typename T, typename U> T Number::convertTo(U value) const
 {
   if constexpr (std::is_same_v<T, std::string>) {
-    return (numberToString(value));
+    return numberToString(value);
   } else {
-    return (static_cast<T>(value));
+    return static_cast<T>(value);
   }
 }
 // Convert stored number to another specified type
 template<typename T> T Number::getAs() const
 {
-  if (auto pValue = std::get_if<int>(&jNodeNumber)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<long>(&jNodeNumber)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<long long>(&jNodeNumber)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<float>(&jNodeNumber)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<double>(&jNodeNumber)) { return (convertTo<T>(*pValue)); }
-  if (auto pValue = std::get_if<long double>(&jNodeNumber)) { return (convertTo<T>(*pValue)); }
+  if (auto pValue = std::get_if<int>(&jNodeNumber)) { return convertTo<T>(*pValue); }
+  if (auto pValue = std::get_if<long>(&jNodeNumber)) { return convertTo<T>(*pValue); }
+  if (auto pValue = std::get_if<long long>(&jNodeNumber)) { return convertTo<T>(*pValue); }
+  if (auto pValue = std::get_if<float>(&jNodeNumber)) { return convertTo<T>(*pValue); }
+  if (auto pValue = std::get_if<double>(&jNodeNumber)) { return convertTo<T>(*pValue); }
+  if (auto pValue = std::get_if<long double>(&jNodeNumber)) { return convertTo<T>(*pValue); }
   throw Error("Could not convert unknown type.");
 }
 }// namespace JSON_Lib

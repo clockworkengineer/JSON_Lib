@@ -17,7 +17,7 @@ namespace js = JSON_Lib;
 /// Return settings json file name.
 /// </summary>
 /// <returns>JSON settings file name.</returns>
-std::string jsonSettingsFile() { return ((std::filesystem::current_path() / "files" / "settings.json").string()); }
+std::string jsonSettingsFile() { return (std::filesystem::current_path() / "files" / "settings.json").string(); }
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {

@@ -18,7 +18,7 @@ namespace js = JSON_Lib;
 /// Return Fibonaci json file name.
 /// </summary>
 /// <returns>JSON settings file name.</returns>
-std::string jsonFibonacciFile() { return ((std::filesystem::current_path() / "files" / "fibonacci.json").string()); }
+std::string jsonFibonacciFile() { return (std::filesystem::current_path() / "files" / "fibonacci.json").string(); }
 /// <summary>
 /// Read in current fibonacci sequence from JSON file, calculate the
 //  next in sequence and write back to JSON file.

@@ -24,8 +24,8 @@ public:
 
   virtual char current() const override
   {
-    if (more()) { return (buffer[bufferPosition]); }
-    return (EOF);
+    if (more()) { return buffer[bufferPosition]; }
+    return EOF;
   }
   virtual void next() override
   {
@@ -37,14 +37,14 @@ public:
       column = 1;
     }
   }
-  virtual bool more() const override { return (bufferPosition < buffer.size()); }
+  virtual bool more() const override { return bufferPosition < buffer.size(); }
   virtual void reset() override
   {
     bufferPosition = 0;
     lineNo = 1;
     column = 1;
   }
-  virtual std::size_t position() const override { return (bufferPosition); }
+  virtual std::size_t position() const override { return bufferPosition; }
 
 private:
   virtual void backup(unsigned long length) override { bufferPosition -= length; }

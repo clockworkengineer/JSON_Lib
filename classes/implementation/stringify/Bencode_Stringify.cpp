@@ -130,7 +130,7 @@ void Bencode_Stringify::stringify(const JNode &jNode, IDestination &destination,
   }
 }
 
-long Bencode_Stringify::getIndent() const { return (0); }
+long Bencode_Stringify::getIndent() const { return 0; }
 
 void Bencode_Stringify::setIndent([[maybe_unused]] long indent) {}
 

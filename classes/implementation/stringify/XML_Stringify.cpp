@@ -140,7 +140,7 @@ void XML_Stringify::stringify(const JNode &jNode, IDestination &destination, [[m
   destination.add("</root>");
 }
 
-long XML_Stringify::getIndent() const { return (0); }
+long XML_Stringify::getIndent() const { return 0; }
 
 void XML_Stringify::setIndent([[maybe_unused]] long indent) {}
 

@@ -27,7 +27,7 @@ static constexpr size_t kMaxFileLengthToDisplay = 16 * 1024;
 void processJSONFile(const std::string &fileName)
 {
   auto elapsedTime = [](const auto &start, const auto &stop) {
-    return (chrono::duration_cast<chrono::microseconds>(stop - start).count());
+    return chrono::duration_cast<chrono::microseconds>(stop - start).count();
   };
   PLOG_INFO << "Processing " << fileName;
   const js::JSON json;

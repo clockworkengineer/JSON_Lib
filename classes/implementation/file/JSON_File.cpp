@@ -51,7 +51,7 @@ std::string readJSONString(std::ifstream &jsonFile)
 {
   std::ostringstream jsonFileBuffer;
   jsonFileBuffer << jsonFile.rdbuf();
-  return (jsonFileBuffer.str());
+  return jsonFileBuffer.str();
 }
 const std::u16string readJSONString(std::ifstream &jsonFile, JSON::Format format)
 {
@@ -75,7 +75,7 @@ const std::u16string readJSONString(std::ifstream &jsonFile, JSON::Format format
   } else {
     throw Error("Unsupported JSON file format (Byte Order Mark) specified in call to readJSONString().");
   }
-  return (utf16String);
+  return utf16String;
 }
 
 /// <summary>
@@ -92,13 +92,13 @@ JSON::Format JSON_Impl::getFileFormat(const std::string &fileName)
   byteOrderMark |= static_cast<unsigned char>(jsonFile.get()) << 16;
   byteOrderMark |= static_cast<unsigned char>(jsonFile.get()) << 8;
   byteOrderMark |= static_cast<unsigned char>(jsonFile.get());
-  if (byteOrderMark == 0x0000FEFF) { return (JSON::Format::utf32BE); }
-  if (byteOrderMark == 0xFFFE0000) { return (JSON::Format::utf32LE); }
-  if ((byteOrderMark & 0xFFFFFF00) == 0xEFBBBF00) { return (JSON::Format::utf8BOM); }
-  if ((byteOrderMark & 0xFFFF0000) == 0xFEFF0000) { return (JSON::Format::utf16BE); }
-  if ((byteOrderMark & 0xFFFF0000) == 0xFFFE0000) { return (JSON::Format::utf16LE); }
+  if (byteOrderMark == 0x0000FEFF) { return JSON::Format::utf32BE; }
+  if (byteOrderMark == 0xFFFE0000) { return JSON::Format::utf32LE; }
+  if ((byteOrderMark & 0xFFFFFF00) == 0xEFBBBF00) { return JSON::Format::utf8BOM; }
+  if ((byteOrderMark & 0xFFFF0000) == 0xFEFF0000) { return JSON::Format::utf16BE; }
+  if ((byteOrderMark & 0xFFFF0000) == 0xFFFE0000) { return JSON::Format::utf16LE; }
   jsonFile.close();
-  return (JSON::Format::utf8);
+  return JSON::Format::utf8;
 }
 
 /// <summary>
@@ -137,7 +137,7 @@ const std::string JSON_Impl::fromFile(const std::string &fileName)
     translated.replace(pos, 2, kLF);
     pos = translated.find(kCRLF, pos + 1);
   }
-  return (translated);
+  return translated;
 }
 
 /// <summary>

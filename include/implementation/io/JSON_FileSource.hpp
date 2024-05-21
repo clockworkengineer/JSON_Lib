@@ -23,7 +23,7 @@ public:
   FileSource &operator=(FileSource &&other) = delete;
   virtual ~FileSource() = default;
 
-  virtual char current() const override { return (static_cast<char>(source.peek())); }
+  virtual char current() const override { return static_cast<char>(source.peek()); }
   virtual void next() override
   {
     if (!more()) { throw Error("Tried to read past end of file."); }
@@ -38,7 +38,7 @@ public:
       column = 1;
     }
   }
-  virtual bool more() const override { return (source.peek() != EOF); }
+  virtual bool more() const override { return source.peek() != EOF; }
   virtual void reset() override
   {
     lineNo = 1;
@@ -48,8 +48,8 @@ public:
   }
   virtual std::size_t position() const override
   {
-    if (more()) { return (static_cast<std::size_t>(source.tellg())); }
-    return (std::filesystem::file_size(filename));
+    if (more()) { return static_cast<std::size_t>(source.tellg()); }
+    return std::filesystem::file_size(filename);
   }
 
 private:

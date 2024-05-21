@@ -25,28 +25,28 @@ struct JNode
   JNode &operator=(JNode &&other) = default;
   ~JNode() = default;
   // Assignment operators
-  template<typename T> JNode &operator=(T value) { return (*this = JNode(value)); }
+  template<typename T> JNode &operator=(T value) { return *this = JNode(value); }
   // Interrogate variant
-  [[nodiscard]] bool isEmpty() const { return (jNodeVariant == nullptr); }
-  [[nodiscard]] bool isObject() const { return (jNodeVariant->isObject()); }
-  [[nodiscard]] bool isArray() const { return (jNodeVariant->isArray()); }
-  [[nodiscard]] bool isNumber() const { return (jNodeVariant->isNumber()); }
-  [[nodiscard]] bool isString() const { return (jNodeVariant->isString()); }
-  [[nodiscard]] bool isBoolean() const { return (jNodeVariant->isBoolean()); }
-  [[nodiscard]] bool isNull() const { return (jNodeVariant->isNull()); }
-  [[nodiscard]] bool isHole() const { return (jNodeVariant->isHole()); }
+  [[nodiscard]] bool isEmpty() const { return jNodeVariant == nullptr; }
+  [[nodiscard]] bool isObject() const { return jNodeVariant->isObject(); }
+  [[nodiscard]] bool isArray() const { return jNodeVariant->isArray(); }
+  [[nodiscard]] bool isNumber() const { return jNodeVariant->isNumber(); }
+  [[nodiscard]] bool isString() const { return jNodeVariant->isString(); }
+  [[nodiscard]] bool isBoolean() const { return jNodeVariant->isBoolean(); }
+  [[nodiscard]] bool isNull() const { return jNodeVariant->isNull(); }
+  [[nodiscard]] bool isHole() const { return jNodeVariant->isHole(); }
   // Indexing operators
   JNode &operator[](const std::string &key);
   const JNode &operator[](const std::string &key) const;
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
   // Get reference to JNode variant
-  Variant &getVariant() { return (*jNodeVariant); }
-  const Variant &getVariant() const { return (*jNodeVariant); }
+  Variant &getVariant() { return *jNodeVariant; }
+  const Variant &getVariant() const { return *jNodeVariant; }
   // Make JNode
   template<typename T, typename... Args> static auto make(Args &&...args)
   {
-    return (JNode{ std::make_unique<T>(std::forward<Args>(args)...) });
+    return JNode{ std::make_unique<T>(std::forward<Args>(args)...) };
   }
 
 private:

@@ -57,7 +57,7 @@ public:
   // ===================================
   [[nodiscard]] bool isWS() const
   {
-    return (current() == ' ' || current() == '\t' || current() == '\n' || current() == '\r');
+    return current() == ' ' || current() == '\t' || current() == '\n' || current() == '\r';
   }
   // ==================================
   // Ignore whitespace on source stream
@@ -74,15 +74,15 @@ public:
     long index = 0;
     while (more() && current() == targetString[index]) {
       next();
-      if (++index == static_cast<long>(targetString.length())) { return (true); }
+      if (++index == static_cast<long>(targetString.length())) { return true; }
     }
     backup(index);
-    return (false);
+    return false;
   }
   // ==================================
   // Get current source stream position
   // ==================================
-  std::pair<long, long> getPosition() const { return (std::make_pair(lineNo, column)); }
+  std::pair<long, long> getPosition() const { return std::make_pair(lineNo, column); }
 
 protected:
   // ========================

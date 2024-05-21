@@ -17,10 +17,10 @@ struct String : Variant
   String &operator=(String &&other) = default;
   ~String() = default;
   // Return reference to string
-  [[nodiscard]] std::string &value() { return (jNodeString); }
-  [[nodiscard]] const std::string &value() const { return (jNodeString); }
+  [[nodiscard]] std::string &value() { return jNodeString; }
+  [[nodiscard]] const std::string &value() const { return jNodeString; }
   // Return string representation of value
-  [[nodiscard]] std::string toString() const { return (jNodeString); }
+  [[nodiscard]] std::string toString() const { return jNodeString; }
 
 private:
   std::string jNodeString;

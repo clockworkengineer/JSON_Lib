@@ -22,16 +22,16 @@ template<typename T> JNode::JNode(T value)
 // Convert intializer list type to JMode
 inline JNode JNode::typeToJNode(const JSON::intializerListTypes &type)
 {
-  if (auto pValue = std::get_if<int>(&type)) { return (JNode(*pValue)); }
-  if (auto pValue = std::get_if<long>(&type)) { return (JNode(*pValue)); }
-  if (auto pValue = std::get_if<long long>(&type)) { return (JNode(*pValue)); }
-  if (auto pValue = std::get_if<float>(&type)) { return (JNode(*pValue)); }
-  if (auto pValue = std::get_if<double>(&type)) { return (JNode(*pValue)); }
-  if (auto pValue = std::get_if<long double>(&type)) { return (JNode(*pValue)); }
-  if (auto pValue = std::get_if<bool>(&type)) { return (JNode((*pValue))); }
-  if (auto pValue = std::get_if<std::string>(&type)) { return (JNode((*pValue))); }
-  if ([[maybe_unused]] auto pValue = std::get_if<std::nullptr_t>(&type)) { return (JNode(nullptr)); }
-  if (auto pValue = std::get_if<JNode>(&type)) { return (std::move(*const_cast<JNode *>(pValue))); }
+  if (auto pValue = std::get_if<int>(&type)) { return JNode(*pValue); }
+  if (auto pValue = std::get_if<long>(&type)) { return JNode(*pValue); }
+  if (auto pValue = std::get_if<long long>(&type)) { return JNode(*pValue); }
+  if (auto pValue = std::get_if<float>(&type)) { return JNode(*pValue); }
+  if (auto pValue = std::get_if<double>(&type)) { return JNode(*pValue); }
+  if (auto pValue = std::get_if<long double>(&type)) { return JNode(*pValue); }
+  if (auto pValue = std::get_if<bool>(&type)) { return JNode(*pValue); }
+  if (auto pValue = std::get_if<std::string>(&type)) { return JNode(*pValue); }
+  if ([[maybe_unused]] auto pValue = std::get_if<std::nullptr_t>(&type)) { return JNode(nullptr); }
+  if (auto pValue = std::get_if<JNode>(&type)) { return std::move(*const_cast<JNode *>(pValue)); }
   throw Error("JNode for unsupported type could not be created.");
 }
 // Construct JNode Array from initializer list

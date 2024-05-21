@@ -252,9 +252,9 @@ TEST_CASE("Check JNode Number floating point precision.", "[JSON][JNode][Number]
     Number::setPrecision(std::numeric_limits<long double>::digits10 + 1);
     json.stringify(jsonDestination);
     Number::setPrecision(6);
-    if constexpr ((std::numeric_limits<long double>::digits10 + 1) == 16) {
+    if constexpr (std::numeric_limits<long double>::digits10 + 1 == 16) {
       REQUIRE(jsonDestination.toString() == R"({"latitude":39.06834030151367,"longitude":-70.74161529541016})");
-    } else if constexpr ((std::numeric_limits<long double>::digits10 + 1) == 19) {
+    } else if constexpr (std::numeric_limits<long double>::digits10 + 1 == 19) {
       REQUIRE(jsonDestination.toString() == R"({"latitude":39.06834030151367188,"longitude":-70.74161529541015625})");
     } else {
       REQUIRE_FALSE(true);

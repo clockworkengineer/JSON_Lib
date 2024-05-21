@@ -25,8 +25,8 @@ public:
   virtual void add(const char ch) override { buffer.push_back(ch); }
   virtual void clear() override { buffer.clear(); }
 
-  [[nodiscard]] const std::string toString() const { return (buffer); }
-  [[nodiscard]] const std::size_t size() const { return (buffer.size()); }
+  [[nodiscard]] const std::string toString() const { return buffer; }
+  [[nodiscard]] const std::size_t size() const { return buffer.size(); }
 
 private:
   std::string buffer;

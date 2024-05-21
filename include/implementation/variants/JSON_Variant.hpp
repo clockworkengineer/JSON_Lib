@@ -15,13 +15,13 @@ struct Variant
   Variant &operator=(Variant &&other) = default;
   ~Variant() = default;
   // Interrogate variant
-  bool isObject() const { return (jNodeType == Variant::Type::object); }
-  bool isArray() const { return (jNodeType == Variant::Type::array); }
-  bool isNumber() const { return (jNodeType == Variant::Type::number); }
-  bool isString() const { return (jNodeType == Variant::Type::string); }
-  bool isBoolean() const { return (jNodeType == Variant::Type::boolean); }
-  bool isNull() const { return (jNodeType == Variant::Type::null); }
-  bool isHole() const { return (jNodeType == Variant::Type::hole); }
+  bool isObject() const { return jNodeType == Variant::Type::object; }
+  bool isArray() const { return jNodeType == Variant::Type::array; }
+  bool isNumber() const { return jNodeType == Variant::Type::number; }
+  bool isString() const { return jNodeType == Variant::Type::string; }
+  bool isBoolean() const { return jNodeType == Variant::Type::boolean; }
+  bool isNull() const { return jNodeType == Variant::Type::null; }
+  bool isHole() const { return jNodeType == Variant::Type::hole; }
 
 private:
   Variant::Type jNodeType;

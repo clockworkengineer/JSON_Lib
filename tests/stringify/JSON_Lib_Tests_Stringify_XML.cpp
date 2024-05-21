@@ -58,7 +58,7 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
     std::string escaped{ "\"abcdefghijklmnopqrstuvwxyz" };
     // Add all ASCII except '"' and '\'
     for (int ch = 1; ch < 128; ch++) {
-      if ((static_cast<char>(ch) != '"') && (static_cast<char>(ch) != '\\')) { escaped += static_cast<char>(ch); }
+      if (static_cast<char>(ch) != '"' && static_cast<char>(ch) != '\\') { escaped += static_cast<char>(ch); }
     }
     escaped += '"';
     BufferSource source{ escaped };

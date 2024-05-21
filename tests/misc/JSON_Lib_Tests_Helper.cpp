@@ -17,7 +17,7 @@ using namespace JSON_Lib;
 /// <returns>Full path to test data file</returns>
 const std::string prefixPath(const std::string &jsonFileName)
 {
-  return ((std::filesystem::current_path() / "files" / jsonFileName).string());
+  return (std::filesystem::current_path() / "files" / jsonFileName).string();
 }
 /// <summary>
 /// Verify that an JNode Array has the correct parsed format.
@@ -64,7 +64,7 @@ std::string stripWhiteSpace(const std::string &jsonBuffer)
   const JSON_Lib::JSON json;
   BufferDestination destination;
   json.strip(BufferSource{ jsonBuffer }, destination);
-  return (destination.toString());
+  return destination.toString();
 }
 
 std::string generateEscapes(unsigned char first, unsigned char last)
@@ -73,10 +73,10 @@ std::string generateEscapes(unsigned char first, unsigned char last)
   for (char16_t utf16Char = first; utf16Char < last + 1; utf16Char++) {
     const char *digits = "0123456789ABCDEF";
     result += "\\u";
-    result += digits[(utf16Char >> 12) & 0x0f];
-    result += digits[(utf16Char >> 8) & 0x0f];
-    result += digits[(utf16Char >> 4) & 0x0f];
-    result += digits[(utf16Char)&0x0f];
+    result += digits[utf16Char >> 12 & 0x0f];
+    result += digits[utf16Char >> 8 & 0x0f];
+    result += digits[utf16Char >> 4 & 0x0f];
+    result += digits[utf16Char&0x0f];
   }
-  return (result);
+  return result;
 }

@@ -21,8 +21,8 @@ public:
   ~Bencode_Translator() override = default;
 
   // Convert to/from Bencode escaped characters
-  std::string from([[maybe_unused]] const std::string &escapedString) const override { return (escapedString); }
-  std::string to(const std::string &rawString) const override { return (rawString); };
+  std::string from([[maybe_unused]] const std::string &escapedString) const override { return escapedString; }
+  std::string to(const std::string &rawString) const override { return rawString; };
 
 private:
 };

@@ -23,21 +23,21 @@ template<typename T> void checkJNode(const JNode &jNode)
 template<typename T> T &JRef(JNode &jNode)
 {
   checkJNode<T>(jNode);
-  return (static_cast<T &>(jNode.getVariant()));
+  return static_cast<T &>(jNode.getVariant());
 }
 template<typename T> const T &JRef(const JNode &jNode)
 {
   checkJNode<T>(jNode);
-  return (static_cast<const T &>(jNode.getVariant()));
+  return static_cast<const T &>(jNode.getVariant());
 }
 template<typename T> T &JRef(Object::Entry &jNodeEntry)
 {
   checkJNode<T>(jNodeEntry.getJNode());
-  return (static_cast<T &>(jNodeEntry.getJNode().getVariant()));
+  return static_cast<T &>(jNodeEntry.getJNode().getVariant());
 }
 template<typename T> const T &JRef(const Object::Entry &jNodeEntry)
 {
   checkJNode<T>(jNodeEntry.getJNode());
-  return (static_cast<const T &>(jNodeEntry.getJNode().getVariant()));
+  return static_cast<const T &>(jNodeEntry.getJNode().getVariant());
 }
 }// namespace JSON_Lib

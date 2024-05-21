@@ -23,8 +23,8 @@ namespace JSON_Lib {
 /// <returns>==true then character is a valid escape character.</returns>
 bool validEscape(char escape)
 {
-  return (escape == '\\' || escape == 't' || escape == '"' || escape == 'b' || escape == 'f' || escape == 'n'
-          || escape == 'r' || (escape == 'u'));
+  return escape == '\\' || escape == 't' || escape == '"' || escape == 'b' || escape == 'f' || escape == 'n'
+         || escape == 'r' || escape == 'u';
 }
 
 /// <summary>
@@ -53,7 +53,7 @@ std::string extractString(ISource &source, ITranslator &translator)
   // Need to translate escapes to UTF8
   if (translateEscapes) { extracted = translator.from(extracted); }
   source.next();
-  return (extracted);
+  return extracted;
 }
 
 /// <summary>
@@ -63,7 +63,7 @@ std::string extractString(ISource &source, ITranslator &translator)
 /// <returns>==true on end of number</returns>
 bool endOfNumber(ISource &source)
 {
-  return (source.isWS() || source.current() == ',' || source.current() == ']' || source.current() == '}');
+  return source.isWS() || source.current() == ',' || source.current() == ']' || source.current() == '}';
 }
 
 /// <summary>
@@ -78,7 +78,7 @@ Object::Entry JSON_Parser::parseObjectEntry(ISource &source)
   source.ignoreWS();
   if (source.current() != ':') { throw SyntaxError(source.getPosition(), "Missing ':' in key value pair."); }
   source.next();
-  return (Object::Entry(key, parse(source)));
+  return Object::Entry(key, parse(source));
 }
 
 /// <summary>
@@ -86,7 +86,7 @@ Object::Entry JSON_Parser::parseObjectEntry(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>String JNode.</returns>
-JNode JSON_Parser::parseString(ISource &source) { return (JNode::make<String>(extractString(source, jsonTranslator))); }
+JNode JSON_Parser::parseString(ISource &source) { return JNode::make<String>(extractString(source, jsonTranslator)); }
 
 /// <summary>
 /// Parse a number from a JSON source stream.
@@ -100,7 +100,7 @@ JNode JSON_Parser::parseNumber(ISource &source)
   Number number{ string };
   if (number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>() || number.is<double>()
       || number.is<long double>()) {
-    return (JNode::make<Number>(number));
+    return JNode::make<Number>(number);
   }
   throw SyntaxError(source.getPosition(), "Invalid numeric value.");
 }
@@ -112,8 +112,8 @@ JNode JSON_Parser::parseNumber(ISource &source)
 /// <returns>Boolean JNode.</returns>
 JNode JSON_Parser::parseBoolean(ISource &source)
 {
-  if (source.match("true")) { return (JNode::make<Boolean>(true)); }
-  if (source.match("false")) { return (JNode::make<Boolean>(false)); }
+  if (source.match("true")) { return JNode::make<Boolean>(true); }
+  if (source.match("false")) { return JNode::make<Boolean>(false); }
   throw SyntaxError(source.getPosition(), "Invalid boolean value.");
 }
 
@@ -125,7 +125,7 @@ JNode JSON_Parser::parseBoolean(ISource &source)
 JNode JSON_Parser::parseNull(ISource &source)
 {
   if (!source.match("null")) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
-  return (JNode::make<Null>());
+  return JNode::make<Null>();
 }
 
 /// <summary>
@@ -147,7 +147,7 @@ JNode JSON_Parser::parseObject(ISource &source)
   }
   if (source.current() != '}') { throw SyntaxError(source.getPosition(), "Missing closing '}' in object definition."); }
   source.next();
-  return (jNodeObject);
+  return jNodeObject;
 }
 
 /// <summary>
@@ -169,7 +169,7 @@ JNode JSON_Parser::parseArray(ISource &source)
   }
   if (source.current() != ']') { throw SyntaxError(source.getPosition(), "Missing closing ']' in array definition."); }
   source.next();
-  return (jNodeArray);
+  return jNodeArray;
 }
 
 /// <summary>
@@ -218,7 +218,7 @@ JNode JSON_Parser::parse(ISource &source)
     throw SyntaxError(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null.");
   }
   source.ignoreWS();
-  return (jNode);
+  return jNode;
 }
 
 }// namespace JSON_Lib

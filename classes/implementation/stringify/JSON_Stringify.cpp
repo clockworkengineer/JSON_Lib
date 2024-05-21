@@ -74,13 +74,13 @@ void JSON_Stringify::stringifyObject(const JNode &jNode, IDestination &destinati
 {
   size_t commaCount = JRef<Object>(jNode).value().size() - 1;
   destination.add('{');
-  if (indent != 0) { destination.add('\n'); };
+  if (indent != 0) { destination.add('\n'); }
   for (auto &entry : JRef<Object>(jNode).value()) {
-    if (indent != 0) { destination.add(std::string(indent, ' ')); };
+    if (indent != 0) { destination.add(std::string(indent, ' ')); }
     stringifyString(entry.getKey(), destination);
     destination.add(":");
     if (indent != 0) { destination.add(" "); }
-    stringify(entry.getJNode(), destination, (indent != 0) ? (indent + printIndent) : 0);
+    stringify(entry.getJNode(), destination, indent != 0 ? indent + printIndent : 0);
     if (commaCount-- > 0) {
       destination.add(",");
       if (indent != 0) { destination.add('\n'); }
@@ -104,10 +104,10 @@ void JSON_Stringify::stringifyArray(const JNode &jNode, IDestination &destinatio
   destination.add('[');
   if (!JRef<Array>(jNode).value().empty()) {
     size_t commaCount = JRef<Array>(jNode).value().size() - 1;
-    if (indent != 0) { destination.add('\n'); };
+    if (indent != 0) { destination.add('\n'); }
     for (auto &entry : JRef<Array>(jNode).value()) {
-      if (indent != 0) { destination.add(std::string(indent, ' ')); };
-      stringify(entry, destination, (indent != 0) ? (indent + printIndent) : 0);
+      if (indent != 0) { destination.add(std::string(indent, ' ')); }
+      stringify(entry, destination, indent != 0 ? indent + printIndent : 0);
       if (commaCount-- > 0) {
         destination.add(",");
         if (indent != 0) { destination.add('\n'); }
