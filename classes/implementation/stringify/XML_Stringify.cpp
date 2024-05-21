@@ -127,12 +127,12 @@ void XML_Stringify::stringifyXML(const JNode &jNode, IDestination &destination, 
 /// Recursively traverse JNode structure encoding it into JSON string on
 /// the destination stream passed in.
 /// </summary>
-/// <param name=jNode>JNode structure to be traversed.</param>
-/// <param name=destination>Destination stream for stringified JSON.</param>
+/// <param name="jNode">JNode structure to be traversed.</param>
+/// <param name="destination">Destination stream for stringified JSON.</param>
 /// <param name="indent">Current print indentation.</param>
 void XML_Stringify::stringify(const JNode &jNode, IDestination &destination, [[maybe_unused]] long indent) const
 {
-  destination.add("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+  destination.add(R"(<?xml version="1.0" encoding="UTF-8"?>)");
   destination.add("<root>");
   stringifyXML(jNode, destination, 0);
   destination.add("</root>");

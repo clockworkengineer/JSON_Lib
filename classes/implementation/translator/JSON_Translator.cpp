@@ -22,7 +22,7 @@ static const std::vector<std::pair<const char, const char>> escapeSequences{ { '
 
 /// <summary>
 /// Convert \uxxxx escape sequences in a string to their correct sequence
-//  of UTF-8 characters.
+///  of UTF-8 characters.
 /// </summary>
 /// <param name="current">Current character position.</param>
 /// <param name="numberOfCharacters">Number of characters left in source string.</param>
@@ -86,9 +86,9 @@ bool isValidSurrogateLower(const char16_t utf16Char)
 }
 
 /// <summary>
-// Check that there are no single unpaired UTF-16 surrogates.From what I see
-// this is meant to be an error but from searching the web I have not found a
-// definitive answer.
+/// Check that there are no single unpaired UTF-16 surrogates.From what I see
+/// this is meant to be an error but from searching the web I have not found a
+/// definitive answer.
 /// </summary>
 /// <param name="utf16Buffer">UTF16 string.</param>
 /// <returns>==false if string contains an unpaired surrogate.</returns>
@@ -128,8 +128,8 @@ JSON_Translator::JSON_Translator()
 
 /// <summary>
 /// Convert any escape sequences in a string to their correct sequence
-//  of UTF-8 characters. If input string contains any unpaired surrogates
-//  then this is deemed as a syntax error and an error is duly thrown.
+///  of UTF-8 characters. If input string contains any unpaired surrogates
+///  then this is deemed as a syntax error and an error is duly thrown.
 /// </summary>
 /// <param name="escapedString">JSON string to process.</param>
 /// <returns>String with escapes translated.</returns>
