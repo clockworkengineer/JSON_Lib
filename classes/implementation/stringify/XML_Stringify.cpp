@@ -17,7 +17,7 @@ namespace JSON_Lib {
 /// </summary>
 /// <param name="jNode">Number JNode.</param>
 /// <param name="destination">Destination stream for XML.</param>
-void XML_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination) const
+void XML_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination)
 {
   // All numbers to rounded integers
   destination.add(std::to_string(JRef<Number>(jNode).value<int>()));
@@ -38,7 +38,7 @@ void XML_Stringify::stringifyString(const JNode &jNode, IDestination &destinatio
 /// </summary>
 /// <param name="jNode">Boolean JNode.</param>
 /// <param name="destination">Destination stream for XML.</param>
-void XML_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination) const
+void XML_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination)
 {
   if (JRef<Boolean>(jNode).value()) {
     destination.add("True");
@@ -52,16 +52,14 @@ void XML_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destinati
 /// </summary>
 /// <param name="jNode">Null JNode.</param>
 /// <param name="destination">Destination stream for XML.</param>
-void XML_Stringify::stringifyNull([[maybe_unused]] const JNode &jNode, [[maybe_unused]] IDestination &destination) const
-{}
+void XML_Stringify::stringifyNull([[maybe_unused]] const JNode &jNode, [[maybe_unused]] IDestination &destination) {}
 
 /// <summary>
 /// Convert Hole JNode to XML on destination stream.
 /// </summary>
 /// <param name="jNode">Hole JNode.</param>
 /// <param name="destination">Destination stream for XML.</param>
-void XML_Stringify::stringifyHole([[maybe_unused]] const JNode &jNode, [[maybe_unused]] IDestination &destination) const
-{}
+void XML_Stringify::stringifyHole([[maybe_unused]] const JNode &jNode, [[maybe_unused]] IDestination &destination) {}
 
 /// <summary>
 /// Convert Object JNode to XML on destination stream.
@@ -101,8 +99,8 @@ void XML_Stringify::stringifyArray(const JNode &jNode, IDestination &destination
 /// Recursively traverse JNode structure encoding it into XML string on
 /// the destination stream passed in.
 /// </summary>
-/// <param name=jNode>JNode structure to be traversed.</param>
-/// <param name=destination>Destination stream for stringified XML.</param>
+/// <param name="jNode">JNode structure to be traversed.</param>
+/// <param name="destination">Destination stream for stringified XML.</param>
 /// <param name="indent">Current print indentation.</param>
 void XML_Stringify::stringifyXML(const JNode &jNode, IDestination &destination, const long indent) const
 {

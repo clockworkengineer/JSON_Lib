@@ -24,11 +24,11 @@ public:
 
 private:
   // Stringify Bencode to XML
-  void stringifyNumber(const JNode &jNode, IDestination &destination) const;
+  static void stringifyNumber(const JNode &jNode, IDestination &destination);
   void stringifyString(const JNode &jNode, IDestination &destination) const;
-  void stringifyBoolean(const JNode &jNode, IDestination &destination) const;
-  void stringifyNull(const JNode &jNode, IDestination &destination) const;
-  void stringifyHole(const JNode &jNode, IDestination &destination) const;
+  static void stringifyBoolean(const JNode &jNode, IDestination &destination);
+  static void stringifyNull(const JNode &jNode, IDestination &destination);
+  static void stringifyHole(const JNode &jNode, IDestination &destination);
   void stringifyObject(const JNode &jNode, IDestination &destination, long indent) const;
   void stringifyArray(const JNode &jNode, IDestination &destination, long indent) const;
   void stringifyXML(const JNode &jNode, IDestination &destination, long indent) const;

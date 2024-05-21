@@ -90,7 +90,7 @@ bool isValidSurrogateLower(const char16_t utf16Char)
 // this is meant to be an error but from searching the web I have not found a
 // definitive answer.
 /// </summary>
-/// <param name="utf16Char">UTF16 strinf.</param>
+/// <param name="utf16Buffer">UTF16 string.</param>
 /// <returns>==false if string contains an unpaired surrogate.</returns>
 bool unpairedSurrogatesInBuffer(const std::u16string &utf16Buffer)
 {

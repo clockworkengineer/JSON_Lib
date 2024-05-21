@@ -125,8 +125,8 @@ void JSON_Stringify::stringifyArray(const JNode &jNode, IDestination &destinatio
 /// Recursively traverse JNode structure encoding it into JSON string on
 /// the destination stream passed in.
 /// </summary>
-/// <param name=jNode>JNode structure to be traversed.</param>
-/// <param name=destination>Destination stream for stringified JSON.</param>
+/// <param name="jNode">JNode structure to be traversed.</param>
+/// <param name="destination">Destination stream for stringified JSON.</param>
 /// <param name="indent">Current print indentation.</param>
 void JSON_Stringify::stringify(const JNode &jNode, IDestination &destination, const long indent) const
 {

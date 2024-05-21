@@ -17,8 +17,8 @@ namespace JSON_Lib {
 /// <summary>
 /// JSON constructor. Set any custom converter or translator here.
 /// </summary>
-/// <param name="translator">Pointer to translator interface.</param>
-/// <param name="converter">Pointer to converter interface.</param>
+/// <param name="stringify">Pointer to stringifier interface.</param>
+/// <param name="parser">Pointer to parser interface.</param>
 JSON::JSON(IStringify *stringify, IParser *parser) : implementation(std::make_unique<JSON_Impl>(stringify, parser))
 {
 }
