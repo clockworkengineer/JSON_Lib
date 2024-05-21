@@ -53,7 +53,7 @@ void Bencode_Stringify::stringifyBoolean(const JNode &jNode, IDestination &desti
 /// </summary>
 /// <param name="jNode">Null JNode.</param>
 /// <param name="destination">Destination stream for Bencode.</param>
-void Bencode_Stringify::stringifyNull([[maybe_unused]] const JNode &jNode, IDestination &destination) const
+void Bencode_Stringify::stringifyNull([[maybe_unused]] const JNode &jNode, IDestination &destination)
 {
   destination.add("4:null");
 }
@@ -64,7 +64,7 @@ void Bencode_Stringify::stringifyNull([[maybe_unused]] const JNode &jNode, IDest
 /// <param name="jNode">Hole JNode.</param>
 /// <param name="destination">Destination stream for Bencode.</param>
 void Bencode_Stringify::stringifyHole([[maybe_unused]] const JNode &jNode,
-  [[maybe_unused]] IDestination &destination) const
+  [[maybe_unused]] IDestination &destination)
 {}
 
 /// <summary>

@@ -17,7 +17,7 @@ namespace JSON_Lib {
 /// </summary>
 /// <param name="jNode">Number JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination) const
+void JSON_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination)
 {
   destination.add(JRef<Number>(jNode).toString());
 }
@@ -39,7 +39,7 @@ void JSON_Stringify::stringifyString(const JNode &jNode, IDestination &destinati
 /// </summary>
 /// <param name="jNode">Boolean JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination) const
+void JSON_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination)
 {
   destination.add(JRef<Boolean>(jNode).toString());
 }
@@ -49,7 +49,7 @@ void JSON_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destinat
 /// </summary>
 /// <param name="jNode">Null JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Stringify::stringifyNull(const JNode &jNode, IDestination &destination) const
+void JSON_Stringify::stringifyNull(const JNode &jNode, IDestination &destination)
 {
   destination.add(JRef<Null>(jNode).toString());
 }
@@ -59,7 +59,7 @@ void JSON_Stringify::stringifyNull(const JNode &jNode, IDestination &destination
 /// </summary>
 /// <param name="jNode">Hole JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
-void JSON_Stringify::stringifyHole(const JNode &jNode, IDestination &destination) const
+void JSON_Stringify::stringifyHole(const JNode &jNode, IDestination &destination)
 {
   destination.add(JRef<Hole>(jNode).toString());
 }
