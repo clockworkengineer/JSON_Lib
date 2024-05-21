@@ -53,7 +53,7 @@ public:
       }
     }
     return translated;
-  };
+  }
 
 private:
 

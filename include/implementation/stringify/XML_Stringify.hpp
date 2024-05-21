@@ -16,11 +16,11 @@ public:
   XML_Stringify &operator=(const XML_Stringify &other) = delete;
   XML_Stringify(XML_Stringify &&other) = delete;
   XML_Stringify &operator=(XML_Stringify &&other) = delete;
-  ~XML_Stringify() = default;
+  ~XML_Stringify() override = default;
 
-  virtual void stringify(const JNode &jNode, IDestination &destination, long indent) const override;
-  virtual long getIndent() const override;
-  virtual void setIndent(long indent) override;
+  void stringify(const JNode &jNode, IDestination &destination, long indent) const override;
+  [[nodiscard]] long getIndent() const override;
+  void setIndent(long indent) override;
 
 private:
   // Stringify Bencode to XML

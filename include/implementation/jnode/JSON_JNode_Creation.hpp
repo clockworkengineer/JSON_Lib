@@ -11,9 +11,7 @@ template<typename T> JNode::JNode(T value)
     *this = JNode::make<Number>(value);
   } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
     *this = make<Null>();
-  } else if constexpr (std::is_same_v<T, const char *>) {
-    *this = JNode::make<String>(value);
-  } else if constexpr (std::is_same_v<T, std::string>) {
+  } else if constexpr (std::is_same_v<T, const char *> || std::is_same_v<T, std::string>) {
     *this = JNode::make<String>(value);
   } else if constexpr (std::is_convertible_v<T, std::unique_ptr<Variant>>) {
     jNodeVariant = std::move(value);

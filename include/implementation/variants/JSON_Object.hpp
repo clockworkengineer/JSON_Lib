@@ -17,9 +17,9 @@ struct Object : Variant
     Entry(const std::string &key, JNode &jNode) : key(JNode::make<String>(key)), jNode(std::move(jNode)) {}
     Entry(const std::string &key, JNode &&jNode) : key(JNode::make<String>(key)), jNode(std::move(jNode)) {}
     JNode &getKey() { return key; }
-    const JNode &getKey() const { return key; }
+    [[nodiscard]] const JNode &getKey() const { return key; }
     JNode &getJNode() { return jNode; }
-    const JNode &getJNode() const { return jNode; }
+    [[nodiscard]] const JNode &getJNode() const { return jNode; }
 
   private:
     JNode key;
@@ -58,19 +58,19 @@ private:
   // Search for a given entry given a key and object list
   [[nodiscard]] std::vector<Entry>::iterator findKey(const std::string &key)
   {
-    const auto entry = std::ranges::find_if(jNodeObject, [&key](Entry &entry) -> bool {
+    const auto keyEntry = std::ranges::find_if(jNodeObject, [&key](Entry &entry) -> bool {
       return static_cast<String &>(entry.getKey().getVariant()).value() == key;
     });
-    if (entry == jNodeObject.end()) { throw JNode::Error("Invalid key used to access object."); }
-    return entry;
+    if (keyEntry == jNodeObject.end()) { throw JNode::Error("Invalid key used to access object."); }
+    return keyEntry;
   }
   [[nodiscard]] std::vector<Entry>::const_iterator findKey(const std::string &key) const
   {
-    const auto entry = std::ranges::find_if(jNodeObject, [&key](const Entry &entry) -> bool {
+    const auto keyEntry = std::ranges::find_if(jNodeObject, [&key](const Entry &entry) -> bool {
       return static_cast<const String &>(entry.getKey().getVariant()).value() == key;
     });
-    if (entry == jNodeObject.end()) { throw JNode::Error("Invalid key used to access object."); }
-    return entry;
+    if (keyEntry == jNodeObject.end()) { throw JNode::Error("Invalid key used to access object."); }
+    return keyEntry;
   }
   // Object entries list
   std::vector<Entry> jNodeObject;

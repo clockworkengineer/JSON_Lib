@@ -69,8 +69,8 @@ private:
 /// Recursively traverse JNode tree calling IAction methods and possibly
 /// modifying the tree contents or even structure.
 /// </summary>
-/// <param name=jNode>JNode tree to be traversed.</param>
-/// <param name=action>Action methods to call during traversal.</param>
+/// <param name="jNode">JNode tree to be traversed.</param>
+/// <param name="action">Action methods to call during traversal.</param>
 template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
 {
   action.onJNode(jNode);
