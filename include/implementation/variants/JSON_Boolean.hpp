@@ -11,7 +11,7 @@ struct Boolean : Variant
 {
   // Constructors/Destructors
   Boolean() : Variant(Type::boolean) {}
-  explicit Boolean(bool boolean) : Variant(Type::boolean), jNodeBoolean(boolean) {}
+  explicit Boolean(const bool boolean) : Variant(Type::boolean), jNodeBoolean(boolean) {}
   Boolean(const Boolean &other) = default;
   Boolean &operator=(const Boolean &other) = default;
   Boolean(Boolean &&other) = default;

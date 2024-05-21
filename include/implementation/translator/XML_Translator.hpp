@@ -44,7 +44,7 @@ public:
         }
       } else {
         translated += "&#x";
-        auto digits = "0123456789ABCDEF";
+        const auto digits = "0123456789ABCDEF";
         translated += digits[ch >> 12 & 0x0f];
         translated += digits[ch >> 8 & 0x0f];
         translated += digits[ch >> 4 & 0x0f];

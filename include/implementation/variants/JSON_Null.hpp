@@ -15,8 +15,8 @@ struct Null : Variant
   Null &operator=(Null &&other) = default;
   ~Null() = default;
   // Return null value
-  [[nodiscard]] void *getNull() const { return nullptr; }
+  [[nodiscard]] static void *getNull() { return nullptr; }
   // Return string representation of value
-  [[nodiscard]] std::string toString() const { return "null"; }
+  [[nodiscard]] static std::string toString() { return "null"; }
 };
 }// namespace JSON_Lib

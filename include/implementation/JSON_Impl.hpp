@@ -46,7 +46,7 @@ public:
   void traverse(IAction &action);
   void traverse(IAction &action) const;
   // Set print ident value
-  void setIndent(long indent) { jsonStringify->setIndent(indent); }
+  static void setIndent(const long indent) { jsonStringify->setIndent(indent); }
   // Read/Write JSON from file
   static std::string fromFile(const std::string &fileName);
   static void toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format);

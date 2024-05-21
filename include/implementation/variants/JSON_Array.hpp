@@ -25,18 +25,18 @@ struct Array : Variant
   std::vector<JNode> &value() { return jNodeArray; }
   [[nodiscard]] const std::vector<JNode> &value() const { return jNodeArray; }
   // Array indexing operators
-  JNode &operator[](std::size_t index)
+  JNode &operator[](const std::size_t index)
   {
     if (index < jNodeArray.size()) { return jNodeArray[index]; }
     throw JNode::Error("Invalid index used to access array.");
   }
-  const JNode &operator[](std::size_t index) const
+  const JNode &operator[](const std::size_t index) const
   {
     if (index < jNodeArray.size()) { return jNodeArray[index]; }
     throw JNode::Error("Invalid index used to access array.");
   }
   // Resize Array
-  void resize(std::size_t index)
+  void resize(const std::size_t index)
   {
     jNodeArray.resize(index + 1);
     for (auto &entry : jNodeArray) {

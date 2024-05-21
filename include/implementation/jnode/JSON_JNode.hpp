@@ -42,7 +42,7 @@ struct JNode
   const JNode &operator[](std::size_t index) const;
   // Get reference to JNode variant
   Variant &getVariant() { return *jNodeVariant; }
-  const Variant &getVariant() const { return *jNodeVariant; }
+  [[nodiscard]] const Variant &getVariant() const { return *jNodeVariant; }
   // Make JNode
   template<typename T, typename... Args> static auto make(Args &&...args)
   {
@@ -50,7 +50,7 @@ struct JNode
   }
 
 private:
-  JNode typeToJNode(const JSON::intializerListTypes &type);
+  static JNode typeToJNode(const JSON::intializerListTypes &type);
   std::unique_ptr<Variant> jNodeVariant;
 };
 }// namespace JSON_Lib

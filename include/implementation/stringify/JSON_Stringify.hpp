@@ -20,7 +20,7 @@ public:
   void stringify(const JNode &jNode, IDestination &destination, long indent) const override;
 
   // Set print ident value
-  void setIndent(long indent) override
+  void setIndent(const long indent) override
   {
     if (indent < 0) { throw JSON_Lib::Error("Invalid print indentation value."); }
     printIndent = indent;

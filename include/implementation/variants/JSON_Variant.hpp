@@ -8,7 +8,7 @@ struct Variant
   // JNode Variant Types
   enum class Type : uint8_t { base = 0, object, array, number, string, boolean, null, hole };
   // Constructors/Destructors
-  explicit Variant(Type nodeType = Type::base) : jNodeType(nodeType) {}
+  explicit Variant(const Type nodeType = Type::base) : jNodeType(nodeType) {}
   Variant(const Variant &other) = default;
   Variant &operator=(const Variant &other) = default;
   Variant(Variant &&other) = default;

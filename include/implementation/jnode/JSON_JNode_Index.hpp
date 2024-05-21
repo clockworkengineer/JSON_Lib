@@ -14,7 +14,7 @@ inline JNode &JNode::operator[](const std::string &key)
 }
 inline const JNode &JNode::operator[](const std::string &key) const { return JRef<const Object>(*this)[key]; }
 // Array
-inline JNode &JNode::operator[](std::size_t index)
+inline JNode &JNode::operator[](const std::size_t index)
 {
   try {
     if (this->isHole()) { *this = make<Array>(); }
@@ -24,6 +24,6 @@ inline JNode &JNode::operator[](std::size_t index)
     return JRef<Array>(*this)[index];
   }
 }
-inline const JNode &JNode::operator[](std::size_t index) const { return JRef<Array>(*this)[index]; }
+inline const JNode &JNode::operator[](const std::size_t index) const { return JRef<Array>(*this)[index]; }
 
 }// namespace JSON_Lib

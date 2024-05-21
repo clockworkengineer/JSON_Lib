@@ -44,7 +44,7 @@ inline JNode::JNode(const JSON::ArrayInitializer &array)
 inline JNode::JNode(const JSON::Objectintializer &object)
 {
   *this = make<Object>();
-  for (const auto &entry : object) { JRef<Object>(*this).add(Object::Entry(entry.first, typeToJNode(entry.second))); }
+  for (const auto &[fst, snd] : object) { JRef<Object>(*this).add(Object::Entry(fst, typeToJNode(snd))); }
 }
 
 }// namespace JSON_Lib
