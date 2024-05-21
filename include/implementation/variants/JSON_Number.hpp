@@ -24,7 +24,7 @@ struct Number : Variant
   // Floating point notation
   enum class numberNotation { normal = 0, fixed, scientific };
   // Constructors/Destructors
-  Number() : Variant(Variant::Type::number) {}
+  Number() : Variant(Type::number) {}
   template<typename T> explicit Number(T value);
   Number(const Number &other) = default;
   Number &operator=(const Number &other) = default;
@@ -41,8 +41,8 @@ struct Number : Variant
   // Return string representation of value
   [[nodiscard]] std::string toString() const { return getAs<std::string>(); }
   // Set floating point to string conversion parameters
-  inline static void setPrecision(int precision) { numberPrecision = precision; }
-  inline static void setNotation(numberNotation notation) { numberNotation = notation; }
+   static void setPrecision(const int precision) { numberPrecision = precision; }
+   static void setNotation(const numberNotation notation) { numberNotation = notation; }
 
 private:
   // Convert string to specific numeric type (returns true on success)
@@ -65,10 +65,10 @@ private:
   Values jNodeNumber;
   // Floating point to string parameters
   inline static int numberPrecision{ 6 };
-  inline static numberNotation numberNotation{ numberNotation::normal };
+  inline static auto numberNotation{ numberNotation::normal };
 };
 // Construct Number from value
-template<typename T> Number::Number(T value) : Variant(Variant::Type::number)
+template<typename T> Number::Number(T value) : Variant(Type::number)
 {
   if constexpr (std::is_same_v<T, std::string>) {
     convertNumber(value);

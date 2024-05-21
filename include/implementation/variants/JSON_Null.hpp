@@ -8,7 +8,7 @@ namespace JSON_Lib {
 struct Null : Variant
 {
   // Constructors/Destructors
-  Null() : Variant(Variant::Type::null) {}
+  Null() : Variant(Type::null) {}
   Null(const Null &other) = default;
   Null &operator=(const Null &other) = default;
   Null(Null &&other) = default;

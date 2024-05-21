@@ -9,8 +9,8 @@ namespace JSON_Lib {
 struct String : Variant
 {
   // Constructors/Destructors
-  String() : Variant(Variant::Type::string) {}
-  explicit String(std::string string) : Variant(Variant::Type::string), jNodeString(std::move(string)) {}
+  String() : Variant(Type::string) {}
+  explicit String(std::string string) : Variant(Type::string), jNodeString(std::move(string)) {}
   String(const String &other) = default;
   String &operator=(const String &other) = default;
   String(String &&other) = default;

@@ -26,7 +26,7 @@ struct Object : Variant
     JNode jNode;
   };
   // Constructors/Destructors
-  Object() : Variant(Variant::Type::object) {}
+  Object() : Variant(Type::object) {}
   Object(const Object &other) = default;
   Object &operator=(const Object &other) = default;
   Object(Object &&other) = default;

@@ -21,9 +21,9 @@ public:
   JSON_Parser &operator=(const JSON_Parser &other) = delete;
   JSON_Parser(JSON_Parser &&other) = delete;
   JSON_Parser &operator=(JSON_Parser &&other) = delete;
-  ~JSON_Parser() = default;
+  ~JSON_Parser() override = default;
 
-  virtual JNode parse(ISource &source);
+  JNode parse(ISource &source) override;
 
 private:
   // Parse JSON

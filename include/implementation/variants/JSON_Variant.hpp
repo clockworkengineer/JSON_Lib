@@ -8,22 +8,22 @@ struct Variant
   // JNode Variant Types
   enum class Type : uint8_t { base = 0, object, array, number, string, boolean, null, hole };
   // Constructors/Destructors
-  explicit Variant(Variant::Type nodeType = Variant::Type::base) : jNodeType(nodeType) {}
+  explicit Variant(Type nodeType = Type::base) : jNodeType(nodeType) {}
   Variant(const Variant &other) = default;
   Variant &operator=(const Variant &other) = default;
   Variant(Variant &&other) = default;
   Variant &operator=(Variant &&other) = default;
   ~Variant() = default;
   // Interrogate variant
-  bool isObject() const { return jNodeType == Variant::Type::object; }
-  bool isArray() const { return jNodeType == Variant::Type::array; }
-  bool isNumber() const { return jNodeType == Variant::Type::number; }
-  bool isString() const { return jNodeType == Variant::Type::string; }
-  bool isBoolean() const { return jNodeType == Variant::Type::boolean; }
-  bool isNull() const { return jNodeType == Variant::Type::null; }
-  bool isHole() const { return jNodeType == Variant::Type::hole; }
+  [[nodiscard]] bool isObject() const { return jNodeType == Type::object; }
+  [[nodiscard]] bool isArray() const { return jNodeType == Type::array; }
+  [[nodiscard]] bool isNumber() const { return jNodeType == Type::number; }
+  [[nodiscard]] bool isString() const { return jNodeType == Type::string; }
+  [[nodiscard]] bool isBoolean() const { return jNodeType == Type::boolean; }
+  [[nodiscard]] bool isNull() const { return jNodeType == Type::null; }
+  [[nodiscard]] bool isHole() const { return jNodeType == Type::hole; }
 
 private:
-  Variant::Type jNodeType;
+  Type jNodeType;
 };
 }// namespace JSON_Lib

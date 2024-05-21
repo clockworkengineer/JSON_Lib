@@ -15,14 +15,14 @@ public:
   JSON_Stringify &operator=(const JSON_Stringify &other) = delete;
   JSON_Stringify(JSON_Stringify &&other) = delete;
   JSON_Stringify &operator=(JSON_Stringify &&other) = delete;
-  ~JSON_Stringify() = default;
+  ~JSON_Stringify() override = default;
 
-  virtual void stringify(const JNode &jNode, IDestination &destination, long indent) const override;
+  void stringify(const JNode &jNode, IDestination &destination, long indent) const override;
 
   // Set print ident value
   void setIndent(long indent) override
   {
-    if (indent < 0) { throw JSON_Lib::Error("Invalid print indentation value."); };
+    if (indent < 0) { throw JSON_Lib::Error("Invalid print indentation value."); }
     printIndent = indent;
   }
 

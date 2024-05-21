@@ -48,7 +48,7 @@ public:
   }
   std::size_t position() const override
   {
-    if (more()) { return static_cast<std::size_t>(source.tellg()); }
+    if (more()) { return source.tellg(); }
     return std::filesystem::file_size(filename);
   }
 

@@ -8,7 +8,7 @@ class Bencode_Translator final : public ITranslator
 {
 public:
   // Bencode translator error
-  struct Error final : public std::runtime_error
+  struct Error final : std::runtime_error
   {
     explicit Error(const std::string &message) : std::runtime_error("Bencode Translator Error: " + message) {}
   };
@@ -22,8 +22,7 @@ public:
 
   // Convert to/from Bencode escaped characters
   [[nodiscard]] std::string from([[maybe_unused]] const std::string &escapedString) const override { return escapedString; }
-  [[nodiscard]] std::string to(const std::string &rawString) const override { return rawString; };
+  [[nodiscard]] std::string to(const std::string &rawString) const override { return rawString; }
 
-private:
 };
 }// namespace JSON_Lib

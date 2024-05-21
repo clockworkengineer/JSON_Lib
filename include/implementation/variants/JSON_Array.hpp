@@ -10,7 +10,7 @@ namespace JSON_Lib {
 struct Array : Variant
 {
   // Constructors/Destructors
-  Array() : Variant(Variant::Type::array) {}
+  Array() : Variant(Type::array) {}
   Array(const Array &other) = default;
   Array &operator=(const Array &other) = default;
   Array(Array &&other) = default;
@@ -27,12 +27,12 @@ struct Array : Variant
   // Array indexing operators
   JNode &operator[](std::size_t index)
   {
-    if (index < static_cast<std::size_t>(jNodeArray.size())) { return jNodeArray[index]; }
+    if (index < jNodeArray.size()) { return jNodeArray[index]; }
     throw JNode::Error("Invalid index used to access array.");
   }
   const JNode &operator[](std::size_t index) const
   {
-    if (index < static_cast<std::size_t>(jNodeArray.size())) { return jNodeArray[index]; }
+    if (index < jNodeArray.size()) { return jNodeArray[index]; }
     throw JNode::Error("Invalid index used to access array.");
   }
   // Resize Array

@@ -10,7 +10,7 @@ template<typename T> JNode::JNode(T value)
   } else if constexpr (std::is_arithmetic_v<T>) {
     *this = JNode::make<Number>(value);
   } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
-    *this = JNode::make<Null>();
+    *this = make<Null>();
   } else if constexpr (std::is_same_v<T, const char *>) {
     *this = JNode::make<String>(value);
   } else if constexpr (std::is_same_v<T, std::string>) {
@@ -37,13 +37,13 @@ inline JNode JNode::typeToJNode(const JSON::intializerListTypes &type)
 // Construct JNode Array from initializer list
 inline JNode::JNode(const JSON::ArrayInitializer &array)
 {
-  *this = JNode::make<Array>();
+  *this = make<Array>();
   for (const auto &entry : array) { JRef<Array>(*this).add(typeToJNode(entry)); }
 }
 // Construct JNode Object from initializer list
 inline JNode::JNode(const JSON::Objectintializer &object)
 {
-  *this = JNode::make<Object>();
+  *this = make<Object>();
   for (const auto &entry : object) { JRef<Object>(*this).add(Object::Entry(entry.first, typeToJNode(entry.second))); }
 }
 

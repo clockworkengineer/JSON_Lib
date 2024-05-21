@@ -9,7 +9,7 @@ class XML_Translator final : public ITranslator
 {
 public:
   // XML translator error
-  struct Error final : public std::runtime_error
+  struct Error final : std::runtime_error
   {
     explicit Error(const std::string &message) : std::runtime_error("XML Translator Error: " + message) {}
   };
@@ -22,9 +22,9 @@ public:
   ~XML_Translator() override = default;
 
   // Convert to/from XML escaped characters
-  std::string from([[maybe_unused]] const std::string &escapedString) const override { return escapedString; }
+  [[nodiscard]] std::string from([[maybe_unused]] const std::string &escapedString) const override { return escapedString; }
 
-  std::string to(const std::string &rawString) const override
+  [[nodiscard]] std::string to(const std::string &rawString) const override
   {
     std::string translated;
     for (const char16_t ch : toUtf16(rawString)) {
@@ -44,7 +44,7 @@ public:
         }
       } else {
         translated += "&#x";
-        const char *digits = "0123456789ABCDEF";
+        auto digits = "0123456789ABCDEF";
         translated += digits[ch >> 12 & 0x0f];
         translated += digits[ch >> 8 & 0x0f];
         translated += digits[ch >> 4 & 0x0f];
@@ -62,6 +62,6 @@ private:
   /// </summary>
   /// <param name="utf16Char">UTF16 character.</param>
   /// <returns>==true if valid ASCII.</returns>
-  bool isASCII(char16_t utf16Char) const { return utf16Char > 0x001F && utf16Char < 0x0080; }
+  [[nodiscard]] static bool isASCII(const char16_t utf16Char) { return utf16Char > 0x001F && utf16Char < 0x0080; }
 };
 }// namespace JSON_Lib

@@ -21,7 +21,7 @@ class JSON_Translator final : public ITranslator
 {
 public:
   // JSON translator error
-  struct Error final : public std::runtime_error
+  struct Error final : std::runtime_error
   {
     explicit Error(const std::string &message) : std::runtime_error("JSON Translator Error: " + message) {}
   };
