@@ -32,7 +32,7 @@ char16_t decodeUTF16(std::string::const_iterator &current, const ptrdiff_t numbe
   if (numberOfCharacters >= 4) {
     char16_t utf16value{};
     // Hex digits will be ascii so can throw away high order byte of char
-    const std::array<char, 5> hexDigits{ (current[1]),
+    const std::array hexDigits{ (current[1]),
       (current[2]),
       (current[3]),
       (current[4]),
