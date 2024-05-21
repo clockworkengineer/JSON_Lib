@@ -7,7 +7,7 @@
 
 namespace JSON_Lib {
 
-class FileDestination : public IDestination
+class FileDestination final : public IDestination
 {
 public:
   explicit FileDestination(const std::string &filename) : filename(filename)
@@ -19,9 +19,9 @@ public:
   FileDestination &operator=(const FileDestination &other) = delete;
   FileDestination(FileDestination &&other) = delete;
   FileDestination &operator=(FileDestination &&other) = delete;
-  virtual ~FileDestination() = default;
+  ~FileDestination() override = default;
 
-  virtual void add(const char ch) override
+  void add(const char ch) override
   {
     if (ch == '\n') {
       destination.write("\r\n", 2);
@@ -31,11 +31,11 @@ public:
       fileSize++;
     }
   }
-  virtual void add(const std::string &bytes) override
+  void add(const std::string &bytes) override
   {
-    for (auto ch : bytes) { add(ch); }
+    for (const auto ch : bytes) { add(ch); }
   }
-  virtual void clear() override
+  void clear() override
   {
     if (destination.is_open()) { destination.close(); }
     destination.open(filename.c_str(), std::ios_base::binary | std::ios_base::trunc);
@@ -44,7 +44,7 @@ public:
   }
   void close() { destination.flush(); }
 
-  std::size_t size() { return fileSize; }
+  std::size_t size() const { return fileSize; }
 
 private:
   std::ofstream destination;

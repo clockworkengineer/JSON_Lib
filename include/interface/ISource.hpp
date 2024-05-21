@@ -20,7 +20,7 @@ public:
   // =============
   // ISource Error
   // =============
-  struct Error : public std::runtime_error
+  struct Error final : public std::runtime_error
   {
     explicit Error(const std::string &message) : std::runtime_error("ISource Error: " + message) {}
   };
@@ -82,7 +82,7 @@ public:
   // ==================================
   // Get current source stream position
   // ==================================
-  std::pair<long, long> getPosition() const { return std::make_pair(lineNo, column); }
+  [[nodiscard]] std::pair<long, long> getPosition() const { return std::make_pair(lineNo, column); }
 
 protected:
   // ========================

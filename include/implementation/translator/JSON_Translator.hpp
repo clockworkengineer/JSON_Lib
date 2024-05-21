@@ -17,11 +17,11 @@ constexpr char16_t kHighSurrogatesEnd{ 0xDBFF };
 constexpr char16_t kLowSurrogatesBegin{ 0xDC00 };
 constexpr char16_t kLowSurrogatesEnd{ 0xDFFF };
 
-class JSON_Translator : public ITranslator
+class JSON_Translator final : public ITranslator
 {
 public:
   // JSON translator error
-  struct Error : public std::runtime_error
+  struct Error final : public std::runtime_error
   {
     explicit Error(const std::string &message) : std::runtime_error("JSON Translator Error: " + message) {}
   };

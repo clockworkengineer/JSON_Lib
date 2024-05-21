@@ -8,7 +8,7 @@
 
 namespace JSON_Lib {
 
-class FileSource : public ISource
+class FileSource final : public ISource
 {
 public:
   explicit FileSource(const std::string &filename) : filename(filename)
@@ -21,10 +21,10 @@ public:
   FileSource &operator=(const FileSource &other) = delete;
   FileSource(FileSource &&other) = delete;
   FileSource &operator=(FileSource &&other) = delete;
-  virtual ~FileSource() = default;
+  ~FileSource() override = default;
 
-  virtual char current() const override { return static_cast<char>(source.peek()); }
-  virtual void next() override
+  char current() const override { return static_cast<char>(source.peek()); }
+  void next() override
   {
     if (!more()) { throw Error("Tried to read past end of file."); }
     source.get();
@@ -38,22 +38,22 @@ public:
       column = 1;
     }
   }
-  virtual bool more() const override { return source.peek() != EOF; }
-  virtual void reset() override
+  bool more() const override { return source.peek() != EOF; }
+  void reset() override
   {
     lineNo = 1;
     column = 1;
     source.clear();
     source.seekg(0, std::ios_base::beg);
   }
-  virtual std::size_t position() const override
+  std::size_t position() const override
   {
     if (more()) { return static_cast<std::size_t>(source.tellg()); }
     return std::filesystem::file_size(filename);
   }
 
 private:
-  virtual void backup(unsigned long length) override
+  void backup(const unsigned long length) override
   {
     source.clear();
     source.seekg(-static_cast<long>(length), std::ios_base::cur);

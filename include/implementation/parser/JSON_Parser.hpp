@@ -13,7 +13,7 @@
 
 namespace JSON_Lib {
 
-class JSON_Parser : public IParser
+class JSON_Parser final : public IParser
 {
 public:
   explicit JSON_Parser(ITranslator &translator) : jsonTranslator(translator) {}

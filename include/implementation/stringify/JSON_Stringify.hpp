@@ -7,7 +7,7 @@
 
 namespace JSON_Lib {
 
-class JSON_Stringify : public IStringify
+class JSON_Stringify final : public IStringify
 {
 public:
   JSON_Stringify() = default;

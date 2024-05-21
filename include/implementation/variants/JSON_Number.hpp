@@ -15,7 +15,7 @@ struct Number : Variant
   // Number values variant
   using Values = std::variant<std::monostate, int, long, long long, float, double, long double>;
   // JNode Number Error
-  struct Error : public std::runtime_error
+  struct Error final : public std::runtime_error
   {
     explicit Error(const std::string &message) : std::runtime_error("JNode Number Error: " + message) {}
   };
@@ -140,12 +140,12 @@ template<typename T, typename U> T Number::convertTo(U value) const
 // Convert stored number to another specified type
 template<typename T> T Number::getAs() const
 {
-  if (auto pValue = std::get_if<int>(&jNodeNumber)) { return convertTo<T>(*pValue); }
-  if (auto pValue = std::get_if<long>(&jNodeNumber)) { return convertTo<T>(*pValue); }
-  if (auto pValue = std::get_if<long long>(&jNodeNumber)) { return convertTo<T>(*pValue); }
-  if (auto pValue = std::get_if<float>(&jNodeNumber)) { return convertTo<T>(*pValue); }
-  if (auto pValue = std::get_if<double>(&jNodeNumber)) { return convertTo<T>(*pValue); }
-  if (auto pValue = std::get_if<long double>(&jNodeNumber)) { return convertTo<T>(*pValue); }
+  if (const auto pValue = std::get_if<int>(&jNodeNumber)) { return convertTo<T>(*pValue); }
+  if (const auto pValue = std::get_if<long>(&jNodeNumber)) { return convertTo<T>(*pValue); }
+  if (const auto pValue = std::get_if<long long>(&jNodeNumber)) { return convertTo<T>(*pValue); }
+  if (const auto pValue = std::get_if<float>(&jNodeNumber)) { return convertTo<T>(*pValue); }
+  if (const auto pValue = std::get_if<double>(&jNodeNumber)) { return convertTo<T>(*pValue); }
+  if (const auto pValue = std::get_if<long double>(&jNodeNumber)) { return convertTo<T>(*pValue); }
   throw Error("Could not convert unknown type.");
 }
 }// namespace JSON_Lib

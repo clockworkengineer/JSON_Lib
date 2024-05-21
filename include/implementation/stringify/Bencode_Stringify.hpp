@@ -6,18 +6,18 @@
 
 namespace JSON_Lib {
 
-class Bencode_Stringify : public IStringify
+class Bencode_Stringify final : public IStringify
 {
 public:
   Bencode_Stringify() = default;
   Bencode_Stringify &operator=(const Bencode_Stringify &other) = delete;
   Bencode_Stringify(Bencode_Stringify &&other) = delete;
   Bencode_Stringify &operator=(Bencode_Stringify &&other) = delete;
-  ~Bencode_Stringify() = default;
+  ~Bencode_Stringify() override = default;
 
-  virtual void stringify(const JNode &jNode, IDestination &destination, long indent) const override;
-  virtual long getIndent() const override;
-  virtual void setIndent(long indent) override;
+  void stringify(const JNode &jNode, IDestination &destination, long indent) const override;
+  [[nodiscard]] long getIndent() const override;
+  void setIndent(long indent) override;
 
 private:
   // Stringify Bencode

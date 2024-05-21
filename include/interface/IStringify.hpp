@@ -20,7 +20,7 @@ public:
   // ================
   // IStringify Error
   // ================
-  struct Error : public std::runtime_error
+  struct Error final : public std::runtime_error
   {
     explicit Error(const std::string &message) : std::runtime_error("IStringify Error: " + message) {}
   };
@@ -35,7 +35,7 @@ public:
   // =========================
   // Set/Get print indentation
   // =========================
-  virtual long getIndent() const = 0;
+  [[nodiscard]] virtual long getIndent() const = 0;
   virtual void setIndent(long indent) = 0;
 };
 // Make custom stringify to pass to JSON constructor: Note pointer is tidied up internally.

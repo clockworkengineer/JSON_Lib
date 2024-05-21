@@ -58,7 +58,7 @@ private:
   // Search for a given entry given a key and object list
   [[nodiscard]] std::vector<Entry>::iterator findKey(const std::string &key)
   {
-    auto entry = std::find_if(jNodeObject.begin(), jNodeObject.end(), [&key](Entry &entry) -> bool {
+    const auto entry = std::ranges::find_if(jNodeObject, [&key](Entry &entry) -> bool {
       return static_cast<String &>(entry.getKey().getVariant()).value() == key;
     });
     if (entry == jNodeObject.end()) { throw JNode::Error("Invalid key used to access object."); }
@@ -66,7 +66,7 @@ private:
   }
   [[nodiscard]] std::vector<Entry>::const_iterator findKey(const std::string &key) const
   {
-    auto entry = std::find_if(jNodeObject.begin(), jNodeObject.end(), [&key](const Entry &entry) -> bool {
+    const auto entry = std::ranges::find_if(jNodeObject, [&key](const Entry &entry) -> bool {
       return static_cast<const String &>(entry.getKey().getVariant()).value() == key;
     });
     if (entry == jNodeObject.end()) { throw JNode::Error("Invalid key used to access object."); }

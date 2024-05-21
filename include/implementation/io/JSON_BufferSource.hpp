@@ -8,7 +8,7 @@
 
 namespace JSON_Lib {
 
-class BufferSource : public ISource
+class BufferSource final : public ISource
 {
 public:
   explicit BufferSource(const std::string &buffer) : buffer(buffer)
@@ -20,14 +20,14 @@ public:
   BufferSource &operator=(const BufferSource &other) = delete;
   BufferSource(BufferSource &&other) = delete;
   BufferSource &operator=(BufferSource &&other) = delete;
-  virtual ~BufferSource() = default;
+  ~BufferSource() override = default;
 
-  virtual char current() const override
+  [[nodiscard]] char current() const override
   {
     if (more()) { return buffer[bufferPosition]; }
     return EOF;
   }
-  virtual void next() override
+  void next() override
   {
     if (!more()) { throw Error("Tried to read past and of buffer."); }
     bufferPosition++;
@@ -37,17 +37,17 @@ public:
       column = 1;
     }
   }
-  virtual bool more() const override { return bufferPosition < buffer.size(); }
-  virtual void reset() override
+  [[nodiscard]] bool more() const override { return bufferPosition < buffer.size(); }
+  void reset() override
   {
     bufferPosition = 0;
     lineNo = 1;
     column = 1;
   }
-  virtual std::size_t position() const override { return bufferPosition; }
+  [[nodiscard]] std::size_t position() const override { return bufferPosition; }
 
 private:
-  virtual void backup(unsigned long length) override { bufferPosition -= length; }
+  void backup(unsigned long length) override { bufferPosition -= length; }
 
   std::size_t bufferPosition = 0;
   std::string buffer;

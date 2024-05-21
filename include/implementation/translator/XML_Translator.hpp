@@ -5,11 +5,11 @@
 
 namespace JSON_Lib {
 
-class XML_Translator : public ITranslator
+class XML_Translator final : public ITranslator
 {
 public:
   // XML translator error
-  struct Error : public std::runtime_error
+  struct Error final : public std::runtime_error
   {
     explicit Error(const std::string &message) : std::runtime_error("XML Translator Error: " + message) {}
   };
@@ -27,7 +27,7 @@ public:
   std::string to(const std::string &rawString) const override
   {
     std::string translated;
-    for (char16_t ch : toUtf16(rawString)) {
+    for (const char16_t ch : toUtf16(rawString)) {
       if (isASCII(ch) && std::isprint(ch)) {
         if (ch == '&') {
           translated += "&amp;";
