@@ -21,9 +21,9 @@ public:
 
 private:
   // Stringify Bencode
-  void stringifyNumber(const JNode &jNode, IDestination &destination) const;
-  void stringifyString(const JNode &jNode, IDestination &destination) const;
-  void stringifyBoolean(const JNode &jNode, IDestination &destination) const;
+  static void stringifyNumber(const JNode &jNode, IDestination &destination);
+  static void stringifyString(const JNode &jNode, IDestination &destination);
+  static void stringifyBoolean(const JNode &jNode, IDestination &destination);
   void stringifyNull(const JNode &jNode, IDestination &destination) const;
   void stringifyHole(const JNode &jNode, IDestination &destination) const;
   void stringifyObject(const JNode &jNode, IDestination &destination, long indent) const;

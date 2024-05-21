@@ -24,7 +24,7 @@ public:
   JSON_Impl &operator=(JSON_Impl &&other) = delete;
   ~JSON_Impl() = default;
   // Get JSON_Lib version
-  std::string version() const;
+  static std::string version();
   // Parse JSON into JNode tree
   void parse(ISource &source);
   // Create JSON text string (no white space) from JNode tree
@@ -32,7 +32,7 @@ public:
   // Create JSON structured text string (pretty print) from JNode tree
   void print(IDestination &destination) const;
   // Strip whitespace from JSON string
-  void strip(ISource &source, IDestination &destination) const;
+  static void strip(ISource &source, IDestination &destination);
   // Get root of JSON tree
   [[nodiscard]] JNode &root() { return jNodeRoot; }
   [[nodiscard]] const JNode &root() const { return jNodeRoot; }

@@ -17,7 +17,7 @@ namespace JSON_Lib {
 /// </summary>
 /// <param name="jNode">Number JNode.</param>
 /// <param name="destination">Destination stream for Bencode.</param>
-void Bencode_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination) const
+void Bencode_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination)
 {
   // All numbers to rounded integers
   destination.add("i" + std::to_string(JRef<Number>(jNode).value<int>()) + "e");
@@ -28,7 +28,7 @@ void Bencode_Stringify::stringifyNumber(const JNode &jNode, IDestination &destin
 /// </summary>
 /// <param name="jNode">String JNode.</param>
 /// <param name="destination">Destination stream for Bencode.</param>
-void Bencode_Stringify::stringifyString(const JNode &jNode, IDestination &destination) const
+void Bencode_Stringify::stringifyString(const JNode &jNode, IDestination &destination)
 {
   destination.add(
     std::to_string(static_cast<int>(JRef<String>(jNode).value().length())) + ":" + JRef<String>(jNode).value());
@@ -39,7 +39,7 @@ void Bencode_Stringify::stringifyString(const JNode &jNode, IDestination &destin
 /// </summary>
 /// <param name="jNode">Boolean JNode.</param>
 /// <param name="destination">Destination stream for Bencode.</param>
-void Bencode_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination) const
+void Bencode_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination)
 {
   if (JRef<Boolean>(jNode).value()) {
     destination.add("4:True");

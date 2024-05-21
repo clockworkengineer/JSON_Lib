@@ -26,7 +26,7 @@ JSON_Impl::JSON_Impl(IStringify *stringify, IParser *parser)
   }
 }
 
-std::string JSON_Impl::version() const
+std::string JSON_Impl::version()
 {
   std::stringstream versionString;
   versionString << "JSON_Lib Version  " << JSON_VERSION_MAJOR << "." << JSON_VERSION_MINOR << "." << JSON_VERSION_PATCH;
@@ -47,7 +47,7 @@ void JSON_Impl::print(IDestination &destination) const
   jsonStringify->stringify(jNodeRoot, destination, jsonStringify->getIndent());
 }
 
-void JSON_Impl::strip(ISource &source, IDestination &destination) const
+void JSON_Impl::strip(ISource &source, IDestination &destination)
 {// Note: That it is assumed that the JSON on the source stream is valid with no errors.
   while (source.more()) {
     if (!source.isWS()) {
