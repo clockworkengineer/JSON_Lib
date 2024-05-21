@@ -109,7 +109,7 @@ void Bencode_Stringify::stringifyArray(const JNode &jNode,
 /// <param name=jNode>JNode structure to be traversed.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void Bencode_Stringify::stringify(const JNode &jNode, IDestination &destination, long indent) const
+void Bencode_Stringify::stringify(const JNode &jNode, IDestination &destination, const long indent) const
 {
   if (jNode.isNumber()) {
     stringifyNumber(jNode, destination);

@@ -28,7 +28,7 @@ public:
 private:
   // Parse JSON
   Object::Entry parseObjectEntry(ISource &source);
-  JNode parseString(ISource &source);
+  JNode parseString(ISource &source) const;
   JNode parseNumber(ISource &source);
   JNode parseBoolean(ISource &source);
   JNode parseNull(ISource &source);

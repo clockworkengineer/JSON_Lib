@@ -73,7 +73,7 @@ void XML_Stringify::stringifyObject(const JNode &jNode, IDestination &destinatio
 {
   for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
     auto elementName = JRef<String>(jNodeNext.getKey()).value();
-    std::replace(elementName.begin(), elementName.end(), ' ', '-');
+    std::ranges::replace(elementName, ' ', '-');
     destination.add("<" + elementName + ">");
     stringifyXML(jNodeNext.getJNode(), destination, 0);
     destination.add("</" + elementName + ">");
@@ -104,7 +104,7 @@ void XML_Stringify::stringifyArray(const JNode &jNode, IDestination &destination
 /// <param name=jNode>JNode structure to be traversed.</param>
 /// <param name=destination>Destination stream for stringified XML.</param>
 /// <param name="indent">Current print indentation.</param>
-void XML_Stringify::stringifyXML(const JNode &jNode, IDestination &destination, long indent) const
+void XML_Stringify::stringifyXML(const JNode &jNode, IDestination &destination, const long indent) const
 {
   if (jNode.isNumber()) {
     stringifyNumber(jNode, destination);

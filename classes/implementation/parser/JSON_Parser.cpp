@@ -21,7 +21,7 @@ namespace JSON_Lib {
 /// </summary>
 /// <param name="escape">Escaped character.</param>
 /// <returns>==true then character is a valid escape character.</returns>
-bool validEscape(char escape)
+bool validEscape(const char escape)
 {
   return escape == '\\' || escape == 't' || escape == '"' || escape == 'b' || escape == 'f' || escape == 'n'
          || escape == 'r' || escape == 'u';
@@ -86,7 +86,8 @@ Object::Entry JSON_Parser::parseObjectEntry(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>String JNode.</returns>
-JNode JSON_Parser::parseString(ISource &source) { return JNode::make<String>(extractString(source, jsonTranslator)); }
+JNode JSON_Parser::parseString(ISource &source) const
+{ return JNode::make<String>(extractString(source, jsonTranslator)); }
 
 /// <summary>
 /// Parse a number from a JSON source stream.

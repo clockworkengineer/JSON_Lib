@@ -70,7 +70,7 @@ void JSON_Stringify::stringifyHole(const JNode &jNode, IDestination &destination
 /// <param name="jNode">Object JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void JSON_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, long indent) const
+void JSON_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, const long indent) const
 {
   size_t commaCount = JRef<Object>(jNode).value().size() - 1;
   destination.add('{');
@@ -99,7 +99,7 @@ void JSON_Stringify::stringifyObject(const JNode &jNode, IDestination &destinati
 /// <param name="jNode">Array JNode.</param>
 /// <param name="destination">Destination stream for JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void JSON_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, long indent) const
+void JSON_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, const long indent) const
 {
   destination.add('[');
   if (!JRef<Array>(jNode).value().empty()) {
@@ -128,7 +128,7 @@ void JSON_Stringify::stringifyArray(const JNode &jNode, IDestination &destinatio
 /// <param name=jNode>JNode structure to be traversed.</param>
 /// <param name=destination>Destination stream for stringified JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void JSON_Stringify::stringify(const JNode &jNode, IDestination &destination, long indent) const
+void JSON_Stringify::stringify(const JNode &jNode, IDestination &destination, const long indent) const
 {
   if (jNode.isNumber()) {
     stringifyNumber(jNode, destination);

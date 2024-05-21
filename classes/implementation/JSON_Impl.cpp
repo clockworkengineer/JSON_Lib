@@ -92,7 +92,7 @@ JNode &JSON_Impl::operator[](const std::string &key)
 }
 const JNode &JSON_Impl::operator[](const std::string &key) const { return jNodeRoot[key]; }
 
-JNode &JSON_Impl::operator[](std::size_t index)
+JNode &JSON_Impl::operator[](const std::size_t index)
 {
   try {
     if (jNodeRoot.isEmpty()) { jNodeRoot = JNode::make<Array>(); }
@@ -102,6 +102,6 @@ JNode &JSON_Impl::operator[](std::size_t index)
     return jNodeRoot[index];
   }
 }
-const JNode &JSON_Impl::operator[](std::size_t index) const { return jNodeRoot[index]; }
+const JNode &JSON_Impl::operator[](const std::size_t index) const { return jNodeRoot[index]; }
 
 }// namespace JSON_Lib

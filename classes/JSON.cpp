@@ -86,7 +86,7 @@ void JSON::print(IDestination &&destination) const { implementation->print(desti
 /// Set print indent value.
 /// </summary>
 /// <param name=indent>Pretty print indent value.</param>
-void JSON::setIndent(long indent) const { implementation->setIndent(indent); }
+void JSON::setIndent(const long indent) const { implementation->setIndent(indent); }
 
 /// <summary>
 /// Recursively traverse JNode structure calling IAction methods (read only)
@@ -109,8 +109,8 @@ const JNode &JSON::operator[](const std::string &key) const { return (*implement
 /// Return array entry for the passed in index.
 /// </summary>
 /// <param name=index>Array entry (JNode) index.</param>
-JNode &JSON::operator[](std::size_t index) { return (*implementation)[index]; }
-const JNode &JSON::operator[](std::size_t index) const { return (*implementation)[index]; }
+JNode &JSON::operator[](const std::size_t index) { return (*implementation)[index]; }
+const JNode &JSON::operator[](const std::size_t index) const { return (*implementation)[index]; }
 
 /// <summary>
 /// Return root of JSON tree.
@@ -125,7 +125,7 @@ const JNode &JSON::root() const { return implementation->root(); }
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 /// <returns>JSON string.</returns>
-const std::string JSON::fromFile(const std::string &fileName) { return JSON_Impl::fromFile(fileName); }
+std::string JSON::fromFile(const std::string &fileName) { return JSON_Impl::fromFile(fileName); }
 
 /// <summary>
 /// Create an JSON file and write JSON string to it.
@@ -133,7 +133,7 @@ const std::string JSON::fromFile(const std::string &fileName) { return JSON_Impl
 /// <param name="fileName">JSON file name</param>
 /// <param name="jsonString">JSON string</param>
 /// <param name="format">JSON file format</param>
-void JSON::toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format)
+void JSON::toFile(const std::string &fileName, const std::string &jsonString, const JSON::Format format)
 {
   JSON_Impl::toFile(fileName, jsonString, format);
 }

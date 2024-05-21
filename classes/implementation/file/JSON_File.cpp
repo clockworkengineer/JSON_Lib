@@ -22,17 +22,17 @@ namespace JSON_Lib {
 /// <param name="jsonString">JSON string</param>
 /// <param name="format">JSON file format</param>
 void writeJSONString(std::ofstream &jsonFile, const std::string &jsonString) { jsonFile << jsonString; }
-void writeJSONString(std::ofstream &jsonFile, const std::u16string &jsonString, JSON::Format format)
+void writeJSONString(std::ofstream &jsonFile, const std::u16string &jsonString, const JSON::Format format)
 {
   if (format == JSON::Format::utf16BE) {
     jsonFile << static_cast<unsigned char>(0xFE) << static_cast<unsigned char>(0xFF);
-    for (auto ch : jsonString) {
+    for (const auto ch : jsonString) {
       jsonFile.put(static_cast<unsigned char>(ch >> 8));
       jsonFile.put(static_cast<unsigned char>(ch));
     }
   } else if (format == JSON::Format::utf16LE) {
     jsonFile << static_cast<unsigned char>(0xFF) << static_cast<unsigned char>(0xFE);
-    for (auto ch : jsonString) {
+    for (const auto ch : jsonString) {
       jsonFile.put(static_cast<unsigned char>(ch));
       jsonFile.put(static_cast<unsigned char>(ch >> 8));
     }
@@ -53,7 +53,7 @@ std::string readJSONString(std::ifstream &jsonFile)
   jsonFileBuffer << jsonFile.rdbuf();
   return jsonFileBuffer.str();
 }
-const std::u16string readJSONString(std::ifstream &jsonFile, JSON::Format format)
+std::u16string readJSONString(std::ifstream &jsonFile, const JSON::Format format)
 {
   std::u16string utf16String;
   // Move past byte order mark
@@ -86,9 +86,8 @@ const std::u16string readJSONString(std::ifstream &jsonFile, JSON::Format format
 /// <returns>JSON file format.</returns>
 JSON::Format JSON_Impl::getFileFormat(const std::string &fileName)
 {
-  uint32_t byteOrderMark;
   std::ifstream jsonFile{ fileName, std::ios_base::binary };
-  byteOrderMark = static_cast<unsigned char>(jsonFile.get()) << 24;
+  uint32_t byteOrderMark = static_cast<unsigned char>(jsonFile.get()) << 24;
   byteOrderMark |= static_cast<unsigned char>(jsonFile.get()) << 16;
   byteOrderMark |= static_cast<unsigned char>(jsonFile.get()) << 8;
   byteOrderMark |= static_cast<unsigned char>(jsonFile.get());
@@ -108,12 +107,11 @@ JSON::Format JSON_Impl::getFileFormat(const std::string &fileName)
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 /// <returns>JSON string.</returns>
-const std::string JSON_Impl::fromFile(const std::string &fileName)
+std::string JSON_Impl::fromFile(const std::string &fileName)
 {
-  const char *kCRLF = "\x0D\x0A";
-  const char *kLF = "\x0A";
+  const auto kCRLF = "\x0D\x0A";
   // Get file format
-  JSON::Format format = getFileFormat(fileName);
+  const JSON::Format format = getFileFormat(fileName);
   // Read in JSON
   std::ifstream jsonFile{ fileName, std::ios_base::binary };
   std::string translated;
@@ -134,6 +132,7 @@ const std::string JSON_Impl::fromFile(const std::string &fileName)
   // Translate CRLF -> LF
   size_t pos = translated.find(kCRLF);
   while (pos != std::string::npos) {
+    const auto kLF = "\x0A";
     translated.replace(pos, 2, kLF);
     pos = translated.find(kCRLF, pos + 1);
   }
@@ -146,7 +145,7 @@ const std::string JSON_Impl::fromFile(const std::string &fileName)
 /// <param name="fileName">JSON file name</param>
 /// <param name="jsonString">JSON string</param>
 /// <param name="format">JSON file format</param>
-void JSON_Impl::toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format)
+void JSON_Impl::toFile(const std::string &fileName, const std::string &jsonString, const JSON::Format format)
 {
   std::ofstream jsonFile{ fileName, std::ios::binary };
   switch (format) {

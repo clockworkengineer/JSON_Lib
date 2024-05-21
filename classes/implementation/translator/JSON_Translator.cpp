@@ -27,12 +27,12 @@ static const std::vector<std::pair<const char, const char>> escapeSequences{ { '
 /// <param name="current">Current character position.</param>
 /// <param name="numberOfCharacters">Number of characters left in source string.</param>
 /// <returns>UTF16 character for "\uxxxx".</returns>
-char16_t decodeUTF16(std::string::const_iterator &current, ptrdiff_t numberOfCharacters)
+char16_t decodeUTF16(std::string::const_iterator &current, const ptrdiff_t numberOfCharacters)
 {
   if (numberOfCharacters >= 4) {
     char16_t utf16value{};
     // Hex digits will be ascii so can throw away high order byte of char
-    std::array<char, 5> hexDigits{ (current[1]),
+    const std::array<char, 5> hexDigits{ (current[1]),
       (current[2]),
       (current[3]),
       (current[4]),
@@ -55,7 +55,7 @@ char16_t decodeUTF16(std::string::const_iterator &current, ptrdiff_t numberOfCha
 std::string encodeUTF16(const char16_t utf16Char)
 {
   std::string utf8Buffer;
-  const char *digits = "0123456789ABCDEF";
+  const auto digits = "0123456789ABCDEF";
   utf8Buffer += "\\u";
   utf8Buffer += digits[utf16Char >> 12 & 0x0f];
   utf8Buffer += digits[utf16Char >> 8 & 0x0f];
@@ -69,7 +69,7 @@ std::string encodeUTF16(const char16_t utf16Char)
 /// </summary>
 /// <param name="utf16Char">UTF16 character.</param>
 /// <returns>==true if valid upper surrogate.</returns>
-bool isValidSurrogateUpper(char16_t utf16Char)
+bool isValidSurrogateUpper(const char16_t utf16Char)
 {
   return utf16Char >= static_cast<char16_t>(kHighSurrogatesBegin)
          && utf16Char <= static_cast<char16_t>(kHighSurrogatesEnd);
@@ -79,7 +79,7 @@ bool isValidSurrogateUpper(char16_t utf16Char)
 /// </summary>
 /// <param name="utf16Char">UTF16 character.</param>
 /// <returns>==true if valid lower surrogate.</returns>
-bool isValidSurrogateLower(char16_t utf16Char)
+bool isValidSurrogateLower(const char16_t utf16Char)
 {
   return utf16Char >= static_cast<char16_t>(kLowSurrogatesBegin)
          && utf16Char <= static_cast<char16_t>(kLowSurrogatesEnd);
@@ -111,7 +111,7 @@ bool unpairedSurrogatesInBuffer(const std::u16string &utf16Buffer)
 /// </summary>
 /// <param name="utf16Char">UTF16 character.</param>
 /// <returns>==true if valid ASCII.</returns>
-bool isASCII(char16_t utf16Char) { return utf16Char > 0x001F && utf16Char < 0x0080; }
+bool isASCII(const char16_t utf16Char) { return utf16Char > 0x001F && utf16Char < 0x0080; }
 
 /// <summary>
 /// JSON translator constructor.
