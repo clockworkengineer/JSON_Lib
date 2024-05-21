@@ -142,13 +142,13 @@ std::string JSON_Translator::from(const std::string &escapedString) const
       utf16Buffer += *current++;
       continue;
     }
-    current++;
+    ++current;
     // Check escape sequence if characters to process
     if (current != escapedString.end()) {
       // Single character
       if (fromEscape.contains(*current)) {
         utf16Buffer += fromEscape[static_cast<char>(*current)];
-        current++;
+        ++current;
       }
       // UTF16 "\uxxxx"
       else if (*current == 'u') {
@@ -157,7 +157,7 @@ std::string JSON_Translator::from(const std::string &escapedString) const
       // Escaped ASCII
       else if (isASCII(*current)) {
         utf16Buffer += *current;
-        current++;
+        ++current;
       }
       // Invalid escaped character
       else {

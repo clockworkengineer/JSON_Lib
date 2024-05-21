@@ -33,7 +33,7 @@ bool validEscape(const char escape)
 /// <param name="source">Source of JSON.</param>
 ///  <param name="translator">String translator.</param>
 /// <returns>Extracted string</returns>
-std::string extractString(ISource &source, ITranslator &translator)
+std::string extractString(ISource &source, const ITranslator &translator)
 {
   bool translateEscapes = false;
   if (source.current() != '"') { throw SyntaxError(source.getPosition(), "Missing opening '\"' on string."); }
@@ -61,7 +61,7 @@ std::string extractString(ISource &source, ITranslator &translator)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>==true on end of number</returns>
-bool endOfNumber(ISource &source)
+bool endOfNumber(const ISource &source)
 {
   return source.isWS() || source.current() == ',' || source.current() == ']' || source.current() == '}';
 }
@@ -98,8 +98,7 @@ JNode JSON_Parser::parseNumber(ISource &source)
 {
   std::string string;
   for (; source.more() && !endOfNumber(source); source.next()) { string += source.current(); }
-  Number number{ string };
-  if (number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>() || number.is<double>()
+  if (Number number{ string }; number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>() || number.is<double>()
       || number.is<long double>()) {
     return JNode::make<Number>(number);
   }

@@ -47,7 +47,7 @@ void writeJSONString(std::ofstream &jsonFile, const std::u16string &jsonString, 
 /// <param name="jsonFile">JSON file stream</param>
 /// <param name="format">JSON file format</param>
 /// <returns>JSON string.</returns>
-std::string readJSONString(std::ifstream &jsonFile)
+std::string readJSONString(const std::ifstream &jsonFile)
 {
   std::ostringstream jsonFileBuffer;
   jsonFileBuffer << jsonFile.rdbuf();
