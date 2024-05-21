@@ -68,7 +68,7 @@ std::string encodeUTF16(const char16_t utf16Char)
 /// Return true if a character is a valid upper surrogate.
 /// </summary>
 /// <param name="utf16Char">UTF16 character.</param>
-/// <returns>==true if valid upper surrogate.</returns>
+/// <returns>true if valid upper surrogate.</returns>
 bool isValidSurrogateUpper(const char16_t utf16Char)
 {
   return utf16Char >= static_cast<char16_t>(kHighSurrogatesBegin)
@@ -78,7 +78,7 @@ bool isValidSurrogateUpper(const char16_t utf16Char)
 /// Return true if a character is a valid lower surrogate.
 /// </summary>
 /// <param name="utf16Char">UTF16 character.</param>
-/// <returns>==true if valid lower surrogate.</returns>
+/// <returns>true if valid lower surrogate.</returns>
 bool isValidSurrogateLower(const char16_t utf16Char)
 {
   return utf16Char >= static_cast<char16_t>(kLowSurrogatesBegin)
@@ -91,7 +91,7 @@ bool isValidSurrogateLower(const char16_t utf16Char)
 /// definitive answer.
 /// </summary>
 /// <param name="utf16Buffer">UTF16 string.</param>
-/// <returns>==false if string contains an unpaired surrogate.</returns>
+/// <returns>false if string contains an unpaired surrogate.</returns>
 bool unpairedSurrogatesInBuffer(const std::u16string &utf16Buffer)
 {
   int index = 0;
@@ -110,7 +110,7 @@ bool unpairedSurrogatesInBuffer(const std::u16string &utf16Buffer)
 /// Determine whether passed in character is vaid ASCII
 /// </summary>
 /// <param name="utf16Char">UTF16 character.</param>
-/// <returns>==true if valid ASCII.</returns>
+/// <returns>true if valid ASCII.</returns>
 bool isASCII(const char16_t utf16Char) { return utf16Char > 0x001F && utf16Char < 0x0080; }
 
 /// <summary>

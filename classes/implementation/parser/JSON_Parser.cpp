@@ -20,7 +20,7 @@ namespace JSON_Lib {
 /// proper escaped sense.
 /// </summary>
 /// <param name="escape">Escaped character.</param>
-/// <returns>==true then character is a valid escape character.</returns>
+/// <returns>true then character is a valid escape character.</returns>
 bool validEscape(const char escape)
 {
   return escape == '\\' || escape == 't' || escape == '"' || escape == 'b' || escape == 'f' || escape == 'n'
@@ -60,7 +60,7 @@ std::string extractString(ISource &source, const ITranslator &translator)
 /// Has the end of a number been reached in source stream ?
 /// </summary>
 /// <param name="source">Source of JSON.</param>
-/// <returns>==true on end of number</returns>
+/// <returns>true on end of number</returns>
 bool endOfNumber(const ISource &source)
 {
   return source.isWS() || source.current() == ',' || source.current() == ']' || source.current() == '}';

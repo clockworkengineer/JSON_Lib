@@ -20,8 +20,13 @@ namespace JSON_Lib {
 /// </summary>
 /// <param name="jsonFile">JSON file stream</param>
 /// <param name="jsonString">JSON string</param>
-/// <param name="format">JSON file format</param>
 void writeJSONString(std::ofstream &jsonFile, const std::string &jsonString) { jsonFile << jsonString; }
+/// <summary>
+/// Write JSON string to a file stream.
+/// </summary>
+/// <param name="jsonFile">JSON file stream</param>
+/// <param name="jsonString">JSON string</param>
+/// <param name="format">JSON file format</param>
 void writeJSONString(std::ofstream &jsonFile, const std::u16string &jsonString, const JSON::Format format)
 {
   if (format == JSON::Format::utf16BE) {
@@ -45,7 +50,6 @@ void writeJSONString(std::ofstream &jsonFile, const std::u16string &jsonString, 
 /// Read JSON string from a file stream.
 /// </summary>
 /// <param name="jsonFile">JSON file stream</param>
-/// <param name="format">JSON file format</param>
 /// <returns>JSON string.</returns>
 std::string readJSONString(const std::ifstream &jsonFile)
 {
