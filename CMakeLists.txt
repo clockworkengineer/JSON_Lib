@@ -27,72 +27,71 @@ set(JSON_LIBRARY_NAME ${PROJECT_NAME})
 
 # JSON sources and includes
 set(JSON_SOURCES
-  ./classes/JSON.cpp
-  ./classes/implementation/JSON_Impl.cpp
-  ./classes/implementation/file/JSON_File.cpp
-  ./classes/implementation/translator/JSON_Translator.cpp
-  ./classes/implementation/parser/JSON_Parser.cpp
-  ./classes/implementation/stringify/JSON_Stringify.cpp
-  ./classes/implementation/stringify/Bencode_Stringify.cpp
-  ./classes/implementation/stringify/XML_Stringify.cpp)
+  ./classes/source/JSON.cpp
+  ./classes/source/implementation/JSON_Impl.cpp
+  ./classes/source/implementation/file/JSON_File.cpp
+  ./classes/source/implementation/translator/JSON_Translator.cpp
+  ./classes/source/implementation/parser/JSON_Parser.cpp
+  ./classes/source/implementation/stringify/JSON_Stringify.cpp
+  ./classes/source/implementation/stringify/Bencode_Stringify.cpp
+  ./classes/source/implementation/stringify/XML_Stringify.cpp)
 
 set(JSON_INCLUDES
   JSON_Config.hpp
-  ./include/JSON.hpp
-  ./include/implementation/JSON_Core.hpp
-  ./include/implementation/JSON_Impl.hpp
-  ./include/implementation/common/JSON_Error.hpp
-  ./include/implementation/variants/JSON_Variant.hpp
-  ./include/implementation/variants/JSON_Hole.hpp
-  ./include/implementation/variants/JSON_Object.hpp
-  ./include/implementation/variants/JSON_Array.hpp
-  ./include/implementation/variants/JSON_Number.hpp
-  ./include/implementation/variants/JSON_String.hpp
-  ./include/implementation/variants/JSON_Boolean.hpp
-  ./include/implementation/variants/JSON_Null.hpp
-  ./include/implementation/jnode/JSON_JNode.hpp
-  ./include/implementation/jnode/JSON_JNode_Index.hpp
-  ./include/implementation/jnode/JSON_JNode_Reference.hpp
-  ./include/implementation/jnode/JSON_JNode_Creation.hpp
-  ./include/implementation/io/JSON_Sources.hpp
-  ./include/implementation/io/JSON_BufferSource.hpp
-  ./include/implementation/io/JSON_FileSource.hpp
-  ./include/implementation/io/JSON_Destinations.hpp
-  ./include/implementation/io/JSON_BufferDestination.hpp
-  ./include/implementation/io/JSON_FileDestination.hpp
-  ./include/implementation/converter/JSON_Converter.hpp
-  ./include/implementation/translator/JSON_Translator.hpp
-  ./include/implementation/translator/Bencode_Translator.hpp
-  ./include/implementation/translator/XML_Translator.hpp
-  ./include/implementation/parser/JSON_Parser.hpp
-  ./include/implementation/stringify/JSON_Stringify.hpp
-  ./include/implementation/stringify/Bencode_Stringify.hpp
-  ./include/interface/JSON_Interfaces.hpp
-  ./include/interface/IAction.hpp
-  ./include/interface/ISource.hpp
-  ./include/interface/IDestination.hpp
-  ./include/interface/ITranslator.hpp
-  ./include/interface/IParser.hpp
-  ./include/interface/IStringify.hpp)
+  ./classes/include/JSON.hpp
+  ./classes/include/implementation/JSON_Core.hpp
+  ./classes/include/implementation/JSON_Impl.hpp
+  ./classes/include/implementation/common/JSON_Error.hpp
+  ./classes/include/implementation/variants/JSON_Variant.hpp
+  ./classes/include/implementation/variants/JSON_Hole.hpp
+  ./classes/include/implementation/variants/JSON_Object.hpp
+  ./classes/include/implementation/variants/JSON_Array.hpp
+  ./classes/include/implementation/variants/JSON_Number.hpp
+  ./classes/include/implementation/variants/JSON_String.hpp
+  ./classes/include/implementation/variants/JSON_Boolean.hpp
+  ./classes/include/implementation/variants/JSON_Null.hpp
+  ./classes/include/implementation/jnode/JSON_JNode.hpp
+  ./classes/include/implementation/jnode/JSON_JNode_Index.hpp
+  ./classes/include/implementation/jnode/JSON_JNode_Reference.hpp
+  ./classes/include/implementation/jnode/JSON_JNode_Creation.hpp
+  ./classes/include/implementation/io/JSON_Sources.hpp
+  ./classes/include/implementation/io/JSON_BufferSource.hpp
+  ./classes/include/implementation/io/JSON_FileSource.hpp
+  ./classes/include/implementation/io/JSON_Destinations.hpp
+  ./classes/include/implementation/io/JSON_BufferDestination.hpp
+  ./classes/include/implementation/io/JSON_FileDestination.hpp
+  ./classes/include/implementation/converter/JSON_Converter.hpp
+  ./classes/include/implementation/translator/JSON_Translator.hpp
+  ./classes/include/implementation/translator/Bencode_Translator.hpp
+  ./classes/include/implementation/translator/XML_Translator.hpp
+  ./classes/include/implementation/parser/JSON_Parser.hpp
+  ./classes/include/implementation/stringify/JSON_Stringify.hpp
+  ./classes/include/implementation/stringify/Bencode_Stringify.hpp
+  ./classes/include/interface/JSON_Interfaces.hpp
+  ./classes/include/interface/IAction.hpp
+  ./classes/include/interface/ISource.hpp
+  ./classes/include/interface/IDestination.hpp
+  ./classes/include/interface/ITranslator.hpp
+  ./classes/include/interface/IParser.hpp
+  ./classes/include/interface/IStringify.hpp)
 
 # Platform specific
-list(APPEND JSON_SOURCES "./classes/implementation/converter/${PLATFORM}/JSON_Converter.cpp")
+list(APPEND JSON_SOURCES "./classes/source/implementation/converter/${PLATFORM}/JSON_Converter.cpp")
 
 # JSON library
 add_library(${JSON_LIBRARY_NAME} ${JSON_SOURCES} ${JSON_INCLUDES})
 target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
-  ${PROJECT_SOURCE_DIR}/include
-  ${PROJECT_SOURCE_DIR}/include/interface
-  ${PROJECT_SOURCE_DIR}/include/implementation
-  ${PROJECT_SOURCE_DIR}/include/implementation/common
-  ${PROJECT_SOURCE_DIR}/include/implementation/jnode
-  ${PROJECT_SOURCE_DIR}/include/implementation/io
-  ${PROJECT_SOURCE_DIR}/include/implementation/converter
-  ${PROJECT_SOURCE_DIR}/include/implementation/translator
-  ${PROJECT_SOURCE_DIR}/include/implementation/variants
-  ${PROJECT_SOURCE_DIR}/include/implementation/parser
-  ${PROJECT_SOURCE_DIR}/include/implementation/stringify
-  ${PROJECT_SOURCE_DIR}/include/external
+  ${PROJECT_SOURCE_DIR}/classes/include
+  ${PROJECT_SOURCE_DIR}/classes/include/interface
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/common
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/jnode
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/converter
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/translator
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/parser
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify
   ${PROJECT_BINARY_DIR})
 
 # Add tests
