@@ -29,14 +29,6 @@ public:
   long getIndent() const override { return printIndent; }
 
 private:
-  // Stringify JSON
-  static void stringifyNumber(const JNode &jNode, IDestination &destination);
-  void stringifyString(const JNode &jNode, IDestination &destination) const;
-  static void stringifyBoolean(const JNode &jNode, IDestination &destination);
-  static void stringifyNull(const JNode &jNode, IDestination &destination);
-  static void stringifyHole(const JNode &jNode, IDestination &destination);
-  void stringifyObject(const JNode &jNode, IDestination &destination, long indent) const;
-  void stringifyArray(const JNode &jNode, IDestination &destination, long indent) const;
 
   JSON_Translator jsonTranslator;
 

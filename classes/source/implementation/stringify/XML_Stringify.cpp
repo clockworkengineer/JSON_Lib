@@ -13,89 +13,6 @@
 namespace JSON_Lib {
 
 /// <summary>
-/// Convert Number JNode to XML on destination stream.
-/// </summary>
-/// <param name="jNode">Number JNode.</param>
-/// <param name="destination">Destination stream for XML.</param>
-void XML_Stringify::stringifyNumber(const JNode &jNode, IDestination &destination)
-{
-  // All numbers to rounded integers
-  destination.add(std::to_string(JRef<Number>(jNode).value<int>()));
-}
-
-/// <summary>
-/// Convert String JNode to XML on destination stream.
-/// </summary>
-/// <param name="jNode">String JNode.</param>
-/// <param name="destination">Destination stream for XML.</param>
-void XML_Stringify::stringifyString(const JNode &jNode, IDestination &destination) const
-{
-  destination.add(xmlTranslator.to(JRef<String>(jNode).value()));
-}
-
-/// <summary>
-/// Convert Boolean JNode to XML on destination stream.
-/// </summary>
-/// <param name="jNode">Boolean JNode.</param>
-/// <param name="destination">Destination stream for XML.</param>
-void XML_Stringify::stringifyBoolean(const JNode &jNode, IDestination &destination)
-{
-  if (JRef<Boolean>(jNode).value()) {
-    destination.add("True");
-  } else {
-    destination.add("False");
-  }
-}
-
-/// <summary>
-/// Convert Null JNode to XML on destination stream.
-/// </summary>
-/// <param name="jNode">Null JNode.</param>
-/// <param name="destination">Destination stream for XML.</param>
-void XML_Stringify::stringifyNull([[maybe_unused]] const JNode &jNode, [[maybe_unused]] IDestination &destination) {}
-
-/// <summary>
-/// Convert Hole JNode to XML on destination stream.
-/// </summary>
-/// <param name="jNode">Hole JNode.</param>
-/// <param name="destination">Destination stream for XML.</param>
-void XML_Stringify::stringifyHole([[maybe_unused]] const JNode &jNode, [[maybe_unused]] IDestination &destination) {}
-
-/// <summary>
-/// Convert Object JNode to XML on destination stream.
-/// </summary>
-/// <param name="jNode">Object JNode.</param>
-/// <param name="destination">Destination stream for XML.</param>
-/// <param name="indent">Current print indentation.</param>
-void XML_Stringify::stringifyObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] long indent) const
-{
-  for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
-    auto elementName = JRef<String>(jNodeNext.getKey()).value();
-    std::ranges::replace(elementName, ' ', '-');
-    destination.add("<" + elementName + ">");
-    stringifyXML(jNodeNext.getJNode(), destination, 0);
-    destination.add("</" + elementName + ">");
-  }
-}
-
-/// <summary>
-/// Convert Array JNode to XML on destination stream.
-/// </summary>
-/// <param name="jNode">Array JNode.</param>
-/// <param name="destination">Destination stream for XML.</param>
-/// <param name="indent">Current print indentation.</param>
-void XML_Stringify::stringifyArray(const JNode &jNode, IDestination &destination, [[maybe_unused]] long indent) const
-{
-  if (JRef<Array>(jNode).value().size() > 1) {
-    for (const auto &bNodeNext : JRef<Array>(jNode).value()) {
-      destination.add("<Row>");
-      stringifyXML(bNodeNext, destination, 0);
-      destination.add("</Row>");
-    }
-  }
-}
-
-/// <summary>
 /// Recursively traverse JNode structure encoding it into XML string on
 /// the destination stream passed in.
 /// </summary>
@@ -105,19 +22,33 @@ void XML_Stringify::stringifyArray(const JNode &jNode, IDestination &destination
 void XML_Stringify::stringifyXML(const JNode &jNode, IDestination &destination, const long indent) const
 {
   if (jNode.isNumber()) {
-    stringifyNumber(jNode, destination);
+    destination.add(std::to_string(JRef<Number>(jNode).value<int>()));
   } else if (jNode.isString()) {
-    stringifyString(jNode, destination);
+    destination.add(xmlTranslator.to(JRef<String>(jNode).value()));
   } else if (jNode.isBoolean()) {
-    stringifyBoolean(jNode, destination);
-  } else if (jNode.isNull()) {
-    stringifyNull(jNode, destination);
-  } else if (jNode.isHole()) {
-    stringifyHole(jNode, destination);
+    if (JRef<Boolean>(jNode).value()) {
+      destination.add("True");
+    } else {
+      destination.add("False");
+    }
+  } else if (jNode.isNull()||jNode.isHole()) {
+    ;
   } else if (jNode.isObject()) {
-    stringifyObject(jNode, destination, indent);
+    for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
+      auto elementName = JRef<String>(jNodeNext.getKey()).value();
+      std::ranges::replace(elementName, ' ', '-');
+      destination.add("<" + elementName + ">");
+      stringifyXML(jNodeNext.getJNode(), destination, 0);
+      destination.add("</" + elementName + ">");
+    }
   } else if (jNode.isArray()) {
-    stringifyArray(jNode, destination, indent);
+    if (JRef<Array>(jNode).value().size() > 1) {
+      for (const auto &bNodeNext : JRef<Array>(jNode).value()) {
+        destination.add("<Row>");
+        stringifyXML(bNodeNext, destination, 0);
+        destination.add("</Row>");
+      }
+    }
   } else {
     throw Error("Unknown JNode type encountered during stringification.");
   }

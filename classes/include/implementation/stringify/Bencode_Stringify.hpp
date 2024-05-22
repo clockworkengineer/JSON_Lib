@@ -20,14 +20,6 @@ public:
   void setIndent(long indent) override;
 
 private:
-  // Stringify Bencode
-  static void stringifyNumber(const JNode &jNode, IDestination &destination);
-  static void stringifyString(const JNode &jNode, IDestination &destination);
-  static void stringifyBoolean(const JNode &jNode, IDestination &destination);
-  static void stringifyNull(const JNode &jNode, IDestination &destination);
-  static void stringifyHole(const JNode &jNode, IDestination &destination);
-  void stringifyObject(const JNode &jNode, IDestination &destination, long indent) const;
-  void stringifyArray(const JNode &jNode, IDestination &destination, long indent) const;
 
   Bencode_Translator bencodeTranslator;
 };
