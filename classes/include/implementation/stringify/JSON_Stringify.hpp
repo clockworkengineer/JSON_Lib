@@ -44,9 +44,7 @@ void stringify(const JNode &jNode, IDestination &destination, const long indent)
     if (indent != 0) { destination.add('\n'); }
     for (auto &entry : JRef<Object>(jNode).value()) {
       if (indent != 0) { destination.add(std::string(indent, ' ')); }
-      destination.add('"');
-      destination.add(jsonTranslator.to(JRef<String>(entry.getKey()).toString()));
-      destination.add('"');
+      stringify(entry.getKey(), destination, indent != 0 ? indent + printIndent : 0);
       destination.add(":");
       if (indent != 0) { destination.add(" "); }
       stringify(entry.getJNode(), destination, indent != 0 ? indent + printIndent : 0);

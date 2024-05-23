@@ -42,8 +42,7 @@ public:
     } else if (jNode.isObject()) {
       destination.add('d');
       for (auto &entry : JRef<Object>(jNode).value()) {
-        destination.add(
-          std::to_string(static_cast<int>(JRef<String>(entry.getKey()).value().length())) + ":" + JRef<String>(entry.getKey()).value());
+        stringify(entry.getKey(), destination, 0);
         stringify(entry.getJNode(), destination, 0);
       }
       destination.add("e");
