@@ -27,8 +27,8 @@ public:
     if (jNode.isNumber()) {
       destination.add("i" + std::to_string(JRef<Number>(jNode).value<int>()) + "e");
     } else if (jNode.isString()) {
-      destination.add(
-        std::to_string(static_cast<int>(JRef<String>(jNode).value().length())) + ":" + JRef<String>(jNode).value());
+      auto jsonString = JRef<String>(jNode).value();
+      destination.add(std::to_string(static_cast<int>(jsonString.length())) + ":" + jsonString);
     } else if (jNode.isBoolean()) {
       if (JRef<Boolean>(jNode).value()) {
         destination.add("4:True");
@@ -48,9 +48,7 @@ public:
       destination.add("e");
     } else if (jNode.isArray()) {
       destination.add('l');
-      if (!JRef<Array>(jNode).value().empty()) {
-        for (auto &entry : JRef<Array>(jNode).value()) { stringify(entry, destination, 0); }
-      }
+      for (auto &entry : JRef<Array>(jNode).value()) { stringify(entry, destination, 0); }
       destination.add("e");
     } else {
       throw Error("Unknown JNode type encountered during stringification.");

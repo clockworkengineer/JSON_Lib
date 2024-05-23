@@ -29,9 +29,7 @@ void stringify(const JNode &jNode, IDestination &destination, const long indent)
   if (jNode.isNumber()) {
     destination.add(JRef<Number>(jNode).toString());
   } else if (jNode.isString()) {
-    destination.add('"');
-    destination.add(jsonTranslator.to(JRef<String>(jNode).toString()));
-    destination.add('"');
+    destination.add('"'+jsonTranslator.to(JRef<String>(jNode).toString())+'"');
   } else if (jNode.isBoolean()) {
     destination.add(JRef<Boolean>(jNode).toString());
   } else if (jNode.isNull()) {
@@ -54,8 +52,7 @@ void stringify(const JNode &jNode, IDestination &destination, const long indent)
       }
     }
     if (indent != 0) {
-      destination.add('\n');
-      destination.add(std::string(indent - printIndent, ' '));
+      destination.add("\n"+std::string(indent - printIndent, ' '));
     }
     destination.add("}");
   } else if (jNode.isArray()) {
@@ -72,8 +69,7 @@ void stringify(const JNode &jNode, IDestination &destination, const long indent)
         }
       }
       if (indent != 0) {
-        destination.add('\n');
-        destination.add(std::string(indent - printIndent, ' '));
+        destination.add("\n"+std::string(indent - printIndent, ' '));
       }
     }
     destination.add("]");
