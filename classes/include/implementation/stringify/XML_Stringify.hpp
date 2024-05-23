@@ -33,9 +33,6 @@ public:
     destination.add("</root>");
   }
 
-  [[nodiscard]] long getIndent() const override { return 0; }
-  void setIndent([[maybe_unused]] long indent) override {}
-
 private:
   /// <summary>
   /// Recursively traverse JNode structure encoding it into XML string on

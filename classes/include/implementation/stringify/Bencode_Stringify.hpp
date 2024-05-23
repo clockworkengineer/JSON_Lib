@@ -58,9 +58,6 @@ public:
     }
   }
 
-  [[nodiscard]] long getIndent() const override { return 0; }
-  void setIndent([[maybe_unused]] long indent) override {}
-
 private:
 
   Bencode_Translator bencodeTranslator;

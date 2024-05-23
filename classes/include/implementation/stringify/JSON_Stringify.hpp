@@ -90,7 +90,6 @@ void stringify(const JNode &jNode, IDestination &destination, const long indent)
     if (indent < 0) { throw JSON_Lib::Error("Invalid print indentation value."); }
     printIndent = indent;
   }
-
   //  Set indent value
   long getIndent() const override { return printIndent; }
 

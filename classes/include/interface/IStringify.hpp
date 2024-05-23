@@ -35,8 +35,8 @@ public:
   // =========================
   // Set/Get print indentation
   // =========================
-  [[nodiscard]] virtual long getIndent() const = 0;
-  virtual void setIndent(long indent) = 0;
+  [[nodiscard]] virtual long getIndent() const { return 0; }
+  virtual void setIndent([[maybe_unused]] long indent)  {}
 };
 // Make custom stringify to pass to JSON constructor: Note pointer is tidied up internally.
 template <typename T> IStringify *makeStringify() {
