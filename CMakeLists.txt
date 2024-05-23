@@ -31,10 +31,7 @@ set(JSON_SOURCES
   ./classes/source/implementation/JSON_Impl.cpp
   ./classes/source/implementation/file/JSON_File.cpp
   ./classes/source/implementation/translator/JSON_Translator.cpp
-  ./classes/source/implementation/parser/JSON_Parser.cpp
-  ./classes/source/implementation/stringify/JSON_Stringify.cpp
-  ./classes/source/implementation/stringify/Bencode_Stringify.cpp
-  ./classes/source/implementation/stringify/XML_Stringify.cpp)
+  ./classes/source/implementation/parser/JSON_Parser.cpp)
 
 set(JSON_INCLUDES
   JSON_Config.hpp
