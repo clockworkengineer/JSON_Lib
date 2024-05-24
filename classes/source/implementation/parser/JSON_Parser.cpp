@@ -72,7 +72,7 @@ bool endOfNumber(const ISource &source)
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <returns>Object key/value pair.</returns>
-Object::Entry JSON_Parser::parseObjectEntry(ISource &source,ITranslator &translator)
+Object::Entry JSON_Parser::parseObjectEntry(ISource &source,const ITranslator &translator)
 {
   source.ignoreWS();
   const std::string key{ extractString(source, translator) };
@@ -88,7 +88,7 @@ Object::Entry JSON_Parser::parseObjectEntry(ISource &source,ITranslator &transla
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <returns>String JNode.</returns>
-JNode JSON_Parser::parseString(ISource &source, ITranslator &translator)
+JNode JSON_Parser::parseString(ISource &source, const ITranslator &translator)
 { return JNode::make<String>(extractString(source, translator)); }
 
 /// <summary>
@@ -136,7 +136,7 @@ JNode JSON_Parser::parseNull(ISource &source)
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <returns>Object JNode (key/value pairs).</returns>
-JNode JSON_Parser::parseObject(ISource &source, ITranslator &translator)
+JNode JSON_Parser::parseObject(ISource &source, const ITranslator &translator)
 {
   JNode jNodeObject = JNode::make<Object>();
   source.next();
@@ -159,7 +159,7 @@ JNode JSON_Parser::parseObject(ISource &source, ITranslator &translator)
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <returns>Array JNode.</returns>
-JNode JSON_Parser::parseArray(ISource &source, ITranslator &translator)
+JNode JSON_Parser::parseArray(ISource &source, const ITranslator &translator)
 {
   JNode jNodeArray = JNode::make<Array>();
   source.next();
@@ -184,7 +184,7 @@ JNode JSON_Parser::parseArray(ISource &source, ITranslator &translator)
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <returns>Pointer to JNode.</returns>
-JNode JSON_Parser::parseTree(ISource &source,ITranslator &translator)
+JNode JSON_Parser::parseTree(ISource &source, const ITranslator &translator)
 {
   JNode jNode;
   source.ignoreWS();
@@ -234,6 +234,6 @@ JNode JSON_Parser::parseTree(ISource &source,ITranslator &translator)
 /// <returns>Pointer to JNode.</returns>
 JNode JSON_Parser::parse(ISource &source)
 {
-  return(parseTree(source, jsonTranslator));
+  return parseTree(source, jsonTranslator);
 }
 }// namespace JSON_Lib
