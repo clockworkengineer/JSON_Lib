@@ -226,9 +226,8 @@ JNode JSON_Parser::parseTree(ISource &source, const ITranslator &translator)
   return jNode;
 }
 /// <summary>
-/// Recursively parse JSON source stream producing a JNode structure
-/// representation  of it. Note: If no obvious match is found for
-/// parsing that it defaults to a numeric value.
+/// Parse JSON source stream producing a JNode structure representation  of it. Note: If no obvious match
+/// is found for parsing that it defaults to a numeric value.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Pointer to JNode.</returns>
