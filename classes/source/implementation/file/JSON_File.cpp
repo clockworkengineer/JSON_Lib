@@ -32,14 +32,14 @@ void writeJSONString(std::ofstream &jsonFile, const std::u16string &jsonString, 
   if (format == JSON::Format::utf16BE) {
     jsonFile << static_cast<unsigned char>(0xFE) << static_cast<unsigned char>(0xFF);
     for (const auto ch : jsonString) {
-      jsonFile.put(static_cast<unsigned char>(ch >> 8));
-      jsonFile.put(static_cast<unsigned char>(ch));
+      jsonFile.put(static_cast<char>(ch >> 8));
+      jsonFile.put(static_cast<char>(ch));
     }
   } else if (format == JSON::Format::utf16LE) {
-    jsonFile << static_cast<unsigned char>(0xFF) << static_cast<unsigned char>(0xFE);
+    jsonFile << static_cast<char>(0xFF) << static_cast<char>(0xFE);
     for (const auto ch : jsonString) {
-      jsonFile.put(static_cast<unsigned char>(ch));
-      jsonFile.put(static_cast<unsigned char>(ch >> 8));
+      jsonFile.put(static_cast<char>(ch));
+      jsonFile.put(static_cast<char>(ch >> 8));
     }
   } else {
     throw Error("Unsupported JSON file format (Byte Order Mark) specified in call to writeJSONString().");
@@ -64,15 +64,15 @@ std::u16string readJSONString(std::ifstream &jsonFile, const JSON::Format format
   jsonFile.seekg(2);
   if (format == JSON::Format::utf16BE)
     while (true) {
-      char16_t ch16 = static_cast<unsigned char>(jsonFile.get()) << 8;
-      ch16 |= static_cast<unsigned char>(jsonFile.get());
+      char16_t ch16 = static_cast<char>(jsonFile.get()) << 8;
+      ch16 |= static_cast<char>(jsonFile.get());
       if (jsonFile.eof()) break;
       utf16String.push_back(ch16);
     }
   else if (format == JSON::Format::utf16LE) {
     while (true) {
-      char16_t ch16 = static_cast<unsigned char>(jsonFile.get());
-      ch16 |= static_cast<unsigned char>(jsonFile.get()) << 8;
+      char16_t ch16 = static_cast<char>(jsonFile.get());
+      ch16 |= static_cast<char>(jsonFile.get()) << 8;
       if (jsonFile.eof()) break;
       utf16String.push_back(ch16);
     }

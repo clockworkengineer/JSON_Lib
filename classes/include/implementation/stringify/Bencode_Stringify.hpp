@@ -27,7 +27,7 @@ public:
     if (jNode.isNumber()) {
       destination.add("i" + std::to_string(JRef<Number>(jNode).value<int>()) + "e");
     } else if (jNode.isString()) {
-      auto jsonString = JRef<String>(jNode).value();
+      const auto jsonString = JRef<String>(jNode).value();
       destination.add(std::to_string(static_cast<int>(jsonString.length())) + ":" + jsonString);
     } else if (jNode.isBoolean()) {
       if (JRef<Boolean>(jNode).value()) {
@@ -38,7 +38,6 @@ public:
     } else if (jNode.isNull()) {
       destination.add("4:null");
     } else if (jNode.isHole()) {
-      ;
     } else if (jNode.isObject()) {
       destination.add('d');
       for (auto &entry : JRef<Object>(jNode).value()) {
