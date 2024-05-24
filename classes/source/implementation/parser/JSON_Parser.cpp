@@ -31,7 +31,7 @@ bool validEscape(const char escape)
 /// Extract a string from a JSON encoded source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
-///  <param name="translator">String translator.</param>
+/// <param name="translator">String translator.</param>
 /// <returns>Extracted string</returns>
 std::string extractString(ISource &source, const ITranslator &translator)
 {
@@ -70,24 +70,26 @@ bool endOfNumber(const ISource &source)
 /// Parse a Object key/value pair from a JSON encoded source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
+/// <param name="translator">String translator.</param>
 /// <returns>Object key/value pair.</returns>
-Object::Entry JSON_Parser::parseObjectEntry(ISource &source)
+Object::Entry JSON_Parser::parseObjectEntry(ISource &source,ITranslator &translator)
 {
   source.ignoreWS();
-  const std::string key{ extractString(source, jsonTranslator) };
+  const std::string key{ extractString(source, translator) };
   source.ignoreWS();
   if (source.current() != ':') { throw SyntaxError(source.getPosition(), "Missing ':' in key value pair."); }
   source.next();
-  return Object::Entry(key, parse(source));
+  return Object::Entry(key, parseTree(source,  translator));
 }
 
 /// <summary>
 /// Parse a string from a JSON source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
+/// <param name="translator">String translator.</param>
 /// <returns>String JNode.</returns>
-JNode JSON_Parser::parseString(ISource &source) const
-{ return JNode::make<String>(extractString(source, jsonTranslator)); }
+JNode JSON_Parser::parseString(ISource &source, ITranslator &translator)
+{ return JNode::make<String>(extractString(source, translator)); }
 
 /// <summary>
 /// Parse a number from a JSON source stream.
@@ -132,17 +134,18 @@ JNode JSON_Parser::parseNull(ISource &source)
 /// Parse an object from a JSON source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
+/// <param name="translator">String translator.</param>
 /// <returns>Object JNode (key/value pairs).</returns>
-JNode JSON_Parser::parseObject(ISource &source)
+JNode JSON_Parser::parseObject(ISource &source, ITranslator &translator)
 {
   JNode jNodeObject = JNode::make<Object>();
   source.next();
   source.ignoreWS();
   if (source.current() != '}') {
-    JRef<Object>(jNodeObject).add(parseObjectEntry(source));
+    JRef<Object>(jNodeObject).add(parseObjectEntry(source, translator));
     while (source.current() == ',') {
       source.next();
-      JRef<Object>(jNodeObject).add(parseObjectEntry(source));
+      JRef<Object>(jNodeObject).add(parseObjectEntry(source, translator));
     }
   }
   if (source.current() != '}') { throw SyntaxError(source.getPosition(), "Missing closing '}' in object definition."); }
@@ -154,17 +157,18 @@ JNode JSON_Parser::parseObject(ISource &source)
 /// Parse an array from a JSON source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
+/// <param name="translator">String translator.</param>
 /// <returns>Array JNode.</returns>
-JNode JSON_Parser::parseArray(ISource &source)
+JNode JSON_Parser::parseArray(ISource &source, ITranslator &translator)
 {
   JNode jNodeArray = JNode::make<Array>();
   source.next();
   source.ignoreWS();
   if (source.current() != ']') {
-    JRef<Array>(jNodeArray).add(parse(source));
+    JRef<Array>(jNodeArray).add(parseTree(source, translator));
     while (source.current() == ',') {
       source.next();
-      JRef<Array>(jNodeArray).add(parse(source));
+      JRef<Array>(jNodeArray).add(parseTree(source, translator));
     }
   }
   if (source.current() != ']') { throw SyntaxError(source.getPosition(), "Missing closing ']' in array definition."); }
@@ -178,20 +182,21 @@ JNode JSON_Parser::parseArray(ISource &source)
 /// parsing that it defaults to a numeric value.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
+/// <param name="translator">String translator.</param>
 /// <returns>Pointer to JNode.</returns>
-JNode JSON_Parser::parse(ISource &source)
+JNode JSON_Parser::parseTree(ISource &source,ITranslator &translator)
 {
   JNode jNode;
   source.ignoreWS();
   switch (source.current()) {
   case '{':
-    jNode = parseObject(source);
+    jNode = parseObject(source, translator);
     break;
   case '[':
-    jNode = parseArray(source);
+    jNode = parseArray(source, translator);
     break;
   case '"':
-    jNode = parseString(source);
+    jNode = parseString(source, translator);
     break;
   case 't':
   case 'f':
@@ -220,5 +225,15 @@ JNode JSON_Parser::parse(ISource &source)
   source.ignoreWS();
   return jNode;
 }
-
+/// <summary>
+/// Recursively parse JSON source stream producing a JNode structure
+/// representation  of it. Note: If no obvious match is found for
+/// parsing that it defaults to a numeric value.
+/// </summary>
+/// <param name="source">Source of JSON.</param>
+/// <returns>Pointer to JNode.</returns>
+JNode JSON_Parser::parse(ISource &source)
+{
+  return(parseTree(source, jsonTranslator));
+}
 }// namespace JSON_Lib

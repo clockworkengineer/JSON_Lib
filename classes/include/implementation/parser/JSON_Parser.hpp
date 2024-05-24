@@ -27,16 +27,17 @@ public:
 
 private:
   // Parse JSON
-  Object::Entry parseObjectEntry(ISource &source);
-  JNode parseString(ISource &source) const;
+  static Object::Entry parseObjectEntry(ISource &source,ITranslator &translator);
+  static JNode parseString(ISource &source, ITranslator &translator);
   static JNode parseNumber(ISource &source);
   static JNode parseBoolean(ISource &source);
   static JNode parseNull(ISource &source);
-  JNode parseObject(ISource &source);
-  JNode parseArray(ISource &source);
+  static JNode parseObject(ISource &source,ITranslator &translator);
+  static JNode parseArray(ISource &source, ITranslator &translator);
+  static JNode parseTree(ISource &source, ITranslator &translator);
 
   // Pointer to JSON translator interface
-  ITranslator &jsonTranslator;
+   ITranslator &jsonTranslator;
 };
 
 }// namespace JSON_Lib
