@@ -27,14 +27,14 @@ public:
 
 private:
   // Parse JSON
-  static Object::Entry parseObjectEntry(ISource &source,const ITranslator &translator);
-  static JNode parseString(ISource &source, const  ITranslator &translator);
-  static JNode parseNumber(ISource &source);
-  static JNode parseBoolean(ISource &source);
-  static JNode parseNull(ISource &source);
-  static JNode parseObject(ISource &source,const ITranslator &translator);
-  static JNode parseArray(ISource &source, const ITranslator &translator);
-  static JNode parseTree(ISource &source, const ITranslator &translator);
+  [[nodiscard]] static Object::Entry parseObjectEntry(ISource &source,const ITranslator &translator);
+  [[nodiscard]] static JNode parseString(ISource &source, const  ITranslator &translator);
+  [[nodiscard]] static JNode parseNumber(ISource &source);
+  [[nodiscard]] static JNode parseBoolean(ISource &source);
+  [[nodiscard]] static JNode parseNull(ISource &source);
+  [[nodiscard]] static JNode parseObject(ISource &source,const ITranslator &translator);
+  [[nodiscard]] static JNode parseArray(ISource &source, const ITranslator &translator);
+  [[nodiscard]] static JNode parseTree(ISource &source, const ITranslator &translator);
 
   // Reference to JSON translator interface
    const ITranslator &jsonTranslator;
