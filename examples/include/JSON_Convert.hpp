@@ -25,18 +25,6 @@ public:
   {
     jNode = JSON_Lib::JNode::make<JSON_Lib::String>(JRef<JSON_Lib::Null>(jNode).toString());
   }
-  virtual void onArray([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onObject([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onJNode([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onString([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  // Const api not used
-  virtual void onNumber([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  virtual void onBoolean([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  virtual void onNull([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  virtual void onArray([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  virtual void onObject([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  virtual void onJNode([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  virtual void onString([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
 
 private:
 };

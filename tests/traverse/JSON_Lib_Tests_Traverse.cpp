@@ -45,14 +45,6 @@ public:
   virtual void onArray([[maybe_unused]] const JNode &jNode) override { totalArrays++; }
   // Add object details to analysis
   virtual void onObject([[maybe_unused]] const JNode &jNode) override { totalObjects++; }
-  // Non-const api not used
-  virtual void onNumber([[maybe_unused]] JNode &jNode) override {}
-  virtual void onBoolean([[maybe_unused]] JNode &jNode) override {}
-  virtual void onNull([[maybe_unused]] JNode &jNode) override {}
-  virtual void onArray([[maybe_unused]] JNode &jNode) override {}
-  virtual void onObject([[maybe_unused]] JNode &jNode) override {}
-  virtual void onJNode([[maybe_unused]] JNode &jNode) override {}
-  virtual void onString([[maybe_unused]] JNode &jNode) override {}
 
   // JSON analysis data
   // Node

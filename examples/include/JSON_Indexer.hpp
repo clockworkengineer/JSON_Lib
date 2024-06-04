@@ -25,20 +25,6 @@ public:
       entry.getKey() = std::to_string(index[key]);
     }
   }
-  virtual void onNumber([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onBoolean([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onNull([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onArray([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onJNode([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  virtual void onString([[maybe_unused]] JSON_Lib::JNode &jNode) override {}
-  // Const api not used
-  virtual void onNumber([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  virtual void onBoolean([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  virtual void onNull([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  virtual void onArray([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  virtual void onObject([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  virtual void onJNode([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
-  virtual void onString([[maybe_unused]] const JSON_Lib::JNode &jNode) override {}
   // Save away index (JSON array) to file
   void save() { array.stringify(JSON_Lib::FileDestination{ fileName + ".idx" }); }
 
