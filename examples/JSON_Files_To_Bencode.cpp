@@ -29,7 +29,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
       PLOG_INFO << "Created file " << Utility::createFileName(jsonFileName, ".ben") << " from " << jsonFileName;
     }
   } catch (const std::exception &ex) {
-    std::cout << "Error Processing Torrent File: [" << ex.what() << "]\n";
+    PLOG_ERROR << "Error Processing Torrent File: [" << ex.what() << "]\n";
   }
   PLOG_INFO << "JSON_Files_To_Bencode exited.";
   exit(EXIT_SUCCESS);
