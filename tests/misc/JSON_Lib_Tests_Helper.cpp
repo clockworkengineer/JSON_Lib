@@ -35,7 +35,7 @@ void checkArray(const JNode &jNode)
   REQUIRE(JRef<String>(jNode[0]).value() == "Dog");
   REQUIRE(JRef<Number>(jNode[1]).value<int>() == 1964);
   REQUIRE(JRef<Boolean>(jNode[2]).value() == true);
-  REQUIRE(JRef<Null>(jNode[3]).getNull() == nullptr);
+  REQUIRE(JRef<Null>(jNode[3]).value() == nullptr);
 }
 /// <summary>
 /// Verify that an JNode Object has the correct parsed format.

@@ -78,7 +78,7 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
   {
     JNode jNode(nullptr);
     REQUIRE_FALSE(!jNode.isNull());
-    REQUIRE(JRef<Null>(jNode).getNull() == nullptr);
+    REQUIRE(JRef<Null>(jNode).value() == nullptr);
   }
   SECTION("Construct JNode(array).", "[JSON][JNode][Constructor][Array]")
   {
@@ -217,7 +217,7 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
   {
     jNode = nullptr;
     REQUIRE_FALSE(!jNode.isNull());
-    REQUIRE(JRef<Null>(jNode).getNull() == nullptr);
+    REQUIRE(JRef<Null>(jNode).value() == nullptr);
   }
   SECTION("Assign array to JNode.", "[JSON][JNode][Assignment][Array]")
   {
@@ -360,7 +360,7 @@ TEST_CASE("Check JNode reference functions work.", "[JSON][JNode][Reference]")
   {
     BufferSource jsonSource{ R"(null)" };
     json.parse(jsonSource);
-    REQUIRE(JRef<Null>(json.root()).getNull() == nullptr);
+    REQUIRE(JRef<Null>(json.root()).value() == nullptr);
   }
   SECTION("Array reference.", "[JSON][JNode][Reference][Array]")
   {
@@ -401,8 +401,8 @@ TEST_CASE("Check JNode reference function exceptions.", "[JSON][JNode][Reference
   {
     BufferSource jsonSource{ R"(true)" };
     json.parse(jsonSource);
-    REQUIRE_THROWS_AS(JRef<Null>(json.root()).getNull(), JNode::Error);
-    REQUIRE_THROWS_WITH(JRef<Null>(json.root()).getNull(), "JNode Error: JNode not a null.");
+    REQUIRE_THROWS_AS(JRef<Null>(json.root()).value(), JNode::Error);
+    REQUIRE_THROWS_WITH(JRef<Null>(json.root()).value(), "JNode Error: JNode not a null.");
   }
   SECTION("Boolean reference a null.", "[JSON][JNode][Reference][Boolean][Exception]")
   {

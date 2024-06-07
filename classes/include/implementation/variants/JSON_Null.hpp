@@ -15,7 +15,7 @@ struct Null : Variant
   Null &operator=(Null &&other) = default;
   ~Null() = default;
   // Return null value
-  [[nodiscard]] static void *getNull() { return nullptr; }
+  [[nodiscard]] static void *value() { return nullptr; }
   // Return string representation of value
   [[nodiscard]] static std::string toString() { return "null"; }
 };

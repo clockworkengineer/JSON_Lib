@@ -81,21 +81,21 @@ TEST_CASE("Check JSON object creation api.", "[JSON][Create][Object]")
     JSON json;
     json["nothing"] = nullptr;
     REQUIRE_FALSE(!json["nothing"].isNull());
-    REQUIRE(JRef<Null>(json.root()["nothing"]).getNull() == nullptr);
+    REQUIRE(JRef<Null>(json.root()["nothing"]).value() == nullptr);
   }
   SECTION("Create two level object and null at base.", "[JSON][Create][Object][null]")
   {
     JSON json;
     json["nothing"]["extra"] = nullptr;
     REQUIRE_FALSE(!json["nothing"]["extra"].isNull());
-    REQUIRE(JRef<Null>(json.root()["nothing"]["extra"]).getNull() == nullptr);
+    REQUIRE(JRef<Null>(json.root()["nothing"]["extra"]).value() == nullptr);
   }
   SECTION("Create three level object and null at base and stringify.", "[JSON][Create][Object][null]")
   {
     JSON json;
     json["nothing"]["extra"]["more"] = nullptr;
     REQUIRE_FALSE(!json["nothing"]["extra"]["more"].isNull());
-    REQUIRE(JRef<Null>(json.root()["nothing"]["extra"]["more"]).getNull() == nullptr);
+    REQUIRE(JRef<Null>(json.root()["nothing"]["extra"]["more"]).value() == nullptr);
     BufferDestination destinationBuffer;
     REQUIRE_NOTHROW(json.stringify(destinationBuffer));
     REQUIRE(destinationBuffer.toString() == R"({"nothing":{"extra":{"more":null}}})");
@@ -185,14 +185,14 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
     JSON json;
     json[0] = nullptr;
     REQUIRE_FALSE(!json[0].isNull());
-    REQUIRE(JRef<Null>(json.root()[0]).getNull() == nullptr);
+    REQUIRE(JRef<Null>(json.root()[0]).value() == nullptr);
   }
   SECTION("Create two level array with null at the base and stringify.", "[JSON][Create][Array][null]")
   {
     JSON json;
     json[0][0] = nullptr;
     REQUIRE_FALSE(!json[0][0].isNull());
-    REQUIRE(JRef<Null>(json.root()[0][0]).getNull() == nullptr);
+    REQUIRE(JRef<Null>(json.root()[0][0]).value() == nullptr);
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
     REQUIRE(jsonDestination.toString() == R"([[null]])");
@@ -240,7 +240,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
     REQUIRE(JRef<String>(json[5][4]).value() == "5.0");
     REQUIRE(JRef<String>(json[5][5]).value() == "test test test test");
     REQUIRE_FALSE(JRef<Boolean>(json[5][6]).value());
-    REQUIRE(JRef<Null>(json[5][7]).getNull() == nullptr);
+    REQUIRE(JRef<Null>(json[5][7]).value() == nullptr);
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
     REQUIRE(jsonDestination.toString()

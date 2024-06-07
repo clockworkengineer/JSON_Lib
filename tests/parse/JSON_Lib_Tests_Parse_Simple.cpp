@@ -98,6 +98,6 @@ TEST_CASE("Check JSON parsing of simple types and check values.", "[JSON][Parse]
   {
     BufferSource jsonSource{ "null" };
     json.parse(jsonSource);
-    REQUIRE(JRef<Null>(json.root()).getNull() == nullptr);
+    REQUIRE(JRef<Null>(json.root()).value() == nullptr);
   }
 }
