@@ -10,19 +10,15 @@
 #include <utility>
 
 #include "JSON_Config.hpp"
+#include "JSON_Interfaces.hpp"
 
 namespace JSON_Lib {
 
-// ========================================================
-// JSON forward declarations for interfaces/classes/structs
-// ========================================================
+// =========================
+// JSON forward declarations
+// =========================
 class JSON_Impl;
 struct JNode;
-class ISource;
-class IDestination;
-class IAction;
-class IStringify;
-class IParser;
 
 class JSON
 {
