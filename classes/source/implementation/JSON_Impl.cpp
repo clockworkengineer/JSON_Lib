@@ -85,7 +85,7 @@ JNode &JSON_Impl::operator[](const std::string &key)
   try {
     if (jNodeRoot.isEmpty()) { jNodeRoot = JNode::make<Object>(); }
     return jNodeRoot[key];
-  } catch ([[maybe_unused]] JNode::Error &error) {
+  } catch ([[maybe_unused]] Object::Error &error) {
     JRef<Object>(jNodeRoot).add(Object::Entry(key, JNode::make<Hole>()));
     return jNodeRoot[key];
   }

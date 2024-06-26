@@ -321,8 +321,8 @@ TEST_CASE("Check use of JNode indexing operators.", "[JSON][JNode][Index]")
   {
     BufferSource jsonSource{ R"({"City":"Southampton","Population":500000})" };
     json.parse(jsonSource);
-    REQUIRE_THROWS_AS(json.root()["Cityy"].isObject(), JNode::Error);
-    REQUIRE_THROWS_WITH(json.root()["Cityy"].isObject(), "JNode Error: Invalid key used to access object.");
+    REQUIRE_THROWS_AS(json.root()["Cityy"].isObject(), Object::Error);
+    REQUIRE_THROWS_WITH(json.root()["Cityy"].isObject(), "Object Error: Invalid key used to access object.");
   }
   SECTION("Parse array and check an invalid index generates exception.", "[JSON][JNode][Index]")
   {
