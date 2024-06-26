@@ -65,24 +65,27 @@ struct Object : Variant
 
 private:
   // Search for a given entry given a key and object list
-  [[nodiscard]] Entries::iterator findKey(Entries &object,const std::string &key)
-  {
-    const auto keyEntry = std::ranges::find_if(object, [&key](Entry &entry) -> bool {
-      return static_cast<String &>(entry.getKey().getVariant()).value() == key;
-    });
-    if (keyEntry == object.end()) { throw Error("Invalid key used to access object."); }
-    return keyEntry;
-  }
-  [[nodiscard]] Entries::const_iterator findKey(const Entries &object, const std::string &key) const
-  {
-    const auto keyEntry = std::ranges::find_if(object, [&key](const Entry &entry) -> bool {
-      return static_cast<const String &>(entry.getKey().getVariant()).value() == key;
-    });
-    if (keyEntry == object.end()) { throw Error("Invalid key used to access object."); }
-    return keyEntry;
-  }
+  [[nodiscard]] Entries::iterator findKey(Entries &object,const std::string &key);
+  [[nodiscard]] Entries::const_iterator findKey(const Entries &object, const std::string &key) const;
+
   // Object entries list
   Entries jNodeObject;
 };
 
+inline Object::Entries::iterator Object::findKey(Entries &object,const std::string &key)
+{
+  const auto keyEntry = std::ranges::find_if(object, [&key](Entry &entry) -> bool {
+    return static_cast<String &>(entry.getKey().getVariant()).value() == key;
+  });
+  if (keyEntry == object.end()) { throw Object::Error("Invalid key used to access object."); }
+  return keyEntry;
+}
+inline Object::Entries::const_iterator Object::findKey(const Entries &object, const std::string &key) const
+{
+  const auto keyEntry = std::ranges::find_if(object, [&key](const Entry &entry) -> bool {
+    return static_cast<const String &>(entry.getKey().getVariant()).value() == key;
+  });
+  if (keyEntry == object.end()) { throw Object::Error("Invalid key used to access object."); }
+  return keyEntry;
+}
 }// namespace JSON_Lib
