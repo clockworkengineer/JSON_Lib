@@ -7,9 +7,7 @@
 #include <cerrno>
 
 namespace JSON_Lib {
-// ======
-// Number
-// ======
+
 struct Number : Variant
 {
   // Number values variant

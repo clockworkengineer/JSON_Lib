@@ -2,9 +2,7 @@
 
 #include <string>
 namespace JSON_Lib {
-// ====
-// Null
-// ====
+
 struct Null : Variant
 {
   // Constructors/Destructors

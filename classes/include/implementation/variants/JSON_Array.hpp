@@ -4,11 +4,18 @@
 #include <vector>
 
 namespace JSON_Lib {
-// =====
-// Array
-// =====
+
+// Array error
+struct ArrayError final : std::runtime_error
+{
+  explicit ArrayError(const std::string &message) : std::runtime_error("Array Error: " + message) {}
+};
+
 struct Array : Variant
 {
+  using Error = ArrayError;
+  using Entry = JNode;
+  using Entries = std::vector<Entry>;
   // Constructors/Destructors
   Array() : Variant(Type::array) {}
   Array(const Array &other) = default;
@@ -17,13 +24,12 @@ struct Array : Variant
   Array &operator=(Array &&other) = default;
   ~Array() = default;
   // Add array element
-  void add(JNode &jNode) { jNodeArray.emplace_back(std::move(jNode)); }
-  void add(JNode &&jNode) { jNodeArray.emplace_back(std::move(jNode)); }
+  void add(Entry bNode) { jNodeArray.emplace_back(std::move(bNode)); }
   // Return the size of array
   [[nodiscard]] std::size_t size() const { return jNodeArray.size(); }
   // Return reference to array base
-  std::vector<JNode> &value() { return jNodeArray; }
-  [[nodiscard]] const std::vector<JNode> &value() const { return jNodeArray; }
+  Entries &value() { return jNodeArray; }
+  [[nodiscard]] const Entries &value() const { return jNodeArray; }
   // Array indexing operators
   JNode &operator[](const std::size_t index)
   {
@@ -46,6 +52,7 @@ struct Array : Variant
 
 private:
   // Array entries list
-  std::vector<JNode> jNodeArray;
+  Entries jNodeArray;
 };
+
 }// namespace JSON_Lib

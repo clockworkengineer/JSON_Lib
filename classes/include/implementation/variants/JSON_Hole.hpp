@@ -2,9 +2,7 @@
 
 #include <string>
 namespace JSON_Lib {
-// ====
-// Hole
-// ====
+
 struct Hole : Variant
 {
   // Constructors/Destructors
