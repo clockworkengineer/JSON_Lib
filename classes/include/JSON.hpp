@@ -8,6 +8,10 @@
 #include <fstream>
 #include <sstream>
 #include <utility>
+#include <algorithm>
+#include <filesystem>
+#include <set>
+#include <unordered_map>
 
 #include "JSON_Config.hpp"
 #include "JSON_Interfaces.hpp"

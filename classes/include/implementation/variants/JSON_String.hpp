@@ -3,9 +3,7 @@
 #include <string>
 
 namespace JSON_Lib {
-// ======
-// String
-// ======
+
 struct String : Variant
 {
   // Constructors/Destructors

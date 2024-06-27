@@ -1,6 +1,7 @@
 #pragma once
 
 namespace JSON_Lib {
+
 // =========================
 // JNode reference converter
 // =========================

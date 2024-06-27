@@ -1,8 +1,7 @@
 #pragma once
+
 namespace JSON_Lib {
-// ====
-// Base
-// ====
+
 struct Variant
 {
   // JNode Variant Types

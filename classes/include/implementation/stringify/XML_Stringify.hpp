@@ -1,7 +1,5 @@
 #pragma once
 
-#include <algorithm>
-
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "XML_Translator.hpp"
