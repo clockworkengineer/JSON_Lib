@@ -8,8 +8,6 @@
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
 
-#include <chrono>
-
 #include "JSON_Utility.hpp"
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
