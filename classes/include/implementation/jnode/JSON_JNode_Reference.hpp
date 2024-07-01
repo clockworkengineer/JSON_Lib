@@ -2,23 +2,45 @@
 
 namespace JSON_Lib {
 
+// =======================
+// What is JNode variant ?
+// =======================
+template<typename T> bool isA(const JNode &jNode)
+{
+  if constexpr (std::is_same_v<T, String>) {
+    return jNode.getVariant().getNodeType() == Variant::Type::string;
+  } else if constexpr (std::is_same_v<T, Number>) {
+    return jNode.getVariant().getNodeType() == Variant::Type::number;
+  } else if constexpr (std::is_same_v<T, Array>) {
+    return jNode.getVariant().getNodeType() == Variant::Type::array;
+  } else if constexpr (std::is_same_v<T, Object>) {
+    return jNode.getVariant().getNodeType() == Variant::Type::object;
+  } else if constexpr (std::is_same_v<T, Boolean>) {
+    return jNode.getVariant().getNodeType() == Variant::Type::boolean;
+  } else if constexpr (std::is_same_v<T, Null>) {
+    return jNode.getVariant().getNodeType() == Variant::Type::null;
+  } else {
+    static_assert(false, "Not a valid JNode variant.");
+  }
+}
+
 // =========================
 // JNode reference converter
 // =========================
 template<typename T> void checkJNode(const JNode &jNode)
 {
   if constexpr (std::is_same_v<T, String>) {
-    if (!jNode.isString()) { throw JNode::Error("JNode not a string."); }
+    if (!isA<String>(jNode)) { throw JNode::Error("JNode not a string."); }
   } else if constexpr (std::is_same_v<T, Number>) {
-    if (!jNode.isNumber()) { throw JNode::Error("JNode not a number."); }
+    if (!isA<Number>(jNode)) { throw JNode::Error("JNode not a number."); }
   } else if constexpr (std::is_same_v<T, Array>) {
-    if (!jNode.isArray()) { throw JNode::Error("JNode not an array."); }
+    if (!isA<Array>(jNode)) { throw JNode::Error("JNode not an array."); }
   } else if constexpr (std::is_same_v<T, Object>) {
-    if (!jNode.isObject()) { throw JNode::Error("JNode not an object."); }
+    if (!isA<Object>(jNode)) { throw JNode::Error("JNode not an object."); }
   } else if constexpr (std::is_same_v<T, Boolean>) {
-    if (!jNode.isBoolean()) { throw JNode::Error("JNode not a boolean."); }
+    if (!isA<Boolean>(jNode)) { throw JNode::Error("JNode not a boolean."); }
   } else if constexpr (std::is_same_v<T, Null>) {
-    if (!jNode.isNull()) { throw JNode::Error("JNode not a null."); }
+    if (!isA<Null>(jNode)) { throw JNode::Error("JNode not a null."); }
   }
 }
 template<typename T> T &JRef(JNode &jNode)

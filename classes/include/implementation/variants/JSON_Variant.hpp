@@ -22,6 +22,11 @@ struct Variant
   [[nodiscard]] bool isNull() const { return jNodeType == Type::null; }
   [[nodiscard]] bool isHole() const { return jNodeType == Type::hole; }
 
+  // Get BNode type
+  [[nodiscard]] Type getNodeType() const {
+    return(jNodeType);
+  }
+private:
 private:
   Type jNodeType;
 };
