@@ -25,7 +25,7 @@ public:
 /// <param name="indent">Current print indentation.</param>
 void stringify(const JNode &jNode, IDestination &destination, const long indent) const override
   {
-  if (jNode.isNumber()) {
+  if (isA<Number>(jNode)) {
     destination.add(JRef<Number>(jNode).toString());
   } else if (jNode.isString()) {
     destination.add('"'+jsonTranslator.to(JRef<String>(jNode).toString())+'"');
@@ -35,7 +35,7 @@ void stringify(const JNode &jNode, IDestination &destination, const long indent)
     destination.add(JRef<Null>(jNode).toString());
   } else if (jNode.isHole()) {
     destination.add(JRef<Hole>(jNode).toString());
-  } else if (jNode.isObject()) {
+  } else if (isA<Object>(jNode)) {
     size_t commaCount = JRef<Object>(jNode).value().size() - 1;
     destination.add('{');
     if (indent != 0) { destination.add('\n'); }
@@ -54,7 +54,7 @@ void stringify(const JNode &jNode, IDestination &destination, const long indent)
       destination.add("\n"+std::string(indent - printIndent, ' '));
     }
     destination.add("}");
-  } else if (jNode.isArray()) {
+  } else if (isA<Array>(jNode)) {
     destination.add('[');
     if (!JRef<Array>(jNode).value().empty()) {
       size_t commaCount = JRef<Array>(jNode).value().size() - 1;

@@ -41,7 +41,7 @@ private:
   /// <param name="indent">Current print indentation.</param>
   void stringifyXML(const JNode &jNode, IDestination &destination, const long indent) const
   {
-    if (jNode.isNumber()) {
+    if (isA<Number>(jNode)) {
       destination.add(std::to_string(JRef<Number>(jNode).value<int>()));
     } else if (jNode.isString()) {
       destination.add(xmlTranslator.to(JRef<String>(jNode).value()));
@@ -53,7 +53,7 @@ private:
       }
     } else if (jNode.isNull()||jNode.isHole()) {
       ;
-    } else if (jNode.isObject()) {
+    } else if (isA<Object>(jNode)) {
       for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
         auto elementName = JRef<String>(jNodeNext.getKey()).value();
         std::ranges::replace(elementName, ' ', '-');
@@ -61,7 +61,7 @@ private:
         stringifyXML(jNodeNext.getJNode(), destination, 0);
         destination.add("</" + elementName + ">");
       }
-    } else if (jNode.isArray()) {
+    } else if (isA<Array>(jNode)) {
       if (JRef<Array>(jNode).value().size() > 1) {
         for (const auto &bNodeNext : JRef<Array>(jNode).value()) {
           destination.add("<Row>");

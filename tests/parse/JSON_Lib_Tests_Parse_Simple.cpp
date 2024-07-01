@@ -25,7 +25,7 @@ TEST_CASE("Check JSON parsing of simple types (number,string,boolean,null).", "[
   {
     BufferSource jsonSource{ "6767" };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!json.root().isNumber());
+    REQUIRE_FALSE(!isA<Number>(json.root()));
   }
   SECTION("Parse an boolean (true).", "[JSON][Parse][Simple]")
   {

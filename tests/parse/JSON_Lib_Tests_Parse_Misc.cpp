@@ -22,7 +22,7 @@ TEST_CASE("Check JSON parsing of a list of example JSON files.", "[JSON][Parse][
     REQUIRE_NOTHROW(json.parse(jsonSource));
     jsonSource.reset();
     json.parse(jsonSource);
-    REQUIRE_FALSE(!(json.root().isObject() || (json.root().isArray())));
+    REQUIRE_FALSE(!(isA<Object>(json.root()) || (isA<Array>(json.root()))));
   }
   SECTION("Parse from file directly.", "[JSON][Parse][Examples][File]")
   {
@@ -30,6 +30,6 @@ TEST_CASE("Check JSON parsing of a list of example JSON files.", "[JSON][Parse][
     REQUIRE_NOTHROW(json.parse(jsonSource));
     jsonSource.reset();
     json.parse(jsonSource);
-    REQUIRE_FALSE(!(json.root().isObject() || (json.root().isArray())));
+    REQUIRE_FALSE(!(isA<Object>(json.root()) || (isA<Array>(json.root()))));
   }
 }

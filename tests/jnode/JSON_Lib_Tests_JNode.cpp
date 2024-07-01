@@ -17,42 +17,42 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
   SECTION("Construct JNode(integer).", "[JSON][JNode][Constructor][Integer]")
   {
     JNode jNode(999);
-    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!isA<Number>(jNode));
     REQUIRE_FALSE(!JRef<Number>(jNode).is<int>());
     REQUIRE(JRef<Number>(jNode).value<int>() == 999);
   }
   SECTION("Construct JNode(long).", "[JSON][JNode][Constructor][Long]")
   {
     JNode jNode(99988899l);
-    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!isA<Number>(jNode));
     REQUIRE_FALSE(!JRef<Number>(jNode).is<long>());
     REQUIRE(JRef<Number>(jNode).value<int>() == 99988899l);
   }
   SECTION("Construct JNode(long long).", "[JSON][JNode][Constructor][Long Long]")
   {
     JNode jNode(99988899ll);
-    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!isA<Number>(jNode));
     REQUIRE_FALSE(!JRef<Number>(jNode).is<long long>());
     REQUIRE(JRef<Number>(jNode).value<long long>() == 99988899ll);
   }
   SECTION("Construct JNode(float).", "[JSON][JNode][Constructor][Float]")
   {
     JNode jNode(777.999f);
-    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!isA<Number>(jNode));
     REQUIRE_FALSE(!JRef<Number>(jNode).is<float>());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).value<float>(), 777.999f, 0.0001));
   }
   SECTION("Construct JNode(double).", "[JSON][JNode][Constructor][Double]")
   {
     JNode jNode(66666.8888);
-    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!isA<Number>(jNode));
     REQUIRE_FALSE(!JRef<Number>(jNode).is<double>());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).value<double>(), 66666.8888, 0.0001));
   }
   SECTION("Construct JNode(long double).", "[JSON][JNode][Constructor][Long Double]")
   {
     JNode jNode(66666.8888l);
-    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!isA<Number>(jNode));
     REQUIRE_FALSE(!JRef<Number>(jNode).is<long double>());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).value<long double>(), 66666.8888l, 0.0001));
   }
@@ -83,7 +83,7 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
   SECTION("Construct JNode(array).", "[JSON][JNode][Constructor][Array]")
   {
     JNode jNode{ 1, 2, 3, 4 };
-    REQUIRE_FALSE(!jNode.isArray());
+    REQUIRE_FALSE(!isA<Array>(jNode));
     auto &array = JRef<Array>(jNode).value();
     REQUIRE(JRef<Number>(array[0]).value<int>() == 1);
     REQUIRE(JRef<Number>(array[1]).value<int>() == 2);
@@ -93,7 +93,7 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
   SECTION("Construct JNode(object).", "[JSON][JNode][Constructor][Object]")
   {
     JNode jNode{ { "key1", 55 }, { "key2", 26666 } };
-    REQUIRE_FALSE(!jNode.isObject());
+    REQUIRE_FALSE(!isA<Object>(jNode));
     auto &object = JRef<Object>(jNode);
     REQUIRE(JRef<Number>(object["key1"]).value<int>() == 55);
     REQUIRE(JRef<Number>(object["key2"]).value<int>() == 26666);
@@ -101,7 +101,7 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
   SECTION("Construct JNode(array with nested array).", "[JSON][JNode][Constructor][Array]")
   {
     JNode jNode{ 1, 2, 3, 4, JNode{ 5, 6, 7, 8 } };
-    REQUIRE_FALSE(!jNode.isArray());
+    REQUIRE_FALSE(!isA<Array>(jNode));
     auto &array = JRef<Array>(jNode).value();
     REQUIRE(JRef<Number>(array[0]).value<int>() == 1);
     REQUIRE(JRef<Number>(array[1]).value<int>() == 2);
@@ -115,7 +115,7 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
   SECTION("Construct JNode(object with nested object).", "[JSON][JNode][Constructor][Object]")
   {
     JNode jNode{ { "key1", 55 }, { "key2", 26666 }, { "key3", JNode{ { "key4", 5555 }, { "key5", 7777 } } } };
-    REQUIRE_FALSE(!jNode.isObject());
+    REQUIRE_FALSE(!isA<Object>(jNode));
     auto &object = JRef<Object>(jNode);
     REQUIRE(JRef<Number>(object["key1"]).value<int>() == 55);
     REQUIRE(JRef<Number>(object["key2"]).value<int>() == 26666);
@@ -125,7 +125,7 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
   SECTION("Construct JNode(array with nested object).", "[JSON][JNode][Constructor][Array]")
   {
     JNode jNode{ 1, 2, 3, 4, JNode{ { "key4", 5555 }, { "key5", 7777 } } };
-    REQUIRE_FALSE(!jNode.isArray());
+    REQUIRE_FALSE(!isA<Array>(jNode));
     auto &array = JRef<Array>(jNode).value();
     REQUIRE(JRef<Number>(array[0]).value<int>() == 1);
     REQUIRE(JRef<Number>(array[1]).value<int>() == 2);
@@ -137,7 +137,7 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
   SECTION("Construct JNode(object with nested array).", "[JSON][JNode][Constructor][Object]")
   {
     JNode jNode{ { "key1", 55 }, { "key2", 26666 }, { "key3", JNode{ 5, 6, 7, 8 } } };
-    REQUIRE_FALSE(!jNode.isObject());
+    REQUIRE_FALSE(!isA<Object>(jNode));
     auto &object = JRef<Object>(jNode);
     REQUIRE(JRef<Number>(object["key1"]).value<int>() == 55);
     REQUIRE(JRef<Number>(object["key2"]).value<int>() == 26666);
@@ -156,42 +156,42 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
   SECTION("Assign integer to JNode.", "[JSON][JNode][Assignment][Integer]")
   {
     jNode = 999;
-    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!isA<Number>(jNode));
     REQUIRE_FALSE(!JRef<Number>(jNode).is<int>());
     REQUIRE(JRef<Number>(jNode).value<int>() == 999);
   }
   SECTION("Assign long to JNode.", "[JSON][JNode][Assignment][Long]")
   {
     jNode = 99988899l;
-    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!isA<Number>(jNode));
     REQUIRE_FALSE(!JRef<Number>(jNode).is<long>());
     REQUIRE(JRef<Number>(jNode).value<int>() == 99988899l);
   }
   SECTION("Assign long long to JNode.", "[JSON][JNode][Assignment][Long Long]")
   {
     jNode = 99988899ll;
-    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!isA<Number>(jNode));
     REQUIRE_FALSE(!JRef<Number>(jNode).is<long long>());
     REQUIRE(JRef<Number>(jNode).value<long long>() == 99988899ll);
   }
   SECTION("Assign float to JNode.", "[JSON][JNode][Assignment][Float]")
   {
     jNode = 777.999f;
-    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!isA<Number>(jNode));
     REQUIRE_FALSE(!JRef<Number>(jNode).is<float>());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).value<float>(), 777.999f, 0.0001));
   }
   SECTION("Assign double to JNode.", "[JSON][JNode][Assignment][Double]")
   {
     jNode = 66666.8888;
-    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!isA<Number>(jNode));
     REQUIRE_FALSE(!JRef<Number>(jNode).is<double>());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).value<double>(), 66666.8888, 0.0001));
   }
   SECTION("Assign long double to JNode.", "[JSON][JNode][Assignment][Long Double]")
   {
     jNode = 66666.8888l;
-    REQUIRE_FALSE(!jNode.isNumber());
+    REQUIRE_FALSE(!isA<Number>(jNode));
     REQUIRE_FALSE(!JRef<Number>(jNode).is<long double>());
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(jNode).value<long double>(), 66666.8888l, 0.0001));
   }
@@ -222,7 +222,7 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
   SECTION("Assign array to JNode.", "[JSON][JNode][Assignment][Array]")
   {
     jNode = { 1, 2, 3, 4 };
-    REQUIRE_FALSE(!jNode.isArray());
+    REQUIRE_FALSE(!isA<Array>(jNode));
     auto &array = JRef<Array>(jNode).value();
     REQUIRE(JRef<Number>(array[0]).value<int>() == 1);
     REQUIRE(JRef<Number>(array[1]).value<int>() == 2);
@@ -232,7 +232,7 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
   SECTION("Assign object to JNode.", "[JSON][JNode][Assignment][Object]")
   {
     jNode = { { "key1", 55 }, { "key2", 26666 } };
-    REQUIRE_FALSE(!jNode.isObject());
+    REQUIRE_FALSE(!isA<Object>(jNode));
     auto &object = JRef<Object>(jNode);
     REQUIRE(JRef<Number>(object["key1"]).value<int>() == 55);
     REQUIRE(JRef<Number>(object["key2"]).value<int>() == 26666);
@@ -240,7 +240,7 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
   SECTION("Assign JNode with array with nested array.", "[JSON][JNode][Constructor][Array]")
   {
     jNode = { 1, 2, 3, 4, JNode{ 5, 6, 7, 8 } };
-    REQUIRE_FALSE(!jNode.isArray());
+    REQUIRE_FALSE(!isA<Array>(jNode));
     auto &array = JRef<Array>(jNode).value();
     REQUIRE(JRef<Number>(array[0]).value<int>() == 1);
     REQUIRE(JRef<Number>(array[1]).value<int>() == 2);
@@ -254,7 +254,7 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
   SECTION("Assign JNode with object with a nested object.", "[JSON][JNode][Constructor][Object]")
   {
     jNode = { { "key1", 55 }, { "key2", 26666 }, { "key3", JNode{ { "key4", 5555 }, { "key5", 7777 } } } };
-    REQUIRE_FALSE(!jNode.isObject());
+    REQUIRE_FALSE(!isA<Object>(jNode));
     auto &object = JRef<Object>(jNode);
     REQUIRE(JRef<Number>(object["key1"]).value<int>() == 55);
     REQUIRE(JRef<Number>(object["key2"]).value<int>() == 26666);
@@ -264,7 +264,7 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
   SECTION("Assign JNode with array with a nested object.", "[JSON][JNode][Constructor][Array]")
   {
     jNode = { 1, 2, 3, 4, JNode{ { "key4", 5555 }, { "key5", 7777 } } };
-    REQUIRE_FALSE(!jNode.isArray());
+    REQUIRE_FALSE(!isA<Array>(jNode));
     auto &array = JRef<Array>(jNode).value();
     REQUIRE(JRef<Number>(array[0]).value<int>() == 1);
     REQUIRE(JRef<Number>(array[1]).value<int>() == 2);
@@ -276,7 +276,7 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
   SECTION("Assign JNode with object with nested a array.", "[JSON][JNode][Constructor][Object]")
   {
     jNode = { { "key1", 55 }, { "key2", 26666 }, { "key3", JNode{ 5, 6, 7, 8 } } };
-    REQUIRE_FALSE(!jNode.isObject());
+    REQUIRE_FALSE(!isA<Object>(jNode));
     auto &object = JRef<Object>(jNode);
     REQUIRE(JRef<Number>(object["key1"]).value<int>() == 55);
     REQUIRE(JRef<Number>(object["key2"]).value<int>() == 26666);
@@ -321,15 +321,15 @@ TEST_CASE("Check use of JNode indexing operators.", "[JSON][JNode][Index]")
   {
     BufferSource jsonSource{ R"({"City":"Southampton","Population":500000})" };
     json.parse(jsonSource);
-    REQUIRE_THROWS_AS(json.root()["Cityy"].isObject(), Object::Error);
-    REQUIRE_THROWS_WITH(json.root()["Cityy"].isObject(), "Object Error: Invalid key used to access object.");
+    REQUIRE_THROWS_AS(isA<Object>(json.root()["Cityy"]), Object::Error);
+    REQUIRE_THROWS_WITH(isA<Object>(json.root()["Cityy"]), "Object Error: Invalid key used to access object.");
   }
   SECTION("Parse array and check an invalid index generates exception.", "[JSON][JNode][Index]")
   {
     BufferSource jsonSource{ R"([777,9000,"apples"])" };
     json.parse(jsonSource);
-    REQUIRE_THROWS_AS(json.root()[3].isArray(), JNode::Error);
-    REQUIRE_THROWS_WITH(json.root()[3].isArray(), "JNode Error: Invalid index used to access array.");
+    REQUIRE_THROWS_AS(isA<Array>(json.root()[3]), JNode::Error);
+    REQUIRE_THROWS_WITH(isA<Array>(json.root()[3]), "JNode Error: Invalid index used to access array.");
   }
 }
 // =========================

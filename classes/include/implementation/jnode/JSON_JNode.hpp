@@ -23,9 +23,9 @@ struct JNode
   template<typename T> JNode &operator=(T value) { return *this = JNode(value); }
   // Interrogate variant
   [[nodiscard]] bool isEmpty() const { return jNodeVariant == nullptr; }
-  [[nodiscard]] bool isObject() const { return jNodeVariant->isObject(); }
-  [[nodiscard]] bool isArray() const { return jNodeVariant->isArray(); }
-  [[nodiscard]] bool isNumber() const { return jNodeVariant->isNumber(); }
+//  [[nodiscard]] bool isObject() const { return jNodeVariant->isObject(); }
+//  [[nodiscard]] bool isArray() const { return jNodeVariant->isArray(); }
+//  [[nodiscard]] bool isNumber() const { return jNodeVariant->isNumber(); }
   [[nodiscard]] bool isString() const { return jNodeVariant->isString(); }
   [[nodiscard]] bool isBoolean() const { return jNodeVariant->isBoolean(); }
   [[nodiscard]] bool isNull() const { return jNodeVariant->isNull(); }

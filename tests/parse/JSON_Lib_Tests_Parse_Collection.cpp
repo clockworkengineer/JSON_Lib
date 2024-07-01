@@ -19,25 +19,25 @@ TEST_CASE("Check JSON parsing of collection types (array,object).", "[JSON][Pars
   {
     BufferSource jsonSource{ R"({"name":"Robert","Age":15})" };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!json.root().isObject());
+    REQUIRE_FALSE(!isA<Object>(json.root()));
   }
   SECTION(R"(Parse an array ([777,9000,"apples"]).)", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ R"([777,9000,"apples"])" };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!json.root().isArray());
+    REQUIRE_FALSE(!isA<Array>(json.root()));
   }
   SECTION("Parse an empty array ([]).", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ "[]" };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!json.root().isArray());
+    REQUIRE_FALSE(!isA<Array>(json.root()));
   }
   SECTION("Parse an empty object ({}).", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ "{}" };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!json.root().isObject());
+    REQUIRE_FALSE(!isA<Object>(json.root()));
   }
   SECTION("Parse an nested empty arrays ([[], [], []]).", "[JSON][Parse][Collection]")
   {
@@ -65,12 +65,12 @@ TEST_CASE("Check JSON parsing of collection types and check values.", "[JSON][Pa
   {
     BufferSource jsonSource{ R"({"Name":"Robert","Age":15})" };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!json.root().isObject());
+    REQUIRE_FALSE(!isA<Object>(json.root()));
     REQUIRE(JRef<Object>(json.root()).size() == 2);
     REQUIRE(JRef<Object>(json.root()).contains("Name"));
     REQUIRE(JRef<Object>(json.root()).contains("Age"));
     REQUIRE_FALSE(!json.root()["Name"].isString());
-    REQUIRE_FALSE(!json.root()["Age"].isNumber());
+    REQUIRE_FALSE(!isA<Number>(json.root()["Age"]));
     REQUIRE(JRef<String>((json.root())["Name"]).value() == "Robert");
     REQUIRE(JRef<Number>((json.root())["Age"]).value<int>() == 15);
   }
@@ -78,10 +78,10 @@ TEST_CASE("Check JSON parsing of collection types and check values.", "[JSON][Pa
   {
     BufferSource jsonSource{ R"([777,9000,"apples"])" };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!json.root().isArray());
+    REQUIRE_FALSE(!isA<Array>(json.root()));
     REQUIRE(JRef<Array>(json.root()).size() == 3);
-    REQUIRE_FALSE(!json.root()[0].isNumber());
-    REQUIRE_FALSE(!json.root()[1].isNumber());
+    REQUIRE_FALSE(!isA<Number>(json.root()[0]));
+    REQUIRE_FALSE(!isA<Number>(json.root()[1]));
     REQUIRE_FALSE(!json.root()[2].isString());
     REQUIRE(JRef<Number>((json.root())[0]).value<int>() == 777);
     REQUIRE(JRef<Number>((json.root())[1]).value<int>() == 9000);

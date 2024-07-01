@@ -24,7 +24,7 @@ public:
   /// <param name="indent">Current print indentation.</param>
   void stringify(const JNode &jNode, IDestination &destination, const long indent) const override
   {
-    if (jNode.isNumber()) {
+    if (isA<Number>(jNode)) {
       destination.add("i" + std::to_string(JRef<Number>(jNode).value<int>()) + "e");
     } else if (jNode.isString()) {
       const auto jsonString = JRef<String>(jNode).value();
@@ -38,14 +38,14 @@ public:
     } else if (jNode.isNull()) {
       destination.add("4:null");
     } else if (jNode.isHole()) {
-    } else if (jNode.isObject()) {
+    } else if (isA<Object>(jNode)) {
       destination.add('d');
       for (auto &entry : JRef<Object>(jNode).value()) {
         stringify(entry.getKey(), destination, 0);
         stringify(entry.getJNode(), destination, 0);
       }
       destination.add("e");
-    } else if (jNode.isArray()) {
+    } else if (isA<Array>(jNode)) {
       destination.add('l');
       for (auto &entry : JRef<Array>(jNode).value()) { stringify(entry, destination, 0); }
       destination.add("e");

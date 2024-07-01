@@ -68,7 +68,7 @@ private:
 template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
 {
   action.onJNode(jNode);
-  if (jNode.isNumber()) {
+  if (isA<Number>(jNode)) {
     action.onNumber(jNode);
   } else if (jNode.isString()) {
     action.onString(jNode);
@@ -76,10 +76,10 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
     action.onBoolean(jNode);
   } else if (jNode.isNull()) {
     action.onNull(jNode);
-  } else if (jNode.isObject()) {
+  } else if (isA<Object>(jNode)) {
     action.onObject(jNode);
     for (auto &entry : JRef<Object>(jNode).value()) { traverseJNodes(entry.getJNode(), action); }
-  } else if (jNode.isArray()) {
+  } else if (isA<Array>(jNode)) {
     action.onArray(jNode);
     for (auto &entry : JRef<Array>(jNode).value()) { traverseJNodes(entry, action); }
   } else if (!jNode.isHole()) {

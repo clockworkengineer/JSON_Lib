@@ -30,17 +30,17 @@ template<typename T> bool isA(const JNode &jNode)
 template<typename T> void checkJNode(const JNode &jNode)
 {
   if constexpr (std::is_same_v<T, String>) {
-    if (!isA<String>(jNode)) { throw JNode::Error("JNode not a string."); }
+    if (!isA<T>(jNode)) { throw JNode::Error("JNode not a string."); }
   } else if constexpr (std::is_same_v<T, Number>) {
-    if (!isA<Number>(jNode)) { throw JNode::Error("JNode not a number."); }
+    if (!isA<T>(jNode)) { throw JNode::Error("JNode not a number."); }
   } else if constexpr (std::is_same_v<T, Array>) {
-    if (!isA<Array>(jNode)) { throw JNode::Error("JNode not an array."); }
+    if (!isA<T>(jNode)) { throw JNode::Error("JNode not an array."); }
   } else if constexpr (std::is_same_v<T, Object>) {
-    if (!isA<Object>(jNode)) { throw JNode::Error("JNode not an object."); }
+    if (!isA<T>(jNode)) { throw JNode::Error("JNode not an object."); }
   } else if constexpr (std::is_same_v<T, Boolean>) {
-    if (!isA<Boolean>(jNode)) { throw JNode::Error("JNode not a boolean."); }
+    if (!isA<T>(jNode)) { throw JNode::Error("JNode not a boolean."); }
   } else if constexpr (std::is_same_v<T, Null>) {
-    if (!isA<Null>(jNode)) { throw JNode::Error("JNode not a null."); }
+    if (!isA<T>(jNode)) { throw JNode::Error("JNode not a null."); }
   }
 }
 template<typename T> T &JRef(JNode &jNode)
