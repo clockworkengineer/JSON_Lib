@@ -70,11 +70,11 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
   action.onJNode(jNode);
   if (isA<Number>(jNode)) {
     action.onNumber(jNode);
-  } else if (jNode.isString()) {
+  } else if (isA<String>(jNode)) {
     action.onString(jNode);
-  } else if (jNode.isBoolean()) {
+  } else if (isA<Boolean>(jNode)) {
     action.onBoolean(jNode);
-  } else if (jNode.isNull()) {
+  } else if (isA<Null>(jNode)) {
     action.onNull(jNode);
   } else if (isA<Object>(jNode)) {
     action.onObject(jNode);
@@ -82,7 +82,7 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
   } else if (isA<Array>(jNode)) {
     action.onArray(jNode);
     for (auto &entry : JRef<Array>(jNode).value()) { traverseJNodes(entry, action); }
-  } else if (!jNode.isHole()) {
+  } else if (!isA<Hole>(jNode)) {
     throw Error("Unknown JNode type encountered during tree traversal.");
   }
 }

@@ -26,18 +26,18 @@ public:
   {
     if (isA<Number>(jNode)) {
       destination.add("i" + std::to_string(JRef<Number>(jNode).value<int>()) + "e");
-    } else if (jNode.isString()) {
+    } else if (isA<String>(jNode)) {
       const auto jsonString = JRef<String>(jNode).value();
       destination.add(std::to_string(static_cast<int>(jsonString.length())) + ":" + jsonString);
-    } else if (jNode.isBoolean()) {
+    } else if (isA<Boolean>(jNode)) {
       if (JRef<Boolean>(jNode).value()) {
         destination.add("4:True");
       } else {
         destination.add("5:False");
       }
-    } else if (jNode.isNull()) {
+    } else if (isA<Null>(jNode)) {
       destination.add("4:null");
-    } else if (jNode.isHole()) {
+    } else if (isA<Hole>(jNode)) {
     } else if (isA<Object>(jNode)) {
       destination.add('d');
       for (auto &entry : JRef<Object>(jNode).value()) {

@@ -27,13 +27,13 @@ void stringify(const JNode &jNode, IDestination &destination, const long indent)
   {
   if (isA<Number>(jNode)) {
     destination.add(JRef<Number>(jNode).toString());
-  } else if (jNode.isString()) {
+  } else if (isA<String>(jNode)) {
     destination.add('"'+jsonTranslator.to(JRef<String>(jNode).toString())+'"');
-  } else if (jNode.isBoolean()) {
+  } else if (isA<Boolean>(jNode)) {
     destination.add(JRef<Boolean>(jNode).toString());
-  } else if (jNode.isNull()) {
+  } else if (isA<Null>(jNode)) {
     destination.add(JRef<Null>(jNode).toString());
-  } else if (jNode.isHole()) {
+  } else if (isA<Hole>(jNode)) {
     destination.add(JRef<Hole>(jNode).toString());
   } else if (isA<Object>(jNode)) {
     size_t commaCount = JRef<Object>(jNode).value().size() - 1;

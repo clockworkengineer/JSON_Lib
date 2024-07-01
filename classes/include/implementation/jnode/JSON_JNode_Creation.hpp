@@ -17,7 +17,7 @@ template<typename T> JNode::JNode(T value)
     jNodeVariant = std::move(value);
   }
 }
-// Convert intializer list type to JMode
+// Convert initializer list type to JMode
 inline JNode JNode::typeToJNode(const JSON::intializerListTypes &type)
 {
   if (const auto pValue = std::get_if<int>(&type)) { return JNode(*pValue); }

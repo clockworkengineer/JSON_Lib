@@ -69,7 +69,7 @@ TEST_CASE("Check JSON parsing of collection types and check values.", "[JSON][Pa
     REQUIRE(JRef<Object>(json.root()).size() == 2);
     REQUIRE(JRef<Object>(json.root()).contains("Name"));
     REQUIRE(JRef<Object>(json.root()).contains("Age"));
-    REQUIRE_FALSE(!json.root()["Name"].isString());
+    REQUIRE_FALSE(!isA<String>(json.root()["Name"]));
     REQUIRE_FALSE(!isA<Number>(json.root()["Age"]));
     REQUIRE(JRef<String>((json.root())["Name"]).value() == "Robert");
     REQUIRE(JRef<Number>((json.root())["Age"]).value<int>() == 15);
@@ -82,7 +82,7 @@ TEST_CASE("Check JSON parsing of collection types and check values.", "[JSON][Pa
     REQUIRE(JRef<Array>(json.root()).size() == 3);
     REQUIRE_FALSE(!isA<Number>(json.root()[0]));
     REQUIRE_FALSE(!isA<Number>(json.root()[1]));
-    REQUIRE_FALSE(!json.root()[2].isString());
+    REQUIRE_FALSE(!isA<String>(json.root()[2]));
     REQUIRE(JRef<Number>((json.root())[0]).value<int>() == 777);
     REQUIRE(JRef<Number>((json.root())[1]).value<int>() == 9000);
     REQUIRE(JRef<String>((json.root())[2]).value() == "apples");

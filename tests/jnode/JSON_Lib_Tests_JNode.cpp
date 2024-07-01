@@ -59,25 +59,25 @@ TEST_CASE("Check use of JNode constructors.", "[JSON][JNode][Constructor]")
   SECTION("Construct JNode(C string).", "[JSON][JNode][Constructor][CString]")
   {
     JNode jNode("test string");
-    REQUIRE_FALSE(!jNode.isString());
+    REQUIRE_FALSE(!isA<String>(jNode));
     REQUIRE(JRef<String>(jNode).value() == "test string");
   }
   SECTION("Construct JNode(string).", "[JSON][JNode][Constructor][String]")
   {
     JNode jNode("test string");
-    REQUIRE_FALSE(!jNode.isString());
+    REQUIRE_FALSE(!isA<String>(jNode));
     REQUIRE(JRef<String>(jNode).value() == "test string");
   }
   SECTION("Construct JNode(boolean).", "[JSON][JNode][Constructor][Boolean]")
   {
     JNode jNode(false);
-    REQUIRE_FALSE(!jNode.isBoolean());
+    REQUIRE_FALSE(!isA<Boolean>(jNode));
     REQUIRE_FALSE(JRef<Boolean>(jNode).value());
   }
   SECTION("Construct JNode(null).", "[JSON][JNode][Constructor][Null]")
   {
     JNode jNode(nullptr);
-    REQUIRE_FALSE(!jNode.isNull());
+    REQUIRE_FALSE(!isA<Null>(jNode));
     REQUIRE(JRef<Null>(jNode).value() == nullptr);
   }
   SECTION("Construct JNode(array).", "[JSON][JNode][Constructor][Array]")
@@ -198,25 +198,25 @@ TEST_CASE("Check use of JNode assigment operators.", "[JSON][JNode][Assignment]"
   SECTION("Assign C string to JNode.", "[JSON][JNode][Assignment][CString]")
   {
     jNode = "test string";
-    REQUIRE_FALSE(!jNode.isString());
+    REQUIRE_FALSE(!isA<String>(jNode));
     REQUIRE(JRef<String>(jNode).value() == "test string");
   }
   SECTION("Assign string to JNode.", "[JSON][JNode][Assignment][String]")
   {
     jNode = std::string("test string");
-    REQUIRE_FALSE(!jNode.isString());
+    REQUIRE_FALSE(!isA<String>(jNode));
     REQUIRE(JRef<String>(jNode).value() == "test string");
   }
   SECTION("Assign boolean to JNode.", "[JSON][JNode][Assignment][Boolean]")
   {
     jNode = false;
-    REQUIRE_FALSE(!jNode.isBoolean());
+    REQUIRE_FALSE(!isA<Boolean>(jNode));
     REQUIRE_FALSE(JRef<Boolean>(jNode).value());
   }
   SECTION("Assign nullptr to JNode.", "[JSON][JNode][Assignment][Null]")
   {
     jNode = nullptr;
-    REQUIRE_FALSE(!jNode.isNull());
+    REQUIRE_FALSE(!isA<Null>(jNode));
     REQUIRE(JRef<Null>(jNode).value() == nullptr);
   }
   SECTION("Assign array to JNode.", "[JSON][JNode][Assignment][Array]")

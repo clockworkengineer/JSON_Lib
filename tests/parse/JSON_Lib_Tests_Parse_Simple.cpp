@@ -19,7 +19,7 @@ TEST_CASE("Check JSON parsing of simple types (number,string,boolean,null).", "[
   {
     BufferSource jsonSource{ R"("example string")" };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!json.root().isString());
+    REQUIRE_FALSE(!isA<String>(json.root()));
   }
   SECTION("Parse an number (6767).", "[JSON][Parse][Simple]")
   {
@@ -31,25 +31,25 @@ TEST_CASE("Check JSON parsing of simple types (number,string,boolean,null).", "[
   {
     BufferSource jsonSource{ "true" };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!json.root().isBoolean());
+    REQUIRE_FALSE(!isA<Boolean>(json.root()));
   }
   SECTION("Parse an boolean (false).", "[JSON][Parse][Simple]")
   {
     BufferSource jsonSource{ "false" };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!json.root().isBoolean());
+    REQUIRE_FALSE(!isA<Boolean>(json.root()));
   }
   SECTION("Parse an null.", "[JSON][Parse][Simple]")
   {
     BufferSource jsonSource{ "null" };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!json.root().isNull());
+    REQUIRE_FALSE(!isA<Null>(json.root()));
   }
   SECTION("Parse an empty string.", "[JSON][Parse][Simple]")
   {
     BufferSource jsonSource{ "\"\"" };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!json.root().isString());
+    REQUIRE_FALSE(!isA<String>(json.root()));
   }
 }
 // ====================================

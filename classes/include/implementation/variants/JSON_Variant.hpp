@@ -13,20 +13,11 @@ struct Variant
   Variant(Variant &&other) = default;
   Variant &operator=(Variant &&other) = default;
   ~Variant() = default;
-  // Interrogate variant
-//  [[nodiscard]] bool isObject() const { return jNodeType == Type::object; }
-//  [[nodiscard]] bool isArray() const { return jNodeType == Type::array; }
-//  [[nodiscard]] bool isNumber() const { return jNodeType == Type::number; }
-  [[nodiscard]] bool isString() const { return jNodeType == Type::string; }
-  [[nodiscard]] bool isBoolean() const { return jNodeType == Type::boolean; }
-  [[nodiscard]] bool isNull() const { return jNodeType == Type::null; }
-  [[nodiscard]] bool isHole() const { return jNodeType == Type::hole; }
-
   // Get BNode type
   [[nodiscard]] Type getNodeType() const {
     return(jNodeType);
   }
-private:
+
 private:
   Type jNodeType;
 };

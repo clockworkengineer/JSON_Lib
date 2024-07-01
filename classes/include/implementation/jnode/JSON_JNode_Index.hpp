@@ -5,7 +5,7 @@ namespace JSON_Lib {
 // Object
 inline JNode &JNode::operator[](const std::string &key)
 {
-  if (this->isHole()) {
+  if (isA<Hole>(*this)) {
     *this = make<Object>();
     JRef<Object>(*this).add(Object::Entry(key, make<Hole>()));
     return JRef<Object>(*this).value().back().getJNode();
@@ -17,7 +17,7 @@ inline const JNode &JNode::operator[](const std::string &key) const { return JRe
 inline JNode &JNode::operator[](const std::size_t index)
 {
   try {
-    if (this->isHole()) { *this = make<Array>(); }
+    if (isA<Hole>(*this)) { *this = make<Array>(); }
     return JRef<Array>(*this)[index];
   } catch ([[maybe_unused]] const Error &error) {
     JRef<Array>(*this).resize(index);

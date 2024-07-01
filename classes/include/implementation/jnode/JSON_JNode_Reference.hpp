@@ -19,6 +19,8 @@ template<typename T> bool isA(const JNode &jNode)
     return jNode.getVariant().getNodeType() == Variant::Type::boolean;
   } else if constexpr (std::is_same_v<T, Null>) {
     return jNode.getVariant().getNodeType() == Variant::Type::null;
+  } else if constexpr (std::is_same_v<T, Hole>) {
+    return jNode.getVariant().getNodeType() == Variant::Type::hole;
   } else {
     static_assert(false, "Not a valid JNode variant.");
   }
@@ -41,6 +43,8 @@ template<typename T> void checkJNode(const JNode &jNode)
     if (!isA<T>(jNode)) { throw JNode::Error("JNode not a boolean."); }
   } else if constexpr (std::is_same_v<T, Null>) {
     if (!isA<T>(jNode)) { throw JNode::Error("JNode not a null."); }
+  }else if constexpr (std::is_same_v<T, Hole>) {
+    if (!isA<T>(jNode)) { throw JNode::Error("JNode not a hole."); }
   }
 }
 template<typename T> T &JRef(JNode &jNode)

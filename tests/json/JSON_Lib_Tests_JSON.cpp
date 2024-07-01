@@ -59,42 +59,42 @@ TEST_CASE("Check JSON object creation api.", "[JSON][Create][Object]")
   {
     JSON json;
     json["name"] = "robert";
-    REQUIRE_FALSE(!json["name"].isString());
+    REQUIRE_FALSE(!isA<String>(json["name"]));
     REQUIRE(JRef<String>(json.root()["name"]).value() == "robert");
   }
   SECTION("Initialise root JSON JNode with one entry containing a std::string.", "[JSON][Create][Object][String]")
   {
     JSON json;
     json["name"] = std::string{ "robert" };
-    REQUIRE_FALSE(!json["name"].isString());
+    REQUIRE_FALSE(!isA<String>(json["name"]));
     REQUIRE(JRef<String>(json.root()["name"]).value() == "robert");
   }
   SECTION("Initialise root JSON JNode with one entry containing a boolean.", "[JSON][Create][Object][Boolean]")
   {
     JSON json;
     json["flag"] = true;
-    REQUIRE_FALSE(!json["flag"].isBoolean());
+    REQUIRE_FALSE(!isA<Boolean>(json["flag"]));
     REQUIRE_FALSE(!JRef<Boolean>(json.root()["flag"]).value());
   }
   SECTION("Initialise root JSON JNode with one entry containing a null.", "[JSON][Create][Object][null]")
   {
     JSON json;
     json["nothing"] = nullptr;
-    REQUIRE_FALSE(!json["nothing"].isNull());
+    REQUIRE_FALSE(!isA<Null>(json["nothing"]));
     REQUIRE(JRef<Null>(json.root()["nothing"]).value() == nullptr);
   }
   SECTION("Create two level object and null at base.", "[JSON][Create][Object][null]")
   {
     JSON json;
     json["nothing"]["extra"] = nullptr;
-    REQUIRE_FALSE(!json["nothing"]["extra"].isNull());
+    REQUIRE_FALSE(!isA<Null>(json["nothing"]["extra"]));
     REQUIRE(JRef<Null>(json.root()["nothing"]["extra"]).value() == nullptr);
   }
   SECTION("Create three level object and null at base and stringify.", "[JSON][Create][Object][null]")
   {
     JSON json;
     json["nothing"]["extra"]["more"] = nullptr;
-    REQUIRE_FALSE(!json["nothing"]["extra"]["more"].isNull());
+    REQUIRE_FALSE(!isA<Null>(json["nothing"]["extra"]["more"]));
     REQUIRE(JRef<Null>(json.root()["nothing"]["extra"]["more"]).value() == nullptr);
     BufferDestination destinationBuffer;
     REQUIRE_NOTHROW(json.stringify(destinationBuffer));
@@ -112,7 +112,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   {
     const JSON json(R"([ "pi", 3.141 ])");
     REQUIRE_FALSE(!isA<Array>(json.root()));
-    REQUIRE_FALSE(!json.root()[0].isString());
+    REQUIRE_FALSE(!isA<String>(json.root()[0]));
     REQUIRE_FALSE(!isA<Number>(json.root()[1]));
     REQUIRE(JRef<String>(json.root()[0]).value() == "pi");
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()[1]).value<float>(), 3.141f, 0.0001));
@@ -163,35 +163,35 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   {
     JSON json;
     json[0] = "robert";
-    REQUIRE_FALSE(!json[0].isString());
+    REQUIRE_FALSE(!isA<String>(json[0]));
     REQUIRE(JRef<String>(json.root()[0]).value() == "robert");
   }
   SECTION("Initialise root JSON array with one entry containing a std::string.", "[JSON][Create][Array][String]")
   {
     JSON json;
     json[0] = std::string{ "robert" };
-    REQUIRE_FALSE(!json[0].isString());
+    REQUIRE_FALSE(!isA<String>(json[0]));
     REQUIRE(JRef<String>(json.root()[0]).value() == "robert");
   }
   SECTION("Initialise root JSON array with one entry containing a boolean.", "[JSON][Create][Array][Boolean]")
   {
     JSON json;
     json[0] = true;
-    REQUIRE_FALSE(!json[0].isBoolean());
+    REQUIRE_FALSE(!isA<Boolean>(json[0]));
     REQUIRE_FALSE(!JRef<Boolean>(json.root()[0]).value());
   }
   SECTION("Initialise root JSON array with one entry containing a null.", "[JSON][Create][Array][null]")
   {
     JSON json;
     json[0] = nullptr;
-    REQUIRE_FALSE(!json[0].isNull());
+    REQUIRE_FALSE(!isA<Null>(json[0]));
     REQUIRE(JRef<Null>(json.root()[0]).value() == nullptr);
   }
   SECTION("Create two level array with null at the base and stringify.", "[JSON][Create][Array][null]")
   {
     JSON json;
     json[0][0] = nullptr;
-    REQUIRE_FALSE(!json[0][0].isNull());
+    REQUIRE_FALSE(!isA<Null>(json[0][0]));
     REQUIRE(JRef<Null>(json.root()[0][0]).value() == nullptr);
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
@@ -201,7 +201,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   {
     JSON json;
     json[5] = "test";
-    REQUIRE_FALSE(!json[5].isString());
+    REQUIRE_FALSE(!isA<String>(json[5]));
     REQUIRE(JRef<String>(json.root()[5]).value() == "test");
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
@@ -211,7 +211,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   {
     JSON json;
     json[5] = "test";
-    REQUIRE_FALSE(!json[5].isString());
+    REQUIRE_FALSE(!isA<String>(json[5]));
     REQUIRE(JRef<String>(json.root()[5]).value() == "test");
     json[3] = 15;
     REQUIRE_FALSE(!isA<Number>(json[3]));
@@ -228,10 +228,10 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
     REQUIRE_FALSE(!isA<Number>(json[5][1]));
     REQUIRE_FALSE(!isA<Number>(json[5][2]));
     REQUIRE_FALSE(!isA<Number>(json[5][3]));
-    REQUIRE_FALSE(!json[5][4].isString());
-    REQUIRE_FALSE(!json[5][5].isString());
-    REQUIRE_FALSE(!json[5][6].isBoolean());
-    REQUIRE_FALSE(!json[5][7].isNull());
+    REQUIRE_FALSE(!isA<String>(json[5][4]));
+    REQUIRE_FALSE(!isA<String>(json[5][5]));
+    REQUIRE_FALSE(!isA<Boolean>(json[5][6]));
+    REQUIRE_FALSE(!isA<Null>(json[5][7]));
     REQUIRE(JRef<Array>(json[5]).size() == 8);
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json[5][0]).value<double>(), 1.0, 0.0001));
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json[5][1]).value<double>(), 2.0, 0.0001));

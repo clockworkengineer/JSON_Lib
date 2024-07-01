@@ -28,10 +28,10 @@ void checkArray(const JNode &jNode)
 {// Array ["Dog",1964,true,null]
   REQUIRE_FALSE(!isA<Array>(jNode));
   REQUIRE(JRef<Array>(jNode).size() == 4);
-  REQUIRE_FALSE(!jNode[0].isString());
+  REQUIRE_FALSE(!isA<String>(jNode[0]));
   REQUIRE_FALSE(!isA<Number>(jNode[1]));
-  REQUIRE_FALSE(!jNode[2].isBoolean());
-  REQUIRE_FALSE(!jNode[3].isNull());
+  REQUIRE_FALSE(!isA<Boolean>(jNode[2]));
+  REQUIRE_FALSE(!isA<Null>(jNode[3]));
   REQUIRE(JRef<String>(jNode[0]).value() == "Dog");
   REQUIRE(JRef<Number>(jNode[1]).value<int>() == 1964);
   REQUIRE(JRef<Boolean>(jNode[2]).value() == true);
@@ -48,7 +48,7 @@ void checkObject(const JNode &jNode)
   REQUIRE(JRef<Object>(jNode).size() == 2);
   REQUIRE(JRef<Object>(jNode).contains("City"));
   REQUIRE(JRef<Object>(jNode).contains("Population"));
-  REQUIRE_FALSE(!jNode["City"].isString());
+  REQUIRE_FALSE(!isA<String>(jNode["City"]));
   REQUIRE_FALSE(!isA<Number>(jNode["Population"]));
   REQUIRE(JRef<String>(jNode["City"]).value() == "Southampton");
   REQUIRE(JRef<Number>(jNode["Population"]).value<int>() == 500000);

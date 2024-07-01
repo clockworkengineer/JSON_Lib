@@ -43,15 +43,15 @@ private:
   {
     if (isA<Number>(jNode)) {
       destination.add(std::to_string(JRef<Number>(jNode).value<int>()));
-    } else if (jNode.isString()) {
+    } else if (isA<String>(jNode)) {
       destination.add(xmlTranslator.to(JRef<String>(jNode).value()));
-    } else if (jNode.isBoolean()) {
+    } else if (isA<Boolean>(jNode)) {
       if (JRef<Boolean>(jNode).value()) {
         destination.add("True");
       } else {
         destination.add("False");
       }
-    } else if (jNode.isNull()||jNode.isHole()) {
+    } else if (isA<Null>(jNode)||isA<Hole>(jNode)) {
       ;
     } else if (isA<Object>(jNode)) {
       for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
