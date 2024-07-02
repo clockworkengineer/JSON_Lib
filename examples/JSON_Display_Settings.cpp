@@ -82,7 +82,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     json.parse(js::FileSource{ jsonSettingsFile() });
     auto &settingsRoot = json.root();
     // JNode root has to be an object
-    if (!settingsRoot.isObject()) { throw std::runtime_error("Invalid JSON settings file."); }
+    if (!js::isA<js::Object>(settingsRoot)) { throw std::runtime_error("Invalid JSON settings file."); }
     // Loop and process each top level entry
     PLOG_INFO << "Displaying settings ...";
     for (const auto &entry : js::JRef<js::Object>(settingsRoot).value()) { processEntry(entry); }
