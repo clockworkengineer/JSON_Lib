@@ -18,7 +18,7 @@ template<typename T> JNode::JNode(T value)
   }
 }
 // Convert initializer list type to JMode
-inline static JNode typeToJNode(const JSON::intializerListTypes &type)
+inline static JNode typeToJNode(const JSON::IntializerListTypes &type)
 {
   if (const auto pValue = std::get_if<int>(&type)) { return JNode(*pValue); }
   if (const auto pValue = std::get_if<long>(&type)) { return JNode(*pValue); }

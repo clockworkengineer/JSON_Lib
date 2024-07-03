@@ -28,12 +28,12 @@ class JSON
 {
 public:
   // Possible JSON Node initializer list types
-  using intializerListTypes =
+  using IntializerListTypes =
     std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t, JNode>;
   // Array initializer list
-  using ArrayInitializer = std::initializer_list<intializerListTypes>;
+  using ArrayInitializer = std::initializer_list<IntializerListTypes>;
   // Object initializer list
-  using Objectintializer = std::initializer_list<std::pair<std::string, intializerListTypes>>;
+  using Objectintializer = std::initializer_list<std::pair<std::string, IntializerListTypes>>;
   // JSON file formats
   enum class Format : uint8_t { utf8 = 0, utf8BOM, utf16BE, utf16LE, utf32BE, utf32LE };
   // Pass any user defined translator/converter here
