@@ -38,7 +38,6 @@ struct JNode
   }
 
 private:
-  static JNode typeToJNode(const JSON::intializerListTypes &type);
   std::unique_ptr<Variant> jNodeVariant;
 };
 }// namespace JSON_Lib

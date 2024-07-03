@@ -18,7 +18,7 @@ template<typename T> JNode::JNode(T value)
   }
 }
 // Convert initializer list type to JMode
-inline JNode JNode::typeToJNode(const JSON::intializerListTypes &type)
+inline static JNode typeToJNode(const JSON::intializerListTypes &type)
 {
   if (const auto pValue = std::get_if<int>(&type)) { return JNode(*pValue); }
   if (const auto pValue = std::get_if<long>(&type)) { return JNode(*pValue); }
@@ -30,7 +30,7 @@ inline JNode JNode::typeToJNode(const JSON::intializerListTypes &type)
   if (const auto pValue = std::get_if<std::string>(&type)) { return JNode(*pValue); }
   if ([[maybe_unused]] auto pValue = std::get_if<std::nullptr_t>(&type)) { return JNode(nullptr); }
   if (const auto pValue = std::get_if<JNode>(&type)) { return std::move(*const_cast<JNode *>(pValue)); }
-  throw Error("JNode for unsupported type could not be created.");
+  throw JNode::Error("JNode for unsupported type could not be created.");
 }
 // Construct JNode Array from initializer list
 inline JNode::JNode(const JSON::ArrayInitializer &array)
