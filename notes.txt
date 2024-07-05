@@ -1,0 +1,14 @@
+Current sizes:
+
+JSON_Lib::JNode size 8 in bytes.
+JSON_Lib::Object size 32 in bytes.
+JSON_Lib::Object Entry size 16 in bytes.
+JSON_Lib::Array size 32 in bytes.
+JSON_Lib::Number::Values size 32 in bytes.
+JSON_Lib::Number size 48 in bytes.
+JSON_Lib::String size 40 in bytes.
+JSON_Lib::Boolean size 2 in bytes.
+JSON_Lib::Null size 1 in bytes.
+|
+|
+V
