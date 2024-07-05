@@ -13,9 +13,9 @@ struct ObjectEntry
 {
   ObjectEntry(const std::string &key, JNode &jNode) : key(JNode::make<String>(key)), jNode(std::move(jNode)) {}
   ObjectEntry(const std::string &key, JNode &&jNode) : key(JNode::make<String>(key)), jNode(std::move(jNode)) {}
-  JNode &getKey() { return key; }
+  [[nodiscard]] JNode &getKey() { return key; }
   [[nodiscard]] const JNode &getKey() const { return key; }
-  JNode &getJNode() { return jNode; }
+  [[nodiscard]] JNode &getJNode() { return jNode; }
   [[nodiscard]] const JNode &getJNode() const { return jNode; }
 
 private:
