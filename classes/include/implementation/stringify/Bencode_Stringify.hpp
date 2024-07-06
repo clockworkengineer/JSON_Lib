@@ -41,7 +41,7 @@ public:
     } else if (isA<Object>(jNode)) {
       destination.add('d');
       for (auto &entry : JRef<Object>(jNode).value()) {
-        stringify(entry.getKey(), destination, 0);
+        stringify(entry.getKeyJNode(), destination, 0);
         stringify(entry.getJNode(), destination, 0);
       }
       destination.add("e");

@@ -55,7 +55,7 @@ private:
       ;
     } else if (isA<Object>(jNode)) {
       for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
-        auto elementName = JRef<String>(jNodeNext.getKey()).value();
+        auto elementName = jNodeNext.getKey();
         std::ranges::replace(elementName, ' ', '-');
         destination.add("<" + elementName + ">");
         stringifyXML(jNodeNext.getJNode(), destination, 0);
