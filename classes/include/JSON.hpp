@@ -12,6 +12,7 @@
 #include <filesystem>
 #include <set>
 #include <unordered_map>
+#include <cstring>
 
 #include "JSON_Config.hpp"
 #include "JSON_Interfaces.hpp"
