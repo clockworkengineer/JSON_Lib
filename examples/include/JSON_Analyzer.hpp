@@ -71,7 +71,7 @@ public:
     sizeInBytes += sizeof(JSON_Lib::Object);
     maxObjectSize = std::max(jNodeObject.value().size(), maxObjectSize);
     for (auto &entry : jNodeObject.value()) {
-      auto &key = JSON_Lib::JRef<JSON_Lib::String>(entry.getKey()).value();
+      auto &key = entry.getKey();
       uniqueKeys.insert(key);
       maxKeySize = std::max(key.size(), maxKeySize);
       sizeInBytes += key.size();

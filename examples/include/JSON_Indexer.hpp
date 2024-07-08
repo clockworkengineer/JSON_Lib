@@ -17,7 +17,7 @@ public:
   virtual void onObject(JSON_Lib::JNode &jNode) override
   {
     for (auto &entry : JSON_Lib::JRef<JSON_Lib::Object>(jNode).value()) {
-      auto &key = JSON_Lib::JRef<JSON_Lib::String>(entry.getKey()).value();
+      auto &key = entry.getKey();
       if (!index.contains(key)) {
         index[key] = currentIndex;
         array[currentIndex++] = key;

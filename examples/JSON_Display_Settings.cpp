@@ -26,7 +26,7 @@ std::string jsonSettingsFile() { return (std::filesystem::current_path() / "file
 /// </summary>
 void processEntry(const js::Object::Entry &entry)
 {
-  auto &key = js::JRef<js::String>(entry.getKey()).value();
+  auto &key = entry.getKey();
   // Log main entry key
   std::string entryJSON{ "\n[" + key + "] = " };
   if (key == "files.exclude") {
@@ -34,7 +34,7 @@ void processEntry(const js::Object::Entry &entry)
     entryJSON += "\n{\n";
     for (const auto &file : js::JRef<js::Object>(entry).value()) {
       entryJSON +=
-        "\"" + js::JRef<js::String>(file.getKey()).value() + "\" : " + js::JRef<js::Boolean>(file).toString() + ",\n";
+        "\"" + file.getKey() + "\" : " + js::JRef<js::Boolean>(file).toString() + ",\n";
     }
     entryJSON.pop_back();
     entryJSON.pop_back();
