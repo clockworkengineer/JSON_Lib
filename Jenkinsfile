@@ -6,7 +6,7 @@ pipeline {
                 sh 'echo "Building..."'
                 sh 'chmod +x ./scripts/Linux-Build.sh'
                 sh './scripts/Linux-Build.sh'
-                archiveArtifacts artifacts: 'build/JSON_Lib_Unit_Tests', fingerprint: true
+                archiveArtifacts artifacts: 'build/tests/JSON_Lib_Unit_Tests', fingerprint: true
             }
         }
         stage ('Test'){
