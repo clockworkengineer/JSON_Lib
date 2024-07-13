@@ -22,7 +22,7 @@ template<typename T> bool isA(const JNode &jNode)
   } else if constexpr (std::is_same_v<T, Hole>) {
     return jNode.getVariant().getNodeType() == Variant::Type::hole;
   } else {
-    static_assert(false, "Not a valid JNode variant.");
+    return false;
   }
 }
 
