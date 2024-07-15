@@ -52,4 +52,4 @@ std::string generateEscapes(unsigned char first, unsigned char last);
     "testfile019.json",                                          \
     "testfile020.json" }))
 // Floating point comparison (accurate to within an epsilon)
-template<typename T> bool equalFloatingPoint(T a, T b, double epsilon) { return (std::fabs(a - b) <= epsilon); };
+template<typename T> bool equalFloatingPoint(T a, T b, double epsilon) { return (std::fabs(a - b) <= epsilon); }
