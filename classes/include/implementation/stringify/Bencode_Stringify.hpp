@@ -25,7 +25,7 @@ public:
   void stringify(const JNode &jNode, IDestination &destination, const long indent) const override
   {
     if (isA<Number>(jNode)) {
-      destination.add("i" + std::to_string(JRef<Number>(jNode).value<int>()) + "e");
+      destination.add("i" + std::to_string(JRef<Number>(jNode).value<long long>()) + "e");
     } else if (isA<String>(jNode)) {
       const auto jsonString = JRef<String>(jNode).value();
       destination.add(std::to_string(static_cast<int>(jsonString.length())) + ":" + jsonString);

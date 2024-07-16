@@ -42,7 +42,7 @@ private:
   void stringifyXML(const JNode &jNode, IDestination &destination, const long indent) const
   {
     if (isA<Number>(jNode)) {
-      destination.add(std::to_string(JRef<Number>(jNode).value<int>()));
+      destination.add(std::to_string(JRef<Number>(jNode).value<long long>()));
     } else if (isA<String>(jNode)) {
       destination.add(xmlTranslator.to(JRef<String>(jNode).value()));
     } else if (isA<Boolean>(jNode)) {
