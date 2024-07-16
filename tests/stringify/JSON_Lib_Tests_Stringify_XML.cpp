@@ -187,7 +187,7 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
     json.stringify(jsonDestination);
     REQUIRE(
       jsonDestination.toString()
-      == R"(<?xml version="1.0" encoding="UTF-8"?><root><Row>True</Row><Row>Out of time</Row><Row>-2147483648</Row><Row><key>4444</key></Row></root>)");
+      == R"(<?xml version="1.0" encoding="UTF-8"?><root><Row>True</Row><Row>Out of time</Row><Row>7890430242211233792</Row><Row><key>4444</key></Row></root>)");
   }
   SECTION(R"(Stringify XML string with escapes '\u007F (non-printable ASCII)' to buffer and check value.)",
     "[JSON][Stringify][XML][Escapes]")

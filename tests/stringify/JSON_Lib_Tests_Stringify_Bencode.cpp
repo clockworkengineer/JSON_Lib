@@ -115,7 +115,7 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     BufferDestination jsonDestination;
     json.parse(BufferSource{ R"([true,"Out of time",7.89043e+18,{"key":4444}])" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.toString() == "l4:True11:Out of timei-2147483648ed3:keyi4444eee");
+    REQUIRE(jsonDestination.toString() == "l4:True11:Out of timei7890430242211233792ed3:keyi4444eee");
   }
   SECTION(R"(Stringify [{},{},{}] to a Bencode.)", "[JSON][Stringify][Object][Bencode]")
   {
