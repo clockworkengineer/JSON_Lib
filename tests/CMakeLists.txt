@@ -19,29 +19,29 @@ enable_testing()
 set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
 set(TEST_SOURCES
-  ./jnode/JSON_Lib_Tests_JNode.cpp
-  ./jnode/JSON_Lib_Tests_JNode_Number.cpp
-  ./json/JSON_Lib_Tests_JSON.cpp
-  ./io/JSON_Lib_Tests_ISource.cpp
-  ./io/JSON_Lib_Tests_IDestination.cpp
-  ./io/JSON_Lib_Tests_File.cpp
-  ./parse/JSON_Lib_Tests_Parse_Escapes.cpp
-  ./parse/JSON_Lib_Tests_Parse_Misc.cpp
-  ./parse/JSON_Lib_Tests_Parse_Simple.cpp
-  ./parse/JSON_Lib_Tests_Parse_Collection.cpp
-  ./parse/JSON_Lib_Tests_Parse_Whitespace.cpp
-  ./parse/JSON_Lib_Tests_Parse_Exceptions.cpp
-  ./stringify/JSON_Lib_Tests_Stringify_Misc.cpp
-  ./stringify/JSON_Lib_Tests_Stringify_Escapes.cpp
-  ./stringify/JSON_Lib_Tests_Stringify_Simple.cpp
-  ./stringify/JSON_Lib_Tests_Stringify_Collection.cpp
-  ./stringify/JSON_Lib_Tests_Stringify_Exceptions.cpp
-  ./stringify/JSON_Lib_Tests_Stringify_Bencode.cpp
-  ./stringify/JSON_Lib_Tests_Stringify_XML.cpp
-  ./stringify/JSON_Lib_Tests_Print.cpp
-  ./misc/JSON_Lib_Tests_Misc.cpp
-  ./misc/JSON_Lib_Tests_Helper.cpp
-  ./traverse/JSON_Lib_Tests_Traverse.cpp)
+        source/jnode/JSON_Lib_Tests_JNode.cpp
+        source/jnode/JSON_Lib_Tests_JNode_Number.cpp
+        source/json/JSON_Lib_Tests_JSON.cpp
+        source/io/JSON_Lib_Tests_ISource.cpp
+        source/io/JSON_Lib_Tests_IDestination.cpp
+        source/io/JSON_Lib_Tests_File.cpp
+        source/parse/JSON_Lib_Tests_Parse_Escapes.cpp
+        source/parse/JSON_Lib_Tests_Parse_Misc.cpp
+        source/parse/JSON_Lib_Tests_Parse_Simple.cpp
+        source/parse/JSON_Lib_Tests_Parse_Collection.cpp
+        source/parse/JSON_Lib_Tests_Parse_Whitespace.cpp
+        source/parse/JSON_Lib_Tests_Parse_Exceptions.cpp
+        source/stringify/JSON_Lib_Tests_Stringify_Misc.cpp
+        source/stringify/JSON_Lib_Tests_Stringify_Escapes.cpp
+        source/stringify/JSON_Lib_Tests_Stringify_Simple.cpp
+        source/stringify/JSON_Lib_Tests_Stringify_Collection.cpp
+        source/stringify/JSON_Lib_Tests_Stringify_Exceptions.cpp
+        source/stringify/JSON_Lib_Tests_Stringify_Bencode.cpp
+        source/stringify/JSON_Lib_Tests_Stringify_XML.cpp
+        source/stringify/JSON_Lib_Tests_Print.cpp
+        source/misc/JSON_Lib_Tests_Misc.cpp
+        source/misc/JSON_Lib_Tests_Helper.cpp
+        source/traverse/JSON_Lib_Tests_Traverse.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${PROJECT_CURRENT_SOURCE_DIR}/include ./include)
