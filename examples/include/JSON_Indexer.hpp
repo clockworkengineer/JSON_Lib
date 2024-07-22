@@ -3,6 +3,7 @@
 #include <set>
 #include <sstream>
 #include <unordered_map>
+#include <utility>
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
@@ -11,7 +12,7 @@ class JSON_Indexer : public JSON_Lib::IAction
 {
 public:
   JSON_Indexer() = default;
-  explicit JSON_Indexer(const std::string &fileName) : fileName(fileName) {}
+  explicit JSON_Indexer(std::string fileName) : fileName(std::move(fileName)) {}
   virtual ~JSON_Indexer() = default;
   // Create index to object key mapping and modify object key to use index
   virtual void onObject(JSON_Lib::JNode &jNode) override

@@ -9,6 +9,9 @@
 #include "plog/Initializers/RollingFileInitializer.h"
 #include "plog/Log.h"
 
+#include "JSON.hpp"
+#include "JSON_Core.hpp"
+
 class Utility
 {
 public:

@@ -2,7 +2,7 @@
 // Program: JSON_Analyze_File
 //
 // Description: For a each JSON file in a directory parse it, then analyze its
-// JSON tree and produce a output report of the analysis.
+// JSON tree and produce an output report of the analysis.
 //
 // Dependencies: C++20, PLOG, JSON_Lib.
 //

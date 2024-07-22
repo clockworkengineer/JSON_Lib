@@ -9,8 +9,6 @@
 //
 
 #include "JSON_Utility.hpp"
-#include "JSON.hpp"
-#include "JSON_Core.hpp"
 
 namespace js = JSON_Lib;
 namespace chrono = std::chrono;

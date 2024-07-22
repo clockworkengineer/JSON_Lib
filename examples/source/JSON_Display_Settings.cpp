@@ -3,15 +3,13 @@
 //
 // Description: Parse JSON example settings file and read its JSON tree data
 // (JNode) and write out a textual representation of it; this is almost the same
-// as stringification but it is used to provide example code that traverses and
-// interperets the JNode tree data.
+// as stringification, but it is used to provide example code that traverses and
+// interprets the JNode tree data.
 //
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
-#include "JSON.hpp"
-#include "JSON_Core.hpp"
 
 namespace js = JSON_Lib;
 
@@ -21,7 +19,7 @@ namespace js = JSON_Lib;
 /// <returns>JSON settings file name.</returns>
 std::string jsonSettingsFile() { return (std::filesystem::current_path() / "files" / "settings.json").string(); }
 /// <summary>
-/// Process settings file top level object entry. This involves jusr reading the
+/// Process settings file top level object entry. This involves just reading the
 /// entries JNode data and logging it to a file.
 /// </summary>
 void processEntry(const js::Object::Entry &entry)

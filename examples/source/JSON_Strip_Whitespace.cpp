@@ -2,14 +2,12 @@
 // Program: JSON_Strip_Whitespace
 //
 // Description: For a each JSON file in a directory strip its white space characters
-// temporary file and then overwrite the existing file by renaming the temporary file.
+// to a temporary file and then overwrite the existing file by renaming the temporary file.
 //
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
-#include "JSON.hpp"
-#include "JSON_Core.hpp"
 
 namespace js = JSON_Lib;
 

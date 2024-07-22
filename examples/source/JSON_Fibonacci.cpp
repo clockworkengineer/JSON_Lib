@@ -9,13 +9,11 @@
 //
 
 #include "JSON_Utility.hpp"
-#include "JSON.hpp"
-#include "JSON_Core.hpp"
 
 namespace js = JSON_Lib;
 
 /// <summary>
-/// Return Fibonaci json file name.
+/// Return Fibonacci json file name.
 /// </summary>
 /// <returns>JSON settings file name.</returns>
 std::string jsonFibonacciFile() { return (std::filesystem::current_path() / "files" / "fibonacci.json").string(); }
@@ -27,7 +25,7 @@ void nextFibonacci()
 {
   js::JSON json;
   if (!std::filesystem::exists(jsonFibonacciFile())) {
-    // If JSON file does not exist create intial sequence
+    // If JSON file does not exist create initial sequence
     json.parse(js::BufferSource{ "[0, 1]" });
   } else {
     // Parse in current sequence

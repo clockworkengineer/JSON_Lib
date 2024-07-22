@@ -1,15 +1,13 @@
 //
 // Program: JSON_Create_At_Runtime
 //
-// Description: Create JSON programatically at runtime using a combination
-// of the JSON class, indexing/key operators plus the use of intializer lists.
+// Description: Create JSON programmatically at runtime using a combination
+// of the JSON class, indexing/key operators plus the use of initializer lists.
 //
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
-#include "JSON.hpp"
-#include "JSON_Core.hpp"
 
 namespace js = JSON_Lib;
 namespace fs = std::filesystem;
@@ -45,7 +43,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     json.stringify(destination);
     PLOG_INFO << destination.toString();
     destination.clear();
-    // create JSON using an intialiser list and nesting array/objects using JNode{}.
+    // create JSON using an initializer list and nesting array/objects using JNode{}.
     js::JSON json2 = { { "pi", 3.141 },
       { "sad", true },
       { "first_name", "Niels" },
