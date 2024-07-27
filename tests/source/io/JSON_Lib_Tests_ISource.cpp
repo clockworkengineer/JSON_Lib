@@ -1,11 +1,3 @@
-//
-// Unit Tests: JSON_Lib_Tests_ISource
-//
-// Description: ISource inteface unit tests for JSON class using the
-// Catch2 test framework. At present the only supported source streams
-// are buffer and file.
-//
-
 #include "JSON_Lib_Tests.hpp"
 
 using namespace JSON_Lib;

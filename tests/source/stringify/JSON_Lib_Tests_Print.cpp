@@ -1,13 +1,4 @@
-//
-// Unit Tests: JSON_Lib_Tests_Print
-//
-// Description: JSON pretty print unit tests for JSON class using
-// the Catch2 test framework.
-//
-
 #include "JSON_Lib_Tests.hpp"
-
-using namespace JSON_Lib;
 
 // ==========================================
 // Pretty printing of sample JSON to a buffer

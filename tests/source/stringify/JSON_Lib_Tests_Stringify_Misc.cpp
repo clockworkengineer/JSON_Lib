@@ -1,13 +1,4 @@
-//
-// Unit Tests: JSON_Lib_Tests_Stringify_Misc
-//
-// Description: JSON stringification miscellaneous unit
-// tests for JSON class using the Catch2 test framework.
-//
-
 #include "JSON_Lib_Tests.hpp"
-
-using namespace JSON_Lib;
 
 // ====================================
 // Parsing and stringification of files

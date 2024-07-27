@@ -1,14 +1,4 @@
-//
-// Unit Tests: JSON_Lib_Tests_IDestination
-//
-// Description: IDestination inteface unit tests for JSON class using
-// the Catch2 test framework. At present the only supported destination
-// streams are buffer and file.
-//
-
 #include "JSON_Lib_Tests.hpp"
-
-using namespace JSON_Lib;
 
 // ======
 // Buffer

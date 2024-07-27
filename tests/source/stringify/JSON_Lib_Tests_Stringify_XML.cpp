@@ -1,16 +1,5 @@
-//
-// Unit Tests: JSON_Lib_Tests_XML_Stringify
-//
-// Description: XML stringification of simple/collection types unit
-// tests for JSON class using the Catch2 test framework.
-//
-
 #include "JSON_Lib_Tests.hpp"
 #include "XML_Stringify.hpp"
-#include "XML_Translator.hpp"
-#include "JSON_Converter.hpp"
-
-using namespace JSON_Lib;
 
 // ================================================================
 // Stringification of simple/collection types to XML and validation

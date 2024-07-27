@@ -1,13 +1,4 @@
-//
-// Unit Tests: JSON_Lib_Tests_Misc
-//
-// Description: Miscellaneous unit tests for JSON class
-// using the Catch2 test framework.
-//
-
 #include "JSON_Lib_Tests.hpp"
-
-using namespace JSON_Lib;
 
 // ===============
 // JSON Translator

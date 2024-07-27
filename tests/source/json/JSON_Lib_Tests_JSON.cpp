@@ -1,14 +1,4 @@
-//
-// Unit Tests: JSON_Lib_Tests_JSON
-//
-// Description: JSON creation API(s) unit tests for JSON class
-// using the Catch2 test framework. Note: These tests use more
-// modern raw literal strings to represent JSON.
-//
-
 #include "JSON_Lib_Tests.hpp"
-
-using namespace JSON_Lib;
 
 // =======================
 // Parse simple JSON types

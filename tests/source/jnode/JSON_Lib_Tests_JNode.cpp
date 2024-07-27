@@ -1,13 +1,4 @@
-//
-// Unit Tests: JSON_Lib_Tests_JNode
-//
-// Description: JNode access/index/reference/constructor/assignment
-// unit tests for JSON class using the Catch2 test framework.
-//
-
 #include "JSON_Lib_Tests.hpp"
-
-using namespace JSON_Lib;
 
 // ==================
 // JNode constructors
