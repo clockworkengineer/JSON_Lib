@@ -20,11 +20,15 @@ set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
 set(TEST_SOURCES
         source/jnode/JSON_Lib_Tests_JNode.cpp
-        source/jnode/JSON_Lib_Tests_JNode_Number.cpp
         source/json/JSON_Lib_Tests_JSON.cpp
-        source/io/JSON_Lib_Tests_ISource.cpp
-        source/io/JSON_Lib_Tests_IDestination.cpp
-        source/io/JSON_Lib_Tests_File.cpp
+        source/io/JSON_Lib_Tests_ISource_Buffer.cpp
+        source/io/JSON_Lib_Tests_ISource_File.cpp
+        source/io/JSON_Lib_Tests_IDestination_Buffer.cpp
+        source/io/JSON_Lib_Tests_IDestination_File.cpp
+        source/io/JSON_Lib_Tests_File_GetFormat.cpp
+        source/io/JSON_Lib_Tests_File_FromFile.cpp
+        source/io/JSON_Lib_Tests_File_ToFile.cpp
+        source/number/JSON_Lib_Tests_JNode_Number.cpp
         source/parse/JSON_Lib_Tests_Parse_Escapes.cpp
         source/parse/JSON_Lib_Tests_Parse_Misc.cpp
         source/parse/JSON_Lib_Tests_Parse_Simple.cpp

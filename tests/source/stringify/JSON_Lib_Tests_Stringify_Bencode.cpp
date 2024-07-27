@@ -1,8 +1,6 @@
 #include "JSON_Lib_Tests.hpp"
 #include "Bencode_Stringify.hpp"
 
-using namespace JSON_Lib;
-
 // =========================================================
 // Stringification of simple types to Bencode and validation
 // =========================================================

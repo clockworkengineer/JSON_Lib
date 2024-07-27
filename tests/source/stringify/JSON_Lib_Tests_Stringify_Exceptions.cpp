@@ -1,8 +1,5 @@
 #include "JSON_Lib_Tests.hpp"
 
-// ====================================
-// Stringification generated exceptions
-// ====================================
 TEST_CASE("Check JSON stringify generated exceptions.", "[JSON][Stringify][Exception]")
 {
   const JSON json;
