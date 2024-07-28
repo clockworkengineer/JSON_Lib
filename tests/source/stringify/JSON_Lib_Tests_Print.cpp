@@ -1,8 +1,5 @@
 #include "JSON_Lib_Tests.hpp"
 
-// ==========================================
-// Pretty printing of sample JSON to a buffer
-// ==========================================
 TEST_CASE("Check Check printing of JSON to a buffer.", "[JSON][Print][Buffer]")
 {
   const JSON json;

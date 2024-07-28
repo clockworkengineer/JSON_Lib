@@ -1,8 +1,5 @@
 #include "JSON_Lib_Tests.hpp"
 
-// ===========================
-// Parser Generated Exceptions
-// ===========================
 TEST_CASE("Check parser generated exceptions.", "[JSON][Parse][Exception]")
 {
   const JSON json;

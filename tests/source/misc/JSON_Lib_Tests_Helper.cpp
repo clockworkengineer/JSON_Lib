@@ -1,8 +1,5 @@
 #include "JSON_Lib_Tests.hpp"
 
-// ==========================
-// Unit test helper functions
-// ==========================
 /// <summary>
 /// Prefix path to test data file name.
 /// </summary>

@@ -1,8 +1,5 @@
 #include "JSON_Lib_Tests.hpp"
 
-// =================================
-// Parse JSON With Escape Characters
-// =================================
 TEST_CASE("Check JSON object for decoding of strings with escape characters.", "[JSON][Parse][Escapes]")
 {
   const JSON json;

@@ -1,9 +1,6 @@
 #include "JSON_Lib_Tests.hpp"
 #include "XML_Stringify.hpp"
 
-// ================================================================
-// Stringification of simple/collection types to XML and validation
-// ================================================================
 TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringify][Simple][XML]")
 {
   const JSON json(makeStringify<XML_Stringify>());

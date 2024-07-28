@@ -1,9 +1,6 @@
 #include "JSON_Lib_Tests.hpp"
 #include "Bencode_Stringify.hpp"
 
-// =========================================================
-// Stringification of simple types to Bencode and validation
-// =========================================================
 TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stringify][Simple][Bencode]")
 {
   const JSON json(makeStringify<Bencode_Stringify>());

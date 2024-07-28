@@ -1,8 +1,5 @@
 #include "JSON_Lib_Tests.hpp"
 
-// =====================================
-// Stringification of escaped characters
-// =====================================
 TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSON][Stringify][Escapes]")
 {
   const JSON json;

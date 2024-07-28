@@ -1,8 +1,5 @@
 #include "JSON_Lib_Tests.hpp"
 
-// ====================================
-// Parsing and stringification of files
-// ====================================
 TEST_CASE("Check JSON stringification of a list of example JSON files.", "[JSON][Stringify]")
 {
   const JSON json;

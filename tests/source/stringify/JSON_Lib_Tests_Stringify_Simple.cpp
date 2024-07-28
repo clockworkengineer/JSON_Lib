@@ -1,8 +1,5 @@
 #include "JSON_Lib_Tests.hpp"
 
-// ========================================================
-// Stringification of simple types to buffer and validation
-// ========================================================
 TEST_CASE("Check JSON stringification of simple types to buffer and check values.",
   "[JSON][Stringify][Simple][Buffer][Validate]")
 {
@@ -40,9 +37,7 @@ TEST_CASE("Check JSON stringification of simple types to buffer and check values
     REQUIRE(jsonDestination.toString() == expected);
   }
 }
-// ======================================================
-// Stringification of simple types to file and validation
-// ======================================================
+
 TEST_CASE("Check JSON stringification of simple types to file and check values.",
   "[JSON][Stringify][Simple][File][Validate]")
 {

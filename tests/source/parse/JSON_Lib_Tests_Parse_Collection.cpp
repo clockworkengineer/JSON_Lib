@@ -1,8 +1,5 @@
 #include "JSON_Lib_Tests.hpp"
 
-// ===========================
-// Parse collection JSON types
-// ===========================
 TEST_CASE("Check JSON parsing of collection types (array,object).", "[JSON][Parse][Collection]")
 {
   const JSON json;
@@ -46,9 +43,7 @@ TEST_CASE("Check JSON parsing of collection types (array,object).", "[JSON][Pars
     REQUIRE_NOTHROW(json.parse(jsonSource));
   }
 }
-// ========================================
-// Parse collection JSON types and validate
-// ========================================
+
 TEST_CASE("Check JSON parsing of collection types and check values.", "[JSON][Parse][Collection][validate]")
 {
   const JSON json;

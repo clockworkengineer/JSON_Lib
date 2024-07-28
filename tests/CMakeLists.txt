@@ -23,7 +23,9 @@ set(TEST_SOURCES
         source/jnode/JSON_Lib_Tests_JNode_Construct.cpp
         source/jnode/JSON_Lib_Tests_JNode_Indexing.cpp
         source/jnode/JSON_Lib_Tests_JNode_Reference.cpp
-        source/json/JSON_Lib_Tests_JSON.cpp
+        source/json/JSON_Lib_Tests_JSON_Create_Complex.cpp
+        source/json/JSON_Lib_Tests_JSON_Create_Array.cpp
+        source/json/JSON_Lib_Tests_JSON_Create_Simple.cpp
         source/io/JSON_Lib_Tests_ISource_Buffer.cpp
         source/io/JSON_Lib_Tests_ISource_File.cpp
         source/io/JSON_Lib_Tests_IDestination_Buffer.cpp

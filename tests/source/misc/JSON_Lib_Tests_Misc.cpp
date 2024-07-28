@@ -1,8 +1,5 @@
 #include "JSON_Lib_Tests.hpp"
 
-// ===============
-// JSON Translator
-// ===============
 TEST_CASE("Check translation of surrogate pairs.", "[JSON][Translator]")
 {
   JSON_Translator translator;
@@ -45,9 +42,7 @@ TEST_CASE("Check translation of surrogate pairs.", "[JSON][Translator]")
     REQUIRE(translator.to({ actual.begin(), actual.end() }) == R"(Begin \uD834\uDD1E End)");
   }
 }
-// ========================
-// R-Value Reference API(s)
-// ========================
+
 TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value-Reference]")
 {
   const JSON json;
@@ -67,9 +62,7 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value-Ref
     REQUIRE(JSON::fromFile(generatedFileName) == stripWhiteSpace(JSON::fromFile(testFileName)));
   }
 }
-// =====================
-// Strip JSON Whitespace
-// =====================
+
 TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
 {
   const JSON json;

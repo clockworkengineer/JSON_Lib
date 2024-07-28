@@ -1,8 +1,5 @@
 #include "JSON_Lib_Tests.hpp"
 
-// =======================
-// Parse simple JSON types
-// =======================
 TEST_CASE("Check JSON parsing of simple types (number,string,boolean,null).", "[JSON][Parse][Simple]")
 {
   const JSON json;
@@ -43,9 +40,6 @@ TEST_CASE("Check JSON parsing of simple types (number,string,boolean,null).", "[
     REQUIRE_FALSE(!isA<String>(json.root()));
   }
 }
-// ====================================
-// Parse simple JSON types and validate
-// ====================================
 TEST_CASE("Check JSON parsing of simple types and check values.", "[JSON][Parse][Simple][Validate]")
 {
   const JSON json;

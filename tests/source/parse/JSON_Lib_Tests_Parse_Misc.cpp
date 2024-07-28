@@ -1,8 +1,5 @@
 #include "JSON_Lib_Tests.hpp"
 
-// ========================
-// Parse Example JSON Files
-// ========================
 TEST_CASE("Check JSON parsing of a list of example JSON files.", "[JSON][Parse][Examples]")
 {
   JSON json;
