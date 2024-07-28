@@ -19,7 +19,10 @@ enable_testing()
 set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
 set(TEST_SOURCES
-        source/jnode/JSON_Lib_Tests_JNode.cpp
+        source/jnode/JSON_Lib_Tests_JNode_Assignment.cpp
+        source/jnode/JSON_Lib_Tests_JNode_Construct.cpp
+        source/jnode/JSON_Lib_Tests_JNode_Indexing.cpp
+        source/jnode/JSON_Lib_Tests_JNode_Reference.cpp
         source/json/JSON_Lib_Tests_JSON.cpp
         source/io/JSON_Lib_Tests_ISource_Buffer.cpp
         source/io/JSON_Lib_Tests_ISource_File.cpp
