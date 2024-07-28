@@ -33,8 +33,9 @@ set(TEST_SOURCES
         source/io/JSON_Lib_Tests_File_GetFormat.cpp
         source/io/JSON_Lib_Tests_File_FromFile.cpp
         source/io/JSON_Lib_Tests_File_ToFile.cpp
-        source/number/JSON_Lib_Tests_JNode_Number_Misc.cpp
         source/number/JSON_Lib_Tests_JNode_Number_Assignment.cpp
+        source/number/JSON_Lib_Tests_JNode_Number_Conversion.cpp
+        source/number/JSON_Lib_Tests_JNode_Number_Misc.cpp
         source/number/JSON_Lib_Tests_JNode_Number_Precision.cpp
         source/number/JSON_Lib_Tests_JNode_Number_Notation.cpp             
         source/parse/JSON_Lib_Tests_Parse_Escapes.cpp
