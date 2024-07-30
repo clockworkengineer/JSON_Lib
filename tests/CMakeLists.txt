@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18.1)
 
-project("JSON_Lib Unit Tests" VERSION 1.0.0 DESCRIPTION "JSON C++ Library Catch Unit Tests" LANGUAGES CXX)
+project("JSON_Lib Unit Tests" VERSION 1.1.0 DESCRIPTION "JSON C++ Library Catch Unit Tests" LANGUAGES CXX)
 
 # Get Catch2 from repository
 Include(FetchContent)
@@ -8,7 +8,7 @@ Include(FetchContent)
 FetchContent_Declare(
   Catch2
   GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG v3.5.2
+  GIT_TAG v3.6.0
 )
 
 FetchContent_MakeAvailable(Catch2)
