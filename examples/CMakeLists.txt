@@ -6,19 +6,6 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Compiler options
-
-if(MSVC)
-  add_compile_options(/W4)
-  set(PLATFORM "windows")
-elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-  add_compile_options(-Wall -Werror -pedantic)
-  set(PLATFORM "linux")
-else()
-  add_compile_options(-Wall -Werror -pedantic)
-  set(PLATFORM "linux")
-endif()
-
 # Get example program list
 
 file(GLOB EXAMPLE_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/source/ "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
