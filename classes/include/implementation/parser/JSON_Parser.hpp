@@ -21,17 +21,17 @@ public:
 
 private:
   // Parse JSON
-  [[nodiscard]] static Object::Entry parseObjectEntry(ISource &source,const ITranslator &translator);
-  [[nodiscard]] static JNode parseString(ISource &source, const  ITranslator &translator);
-  [[nodiscard]] static JNode parseNumber(ISource &source);
-  [[nodiscard]] static JNode parseBoolean(ISource &source);
-  [[nodiscard]] static JNode parseNull(ISource &source);
-  [[nodiscard]] static JNode parseObject(ISource &source,const ITranslator &translator);
+  [[nodiscard]] static Object::Entry parseObjectEntry(ISource &source, const ITranslator &translator);
+  [[nodiscard]] static JNode parseString(ISource &source, const ITranslator &translator);
+  [[nodiscard]] static JNode parseNumber(ISource &source, [[maybe_unused]] const ITranslator &translator);
+  [[nodiscard]] static JNode parseBoolean(ISource &source, [[maybe_unused]] const ITranslator &translator);
+  [[nodiscard]] static JNode parseNull(ISource &source, [[maybe_unused]] const ITranslator &translator);
+  [[nodiscard]] static JNode parseObject(ISource &source, const ITranslator &translator);
   [[nodiscard]] static JNode parseArray(ISource &source, const ITranslator &translator);
   [[nodiscard]] static JNode parseTree(ISource &source, const ITranslator &translator);
 
   // Reference to JSON translator interface
-   const ITranslator &jsonTranslator;
+  const ITranslator &jsonTranslator;
 };
 
 }// namespace JSON_Lib

@@ -72,14 +72,14 @@ bool endOfNumber(const ISource &source)
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <returns>Object key/value pair.</returns>
-Object::Entry JSON_Parser::parseObjectEntry(ISource &source,const ITranslator &translator)
+Object::Entry JSON_Parser::parseObjectEntry(ISource &source, const ITranslator &translator)
 {
   source.ignoreWS();
   const std::string key{ extractString(source, translator) };
   source.ignoreWS();
   if (source.current() != ':') { throw SyntaxError(source.getPosition(), "Missing ':' in key value pair."); }
   source.next();
-  return Object::Entry(key, parseTree(source,  translator));
+  return Object::Entry(key, parseTree(source, translator));
 }
 
 /// <summary>
@@ -89,19 +89,21 @@ Object::Entry JSON_Parser::parseObjectEntry(ISource &source,const ITranslator &t
 /// <param name="translator">String translator.</param>
 /// <returns>String JNode.</returns>
 JNode JSON_Parser::parseString(ISource &source, const ITranslator &translator)
-{ return JNode::make<String>(extractString(source, translator)); }
+{
+  return JNode::make<String>(extractString(source, translator));
+}
 
 /// <summary>
 /// Parse a number from a JSON source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Number JNode.</returns>
-JNode JSON_Parser::parseNumber(ISource &source)
+JNode JSON_Parser::parseNumber(ISource &source, const ITranslator &translator)
 {
   std::string string;
   for (; source.more() && !endOfNumber(source); source.next()) { string += source.current(); }
-  if (Number number{ string }; number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>() || number.is<double>()
-      || number.is<long double>()) {
+  if (Number number{ string }; number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>()
+                               || number.is<double>() || number.is<long double>()) {
     return JNode::make<Number>(number);
   }
   throw SyntaxError(source.getPosition(), "Invalid numeric value.");
@@ -112,7 +114,7 @@ JNode JSON_Parser::parseNumber(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Boolean JNode.</returns>
-JNode JSON_Parser::parseBoolean(ISource &source)
+JNode JSON_Parser::parseBoolean(ISource &source, const ITranslator &translator)
 {
   if (source.match("true")) { return JNode::make<Boolean>(true); }
   if (source.match("false")) { return JNode::make<Boolean>(false); }
@@ -124,7 +126,7 @@ JNode JSON_Parser::parseBoolean(ISource &source)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Null JNode.</returns>
-JNode JSON_Parser::parseNull(ISource &source)
+JNode JSON_Parser::parseNull(ISource &source, const ITranslator &translator)
 {
   if (!source.match("null")) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
   return JNode::make<Null>();
@@ -200,10 +202,10 @@ JNode JSON_Parser::parseTree(ISource &source, const ITranslator &translator)
     break;
   case 't':
   case 'f':
-    jNode = parseBoolean(source);
+    jNode = parseBoolean(source, translator);
     break;
   case 'n':
-    jNode = parseNull(source);
+    jNode = parseNull(source, translator);
     break;
   case '0':
   case '1':
@@ -217,7 +219,7 @@ JNode JSON_Parser::parseTree(ISource &source, const ITranslator &translator)
   case '9':
   case '+':
   case '-':
-    jNode = parseNumber(source);
+    jNode = parseNumber(source, translator);
     break;
   default:
     throw SyntaxError(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null.");
@@ -231,8 +233,5 @@ JNode JSON_Parser::parseTree(ISource &source, const ITranslator &translator)
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Pointer to JNode.</returns>
-JNode JSON_Parser::parse(ISource &source)
-{
-  return parseTree(source, jsonTranslator);
-}
+JNode JSON_Parser::parse(ISource &source) { return parseTree(source, jsonTranslator); }
 }// namespace JSON_Lib
