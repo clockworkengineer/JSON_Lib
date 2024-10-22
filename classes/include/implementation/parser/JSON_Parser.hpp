@@ -29,6 +29,27 @@ private:
   [[nodiscard]] static JNode parseObject(ISource &source, const ITranslator &translator);
   [[nodiscard]] static JNode parseArray(ISource &source, const ITranslator &translator);
   [[nodiscard]] static JNode parseTree(ISource &source, const ITranslator &translator);
+  // Parser routing table
+  using ParseFunc = std::function<JNode(ISource &, const ITranslator &)>;
+  inline static std::map<char, ParseFunc> parsers = { { '{', parseObject },
+    { '[', parseArray },
+    { 't', parseBoolean },
+    { 'f', parseBoolean },
+    { 'n', parseNull },
+    { '"', parseString },
+    { '\'', parseString },
+    { '+', parseNumber },
+    { '-', parseNumber },
+    { '0', parseNumber },
+    { '1', parseNumber },
+    { '2', parseNumber },
+    { '3', parseNumber },
+    { '4', parseNumber },
+    { '5', parseNumber },
+    { '6', parseNumber },
+    { '7', parseNumber },
+    { '8', parseNumber },
+    { '9', parseNumber } };
 
   // Reference to JSON translator interface
   const ITranslator &jsonTranslator;

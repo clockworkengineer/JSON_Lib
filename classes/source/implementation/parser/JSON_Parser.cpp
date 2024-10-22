@@ -188,26 +188,6 @@ JNode JSON_Parser::parseArray(ISource &source, const ITranslator &translator)
 /// <returns>Pointer to JNode.</returns>
 JNode JSON_Parser::parseTree(ISource &source, const ITranslator &translator)
 {
-  using ParseFunc = std::function<JNode(void)>;
-  std::map<char, ParseFunc> parsers = { { '{', [&source, &translator] { return parseObject(source, translator); } },
-    { '[', [&source, &translator] { return parseArray(source, translator); } },
-    { 't', [&source, &translator] { return parseBoolean(source, translator); } },
-    { 'f', [&source, &translator] { return parseBoolean(source, translator); } },
-    { 'n', [&source, &translator] { return parseNull(source, translator); } },
-    { '"', [&source, &translator] { return parseString(source, translator); } },
-    { '\'', [&source, &translator] { return parseString(source, translator); } },
-    { '+', [&source, &translator] { return parseNumber(source, translator); } },
-    { '-', [&source, &translator] { return parseNumber(source, translator); } },
-    { '0', [&source, &translator] { return parseNumber(source, translator); } },
-    { '1', [&source, &translator] { return parseNumber(source, translator); } },
-    { '2', [&source, &translator] { return parseNumber(source, translator); } },
-    { '3', [&source, &translator] { return parseNumber(source, translator); } },
-    { '4', [&source, &translator] { return parseNumber(source, translator); } },
-    { '5', [&source, &translator] { return parseNumber(source, translator); } },
-    { '6', [&source, &translator] { return parseNumber(source, translator); } },
-    { '7', [&source, &translator] { return parseNumber(source, translator); } },
-    { '8', [&source, &translator] { return parseNumber(source, translator); } },
-    { '9', [&source, &translator] { return parseNumber(source, translator); } } };
 
   JNode jNode;
   source.ignoreWS();
@@ -215,7 +195,7 @@ JNode JSON_Parser::parseTree(ISource &source, const ITranslator &translator)
   if (it == parsers.end()) {
     throw SyntaxError(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null.");
   }
-  jNode = it->second();
+  jNode = it->second(source, translator);
   source.ignoreWS();
   return jNode;
 }
