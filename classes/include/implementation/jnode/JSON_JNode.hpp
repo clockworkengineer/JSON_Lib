@@ -13,7 +13,7 @@ struct JNode
   JNode() = default;
   template<typename T> explicit JNode(T value);
   JNode(const JSON::ArrayInitializer &array);
-  JNode(const JSON::Objectintializer &object);
+  JNode(const JSON::ObjectInitializer &object);
   JNode(const JNode &other) = delete;
   JNode &operator=(const JNode &other) = delete;
   JNode(JNode &&other) = default;

@@ -27,7 +27,7 @@ public:
   void print(IDestination &destination) const;
   // Strip whitespace from JSON string
   static void strip(ISource &source, IDestination &destination);
-  // Get root of JSON tree
+  // Get the root of JSON tree
   [[nodiscard]] JNode &root() { return jNodeRoot; }
   [[nodiscard]] const JNode &root() const { return jNodeRoot; }
   // Search for JSON object entry with a given key
@@ -41,7 +41,7 @@ public:
   void traverse(IAction &action) const;
   // Set print ident value
   static void setIndent(const long indent) { jsonStringify->setIndent(indent); }
-  // Read/Write JSON from file
+  // Read/Write JSON from a file
   static std::string fromFile(const std::string &fileName);
   static void toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format);
   // Get JSON file format

@@ -25,14 +25,14 @@ JSON::JSON(IStringify *stringify, IParser *parser) : implementation(std::make_un
 /// <summary>
 /// JSON constructor (array).
 /// </summary>
-/// <param name="array">Intialiser list of single values or JNode.</param>
+/// <param name="array">Initializer list of single values or JNode.</param>
 JSON::JSON(const ArrayInitializer &array) : JSON() { this->root() = JNode(array); }
 
 /// <summary>
 /// JSON constructor (object).
 /// </summary>
-/// <param name="object">Intialiser list of key/value(JNode) pairs.</param>
-JSON::JSON(const Objectintializer &object) : JSON() { this->root() = JNode(object); }
+/// <param name="object">Initializer list of key/value(JNode) pairs.</param>
+JSON::JSON(const ObjectInitializer &object) : JSON() { this->root() = JNode(object); }
 
 /// <summary>
 /// JSON constructor. Pass a JSON string to be initially parsed.
@@ -43,22 +43,22 @@ JSON::JSON(const std::string &jsonString) : JSON() { parse(BufferSource{ jsonStr
 /// <summary>
 /// JSON destructor.
 /// </summary>
-JSON::~JSON() {}
+JSON::~JSON() = default;
 
 /// <summary>
 /// Get JSON library version.
 /// </summary>
-std::string JSON::version() const { return implementation->version(); }
+std::string JSON::version() { return JSON_Impl::version(); }
 
 /// <summary>
 /// Strip all whitespace from a JSON source.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <param name="destination">Destination for stripped JSON.</param>
-void JSON::strip(ISource &source, IDestination &destination) const { implementation->strip(source, destination); }
-void JSON::strip(ISource &source, IDestination &&destination) const { implementation->strip(source, destination); }
-void JSON::strip(ISource &&source, IDestination &destination) const { implementation->strip(source, destination); }
-void JSON::strip(ISource &&source, IDestination &&destination) const { implementation->strip(source, destination); }
+void JSON::strip(ISource &source, IDestination &destination) { JSON_Impl::strip(source, destination); }
+void JSON::strip(ISource &source, IDestination &&destination)  { JSON_Impl::strip(source, destination); }
+void JSON::strip(ISource &&source, IDestination &destination)  { JSON_Impl::strip(source, destination); }
+void JSON::strip(ISource &&source, IDestination &&destination)  { JSON_Impl::strip(source, destination); }
 
 /// <summary>
 /// Create JNode structure by parsing JSON on the source stream.
@@ -85,10 +85,10 @@ void JSON::print(IDestination &&destination) const { implementation->print(desti
 /// Set print indent value.
 /// </summary>
 /// <param name="indent">Pretty print indent value.</param>
-void JSON::setIndent(const long indent) const { implementation->setIndent(indent); }
+void JSON::setIndent(const long indent) { JSON_Impl::setIndent(indent); }
 
 /// <summary>
-/// Recursively traverse JNode structure calling IAction methods (read only)
+/// Recursively traverse JNode structure calling IAction methods (read-only)
 ///  or to change the JSON tree node directly.
 /// </summary>
 /// <param name="action">Action methods to call during traversal.</param>
@@ -98,7 +98,7 @@ void JSON::traverse(IAction &action) { implementation->traverse(action); }
 void JSON::traverse(IAction &action) const { std::as_const(*implementation).traverse(action); }
 
 /// <summary>
-/// Return object entry for the passed in key.
+/// Return object entry for the passed in keys.
 /// </summary>
 /// <param name="key">Object entry (JNode) key.</param>
 JNode &JSON::operator[](const std::string &key) { return (*implementation)[key]; }

@@ -69,17 +69,17 @@ private:
 
 inline Object::Entries::iterator Object::findKey(Entries &object, const std::string &key)
 {
-  auto it = std::ranges::find_if(
+  const auto it = std::ranges::find_if(
     object, [&key](Entry &entry) -> bool { return entry.getKey() == key; });
-  if (it == object.end()) { throw Object::Error("Invalid key used to access object."); }
+  if (it == object.end()) { throw Error("Invalid key used to access object."); }
   return it;
 }
 inline Object::Entries::const_iterator Object::findKey(const Entries &object, const std::string &key)
 {
-  auto it = std::ranges::find_if(object, [&key](const Entry &entry) -> bool {
+  const auto it = std::ranges::find_if(object, [&key](const Entry &entry) -> bool {
     return entry.getKey() == key;
   });
-  if (it == object.end()) { throw Object::Error("Invalid key used to access object."); }
+  if (it == object.end()) { throw Error("Invalid key used to access object."); }
   return it;
 }
 }// namespace JSON_Lib

@@ -31,22 +31,22 @@ class JSON
 {
 public:
   // Possible JSON Node initializer list types
-  using IntializerListTypes =
+  using InitializerListTypes =
     std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t, JNode>;
   // Array initializer list
-  using ArrayInitializer = std::initializer_list<IntializerListTypes>;
+  using ArrayInitializer = std::initializer_list<InitializerListTypes>;
   // Object initializer list
-  using Objectintializer = std::initializer_list<std::pair<std::string, IntializerListTypes>>;
+  using ObjectInitializer = std::initializer_list<std::pair<std::string, InitializerListTypes>>;
   // JSON file formats
   enum class Format : uint8_t { utf8 = 0, utf8BOM, utf16BE, utf16LE, utf32BE, utf32LE };
   // Pass any user defined translator/converter here
-  explicit JSON(IStringify *stringify=nullptr, IParser *parser= nullptr);
+  explicit JSON([[maybe_unused]]IStringify *stringify=nullptr, [[maybe_unused]] IParser *parser= nullptr);
   // Pass in default JSON to parse
   explicit JSON(const std::string &jsonString);
-  // Construct array
+  // Construct an array
   JSON(const ArrayInitializer &array);
   // Construct object
-  JSON(const Objectintializer &object);
+  JSON(const ObjectInitializer &object);
   // No other constructors supported
   JSON(const JSON &other) = delete;
   JSON &operator=(const JSON &other) = delete;
@@ -55,8 +55,8 @@ public:
   // Provide own destructor
   ~JSON();
   // Get JSON library version
-  [[nodiscard]] std::string version() const;
-  // Parse JSON into tree
+  [[nodiscard]] static std::string version();
+  // Parse JSON into the tree
   void parse(ISource &source) const;
   void parse(ISource &&source) const;
   // Create JSON text string from JNode tree (no whitespace)
@@ -66,16 +66,16 @@ public:
   void print(IDestination &destination) const;
   void print(IDestination &&destination) const;
   // Strip whitespace from JSON string
-  void strip(ISource &source, IDestination &destination) const;
-  void strip(ISource &source, IDestination &&destination) const;
-  void strip(ISource &&source, IDestination &destination) const;
-  void strip(ISource &&source, IDestination &&destination) const;
+  static void strip(ISource &source, IDestination &destination);
+  static void strip(ISource &source, IDestination &&destination) ;
+  static void strip(ISource &&source, IDestination &destination) ;
+  static void strip(ISource &&source, IDestination &&destination) ;
   // Traverse JSON tree
   void traverse(IAction &action);
   void traverse(IAction &action) const;
   // Set print ident value
-  void setIndent(long indent) const;
-  // Get root of JSON tree
+  static void setIndent(long indent);
+  // Get the root of JSON tree
   [[nodiscard]] JNode &root();
   [[nodiscard]] const JNode &root() const;
   // Search for JSON object entry with a given key
@@ -84,7 +84,7 @@ public:
   // Get JSON array entry at index
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
-  // Read/Write JSON from file
+  // Read/Write JSON from the file
   static std::string fromFile(const std::string &fileName);
   static void toFile(const std::string &fileName, const std::string &jsonString, Format format = Format::utf8);
   // Get JSON file format

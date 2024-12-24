@@ -15,7 +15,7 @@ struct Variant
   ~Variant() = default;
   // Get BNode type
   [[nodiscard]] Type getNodeType() const {
-    return(jNodeType);
+    return jNodeType;
   }
 
 private:

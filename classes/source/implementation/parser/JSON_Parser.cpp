@@ -13,14 +13,14 @@
 namespace JSON_Lib {
 
 /// <summary>
-/// Check whether character is avalid escaped character or is just
+/// Check whether character is a valid-escaped character or is just
 /// normal escaped ASCII character. Only a few characters are valid
 /// escaped characters such as '\t' or '\"' but normal ASCII characters
 /// may still be can still have a '\' prefix and be escaped though not
 /// proper escaped sense.
 /// </summary>
 /// <param name="escape">Escaped character.</param>
-/// <returns>true then character is a valid escape character.</returns>
+/// <returns>True then character is a valid escape character.</returns>
 bool validEscape(const char escape)
 {
   return escape == '\\' || escape == 't' || escape == '"' || escape == 'b' || escape == 'f' || escape == 'n'
@@ -57,17 +57,17 @@ std::string extractString(ISource &source, const ITranslator &translator)
 }
 
 /// <summary>
-/// Has the end of a number been reached in source stream ?
+/// Has the end of a number been reached in source stream?
 /// </summary>
 /// <param name="source">Source of JSON.</param>
-/// <returns>true on end of number</returns>
+/// <returns>True on end of number</returns>
 bool endOfNumber(const ISource &source)
 {
   return source.isWS() || source.current() == ',' || source.current() == ']' || source.current() == '}';
 }
 
 /// <summary>
-/// Parse a Object key/value pair from a JSON encoded source stream.
+/// Parse an Object key/value pair from a JSON encoded source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
@@ -97,8 +97,9 @@ JNode JSON_Parser::parseString(ISource &source, const ITranslator &translator)
 /// Parse a number from a JSON source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
+/// <param name="translator">String translator.</param>
 /// <returns>Number JNode.</returns>
-JNode JSON_Parser::parseNumber(ISource &source, const ITranslator &translator)
+JNode JSON_Parser::parseNumber(ISource &source, [[maybe_unused]]const ITranslator &translator)
 {
   std::string string;
   for (; source.more() && !endOfNumber(source); source.next()) { string += source.current(); }
@@ -113,8 +114,9 @@ JNode JSON_Parser::parseNumber(ISource &source, const ITranslator &translator)
 /// Parse a boolean from a JSON source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
+/// <param name="translator">String translator.</param>
 /// <returns>Boolean JNode.</returns>
-JNode JSON_Parser::parseBoolean(ISource &source, const ITranslator &translator)
+JNode JSON_Parser::parseBoolean(ISource &source,  [[maybe_unused]]const ITranslator &translator)
 {
   if (source.match("true")) { return JNode::make<Boolean>(true); }
   if (source.match("false")) { return JNode::make<Boolean>(false); }
@@ -125,8 +127,9 @@ JNode JSON_Parser::parseBoolean(ISource &source, const ITranslator &translator)
 /// Parse a null from a JSON source stream.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
+/// <param name="translator">String translator.</param>
 /// <returns>Null JNode.</returns>
-JNode JSON_Parser::parseNull(ISource &source, const ITranslator &translator)
+JNode JSON_Parser::parseNull(ISource &source,  [[maybe_unused]]const ITranslator &translator)
 {
   if (!source.match("null")) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
   return JNode::make<Null>();
@@ -188,14 +191,12 @@ JNode JSON_Parser::parseArray(ISource &source, const ITranslator &translator)
 /// <returns>Pointer to JNode.</returns>
 JNode JSON_Parser::parseTree(ISource &source, const ITranslator &translator)
 {
-
-  JNode jNode;
   source.ignoreWS();
-  auto it = parsers.find(source.current());
+  const auto it = parsers.find(source.current());
   if (it == parsers.end()) {
     throw SyntaxError(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null.");
   }
-  jNode = it->second(source, translator);
+  JNode jNode = it->second(source, translator);
   source.ignoreWS();
   return jNode;
 }

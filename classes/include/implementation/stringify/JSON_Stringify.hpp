@@ -32,9 +32,9 @@ void stringify(const JNode &jNode, IDestination &destination, const long indent)
   } else if (isA<Boolean>(jNode)) {
     destination.add(JRef<Boolean>(jNode).toString());
   } else if (isA<Null>(jNode)) {
-    destination.add(JRef<Null>(jNode).toString());
+    destination.add(Null::toString());
   } else if (isA<Hole>(jNode)) {
-    destination.add(JRef<Hole>(jNode).toString());
+    destination.add(Hole::toString());
   } else if (isA<Object>(jNode)) {
     size_t commaCount = JRef<Object>(jNode).value().size() - 1;
     destination.add('{');

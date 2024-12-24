@@ -17,8 +17,8 @@ template<typename T> JNode::JNode(T value)
     jNodeVariant = std::move(value);
   }
 }
-// Convert initializer list type to JMode
-inline static JNode typeToJNode(const JSON::IntializerListTypes &type)
+// Convert an initializer list type to JMode
+static JNode typeToJNode(const JSON::InitializerListTypes &type)
 {
   if (const auto pValue = std::get_if<int>(&type)) { return JNode(*pValue); }
   if (const auto pValue = std::get_if<long>(&type)) { return JNode(*pValue); }
@@ -39,7 +39,7 @@ inline JNode::JNode(const JSON::ArrayInitializer &array)
   for (const auto &entry : array) { JRef<Array>(*this).add(typeToJNode(entry)); }
 }
 // Construct JNode Object from initializer list
-inline JNode::JNode(const JSON::Objectintializer &object)
+inline JNode::JNode(const JSON::ObjectInitializer &object)
 {
   *this = make<Object>();
   for (const auto &[fst, snd] : object) { JRef<Object>(*this).add(Object::Entry(fst, typeToJNode(snd))); }
