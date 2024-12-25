@@ -40,7 +40,7 @@ public:
         } else if (ch == '"') {
           translated += "&quot;";
         } else {
-          translated += static_cast<unsigned char>(ch);
+          translated += static_cast<char>(ch);
         }
       } else {
         translated += "&#x";

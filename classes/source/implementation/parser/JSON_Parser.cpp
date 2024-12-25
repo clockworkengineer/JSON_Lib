@@ -79,7 +79,7 @@ Object::Entry JSON_Parser::parseObjectEntry(ISource &source, const ITranslator &
   source.ignoreWS();
   if (source.current() != ':') { throw SyntaxError(source.getPosition(), "Missing ':' in key value pair."); }
   source.next();
-  return Object::Entry(key, parseTree(source, translator));
+  return {key, parseTree(source, translator)};
 }
 
 /// <summary>
