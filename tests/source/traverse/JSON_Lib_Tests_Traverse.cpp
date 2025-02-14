@@ -1,16 +1,17 @@
 #include "JSON_Lib_Tests.hpp"
 
-class JSON_Analyzer : public IAction
+class JSON_Analyzer final : public IAction
 {
 public:
   JSON_Analyzer() = default;
-  virtual ~JSON_Analyzer() = default;
+
+  ~JSON_Analyzer() override = default;
   // Add JNode details to analysis
-  virtual void onJNode([[maybe_unused]] const JNode &jNode) override { totalNodes++; }
+  void onJNode([[maybe_unused]] const JNode &jNode) override { totalNodes++; }
   // Add string details to analysis
-  virtual void onString([[maybe_unused]] const JNode &jNode) override { totalStrings++; }
+  void onString([[maybe_unused]] const JNode &jNode) override { totalStrings++; }
   // Add number details to analysis
-  virtual void onNumber(const JNode &jNode) override
+  void onNumber(const JNode &jNode) override
   {
     const Number &jNodeNumber = JRef<Number>(jNode);
     totalNumbers++;
@@ -29,13 +30,14 @@ public:
       totalLongDouble++;
     }
   }
-  virtual void onBoolean([[maybe_unused]] const JNode &jNode) override { totalBoolean++; }
+
+  void onBoolean([[maybe_unused]] const JNode &jNode) override { totalBoolean++; }
   // Add null details to analysis
-  virtual void onNull([[maybe_unused]] const JNode &jNode) override { totalNull++; }
+  void onNull([[maybe_unused]] const JNode &jNode) override { totalNull++; }
   // Add array details to analysis
-  virtual void onArray([[maybe_unused]] const JNode &jNode) override { totalArrays++; }
+  void onArray([[maybe_unused]] const JNode &jNode) override { totalArrays++; }
   // Add object details to analysis
-  virtual void onObject([[maybe_unused]] const JNode &jNode) override { totalObjects++; }
+  void onObject([[maybe_unused]] const JNode &jNode) override { totalObjects++; }
 
   // JSON analysis data
   // Node
@@ -147,7 +149,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
   SECTION("Decode an double (3.402823466e+39) and traverse", "[JSON][Traverse][Double]")
   {
     BufferSource source{ "3.402823466e+39" };
-    bEncode.parse(source);// sizeof(doble) == sizeof(long double)
+    bEncode.parse(source);// sizeof(double) == sizeof(long double)
     JSON_Analyzer analyzer;
     bEncode.traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
@@ -157,7 +159,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
   SECTION("Decode an long double (1.7976931348623158e+308) and traverse", "[JSON][Traverse][LongDouble]")
   {
     BufferSource source{ "1.7976931348623158e+308" };
-    bEncode.parse(source);// sizeof(doble) == sizeof(long double)
+    bEncode.parse(source);// sizeof(double) == sizeof(long double)
     JSON_Analyzer analyzer;
     bEncode.traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);

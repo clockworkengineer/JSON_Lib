@@ -36,7 +36,7 @@ void processJSONFile(const std::string &fileName)
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   // Initialise logging.
-  plog::init(plog::debug, "JSON_Index_File.log");
+  init(plog::debug, "JSON_Index_File.log");
   PLOG_INFO << "JSON_Index_File started ...";
   PLOG_INFO << js::JSON().version();
   // Analyze JSON files.

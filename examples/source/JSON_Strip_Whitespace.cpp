@@ -27,7 +27,7 @@ void processJSONFile(const std::string &fileName)
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   // Initialise logging.
-  plog::init(plog::debug, "JSON_Strip_Whitespace.log");
+  init(plog::debug, "JSON_Strip_Whitespace.log");
   PLOG_INFO << "JSON_Strip_Whitespace started ...";
   // Output JSON Lib version
   PLOG_INFO << js::JSON().version();

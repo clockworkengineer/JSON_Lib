@@ -1,7 +1,7 @@
 //
-// Program:  JSON_Files_To_Bencode
+// Program: JSON_Files_To_Bencode
 //
-// Description: Use JSON_Lib to read in torrent file then write
+// Description: Use JSON_Lib to read in a torrent file then write
 // it out as JSON using a custom encoder.
 //
 // Dependencies: C++20, PLOG, JSON_Lib.
@@ -15,9 +15,9 @@ namespace js = JSON_Lib;
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   try {
-    js::JSON json(js::makeStringify<js::Bencode_Stringify>());
+    const js::JSON json(js::makeStringify<js::Bencode_Stringify>());
     // Initialise logging.
-    plog::init(plog::debug, "JSON_Files_To_Bencode.log");
+    init(plog::debug, "JSON_Files_To_Bencode.log");
     PLOG_INFO << "JSON_Files_To_Bencode started ...";
     PLOG_INFO << json.version();
     for (const auto &jsonFileName : Utility::createJSONFileList()) {

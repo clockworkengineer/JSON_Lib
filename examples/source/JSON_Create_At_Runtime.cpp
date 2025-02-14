@@ -16,24 +16,24 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   try {
     // Initialise logging.
-    plog::init(plog::debug, "JSON_Create_At_Runtime.log");
+    init(plog::debug, "JSON_Create_At_Runtime.log");
     PLOG_INFO << "JSON_Create_At_Runtime started ...";
     // Log version
     PLOG_INFO << js::JSON().version();
     // create an empty structure (null)
     js::JSON json;
-    // add a number that is stored as double (note the implicit conversion of
-    // json to an object)
+    // add a number stored as double (note the implicit conversion of
+    // JSON to an object)
     json["pi"] = 3.141;
-    // add a Boolean that is stored as bool
+    // add a Boolean stored as bool
     json["sad"] = true;
-    // add a string that is stored as std::string
+    // add a string stored as std::string
     json["first_name"] = "Niels";
-    // add another null object by passing nullptr
+    // add another null object by passing a nullptr
     json["nothing"] = nullptr;
     // add an object inside the object
     json["the_answer"]["everything"] = 42;
-    // add an array that is stored as std::vector (using an initializer list)
+    // add an array stored as std::vector (using an initializer list)
     json["list"] = { 1, 0, 2 };
     // add another object (using an initializer list of pairs)
     json["object"] = { { "currency", "USD" }, { "value", 42.99 } };
@@ -44,7 +44,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     PLOG_INFO << destination.toString();
     destination.clear();
     // create JSON using an initializer list and nesting array/objects using JNode{}.
-    js::JSON json2 = { { "pi", 3.141 },
+    const js::JSON json2 = { { "pi", 3.141 },
       { "sad", true },
       { "first_name", "Niels" },
       { "nothing", nullptr },

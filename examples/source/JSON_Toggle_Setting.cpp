@@ -21,7 +21,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   try {
     // Initialise logging.
-    plog::init(plog::debug, "JSON_Toggle_Setting.log");
+    init(plog::debug, "JSON_Toggle_Setting.log");
     PLOG_INFO << "JSON_Toggle_Setting started ...";
     // Log version
     PLOG_INFO << js::JSON().version();

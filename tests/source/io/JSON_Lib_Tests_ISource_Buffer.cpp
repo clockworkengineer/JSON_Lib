@@ -16,14 +16,14 @@ TEST_CASE("Check ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
   SECTION("Create BufferSource and that it is positioned on the correct first character.",
     "[JSON][ISource][Buffer][Position]")
   {
-    BufferSource source{ BufferSource(buffer) };
+    auto source{ BufferSource(buffer) };
     REQUIRE_FALSE(!source.more());
     REQUIRE(static_cast<char>(source.current()) == '{');
   }
   SECTION(
     "Create BufferSource and then check next positions to correct next character", "[JSON][ISource][Buffer][Next]")
   {
-    BufferSource source{ BufferSource(buffer) };
+    auto source{ BufferSource(buffer) };
     source.next();
     REQUIRE_FALSE(!source.more());
     REQUIRE(static_cast<char>(source.current()) == '\n');
@@ -31,7 +31,7 @@ TEST_CASE("Check ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
   SECTION(
     "Create BufferSource move past last character, check it and the bytes moved.", "[JSON][ISource][Buffer][More]")
   {
-    BufferSource source{ BufferSource(buffer) };
+    auto source{ BufferSource(buffer) };
     while (source.more()) { source.next(); }
     REQUIRE(source.position() == 787);// eof
     REQUIRE(source.current() == static_cast<char>(EOF));// eof
@@ -39,7 +39,7 @@ TEST_CASE("Check ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
   SECTION("Create BufferSource, move past last character, reset and then check back at the beginning.",
     "[JSON][ISource][Buffer][Reset]")
   {
-    BufferSource source{ BufferSource(buffer) };
+    auto source{ BufferSource(buffer) };
     while (source.more()) { source.next(); }
     source.reset();
     REQUIRE(source.position() == 0);//  Check at the beginning
@@ -81,13 +81,13 @@ TEST_CASE("Check ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
   }
   SECTION("Create BufferSource and then try to read off the end.", "[JSON][ISource][Buffer][Exception]")
   {
-    BufferSource source{ BufferSource(buffer) };
+    auto source{ BufferSource(buffer) };
     while (source.more()) { source.next(); }
     REQUIRE_THROWS_AS(source.next(), ISource::Error);
     REQUIRE_THROWS_WITH(source.next(), "ISource Error: Tried to read past and of buffer.");
   }
-  SECTION("Create a BufferSource that contains linfeeds and read from it into a string and compare.",
-    "[JSON][ISource][Buffer][Linefeeds]")
+  SECTION("Create a BufferSource that contains linefeed and read from it into a string and compare.",
+    "[JSON][ISource][Buffer][Linefeed]")
   {
     std::string result;
     BufferSource source{ "[true\n,\"Out of time\"\n,7.89043e+18\n,true\n]" };
@@ -95,11 +95,11 @@ TEST_CASE("Check ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
       result.push_back(source.current());
       source.next();
     }
-    //  No translation of linefeeds occurs
+    //  No translation of linefeed occurs
     REQUIRE(result == "[true\n,\"Out of time\"\n,7.89043e+18\n,true\n]");
   }
-  SECTION("Create a BufferSource that contains carriage return/linfeed and read from it into a string and compare.",
-    "[JSON][ISource][Buffer][Linefeeds]")
+  SECTION("Create a BufferSource that contains carriage return/linefeed and read from it into a string and compare.",
+    "[JSON][ISource][Buffer][Linefeed]")
   {
     std::string result;
     BufferSource source{ "[true\r\n,\"Out of time\"\r\n,7.89043e+18\r\n,true\r\n]" };

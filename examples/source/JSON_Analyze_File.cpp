@@ -1,7 +1,7 @@
 //
 // Program: JSON_Analyze_File
 //
-// Description: For a each JSON file in a directory parse it, then analyze its
+// Description: For each JSON file in a directory parse it, then analyze its
 // JSON tree and produce an output report of the analysis.
 //
 // Dependencies: C++20, PLOG, JSON_Lib.
@@ -30,7 +30,7 @@ void processJSONFile(const std::string &fileName)
 int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   // Initialise logging.
-  plog::init(plog::debug, "JSON_Analyze_File.log");
+  init(plog::debug, "JSON_Analyze_File.log");
   PLOG_INFO << "JSON_Analyze_File started ...";
   // Output JSON Lib version and data structure metrics
   PLOG_INFO << js::JSON().version();

@@ -19,7 +19,7 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
   }
   SECTION("Create FileSource and check positioned on the correct first character.", "[JSON][ISource][File][Position]")
   {
-    FileSource source{ FileSource(testFileName) };
+    auto source{ FileSource(testFileName) };
     REQUIRE_FALSE(!source.more());
     REQUIRE(static_cast<char>(source.current()) == '{');
   }
@@ -80,12 +80,12 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
     REQUIRE_FALSE(!source.match("[true"));// Match
     REQUIRE(source.position() == 5);// new position
   }
-  SECTION("Create FileSource with non existant file.", "[JSON][ISource][File][Exception]")
+  SECTION("Create FileSource with non existent file.", "[JSON][ISource][File][Exception]")
   {
-    const std::string nonExistantFileName{ prefixPath(kNonExistantJSONFile) };
-    REQUIRE_THROWS_AS(FileSource(nonExistantFileName), ISource::Error);
+    const std::string nonExistentFileName{ prefixPath(kNonExistantJSONFile) };
+    REQUIRE_THROWS_AS(FileSource(nonExistentFileName), ISource::Error);
     REQUIRE_THROWS_WITH(
-      FileSource(nonExistantFileName), "ISource Error: File input stream failed to open or does not exist.");
+      FileSource(nonExistentFileName), "ISource Error: File input stream failed to open or does not exist.");
   }
   SECTION("Create FileSource and then try to read off he end.", "[JSON][ISource][File][Exception]")
   {
@@ -94,8 +94,8 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
     REQUIRE_THROWS_AS(source.next(), ISource::Error);
     REQUIRE_THROWS_WITH(source.next(), "ISource Error: Tried to read past end of file.");
   }
-  SECTION("Create a FileSource that contains linfeeds and read from it into a string and compare.",
-    "[JSON][ISource][Buffer][Linefeeds]")
+  SECTION("Create a FileSource that contains linefeed and read from it into a string and compare.",
+    "[JSON][ISource][Buffer][Linefeed]")
   {
     std::string result;
     BufferSource source{ R"([true\n,Out of time"\n,7.89043e+18\n,true\n])" };
@@ -103,11 +103,11 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
       result.push_back(source.current());
       source.next();
     }
-    //  No translation  of linefeeds occurs
+    //  No translation of linefeed occurs
     REQUIRE(result == R"([true\n,Out of time"\n,7.89043e+18\n,true\n])");
   }
-  SECTION("Create a FileSource that contains linfeeds and read from it into a string and compare.",
-    "[JSON][ISource][Buffer][Linefeeds]")
+  SECTION("Create a FileSource that contains linefeed and read from it into a string and compare.",
+    "[JSON][ISource][Buffer][Linefeed]")
   {
     std::string result;
     std::filesystem::remove(kGeneratedJSONFile);
@@ -117,11 +117,11 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
       result.push_back(source.current());
       source.next();
     }
-    // No translation of just linefeeds occurs when reading from source stream
+    // No translation of just linefeed occurs when reading from source stream
     REQUIRE(result == "[true\n,\"Out of time\"\n,7.89043e+18\n,true\n]");
   }
-  SECTION("Create a FileSource that contains carriage return/linfeeds and read from it into a string and compare.",
-    "[JSON][ISource][Buffer][Linefeeds]")
+  SECTION("Create a FileSource that contains carriage return/linefeed and read from it into a string and compare.",
+    "[JSON][ISource][Buffer][Linefeed]")
   {
     std::string result;
     std::filesystem::remove(kGeneratedJSONFile);

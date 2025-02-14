@@ -71,7 +71,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
   try {
     // Initialise logging.
-    plog::init(plog::debug, "JSON_Display_Settings.log");
+    init(plog::debug, "JSON_Display_Settings.log");
     PLOG_INFO << "JSON_Display_Settings started ...";
     // Log version
     PLOG_INFO << js::JSON().version();
