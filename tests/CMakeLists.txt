@@ -51,7 +51,7 @@ set(TEST_SOURCES
         source/stringify/JSON_Lib_Tests_Stringify_Exceptions.cpp
         source/stringify/JSON_Lib_Tests_Stringify_Bencode.cpp
         source/stringify/JSON_Lib_Tests_Stringify_XML.cpp
-        source/stringify/JSON_Lib_Tests_Print.cpp
+        source/stringify/JSON_Lib_Tests_Stringify_Print.cpp
         source/misc/JSON_Lib_Tests_Misc.cpp
         source/misc/JSON_Lib_Tests_Helper.cpp
         source/traverse/JSON_Lib_Tests_Traverse.cpp)
