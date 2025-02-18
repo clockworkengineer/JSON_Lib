@@ -28,14 +28,14 @@ public:
   // ====================
   // Stringify JNode tree
   // ====================
-  virtual void stringify(const JNode &jNode, IDestination &destination, long indent) const = 0;
+  virtual void stringify(const JNode &jNode, IDestination &destination, const unsigned long indent) const = 0;
   // =========================
   // Set/Get print indentation
   // =========================
   [[nodiscard]] virtual long getIndent() const { return 0; }
   virtual void setIndent([[maybe_unused]] long indent)  {}
 };
-// Make custom stringify to pass to JSON constructor: Note pointer is tidied up internally.
+// Make custom stringify to pass to JSON constructor: Pointer is tidied up internally.
 template <typename T> IStringify *makeStringify() {
   return std::make_unique<T>().release();
 }

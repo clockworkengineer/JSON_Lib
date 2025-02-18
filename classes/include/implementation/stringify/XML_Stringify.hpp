@@ -23,7 +23,7 @@ public:
   /// <param name="jNode">JNode structure to be traversed.</param>
   /// <param name="destination">Destination stream for stringified JSON.</param>
   /// <param name="indent">Current print indentation.</param>
-  void stringify(const JNode &jNode, IDestination &destination, [[maybe_unused]] long indent) const override
+  void stringify(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const override
   {
     destination.add(R"(<?xml version="1.0" encoding="UTF-8"?>)");
     destination.add("<root>");

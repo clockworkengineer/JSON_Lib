@@ -23,7 +23,7 @@ public:
 /// <param name="jNode">JNode structure to be traversed.</param>
 /// <param name="destination">Destination stream for stringified JSON.</param>
 /// <param name="indent">Current print indentation.</param>
-void stringify(const JNode &jNode, IDestination &destination, const long indent) const override
+void stringify(const JNode &jNode, IDestination &destination, const unsigned long indent) const override
   {
   if (isA<Number>(jNode)) {
     destination.add(JRef<Number>(jNode).toString());
