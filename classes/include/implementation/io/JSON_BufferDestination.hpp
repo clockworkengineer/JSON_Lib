@@ -16,7 +16,6 @@ public:
 
   void add(const std::string &bytes) override
   {
-    // for (auto b : bytes) { buffer.push_back(b); }
     std::ranges::copy(bytes, std::back_inserter(buffer));
   }
   void add(const char ch) override { buffer.push_back(ch); }
@@ -24,6 +23,7 @@ public:
 
   [[nodiscard]] std::string toString() const { return buffer; }
   [[nodiscard]] std::size_t size() const { return buffer.size(); }
+  [[nodiscard]] char last() override { return buffer.back(); }
 
 private:
   std::string buffer;

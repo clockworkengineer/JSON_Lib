@@ -51,10 +51,12 @@ set(TEST_SOURCES
         source/stringify/JSON_Lib_Tests_Stringify_Exceptions.cpp
         source/stringify/JSON_Lib_Tests_Stringify_Bencode.cpp
         source/stringify/JSON_Lib_Tests_Stringify_XML.cpp
+        source/stringify/JSON_Lib_Tests_Stringify_YAML.cpp
         source/stringify/JSON_Lib_Tests_Stringify_Print.cpp
         source/misc/JSON_Lib_Tests_Misc.cpp
         source/misc/JSON_Lib_Tests_Helper.cpp
-        source/traverse/JSON_Lib_Tests_Traverse.cpp)
+        source/traverse/JSON_Lib_Tests_Traverse.cpp
+        source/stringify/JSON_Lib_Tests_Stringify_YAML.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${PROJECT_CURRENT_SOURCE_DIR}/include ./include)

@@ -27,10 +27,12 @@ public:
       destination.put(ch);
       fileSize++;
     }
+    lastChar = ch;
   }
   void add(const std::string &bytes) override
   {
     for (const auto ch : bytes) { add(ch); }
+    lastChar = bytes.back();
   }
   void clear() override
   {
@@ -38,14 +40,16 @@ public:
     destination.open(filename.c_str(), std::ios_base::binary | std::ios_base::trunc);
     if (!destination.is_open()) { throw Error("File output stream failed to open or could not be created."); }
     fileSize = 0;
+    lastChar = 0;
   }
   void close() { destination.flush(); }
-
   std::size_t size() const { return fileSize; }
+  [[nodiscard]] char last() override { return lastChar; }
 
 private:
   std::ofstream destination;
   std::string filename;
   std::size_t fileSize{};
+  char lastChar{};
 };
 }// namespace JSON_Lib

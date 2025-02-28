@@ -58,16 +58,20 @@ set(JSON_INCLUDES
   ./classes/include/implementation/translator/JSON_Translator.hpp
   ./classes/include/implementation/translator/Bencode_Translator.hpp
   ./classes/include/implementation/translator/XML_Translator.hpp
+  ./classes/include/implementation/translator/YAML_Translator.hpp
   ./classes/include/implementation/parser/JSON_Parser.hpp
   ./classes/include/implementation/stringify/JSON_Stringify.hpp
   ./classes/include/implementation/stringify/Bencode_Stringify.hpp
+  ./classes/include/implementation/stringify/XML_Stringify.hpp
+  ./classes/include/implementation/stringify/YAML_Stringify.hpp
   ./classes/include/interface/JSON_Interfaces.hpp
   ./classes/include/interface/IAction.hpp
   ./classes/include/interface/ISource.hpp
   ./classes/include/interface/IDestination.hpp
   ./classes/include/interface/ITranslator.hpp
   ./classes/include/interface/IParser.hpp
-  ./classes/include/interface/IStringify.hpp)
+  ./classes/include/interface/IStringify.hpp
+)
 
 # Platform specific
 list(APPEND JSON_SOURCES "./classes/source/implementation/converter/${PLATFORM}/JSON_Converter.cpp")

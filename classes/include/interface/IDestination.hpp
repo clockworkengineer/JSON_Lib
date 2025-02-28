@@ -28,8 +28,13 @@ public:
   // ============================
   virtual void add(char ch) = 0;
   // ============================
-  // Clear the curent destination
+  // Clear the current destination
   // ===========================
   virtual void clear() = 0;
+  // =================================
+  // Return the last character written
+  // =================================
+  virtual char last() = 0;
+
 };
 }// namespace JSON_Lib
