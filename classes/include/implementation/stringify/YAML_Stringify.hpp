@@ -28,7 +28,7 @@ public:
   /// <param name="indent">Current print indentation.</param>
   void stringify(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const override {
     destination.add("---\n");
-    encodeYAML(jNode, destination, 0);
+    stringifyYAML(jNode, destination, 0);
     destination.add("...\n");
   }
 
@@ -39,22 +39,25 @@ private:
     }
     return std::string("");
   }
-  void encodeYAML(const JNode &jNode, IDestination &destination,
+  void stringifyYAML(const JNode &jNode, IDestination &destination,
                   const unsigned long indent) const {
     if (isA<Object>(jNode)) {
-      encodeObject(jNode, destination, indent);
+      stringifyObject(jNode, destination, indent);
     } else if (isA<Array>(jNode)) {
-      encodeArray(jNode, destination, indent);
+      stringifyArray(jNode, destination, indent);
     } else if (isA<Number>(jNode)) {
-      encodeNumber(jNode, destination);
+      stringifyNumber(jNode, destination);
     } else if (isA<String>(jNode)) {
-      encodeString(jNode, destination);
+      stringifyString(jNode, destination);
+    } else if (isA<Boolean>(jNode)) {
+      stringifyBoolean(jNode, destination);
+    } else if (isA<Null>(jNode)){
+      stringifyNull(jNode, destination);
     }
   }
 
-  void encodeObject(const JNode &jNode, IDestination &destination,
+  void stringifyObject(const JNode &jNode, IDestination &destination,
                         const unsigned long indent) const {
-    // std::string spaces(indent, ' ');
     if (!JRef<Object>(jNode).value().empty()) {
       for (const auto &entryJNode : JRef<Object>(jNode).value()) {
         destination.add(calculateIndent(destination, indent));
@@ -64,31 +67,39 @@ private:
             isA<Object>(entryJNode.getJNode())) {
           destination.add('\n');
         }
-        encodeYAML(entryJNode.getJNode(), destination, indent + 2);
+        stringifyYAML(entryJNode.getJNode(), destination, indent + 2);
       }
     } else {
       destination.add("{}\n");
     }
   }
 
-  void encodeArray(const JNode &jNode, IDestination &destination,
+  void stringifyArray(const JNode &jNode, IDestination &destination,
                   const unsigned long indent) const {
     std::string spaces(indent, ' ');
     if (!JRef<Array>(jNode).value().empty()) {
       for (const auto &jNodeNext : JRef<Array>(jNode).value()) {
         destination.add(calculateIndent(destination, indent) + "- ");
-        encodeYAML(jNodeNext, destination, indent + 2);
+        stringifyYAML(jNodeNext, destination, indent + 2);
       }
     } else {
       destination.add("[]\n");
     }
   }
 
-  static void encodeNumber(const JNode &jNode, IDestination &destination) {
-    destination.add(JRef<Number>(jNode).toString());
+  void stringifyNumber(const JNode &jNode, IDestination &destination) const {
+    destination.add(JRef<Number>(jNode).toString()+"\n");
   }
 
-  void encodeString(const JNode &jNode, IDestination &destination) const {
+  void stringifyBoolean(const JNode &jNode, IDestination &destination) const {
+    destination.add(JRef<Boolean>(jNode).toString()+"\n");
+  }
+
+  void stringifyNull(const JNode &jNode, IDestination & destination) const {
+    destination.add(JRef<Null>(jNode).toString()+"\n");
+  }
+
+  void stringifyString(const JNode &jNode, IDestination &destination) const {
     destination.add("\"" + yamlTranslator.to(JRef<String>(jNode).value()) +
                     "\"" + "\n");
   }
