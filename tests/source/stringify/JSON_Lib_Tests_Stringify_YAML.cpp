@@ -13,7 +13,7 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
     REQUIRE(jsonDestination.toString() == "---\n\"abcdefghijklmnopqrstuvwxyz\"\n...\n");
   }
   SECTION(
-    "Stringify n string with unprintable characters "
+    "Stringify a string with unprintable characters "
     "('abcdefghijklmnopqrstuvwxyz') ",
     "[JSON][Stringify][YAML][String]")
   {
@@ -28,23 +28,20 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
     json.stringify(destination);
     REQUIRE(destination.toString() == "---\n\"abcdefghijklmnopqrstuvwxyz\\u0001\\u0002\"\n...\n");
   }
-  // SECTION("YAML encode an string with unprintable characters (1-127) ", "[JSON][Stringify][YAML][String]")
-  // {
-  //   std::string escaped{ "\"abcdefghijklmnopqrstuvwxyz" };
-  //   // Add all ASCII except '"' and '\'
-  //   for (int ch = 1; ch < 128; ch++) {
-  //     if (static_cast<char>(ch) != '"' && static_cast<char>(ch) != '\\') { escaped += static_cast<char>(ch); }
-  //   }
-  //   escaped += '"';
-  //   BufferSource source{ escaped };
-  //   BufferDestination destination;
-  //   json.parse(source);
-  //   json.stringify(destination);
-  //   REQUIRE(
-  //     destination.toString()
-  //     =="---\n\"abcdefghijklmnopqrstuvwxyz\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\u0008\\u0009\\u000A\\u000B\\u000C\\u000D\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F
-  //     !#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\\u007F\"\n...\n");
-  // }
+  SECTION("Stringify an string with unprintable characters (1-127) ", "[JSON][Stringify][YAML][String]")
+  {
+    std::string escaped{ "\"abcdefghijklmnopqrstuvwxyz" };
+    // Add all ASCII except '"' and '\'
+    for (int ch = 1; ch < 128; ch++) {
+      if (static_cast<char>(ch) != '"' && static_cast<char>(ch) != '\\') { escaped += static_cast<char>(ch); }
+    }
+    escaped += '"';
+    BufferSource source{ escaped };
+    BufferDestination destination;
+    json.parse(source);
+    json.stringify(destination);
+    REQUIRE(destination.toString() == "---\n\"abcdefghijklmnopqrstuvwxyz\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\u0008\\u0009\\u000A\\u000B\\u000C\\u000D\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~\\u007F\"\n...\n");
+  }
   // // Disable tests for present
   // // SECTION("YAML encode an string with unprintable characters (128-255) ", "[JSON][Stringify][YAML][String]")
   // // {
