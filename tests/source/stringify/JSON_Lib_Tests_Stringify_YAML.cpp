@@ -13,7 +13,7 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
     REQUIRE(jsonDestination.toString() == "---\n\"abcdefghijklmnopqrstuvwxyz\"\n...\n");
   }
   SECTION(
-    "YAML encode an string with unprintable characters "
+    "Stringify n string with unprintable characters "
     "('abcdefghijklmnopqrstuvwxyz') ",
     "[JSON][Stringify][YAML][String]")
   {
@@ -42,7 +42,8 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
   //   json.stringify(destination);
   //   REQUIRE(
   //     destination.toString()
-  //     =="---\n\"abcdefghijklmnopqrstuvwxyz\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\u0008\\u0009\\u000A\\u000B\\u000C\\u000D\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\\u007F\"\n...\n");
+  //     =="---\n\"abcdefghijklmnopqrstuvwxyz\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\u0008\\u0009\\u000A\\u000B\\u000C\\u000D\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F
+  //     !#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\\u007F\"\n...\n");
   // }
   // // Disable tests for present
   // // SECTION("YAML encode an string with unprintable characters (128-255) ", "[JSON][Stringify][YAML][String]")
@@ -186,8 +187,7 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
   //   BufferDestination jsonDestination;
   //   json.parse(BufferSource{ source });
   //   json.stringify(jsonDestination);
-  //   REQUIRE(jsonDestination.toString()
-  //           == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz &#x0080;</root>)");
+  //   REQUIRE(jsonDestination.toString() == "");
   // }
   // SECTION(
   //   R"(Stringify YAML string with escapes (128-255)' to buffer and check value.)",
@@ -199,34 +199,27 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
   //   BufferDestination jsonDestination;
   //   json.parse(BufferSource{ source });
   //   json.stringify(jsonDestination);
-  //   REQUIRE(
-  //     jsonDestination.toString()
-  //     == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz
-  //     &#x0080;&#x0081;&#x0082;&#x0083;&#x0084;&#x0085;&#x0086;&#x0087;&#x0088;&#x0089;&#x008A;&#x008B;&#x008C;&#x008D;&#x008E;&#x008F;&#x0090;&#x0091;&#x0092;&#x0093;&#x0094;&#x0095;&#x0096;&#x0097;&#x0098;&#x0099;&#x009A;&#x009B;&#x009C;&#x009D;&#x009E;&#x009F;&#x00A0;&#x00A1;&#x00A2;&#x00A3;&#x00A4;&#x00A5;&#x00A6;&#x00A7;&#x00A8;&#x00A9;&#x00AA;&#x00AB;&#x00AC;&#x00AD;&#x00AE;&#x00AF;&#x00B0;&#x00B1;&#x00B2;&#x00B3;&#x00B4;&#x00B5;&#x00B6;&#x00B7;&#x00B8;&#x00B9;&#x00BA;&#x00BB;&#x00BC;&#x00BD;&#x00BE;&#x00BF;&#x00C0;&#x00C1;&#x00C2;&#x00C3;&#x00C4;&#x00C5;&#x00C6;&#x00C7;&#x00C8;&#x00C9;&#x00CA;&#x00CB;&#x00CC;&#x00CD;&#x00CE;&#x00CF;&#x00D0;&#x00D1;&#x00D2;&#x00D3;&#x00D4;&#x00D5;&#x00D6;&#x00D7;&#x00D8;&#x00D9;&#x00DA;&#x00DB;&#x00DC;&#x00DD;&#x00DE;&#x00DF;&#x00E0;&#x00E1;&#x00E2;&#x00E3;&#x00E4;&#x00E5;&#x00E6;&#x00E7;&#x00E8;&#x00E9;&#x00EA;&#x00EB;&#x00EC;&#x00ED;&#x00EE;&#x00EF;&#x00F0;&#x00F1;&#x00F2;&#x00F3;&#x00F4;&#x00F5;&#x00F6;&#x00F7;&#x00F8;&#x00F9;&#x00FA;&#x00FB;&#x00FC;&#x00FD;&#x00FE;&#x00FF;</root>)");
+  //   REQUIRE(jsonDestination.toString() == "");
   // }
-  // SECTION(R"(Stringify [{},{},{}] to a YAML.)", "[JSON][Stringify][Array][YAML]")
-  // {
-  //   BufferDestination jsonDestination;
-  //   json.parse(BufferSource{ R"([{},{},{}])" });
-  //   json.stringify(jsonDestination);
-  //   REQUIRE(jsonDestination.toString()
-  //           == R"(<?xml version="1.0" encoding="UTF-8"?><root><Row></Row><Row></Row><Row></Row></root>)");
-  // }
-  // SECTION(R"(Stringify [[], [],[]] to a YAML.)", "[JSON][Stringify][Array][YAML]")
-  // {
-  //   BufferDestination jsonDestination;
-  //   json.parse(BufferSource{ R"([[], [],[]])" });
-  //   json.stringify(jsonDestination);
-  //   REQUIRE(jsonDestination.toString()
-  //           == R"(<?xml version="1.0" encoding="UTF-8"?><root><Row></Row><Row></Row><Row></Row></root>)");
-  // }
-  // SECTION(R"(Stringify {"Test" : [[],[],[]]} to a YAML.)", "[JSON][Stringify][Object][YAML]")
-  // {
-  //   BufferDestination jsonDestination;
-  //   json.parse(BufferSource{ R"({"Test" : [[],[],[]]})" });
-  //   json.stringify(jsonDestination);
-  //   REQUIRE(jsonDestination.toString()
-  //           == R"(<?xml version="1.0"
-  //           encoding="UTF-8"?><root><Test><Row></Row><Row></Row><Row></Row></Test></root>)");
-  // }
+  SECTION(R"(Stringify [{},{},{}] to a YAML.)", "[JSON][Stringify][Array][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"([{},{},{}])" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n- {}\n- {}\n- {}\n...\n");
+  }
+  SECTION(R"(Stringify [[], [],[]] to a YAML.)", "[JSON][Stringify][Array][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"([[], [],[]])" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n- []\n- []\n- []\n...\n");
+  }
+  SECTION(R"(Stringify {"Test" : [[],[],[]]} to a YAML.)", "[JSON][Stringify][Object][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"Test" : [[],[],[]]})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\nTest: \n  - []\n  - []\n  - []\n...\n");
+  }
 }
