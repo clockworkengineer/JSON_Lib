@@ -23,20 +23,25 @@ namespace JSON_Lib {
         }
         [[nodiscard]] std::string to(const std::string &escapedString) const override {
             std::string translated;
-            for (const char ch : escapedString) {
-                if (!isprint(ch)) {
+            
+            for (const auto ch : toUtf16(escapedString)) {
+                if (isASCII(ch) && isprint(ch)) {
+                    translated += ch;
+                } else {
                     const auto digits = "0123456789ABCDEF";
                     translated += "\\u00";
                     translated += digits[ch >> 4 & 0x0f];
                     translated += digits[ch&0x0f];
-                } else {
-                    if (ch=='\"') {
-                        translated += "\\";
-                    }
-                    translated += ch;
-                }
+                } 
             }
             return translated;
-        }
+        }    
+    private:
+        /// <summary>
+        /// Determine whether passed in character is valid ASCII
+        /// </summary>
+        /// <param name="utf16Char">UTF16 character.</param>
+        /// <returns>True if valid ASCII.</returns>
+        [[nodiscard]] static bool isASCII(const char16_t utf16Char) { return utf16Char > 0x001F && utf16Char < 0x0080; }
     };
 } // namespace JSON_Lib
