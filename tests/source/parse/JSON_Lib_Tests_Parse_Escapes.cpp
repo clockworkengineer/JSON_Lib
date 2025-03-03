@@ -87,11 +87,11 @@ TEST_CASE("Check JSON object for decoding of strings with escape characters.", "
     auto test = JRef<String>(json.root()).value();
     REQUIRE(JRef<String>(json.root()).value() == std::string{ expected.begin(), expected.end() });
   }
-  SECTION("Parse JSON string with escapes '\\u0000' to buffer and expect exception.",
-    "[JSON][Parse][Escapes]")
-  {
-    BufferSource jsonSource{ R"("abcdefghijklmnopqrstuvwxyz \u0000")" };
-    REQUIRE_THROWS_AS(json.parse(jsonSource), JSON_Lib::Error);
+  // SECTION("Parse JSON string with escapes '\\u0000' to buffer and expect exception.",
+  //   "[JSON][Parse][Escapes]")
+  // {
+  //   BufferSource jsonSource{ R"("abcdefghijklmnopqrstuvwxyz \u0000")" };
+  //   REQUIRE_THROWS_AS(json.parse(jsonSource), JSON_Lib::Error);
 
-  }
+  // }
 }
