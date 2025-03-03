@@ -9,7 +9,8 @@
 
 namespace JSON_Lib {
 
-class YAML_Stringify final : public IStringify {
+class YAML_Stringify final : public IStringify
+{
 public:
   // Constructors/destructors
   YAML_Stringify() = default;
@@ -26,21 +27,22 @@ public:
   /// <param name="jNode">JNode structure to be traversed.</param>
   /// <param name="destination">Destination stream for stringified YAML.</param>
   /// <param name="indent">Current print indentation.</param>
-  void stringify(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const override {
+  void
+    stringify(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const override
+  {
     destination.add("---\n");
     stringifyYAML(jNode, destination, 0);
     destination.add("...\n");
   }
 
 private:
-  auto calculateIndent(IDestination &destination, const unsigned long indent) const {
-    if (destination.last() == '\n') {
-      return std::string(indent, ' ');
-    }
+  auto calculateIndent(IDestination &destination, const unsigned long indent) const
+  {
+    if (destination.last() == '\n') { return std::string(indent, ' '); }
     return std::string("");
   }
-  void stringifyYAML(const JNode &jNode, IDestination &destination,
-                  const unsigned long indent) const {
+  void stringifyYAML(const JNode &jNode, IDestination &destination, const unsigned long indent) const
+  {
     if (isA<Object>(jNode)) {
       stringifyObject(jNode, destination, indent);
     } else if (isA<Array>(jNode)) {
@@ -51,22 +53,19 @@ private:
       stringifyString(jNode, destination);
     } else if (isA<Boolean>(jNode)) {
       stringifyBoolean(jNode, destination);
-    } else if (isA<Null>(jNode)){
+    } else if (isA<Null>(jNode)) {
       stringifyNull(jNode, destination);
     }
   }
 
-  void stringifyObject(const JNode &jNode, IDestination &destination,
-                        const unsigned long indent) const {
+  void stringifyObject(const JNode &jNode, IDestination &destination, const unsigned long indent) const
+  {
     if (!JRef<Object>(jNode).value().empty()) {
       for (const auto &entryJNode : JRef<Object>(jNode).value()) {
         destination.add(calculateIndent(destination, indent));
-        destination.add(JRef<String>(entryJNode.getKeyJNode()).value());
+        destination.add("\"" + JRef<String>(entryJNode.getKeyJNode()).value() + "\"");
         destination.add(": ");
-        if (isA<Array>(entryJNode.getJNode()) ||
-            isA<Object>(entryJNode.getJNode())) {
-          destination.add('\n');
-        }
+        if (isA<Array>(entryJNode.getJNode()) || isA<Object>(entryJNode.getJNode())) { destination.add('\n'); }
         stringifyYAML(entryJNode.getJNode(), destination, indent + 2);
       }
     } else {
@@ -74,8 +73,8 @@ private:
     }
   }
 
-  void stringifyArray(const JNode &jNode, IDestination &destination,
-                  const unsigned long indent) const {
+  void stringifyArray(const JNode &jNode, IDestination &destination, const unsigned long indent) const
+  {
     std::string spaces(indent, ' ');
     if (!JRef<Array>(jNode).value().empty()) {
       for (const auto &jNodeNext : JRef<Array>(jNode).value()) {
@@ -87,23 +86,26 @@ private:
     }
   }
 
-  void stringifyNumber(const JNode &jNode, IDestination &destination) const {
-    destination.add(JRef<Number>(jNode).toString()+"\n");
+  void stringifyNumber(const JNode &jNode, IDestination &destination) const
+  {
+    destination.add(JRef<Number>(jNode).toString() + "\n");
   }
 
-  void stringifyBoolean(const JNode &jNode, IDestination &destination) const {
-    destination.add(JRef<Boolean>(jNode).toString()+"\n");
+  void stringifyBoolean(const JNode &jNode, IDestination &destination) const
+  {
+    destination.add(JRef<Boolean>(jNode).toString() + "\n");
   }
 
-  void stringifyNull(const JNode &jNode, IDestination & destination) const {
-    destination.add(JRef<Null>(jNode).toString()+"\n");
+  void stringifyNull(const JNode &jNode, IDestination &destination) const
+  {
+    destination.add(JRef<Null>(jNode).toString() + "\n");
   }
 
-  void stringifyString(const JNode &jNode, IDestination &destination) const {
-    destination.add("\"" + yamlTranslator.to(JRef<String>(jNode).value()) +
-                    "\"" + "\n");
+  void stringifyString(const JNode &jNode, IDestination &destination) const
+  {
+    destination.add("\"" + yamlTranslator.to(JRef<String>(jNode).value()) + "\"" + "\n");
   }
 
   YAML_Translator yamlTranslator;
 };
-} // namespace JSON_Lib
+}// namespace JSON_Lib

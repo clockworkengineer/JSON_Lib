@@ -129,7 +129,7 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
     BufferDestination jsonDestination;
     json.parse(BufferSource{ { R"({"Age":77,"Name":"Rob"})" } });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.toString() == "---\nAge: 77\nName: \"Rob\"\n...\n");
+    REQUIRE(jsonDestination.toString() == "---\n\"Age\": 77\n\"Name\": \"Rob\"\n...\n");
   }
   SECTION("Stringify an empty object to YAML.", "[JSON][Stringify][Object][YAML]")
   {
@@ -145,7 +145,7 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
     json.parse(BufferSource{ R"({"City":"London","Population":[1,2,3,4,5]})" });
     json.stringify(jsonDestination);
     REQUIRE(
-      jsonDestination.toString() == "---\nCity: \"London\"\nPopulation: \n  - 1\n  - 2\n  - 3\n  - 4\n  - 5\n...\n");
+      jsonDestination.toString() == "---\n\"City\": \"London\"\n\"Population\": \n  - 1\n  - 2\n  - 3\n  - 4\n  - 5\n...\n");
   }
   SECTION(
     R"(Stringify a nested object ([true,"Out of time",7.89043e+18,{"key":4444}]) to a buffer and check its
@@ -155,7 +155,7 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
     BufferDestination jsonDestination;
     json.parse(BufferSource{ R"([true,"Out of time",7.89043e+18,{"key":4444}])" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.toString() == "---\n- true\n- \"Out of time\"\n- 7.89043e+18\n- key: 4444\n...\n");
+    REQUIRE(jsonDestination.toString() == "---\n- true\n- \"Out of time\"\n- 7.89043e+18\n- \"key\": 4444\n...\n");
   }
   SECTION(R"(Stringify YAML string with escapes '\u007F (non-printable ASCII)' to buffer and check value.)",
     "[JSON][Stringify][YAML][Escapes]")
@@ -216,6 +216,6 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
     BufferDestination jsonDestination;
     json.parse(BufferSource{ R"({"Test" : [[],[],[]]})" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.toString() == "---\nTest: \n  - []\n  - []\n  - []\n...\n");
+    REQUIRE(jsonDestination.toString() == "---\n\"Test\": \n  - []\n  - []\n  - []\n...\n");
   }
 }
