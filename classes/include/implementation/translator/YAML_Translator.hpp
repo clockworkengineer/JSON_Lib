@@ -27,10 +27,12 @@ public:
       if (isASCII(ch) && isprint(ch)) {
         translated += ch;
       } else {
+        translated += "\\u";
         const auto digits = "0123456789ABCDEF";
-        translated += "\\u00";
+        translated += digits[ch >> 12 & 0x0f];
+        translated += digits[ch >> 8 & 0x0f];
         translated += digits[ch >> 4 & 0x0f];
-        translated += digits[ch & 0x0f];
+        translated += digits[ch&0x0f];
       }
     }
     return translated;

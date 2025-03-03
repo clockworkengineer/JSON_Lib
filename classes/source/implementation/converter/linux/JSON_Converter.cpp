@@ -26,7 +26,7 @@ std::u16string toUtf16(const std::string &utf8)
 }
 std::string toUtf8(const std::u16string &utf16) 
 {
-  if (utf16.find(u'\0') != std::string::npos) { throw Error("Tried to convert a null character."); }
+   if (utf16.find(u'\0') != std::string::npos) { throw Error("Tried to convert a null character."); }
   return utf16Converter.to_bytes(utf16);
 }
 

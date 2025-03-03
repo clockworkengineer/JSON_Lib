@@ -21,6 +21,7 @@ public:
     for (auto &file : std::filesystem::directory_iterator((std::filesystem::current_path() / "files"))) {
       if (file.path().extension() == ".json") { fileList.push_back(file.path().string()); }
     }
+    sort(fileList.begin(), fileList.end());
     return (fileList);
   }
   static std::string createFileName(const std::string &torrentFileName, const std::string newExtension)
