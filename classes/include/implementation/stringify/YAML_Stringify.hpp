@@ -5,7 +5,7 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-#include "YAML_Translator.hpp"
+#include "JSON_Translator.hpp"
 
 namespace JSON_Lib {
 
@@ -63,7 +63,7 @@ private:
     if (!JRef<Object>(jNode).value().empty()) {
       for (const auto &entryJNode : JRef<Object>(jNode).value()) {
         destination.add(calculateIndent(destination, indent));
-        destination.add("\"" + JRef<String>(entryJNode.getKeyJNode()).value() + "\"");
+        destination.add("\"" + yamlTranslator.to(JRef<String>(entryJNode.getKeyJNode()).value()) + "\"");
         destination.add(": ");
         if (isA<Array>(entryJNode.getJNode()) || isA<Object>(entryJNode.getJNode())) { destination.add('\n'); }
         stringifyYAML(entryJNode.getJNode(), destination, indent + 2);
@@ -106,6 +106,6 @@ private:
     destination.add("\"" + yamlTranslator.to(JRef<String>(jNode).value()) + "\"" + "\n");
   }
 
-  YAML_Translator yamlTranslator;
+  JSON_Translator yamlTranslator;
 };
 }// namespace JSON_Lib

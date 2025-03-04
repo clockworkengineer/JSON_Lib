@@ -40,7 +40,7 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
     BufferDestination destination;
     json.parse(source);
     json.stringify(destination);
-    REQUIRE(destination.toString() == "---\n\"abcdefghijklmnopqrstuvwxyz\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\u0008\\u0009\\u000A\\u000B\\u000C\\u000D\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~\\u007F\"\n...\n");
+    REQUIRE(destination.toString() == "---\n\"abcdefghijklmnopqrstuvwxyz\\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_`abcdefghijklmnopqrstuvwxyz{|}~\\u007F\"\n...\n");
   }
   // // Disable tests for present
   // // SECTION("YAML encode an string with unprintable characters (128-255) ", "[JSON][Stringify][YAML][String]")
@@ -175,7 +175,7 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
     BufferDestination jsonDestination;
     json.parse(BufferSource{ source });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.toString() == "---\n\"abcdefghijklmnopqrstuvwxyz \\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\u0008\\u0009\\u000A\\u000B\\u000C\\u000D\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\\u007F\"\n...\n");
+    REQUIRE(jsonDestination.toString() == "---\n\"abcdefghijklmnopqrstuvwxyz \\u0001\\u0002\\u0003\\u0004\\u0005\\u0006\\u0007\\b\\t\\n\\u000B\\f\\r\\u000E\\u000F\\u0010\\u0011\\u0012\\u0013\\u0014\\u0015\\u0016\\u0017\\u0018\\u0019\\u001A\\u001B\\u001C\\u001D\\u001E\\u001F !\\\"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\\u007F\"\n...\n");
   }
   SECTION(R"(Stringify YAML string with escapes '\u0080 (non-printable ASCII)' to buffer and check value.)",
     "[JSON][Stringify][YAML][Escapes]")
@@ -218,4 +218,12 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "---\n\"Test\": \n  - []\n  - []\n  - []\n...\n");
   }
+  SECTION("Stringify from dictionary key containing escapes.", "[JSON][Stringify][Object][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource( "{ \"test\n\t\u0001\": 33333 } " ));
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n\"test\\n\\t\\u0001\": 33333\n...\n");
+  }
+
 }
