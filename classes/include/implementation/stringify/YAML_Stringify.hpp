@@ -5,7 +5,7 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-#include "JSON_Translator.hpp"
+#include "Default_Translator.hpp"
 
 namespace JSON_Lib {
 
@@ -106,6 +106,6 @@ private:
     destination.add("\"" + yamlTranslator.to(JRef<String>(jNode).value()) + "\"" + "\n");
   }
 
-  JSON_Translator yamlTranslator;
+  Default_Translator yamlTranslator;
 };
 }// namespace JSON_Lib

@@ -17,7 +17,7 @@ constexpr char16_t kHighSurrogatesEnd{ 0xDBFF };
 constexpr char16_t kLowSurrogatesBegin{ 0xDC00 };
 constexpr char16_t kLowSurrogatesEnd{ 0xDFFF };
 
-class JSON_Translator final : public ITranslator
+class Default_Translator final : public ITranslator
 {
 public:
   // JSON translator error
@@ -27,13 +27,13 @@ public:
   };
 
   // Pass in user defined converter here
-  JSON_Translator();
+  Default_Translator();
   // No other constructors supported
-  JSON_Translator(const JSON_Translator &other) = delete;
-  JSON_Translator &operator=(const JSON_Translator &other) = delete;
-  JSON_Translator(JSON_Translator &&other) = delete;
-  JSON_Translator &operator=(JSON_Translator &&other) = delete;
-  ~JSON_Translator() override = default;
+  Default_Translator(const Default_Translator &other) = delete;
+  Default_Translator &operator=(const Default_Translator &other) = delete;
+  Default_Translator(Default_Translator &&other) = delete;
+  Default_Translator &operator=(Default_Translator &&other) = delete;
+  ~Default_Translator() override = default;
 
   // Convert to/from JSON escaped characters
   std::string from(const std::string &escapedString) const override;

@@ -1,5 +1,5 @@
 //
-// Class: JSON_Translator
+// Class: Default_Translator
 //
 // Description: Translate to/from JSON string escapes within source
 // strings. This is the default translator but is possible to write
@@ -8,7 +8,7 @@
 // Dependencies: C++20 - Language standard features used.
 //
 
-#include "JSON_Translator.hpp"
+#include "Default_Translator.hpp"
 
 namespace JSON_Lib {
 
@@ -44,7 +44,7 @@ char16_t decodeUTF16(std::string::const_iterator &current, const ptrdiff_t numbe
       return utf16value;
     }
   }
-  throw JSON_Translator::Error("Syntax error detected.");
+  throw Default_Translator::Error("Syntax error detected.");
 }
 
 /// <summary>
@@ -116,7 +116,7 @@ bool isASCII(const char16_t utf16Char) { return utf16Char > 0x001F && utf16Char 
 /// <summary>
 /// JSON translator constructor.
 /// </summary>
-JSON_Translator::JSON_Translator()
+Default_Translator::Default_Translator()
 {
   // Initialise tables used to convert to/from single character
   // escape sequences within a JSON string.
@@ -133,7 +133,7 @@ JSON_Translator::JSON_Translator()
 /// </summary>
 /// <param name="escapedString">JSON string to process.</param>
 /// <returns>String with escapes translated.</returns>
-std::string JSON_Translator::from(const std::string &escapedString) const
+std::string Default_Translator::from(const std::string &escapedString) const
 {
   std::u16string utf16Buffer;
   for (auto current = escapedString.begin(); current != escapedString.end();) {
@@ -177,7 +177,7 @@ std::string JSON_Translator::from(const std::string &escapedString) const
 /// </summary>
 /// <param name="rawString">String to convert.</param>
 /// <returns>JSON string with escapes.</returns>
-std::string JSON_Translator::to(const std::string &rawString) const
+std::string Default_Translator::to(const std::string &rawString) const
 {
   std::string escapedString;
   for (char16_t utf16Char : toUtf16(rawString)) {

@@ -2,7 +2,7 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-#include "JSON_Translator.hpp"
+#include "Default_Translator.hpp"
 
 namespace JSON_Lib {
 
@@ -88,7 +88,7 @@ void stringify(const JNode &jNode, IDestination &destination, const unsigned lon
 
 private:
 
-  JSON_Translator jsonTranslator;
+  Default_Translator jsonTranslator;
 
   inline static long printIndent{ 4 };
 };

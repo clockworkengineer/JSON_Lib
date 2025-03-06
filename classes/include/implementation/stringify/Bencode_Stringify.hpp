@@ -2,7 +2,7 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-#include "JSON_Translator.hpp"
+#include "Default_Translator.hpp"
 
 namespace JSON_Lib {
 
@@ -56,7 +56,7 @@ public:
 
 private:
 
-  JSON_Translator bencodeTranslator;
+  Default_Translator bencodeTranslator;
 };
 
 
