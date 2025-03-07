@@ -36,7 +36,7 @@ public:
   }
 
 private:
-  auto calculateIndent(IDestination &destination, const unsigned long indent) const
+  static auto calculateIndent(IDestination &destination, const unsigned long indent)
   {
     if (destination.last() == '\n') { return std::string(indent, ' '); }
     return std::string("");
@@ -86,17 +86,17 @@ private:
     }
   }
 
-  void stringifyNumber(const JNode &jNode, IDestination &destination) const
+  static void stringifyNumber(const JNode &jNode, IDestination &destination)
   {
     destination.add(JRef<Number>(jNode).toString() + "\n");
   }
 
-  void stringifyBoolean(const JNode &jNode, IDestination &destination) const
+  static void stringifyBoolean(const JNode &jNode, IDestination &destination)
   {
     destination.add(JRef<Boolean>(jNode).toString() + "\n");
   }
 
-  void stringifyNull(const JNode &jNode, IDestination &destination) const
+  static void stringifyNull(const JNode &jNode, IDestination &destination)
   {
     destination.add(JRef<Null>(jNode).toString() + "\n");
   }

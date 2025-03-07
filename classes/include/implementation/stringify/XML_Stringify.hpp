@@ -6,7 +6,7 @@
 
 namespace JSON_Lib {
 
-class XML_Stringify : public IStringify
+class XML_Stringify final : public IStringify
 {
 public:
   XML_Stringify() = default;
@@ -39,7 +39,7 @@ private:
   /// <param name="jNode">JNode structure to be traversed.</param>
   /// <param name="destination">Destination stream for stringified XML.</param>
   /// <param name="indent">Current print indentation.</param>
-  void stringifyXML(const JNode &jNode, IDestination &destination, const long indent) const
+  void stringifyXML(const JNode &jNode, IDestination &destination, [[maybe_unused]] const long indent) const
   {
     if (isA<Number>(jNode)) {
       destination.add(std::to_string(JRef<Number>(jNode).value<long long>()));
@@ -52,7 +52,6 @@ private:
         destination.add("False");
       }
     } else if (isA<Null>(jNode)||isA<Hole>(jNode)) {
-      ;
     } else if (isA<Object>(jNode)) {
       for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
         auto elementName = jNodeNext.getKey();

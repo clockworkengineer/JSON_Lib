@@ -25,36 +25,65 @@ public:
   void stringify(const JNode &jNode, IDestination &destination, const unsigned long indent) const override
   {
     if (isA<Number>(jNode)) {
-      destination.add("i" + std::to_string(JRef<Number>(jNode).value<long long>()) + "e");
+       stringifyNumber(jNode, destination);
     } else if (isA<String>(jNode)) {
-      const auto jsonString = JRef<String>(jNode).value();
-      destination.add(std::to_string(static_cast<int>(jsonString.length())) + ":" + jsonString);
+      stringifyString(jNode, destination);
     } else if (isA<Boolean>(jNode)) {
-      if (JRef<Boolean>(jNode).value()) {
-        destination.add("4:True");
-      } else {
-        destination.add("5:False");
-      }
+      stringifyBoolean(jNode, destination);
     } else if (isA<Null>(jNode)) {
-      destination.add("4:null");
+      stringifyNull(jNode, destination);
     } else if (isA<Hole>(jNode)) {
     } else if (isA<Object>(jNode)) {
-      destination.add('d');
-      for (auto &entry : JRef<Object>(jNode).value()) {
-        stringify(entry.getKeyJNode(), destination, 0);
-        stringify(entry.getJNode(), destination, 0);
-      }
-      destination.add("e");
+      stringifyObject(jNode, destination, 0);
     } else if (isA<Array>(jNode)) {
-      destination.add('l');
-      for (auto &entry : JRef<Array>(jNode).value()) { stringify(entry, destination, 0); }
-      destination.add("e");
+      stringifyArray(jNode, destination, 0);
     } else {
       throw Error("Unknown JNode type encountered during stringification.");
     }
   }
 
 private:
+  void stringifyObject(const JNode &jNode, IDestination &destination, const unsigned long indent) const
+  {
+    destination.add('d');
+    for (auto &entry : JRef<Object>(jNode).value()) {
+      stringify(entry.getKeyJNode(), destination, 0);
+      stringify(entry.getJNode(), destination, 0);
+    }
+    destination.add("e");
+  }
+
+  void stringifyArray(const JNode &jNode, IDestination &destination, const unsigned long indent) const
+  {
+    destination.add('l');
+    for (auto &entry : JRef<Array>(jNode).value()) { stringify(entry, destination, 0); }
+    destination.add("e");
+  }
+
+  static void stringifyNumber(const JNode &jNode, IDestination &destination)
+  {
+    destination.add("i" + std::to_string(JRef<Number>(jNode).value<long long>()) + "e");
+  }
+
+  static void stringifyBoolean(const JNode &jNode, IDestination &destination)
+  {
+    if (JRef<Boolean>(jNode).value()) {
+      destination.add("4:True");
+    } else {
+      destination.add("5:False");
+    }
+  }
+
+  static void stringifyNull(const JNode &jNode, IDestination &destination)
+  {
+    destination.add("4:null");
+  }
+
+  void stringifyString(const JNode &jNode, IDestination &destination) const
+  {
+    const auto jsonString = JRef<String>(jNode).value();
+    destination.add(std::to_string(static_cast<int>(jsonString.length())) + ":" + jsonString);
+  }
 
   Default_Translator bencodeTranslator;
 };
