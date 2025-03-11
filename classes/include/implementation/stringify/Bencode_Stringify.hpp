@@ -9,9 +9,8 @@ namespace JSON_Lib {
 class Bencode_Stringify final : public IStringify
 {
 public:
-  explicit Bencode_Stringify(std::unique_ptr<ITranslator> translator =
-                            std::make_unique<Default_Translator>())
-      : bencodeTranslator(std::move(translator)) {};
+  explicit Bencode_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
+    : bencodeTranslator(std::move(translator)) {};
   Bencode_Stringify &operator=(const Bencode_Stringify &other) = delete;
   Bencode_Stringify(Bencode_Stringify &&other) = delete;
   Bencode_Stringify &operator=(Bencode_Stringify &&other) = delete;
@@ -27,7 +26,7 @@ public:
   void stringify(const JNode &jNode, IDestination &destination, const unsigned long indent) const override
   {
     if (isA<Number>(jNode)) {
-       stringifyNumber(jNode, destination);
+      stringifyNumber(jNode, destination);
     } else if (isA<String>(jNode)) {
       stringifyString(jNode, destination);
     } else if (isA<Boolean>(jNode)) {
@@ -76,10 +75,7 @@ private:
     }
   }
 
-  static void stringifyNull(const JNode &jNode, IDestination &destination)
-  {
-    destination.add("4:null");
-  }
+  static void stringifyNull(const JNode &jNode, IDestination &destination) { destination.add("4:null"); }
 
   void stringifyString(const JNode &jNode, IDestination &destination) const
   {
