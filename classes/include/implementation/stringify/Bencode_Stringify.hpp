@@ -9,7 +9,9 @@ namespace JSON_Lib {
 class Bencode_Stringify final : public IStringify
 {
 public:
-  Bencode_Stringify() = default;
+  explicit Bencode_Stringify(std::unique_ptr<ITranslator> translator =
+                            std::make_unique<Default_Translator>())
+      : bencodeTranslator(std::move(translator)) {};
   Bencode_Stringify &operator=(const Bencode_Stringify &other) = delete;
   Bencode_Stringify(Bencode_Stringify &&other) = delete;
   Bencode_Stringify &operator=(Bencode_Stringify &&other) = delete;
@@ -85,7 +87,7 @@ private:
     destination.add(std::to_string(static_cast<int>(jsonString.length())) + ":" + jsonString);
   }
 
-  Default_Translator bencodeTranslator;
+  std::unique_ptr<ITranslator> bencodeTranslator;
 };
 
 

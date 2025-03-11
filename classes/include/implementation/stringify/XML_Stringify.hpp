@@ -9,7 +9,9 @@ namespace JSON_Lib {
 class XML_Stringify final : public IStringify
 {
 public:
-  XML_Stringify() = default;
+  explicit XML_Stringify(std::unique_ptr<ITranslator> translator =
+                            std::make_unique<XML_Translator>())
+      : xmlTranslator(std::move(translator)) {};
   XML_Stringify(const XML_Stringify &other) = delete;
   XML_Stringify &operator=(const XML_Stringify &other) = delete;
   XML_Stringify(XML_Stringify &&other) = delete;
@@ -100,10 +102,10 @@ stringifyNumber(jNode, destination);
 
   void stringifyString(const JNode &jNode, IDestination &destination) const
   {
-    destination.add(xmlTranslator.to(JRef<String>(jNode).value()));
+    destination.add(xmlTranslator->to(JRef<String>(jNode).value()));
   }
 
-  XML_Translator xmlTranslator;
+  std::unique_ptr<ITranslator> xmlTranslator;
 };
 
 }// namespace JSON_Lib

@@ -13,7 +13,9 @@ class YAML_Stringify final : public IStringify
 {
 public:
   // Constructors/destructors
-  YAML_Stringify() = default;
+  explicit YAML_Stringify(std::unique_ptr<ITranslator> translator =
+                            std::make_unique<Default_Translator>())
+      : yamlTranslator(std::move(translator)) {};
   YAML_Stringify(const YAML_Stringify &other) = delete;
   YAML_Stringify &operator=(const YAML_Stringify &other) = delete;
   YAML_Stringify(YAML_Stringify &&other) = delete;
@@ -63,7 +65,7 @@ private:
     if (!JRef<Object>(jNode).value().empty()) {
       for (const auto &entryJNode : JRef<Object>(jNode).value()) {
         destination.add(calculateIndent(destination, indent));
-        destination.add("\"" + yamlTranslator.to(JRef<String>(entryJNode.getKeyJNode()).value()) + "\"");
+        destination.add("\"" + yamlTranslator->to(JRef<String>(entryJNode.getKeyJNode()).value()) + "\"");
         destination.add(": ");
         if (isA<Array>(entryJNode.getJNode()) || isA<Object>(entryJNode.getJNode())) { destination.add('\n'); }
         stringifyYAML(entryJNode.getJNode(), destination, indent + 2);
@@ -103,9 +105,9 @@ private:
 
   void stringifyString(const JNode &jNode, IDestination &destination) const
   {
-    destination.add("\"" + yamlTranslator.to(JRef<String>(jNode).value()) + "\"" + "\n");
+    destination.add("\"" + yamlTranslator->to(JRef<String>(jNode).value()) + "\"" + "\n");
   }
 
-  Default_Translator yamlTranslator;
+  std::unique_ptr<ITranslator> yamlTranslator;
 };
 }// namespace JSON_Lib

@@ -9,7 +9,9 @@ namespace JSON_Lib {
 class JSON_Stringify final : public IStringify
 {
 public:
-  JSON_Stringify() = default;
+  explicit JSON_Stringify(std::unique_ptr<ITranslator> translator =
+                            std::make_unique<Default_Translator>())
+      : jsonTranslator(std::move(translator)) {};
   JSON_Stringify(const JSON_Stringify &other) = delete;
   JSON_Stringify &operator=(const JSON_Stringify &other) = delete;
   JSON_Stringify(JSON_Stringify &&other) = delete;
@@ -117,10 +119,10 @@ private:
 
   void stringifyString(const JNode &jNode, IDestination &destination) const
   {
-  destination.add('"'+jsonTranslator.to(JRef<String>(jNode).toString())+'"');
+  destination.add('"'+jsonTranslator->to(JRef<String>(jNode).toString())+'"');
   }
 
-  Default_Translator jsonTranslator;
+  std::unique_ptr<ITranslator> jsonTranslator;
 
   inline static long printIndent{ 4 };
 };
