@@ -10,7 +10,7 @@ class XML_Stringify final : public IStringify
 {
 public:
   explicit XML_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<XML_Translator>())
-    : xmlTranslator(std::move(translator)) {};
+    : xmlTranslator(std::move(translator)) {}
   XML_Stringify(const XML_Stringify &other) = delete;
   XML_Stringify &operator=(const XML_Stringify &other) = delete;
   XML_Stringify(XML_Stringify &&other) = delete;
@@ -60,7 +60,7 @@ private:
     }
   }
 
-  void stringifyObject(const JNode &jNode, IDestination &destination, const unsigned long indent) const
+  void stringifyObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const
   {
     for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
       auto elementName = jNodeNext.getKey();
@@ -71,7 +71,7 @@ private:
     }
   }
 
-  void stringifyArray(const JNode &jNode, IDestination &destination, const unsigned long indent) const
+  void stringifyArray(const JNode &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent) const
   {
     if (JRef<Array>(jNode).value().size() > 1) {
       for (const auto &bNodeNext : JRef<Array>(jNode).value()) {
@@ -96,7 +96,7 @@ private:
     }
   }
 
-  static void stringifyNull(const JNode &jNode, IDestination &destination) {}
+  static void stringifyNull([[maybe_unused]]const JNode &jNode, [[maybe_unused]]IDestination &destination) {}
 
   void stringifyString(const JNode &jNode, IDestination &destination) const
   {

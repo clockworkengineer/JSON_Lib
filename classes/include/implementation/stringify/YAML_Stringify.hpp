@@ -14,7 +14,7 @@ class YAML_Stringify final : public IStringify
 public:
   // Constructors/destructors
   explicit YAML_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
-    : yamlTranslator(std::move(translator)) {};
+    : yamlTranslator(std::move(translator)) {}
   YAML_Stringify(const YAML_Stringify &other) = delete;
   YAML_Stringify &operator=(const YAML_Stringify &other) = delete;
   YAML_Stringify(YAML_Stringify &&other) = delete;

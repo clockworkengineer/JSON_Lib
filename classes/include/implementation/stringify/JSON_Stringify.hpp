@@ -10,7 +10,7 @@ class JSON_Stringify final : public IStringify
 {
 public:
   explicit JSON_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
-    : jsonTranslator(std::move(translator)) {};
+    : jsonTranslator(std::move(translator)) {}
   JSON_Stringify(const JSON_Stringify &other) = delete;
   JSON_Stringify &operator=(const JSON_Stringify &other) = delete;
   JSON_Stringify(JSON_Stringify &&other) = delete;
@@ -104,7 +104,7 @@ private:
     destination.add(JRef<Boolean>(jNode).toString());
   }
 
-  static void stringifyNull(const JNode &jNode, IDestination &destination) { destination.add(Null::toString()); }
+  static void stringifyNull([[maybe_unused]]const JNode &jNode, IDestination &destination) { destination.add(Null::toString()); }
 
   void stringifyString(const JNode &jNode, IDestination &destination) const
   {
