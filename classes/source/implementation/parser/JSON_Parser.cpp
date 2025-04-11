@@ -34,6 +34,7 @@ bool validEscape(const char escape)
 /// <returns>Extracted string</returns>
 std::string extractString(ISource &source, const ITranslator &translator)
 {
+  uint64_t stringLength = 0;
   bool translateEscapes = false;
   if (source.current() != '"') { throw SyntaxError(source.getPosition(), "Missing opening '\"' on string."); }
   source.next();
@@ -46,6 +47,10 @@ std::string extractString(ISource &source, const ITranslator &translator)
       translateEscapes = true;
     }
     extracted += source.current();
+    stringLength++;
+    if (stringLength>String::getMaxStringLength()) {
+      throw SyntaxError("String size exceeds maximum allowed size.");
+    }
     source.next();
   }
   if (source.current() != '"') { throw SyntaxError(source.getPosition(), "Missing closing '\"' on string."); }
