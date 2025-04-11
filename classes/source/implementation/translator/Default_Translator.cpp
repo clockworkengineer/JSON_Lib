@@ -46,7 +46,6 @@ char16_t decodeUTF16(std::string::const_iterator &current, const ptrdiff_t numbe
   }
   throw Default_Translator::Error("Syntax error detected.");
 }
-
 /// <summary>
 /// Convert UTF16 character into its \uxxxx encoded escape sequence.
 /// </summary>
@@ -63,12 +62,11 @@ std::string encodeUTF16(const char16_t utf16Char)
   utf8Buffer += digits[utf16Char&0x0f];
   return utf8Buffer;
 }
-
 /// <summary>
 /// Return true if a character is a valid upper surrogate.
 /// </summary>
 /// <param name="utf16Char">UTF16 character.</param>
-/// <returns>true if valid upper surrogate.</returns>
+/// <returns>True if valid upper surrogate.</returns>
 bool isValidSurrogateUpper(const char16_t utf16Char)
 {
   return utf16Char >= static_cast<char16_t>(kHighSurrogatesBegin)
@@ -78,20 +76,19 @@ bool isValidSurrogateUpper(const char16_t utf16Char)
 /// Return true if a character is a valid lower surrogate.
 /// </summary>
 /// <param name="utf16Char">UTF16 character.</param>
-/// <returns>true if valid lower surrogate.</returns>
+/// <returns>True if valid lower surrogate.</returns>
 bool isValidSurrogateLower(const char16_t utf16Char)
 {
   return utf16Char >= static_cast<char16_t>(kLowSurrogatesBegin)
          && utf16Char <= static_cast<char16_t>(kLowSurrogatesEnd);
 }
-
 /// <summary>
 /// Check that there are no single unpaired UTF-16 surrogates.From what I see
-/// this is meant to be an error but from searching the web I have not found a
+/// this is meant to be an error, but from searching the web, I have not found a
 /// definitive answer.
 /// </summary>
 /// <param name="utf16Buffer">UTF16 string.</param>
-/// <returns>false if string contains an unpaired surrogate.</returns>
+/// <returns>False if string contains an unpaired surrogate.</returns>
 bool unpairedSurrogatesInBuffer(const std::u16string &utf16Buffer)
 {
   int index = 0;
@@ -105,14 +102,12 @@ bool unpairedSurrogatesInBuffer(const std::u16string &utf16Buffer)
   }
   return false;
 }
-
 /// <summary>
-/// Determine whether passed in character is vaid ASCII
+/// Determine whether passed in character is valid ASCII
 /// </summary>
 /// <param name="utf16Char">UTF16 character.</param>
-/// <returns>true if valid ASCII.</returns>
+/// <returns>True if valid ASCII.</returns>
 bool isASCII(const char16_t utf16Char) { return utf16Char > 0x001F && utf16Char < 0x0080; }
-
 /// <summary>
 /// JSON translator constructor.
 /// </summary>
@@ -125,11 +120,10 @@ Default_Translator::Default_Translator()
     toEscape[value] = key;
   }
 }
-
 /// <summary>
 /// Convert any escape sequences in a string to their correct sequence
-///  of UTF-8 characters. If input string contains any unpaired surrogates
-///  then this is deemed as a syntax error and an error is duly thrown.
+///  of UTF-8 characters.If input string contains any unpaired surrogates,
+///  then this is deemed as a syntax error, and an error is duly thrown.
 /// </summary>
 /// <param name="escapedString">JSON string to process.</param>
 /// <returns>String with escapes translated.</returns>
@@ -143,7 +137,7 @@ std::string Default_Translator::from(const std::string &escapedString) const
       continue;
     }
     ++current;
-    // Check escape sequence if characters to process
+    // Check an escape sequence if characters to process
     if (current != escapedString.end()) {
       // Single character
       if (fromEscape.contains(*current)) {
@@ -170,9 +164,8 @@ std::string Default_Translator::from(const std::string &escapedString) const
   if (unpairedSurrogatesInBuffer(utf16Buffer)) { throw Error("Unpaired surrogate found."); }
   return toUtf8(utf16Buffer);
 }
-
 /// <summary>
-/// Convert a string from raw charater values (UTF8) so that it has character
+/// Convert a string from raw character values (UTF8) so that it has character
 /// escapes where applicable for its JSON form.
 /// </summary>
 /// <param name="rawString">String to convert.</param>

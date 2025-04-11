@@ -24,28 +24,23 @@ JSON_Impl::JSON_Impl(IStringify *stringify, IParser *parser)
     jsonStringify.reset(stringify);
   }
 }
-
 std::string JSON_Impl::version()
 {
   std::stringstream versionString;
   versionString << "JSON_Lib Version  " << JSON_VERSION_MAJOR << "." << JSON_VERSION_MINOR << "." << JSON_VERSION_PATCH;
   return versionString.str();
 }
-
 void JSON_Impl::parse(ISource &source) { jNodeRoot = jsonParser->parse(source); }
-
 void JSON_Impl::stringify(IDestination &destination) const
 {
   if (jNodeRoot.isEmpty()) { throw Error("No JSON to stringify."); }
   jsonStringify->stringify(jNodeRoot, destination, 0);
 }
-
 void JSON_Impl::print(IDestination &destination) const
 {
   if (jNodeRoot.isEmpty()) { throw Error("No JSON to print."); }
   jsonStringify->stringify(jNodeRoot, destination, jsonStringify->getIndent());
 }
-
 void JSON_Impl::strip(ISource &source, IDestination &destination)
 {// Note: That it is assumed that the JSON on the source stream is valid with no errors.
   while (source.more()) {
@@ -67,7 +62,6 @@ void JSON_Impl::strip(ISource &source, IDestination &destination)
     source.next();
   }
 }
-
 void JSON_Impl::traverse(IAction &action)
 {
   if (jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
@@ -78,7 +72,6 @@ void JSON_Impl::traverse(IAction &action) const
   if (jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
   traverseJNodes(jNodeRoot, action);
 }
-
 JNode &JSON_Impl::operator[](const std::string &key)
 {
   try {
@@ -90,7 +83,6 @@ JNode &JSON_Impl::operator[](const std::string &key)
   }
 }
 const JNode &JSON_Impl::operator[](const std::string &key) const { return jNodeRoot[key]; }
-
 JNode &JSON_Impl::operator[](const std::size_t index)
 {
   try {
@@ -102,5 +94,4 @@ JNode &JSON_Impl::operator[](const std::size_t index)
   }
 }
 const JNode &JSON_Impl::operator[](const std::size_t index) const { return jNodeRoot[index]; }
-
 }// namespace JSON_Lib

@@ -14,7 +14,7 @@ namespace JSON_Lib {
 
 /// <summary>
 /// Check whether character is a valid-escaped character or is just
-/// normal escaped ASCII character. Only a few characters are valid
+/// normally escaped ASCII character. Only a few characters are valid
 /// escaped characters such as '\t' or '\"' but normal ASCII characters
 /// may still be can still have a '\' prefix and be escaped though not
 /// proper escaped sense.
@@ -26,7 +26,6 @@ bool validEscape(const char escape)
   return escape == '\\' || escape == 't' || escape == '"' || escape == 'b' || escape == 'f' || escape == 'n'
          || escape == 'r' || escape == 'u';
 }
-
 /// <summary>
 /// Extract a string from a JSON encoded source stream.
 /// </summary>
@@ -55,7 +54,6 @@ std::string extractString(ISource &source, const ITranslator &translator)
   source.next();
   return extracted;
 }
-
 /// <summary>
 /// Has the end of a number been reached in source stream?
 /// </summary>
@@ -65,7 +63,6 @@ bool endOfNumber(const ISource &source)
 {
   return source.isWS() || source.current() == ',' || source.current() == ']' || source.current() == '}';
 }
-
 /// <summary>
 /// Parse an Object key/value pair from a JSON encoded source stream.
 /// </summary>
@@ -81,7 +78,6 @@ Object::Entry JSON_Parser::parseObjectEntry(ISource &source, const ITranslator &
   source.next();
   return {key, parseTree(source, translator)};
 }
-
 /// <summary>
 /// Parse a string from a JSON source stream.
 /// </summary>
@@ -92,7 +88,6 @@ JNode JSON_Parser::parseString(ISource &source, const ITranslator &translator)
 {
   return JNode::make<String>(extractString(source, translator));
 }
-
 /// <summary>
 /// Parse a number from a JSON source stream.
 /// </summary>
@@ -109,7 +104,6 @@ JNode JSON_Parser::parseNumber(ISource &source, [[maybe_unused]]const ITranslato
   }
   throw SyntaxError(source.getPosition(), "Invalid numeric value.");
 }
-
 /// <summary>
 /// Parse a boolean from a JSON source stream.
 /// </summary>
@@ -122,7 +116,6 @@ JNode JSON_Parser::parseBoolean(ISource &source,  [[maybe_unused]]const ITransla
   if (source.match("false")) { return JNode::make<Boolean>(false); }
   throw SyntaxError(source.getPosition(), "Invalid boolean value.");
 }
-
 /// <summary>
 /// Parse a null from a JSON source stream.
 /// </summary>
@@ -134,7 +127,6 @@ JNode JSON_Parser::parseNull(ISource &source,  [[maybe_unused]]const ITranslator
   if (!source.match("null")) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
   return JNode::make<Null>();
 }
-
 /// <summary>
 /// Parse an object from a JSON source stream.
 /// </summary>
@@ -157,7 +149,6 @@ JNode JSON_Parser::parseObject(ISource &source, const ITranslator &translator)
   source.next();
   return jNodeObject;
 }
-
 /// <summary>
 /// Parse an array from a JSON source stream.
 /// </summary>
@@ -180,7 +171,6 @@ JNode JSON_Parser::parseArray(ISource &source, const ITranslator &translator)
   source.next();
   return jNodeArray;
 }
-
 /// <summary>
 /// Recursively parse JSON source stream producing a JNode structure
 /// representation  of it. Note: If no obvious match is found for
