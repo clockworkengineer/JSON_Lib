@@ -28,7 +28,7 @@ TEST_CASE("Check string overflow handling.", "[Bencode][String][Overflow]") {
   SECTION("Default max string 16K", "[Bencode][Parse][String]") {
     REQUIRE(String::getMaxStringLength()==16*1024);
   }
-  SECTION("Parse a string larger than the max allowed length of 1M", "[Bencode][Parse][String]") {
+  SECTION("Parse a string larger than the max allowed length of 16K", "[Bencode][Parse][String]") {
     REQUIRE_THROWS_WITH(json.parse(BufferSource{"[\""+std::string(String::getMaxStringLength()+1,'0')+"\"]"}), "JSON Syntax Error: String size exceeds maximum allowed size.");
   }
 }
