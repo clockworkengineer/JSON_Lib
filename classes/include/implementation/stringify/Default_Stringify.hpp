@@ -6,16 +6,16 @@
 
 namespace JSON_Lib {
 
-class JSON_Stringify final : public IStringify
+class Default_Stringify final : public IStringify
 {
 public:
-  explicit JSON_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
+  explicit Default_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
     : jsonTranslator(std::move(translator)) {}
-  JSON_Stringify(const JSON_Stringify &other) = delete;
-  JSON_Stringify &operator=(const JSON_Stringify &other) = delete;
-  JSON_Stringify(JSON_Stringify &&other) = delete;
-  JSON_Stringify &operator=(JSON_Stringify &&other) = delete;
-  ~JSON_Stringify() override = default;
+  Default_Stringify(const Default_Stringify &other) = delete;
+  Default_Stringify &operator=(const Default_Stringify &other) = delete;
+  Default_Stringify(Default_Stringify &&other) = delete;
+  Default_Stringify &operator=(Default_Stringify &&other) = delete;
+  ~Default_Stringify() override = default;
 
   /// <summary>
   /// Recursively traverse JNode structure encoding it into JSON string on

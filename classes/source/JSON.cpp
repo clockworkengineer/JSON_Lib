@@ -21,35 +21,29 @@ namespace JSON_Lib {
 JSON::JSON(IStringify *stringify, IParser *parser) : implementation(std::make_unique<JSON_Impl>(stringify, parser))
 {
 }
-
 /// <summary>
 /// JSON constructor (array).
 /// </summary>
 /// <param name="array">Initializer list of single values or JNode.</param>
 JSON::JSON(const ArrayInitializer &array) : JSON() { this->root() = JNode(array); }
-
 /// <summary>
 /// JSON constructor (object).
 /// </summary>
 /// <param name="object">Initializer list of key/value(JNode) pairs.</param>
 JSON::JSON(const ObjectInitializer &object) : JSON() { this->root() = JNode(object); }
-
 /// <summary>
 /// JSON constructor. Pass a JSON string to be initially parsed.
 /// </summary>
 /// <param name="jsonString">JSON string.</param>
 JSON::JSON(const std::string &jsonString) : JSON() { parse(BufferSource{ jsonString }); }
-
 /// <summary>
 /// JSON destructor.
 /// </summary>
 JSON::~JSON() = default;
-
 /// <summary>
 /// Get JSON library version.
 /// </summary>
 std::string JSON::version() { return JSON_Impl::version(); }
-
 /// <summary>
 /// Strip all whitespace from a JSON source.
 /// </summary>
@@ -59,14 +53,12 @@ void JSON::strip(ISource &source, IDestination &destination) { JSON_Impl::strip(
 void JSON::strip(ISource &source, IDestination &&destination)  { JSON_Impl::strip(source, destination); }
 void JSON::strip(ISource &&source, IDestination &destination)  { JSON_Impl::strip(source, destination); }
 void JSON::strip(ISource &&source, IDestination &&destination)  { JSON_Impl::strip(source, destination); }
-
 /// <summary>
 /// Create JNode structure by parsing JSON on the source stream.
 /// </summary>
 /// <param name="source">Source for JSON encoded bytes.</param>
 void JSON::parse(ISource &source) const { implementation->parse(source); }
 void JSON::parse(ISource &&source) const { implementation->parse(source); }
-
 /// <summary>
 /// Traverse JNode structure and build its JSON string (no whitespace) on destination stream.
 /// </summary>

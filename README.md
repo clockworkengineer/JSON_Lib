@@ -1,105 +1,129 @@
 # JSON_Lib
 
-**JSON_Lib** is a lightweight, flexible, and efficient library for parsing, manipulating, and serializing JSON data in C++. It adheres to the JSON standard as specified in [RFC 8259](https://tools.ietf.org/html/rfc8259). The library allows easy creation and manipulation of JSON objects, offering robust features for developers working with JSON data.
+**JSON_Lib** is a C++20-based library designed to simplify interactions with JSON data. With a focus on providing a clean and intuitive API, the library enables developers to parse, manipulate, and serialize JSON data with ease and efficiency.
 
 ---
 
 ## Features
 
-- **JSON Parsing**: Convert JSON text into an internal JSON object while validating its syntax. Robust exceptions are thrown when invalid JSON is encountered.
-- **JSON Serialization**: Convert JSON objects back into a text form with options for compact or well-formatted (indented) output.
-- **Custom I/O Sources**: Support for parsing from or serializing to:
-  - Byte buffers
-  - Files
-  - Custom sources or destinations through `ISource` and `IDestination` interfaces.
-- **Tree Traversal**: Easily traverse the JSON object tree and perform actions through the `IAction` interface. Enables reading or modifying nodes during traversal.
-- **Indentation Support**: Options for pretty-printing JSON with defined indentation levels using the `print` and `setIndent()` methods.
+- Modern and lightweight JSON handling.
+- Fully compatible with C++20 features (e.g., concepts, `std::string_view`, etc.).
+- Highly customizable and efficient, designed for performance.
+- Support for parsing, creating, and serializing JSON objects and arrays.
+- Extensive error management for JSON parsing and handling.
 
 ---
 
-## Installation
+## Getting Started
 
-1. Clone the repository:
+### Prerequisites
+
+Before using `JSON_Lib`, ensure you have the following installed:
+
+- **C++ compiler** with C++20 support (e.g., GCC 10+, Clang 10+, MSVC 19.26+).
+- **CMake** (version 3.15 or above) for build configuration.
+
+### Installation
+
+1. Clone the repository to your local machine:
+
    ```bash
-   git clone <repository_link>
+   git clone <repository-url>
+   cd JSON_Lib
    ```
-2. Install the library using CMake:
+
+2. Configure and build the project using CMake:
+
    ```bash
-   mkdir build && cd build
+   mkdir build
+   cd build
    cmake ..
    make
-   sudo make install
+   ```
+
+3. Include the library in your project by linking it during compilation:
+
+   ```cmake
+   target_link_libraries(<your-project-name> PRIVATE JSON_Lib)
    ```
 
 ---
 
-## Basic Usage
+## Usage
 
-### Parsing JSON
+### Basic Example
+
+Here's a simple example of how to use the library to parse a JSON string:
+
 ```cpp
-#include "JSON_Lib/JSON.h"
+#include "json_lib.h"
 
-// Parse JSON string into an internal JSON object
-std::string jsonStr = R"({"key": "value"})";
-JSON jsonObject = JSON::parse(jsonStr);
+int main() {
+    std::string json_string = R"({"name": "John", "age": 30, "is_admin": true})";
+    JsonLib::Json json = JsonLib::Json::parse(json_string);
+
+    // Access JSON data
+    std::string name = json["name"].as_string();
+    int age = json["age"].as_int();
+    bool isAdmin = json["is_admin"].as_bool();
+
+    std::cout << "Name: " << name << ", Age: " << age << ", Admin: " << (isAdmin ? "Yes" : "No") << "\n";
+
+    return 0;
+}
 ```
 
-### Stringify JSON
+### Creating JSON
+
 ```cpp
-// Convert JSON object back to a compact string
-std::string jsonString = jsonObject.stringify();
-```
+#include "json_lib.h"
 
-### Pretty Print
-```cpp
-jsonObject.setIndent(4); // Set indentation to 4 spaces
-jsonObject.print(std::cout); // Print the formatted output
-```
+int main() {
+    JsonLib::Json json;
+    json["name"] = "Jane";
+    json["age"] = 25;
+    json["is_admin"] = false;
 
-### Traversing a JSON Tree
-Use the `IAction` interface to traverse the JSON tree and apply actions on each node.
+    std::string serialized_json = json.dump();
+    std::cout << serialized_json << "\n";
 
----
-
-## Examples
-- The `examples` folder contains practical programs demonstrating:
-    - Parsing JSON
-    - Modifying JSON objects
-    - Serializing JSON with various options
-
-To explore these examples, navigate to the `examples` directory and build the sample programs.
-
----
-
-## Testing
-The library includes unit tests to ensure robustness. Use the following to build and run tests:
-```bash
-mkdir build && cd build
-cmake ..
-make test
+    return 0;
+}
 ```
 
 ---
 
 ## Documentation
-Refer to the code comments and examples for in-depth details on how to use the library. For the full JSON specification, visit [RFC 8259](https://tools.ietf.org/html/rfc8259).
+
+For detailed API documentation, refer to the **`docs/`** folder in this repository.
+
+You can also explore the `json_lib.h` header file for insights into the API design.
 
 ---
 
 ## Contributing
-Contributions in the form of bug reports, feature requests, or pull requests are welcome! Please follow the standard GitHub workflow:
 
-1. Fork the repository.
-2. Create a new branch for your feature or fix.
-3. Submit a pull request.
+We welcome contributions to enhance the library! Feel free to fork the repository and submit a pull request. Before submitting, ensure that:
+
+- The code follows consistent formatting and style guides.
+- You have included relevant test cases for any new functionality added.
+
+For significant changes, please open an issue first to discuss your ideas.
 
 ---
 
 ## License
-This project is licensed under the **MIT License**. See the `LICENSE` file for more details.
+
+This project is available under the **MIT License**. See the [LICENSE](LICENSE) file for more details.
+
+---
+
+## Acknowledgments
+
+Special thanks to all contributors and the open-source community for inspiration and feedback!
 
 ---
 
 ## Contact
-For support, feedback, or further information, feel free to reach out via the issue tracker or contribute to the discussions section.
-```
+
+If you encounter any bugs or have questions, please feel free to file an issue in the repository.

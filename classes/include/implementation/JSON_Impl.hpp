@@ -2,8 +2,8 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-#include "JSON_Parser.hpp"
-#include "JSON_Stringify.hpp"
+#include "Default_Parser.hpp"
+#include "Default_Stringify.hpp"
 
 namespace JSON_Lib {
 

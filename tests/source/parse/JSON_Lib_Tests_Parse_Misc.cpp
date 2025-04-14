@@ -1,5 +1,5 @@
 #include "JSON_Lib_Tests.hpp"
-#include "JSON_Parser.hpp"
+#include "Default_Parser.hpp"
 
 TEST_CASE("Check JSON parsing of a list of example JSON files.", "[JSON][Parse][Examples]")
 {
@@ -42,15 +42,15 @@ TEST_CASE("Check parse depth handling.", "[JSON][Parse][Depth]")
     REQUIRE_THROWS_WITH(json.parse(BufferSource("[[[[[[[[[[[]]]]]]]]]]]")),"JSON Syntax Error: Maximum parser depth exceeded.");
   }
   SECTION("Get default maximum parser depth.", "[Bencode][Parse][Depth]") {
-    REQUIRE(JSON_Parser::getMaxParserDepth()==10);
+    REQUIRE(Default_Parser::getMaxParserDepth()==10);
   }
   SECTION("Set default maximum parser depth.", "[Bencode][Parse][Depth]") {
-    JSON_Parser::setMaxParserDepth(20);
-    REQUIRE(JSON_Parser::getMaxParserDepth()==20);
+    Default_Parser::setMaxParserDepth(20);
+    REQUIRE(Default_Parser::getMaxParserDepth()==20);
   }
   SECTION("Set default maximum parser depth and check new value works.", "[Bencode][Parse][Depth]") {
-    JSON_Parser::setMaxParserDepth(20);
-    REQUIRE(JSON_Parser::getMaxParserDepth()==20);
+    Default_Parser::setMaxParserDepth(20);
+    REQUIRE(Default_Parser::getMaxParserDepth()==20);
     REQUIRE_NOTHROW(json.parse(BufferSource("[[[[[[[[[[[]]]]]]]]]]]")));
   }
 }

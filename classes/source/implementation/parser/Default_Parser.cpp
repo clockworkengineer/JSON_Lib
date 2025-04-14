@@ -8,7 +8,7 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-#include "JSON_Parser.hpp"
+#include "Default_Parser.hpp"
 
 namespace JSON_Lib {
 
@@ -75,7 +75,7 @@ bool endOfNumber(const ISource &source)
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Object key/value pair.</returns>
-Object::Entry JSON_Parser::parseObjectEntry(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
+Object::Entry Default_Parser::parseObjectEntry(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
   source.ignoreWS();
   const std::string key{ extractString(source, translator) };
@@ -91,7 +91,7 @@ Object::Entry JSON_Parser::parseObjectEntry(ISource &source, const ITranslator &
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>String JNode.</returns>
-JNode JSON_Parser::parseString(ISource &source, const ITranslator &translator,const unsigned long parserDepth)
+JNode Default_Parser::parseString(ISource &source, const ITranslator &translator,const unsigned long parserDepth)
 {
   return JNode::make<String>(extractString(source, translator));
 }
@@ -102,7 +102,7 @@ JNode JSON_Parser::parseString(ISource &source, const ITranslator &translator,co
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Number JNode.</returns>
-JNode JSON_Parser::parseNumber(ISource &source, [[maybe_unused]]const ITranslator &translator, const unsigned long parserDepth)
+JNode Default_Parser::parseNumber(ISource &source, [[maybe_unused]]const ITranslator &translator, const unsigned long parserDepth)
 {
   std::string string;
   for (; source.more() && !endOfNumber(source); source.next()) { string += source.current(); }
@@ -119,7 +119,7 @@ JNode JSON_Parser::parseNumber(ISource &source, [[maybe_unused]]const ITranslato
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Boolean JNode.</returns>
-JNode JSON_Parser::parseBoolean(ISource &source,  [[maybe_unused]]const ITranslator &translator, const unsigned long parserDepth)
+JNode Default_Parser::parseBoolean(ISource &source,  [[maybe_unused]]const ITranslator &translator, const unsigned long parserDepth)
 {
   if (source.match("true")) { return JNode::make<Boolean>(true); }
   if (source.match("false")) { return JNode::make<Boolean>(false); }
@@ -132,7 +132,7 @@ JNode JSON_Parser::parseBoolean(ISource &source,  [[maybe_unused]]const ITransla
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Null JNode.</returns>
-JNode JSON_Parser::parseNull(ISource &source,  [[maybe_unused]]const ITranslator &translator, const unsigned long parserDepth)
+JNode Default_Parser::parseNull(ISource &source,  [[maybe_unused]]const ITranslator &translator, const unsigned long parserDepth)
 {
   if (!source.match("null")) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
   return JNode::make<Null>();
@@ -144,7 +144,7 @@ JNode JSON_Parser::parseNull(ISource &source,  [[maybe_unused]]const ITranslator
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Object JNode (key/value pairs).</returns>
-JNode JSON_Parser::parseObject(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
+JNode Default_Parser::parseObject(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
   JNode jNodeObject = JNode::make<Object>();
   source.next();
@@ -167,7 +167,7 @@ JNode JSON_Parser::parseObject(ISource &source, const ITranslator &translator, c
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Array JNode.</returns>
-JNode JSON_Parser::parseArray(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
+JNode Default_Parser::parseArray(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
   JNode jNodeArray = JNode::make<Array>();
   source.next();
@@ -192,7 +192,7 @@ JNode JSON_Parser::parseArray(ISource &source, const ITranslator &translator, co
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Pointer to JNode.</returns>
-JNode JSON_Parser::parseJNodes(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
+JNode Default_Parser::parseJNodes(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
   if (parserDepth>=getMaxParserDepth()) {
     throw SyntaxError("Maximum parser depth exceeded.");
@@ -212,5 +212,5 @@ JNode JSON_Parser::parseJNodes(ISource &source, const ITranslator &translator, c
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Pointer to JNode.</returns>
-JNode JSON_Parser::parse(ISource &source) { return parseJNodes(source, jsonTranslator, 1); }
+JNode Default_Parser::parse(ISource &source) { return parseJNodes(source, jsonTranslator, 1); }
 }// namespace JSON_Lib

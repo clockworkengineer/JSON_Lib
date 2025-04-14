@@ -28,7 +28,7 @@ set(JSON_SOURCES
   ./classes/source/implementation/JSON_Impl.cpp
   ./classes/source/implementation/file/JSON_File.cpp
   ./classes/source/implementation/translator/Default_Translator.cpp
-  ./classes/source/implementation/parser/JSON_Parser.cpp)
+        classes/source/implementation/parser/Default_Parser.cpp)
 
 set(JSON_INCLUDES
   JSON_Config.hpp
@@ -57,8 +57,8 @@ set(JSON_INCLUDES
   ./classes/include/implementation/converter/JSON_Converter.hpp
   ./classes/include/implementation/translator/Default_Translator.hpp
   ./classes/include/implementation/translator/XML_Translator.hpp
-  ./classes/include/implementation/parser/JSON_Parser.hpp
-  ./classes/include/implementation/stringify/JSON_Stringify.hpp
+  ./classes/include/implementation/parser/Default_Parser.hpp
+  ./classes/include/implementation/stringify/Default_Stringify.hpp
   ./classes/include/implementation/stringify/Bencode_Stringify.hpp
   ./classes/include/implementation/stringify/XML_Stringify.hpp
   ./classes/include/implementation/stringify/YAML_Stringify.hpp

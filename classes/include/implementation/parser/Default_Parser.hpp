@@ -7,18 +7,18 @@
 
 namespace JSON_Lib {
 
-class JSON_Parser final : public IParser
+class Default_Parser final : public IParser
 {
 public:
   // Default maximum parser depth
   constexpr static unsigned long kDefaultMaxParserDepth = 10;
 
-  explicit JSON_Parser(ITranslator &translator) : jsonTranslator(translator) {}
-  JSON_Parser(const JSON_Parser &other) = delete;
-  JSON_Parser &operator=(const JSON_Parser &other) = delete;
-  JSON_Parser(JSON_Parser &&other) = delete;
-  JSON_Parser &operator=(JSON_Parser &&other) = delete;
-  ~JSON_Parser() override = default;
+  explicit Default_Parser(ITranslator &translator) : jsonTranslator(translator) {}
+  Default_Parser(const Default_Parser &other) = delete;
+  Default_Parser &operator=(const Default_Parser &other) = delete;
+  Default_Parser(Default_Parser &&other) = delete;
+  Default_Parser &operator=(Default_Parser &&other) = delete;
+  ~Default_Parser() override = default;
 
   // Get/Set parser max recursion depth
   static void setMaxParserDepth(const unsigned long depth) { maxParserDepth = depth; }

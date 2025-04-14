@@ -14,12 +14,12 @@ JSON_Impl::JSON_Impl(IStringify *stringify, IParser *parser)
 {
   jsonTranslator = std::make_unique<Default_Translator>();
   if (parser == nullptr) {
-    jsonParser = std::make_unique<JSON_Parser>(*jsonTranslator);
+    jsonParser = std::make_unique<Default_Parser>(*jsonTranslator);
   } else {
     jsonParser.reset(parser);
   }
   if (stringify == nullptr) {
-    jsonStringify = std::make_unique<JSON_Stringify>();
+    jsonStringify = std::make_unique<Default_Stringify>();
   } else {
     jsonStringify.reset(stringify);
   }
