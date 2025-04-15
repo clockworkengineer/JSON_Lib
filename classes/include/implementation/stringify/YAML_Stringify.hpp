@@ -58,7 +58,6 @@ private:
       stringifyNull(jNode, destination);
     }
   }
-
   void stringifyObject(const JNode &jNode, IDestination &destination, const unsigned long indent) const
   {
     if (!JRef<Object>(jNode).value().empty()) {
@@ -73,7 +72,6 @@ private:
       destination.add("{}\n");
     }
   }
-
   void stringifyArray(const JNode &jNode, IDestination &destination, const unsigned long indent) const
   {
     std::string spaces(indent, ' ');
@@ -86,22 +84,18 @@ private:
       destination.add("[]\n");
     }
   }
-
   static void stringifyNumber(const JNode &jNode, IDestination &destination)
   {
     destination.add(JRef<Number>(jNode).toString() + "\n");
   }
-
   static void stringifyBoolean(const JNode &jNode, IDestination &destination)
   {
     destination.add(JRef<Boolean>(jNode).toString() + "\n");
   }
-
   static void stringifyNull(const JNode &jNode, IDestination &destination)
   {
     destination.add(JRef<Null>(jNode).toString() + "\n");
   }
-
   void stringifyString(const JNode &jNode, IDestination &destination) const
   {
     destination.add("\"" + yamlTranslator->to(JRef<String>(jNode).value()) + "\"" + "\n");

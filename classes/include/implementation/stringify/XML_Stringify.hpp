@@ -18,11 +18,11 @@ public:
   ~XML_Stringify() override = default;
 
   /// <summary>
-  /// Recursively traverse JNode structure encoding it into JSON string on
+  /// Recursively traverse JNode structure encoding it into XML string on
   /// the destination stream passed in.
   /// </summary>
   /// <param name="jNode">JNode structure to be traversed.</param>
-  /// <param name="destination">Destination stream for stringified JSON.</param>
+  /// <param name="destination">Destination stream for stringified XML.</param>
   /// <param name="indent">Current print indentation.</param>
   void
     stringify(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const override
@@ -59,7 +59,6 @@ private:
       throw Error("Unknown JNode type encountered during stringification.");
     }
   }
-
   void stringifyObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const
   {
     for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
@@ -70,7 +69,6 @@ private:
       destination.add("</" + elementName + ">");
     }
   }
-
   void stringifyArray(const JNode &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent) const
   {
     if (JRef<Array>(jNode).value().size() > 1) {
@@ -81,12 +79,10 @@ private:
       }
     }
   }
-
   static void stringifyNumber(const JNode &jNode, IDestination &destination)
   {
     destination.add(std::to_string(JRef<Number>(jNode).value<long long>()));
   }
-
   static void stringifyBoolean(const JNode &jNode, IDestination &destination)
   {
     if (JRef<Boolean>(jNode).value()) {
@@ -95,7 +91,6 @@ private:
       destination.add("False");
     }
   }
-
   static void stringifyNull([[maybe_unused]]const JNode &jNode, [[maybe_unused]]IDestination &destination) {}
 
   void stringifyString(const JNode &jNode, IDestination &destination) const

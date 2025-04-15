@@ -74,7 +74,6 @@ private:
     if (indent != 0) { destination.add("\n" + std::string(indent - printIndent, ' ')); }
     destination.add("}");
   }
-
   void stringifyArray(const JNode &jNode, IDestination &destination, const unsigned long indent) const
   {
     destination.add('[');
@@ -93,26 +92,21 @@ private:
     }
     destination.add("]");
   }
-
   static void stringifyNumber(const JNode &jNode, IDestination &destination)
   {
     destination.add(JRef<Number>(jNode).toString());
   }
-
   static void stringifyBoolean(const JNode &jNode, IDestination &destination)
   {
     destination.add(JRef<Boolean>(jNode).toString());
   }
-
   static void stringifyNull([[maybe_unused]]const JNode &jNode, IDestination &destination) { destination.add(Null::toString()); }
-
   void stringifyString(const JNode &jNode, IDestination &destination) const
   {
     destination.add('"' + jsonTranslator->to(JRef<String>(jNode).toString()) + '"');
   }
 
   std::unique_ptr<ITranslator> jsonTranslator;
-
   inline static long printIndent{ 4 };
 };
 

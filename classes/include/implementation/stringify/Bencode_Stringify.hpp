@@ -17,11 +17,11 @@ public:
   ~Bencode_Stringify() override = default;
 
   /// <summary>
-  /// Recursively traverse JNode structure encoding it into JSON string on
+  /// Recursively traverse JNode structure encoding it into Bencode string on
   /// the destination stream passed in.
   /// </summary>
   /// <param name="jNode">JNode structure to be traversed.</param>
-  /// <param name="destination">Destination stream for stringified JSON.</param>
+  /// <param name="destination">Destination stream for stringified Bencode.</param>
   /// <param name="indent">Current print indentation.</param>
   void stringify(const JNode &jNode, IDestination &destination, const unsigned long indent) const override
   {
@@ -53,19 +53,16 @@ private:
     }
     destination.add("e");
   }
-
   void stringifyArray(const JNode &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent) const
   {
     destination.add('l');
     for (auto &entry : JRef<Array>(jNode).value()) { stringify(entry, destination, 0); }
     destination.add("e");
   }
-
   static void stringifyNumber(const JNode &jNode, IDestination &destination)
   {
     destination.add("i" + std::to_string(JRef<Number>(jNode).value<long long>()) + "e");
   }
-
   static void stringifyBoolean(const JNode &jNode, IDestination &destination)
   {
     if (JRef<Boolean>(jNode).value()) {
@@ -74,9 +71,7 @@ private:
       destination.add("5:False");
     }
   }
-
   static void stringifyNull([[maybe_unused]]const JNode &jNode, IDestination &destination) { destination.add("4:null"); }
-
   static void stringifyString(const JNode &jNode, IDestination &destination)
   {
     const auto jsonString = JRef<String>(jNode).value();
