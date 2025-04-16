@@ -10,7 +10,7 @@ class Default_Stringify final : public IStringify
 {
 public:
   explicit Default_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
-    : jsonTranslator(std::move(translator)) {}
+    {jsonTranslator=std::move(translator);}
   Default_Stringify(const Default_Stringify &other) = delete;
   Default_Stringify &operator=(const Default_Stringify &other) = delete;
   Default_Stringify(Default_Stringify &&other) = delete;
@@ -25,6 +25,21 @@ public:
   /// <param name="destination">Destination stream for stringified JSON.</param>
   /// <param name="indent">Current print indentation.</param>
   void stringify(const JNode &jNode, IDestination &destination, const unsigned long indent) const override
+  {
+    stringifyJNodes(jNode,destination, indent);
+  }
+
+  // Set print ident value
+  void setIndent(const long indent) override
+  {
+    if (indent < 0) { throw JSON_Lib::Error("Invalid print indentation value."); }
+    printIndent = indent;
+  }
+  //  Set indent value
+  long getIndent() const override { return printIndent; }
+
+private:
+  static void stringifyJNodes(const JNode &jNode, IDestination &destination, const unsigned long indent)
   {
     if (isA<Number>(jNode)) {
       stringifyNumber(jNode, destination);
@@ -44,28 +59,17 @@ public:
       throw Error("Unknown JNode type encountered during stringification.");
     }
   }
-
-  // Set print ident value
-  void setIndent(const long indent) override
-  {
-    if (indent < 0) { throw JSON_Lib::Error("Invalid print indentation value."); }
-    printIndent = indent;
-  }
-  //  Set indent value
-  long getIndent() const override { return printIndent; }
-
-private:
-  void stringifyObject(const JNode &jNode, IDestination &destination, const unsigned long indent) const
+  static void stringifyObject(const JNode &jNode, IDestination &destination, const unsigned long indent)
   {
     size_t commaCount = JRef<Object>(jNode).value().size() - 1;
     destination.add('{');
     if (indent != 0) { destination.add('\n'); }
     for (auto &entry : JRef<Object>(jNode).value()) {
       if (indent != 0) { destination.add(std::string(indent, ' ')); }
-      stringify(entry.getKeyJNode(), destination, indent != 0 ? indent + printIndent : 0);
+      stringifyJNodes(entry.getKeyJNode(), destination, indent != 0 ? indent + printIndent : 0);
       destination.add(":");
       if (indent != 0) { destination.add(" "); }
-      stringify(entry.getJNode(), destination, indent != 0 ? indent + printIndent : 0);
+      stringifyJNodes(entry.getJNode(), destination, indent != 0 ? indent + printIndent : 0);
       if (commaCount-- > 0) {
         destination.add(",");
         if (indent != 0) { destination.add('\n'); }
@@ -74,7 +78,7 @@ private:
     if (indent != 0) { destination.add("\n" + std::string(indent - printIndent, ' ')); }
     destination.add("}");
   }
-  void stringifyArray(const JNode &jNode, IDestination &destination, const unsigned long indent) const
+  static void stringifyArray(const JNode &jNode, IDestination &destination, const unsigned long indent)
   {
     destination.add('[');
     if (!JRef<Array>(jNode).value().empty()) {
@@ -82,7 +86,7 @@ private:
       if (indent != 0) { destination.add('\n'); }
       for (auto &entry : JRef<Array>(jNode).value()) {
         if (indent != 0) { destination.add(std::string(indent, ' ')); }
-        stringify(entry, destination, indent != 0 ? indent + printIndent : 0);
+        stringifyJNodes(entry, destination, indent != 0 ? indent + printIndent : 0);
         if (commaCount-- > 0) {
           destination.add(",");
           if (indent != 0) { destination.add('\n'); }
@@ -101,12 +105,12 @@ private:
     destination.add(JRef<Boolean>(jNode).toString());
   }
   static void stringifyNull([[maybe_unused]]const JNode &jNode, IDestination &destination) { destination.add(Null::toString()); }
-  void stringifyString(const JNode &jNode, IDestination &destination) const
+  static void stringifyString(const JNode &jNode, IDestination &destination)
   {
     destination.add('"' + jsonTranslator->to(JRef<String>(jNode).toString()) + '"');
   }
 
-  std::unique_ptr<ITranslator> jsonTranslator;
+  inline static std::unique_ptr<ITranslator> jsonTranslator;
   inline static long printIndent{ 4 };
 };
 

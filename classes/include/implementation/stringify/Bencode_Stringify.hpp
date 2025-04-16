@@ -10,7 +10,7 @@ class Bencode_Stringify final : public IStringify
 {
 public:
   explicit Bencode_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
-    : bencodeTranslator(std::move(translator)) {}
+      {bencodeTranslator = std::move(translator);}
   Bencode_Stringify &operator=(const Bencode_Stringify &other) = delete;
   Bencode_Stringify(Bencode_Stringify &&other) = delete;
   Bencode_Stringify &operator=(Bencode_Stringify &&other) = delete;
@@ -24,6 +24,12 @@ public:
   /// <param name="destination">Destination stream for stringified Bencode.</param>
   /// <param name="indent">Current print indentation.</param>
   void stringify(const JNode &jNode, IDestination &destination, const unsigned long indent) const override
+  {
+    stringifyJNodes(jNode, destination, indent);
+  }
+
+private:
+  static void stringifyJNodes(const JNode &jNode, IDestination &destination, const unsigned long indent)
   {
     if (isA<Number>(jNode)) {
       stringifyNumber(jNode, destination);
@@ -42,21 +48,19 @@ public:
       throw Error("Unknown JNode type encountered during stringification.");
     }
   }
-
-private:
-  void stringifyObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const
+  static void stringifyObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent)
   {
     destination.add('d');
     for (auto &entry : JRef<Object>(jNode).value()) {
-      stringify(entry.getKeyJNode(), destination, 0);
-      stringify(entry.getJNode(), destination, 0);
+      stringifyJNodes(entry.getKeyJNode(), destination, 0);
+      stringifyJNodes(entry.getJNode(), destination, 0);
     }
     destination.add("e");
   }
-  void stringifyArray(const JNode &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent) const
+  static void stringifyArray(const JNode &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
   {
     destination.add('l');
-    for (auto &entry : JRef<Array>(jNode).value()) { stringify(entry, destination, 0); }
+    for (auto &entry : JRef<Array>(jNode).value()) { stringifyJNodes(entry, destination, 0); }
     destination.add("e");
   }
   static void stringifyNumber(const JNode &jNode, IDestination &destination)
@@ -78,7 +82,7 @@ private:
     destination.add(std::to_string(static_cast<int>(jsonString.length())) + ":" + jsonString);
   }
 
-  std::unique_ptr<ITranslator> bencodeTranslator;
+  inline static std::unique_ptr<ITranslator> bencodeTranslator;
 };
 
 

@@ -14,7 +14,7 @@ class YAML_Stringify final : public IStringify
 public:
   // Constructors/destructors
   explicit YAML_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
-    : yamlTranslator(std::move(translator)) {}
+     {yamlTranslator = std::move(translator); }
   YAML_Stringify(const YAML_Stringify &other) = delete;
   YAML_Stringify &operator=(const YAML_Stringify &other) = delete;
   YAML_Stringify(YAML_Stringify &&other) = delete;
@@ -32,7 +32,7 @@ public:
     stringify(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const override
   {
     destination.add("---\n");
-    stringifyYAML(jNode, destination, 0);
+    stringifyJNodes(jNode, destination, 0);
     destination.add("...\n");
   }
 
@@ -42,7 +42,7 @@ private:
     if (destination.last() == '\n') { return std::string(indent, ' '); }
     return std::string("");
   }
-  void stringifyYAML(const JNode &jNode, IDestination &destination, const unsigned long indent) const
+  static void stringifyJNodes(const JNode &jNode, IDestination &destination, const unsigned long indent)
   {
     if (isA<Object>(jNode)) {
       stringifyObject(jNode, destination, indent);
@@ -58,7 +58,7 @@ private:
       stringifyNull(jNode, destination);
     }
   }
-  void stringifyObject(const JNode &jNode, IDestination &destination, const unsigned long indent) const
+  static void stringifyObject(const JNode &jNode, IDestination &destination, const unsigned long indent)
   {
     if (!JRef<Object>(jNode).value().empty()) {
       for (const auto &entryJNode : JRef<Object>(jNode).value()) {
@@ -66,19 +66,19 @@ private:
         destination.add("\"" + yamlTranslator->to(JRef<String>(entryJNode.getKeyJNode()).value()) + "\"");
         destination.add(": ");
         if (isA<Array>(entryJNode.getJNode()) || isA<Object>(entryJNode.getJNode())) { destination.add('\n'); }
-        stringifyYAML(entryJNode.getJNode(), destination, indent + 2);
+        stringifyJNodes(entryJNode.getJNode(), destination, indent + 2);
       }
     } else {
       destination.add("{}\n");
     }
   }
-  void stringifyArray(const JNode &jNode, IDestination &destination, const unsigned long indent) const
+  static void stringifyArray(const JNode &jNode, IDestination &destination, const unsigned long indent)
   {
     std::string spaces(indent, ' ');
     if (!JRef<Array>(jNode).value().empty()) {
       for (const auto &jNodeNext : JRef<Array>(jNode).value()) {
         destination.add(calculateIndent(destination, indent) + "- ");
-        stringifyYAML(jNodeNext, destination, indent + 2);
+        stringifyJNodes(jNodeNext, destination, indent + 2);
       }
     } else {
       destination.add("[]\n");
@@ -96,11 +96,11 @@ private:
   {
     destination.add(JRef<Null>(jNode).toString() + "\n");
   }
-  void stringifyString(const JNode &jNode, IDestination &destination) const
+  static void stringifyString(const JNode &jNode, IDestination &destination)
   {
     destination.add("\"" + yamlTranslator->to(JRef<String>(jNode).value()) + "\"" + "\n");
   }
 
-  std::unique_ptr<ITranslator> yamlTranslator;
+  inline static std::unique_ptr<ITranslator> yamlTranslator;
 };
 }// namespace JSON_Lib

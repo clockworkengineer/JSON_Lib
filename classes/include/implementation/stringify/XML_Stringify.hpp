@@ -10,7 +10,7 @@ class XML_Stringify final : public IStringify
 {
 public:
   explicit XML_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<XML_Translator>())
-    : xmlTranslator(std::move(translator)) {}
+    {xmlTranslator = std::move(translator);}
   XML_Stringify(const XML_Stringify &other) = delete;
   XML_Stringify &operator=(const XML_Stringify &other) = delete;
   XML_Stringify(XML_Stringify &&other) = delete;
@@ -29,19 +29,12 @@ public:
   {
     destination.add(R"(<?xml version="1.0" encoding="UTF-8"?>)");
     destination.add("<root>");
-    stringifyXML(jNode, destination, 0);
+    stringifyJNodes(jNode, destination, 0);
     destination.add("</root>");
   }
 
 private:
-  /// <summary>
-  /// Recursively traverse JNode structure encoding it into XML string on
-  /// the destination stream passed in.
-  /// </summary>
-  /// <param name="jNode">JNode structure to be traversed.</param>
-  /// <param name="destination">Destination stream for stringified XML.</param>
-  /// <param name="indent">Current print indentation.</param>
-  void stringifyXML(const JNode &jNode, IDestination &destination, [[maybe_unused]] const long indent) const
+  static void stringifyJNodes(const JNode &jNode, IDestination &destination, [[maybe_unused]] const long indent)
   {
     if (isA<Number>(jNode)) {
       stringifyNumber(jNode, destination);
@@ -59,22 +52,22 @@ private:
       throw Error("Unknown JNode type encountered during stringification.");
     }
   }
-  void stringifyObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const
+  static void stringifyObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent)
   {
     for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
       auto elementName = jNodeNext.getKey();
       std::ranges::replace(elementName, ' ', '-');
       destination.add("<" + elementName + ">");
-      stringifyXML(jNodeNext.getJNode(), destination, 0);
+      stringifyJNodes(jNodeNext.getJNode(), destination, 0);
       destination.add("</" + elementName + ">");
     }
   }
-  void stringifyArray(const JNode &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent) const
+  static void stringifyArray(const JNode &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
   {
     if (JRef<Array>(jNode).value().size() > 1) {
       for (const auto &bNodeNext : JRef<Array>(jNode).value()) {
         destination.add("<Row>");
-        stringifyXML(bNodeNext, destination, 0);
+        stringifyJNodes(bNodeNext, destination, 0);
         destination.add("</Row>");
       }
     }
@@ -92,13 +85,12 @@ private:
     }
   }
   static void stringifyNull([[maybe_unused]]const JNode &jNode, [[maybe_unused]]IDestination &destination) {}
-
-  void stringifyString(const JNode &jNode, IDestination &destination) const
+  static void stringifyString(const JNode &jNode, IDestination &destination)
   {
     destination.add(xmlTranslator->to(JRef<String>(jNode).value()));
   }
 
-  std::unique_ptr<ITranslator> xmlTranslator;
+  inline static std::unique_ptr<ITranslator> xmlTranslator;
 };
 
 }// namespace JSON_Lib
