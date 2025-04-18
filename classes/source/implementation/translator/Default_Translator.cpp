@@ -8,7 +8,8 @@
 // Dependencies: C++20 - Language standard features used.
 //
 
-#include "Default_Translator.hpp"
+#include "JSON.hpp"
+#include "JSON_Core.hpp"
 
 namespace JSON_Lib {
 
