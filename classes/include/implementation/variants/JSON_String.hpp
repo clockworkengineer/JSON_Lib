@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 namespace JSON_Lib {
 
 struct String : Variant

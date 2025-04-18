@@ -1,8 +1,5 @@
 #pragma once
 
-#include "ITranslator.hpp"
-#include "JSON_Converter.hpp"
-
 namespace JSON_Lib {
 
 class XML_Translator final : public ITranslator

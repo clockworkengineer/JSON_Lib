@@ -2,7 +2,6 @@
 
 namespace JSON_Lib {
 
-// Array error
 struct ArrayError final : std::runtime_error
 {
   explicit ArrayError(const std::string &message) : std::runtime_error("Array Error: " + message) {}

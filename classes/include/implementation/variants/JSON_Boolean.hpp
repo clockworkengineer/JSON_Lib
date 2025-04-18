@@ -1,9 +1,7 @@
 #pragma once
 
 namespace JSON_Lib {
-// =======
-// Boolean
-// =======
+
 struct Boolean : Variant
 {
   // Constructors/Destructors

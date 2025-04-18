@@ -1,7 +1,5 @@
 #pragma once
 
-#include "IDestination.hpp"
-
 namespace JSON_Lib {
 
 class BufferDestination final : public IDestination

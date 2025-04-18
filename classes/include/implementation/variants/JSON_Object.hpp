@@ -2,7 +2,6 @@
 
 namespace JSON_Lib {
 
-// Object error
 struct ObjectError final : std::runtime_error
 {
   explicit ObjectError(const std::string &message) : std::runtime_error("Object Error: " + message) {}

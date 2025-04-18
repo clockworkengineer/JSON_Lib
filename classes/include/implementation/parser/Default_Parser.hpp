@@ -2,8 +2,6 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
-#include "JSON_Converter.hpp"
-#include "Default_Translator.hpp"
 
 namespace JSON_Lib {
 
