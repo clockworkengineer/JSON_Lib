@@ -35,7 +35,7 @@ JSON::JSON(const ObjectInitializer &object) : JSON() { this->root() = JNode(obje
 /// JSON constructor. Pass a JSON string to be initially parsed.
 /// </summary>
 /// <param name="jsonString">JSON string.</param>
-JSON::JSON(const std::string &jsonString) : JSON() { parse(BufferSource{ jsonString }); }
+JSON::JSON(const std::string_view &jsonString) : JSON() { parse(BufferSource{ jsonString }); }
 /// <summary>
 /// JSON destructor.
 /// </summary>
@@ -89,8 +89,8 @@ void JSON::traverse(IAction &action) const { std::as_const(*implementation).trav
 /// Return object entry for the passed in keys.
 /// </summary>
 /// <param name="key">Object entry (JNode) key.</param>
-JNode &JSON::operator[](const std::string &key) { return (*implementation)[key]; }
-const JNode &JSON::operator[](const std::string &key) const { return (*implementation)[key]; }
+JNode &JSON::operator[](const std::string_view &key) { return (*implementation)[key]; }
+const JNode &JSON::operator[](const std::string_view &key) const { return (*implementation)[key]; }
 /// <summary>
 /// Return array entry for the passed in index.
 /// </summary>

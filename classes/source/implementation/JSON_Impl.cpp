@@ -72,7 +72,7 @@ void JSON_Impl::traverse(IAction &action) const
   if (jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
   traverseJNodes(jNodeRoot, action);
 }
-JNode &JSON_Impl::operator[](const std::string &key)
+JNode &JSON_Impl::operator[](const std::string_view &key)
 {
   try {
     if (jNodeRoot.isEmpty()) { jNodeRoot = JNode::make<Object>(); }
@@ -82,7 +82,7 @@ JNode &JSON_Impl::operator[](const std::string &key)
     return jNodeRoot[key];
   }
 }
-const JNode &JSON_Impl::operator[](const std::string &key) const { return jNodeRoot[key]; }
+const JNode &JSON_Impl::operator[](const std::string_view &key) const { return jNodeRoot[key]; }
 JNode &JSON_Impl::operator[](const std::size_t index)
 {
   try {

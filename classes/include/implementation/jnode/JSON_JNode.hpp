@@ -24,8 +24,8 @@ struct JNode
   // Has the variant been created
   [[nodiscard]] bool isEmpty() const { return jNodeVariant == nullptr; }
   // Indexing operators
-  JNode &operator[](const std::string &key);
-  const JNode &operator[](const std::string &key) const;
+  JNode &operator[](const std::string_view &key);
+  const JNode &operator[](const std::string_view &key) const;
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;
   // Get reference to JNode variant

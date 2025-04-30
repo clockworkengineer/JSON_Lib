@@ -29,8 +29,8 @@ public:
   [[nodiscard]] JNode &root() { return jNodeRoot; }
   [[nodiscard]] const JNode &root() const { return jNodeRoot; }
   // Search for JSON object entry with a given key
-  JNode &operator[](const std::string &key);
-  const JNode &operator[](const std::string &key) const;
+  JNode &operator[](const std::string_view &key);
+  const JNode &operator[](const std::string_view &key) const;
   // Get JSON array element at index
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;

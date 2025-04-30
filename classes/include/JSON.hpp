@@ -42,7 +42,7 @@ public:
   // Pass any user defined translator/converter here
   explicit JSON([[maybe_unused]]IStringify *stringify=nullptr, [[maybe_unused]] IParser *parser= nullptr);
   // Pass in default JSON to parse
-  explicit JSON(const std::string &jsonString);
+  explicit JSON(const std::string_view &jsonString);
   // Construct an array
   JSON(const ArrayInitializer &array);
   // Construct object
@@ -79,8 +79,8 @@ public:
   [[nodiscard]] JNode &root();
   [[nodiscard]] const JNode &root() const;
   // Search for JSON object entry with a given key
-  JNode &operator[](const std::string &key);
-  const JNode &operator[](const std::string &key) const;
+  JNode &operator[](const std::string_view &key);
+  const JNode &operator[](const std::string_view &key) const;
   // Get JSON array entry at index
   JNode &operator[](std::size_t index);
   const JNode &operator[](std::size_t index) const;

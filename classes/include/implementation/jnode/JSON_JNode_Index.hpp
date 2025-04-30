@@ -3,7 +3,7 @@
 namespace JSON_Lib {
 
 // Object
-inline JNode &JNode::operator[](const std::string &key)
+inline JNode &JNode::operator[](const std::string_view &key)
 {
   if (isA<Hole>(*this)) {
     *this = make<Object>();
@@ -12,7 +12,7 @@ inline JNode &JNode::operator[](const std::string &key)
   }
   return JRef<Object>(*this)[key];
 }
-inline const JNode &JNode::operator[](const std::string &key) const { return JRef<const Object>(*this)[key]; }
+inline const JNode &JNode::operator[](const std::string_view &key) const { return JRef<const Object>(*this)[key]; }
 // Array
 inline JNode &JNode::operator[](const std::size_t index)
 {
