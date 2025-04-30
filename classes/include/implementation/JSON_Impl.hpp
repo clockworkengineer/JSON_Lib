@@ -40,10 +40,10 @@ public:
   // Set print ident value
   static void setIndent(const long indent) { jsonStringify->setIndent(indent); }
   // Read/Write JSON from a file
-  static std::string fromFile(const std::string &fileName);
-  static void toFile(const std::string &fileName, const std::string &jsonString, JSON::Format format);
+  static std::string fromFile(const std::string_view &fileName);
+  static void toFile(const std::string_view &fileName, const std::string_view &jsonString, JSON::Format format);
   // Get JSON file format
-  static JSON::Format getFileFormat(const std::string &fileName);
+  static JSON::Format getFileFormat(const std::string_view &fileName);
 
 private:
   // Traverse JSON tree
