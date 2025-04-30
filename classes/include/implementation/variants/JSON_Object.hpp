@@ -4,7 +4,7 @@ namespace JSON_Lib {
 
 struct ObjectError final : std::runtime_error
 {
-  explicit ObjectError(const std::string &message) : std::runtime_error("Object Error: " + message) {}
+  explicit ObjectError(const std::string_view &message) : std::runtime_error(std::string("Object Error: ").append(message)) {}
 };
 
 // Object entry

@@ -7,7 +7,7 @@ struct String : Variant
   constexpr static int64_t kDefMaxStringLength = 16*1024;
   // Constructors/Destructors
   String() : Variant(Type::string) {}
-  explicit String(std::string_view string) : Variant(Type::string), jNodeString(std::move(string)) {}
+  explicit String(const std::string_view &string) : Variant(Type::string), jNodeString(string) {}
   String(const String &other) = default;
   String &operator=(const String &other) = default;
   String(String &&other) = default;

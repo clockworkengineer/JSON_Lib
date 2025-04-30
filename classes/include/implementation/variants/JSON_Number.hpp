@@ -9,7 +9,7 @@ struct Number : Variant
   // JNode Number Error
   struct Error final :  std::runtime_error
   {
-    explicit Error(const std::string &message) : std::runtime_error("JNode Number Error: " + message) {}
+    explicit Error(const std::string_view &message) : std::runtime_error(std::string("JNode Number Error: ").append(message)) {}
   };
   // All string conversions are for base 10
   static constexpr int kStringConversionBase{ 10 };
