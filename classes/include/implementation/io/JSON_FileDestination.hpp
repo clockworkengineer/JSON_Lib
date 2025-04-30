@@ -30,7 +30,19 @@ public:
   void add(const std::string &bytes) override
   {
     for (const auto ch : bytes) { add(ch); }
+    destination.flush();
     lastChar = bytes.back();
+  }
+  void add( const std::string_view &bytes) override {
+    for (const auto ch : bytes) { add(ch); }
+    destination.flush();
+    lastChar = bytes.back();
+  }
+  void add(const char *bytes) override {
+    int len = strlen(bytes);
+    for (int index=0; index<len; index++) { add(bytes[index]); }
+    destination.flush();
+    lastChar = bytes[len - 1];
   }
   void clear() override
   {

@@ -19,7 +19,7 @@ static std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> utf16Co
 /// <summary>
 /// Convert utf8 <-> utf16 strings.
 /// </summary>
-std::u16string toUtf16(const std::string &utf8) 
+std::u16string toUtf16(const std::string &utf8)
 {
   if (utf8.find('\0') != std::string::npos) { throw Error("Tried to convert a null character."); }
   return utf16Converter.from_bytes(utf8);

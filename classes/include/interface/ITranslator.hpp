@@ -13,7 +13,7 @@ public:
   // =============
   struct Error final : std::runtime_error
   {
-    explicit Error(const std::string &message) : std::runtime_error("ITranslator Error: " + message) {}
+    explicit Error(const std::string_view &message) : std::runtime_error(std::string("ITranslator Error: ").append(message)) {}
   };
   // ========================
   // Constructors/destructors

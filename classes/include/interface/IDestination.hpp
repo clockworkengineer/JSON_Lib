@@ -13,7 +13,7 @@ public:
   // ==================
   struct Error final : std::runtime_error
   {
-    explicit Error(const std::string &message) : std::runtime_error("IDestination Error: " + message) {}
+    explicit Error(const std::string_view &message) : std::runtime_error(std::string("IDestination Error: ").append(message)) {}
   };
   // ========================
   // Constructors/destructors
@@ -23,6 +23,8 @@ public:
   // Add bytes to destination
   // ========================
   virtual void add(const std::string &bytes) = 0;
+  virtual void add(const char *bytes) = 0;
+  virtual void add(const std::string_view &bytes) = 0;
   // ============================
   // Add character to destination
   // ============================
