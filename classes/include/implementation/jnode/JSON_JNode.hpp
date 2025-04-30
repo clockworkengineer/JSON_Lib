@@ -7,7 +7,7 @@ struct JNode
   // JNode Error
   struct Error final : std::runtime_error
   {
-    explicit Error(const std::string &message) : std::runtime_error("JNode Error: " + message) {}
+    explicit Error(const std::string_view &message) : std::runtime_error(std::string("JNode Error: ").append(message)) {}
   };
   // Constructors/Destructors
   JNode() = default;
