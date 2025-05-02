@@ -26,13 +26,13 @@ void processEntry(const js::Object::Entry &entry)
 {
   auto &key = entry.getKey();
   // Log main entry key
-  std::string entryJSON{ "\n[" + key + "] = " };
+  std::string entryJSON{ "\n[" + std::string(key) + "] = " };
   if (key == "files.exclude") {
     // Read object data (key/boolean pair) and add to log
     entryJSON += "\n{\n";
     for (const auto &file : js::JRef<js::Object>(entry).value()) {
       entryJSON +=
-        "\"" + file.getKey() + "\" : " + js::JRef<js::Boolean>(file).toString() + ",\n";
+        "\"" + std::string(file.getKey()) + "\" : " + js::JRef<js::Boolean>(file).toString() + ",\n";
     }
     entryJSON.pop_back();
     entryJSON.pop_back();
