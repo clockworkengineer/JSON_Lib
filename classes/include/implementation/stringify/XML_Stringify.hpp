@@ -55,7 +55,7 @@ private:
   static void stringifyObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent)
   {
     for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
-      auto elementName = jNodeNext.getKey();
+      std::string elementName { jNodeNext.getKey()} ;
       std::ranges::replace(elementName, ' ', '-');
       destination.add("<" + elementName + ">");
       stringifyJNodes(jNodeNext.getJNode(), destination, 0);

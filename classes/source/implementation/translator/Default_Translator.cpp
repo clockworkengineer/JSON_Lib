@@ -191,4 +191,24 @@ std::string Default_Translator::to(const std::string &rawString) const
   }
   return escapedString;
 }
+std::string Default_Translator::to(const std::string_view &rawString) const
+{
+  std::string escapedString;
+  for (char16_t utf16Char : toUtf16(rawString)) {
+    // Control characters
+    if (toEscape.contains(utf16Char)) {
+      escapedString += '\\';
+      escapedString += toEscape[utf16Char];
+    }
+    // ASCII
+    else if (isASCII(utf16Char) && std::isprint(utf16Char)) {
+      escapedString += static_cast<char>(utf16Char);
+    }
+    // UTF8 escaped
+    else {
+      escapedString += encodeUTF16(utf16Char);
+    }
+  }
+  return escapedString;
+}
 }// namespace JSON_Lib

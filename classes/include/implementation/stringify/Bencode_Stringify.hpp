@@ -78,7 +78,7 @@ private:
   static void stringifyString(const JNode &jNode, IDestination &destination)
   {
     const auto jsonString = JRef<String>(jNode).value();
-    destination.add(std::to_string(static_cast<int>(jsonString.length())) + ":" + jsonString);
+    destination.add((std::to_string(static_cast<int>(jsonString.length())) + ":").append(jsonString));
   }
 
   inline static std::unique_ptr<ITranslator> bencodeTranslator;
