@@ -84,7 +84,7 @@ TEST_CASE("Check JSON object for decoding of strings with escape characters.", "
     BufferSource jsonSource{ R"("abcdefghijklmnopqrstuvwxyz \u0005 \u0004 \u0003 \u0002 \u0001")" };
     json.parse(jsonSource);
     std::u8string expected{ u8"abcdefghijklmnopqrstuvwxyz \u0005 \u0004 \u0003 \u0002 \u0001" };
-    auto _ = JRef<String>(json.root()).value();
+    [[maybe_unused]] auto _ = JRef<String>(json.root()).value();
     REQUIRE(JRef<String>(json.root()).value() == std::string{ expected.begin(), expected.end() });
   }
   // SECTION("Parse JSON string with escapes '\\u0000' to buffer and expect exception.",
