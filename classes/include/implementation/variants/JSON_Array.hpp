@@ -2,14 +2,8 @@
 
 namespace JSON_Lib {
 
-struct ArrayError final : std::runtime_error
-{
-  explicit ArrayError(const std::string_view &message) : std::runtime_error(std::string("Array Error: ").append(message)) {}
-};
-
 struct Array : Variant
 {
-  using Error = ArrayError;
   using Entry = JNode;
   using Entries = std::vector<Entry>;
   // Constructors/Destructors

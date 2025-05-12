@@ -6,11 +6,6 @@ struct Number : Variant
 {
   // Number values variant
   using Values = std::variant<std::monostate, int, long, long long, float, double, long double>;
-  // JNode Number Error
-  struct Error final :  std::runtime_error
-  {
-    explicit Error(const std::string_view &message) : std::runtime_error(std::string("JNode Number Error: ").append(message)) {}
-  };
   // All string conversions are for base 10
   static constexpr int kStringConversionBase{ 10 };
   // Floating point notation
@@ -138,6 +133,6 @@ template<typename T> T Number::getAs() const
   if (const auto pValue = std::get_if<float>(&jNodeNumber)) { return convertTo<T>(*pValue); }
   if (const auto pValue = std::get_if<double>(&jNodeNumber)) { return convertTo<T>(*pValue); }
   if (const auto pValue = std::get_if<long double>(&jNodeNumber)) { return convertTo<T>(*pValue); }
-  throw Error("Could not convert unknown type.");
+  throw JNode::Error("Could not convert unknown type.");
 }
 }// namespace JSON_Lib

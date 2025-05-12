@@ -2,11 +2,6 @@
 
 namespace JSON_Lib {
 
-struct ObjectError final : std::runtime_error
-{
-  explicit ObjectError(const std::string_view &message) : std::runtime_error(std::string("Object Error: ").append(message)) {}
-};
-
 // Object entry
 struct ObjectEntry
 {
@@ -26,7 +21,6 @@ private:
 
 struct Object : Variant
 {
-  using Error = ObjectError;
   using Entry = ObjectEntry;
   using Entries = std::vector<Entry>;
   // Constructors/Destructors
@@ -43,7 +37,7 @@ struct Object : Variant
   {
     try {
       [[maybe_unused]] auto _ = findKey(jNodeObject, key);
-    } catch ([[maybe_unused]] const Error &e) {
+    } catch ([[maybe_unused]] const JNode::Error &e) {
       return false;
     }
     return true;
@@ -70,7 +64,7 @@ inline Object::Entries::iterator Object::findKey(Entries &object, const std::str
 {
   const auto it = std::ranges::find_if(
     object, [&key](Entry &entry) -> bool { return entry.getKey() == key; });
-  if (it == object.end()) { throw Error("Invalid key used to access object."); }
+  if (it == object.end()) { throw JNode::Error("Invalid key used to access object."); }
   return it;
 }
 inline Object::Entries::const_iterator Object::findKey(const Entries &object, const std::string_view &key)
@@ -78,7 +72,7 @@ inline Object::Entries::const_iterator Object::findKey(const Entries &object, co
   const auto it = std::ranges::find_if(object, [&key](const Entry &entry) -> bool {
     return entry.getKey() == key;
   });
-  if (it == object.end()) { throw Error("Invalid key used to access object."); }
+  if (it == object.end()) { throw JNode::Error("Invalid key used to access object."); }
   return it;
 }
 }// namespace JSON_Lib
