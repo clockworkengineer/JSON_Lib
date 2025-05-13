@@ -32,8 +32,7 @@ public:
   ~Default_Translator() override = default;
 
   // Convert to/from JSON escaped characters
-  std::string from(const std::string &escapedString) const override;
-  std::string to(const std::string &rawString) const override;
+  std::string from(const std::string_view &escapedString) const override;
   std::string to(const std::string_view &rawString) const override;
 
 private:

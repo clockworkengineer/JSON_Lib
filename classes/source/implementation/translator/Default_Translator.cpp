@@ -28,7 +28,7 @@ static const std::vector<std::pair<const char, const char>> escapeSequences{ { '
 /// <param name="current">Current character position.</param>
 /// <param name="numberOfCharacters">Number of characters left in source string.</param>
 /// <returns>UTF16 character for "\uxxxx".</returns>
-char16_t decodeUTF16(std::string::const_iterator &current, const ptrdiff_t numberOfCharacters)
+char16_t decodeUTF16(std::string_view::const_iterator &current, const ptrdiff_t numberOfCharacters)
 {
   if (numberOfCharacters >= 4) {
     char16_t utf16value{};
@@ -128,7 +128,7 @@ Default_Translator::Default_Translator()
 /// </summary>
 /// <param name="escapedString">JSON string to process.</param>
 /// <returns>String with escapes translated.</returns>
-std::string Default_Translator::from(const std::string &escapedString) const
+std::string Default_Translator::from(const std::string_view &escapedString) const
 {
   std::u16string utf16Buffer;
   for (auto current = escapedString.begin(); current != escapedString.end();) {
@@ -171,26 +171,6 @@ std::string Default_Translator::from(const std::string &escapedString) const
 /// </summary>
 /// <param name="rawString">String to convert.</param>
 /// <returns>JSON string with escapes.</returns>
-std::string Default_Translator::to(const std::string &rawString) const
-{
-  std::string escapedString;
-  for (char16_t utf16Char : toUtf16(rawString)) {
-    // Control characters
-    if (toEscape.contains(utf16Char)) {
-      escapedString += '\\';
-      escapedString += toEscape[utf16Char];
-    }
-    // ASCII
-    else if (isASCII(utf16Char) && std::isprint(utf16Char)) {
-      escapedString += static_cast<char>(utf16Char);
-    }
-    // UTF8 escaped
-    else {
-      escapedString += encodeUTF16(utf16Char);
-    }
-  }
-  return escapedString;
-}
 std::string Default_Translator::to(const std::string_view &rawString) const
 {
   std::string escapedString;

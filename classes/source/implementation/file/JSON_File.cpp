@@ -89,7 +89,7 @@ std::u16string readJSONString(std::ifstream &jsonFile, const JSON::Format format
 /// <returns>JSON file format.</returns>
 JSON::Format JSON_Impl::getFileFormat(const std::string_view &fileName)
 {
-  std::ifstream jsonFile{ std::string(fileName), std::ios_base::binary };
+  std::ifstream jsonFile{ fileName.data(), std::ios_base::binary };
   uint32_t byteOrderMark = static_cast<unsigned char>(jsonFile.get()) << 24;
   byteOrderMark |= static_cast<unsigned char>(jsonFile.get()) << 16;
   byteOrderMark |= static_cast<unsigned char>(jsonFile.get()) << 8;
@@ -116,7 +116,7 @@ std::string JSON_Impl::fromFile(const std::string_view &fileName)
   // Get file format
   const JSON::Format format = getFileFormat(fileName);
   // Read in JSON
-  std::ifstream jsonFile{ std::string(fileName), std::ios_base::binary };
+  std::ifstream jsonFile{ fileName.data(), std::ios_base::binary };
   std::string translated;
   switch (format) {
   case JSON::Format::utf8BOM:
@@ -150,7 +150,7 @@ std::string JSON_Impl::fromFile(const std::string_view &fileName)
 /// <param name="format">JSON file format</param>
 void JSON_Impl::toFile(const std::string_view &fileName, const std::string_view &jsonString, const JSON::Format format)
 {
-  std::ofstream jsonFile{ std::string(fileName), std::ios::binary };
+  std::ofstream jsonFile{ fileName.data(), std::ios::binary };
   switch (format) {
   case JSON::Format::utf8BOM:
     jsonFile << static_cast<unsigned char>(0xEF) << static_cast<unsigned char>(0xBB)

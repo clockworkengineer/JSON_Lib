@@ -38,8 +38,8 @@ TEST_CASE("Check translation of surrogate pairs.", "[JSON][Translator]")
   SECTION("Translate to escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value.",
     "[JSON][Translator]")
   {
-    std::u8string actual{ u8"Begin \U0001D11E End" };
-    REQUIRE(translator.to({ actual.begin(), actual.end() }) == R"(Begin \uD834\uDD1E End)");
+    std::u8string_view actual{ u8"Begin \U0001D11E End" };
+    REQUIRE(translator.to(std::string(actual.begin(), actual.end())) == R"(Begin \uD834\uDD1E End)");
   }
 }
 
