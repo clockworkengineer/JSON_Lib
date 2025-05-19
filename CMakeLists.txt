@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.18.1)
 project("JSON_Lib" VERSION 1.1.0 DESCRIPTION "JSON C++ Library" LANGUAGES CXX)
 
 # C++ options
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -28,7 +28,7 @@ set(JSON_SOURCES
   ./classes/source/implementation/JSON_Impl.cpp
   ./classes/source/implementation/file/JSON_File.cpp
   ./classes/source/implementation/translator/Default_Translator.cpp
-        classes/source/implementation/parser/Default_Parser.cpp)
+  ./classes/source/implementation/parser/Default_Parser.cpp)
 
 set(JSON_INCLUDES
   JSON_Config.hpp
