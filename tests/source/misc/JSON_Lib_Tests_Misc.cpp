@@ -14,26 +14,26 @@ TEST_CASE("Check translation of surrogate pairs.", "[JSON][Translator]")
   {
     REQUIRE_THROWS_AS(translator.from(R"(Begin \uD834 \uDD1E End)"), Default_Translator::Error);
     REQUIRE_THROWS_WITH(
-      translator.from(R"(Begin \uD834 \uDD1E End)"), "JSON Translator Error: Unpaired surrogate found.");
+      translator.from(R"(Begin \uD834 \uDD1E End)"), "ITranslator Error: Unpaired surrogate found.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834\\u0045 End' in error then expect exception.",
     "[JSON][Translator][Exception]")
   {
     REQUIRE_THROWS_AS(translator.from(R"(Begin \uD834\u0045 End)"), Default_Translator::Error);
     REQUIRE_THROWS_WITH(
-      translator.from(R"(Begin \uD834\u0045 End)"), "JSON Translator Error: Unpaired surrogate found.");
+      translator.from(R"(Begin \uD834\u0045 End)"), "ITranslator Error: Unpaired surrogate found.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 End' in error then expect exception.",
     "[JSON][Translator][Exception]")
   {
     REQUIRE_THROWS_AS(translator.from(R"(Begin \uD834 End)"), Default_Translator::Error);
-    REQUIRE_THROWS_WITH(translator.from(R"(Begin \uD834 End)"), "JSON Translator Error: Unpaired surrogate found.");
+    REQUIRE_THROWS_WITH(translator.from(R"(Begin \uD834 End)"), "ITranslator Error: Unpaired surrogate found.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uDD1E End' in error then expect exception.",
     "[JSON][Translator][Exception]")
   {
     REQUIRE_THROWS_AS(translator.from(R"(Begin \uDD1E End)"), Default_Translator::Error);
-    REQUIRE_THROWS_WITH(translator.from(R"(Begin \uDD1E End)"), "JSON Translator Error: Unpaired surrogate found.");
+    REQUIRE_THROWS_WITH(translator.from(R"(Begin \uDD1E End)"), "ITranslator Error: Unpaired surrogate found.");
   }
   SECTION("Translate to escape sequences valid surrogate pair 'Begin \\uD834\\uDD1E End' and check value.",
     "[JSON][Translator]")

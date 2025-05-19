@@ -5,12 +5,6 @@ namespace JSON_Lib {
 class XML_Translator final : public ITranslator
 {
 public:
-  // XML translator error
-  struct Error final : std::runtime_error
-  {
-    explicit Error(const std::string &message) : std::runtime_error("XML Translator Error: " + message) {}
-  };
-
   XML_Translator() = default;
   XML_Translator(const XML_Translator &other) = delete;
   XML_Translator &operator=(const XML_Translator &other) = delete;

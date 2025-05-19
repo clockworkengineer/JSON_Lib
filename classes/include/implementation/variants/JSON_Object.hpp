@@ -33,7 +33,7 @@ struct Object : Variant
   // Add Entry to Object
   template<typename T> void add(T &&entry) { jNodeObject.emplace_back(std::forward<T>(entry)); }
   // Return true if an object contains a given key
-  [[nodiscard]] bool contains(const std::string &key) const
+  [[nodiscard]] bool contains(const std::string_view &key) const
   {
     try {
       [[maybe_unused]] auto _ = findKey(jNodeObject, key);

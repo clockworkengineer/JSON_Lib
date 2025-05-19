@@ -5,9 +5,9 @@ namespace JSON_Lib {
 class FileDestination final : public IDestination
 {
 public:
-  explicit FileDestination(const std::string &filename) : filename(filename)
+  explicit FileDestination(const std::string_view &filename) : filename(filename)
   {
-    destination.open(filename.c_str(), std::ios_base::binary | std::ios_base::trunc);
+    destination.open(filename.data(), std::ios_base::binary | std::ios_base::trunc);
   }
   FileDestination() = delete;
   FileDestination(const FileDestination &other) = delete;

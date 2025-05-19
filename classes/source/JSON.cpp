@@ -109,14 +109,14 @@ const JNode &JSON::root() const { return implementation->root(); }
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 /// <returns>JSON string.</returns>
-std::string JSON::fromFile(const std::string &fileName) { return JSON_Impl::fromFile(fileName); }
+std::string JSON::fromFile(const std::string_view &fileName) { return JSON_Impl::fromFile(fileName); }
 /// <summary>
 /// Create an JSON file and write JSON string to it.
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 /// <param name="jsonString">JSON string</param>
 /// <param name="format">JSON file format</param>
-void JSON::toFile(const std::string &fileName, const std::string &jsonString, const Format format)
+void JSON::toFile(const std::string_view &fileName, const std::string_view &jsonString, const Format format)
 {
   JSON_Impl::toFile(fileName, jsonString, format);
 }
@@ -125,5 +125,5 @@ void JSON::toFile(const std::string &fileName, const std::string &jsonString, co
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 /// <returns>JSON file format.</returns>
-JSON::Format JSON::getFileFormat(const std::string &fileName) { return JSON_Impl::getFileFormat(fileName); }
+JSON::Format JSON::getFileFormat(const std::string_view &fileName) { return JSON_Impl::getFileFormat(fileName); }
 }// namespace JSON_Lib

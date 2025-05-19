@@ -16,12 +16,6 @@ constexpr char16_t kLowSurrogatesEnd{ 0xDFFF };
 class Default_Translator final : public ITranslator
 {
 public:
-  // JSON translator error
-  struct Error final : std::runtime_error
-  {
-    explicit Error(const std::string &message) : std::runtime_error("JSON Translator Error: " + message) {}
-  };
-
   // Pass in user defined converter here
   Default_Translator();
   // No other constructors supported
