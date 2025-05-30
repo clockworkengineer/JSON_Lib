@@ -2,6 +2,7 @@
 // =====================
 // JSON core definitions
 // =====================
+#include "JSON_Config.hpp"
 #include "JSON_Interfaces.hpp"
 #include "JSON_Variant.hpp"
 #include "JSON_JNode.hpp"

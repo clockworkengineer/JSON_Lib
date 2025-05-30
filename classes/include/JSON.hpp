@@ -16,14 +16,19 @@
 #include <functional>
 #include <map>
 
-#include "JSON_Config.hpp"
-#include "JSON_Interfaces.hpp"
+// #include "JSON_Config.hpp"
+// // #include "JSON_Interfaces.hpp"
 
 namespace JSON_Lib {
 
 // =========================
 // JSON forward declarations
 // =========================
+class IStringify;
+class IParser;
+class ISource;
+class IDestination;
+class IAction;
 class JSON_Impl;
 struct JNode;
 
