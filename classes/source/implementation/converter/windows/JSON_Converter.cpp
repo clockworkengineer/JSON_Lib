@@ -8,6 +8,7 @@
 
 #include "Windows.h"
 
+#include "JSON.hpp"
 #include "JSON_Converter.hpp"
 #include "JSON_Error.hpp"
 
@@ -31,8 +32,8 @@ int BytesToWideChar(const char *bytes, int length, wchar_t *sideString = nullptr
 std::u16string toUtf16(const std::string_view &utf8)
 {
   if (utf8.find('\0') != std::string_view::npos) { throw Error("Tried to convert a null character."); }
-  std::wstring wideString(BytesToWideChar(utf8.c_str(), static_cast<int>(utf8.length())), 0);
-  BytesToWideChar(utf8.c_str(), static_cast<int>(utf8.length()), &wideString[0], static_cast<int>(wideString.length()));
+  std::wstring wideString(BytesToWideChar(utf8.data(), static_cast<int>(utf8.length())), 0);
+  BytesToWideChar(utf8.data(), static_cast<int>(utf8.length()), &wideString[0], static_cast<int>(wideString.length()));
   return (std::u16string{ wideString.begin(), wideString.end() });
 }
 

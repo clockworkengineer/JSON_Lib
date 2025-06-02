@@ -6,7 +6,7 @@
 /// <param name="jsonFileName">Test JSON data file name</param>
 /// <returns>Full path to test data file</returns>
 std::string prefixPath(const std::string &jsonFileName) {
-  return (std::filesystem::current_path() / "files" / jsonFileName).string();
+  return (std::filesystem::current_path() / "../files" / jsonFileName).string();
 }
 /// <summary>
 /// Verify that an JNode Array has the correct parsed format.

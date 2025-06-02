@@ -90,7 +90,7 @@ Object::Entry Default_Parser::parseObjectEntry(ISource &source, const ITranslato
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>String JNode.</returns>
-JNode Default_Parser::parseString(ISource &source, const ITranslator &translator,const unsigned long parserDepth)
+JNode Default_Parser::parseString(ISource &source, const ITranslator &translator,[[maybe_unused]] const unsigned long parserDepth)
 {
   return JNode::make<String>(extractString(source, translator));
 }
@@ -101,7 +101,7 @@ JNode Default_Parser::parseString(ISource &source, const ITranslator &translator
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Number JNode.</returns>
-JNode Default_Parser::parseNumber(ISource &source, [[maybe_unused]]const ITranslator &translator, const unsigned long parserDepth)
+JNode Default_Parser::parseNumber(ISource &source, [[maybe_unused]]const ITranslator &translator, [[maybe_unused]]const unsigned long parserDepth)
 {
   std::string string;
   for (; source.more() && !endOfNumber(source); source.next()) { string += source.current(); }
@@ -118,7 +118,7 @@ JNode Default_Parser::parseNumber(ISource &source, [[maybe_unused]]const ITransl
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Boolean JNode.</returns>
-JNode Default_Parser::parseBoolean(ISource &source,  [[maybe_unused]]const ITranslator &translator, const unsigned long parserDepth)
+JNode Default_Parser::parseBoolean(ISource &source,  [[maybe_unused]]const ITranslator &translator,[[maybe_unused]] const unsigned long parserDepth)
 {
   if (source.match("true")) { return JNode::make<Boolean>(true); }
   if (source.match("false")) { return JNode::make<Boolean>(false); }
@@ -131,7 +131,7 @@ JNode Default_Parser::parseBoolean(ISource &source,  [[maybe_unused]]const ITran
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Null JNode.</returns>
-JNode Default_Parser::parseNull(ISource &source,  [[maybe_unused]]const ITranslator &translator, const unsigned long parserDepth)
+JNode Default_Parser::parseNull(ISource &source,  [[maybe_unused]]const ITranslator &translator, [[maybe_unused]]const unsigned long parserDepth)
 {
   if (!source.match("null")) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
   return JNode::make<Null>();

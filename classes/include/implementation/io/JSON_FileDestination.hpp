@@ -39,7 +39,7 @@ public:
     lastChar = bytes.back();
   }
   void add(const char *bytes) override {
-    int len = strlen(bytes);
+    std::size_t len = strlen(bytes);
     for (int index=0; index<len; index++) { add(bytes[index]); }
     destination.flush();
     lastChar = bytes[len - 1];
