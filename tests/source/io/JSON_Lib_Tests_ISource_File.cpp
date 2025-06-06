@@ -2,7 +2,7 @@
 
 TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
 {
-  const std::string testFileName{ prefixPath(kSingleJSONFile) };
+  const std::string testFileName{ prefixTestDataPath(kSingleJSONFile) };
   SECTION("Create FileSource with testfile001.json.", "[JSON][ISource][File][Construct]")
   {
     REQUIRE_NOTHROW(FileSource(testFileName));
@@ -82,7 +82,7 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
   }
   SECTION("Create FileSource with non existent file.", "[JSON][ISource][File][Exception]")
   {
-    const std::string nonExistentFileName{ prefixPath(kNonExistantJSONFile) };
+    const std::string nonExistentFileName{ prefixTestDataPath(kNonExistantJSONFile) };
     REQUIRE_THROWS_AS(FileSource(nonExistentFileName), ISource::Error);
     REQUIRE_THROWS_WITH(
       FileSource(nonExistentFileName), "ISource Error: File input stream failed to open or does not exist.");

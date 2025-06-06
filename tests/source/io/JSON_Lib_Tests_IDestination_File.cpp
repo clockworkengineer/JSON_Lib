@@ -2,7 +2,7 @@
 
 TEST_CASE("Check IDestination (File) interface.", "[JSON][IDestination][File]")
 {
-  const std::string testFileName{ prefixPath(kGeneratedJSONFile) };
+  const std::string testFileName{ prefixTestDataPath(kGeneratedJSONFile) };
   SECTION("Create FileDestination.", "[JSON][IDestination][File][Construct]")
   {
     std::filesystem::remove(testFileName);

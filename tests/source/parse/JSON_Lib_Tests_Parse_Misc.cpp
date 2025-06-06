@@ -7,7 +7,7 @@ TEST_CASE("Check JSON parsing of a list of example JSON files.", "[JSON][Parse][
   TEST_FILE_LIST(testFile);
   SECTION("Parse from buffer.", "[JSON][Parse][Examples][Buffer]")
   {
-    BufferSource jsonSource{ JSON::fromFile(prefixPath(testFile)) };
+    BufferSource jsonSource{ JSON::fromFile(prefixTestDataPath(testFile)) };
     REQUIRE_NOTHROW(json.parse(jsonSource));
     jsonSource.reset();
     json.parse(jsonSource);
@@ -15,7 +15,7 @@ TEST_CASE("Check JSON parsing of a list of example JSON files.", "[JSON][Parse][
   }
   SECTION("Parse from file directly.", "[JSON][Parse][Examples][File]")
   {
-    FileSource jsonSource{ prefixPath(testFile) };
+    FileSource jsonSource{ prefixTestDataPath(testFile) };
     REQUIRE_NOTHROW(json.parse(jsonSource));
     jsonSource.reset();
     json.parse(jsonSource);

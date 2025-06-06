@@ -123,7 +123,7 @@ TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
     4,
     5
 ])" };
-    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
@@ -139,7 +139,7 @@ TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
     "Eye Color": "Blue",
     "Sex": "Male"
 })" };
-    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
@@ -170,7 +170,7 @@ TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
         8
     ]
 ])" };
-    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
@@ -191,7 +191,7 @@ TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
         "enabled": true
     }
 })" };
-    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
@@ -226,7 +226,7 @@ TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
         }
     }
 })" };
-    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
@@ -273,7 +273,7 @@ TEST_CASE("Check Check setting of print indentation.", "[JSON][Print][Indent]")
                 "enabled": true
         }
 })" };
-    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
     FileDestination jsonDestination{ generatedFileName };
     json.setIndent(8);
@@ -309,7 +309,7 @@ TEST_CASE("Check JSON print of list of example JSON files.", "[JSON][Print]")
   SECTION("Print to  buffer and check value.", "[JSON][Print][Buffer]")
   {
     json.setIndent(4);
-    const std::string jsonFileBuffer{ JSON::fromFile(prefixPath(testFile)) };
+    const std::string jsonFileBuffer{ JSON::fromFile(prefixTestDataPath(testFile)) };
     BufferSource jsonSource{ jsonFileBuffer };
     BufferDestination jsonDestination;
     json.parse(jsonSource);
@@ -319,8 +319,8 @@ TEST_CASE("Check JSON print of list of example JSON files.", "[JSON][Print]")
   SECTION("Print to file and check value.", "[JSON][Print][File]")
   {
     json.setIndent(4);
-    const std::string testFileName{ prefixPath(testFile) };
-    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    const std::string testFileName{ prefixTestDataPath(testFile) };
+    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
     std::string jsonFileBuffer{ JSON::fromFile(testFileName) };
     BufferSource jsonSource{ jsonFileBuffer };

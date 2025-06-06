@@ -6,7 +6,7 @@ TEST_CASE("Check JSON stringification of a list of example JSON files.", "[JSON]
   TEST_FILE_LIST(testFile);
   SECTION("Stringify to  buffer and check value.", "[JSON][Stringify][Buffer]")
   {
-    const std::string jsonFileBuffer{ JSON::fromFile(prefixPath(testFile)) };
+    const std::string jsonFileBuffer{ JSON::fromFile(prefixTestDataPath(testFile)) };
     BufferSource jsonSource{ jsonFileBuffer };
     BufferDestination jsonDestination;
     json.parse(jsonSource);
@@ -15,8 +15,8 @@ TEST_CASE("Check JSON stringification of a list of example JSON files.", "[JSON]
   }
   SECTION("Stringify to file and check value.", "[JSON][Stringify][File]")
   {
-    const std::string testFileName{ prefixPath(testFile) };
-    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    const std::string testFileName{ prefixTestDataPath(testFile) };
+    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
     std::string jsonFileBuffer{ JSON::fromFile(testFileName) };
     BufferSource jsonSource{ jsonFileBuffer };

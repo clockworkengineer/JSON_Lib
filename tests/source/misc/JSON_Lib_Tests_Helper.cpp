@@ -5,8 +5,8 @@
 /// </summary>
 /// <param name="jsonFileName">Test JSON data file name</param>
 /// <returns>Full path to test data file</returns>
-std::string prefixPath(const std::string &jsonFileName) {
-#ifdef WIN32
+std::string prefixTestDataPath(const std::string &jsonFileName) {
+#ifdef _WIN32
   return (std::filesystem::current_path() / "./files" / jsonFileName).string();
 #else
   return (std::filesystem::current_path() / "../files" / jsonFileName).string();

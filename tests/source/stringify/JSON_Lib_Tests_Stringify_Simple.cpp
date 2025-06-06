@@ -45,7 +45,7 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
   SECTION("Stringify a string (abcdefghijklmnopqrstuvwxyz) to file.", "[JSON][Stringify][Simple][File][Validate]")
   {
     const std::string expected{ R"("abcdefghijklmnopqrstuvwxyz")" };
-    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
@@ -56,7 +56,7 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
   SECTION("Stringify a boolean (true) to file.", "[JSON][Stringify][Simple][File][Validate]")
   {
     const std::string expected{ "true" };
-    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
@@ -67,7 +67,7 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
   SECTION("Stringify a number (98345) to file.", "[JSON][Stringify][Simple][File][Validate]")
   {
     const std::string expected{ "98345" };
-    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
@@ -78,7 +78,7 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
   SECTION("Stringify a null to file.", "[JSON][Stringify][Simple][File][Validate]")
   {
     const std::string expected{ "null" };
-    const std::string generatedFileName{ prefixPath(kGeneratedJSONFile) };
+    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
     std::filesystem::remove(generatedFileName);
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
