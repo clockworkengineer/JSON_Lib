@@ -6,11 +6,13 @@
 /// <param name="jsonFileName">Test JSON data file name</param>
 /// <returns>Full path to test data file</returns>
 std::string prefixTestDataPath(const std::string &jsonFileName) {
-#ifdef _WIN32
-  return (std::filesystem::current_path() / "./files" / jsonFileName).string();
-#else
-  return (std::filesystem::current_path() / "../files" / jsonFileName).string();
-#endif
+  if (std::filesystem::is_directory("./files")) {
+    return (std::filesystem::current_path() / "./files" / jsonFileName)
+        .string();
+  } else {
+    return (std::filesystem::current_path() / "../files" / jsonFileName)
+        .string();
+  }
 }
 /// <summary>
 /// Verify that an JNode Array has the correct parsed format.
