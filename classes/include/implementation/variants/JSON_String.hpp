@@ -15,7 +15,7 @@ struct String : Variant
   ~String() = default;
   // Return reference to string
   [[nodiscard]] std::string_view value() { return jNodeString; }
-  [[nodiscard]] const std::string_view value() const { return jNodeString; }
+  [[nodiscard]] std::string_view value() const { return jNodeString; }
   // Return string representation of value
   [[nodiscard]] std::string toString() const { return jNodeString; }
   // Set/get maximum string length

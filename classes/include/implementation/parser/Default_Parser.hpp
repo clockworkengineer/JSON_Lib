@@ -26,16 +26,16 @@ public:
 
 private:
   // Parse JSON
-  [[nodiscard]] static Object::Entry parseObjectEntry(ISource &source, const ITranslator &translator, const unsigned long parserDepth);
-  [[nodiscard]] static JNode parseString(ISource &source, const ITranslator &translator, [[maybe_unused]]const unsigned long parserDepth);
-  [[nodiscard]] static JNode parseNumber(ISource &source, [[maybe_unused]] const ITranslator &translator, [[maybe_unused]]const unsigned long parserDepth);
-  [[nodiscard]] static JNode parseBoolean(ISource &source, [[maybe_unused]] const ITranslator &translator, [[maybe_unused]]const unsigned long parserDepth);
-  [[nodiscard]] static JNode parseNull(ISource &source, [[maybe_unused]] const ITranslator &translator, [[maybe_unused]]const unsigned long parserDepth);
-  [[nodiscard]] static JNode parseObject(ISource &source, const ITranslator &translator, const unsigned long parserDepth);
-  [[nodiscard]] static JNode parseArray(ISource &source, const ITranslator &translator, const unsigned long parserDepth);
-  [[nodiscard]] static JNode parseJNodes(ISource &source, const ITranslator &translator, const unsigned long parserDepth);
+  [[nodiscard]] static Object::Entry parseObjectEntry(ISource &source, const ITranslator &translator, unsigned long parserDepth);
+  [[nodiscard]] static JNode parseString(ISource &source, const ITranslator &translator, [[maybe_unused]] unsigned long parserDepth);
+  [[nodiscard]] static JNode parseNumber(ISource &source, [[maybe_unused]] const ITranslator &translator, [[maybe_unused]] unsigned long parserDepth);
+  [[nodiscard]] static JNode parseBoolean(ISource &source, [[maybe_unused]] const ITranslator &translator, [[maybe_unused]] unsigned long parserDepth);
+  [[nodiscard]] static JNode parseNull(ISource &source, [[maybe_unused]] const ITranslator &translator, [[maybe_unused]] unsigned long parserDepth);
+  [[nodiscard]] static JNode parseObject(ISource &source, const ITranslator &translator, unsigned long parserDepth);
+  [[nodiscard]] static JNode parseArray(ISource &source, const ITranslator &translator, unsigned long parserDepth);
+  [[nodiscard]] static JNode parseJNodes(ISource &source, const ITranslator &translator, unsigned long parserDepth);
   // Parser routing table
-  using ParseFunc = std::function<JNode(ISource &, const ITranslator &, const unsigned long parserDepth)>;
+  using ParseFunc = std::function<JNode(ISource &, const ITranslator &, unsigned long parserDepth)>;
   inline static std::map<char, ParseFunc> parsers = { { '{', parseObject },
     { '[', parseArray },
     { 't', parseBoolean },

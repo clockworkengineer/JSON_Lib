@@ -8,7 +8,7 @@ struct ObjectEntry
   ObjectEntry(const std::string_view &key, JNode &jNode) : key(JNode::make<String>(key)), jNode(std::move(jNode)) {}
   ObjectEntry(const std::string_view &key, JNode &&jNode) : key(JNode::make<String>(key)), jNode(std::move(jNode)) {}
   [[nodiscard]] std::string_view getKey() { return static_cast<String &>(key.getVariant()).value(); }
-  [[nodiscard]] const std::string_view getKey() const { return static_cast<const String &>(key.getVariant()).value(); }
+  [[nodiscard]] std::string_view getKey() const { return static_cast<const String &>(key.getVariant()).value(); }
   [[nodiscard]] JNode &getKeyJNode() { return key; }
   [[nodiscard]] const JNode &getKeyJNode() const { return key; }
   [[nodiscard]] JNode &getJNode() { return jNode; }
