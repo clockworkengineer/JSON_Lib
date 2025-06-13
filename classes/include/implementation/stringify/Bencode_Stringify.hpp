@@ -28,7 +28,7 @@ public:
   }
 
 private:
-  static void stringifyJNodes(const JNode &jNode, IDestination &destination, const unsigned long indent)
+  static void stringifyJNodes(const JNode &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
   {
     if (isA<Number>(jNode)) {
       stringifyNumber(jNode, destination);
