@@ -24,7 +24,7 @@ std::string jsonSettingsFile() { return (std::filesystem::current_path() / "file
 /// </summary>
 void processEntry(const js::Object::Entry &entry)
 {
-  auto &key = entry.getKey();
+  auto key = entry.getKey();
   // Log main entry key
   std::string entryJSON{ "\n[" + std::string(key) + "] = " };
   if (key == "files.exclude") {
