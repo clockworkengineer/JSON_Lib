@@ -14,7 +14,6 @@
 #include "Default_Translator.hpp"
 
 // Unit test constants
-constexpr char kGeneratedJSONFile[] = "generated.json";
 constexpr char kSingleJSONFile[] = "testfile001.json";
 constexpr char kNonExistantJSONFile[] = "doesntexist.json";
 // Unit test helper functions

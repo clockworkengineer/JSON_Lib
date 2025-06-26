@@ -99,8 +99,7 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
   }
   SECTION("Stripped (File) should be the same as parsed then stringified JSON.", "[JSON][Parse][Strip]")
   {
-    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
-    std::filesystem::remove(generatedFileName);
+    const std::string generatedFileName{ generateRandomFileName() };
     FileSource jsonSource{ prefixTestDataPath(testFile) };
     BufferDestination jsonDestination;
     json.parse(jsonSource);
@@ -110,6 +109,7 @@ TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
     json.strip(jsonSource, strippedDestination);
     strippedDestination.close();
     REQUIRE(jsonDestination.toString() == JSON::fromFile(generatedFileName));
+    std::filesystem::remove(strippedDestination.getFileName());
   }
   SECTION("Strip JSON with escaped ascii characters.", "[JSON][Parse][Strip]")
   {

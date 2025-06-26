@@ -45,6 +45,8 @@ public:
     if (more()) { return source.tellg(); }
     return std::filesystem::file_size(filename);
   }
+  std::string getFileName() { return filename; }
+  void close() { source.close(); }
 
 private:
   void backup(const unsigned long length) override

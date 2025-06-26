@@ -42,7 +42,6 @@ TEST_CASE("Check JSON stringification of collection types to a buffer and check 
 TEST_CASE("Check JSON stringification of collection types to a file and check values.", "[JSON][Stringify][File]")
 {
   const JSON json;
-  const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
   SECTION(R"(Stringify an object ({"Age":77,"Name":"Rob"}) to a file.)", "[JSON][Stringify][File]")
   {
     const std::string expected{ R"({"Age":77,"Name":"Rob"})" };
