@@ -13,15 +13,13 @@ TEST_CASE("Check translation of surrogate pairs.", "[JSON][Translator]")
     "[JSON][Translator][Exception]")
   {
     REQUIRE_THROWS_AS(translator.from(R"(Begin \uD834 \uDD1E End)"), Default_Translator::Error);
-    REQUIRE_THROWS_WITH(
-      translator.from(R"(Begin \uD834 \uDD1E End)"), "ITranslator Error: Unpaired surrogate found.");
+    REQUIRE_THROWS_WITH(translator.from(R"(Begin \uD834 \uDD1E End)"), "ITranslator Error: Unpaired surrogate found.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834\\u0045 End' in error then expect exception.",
     "[JSON][Translator][Exception]")
   {
     REQUIRE_THROWS_AS(translator.from(R"(Begin \uD834\u0045 End)"), Default_Translator::Error);
-    REQUIRE_THROWS_WITH(
-      translator.from(R"(Begin \uD834\u0045 End)"), "ITranslator Error: Unpaired surrogate found.");
+    REQUIRE_THROWS_WITH(translator.from(R"(Begin \uD834\u0045 End)"), "ITranslator Error: Unpaired surrogate found.");
   }
   SECTION("Translate from escape sequences surrogate pair 'Begin \\uD834 End' in error then expect exception.",
     "[JSON][Translator][Exception]")
@@ -55,11 +53,11 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value-Ref
   SECTION("Parse/Stringify both with R-Value reference (File).", "[JSON][JNode][R-Value-Reference]")
   {
     const std::string testFileName{ prefixTestDataPath(kSingleJSONFile) };
-    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
-    std::filesystem::remove(generatedFileName);
+    const std::string generatedFileName{ generateRandomFileName() };
     json.parse(FileSource{ testFileName });
     json.stringify(FileDestination{ generatedFileName });
     REQUIRE(JSON::fromFile(generatedFileName) == stripWhiteSpace(JSON::fromFile(testFileName)));
+    std::filesystem::remove(generatedFileName);
   }
 }
 

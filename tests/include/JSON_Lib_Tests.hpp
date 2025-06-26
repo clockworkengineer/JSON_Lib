@@ -22,6 +22,7 @@ std::string prefixTestDataPath(const std::string &jsonFileName);
 std::string stripWhiteSpace(const std::string &jsonBuffer);
 void checkObject(const JSON_Lib::JNode &jNode);
 void checkArray(const JSON_Lib::JNode &jNode);
+std::string generateRandomFileName(void );
 std::string generateEscapes(unsigned char first, unsigned char last);
 // Test files macro
 #define TEST_FILE_LIST(file)                                     \

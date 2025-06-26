@@ -60,7 +60,14 @@ std::string stripWhiteSpace(const std::string &jsonBuffer)
   json.strip(BufferSource{ jsonBuffer }, destination);
   return destination.toString();
 }
-
+/// <summary>
+/// Generate unique file name.
+/// </summary>
+/// <returns>Unique torrent file name</returns>
+std::string generateRandomFileName(void) {
+  std::string name1 = std::tmpnam(nullptr);
+  return name1;
+}
 std::string generateEscapes(const unsigned char first, const unsigned char last)
 {
   std::string result;

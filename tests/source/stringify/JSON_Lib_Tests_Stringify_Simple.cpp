@@ -45,45 +45,46 @@ TEST_CASE("Check JSON stringification of simple types to file and check values."
   SECTION("Stringify a string (abcdefghijklmnopqrstuvwxyz) to file.", "[JSON][Stringify][Simple][File][Validate]")
   {
     const std::string expected{ R"("abcdefghijklmnopqrstuvwxyz")" };
-    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
-    std::filesystem::remove(generatedFileName);
+    const std::string generatedFileName{ prefixTestDataPath(generateRandomFileName()) };
+    ;
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
     jsonDestination.close();
     REQUIRE(JSON::fromFile(generatedFileName) == expected);
+    std::filesystem::remove(jsonDestination.getFileName());
   }
   SECTION("Stringify a boolean (true) to file.", "[JSON][Stringify][Simple][File][Validate]")
   {
     const std::string expected{ "true" };
-    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
-    std::filesystem::remove(generatedFileName);
+    const std::string generatedFileName{ prefixTestDataPath(generateRandomFileName()) };
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
     jsonDestination.close();
     REQUIRE(JSON::fromFile(generatedFileName) == expected);
+    std::filesystem::remove(jsonDestination.getFileName());
   }
   SECTION("Stringify a number (98345) to file.", "[JSON][Stringify][Simple][File][Validate]")
   {
     const std::string expected{ "98345" };
-    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
-    std::filesystem::remove(generatedFileName);
+    const std::string generatedFileName{ prefixTestDataPath(generateRandomFileName()) };
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
     jsonDestination.close();
     REQUIRE(JSON::fromFile(generatedFileName) == expected);
+    std::filesystem::remove(jsonDestination.getFileName());
   }
   SECTION("Stringify a null to file.", "[JSON][Stringify][Simple][File][Validate]")
   {
     const std::string expected{ "null" };
-    const std::string generatedFileName{ prefixTestDataPath(kGeneratedJSONFile) };
-    std::filesystem::remove(generatedFileName);
+    const std::string generatedFileName{ prefixTestDataPath(generateRandomFileName()) };
     FileDestination jsonDestination{ generatedFileName };
     json.parse(BufferSource{ expected });
     json.print(jsonDestination);
     jsonDestination.close();
     REQUIRE(JSON::fromFile(generatedFileName) == expected);
+    std::filesystem::remove(jsonDestination.getFileName());
   }
 }

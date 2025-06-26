@@ -33,14 +33,16 @@ public:
     destination.flush();
     lastChar = bytes.back();
   }
-  void add( const std::string_view &bytes) override {
+  void add(const std::string_view &bytes) override
+  {
     for (const auto ch : bytes) { add(ch); }
     destination.flush();
     lastChar = bytes.back();
   }
-  void add(const char *bytes) override {
+  void add(const char *bytes) override
+  {
     const std::size_t len = strlen(bytes);
-    for (int index=0; index<len; index++) { add(bytes[index]); }
+    for (int index = 0; index < len; index++) { add(bytes[index]); }
     destination.flush();
     lastChar = bytes[len - 1];
   }
@@ -52,6 +54,7 @@ public:
     fileSize = 0;
     lastChar = 0;
   }
+  std::string getFileName() { return filename; }
   void close() { destination.close(); }
   std::size_t size() const { return fileSize; }
   [[nodiscard]] char last() override { return lastChar; }
