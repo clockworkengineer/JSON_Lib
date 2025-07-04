@@ -5,7 +5,7 @@ namespace JSON_Lib {
 // ====================
 // Forward declarations
 // ====================
-struct JNode;
+struct Node;
 
 // ==========================================================
 // Interface for the action events during JSON tree traversal
@@ -25,39 +25,39 @@ public:
   // ========================
   virtual ~IAction() = default;
   // ============================
-  // JNode encountered so process
+  // Node encountered so process
   // ============================
-  virtual void onJNode([[maybe_unused]] JNode &jNode) { }
-  virtual void onJNode([[maybe_unused]] const JNode &jNode) { }
+  virtual void onNode([[maybe_unused]] Node &jNode) { }
+  virtual void onNode([[maybe_unused]] const Node &jNode) { }
   // =============================
   // String encountered so process
   // =============================
-  virtual void onString([[maybe_unused]] JNode &jNode) { }
-  virtual void onString([[maybe_unused]] const JNode &jNode) { }
+  virtual void onString([[maybe_unused]] Node &jNode) { }
+  virtual void onString([[maybe_unused]] const Node &jNode) { }
   // =============================
   // Number encountered so process
   // =============================
-  virtual void onNumber([[maybe_unused]] JNode &jNode) { }
-  virtual void onNumber([[maybe_unused]] const JNode &jNode) { }
+  virtual void onNumber([[maybe_unused]] Node &jNode) { }
+  virtual void onNumber([[maybe_unused]] const Node &jNode) { }
   // ==============================
   // Boolean encountered so process
   // ==============================
-  virtual void onBoolean([[maybe_unused]] JNode &jNode) { }
-  virtual void onBoolean([[maybe_unused]] const JNode &jNode) { }
+  virtual void onBoolean([[maybe_unused]] Node &jNode) { }
+  virtual void onBoolean([[maybe_unused]] const Node &jNode) { }
   // ===========================
   // Null encountered so process
   // ===========================
-  virtual void onNull([[maybe_unused]] JNode &jNode) { }
-  virtual void onNull([[maybe_unused]] const JNode &jNode) { }
+  virtual void onNull([[maybe_unused]] Node &jNode) { }
+  virtual void onNull([[maybe_unused]] const Node &jNode) { }
   // ============================
   // Array encountered so process
   // ============================
-  virtual void onArray([[maybe_unused]] JNode &jNode) { }
-  virtual void onArray([[maybe_unused]] const JNode &jNode) { }
+  virtual void onArray([[maybe_unused]] Node &jNode) { }
+  virtual void onArray([[maybe_unused]] const Node &jNode) { }
   // =============================
   // Object encountered so process
   // =============================
-  virtual void onObject([[maybe_unused]] JNode &jNode) { }
-  virtual void onObject([[maybe_unused]] const JNode &jNode) { }
+  virtual void onObject([[maybe_unused]] Node &jNode) { }
+  virtual void onObject([[maybe_unused]] const Node &jNode) { }
 };
 }// namespace JSON_Lib

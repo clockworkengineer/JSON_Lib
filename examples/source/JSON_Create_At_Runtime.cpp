@@ -37,20 +37,20 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     json["list"] = { 1, 0, 2 };
     // add another object (using an initializer list of pairs)
     json["object"] = { { "currency", "USD" }, { "value", 42.99 } };
-    // add another object that has a nested array (JNode{})
-    json["object2"] = { { "currency", "USD" }, { "array", js::JNode{ 23.22, 33, 55, 99.99 } } };
+    // add another object that has a nested array (Node{})
+    json["object2"] = { { "currency", "USD" }, { "array", js::Node{ 23.22, 33, 55, 99.99 } } };
     js::BufferDestination destination;
     json.stringify(destination);
     PLOG_INFO << destination.toString();
     destination.clear();
-    // create JSON using an initializer list and nesting array/objects using JNode{}.
+    // create JSON using an initializer list and nesting array/objects using Node{}.
     const js::JSON json2 = { { "pi", 3.141 },
       { "sad", true },
       { "first_name", "Niels" },
       { "nothing", nullptr },
-      { "the_answer", js::JNode{ { "everything", 42 } } },
-      { "list", js::JNode{ 1, 0, 2 } },
-      { "object", js::JNode{ { "currency", "USD" }, { "value", js::JNode{ 23.22, 33, 55, 99.99 } } } } };
+      { "the_answer", js::Node{ { "everything", 42 } } },
+      { "list", js::Node{ 1, 0, 2 } },
+      { "object", js::Node{ { "currency", "USD" }, { "value", js::Node{ 23.22, 33, 55, 99.99 } } } } };
     json2.stringify(destination);
     PLOG_INFO << destination.toString();
   } catch (std::exception &ex) {

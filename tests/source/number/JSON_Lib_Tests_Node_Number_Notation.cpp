@@ -1,12 +1,12 @@
 #include "JSON_Lib_Tests.hpp"
 
 // ====================================
-// JNode Number floating point notation
+// Node Number floating point notation
 // ====================================
-TEST_CASE("Check JNode Number floating point notation.", "[JSON][JNode][Number][Float][Precision]")
+TEST_CASE("Check Node Number floating point notation.", "[JSON][Node][Number][Float][Precision]")
 {
   const JSON json;
-  SECTION("Floating point notation to normal.", "[JSON][JNode][Number][Float][Notation]")
+  SECTION("Floating point notation to normal.", "[JSON][Node][Number][Float][Notation]")
   {
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };
@@ -19,7 +19,7 @@ TEST_CASE("Check JNode Number floating point notation.", "[JSON][JNode][Number][
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == R"({"latitude":39.0683,"longitude":-70.7416})");
   }
-  SECTION("Floating point notation to fixed.", "[JSON][JNode][Number][Float][Notation]")
+  SECTION("Floating point notation to fixed.", "[JSON][Node][Number][Float][Notation]")
   {
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };
@@ -33,7 +33,7 @@ TEST_CASE("Check JNode Number floating point notation.", "[JSON][JNode][Number][
     Number::setNotation(Number::numberNotation::normal);
     REQUIRE(jsonDestination.toString() == R"({"latitude":39.068340,"longitude":-70.741615})");
   }
-  SECTION("Floating point notation to scientific.", "[JSON][JNode][Number][Float][Notation]")
+  SECTION("Floating point notation to scientific.", "[JSON][Node][Number][Float][Notation]")
   {
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };

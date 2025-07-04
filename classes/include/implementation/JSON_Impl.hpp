@@ -17,23 +17,23 @@ public:
   ~JSON_Impl() = default;
   // Get JSON_Lib version
   static std::string version();
-  // Parse JSON into JNode tree
+  // Parse JSON into Node tree
   void parse(ISource &source);
-  // Create JSON text string (no white space) from JNode tree
+  // Create JSON text string (no white space) from Node tree
   void stringify(IDestination &destination) const;
-  // Create JSON structured text string (pretty print) from JNode tree
+  // Create JSON structured text string (pretty print) from Node tree
   void print(IDestination &destination) const;
   // Strip whitespace from JSON string
   static void strip(ISource &source, IDestination &destination);
   // Get the root of JSON tree
-  [[nodiscard]] JNode &root() { return jNodeRoot; }
-  [[nodiscard]] const JNode &root() const { return jNodeRoot; }
+  [[nodiscard]] Node &root() { return jNodeRoot; }
+  [[nodiscard]] const Node &root() const { return jNodeRoot; }
   // Search for JSON object entry with a given key
-  JNode &operator[](const std::string_view &key);
-  const JNode &operator[](const std::string_view &key) const;
+  Node &operator[](const std::string_view &key);
+  const Node &operator[](const std::string_view &key) const;
   // Get JSON array element at index
-  JNode &operator[](std::size_t index);
-  const JNode &operator[](std::size_t index) const;
+  Node &operator[](std::size_t index);
+  const Node &operator[](std::size_t index) const;
   // Traverse JSON tree
   void traverse(IAction &action);
   void traverse(IAction &action) const;
@@ -47,9 +47,9 @@ public:
 
 private:
   // Traverse JSON tree
-  template<typename T> static void traverseJNodes(T &jNode, IAction &action);
+  template<typename T> static void traverseNodes(T &jNode, IAction &action);
   // Root of JSON tree
-  JNode jNodeRoot;
+  Node jNodeRoot;
   // Pointer to JSON parser interface
   inline static std::unique_ptr<IParser> jsonParser;
   // Pointer to JSON stringify interface
@@ -58,14 +58,14 @@ private:
   inline static std::unique_ptr<ITranslator> jsonTranslator;
 };
 /// <summary>
-/// Recursively traverse JNode tree calling IAction methods and possibly
+/// Recursively traverse Node tree calling IAction methods and possibly
 /// modifying the tree contents or even structure.
 /// </summary>
-/// <param name="jNode">JNode tree to be traversed.</param>
+/// <param name="jNode">Node tree to be traversed.</param>
 /// <param name="action">Action methods to call during traversal.</param>
-template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
+template<typename T> void JSON_Impl::traverseNodes(T &jNode, IAction &action)
 {
-  action.onJNode(jNode);
+  action.onNode(jNode);
   if (isA<Number>(jNode)) {
     action.onNumber(jNode);
   } else if (isA<String>(jNode)) {
@@ -76,12 +76,12 @@ template<typename T> void JSON_Impl::traverseJNodes(T &jNode, IAction &action)
     action.onNull(jNode);
   } else if (isA<Object>(jNode)) {
     action.onObject(jNode);
-    for (auto &entry : JRef<Object>(jNode).value()) { traverseJNodes(entry.getJNode(), action); }
+    for (auto &entry : JRef<Object>(jNode).value()) { traverseNodes(entry.getNode(), action); }
   } else if (isA<Array>(jNode)) {
     action.onArray(jNode);
-    for (auto &entry : JRef<Array>(jNode).value()) { traverseJNodes(entry, action); }
+    for (auto &entry : JRef<Array>(jNode).value()) { traverseNodes(entry, action); }
   } else if (!isA<Hole>(jNode)) {
-    throw Error("Unknown JNode type encountered during tree traversal.");
+    throw Error("Unknown Node type encountered during tree traversal.");
   }
 }
 }// namespace JSON_Lib

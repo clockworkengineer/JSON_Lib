@@ -68,7 +68,7 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
     json["nothing"] = nullptr;
     json["answer"]["everything"] = 42;
     json["list"] = { 1, 0, 2 };
-    json["object"] = { { "currency", "USD" }, { "value", JNode{ 1, 2, 3, 4, 5 } } };
+    json["object"] = { { "currency", "USD" }, { "value", Node{ 1, 2, 3, 4, 5 } } };
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
     REQUIRE(
@@ -87,7 +87,7 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
     json["nothing"] = nullptr;
     json["answer"]["everything"] = 42;
     json["list"] = { 1, 0, 2 };
-    json["object"] = { { "currency", "USD" }, { "value", JNode{ { "key1", 22 }, { "key2", 99.899 } } } };
+    json["object"] = { { "currency", "USD" }, { "value", Node{ { "key1", 22 }, { "key2", 99.899 } } } };
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
     REQUIRE(
@@ -110,15 +110,15 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
   }
   SECTION("Object creation completely using a nested initializer list.", "[JSON][Create][Complex][Initializer")
   {
-    // Note: For the moment has to explicitly uses JNode to create a
+    // Note: For the moment has to explicitly uses Node to create a
     // nested object/array
     JSON json = { { "pi", 3.141 },
       { "happy", true },
       { "name", "Niels" },
       { "nothing", nullptr },
-      { "answer", JNode{ { "everything", 42 } } },
-      { "list", JNode{ 1, 0, 2 } },
-      { "object", JNode{ { "currency", "USD" }, { "value", 42.99 } } } };
+      { "answer", Node{ { "everything", 42 } } },
+      { "list", Node{ 1, 0, 2 } },
+      { "object", Node{ { "currency", "USD" }, { "value", 42.99 } } } };
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
     REQUIRE(

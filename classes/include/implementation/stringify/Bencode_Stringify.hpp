@@ -16,19 +16,19 @@ public:
   ~Bencode_Stringify() override = default;
 
   /// <summary>
-  /// Recursively traverse JNode structure encoding it into Bencode string on
+  /// Recursively traverse Node structure encoding it into Bencode string on
   /// the destination stream passed in.
   /// </summary>
-  /// <param name="jNode">JNode structure to be traversed.</param>
+  /// <param name="jNode">Node structure to be traversed.</param>
   /// <param name="destination">Destination stream for stringified Bencode.</param>
   /// <param name="indent">Current print indentation.</param>
-  void stringify(const JNode &jNode, IDestination &destination, const unsigned long indent) const override
+  void stringify(const Node &jNode, IDestination &destination, const unsigned long indent) const override
   {
-    stringifyJNodes(jNode, destination, indent);
+    stringifyNodes(jNode, destination, indent);
   }
 
 private:
-  static void stringifyJNodes(const JNode &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
+  static void stringifyNodes(const Node &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
   {
     if (isA<Number>(jNode)) {
       stringifyNumber(jNode, destination);
@@ -44,29 +44,29 @@ private:
     } else if (isA<Array>(jNode)) {
       stringifyArray(jNode, destination, 0);
     } else {
-      throw Error("Unknown JNode type encountered during stringification.");
+      throw Error("Unknown Node type encountered during stringification.");
     }
   }
-  static void stringifyObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent)
+  static void stringifyObject(const Node &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent)
   {
     destination.add('d');
     for (auto &entry : JRef<Object>(jNode).value()) {
-      stringifyJNodes(entry.getKeyJNode(), destination, 0);
-      stringifyJNodes(entry.getJNode(), destination, 0);
+      stringifyNodes(entry.getKeyNode(), destination, 0);
+      stringifyNodes(entry.getNode(), destination, 0);
     }
     destination.add("e");
   }
-  static void stringifyArray(const JNode &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
+  static void stringifyArray(const Node &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
   {
     destination.add('l');
-    for (auto &entry : JRef<Array>(jNode).value()) { stringifyJNodes(entry, destination, 0); }
+    for (auto &entry : JRef<Array>(jNode).value()) { stringifyNodes(entry, destination, 0); }
     destination.add("e");
   }
-  static void stringifyNumber(const JNode &jNode, IDestination &destination)
+  static void stringifyNumber(const Node &jNode, IDestination &destination)
   {
     destination.add("i" + std::to_string(JRef<Number>(jNode).value<long long>()) + "e");
   }
-  static void stringifyBoolean(const JNode &jNode, IDestination &destination)
+  static void stringifyBoolean(const Node &jNode, IDestination &destination)
   {
     if (JRef<Boolean>(jNode).value()) {
       destination.add("4:True");
@@ -74,8 +74,8 @@ private:
       destination.add("5:False");
     }
   }
-  static void stringifyNull([[maybe_unused]]const JNode &jNode, IDestination &destination) { destination.add("4:null"); }
-  static void stringifyString(const JNode &jNode, IDestination &destination)
+  static void stringifyNull([[maybe_unused]]const Node &jNode, IDestination &destination) { destination.add("4:null"); }
+  static void stringifyString(const Node &jNode, IDestination &destination)
   {
     const auto jsonString = JRef<String>(jNode).value();
     destination.add((std::to_string(static_cast<int>(jsonString.length())) + ":").append(jsonString));

@@ -1,12 +1,12 @@
 #include "JSON_Lib_Tests.hpp"
 
 // =====================================
-// JNode Number floating point precision
+// Node Number floating point precision
 // =====================================
-TEST_CASE("Check JNode Number floating point precision.", "[JSON][JNode][Number][Float][Precision]")
+TEST_CASE("Check Node Number floating point precision.", "[JSON][Node][Number][Float][Precision]")
 {
   const JSON json;
-  SECTION("Floating point precision to 6 (default).", "[JSON][JNode][Number][Float][Precision]")
+  SECTION("Floating point precision to 6 (default).", "[JSON][Node][Number][Float][Precision]")
   {
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };
@@ -18,7 +18,7 @@ TEST_CASE("Check JNode Number floating point precision.", "[JSON][JNode][Number]
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == R"({"latitude":39.0683,"longitude":-70.7416})");
   }
-  SECTION("Floating point precision to 7.", "[JSON][JNode][Number][Float][Precision]")
+  SECTION("Floating point precision to 7.", "[JSON][Node][Number][Float][Precision]")
   {
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };
@@ -31,7 +31,7 @@ TEST_CASE("Check JNode Number floating point precision.", "[JSON][JNode][Number]
     Number::setPrecision(6);
     REQUIRE(jsonDestination.toString() == R"({"latitude":39.06834,"longitude":-70.74162})");
   }
-  SECTION("Floating point precision to 8.", "[JSON][JNode][Number][Float][Precision]")
+  SECTION("Floating point precision to 8.", "[JSON][Node][Number][Float][Precision]")
   {
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };
@@ -44,7 +44,7 @@ TEST_CASE("Check JNode Number floating point precision.", "[JSON][JNode][Number]
     Number::setPrecision(6);
     REQUIRE(jsonDestination.toString() == R"({"latitude":39.06834,"longitude":-70.741615})");
   }
-//   SECTION("Floating point precision to maximum.", "[JSON][JNode][Number][Float][Precision]")
+//   SECTION("Floating point precision to maximum.", "[JSON][Node][Number][Float][Precision]")
 //   {
 //     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
 //     BufferSource jsonSource{ expected };

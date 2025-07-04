@@ -1,28 +1,28 @@
 #include "JSON_Lib_Tests.hpp"
 
-TEST_CASE("Check JNode Number conversion exceptions.", "[JSON][JNode][Number][Exceptions]")
+TEST_CASE("Check Node Number conversion exceptions.", "[JSON][Node][Number][Exceptions]")
 {
   const JSON json;
-  SECTION("Check integer with invalid characters.", "[JSON][JNode][Number][Exceptions]")
+  SECTION("Check integer with invalid characters.", "[JSON][Node][Number][Exceptions]")
   {
     BufferSource jsonSource{ "4345u334u" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), SyntaxError);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Syntax Error [Line: 1 Column: 10]: Invalid numeric value.");
   }
-  SECTION("Check floating point with exponent.", "[JSON][JNode][Number][Exceptions]")
+  SECTION("Check floating point with exponent.", "[JSON][Node][Number][Exceptions]")
   {
     BufferSource jsonSource{ "78.43e-2" };
     REQUIRE_NOTHROW(json.parse(jsonSource));
   }
-  SECTION("Check floating point with invalid exponent.", "[JSON][JNode][Number][Exceptions]")
+  SECTION("Check floating point with invalid exponent.", "[JSON][Node][Number][Exceptions]")
   {
     BufferSource jsonSource{ "78.e43e-2" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), SyntaxError);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Syntax Error [Line: 1 Column: 10]: Invalid numeric value.");
   }
-  SECTION("Check floating point with multiple decimal points.", "[JSON][JNode][Number][Exceptions]")
+  SECTION("Check floating point with multiple decimal points.", "[JSON][Node][Number][Exceptions]")
   {
     BufferSource jsonSource{ "78.5454.545" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), SyntaxError);
@@ -31,10 +31,10 @@ TEST_CASE("Check JNode Number conversion exceptions.", "[JSON][JNode][Number][Ex
   }
 }
 
-TEST_CASE("Check JNode Number API(s) for all supported number types.", "[JSON][JNode][Number]")
+TEST_CASE("Check Node Number API(s) for all supported number types.", "[JSON][Node][Number]")
 {
   JSON json;
-  SECTION("Check numbers are the correct type.", "[JSON][JNode][Number][Addition]")
+  SECTION("Check numbers are the correct type.", "[JSON][Node][Number][Addition]")
   {
     json["root"] = { 1, 1l, 1ll, 1.0f, 1.0, 1.0l };
     BufferDestination destinationBuffer;
@@ -47,7 +47,7 @@ TEST_CASE("Check JNode Number API(s) for all supported number types.", "[JSON][J
     REQUIRE_FALSE(!JRef<Number>(json["root"][4]).is<double>());
     REQUIRE_FALSE(!JRef<Number>(json["root"][5]).is<long double>());
   }
-  SECTION("Simple arithmetic add one to a number.", "[JSON][JNode][Number][Get/Set]")
+  SECTION("Simple arithmetic add one to a number.", "[JSON][Node][Number][Get/Set]")
   {
     json["root"] = { 1, 1l, 1l, 1.0f, 1.0, 1.0l };
     BufferDestination destinationBuffer;
@@ -69,7 +69,7 @@ TEST_CASE("Check JNode Number API(s) for all supported number types.", "[JSON][J
     json.stringify(destinationBuffer);
     REQUIRE(destinationBuffer.toString() == R"({"root":[2,2,2,2.0,2.0,2.0]})");
   }
-  SECTION("Change types and values.", "[JSON][JNode][Number][Reset]")
+  SECTION("Change types and values.", "[JSON][Node][Number][Reset]")
   {
     json["root"] = { 1, 1l, 1ll, 1.0f, 1.0, 1.0l };
     BufferDestination destinationBuffer;

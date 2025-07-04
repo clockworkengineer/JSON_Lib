@@ -10,7 +10,7 @@ public:
   explicit JSON_Indexer(std::string fileName) : fileName(std::move(fileName)) {}
   virtual ~JSON_Indexer() = default;
   // Create index to object key mapping and modify object key to use index
-  virtual void onObject(JSON_Lib::JNode &jNode) override
+  virtual void onObject(JSON_Lib::Node &jNode) override
   {
     for (auto &entry : JSON_Lib::JRef<JSON_Lib::Object>(jNode).value()) {
       auto key = std::string(entry.getKey());

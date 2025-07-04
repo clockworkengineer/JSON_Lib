@@ -41,16 +41,16 @@ TEST_CASE("Check translation of surrogate pairs.", "[JSON][Translator]")
   }
 }
 
-TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][JNode][R-Value-Reference]")
+TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][Node][R-Value-Reference]")
 {
   const JSON json;
-  SECTION("Parse with R-Value reference (Buffer).", "[JSON][JNode][R-Value-Reference]")
+  SECTION("Parse with R-Value reference (Buffer).", "[JSON][Node][R-Value-Reference]")
   {
     json.parse(BufferSource{ R"({"City":"Southampton","Population":500000 })" });
     REQUIRE(JRef<Object>(json.root()).size() == 2);
     REQUIRE(JRef<String>((json.root())["City"]).value() == "Southampton");
   }
-  SECTION("Parse/Stringify both with R-Value reference (File).", "[JSON][JNode][R-Value-Reference]")
+  SECTION("Parse/Stringify both with R-Value reference (File).", "[JSON][Node][R-Value-Reference]")
   {
     const std::string testFileName{ prefixTestDataPath(kSingleJSONFile) };
     const std::string generatedFileName{ generateRandomFileName() };

@@ -5,18 +5,18 @@ namespace JSON_Lib {
 // Object entry
 struct ObjectEntry
 {
-  ObjectEntry(const std::string_view &key, JNode &jNode) : key(JNode::make<String>(key)), jNode(std::move(jNode)) {}
-  ObjectEntry(const std::string_view &key, JNode &&jNode) : key(JNode::make<String>(key)), jNode(std::move(jNode)) {}
+  ObjectEntry(const std::string_view &key, Node &jNode) : key(Node::make<String>(key)), jNode(std::move(jNode)) {}
+  ObjectEntry(const std::string_view &key, Node &&jNode) : key(Node::make<String>(key)), jNode(std::move(jNode)) {}
   [[nodiscard]] std::string_view getKey() { return static_cast<String &>(key.getVariant()).value(); }
   [[nodiscard]] std::string_view getKey() const { return static_cast<const String &>(key.getVariant()).value(); }
-  [[nodiscard]] JNode &getKeyJNode() { return key; }
-  [[nodiscard]] const JNode &getKeyJNode() const { return key; }
-  [[nodiscard]] JNode &getJNode() { return jNode; }
-  [[nodiscard]] const JNode &getJNode() const { return jNode; }
+  [[nodiscard]] Node &getKeyNode() { return key; }
+  [[nodiscard]] const Node &getKeyNode() const { return key; }
+  [[nodiscard]] Node &getNode() { return jNode; }
+  [[nodiscard]] const Node &getNode() const { return jNode; }
 
 private:
-  JNode key;
-  JNode jNode;
+  Node key;
+  Node jNode;
 };
 
 struct Object : Variant
@@ -37,7 +37,7 @@ struct Object : Variant
   {
     try {
       [[maybe_unused]] auto _ = findKey(jNodeObject, key);
-    } catch ([[maybe_unused]] const JNode::Error &e) {
+    } catch ([[maybe_unused]] const Node::Error &e) {
       return false;
     }
     return true;
@@ -45,8 +45,8 @@ struct Object : Variant
   // Return number of entries in an object
   [[nodiscard]] int size() const { return static_cast<int>(jNodeObject.size()); }
   // Return object entry for a given key
-  JNode &operator[](const std::string_view &key) { return findKey(jNodeObject, key)->getJNode(); }
-  const JNode &operator[](const std::string_view &key) const { return findKey(jNodeObject, key)->getJNode(); }
+  Node &operator[](const std::string_view &key) { return findKey(jNodeObject, key)->getNode(); }
+  const Node &operator[](const std::string_view &key) const { return findKey(jNodeObject, key)->getNode(); }
   // Return reference to base of object entries
   Entries &value() { return jNodeObject; }
   [[nodiscard]] const Entries &value() const { return jNodeObject; }
@@ -64,7 +64,7 @@ inline Object::Entries::iterator Object::findKey(Entries &object, const std::str
 {
   const auto it = std::ranges::find_if(
     object, [&key](Entry &entry) -> bool { return entry.getKey() == key; });
-  if (it == object.end()) { throw JNode::Error("Invalid key used to access object."); }
+  if (it == object.end()) { throw Node::Error("Invalid key used to access object."); }
   return it;
 }
 inline Object::Entries::const_iterator Object::findKey(const Entries &object, const std::string_view &key)
@@ -72,7 +72,7 @@ inline Object::Entries::const_iterator Object::findKey(const Entries &object, co
   const auto it = std::ranges::find_if(object, [&key](const Entry &entry) -> bool {
     return entry.getKey() == key;
   });
-  if (it == object.end()) { throw JNode::Error("Invalid key used to access object."); }
+  if (it == object.end()) { throw Node::Error("Invalid key used to access object."); }
   return it;
 }
 }// namespace JSON_Lib

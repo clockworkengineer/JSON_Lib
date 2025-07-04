@@ -44,10 +44,10 @@ set(JSON_INCLUDES
   ./classes/include/implementation/variants/JSON_String.hpp
   ./classes/include/implementation/variants/JSON_Boolean.hpp
   ./classes/include/implementation/variants/JSON_Null.hpp
-  ./classes/include/implementation/jnode/JSON_JNode.hpp
-  ./classes/include/implementation/jnode/JSON_JNode_Index.hpp
-  ./classes/include/implementation/jnode/JSON_JNode_Reference.hpp
-  ./classes/include/implementation/jnode/JSON_JNode_Creation.hpp
+        classes/include/implementation/node/JSON_Node.hpp
+        classes/include/implementation/node/JSON_Node_Index.hpp
+        classes/include/implementation/node/JSON_Node_Reference.hpp
+        classes/include/implementation/node/JSON_Node_Creation.hpp
   ./classes/include/implementation/io/JSON_Sources.hpp
   ./classes/include/implementation/io/JSON_BufferSource.hpp
   ./classes/include/implementation/io/JSON_FileSource.hpp
@@ -81,7 +81,7 @@ target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
   ${PROJECT_SOURCE_DIR}/classes/include/interface
   ${PROJECT_SOURCE_DIR}/classes/include/implementation
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/common
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/jnode
+        ${PROJECT_SOURCE_DIR}/classes/include/implementation/node
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/io
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/converter
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/translator

@@ -7,7 +7,7 @@ namespace JSON_Lib {
 // ====================
 
 class ISource;
-struct JNode;
+struct Node;
 
 // =========================
 // Interface for JSON parser
@@ -29,6 +29,6 @@ public:
   // =================
   // Parse JSON source
   // =================
-virtual JNode parse(ISource &source) = 0;
+virtual Node parse(ISource &source) = 0;
 };
 }// namespace JSON_Lib

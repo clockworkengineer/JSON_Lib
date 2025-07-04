@@ -29,7 +29,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     js::JSON json;
     json.parse(js::FileSource{ jsonSettingsFile() });
     auto &settingsRoot = json.root();
-    // JNode root has to be an object
+    // Node root has to be an object
     if (!js::isA<js::Object>(settingsRoot)) { throw std::runtime_error("Invalid JSON settings file."); }
     // Check key exists
     if (!js::JRef<js::Object>(settingsRoot).contains("C_Cpp.codeAnalysis.clangTidy.enabled")) {

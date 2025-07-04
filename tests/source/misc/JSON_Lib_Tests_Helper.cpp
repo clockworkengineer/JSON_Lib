@@ -15,11 +15,11 @@ std::string prefixTestDataPath(const std::string &jsonFileName) {
   }
 }
 /// <summary>
-/// Verify that an JNode Array has the correct parsed format.
+/// Verify that an Node Array has the correct parsed format.
 /// </summary>
-/// <param name="jNode">Pointer to JNode Array</param>
+/// <param name="jNode">Pointer to Node Array</param>
 /// <returns></returns>
-void checkArray(const JNode &jNode)
+void checkArray(const Node &jNode)
 {// Array ["Dog",1964,true,null]
   REQUIRE_FALSE(!isA<Array>(jNode));
   REQUIRE(JRef<Array>(jNode).size() == 4);
@@ -33,11 +33,11 @@ void checkArray(const JNode &jNode)
   REQUIRE(JRef<Null>(jNode[3]).value() == nullptr);
 }
 /// <summary>
-/// Verify that an JNode Object has the correct parsed format.
+/// Verify that an Node Object has the correct parsed format.
 /// </summary>
-/// <param name="jNode">Pointer to JNode Object</param>
+/// <param name="jNode">Pointer to Node Object</param>
 /// <returns></returns>
-void checkObject(const JNode &jNode)
+void checkObject(const Node &jNode)
 {// {"City":"Southampton","Population":500000}
   REQUIRE_FALSE(!isA<Object>(jNode));
   REQUIRE(JRef<Object>(jNode).size() == 2);

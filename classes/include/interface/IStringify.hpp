@@ -6,7 +6,7 @@ namespace JSON_Lib {
 // Forward declarations
 // ====================
 class IDestination;
-struct JNode;
+struct Node;
 
 // ==================================
 // Interface for JSON stringification
@@ -26,9 +26,9 @@ public:
   // ========================
   virtual ~IStringify() = default;
   // ====================
-  // Stringify JNode tree
+  // Stringify Node tree
   // ====================
-  virtual void stringify(const JNode &jNode, IDestination &destination, unsigned long indent) const = 0;
+  virtual void stringify(const Node &jNode, IDestination &destination, unsigned long indent) const = 0;
   // =========================
   // Set/Get print indentation
   // =========================

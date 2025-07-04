@@ -2,9 +2,9 @@
 // Program: JSON_Display_Settings
 //
 // Description: Parse JSON example settings file and read its JSON tree data
-// (JNode) and write out a textual representation of it; this is almost the same
+// (Node) and write out a textual representation of it; this is almost the same
 // as stringification, but it is used to provide example code that traverses and
-// interprets the JNode tree data.
+// interprets the Node tree data.
 //
 // Dependencies: C++20, PLOG, JSON_Lib.
 //
@@ -20,7 +20,7 @@ namespace js = JSON_Lib;
 std::string jsonSettingsFile() { return (std::filesystem::current_path() / "files" / "settings.json").string(); }
 /// <summary>
 /// Process settings file top level object entry. This involves just reading the
-/// entries JNode data and logging it to a file.
+/// entries Node data and logging it to a file.
 /// </summary>
 void processEntry(const js::Object::Entry &entry)
 {
@@ -79,7 +79,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     const js::JSON json;
     json.parse(js::FileSource{ jsonSettingsFile() });
     auto &settingsRoot = json.root();
-    // JNode root has to be an object
+    // Node root has to be an object
     if (!js::isA<js::Object>(settingsRoot)) { throw std::runtime_error("Invalid JSON settings file."); }
     // Loop and process each top level entry
     PLOG_INFO << "Displaying settings ...";

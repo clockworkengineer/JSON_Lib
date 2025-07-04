@@ -65,33 +65,33 @@ void JSON_Impl::strip(ISource &source, IDestination &destination)
 void JSON_Impl::traverse(IAction &action)
 {
   if (jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
-  traverseJNodes(jNodeRoot, action);
+  traverseNodes(jNodeRoot, action);
 }
 void JSON_Impl::traverse(IAction &action) const
 {
   if (jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
-  traverseJNodes(jNodeRoot, action);
+  traverseNodes(jNodeRoot, action);
 }
-JNode &JSON_Impl::operator[](const std::string_view &key)
+Node &JSON_Impl::operator[](const std::string_view &key)
 {
   try {
-    if (jNodeRoot.isEmpty()) { jNodeRoot = JNode::make<Object>(); }
+    if (jNodeRoot.isEmpty()) { jNodeRoot = Node::make<Object>(); }
     return jNodeRoot[key];
-  } catch ([[maybe_unused]] JNode::Error &error) {
-    JRef<Object>(jNodeRoot).add(Object::Entry(key, JNode::make<Hole>()));
+  } catch ([[maybe_unused]] Node::Error &error) {
+    JRef<Object>(jNodeRoot).add(Object::Entry(key, Node::make<Hole>()));
     return jNodeRoot[key];
   }
 }
-const JNode &JSON_Impl::operator[](const std::string_view &key) const { return jNodeRoot[key]; }
-JNode &JSON_Impl::operator[](const std::size_t index)
+const Node &JSON_Impl::operator[](const std::string_view &key) const { return jNodeRoot[key]; }
+Node &JSON_Impl::operator[](const std::size_t index)
 {
   try {
-    if (jNodeRoot.isEmpty()) { jNodeRoot = JNode::make<Array>(); }
+    if (jNodeRoot.isEmpty()) { jNodeRoot = Node::make<Array>(); }
     return jNodeRoot[index];
-  } catch ([[maybe_unused]] JNode::Error &error) {
+  } catch ([[maybe_unused]] Node::Error &error) {
     JRef<Array>(jNodeRoot).resize(index);
     return jNodeRoot[index];
   }
 }
-const JNode &JSON_Impl::operator[](const std::size_t index) const { return jNodeRoot[index]; }
+const Node &JSON_Impl::operator[](const std::size_t index) const { return jNodeRoot[index]; }
 }// namespace JSON_Lib

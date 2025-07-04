@@ -81,7 +81,7 @@ Object::Entry Default_Parser::parseObjectEntry(ISource &source, const ITranslato
   source.ignoreWS();
   if (source.current() != ':') { throw SyntaxError(source.getPosition(), "Missing ':' in key value pair."); }
   source.next();
-  return {key, parseJNodes(source, translator, parserDepth + 1)};
+  return {key, parseNodes(source, translator, parserDepth + 1)};
 }
 /// <summary>
 /// Parse a string from a JSON source stream.
@@ -89,10 +89,10 @@ Object::Entry Default_Parser::parseObjectEntry(ISource &source, const ITranslato
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
-/// <returns>String JNode.</returns>
-JNode Default_Parser::parseString(ISource &source, const ITranslator &translator,[[maybe_unused]] const unsigned long parserDepth)
+/// <returns>String Node.</returns>
+Node Default_Parser::parseString(ISource &source, const ITranslator &translator,[[maybe_unused]] const unsigned long parserDepth)
 {
-  return JNode::make<String>(extractString(source, translator));
+  return Node::make<String>(extractString(source, translator));
 }
 /// <summary>
 /// Parse a number from a JSON source stream.
@@ -100,14 +100,14 @@ JNode Default_Parser::parseString(ISource &source, const ITranslator &translator
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
-/// <returns>Number JNode.</returns>
-JNode Default_Parser::parseNumber(ISource &source, [[maybe_unused]]const ITranslator &translator, [[maybe_unused]]const unsigned long parserDepth)
+/// <returns>Number Node.</returns>
+Node Default_Parser::parseNumber(ISource &source, [[maybe_unused]]const ITranslator &translator, [[maybe_unused]]const unsigned long parserDepth)
 {
   std::string string;
   for (; source.more() && !endOfNumber(source); source.next()) { string += source.current(); }
   if (Number number{ string }; number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>()
                                || number.is<double>() || number.is<long double>()) {
-    return JNode::make<Number>(number);
+    return Node::make<Number>(number);
   }
   throw SyntaxError(source.getPosition(), "Invalid numeric value.");
 }
@@ -117,11 +117,11 @@ JNode Default_Parser::parseNumber(ISource &source, [[maybe_unused]]const ITransl
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
-/// <returns>Boolean JNode.</returns>
-JNode Default_Parser::parseBoolean(ISource &source,  [[maybe_unused]]const ITranslator &translator,[[maybe_unused]] const unsigned long parserDepth)
+/// <returns>Boolean Node.</returns>
+Node Default_Parser::parseBoolean(ISource &source,  [[maybe_unused]]const ITranslator &translator,[[maybe_unused]] const unsigned long parserDepth)
 {
-  if (source.match("true")) { return JNode::make<Boolean>(true); }
-  if (source.match("false")) { return JNode::make<Boolean>(false); }
+  if (source.match("true")) { return Node::make<Boolean>(true); }
+  if (source.match("false")) { return Node::make<Boolean>(false); }
   throw SyntaxError(source.getPosition(), "Invalid boolean value.");
 }
 /// <summary>
@@ -130,11 +130,11 @@ JNode Default_Parser::parseBoolean(ISource &source,  [[maybe_unused]]const ITran
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
-/// <returns>Null JNode.</returns>
-JNode Default_Parser::parseNull(ISource &source,  [[maybe_unused]]const ITranslator &translator, [[maybe_unused]]const unsigned long parserDepth)
+/// <returns>Null Node.</returns>
+Node Default_Parser::parseNull(ISource &source,  [[maybe_unused]]const ITranslator &translator, [[maybe_unused]]const unsigned long parserDepth)
 {
   if (!source.match("null")) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
-  return JNode::make<Null>();
+  return Node::make<Null>();
 }
 /// <summary>
 /// Parse an object from a JSON source stream.
@@ -142,10 +142,10 @@ JNode Default_Parser::parseNull(ISource &source,  [[maybe_unused]]const ITransla
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
-/// <returns>Object JNode (key/value pairs).</returns>
-JNode Default_Parser::parseObject(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
+/// <returns>Object Node (key/value pairs).</returns>
+Node Default_Parser::parseObject(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
-  JNode jNodeObject = JNode::make<Object>();
+  Node jNodeObject = Node::make<Object>();
   source.next();
   source.ignoreWS();
   if (source.current() != '}') {
@@ -165,17 +165,17 @@ JNode Default_Parser::parseObject(ISource &source, const ITranslator &translator
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
-/// <returns>Array JNode.</returns>
-JNode Default_Parser::parseArray(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
+/// <returns>Array Node.</returns>
+Node Default_Parser::parseArray(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
-  JNode jNodeArray = JNode::make<Array>();
+  Node jNodeArray = Node::make<Array>();
   source.next();
   source.ignoreWS();
   if (source.current() != ']') {
-    JRef<Array>(jNodeArray).add(parseJNodes(source, translator,parserDepth+1));
+    JRef<Array>(jNodeArray).add(parseNodes(source, translator,parserDepth+1));
     while (source.current() == ',') {
       source.next();
-      JRef<Array>(jNodeArray).add(parseJNodes(source, translator, parserDepth+1));
+      JRef<Array>(jNodeArray).add(parseNodes(source, translator, parserDepth+1));
     }
   }
   if (source.current() != ']') { throw SyntaxError(source.getPosition(), "Missing closing ']' in array definition."); }
@@ -183,15 +183,15 @@ JNode Default_Parser::parseArray(ISource &source, const ITranslator &translator,
   return jNodeArray;
 }
 /// <summary>
-/// Recursively parse JSON source stream producing a JNode structure
+/// Recursively parse JSON source stream producing a Node structure
 /// representation  of it. Note: If no obvious match is found for
 /// parsing that it defaults to a numeric value.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
-/// <returns>Pointer to JNode.</returns>
-JNode Default_Parser::parseJNodes(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
+/// <returns>Pointer to Node.</returns>
+Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
   if (parserDepth>=getMaxParserDepth()) {
     throw SyntaxError("Maximum parser depth exceeded.");
@@ -201,15 +201,15 @@ JNode Default_Parser::parseJNodes(ISource &source, const ITranslator &translator
   if (it == parsers.end()) {
     throw SyntaxError(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null.");
   }
-  JNode jNode = it->second(source, translator,  parserDepth);
+  Node jNode = it->second(source, translator,  parserDepth);
   source.ignoreWS();
   return jNode;
 }
 /// <summary>
-/// Parse JSON source stream producing a JNode structure representation  of it. Note: If no obvious match
+/// Parse JSON source stream producing a Node structure representation  of it. Note: If no obvious match
 /// is found for parsing that it defaults to a numeric value.
 /// </summary>
 /// <param name="source">Source of JSON.</param>
-/// <returns>Pointer to JNode.</returns>
-JNode Default_Parser::parse(ISource &source) { return parseJNodes(source, jsonTranslator, 1); }
+/// <returns>Pointer to Node.</returns>
+Node Default_Parser::parse(ISource &source) { return parseNodes(source, jsonTranslator, 1); }
 }// namespace JSON_Lib

@@ -3,18 +3,18 @@
 namespace JSON_Lib {
 
 // Object
-inline JNode &JNode::operator[](const std::string_view &key)
+inline Node &Node::operator[](const std::string_view &key)
 {
   if (isA<Hole>(*this)) {
     *this = make<Object>();
     JRef<Object>(*this).add(Object::Entry(key, make<Hole>()));
-    return JRef<Object>(*this).value().back().getJNode();
+    return JRef<Object>(*this).value().back().getNode();
   }
   return JRef<Object>(*this)[key];
 }
-inline const JNode &JNode::operator[](const std::string_view &key) const { return JRef<const Object>(*this)[key]; }
+inline const Node &Node::operator[](const std::string_view &key) const { return JRef<const Object>(*this)[key]; }
 // Array
-inline JNode &JNode::operator[](const std::size_t index)
+inline Node &Node::operator[](const std::size_t index)
 {
   try {
     if (isA<Hole>(*this)) { *this = make<Array>(); }
@@ -24,6 +24,6 @@ inline JNode &JNode::operator[](const std::size_t index)
     return JRef<Array>(*this)[index];
   }
 }
-inline const JNode &JNode::operator[](const std::size_t index) const { return JRef<Array>(*this)[index]; }
+inline const Node &Node::operator[](const std::size_t index) const { return JRef<Array>(*this)[index]; }
 
 }// namespace JSON_Lib

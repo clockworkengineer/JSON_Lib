@@ -6,12 +6,12 @@ public:
   JSON_Analyzer() = default;
 
   ~JSON_Analyzer() override = default;
-  // Add JNode details to analysis
-  void onJNode([[maybe_unused]] const JNode &jNode) override { totalNodes++; }
+  // Add Node details to analysis
+  void onNode([[maybe_unused]] const Node &jNode) override { totalNodes++; }
   // Add string details to analysis
-  void onString([[maybe_unused]] const JNode &jNode) override { totalStrings++; }
+  void onString([[maybe_unused]] const Node &jNode) override { totalStrings++; }
   // Add number details to analysis
-  void onNumber(const JNode &jNode) override
+  void onNumber(const Node &jNode) override
   {
     const Number &jNodeNumber = JRef<Number>(jNode);
     totalNumbers++;
@@ -31,13 +31,13 @@ public:
     }
   }
 
-  void onBoolean([[maybe_unused]] const JNode &jNode) override { totalBoolean++; }
+  void onBoolean([[maybe_unused]] const Node &jNode) override { totalBoolean++; }
   // Add null details to analysis
-  void onNull([[maybe_unused]] const JNode &jNode) override { totalNull++; }
+  void onNull([[maybe_unused]] const Node &jNode) override { totalNull++; }
   // Add array details to analysis
-  void onArray([[maybe_unused]] const JNode &jNode) override { totalArrays++; }
+  void onArray([[maybe_unused]] const Node &jNode) override { totalArrays++; }
   // Add object details to analysis
-  void onObject([[maybe_unused]] const JNode &jNode) override { totalObjects++; }
+  void onObject([[maybe_unused]] const Node &jNode) override { totalObjects++; }
 
   // JSON analysis data
   // Node

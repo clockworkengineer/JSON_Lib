@@ -3,9 +3,9 @@
 namespace JSON_Lib {
 
 // =======================
-// What is JNode variant ?
+// What is Node variant ?
 // =======================
-template<typename T> bool isA(const JNode &jNode)
+template<typename T> bool isA(const Node &jNode)
 {
   if constexpr (std::is_same_v<T, String>) {
     return jNode.getVariant().getNodeType() == Variant::Type::string;
@@ -27,44 +27,44 @@ template<typename T> bool isA(const JNode &jNode)
 }
 
 // =========================
-// JNode reference converter
+// Node reference converter
 // =========================
-template<typename T> void checkJNode(const JNode &jNode)
+template<typename T> void checkNode(const Node &jNode)
 {
   if constexpr (std::is_same_v<T, String>) {
-    if (!isA<T>(jNode)) { throw JNode::Error("JNode not a string."); }
+    if (!isA<T>(jNode)) { throw Node::Error("Node not a string."); }
   } else if constexpr (std::is_same_v<T, Number>) {
-    if (!isA<T>(jNode)) { throw JNode::Error("JNode not a number."); }
+    if (!isA<T>(jNode)) { throw Node::Error("Node not a number."); }
   } else if constexpr (std::is_same_v<T, Array>) {
-    if (!isA<T>(jNode)) { throw JNode::Error("JNode not an array."); }
+    if (!isA<T>(jNode)) { throw Node::Error("Node not an array."); }
   } else if constexpr (std::is_same_v<T, Object>) {
-    if (!isA<T>(jNode)) { throw JNode::Error("JNode not an object."); }
+    if (!isA<T>(jNode)) { throw Node::Error("Node not an object."); }
   } else if constexpr (std::is_same_v<T, Boolean>) {
-    if (!isA<T>(jNode)) { throw JNode::Error("JNode not a boolean."); }
+    if (!isA<T>(jNode)) { throw Node::Error("Node not a boolean."); }
   } else if constexpr (std::is_same_v<T, Null>) {
-    if (!isA<T>(jNode)) { throw JNode::Error("JNode not a null."); }
+    if (!isA<T>(jNode)) { throw Node::Error("Node not a null."); }
   }else if constexpr (std::is_same_v<T, Hole>) {
-    if (!isA<T>(jNode)) { throw JNode::Error("JNode not a hole."); }
+    if (!isA<T>(jNode)) { throw Node::Error("Node not a hole."); }
   }
 }
-template<typename T> T &JRef(JNode &jNode)
+template<typename T> T &JRef(Node &jNode)
 {
-  checkJNode<T>(jNode);
+  checkNode<T>(jNode);
   return static_cast<T &>(jNode.getVariant());
 }
-template<typename T> const T &JRef(const JNode &jNode)
+template<typename T> const T &JRef(const Node &jNode)
 {
-  checkJNode<T>(jNode);
+  checkNode<T>(jNode);
   return static_cast<const T &>(jNode.getVariant());
 }
 template<typename T> T &JRef(Object::Entry &jNodeEntry)
 {
-  checkJNode<T>(jNodeEntry.getJNode());
-  return static_cast<T &>(jNodeEntry.getJNode().getVariant());
+  checkNode<T>(jNodeEntry.getNode());
+  return static_cast<T &>(jNodeEntry.getNode().getVariant());
 }
 template<typename T> const T &JRef(const Object::Entry &jNodeEntry)
 {
-  checkJNode<T>(jNodeEntry.getJNode());
-  return static_cast<const T &>(jNodeEntry.getJNode().getVariant());
+  checkNode<T>(jNodeEntry.getNode());
+  return static_cast<const T &>(jNodeEntry.getNode().getVariant());
 }
 }// namespace JSON_Lib

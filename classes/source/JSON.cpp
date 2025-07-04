@@ -24,13 +24,13 @@ JSON::JSON(IStringify *stringify, IParser *parser) : implementation(std::make_un
 /// <summary>
 /// JSON constructor (array).
 /// </summary>
-/// <param name="array">Initializer list of single values or JNode.</param>
-JSON::JSON(const ArrayInitializer &array) : JSON() { this->root() = JNode(array); }
+/// <param name="array">Initializer list of single values or Node.</param>
+JSON::JSON(const ArrayInitializer &array) : JSON() { this->root() = Node(array); }
 /// <summary>
 /// JSON constructor (object).
 /// </summary>
-/// <param name="object">Initializer list of key/value(JNode) pairs.</param>
-JSON::JSON(const ObjectInitializer &object) : JSON() { this->root() = JNode(object); }
+/// <param name="object">Initializer list of key/value(Node) pairs.</param>
+JSON::JSON(const ObjectInitializer &object) : JSON() { this->root() = Node(object); }
 /// <summary>
 /// JSON constructor. Pass a JSON string to be initially parsed.
 /// </summary>
@@ -54,19 +54,19 @@ void JSON::strip(ISource &source, IDestination &&destination)  { JSON_Impl::stri
 void JSON::strip(ISource &&source, IDestination &destination)  { JSON_Impl::strip(source, destination); }
 void JSON::strip(ISource &&source, IDestination &&destination)  { JSON_Impl::strip(source, destination); }
 /// <summary>
-/// Create JNode structure by parsing JSON on the source stream.
+/// Create Node structure by parsing JSON on the source stream.
 /// </summary>
 /// <param name="source">Source for JSON encoded bytes.</param>
 void JSON::parse(ISource &source) const { implementation->parse(source); }
 void JSON::parse(ISource &&source) const { implementation->parse(source); }
 /// <summary>
-/// Traverse JNode structure and build its JSON string (no whitespace) on destination stream.
+/// Traverse Node structure and build its JSON string (no whitespace) on destination stream.
 /// </summary>
 /// <param name="destination">Destination stream for stringified JSON.</param>
 void JSON::stringify(IDestination &destination) const { implementation->stringify(destination); }
 void JSON::stringify(IDestination &&destination) const { implementation->stringify(destination); }
 /// <summary>
-/// Traverse JNode structure and build its JSON string (pretty printed) on destination stream.
+/// Traverse Node structure and build its JSON string (pretty printed) on destination stream.
 /// </summary>
 /// <param name="destination">Destination stream for stringified JSON.</param>
 void JSON::print(IDestination &destination) const { implementation->print(destination); }
@@ -77,7 +77,7 @@ void JSON::print(IDestination &&destination) const { implementation->print(desti
 /// <param name="indent">Pretty print indent value.</param>
 void JSON::setIndent(const long indent) { JSON_Impl::setIndent(indent); }
 /// <summary>
-/// Recursively traverse JNode structure calling IAction methods (read-only)
+/// Recursively traverse Node structure calling IAction methods (read-only)
 ///  or to change the JSON tree node directly.
 /// </summary>
 /// <param name="action">Action methods to call during traversal.</param>
@@ -88,21 +88,21 @@ void JSON::traverse(IAction &action) const { std::as_const(*implementation).trav
 /// <summary>
 /// Return object entry for the passed in keys.
 /// </summary>
-/// <param name="key">Object entry (JNode) key.</param>
-JNode &JSON::operator[](const std::string_view &key) { return (*implementation)[key]; }
-const JNode &JSON::operator[](const std::string_view &key) const { return (*implementation)[key]; }
+/// <param name="key">Object entry (Node) key.</param>
+Node &JSON::operator[](const std::string_view &key) { return (*implementation)[key]; }
+const Node &JSON::operator[](const std::string_view &key) const { return (*implementation)[key]; }
 /// <summary>
 /// Return array entry for the passed in index.
 /// </summary>
-/// <param name="index">Array entry (JNode) index.</param>
-JNode &JSON::operator[](const std::size_t index) { return (*implementation)[index]; }
-const JNode &JSON::operator[](const std::size_t index) const { return (*implementation)[index]; }
+/// <param name="index">Array entry (Node) index.</param>
+Node &JSON::operator[](const std::size_t index) { return (*implementation)[index]; }
+const Node &JSON::operator[](const std::size_t index) const { return (*implementation)[index]; }
 /// <summary>
 /// Return root of JSON tree.
 /// </summary>
 /// <returns>Root of JSON tree.</returns>
-JNode &JSON::root() { return implementation->root(); }
-const JNode &JSON::root() const { return implementation->root(); }
+Node &JSON::root() { return implementation->root(); }
+const Node &JSON::root() const { return implementation->root(); }
 /// <summary>
 /// Open a JSON file, read its contents into a string buffer and return
 /// the buffer.

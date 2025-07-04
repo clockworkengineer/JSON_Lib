@@ -30,14 +30,14 @@ class ISource;
 class IDestination;
 class IAction;
 class JSON_Impl;
-struct JNode;
+struct Node;
 
 class JSON
 {
 public:
   // Possible JSON Node initializer list types
   using InitializerListTypes =
-    std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t, JNode>;
+    std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t, Node>;
   // Array initializer list
   using ArrayInitializer = std::initializer_list<InitializerListTypes>;
   // Object initializer list
@@ -64,10 +64,10 @@ public:
   // Parse JSON into the tree
   void parse(ISource &source) const;
   void parse(ISource &&source) const;
-  // Create JSON text string from JNode tree (no whitespace)
+  // Create JSON text string from Node tree (no whitespace)
   void stringify(IDestination &destination) const;
   void stringify(IDestination &&destination) const;
-  // Create JSON text string from JNode tree (pretty printed)
+  // Create JSON text string from Node tree (pretty printed)
   void print(IDestination &destination) const;
   void print(IDestination &&destination) const;
   // Strip whitespace from JSON string
@@ -81,14 +81,14 @@ public:
   // Set print ident value
   static void setIndent(long indent);
   // Get the root of JSON tree
-  [[nodiscard]] JNode &root();
-  [[nodiscard]] const JNode &root() const;
+  [[nodiscard]] Node &root();
+  [[nodiscard]] const Node &root() const;
   // Search for JSON object entry with a given key
-  JNode &operator[](const std::string_view &key);
-  const JNode &operator[](const std::string_view &key) const;
+  Node &operator[](const std::string_view &key);
+  const Node &operator[](const std::string_view &key) const;
   // Get JSON array entry at index
-  JNode &operator[](std::size_t index);
-  const JNode &operator[](std::size_t index) const;
+  Node &operator[](std::size_t index);
+  const Node &operator[](std::size_t index) const;
   // Read/Write JSON from the file
   static std::string fromFile(const std::string_view &fileName);
   static void toFile(const std::string_view &fileName, const std::string_view &jsonString, Format format = Format::utf8);

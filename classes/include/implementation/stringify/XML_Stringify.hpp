@@ -18,23 +18,23 @@ public:
   ~XML_Stringify() override = default;
 
   /// <summary>
-  /// Recursively traverse JNode structure encoding it into XML string on
+  /// Recursively traverse Node structure encoding it into XML string on
   /// the destination stream passed in.
   /// </summary>
-  /// <param name="jNode">JNode structure to be traversed.</param>
+  /// <param name="jNode">Node structure to be traversed.</param>
   /// <param name="destination">Destination stream for stringified XML.</param>
   /// <param name="indent">Current print indentation.</param>
   void
-    stringify(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const override
+    stringify(const Node &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const override
   {
     destination.add(R"(<?xml version="1.0" encoding="UTF-8"?>)");
     destination.add("<root>");
-    stringifyJNodes(jNode, destination, 0);
+    stringifyNodes(jNode, destination, 0);
     destination.add("</root>");
   }
 
 private:
-  static void stringifyJNodes(const JNode &jNode, IDestination &destination, [[maybe_unused]] const long indent)
+  static void stringifyNodes(const Node &jNode, IDestination &destination, [[maybe_unused]] const long indent)
   {
     if (isA<Number>(jNode)) {
       stringifyNumber(jNode, destination);
@@ -49,34 +49,34 @@ private:
     } else if (isA<Array>(jNode)) {
       stringifyArray(jNode, destination, 0);
     } else {
-      throw Error("Unknown JNode type encountered during stringification.");
+      throw Error("Unknown Node type encountered during stringification.");
     }
   }
-  static void stringifyObject(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent)
+  static void stringifyObject(const Node &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent)
   {
     for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
       std::string elementName { jNodeNext.getKey()} ;
       std::ranges::replace(elementName, ' ', '-');
       destination.add("<" + elementName + ">");
-      stringifyJNodes(jNodeNext.getJNode(), destination, 0);
+      stringifyNodes(jNodeNext.getNode(), destination, 0);
       destination.add("</" + elementName + ">");
     }
   }
-  static void stringifyArray(const JNode &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
+  static void stringifyArray(const Node &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
   {
     if (JRef<Array>(jNode).value().size() > 1) {
       for (const auto &bNodeNext : JRef<Array>(jNode).value()) {
         destination.add("<Row>");
-        stringifyJNodes(bNodeNext, destination, 0);
+        stringifyNodes(bNodeNext, destination, 0);
         destination.add("</Row>");
       }
     }
   }
-  static void stringifyNumber(const JNode &jNode, IDestination &destination)
+  static void stringifyNumber(const Node &jNode, IDestination &destination)
   {
     destination.add(std::to_string(JRef<Number>(jNode).value<long long>()));
   }
-  static void stringifyBoolean(const JNode &jNode, IDestination &destination)
+  static void stringifyBoolean(const Node &jNode, IDestination &destination)
   {
     if (JRef<Boolean>(jNode).value()) {
       destination.add("True");
@@ -84,8 +84,8 @@ private:
       destination.add("False");
     }
   }
-  static void stringifyNull([[maybe_unused]]const JNode &jNode, [[maybe_unused]]IDestination &destination) {}
-  static void stringifyString(const JNode &jNode, IDestination &destination)
+  static void stringifyNull([[maybe_unused]]const Node &jNode, [[maybe_unused]]IDestination &destination) {}
+  static void stringifyString(const Node &jNode, IDestination &destination)
   {
     destination.add(xmlTranslator->to(JRef<String>(jNode).value()));
   }

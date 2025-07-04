@@ -14,56 +14,56 @@ TEST_CASE("Check JSON object creation api.", "[JSON][Create][Object]")
     REQUIRE_FALSE(!isA<Number>(json.root()["pi"]));
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()["pi"]).value<float>(), 3.141f, 0.0001));
   }
-  SECTION("Initialise root JSON JNode with one entry containing a integer.", "[JSON][Create][Object][Number]")
+  SECTION("Initialise root JSON Node with one entry containing a integer.", "[JSON][Create][Object][Number]")
   {
     JSON json;
     json["integer"] = 300;
     REQUIRE_FALSE(!isA<Number>(json["integer"]));
     REQUIRE(JRef<Number>(json.root()["integer"]).value<int>() == 300);
   }
-  SECTION("Initialise root JSON JNode with one entry containing a long.", "[JSON][Create][Object][Number]")
+  SECTION("Initialise root JSON Node with one entry containing a long.", "[JSON][Create][Object][Number]")
   {
     JSON json;
     json["integer"] = 30000l;
     REQUIRE_FALSE(!isA<Number>(json["integer"]));
     REQUIRE(JRef<Number>(json.root()["integer"]).value<long>() == 30000);
   }
-  SECTION("Initialise root JSON JNode with one entry containing a float.", "[JSON][Create][Object][Number]")
+  SECTION("Initialise root JSON Node with one entry containing a float.", "[JSON][Create][Object][Number]")
   {
     JSON json;
     json["pi"] = 3.141f;
     REQUIRE_FALSE(!isA<Number>(json["pi"]));
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()["pi"]).value<float>(), 3.141f, 0.0001));
   }
-  SECTION("Initialise root JSON JNode with one entry containing a double.", "[JSON][Create][Object][Number]")
+  SECTION("Initialise root JSON Node with one entry containing a double.", "[JSON][Create][Object][Number]")
   {
     JSON json;
     json["pi"] = 3.141;
     REQUIRE_FALSE(!isA<Number>(json["pi"]));
     REQUIRE_FALSE(!equalFloatingPoint(JRef<Number>(json.root()["pi"]).value<double>(), 3.141, 0.0001));
   }
-  SECTION("Initialise root JSON JNode with one entry containing a const char *.", "[JSON][Create][Object][String]")
+  SECTION("Initialise root JSON Node with one entry containing a const char *.", "[JSON][Create][Object][String]")
   {
     JSON json;
     json["name"] = "robert";
     REQUIRE_FALSE(!isA<String>(json["name"]));
     REQUIRE(JRef<String>(json.root()["name"]).value() == "robert");
   }
-  SECTION("Initialise root JSON JNode with one entry containing a std::string.", "[JSON][Create][Object][String]")
+  SECTION("Initialise root JSON Node with one entry containing a std::string.", "[JSON][Create][Object][String]")
   {
     JSON json;
     json["name"] = std::string{ "robert" };
     REQUIRE_FALSE(!isA<String>(json["name"]));
     REQUIRE(JRef<String>(json.root()["name"]).value() == "robert");
   }
-  SECTION("Initialise root JSON JNode with one entry containing a boolean.", "[JSON][Create][Object][Boolean]")
+  SECTION("Initialise root JSON Node with one entry containing a boolean.", "[JSON][Create][Object][Boolean]")
   {
     JSON json;
     json["flag"] = true;
     REQUIRE_FALSE(!isA<Boolean>(json["flag"]));
     REQUIRE_FALSE(!JRef<Boolean>(json.root()["flag"]).value());
   }
-  SECTION("Initialise root JSON JNode with one entry containing a null.", "[JSON][Create][Object][null]")
+  SECTION("Initialise root JSON Node with one entry containing a null.", "[JSON][Create][Object][null]")
   {
     JSON json;
     json["nothing"] = nullptr;

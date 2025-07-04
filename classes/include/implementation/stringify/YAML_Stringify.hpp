@@ -18,17 +18,17 @@ public:
   ~YAML_Stringify() override = default;
 
   /// <summary>
-  /// Recursively traverse JNode structure encoding it into YAML string on
+  /// Recursively traverse Node structure encoding it into YAML string on
   /// the destination stream passed in.
   /// </summary>
-  /// <param name="jNode">JNode structure to be traversed.</param>
+  /// <param name="jNode">Node structure to be traversed.</param>
   /// <param name="destination">Destination stream for stringified YAML.</param>
   /// <param name="indent">Current print indentation.</param>
   void
-    stringify(const JNode &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const override
+    stringify(const Node &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const override
   {
     destination.add("---\n");
-    stringifyJNodes(jNode, destination, 0);
+    stringifyNodes(jNode, destination, 0);
     destination.add("...\n");
   }
 
@@ -38,7 +38,7 @@ private:
     if (destination.last() == '\n') { return std::string(indent, ' '); }
     return std::string("");
   }
-  static void stringifyJNodes(const JNode &jNode, IDestination &destination, const unsigned long indent)
+  static void stringifyNodes(const Node &jNode, IDestination &destination, const unsigned long indent)
   {
     if (isA<Object>(jNode)) {
       stringifyObject(jNode, destination, indent);
@@ -54,45 +54,45 @@ private:
       stringifyNull(jNode, destination);
     }
   }
-  static void stringifyObject(const JNode &jNode, IDestination &destination, const unsigned long indent)
+  static void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long indent)
   {
     if (!JRef<Object>(jNode).value().empty()) {
-      for (const auto &entryJNode : JRef<Object>(jNode).value()) {
+      for (const auto &entryNode : JRef<Object>(jNode).value()) {
         destination.add(calculateIndent(destination, indent));
-        destination.add("\"" + yamlTranslator->to(JRef<String>(entryJNode.getKeyJNode()).value()) + "\"");
+        destination.add("\"" + yamlTranslator->to(JRef<String>(entryNode.getKeyNode()).value()) + "\"");
         destination.add(": ");
-        if (isA<Array>(entryJNode.getJNode()) || isA<Object>(entryJNode.getJNode())) { destination.add('\n'); }
-        stringifyJNodes(entryJNode.getJNode(), destination, indent + 2);
+        if (isA<Array>(entryNode.getNode()) || isA<Object>(entryNode.getNode())) { destination.add('\n'); }
+        stringifyNodes(entryNode.getNode(), destination, indent + 2);
       }
     } else {
       destination.add("{}\n");
     }
   }
-  static void stringifyArray(const JNode &jNode, IDestination &destination, const unsigned long indent)
+  static void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long indent)
   {
     std::string spaces(indent, ' ');
     if (!JRef<Array>(jNode).value().empty()) {
       for (const auto &jNodeNext : JRef<Array>(jNode).value()) {
         destination.add(calculateIndent(destination, indent) + "- ");
-        stringifyJNodes(jNodeNext, destination, indent + 2);
+        stringifyNodes(jNodeNext, destination, indent + 2);
       }
     } else {
       destination.add("[]\n");
     }
   }
-  static void stringifyNumber(const JNode &jNode, IDestination &destination)
+  static void stringifyNumber(const Node &jNode, IDestination &destination)
   {
     destination.add(JRef<Number>(jNode).toString() + "\n");
   }
-  static void stringifyBoolean(const JNode &jNode, IDestination &destination)
+  static void stringifyBoolean(const Node &jNode, IDestination &destination)
   {
     destination.add(JRef<Boolean>(jNode).toString() + "\n");
   }
-  static void stringifyNull(const JNode &jNode, IDestination &destination)
+  static void stringifyNull(const Node &jNode, IDestination &destination)
   {
     destination.add(JRef<Null>(jNode).toString() + "\n");
   }
-  static void stringifyString(const JNode &jNode, IDestination &destination)
+  static void stringifyString(const Node &jNode, IDestination &destination)
   {
     destination.add("\"" + yamlTranslator->to(JRef<String>(jNode).value()) + "\"" + "\n");
   }

@@ -19,10 +19,10 @@ enable_testing()
 set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
 set(TEST_SOURCES
-        source/jnode/JSON_Lib_Tests_JNode_Assignment.cpp
-        source/jnode/JSON_Lib_Tests_JNode_Construct.cpp
-        source/jnode/JSON_Lib_Tests_JNode_Indexing.cpp
-        source/jnode/JSON_Lib_Tests_JNode_Reference.cpp
+        source/node/JSON_Lib_Tests_Node_Assignment.cpp
+        source/node/JSON_Lib_Tests_Node_Construct.cpp
+        source/node/JSON_Lib_Tests_Node_Indexing.cpp
+        source/node/JSON_Lib_Tests_Node_Reference.cpp
         source/json/JSON_Lib_Tests_JSON_Create_Complex.cpp
         source/json/JSON_Lib_Tests_JSON_Create_Array.cpp
         source/json/JSON_Lib_Tests_JSON_Create_Simple.cpp
@@ -33,11 +33,11 @@ set(TEST_SOURCES
         source/io/JSON_Lib_Tests_File_GetFormat.cpp
         source/io/JSON_Lib_Tests_File_FromFile.cpp
         source/io/JSON_Lib_Tests_File_ToFile.cpp
-        source/number/JSON_Lib_Tests_JNode_Number_Assignment.cpp
-        source/number/JSON_Lib_Tests_JNode_Number_Conversion.cpp
-        source/number/JSON_Lib_Tests_JNode_Number_Misc.cpp
-        source/number/JSON_Lib_Tests_JNode_Number_Precision.cpp
-        source/number/JSON_Lib_Tests_JNode_Number_Notation.cpp             
+        source/number/JSON_Lib_Tests_Node_Number_Assignment.cpp
+        source/number/JSON_Lib_Tests_Node_Number_Conversion.cpp
+        source/number/JSON_Lib_Tests_Node_Number_Misc.cpp
+        source/number/JSON_Lib_Tests_Node_Number_Precision.cpp
+        source/number/JSON_Lib_Tests_Node_Number_Notation.cpp
         source/parse/JSON_Lib_Tests_Parse_Escapes.cpp
         source/parse/JSON_Lib_Tests_Parse_Misc.cpp
         source/parse/JSON_Lib_Tests_Parse_Simple.cpp

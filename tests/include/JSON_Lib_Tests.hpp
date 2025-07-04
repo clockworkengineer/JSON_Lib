@@ -19,8 +19,8 @@ constexpr char kNonExistantJSONFile[] = "doesntexist.json";
 // Unit test helper functions
 std::string prefixTestDataPath(const std::string &jsonFileName);
 std::string stripWhiteSpace(const std::string &jsonBuffer);
-void checkObject(const JSON_Lib::JNode &jNode);
-void checkArray(const JSON_Lib::JNode &jNode);
+void checkObject(const JSON_Lib::Node &jNode);
+void checkArray(const JSON_Lib::Node &jNode);
 std::string generateRandomFileName(void );
 std::string generateEscapes(unsigned char first, unsigned char last);
 // Test files macro

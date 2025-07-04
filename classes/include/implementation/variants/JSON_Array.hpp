@@ -4,7 +4,7 @@ namespace JSON_Lib {
 
 struct Array : Variant
 {
-  using Entry = JNode;
+  using Entry = Node;
   using Entries = std::vector<Entry>;
   // Constructors/Destructors
   Array() : Variant(Type::array) {}
@@ -21,22 +21,22 @@ struct Array : Variant
   Entries &value() { return jNodeArray; }
   [[nodiscard]] const Entries &value() const { return jNodeArray; }
   // Array indexing operators
-  JNode &operator[](const std::size_t index)
+  Node &operator[](const std::size_t index)
   {
     if (index < jNodeArray.size()) { return jNodeArray[index]; }
-    throw JNode::Error("Invalid index used to access array.");
+    throw Node::Error("Invalid index used to access array.");
   }
-  const JNode &operator[](const std::size_t index) const
+  const Node &operator[](const std::size_t index) const
   {
     if (index < jNodeArray.size()) { return jNodeArray[index]; }
-    throw JNode::Error("Invalid index used to access array.");
+    throw Node::Error("Invalid index used to access array.");
   }
   // Resize Array
   void resize(const std::size_t index)
   {
     jNodeArray.resize(index + 1);
     for (auto &entry : jNodeArray) {
-      if (entry.isEmpty()) { entry = JNode::make<Hole>(); }
+      if (entry.isEmpty()) { entry = Node::make<Hole>(); }
     }
   }
 

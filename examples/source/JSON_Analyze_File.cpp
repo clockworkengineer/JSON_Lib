@@ -35,7 +35,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
   // Output JSON Lib version and data structure metrics
   PLOG_INFO << js::JSON().version();
   PLOG_INFO << JSON_Analyzer::dumpNumericSizes();
-  PLOG_INFO << JSON_Analyzer::dumpJNodeSizes();
+  PLOG_INFO << JSON_Analyzer::dumpNodeSizes();
   // Analyze JSON files.
   for (auto &fileName : Utility::createJSONFileList()) {
     try {

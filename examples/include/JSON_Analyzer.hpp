@@ -11,10 +11,10 @@ class JSON_Analyzer : public JSON_Lib::IAction
 public:
   JSON_Analyzer() = default;
   ~JSON_Analyzer() override = default;
-  // Add JNode details to analysis
-  void onJNode([[maybe_unused]] const JSON_Lib::JNode &jNode) override { totalNodes++; }
+  // Add Node details to analysis
+  void onNode([[maybe_unused]] const JSON_Lib::Node &jNode) override { totalNodes++; }
   // Add string details to analysis
-  void onString(const JSON_Lib::JNode &jNode) override
+  void onString(const JSON_Lib::Node &jNode) override
   {
     const auto &jNodeString = JRef<JSON_Lib::String>(jNode);
     totalStrings++;
@@ -24,7 +24,7 @@ public:
     uniqueStrings.insert(std::string(jNodeString.value()));
   }
   // Add number details to analysis
-  void onNumber(const JSON_Lib::JNode &jNode) override
+  void onNumber(const JSON_Lib::Node &jNode) override
   {
     const auto &jNodeNumber = JRef<JSON_Lib::Number>(jNode);
     totalNumbers++;
@@ -43,28 +43,28 @@ public:
       totalLongDouble++;
     }
   }
-  void onBoolean([[maybe_unused]] const JSON_Lib::JNode &jNode) override
+  void onBoolean([[maybe_unused]] const JSON_Lib::Node &jNode) override
   {
     totalBoolean++;
     sizeInBytes += sizeof(JSON_Lib::Boolean);
   }
   // Add null details to analysis
-  void onNull([[maybe_unused]] const JSON_Lib::JNode &jNode) override
+  void onNull([[maybe_unused]] const JSON_Lib::Node &jNode) override
   {
     totalNull++;
     sizeInBytes += sizeof(JSON_Lib::Null);
   }
   // Add array details to analysis
-  void onArray(const JSON_Lib::JNode &jNode) override
+  void onArray(const JSON_Lib::Node &jNode) override
   {
     const auto &jNodeArray = JRef<JSON_Lib::Array>(jNode);
     totalArrays++;
     sizeInBytes += sizeof(JSON_Lib::Array);
     maxArraySize = std::max(jNodeArray.size(), maxArraySize);
-    for ([[maybe_unused]] auto &jNodeEntry : jNodeArray.value()) { sizeInBytes += sizeof(JSON_Lib::JNode); }
+    for ([[maybe_unused]] auto &jNodeEntry : jNodeArray.value()) { sizeInBytes += sizeof(JSON_Lib::Node); }
   }
   // Add object details to analysis
-  void onObject(const JSON_Lib::JNode &jNode) override
+  void onObject(const JSON_Lib::Node &jNode) override
   {
     const auto &jNodeObject = JRef<JSON_Lib::Object>(jNode);
     totalObjects++;
@@ -114,11 +114,11 @@ public:
     os << "----------------------------------------------------";
     return (os.str());
   }
-  static std::string dumpJNodeSizes()
+  static std::string dumpNodeSizes()
   {
     std::stringstream os;
-    os << "\n--------------------JSON_Lib::JNode Sizes---------------------\n";
-    os << "JSON_Lib::JNode size " << sizeof(JSON_Lib::JNode) << " in bytes.\n";
+    os << "\n--------------------JSON_Lib::Node Sizes---------------------\n";
+    os << "JSON_Lib::Node size " << sizeof(JSON_Lib::Node) << " in bytes.\n";
     os << "JSON_Lib::Object size " << sizeof(JSON_Lib::Object) << " in bytes.\n";
     os << "JSON_Lib::Object Entry size " << sizeof(JSON_Lib::Object::Entry) << " in bytes.\n";
     os << "JSON_Lib::Array size " << sizeof(JSON_Lib::Array) << " in bytes.\n";
