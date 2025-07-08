@@ -13,7 +13,7 @@ public:
   // Add number details to analysis
   void onNumber(const Node &jNode) override
   {
-    const Number &jNodeNumber = JRef<Number>(jNode);
+    const Number &jNodeNumber = NRef<Number>(jNode);
     totalNumbers++;
 
     if (jNodeNumber.is<int>()) {

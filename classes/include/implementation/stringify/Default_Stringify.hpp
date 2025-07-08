@@ -60,10 +60,10 @@ private:
   }
   static void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long indent)
   {
-    size_t commaCount = JRef<Object>(jNode).value().size() - 1;
+    size_t commaCount = NRef<Object>(jNode).value().size() - 1;
     destination.add('{');
     if (indent != 0) { destination.add('\n'); }
-    for (auto &entry : JRef<Object>(jNode).value()) {
+    for (auto &entry : NRef<Object>(jNode).value()) {
       if (indent != 0) { destination.add(std::string(indent, ' ')); }
       stringifyNodes(entry.getKeyNode(), destination, indent != 0 ? indent + printIndent : 0);
       destination.add(":");
@@ -80,10 +80,10 @@ private:
   static void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long indent)
   {
     destination.add('[');
-    if (!JRef<Array>(jNode).value().empty()) {
-      size_t commaCount = JRef<Array>(jNode).value().size() - 1;
+    if (!NRef<Array>(jNode).value().empty()) {
+      size_t commaCount = NRef<Array>(jNode).value().size() - 1;
       if (indent != 0) { destination.add('\n'); }
-      for (auto &entry : JRef<Array>(jNode).value()) {
+      for (auto &entry : NRef<Array>(jNode).value()) {
         if (indent != 0) { destination.add(std::string(indent, ' ')); }
         stringifyNodes(entry, destination, indent != 0 ? indent + printIndent : 0);
         if (commaCount-- > 0) {
@@ -97,16 +97,16 @@ private:
   }
   static void stringifyNumber(const Node &jNode, IDestination &destination)
   {
-    destination.add(JRef<Number>(jNode).toString());
+    destination.add(NRef<Number>(jNode).toString());
   }
   static void stringifyBoolean(const Node &jNode, IDestination &destination)
   {
-    destination.add(JRef<Boolean>(jNode).toString());
+    destination.add(NRef<Boolean>(jNode).toString());
   }
   static void stringifyNull([[maybe_unused]]const Node &jNode, IDestination &destination) { destination.add(Null::toString()); }
   static void stringifyString(const Node &jNode, IDestination &destination)
   {
-    destination.add('"' + jsonTranslator->to(JRef<String>(jNode).toString()) + '"');
+    destination.add('"' + jsonTranslator->to(NRef<String>(jNode).toString()) + '"');
   }
 
   inline static std::unique_ptr<ITranslator> jsonTranslator;

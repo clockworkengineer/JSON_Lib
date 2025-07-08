@@ -30,37 +30,37 @@ void processEntry(const js::Object::Entry &entry)
   if (key == "files.exclude") {
     // Read object data (key/boolean pair) and add to log
     entryJSON += "\n{\n";
-    for (const auto &file : js::JRef<js::Object>(entry).value()) {
+    for (const auto &file : js::NRef<js::Object>(entry).value()) {
       entryJSON +=
-        "\"" + std::string(file.getKey()) + "\" : " + js::JRef<js::Boolean>(file).toString() + ",\n";
+        "\"" + std::string(file.getKey()) + "\" : " + js::NRef<js::Boolean>(file).toString() + ",\n";
     }
     entryJSON.pop_back();
     entryJSON.pop_back();
     entryJSON += "\n}";
   } else if (key == "explorerExclude.backup") {
     // Read null data and add to log
-    entryJSON += js::JRef<js::Null>(entry).toString();
+    entryJSON += js::NRef<js::Null>(entry).toString();
   } else if (key == "cSpell.words") {
     // Read array of string data and add to log
     entryJSON += "[";
-    for (const auto &word : js::JRef<js::Array>(entry).value()) {
-      entryJSON += "\"" + js::JRef<js::String>(word).toString() + "\",";
+    for (const auto &word : js::NRef<js::Array>(entry).value()) {
+      entryJSON += "\"" + js::NRef<js::String>(word).toString() + "\",";
     }
     entryJSON.pop_back();
     entryJSON += "]";
   } else if (key == "files.associations") {
     // Read object data (key/string pair) and add to log
     entryJSON += "\n{\n";
-    for (const auto &file : js::JRef<js::Object>(entry).value()) {
+    for (const auto &file : js::NRef<js::Object>(entry).value()) {
       entryJSON +=
-        "\"" + js::JRef<js::String>(file).toString() + "\" : " + "\"" + js::JRef<js::String>(file).toString() + "\",\n";
+        "\"" + js::NRef<js::String>(file).toString() + "\" : " + "\"" + js::NRef<js::String>(file).toString() + "\",\n";
     }
     entryJSON.pop_back();
     entryJSON.pop_back();
     entryJSON += "\n}";
   } else if (key == "C_Cpp.codeAnalysis.clangTidy.enabled") {
     // Read boolean data and add to log
-    entryJSON += js::JRef<js::Boolean>(entry).toString();
+    entryJSON += js::NRef<js::Boolean>(entry).toString();
   } else {
     throw std::runtime_error("Invalid JSON settings file.");
   }
@@ -83,7 +83,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     if (!js::isA<js::Object>(settingsRoot)) { throw std::runtime_error("Invalid JSON settings file."); }
     // Loop and process each top level entry
     PLOG_INFO << "Displaying settings ...";
-    for (const auto &entry : js::JRef<js::Object>(settingsRoot).value()) { processEntry(entry); }
+    for (const auto &entry : js::NRef<js::Object>(settingsRoot).value()) { processEntry(entry); }
   } catch (std::exception &ex) {
     PLOG_ERROR << "Error: " << ex.what();
   }

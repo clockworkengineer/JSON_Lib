@@ -31,10 +31,10 @@ void nextFibonacci()
     // Parse in current sequence
     json.parse(js::FileSource{ jsonFibonacciFile() });
     // Get index of last element
-    const auto last = js::JRef<js::Array>(json.root()).size() - 1;
+    const auto last = js::NRef<js::Array>(json.root()).size() - 1;
     // Next is the sum of the last two entries
-    auto next = js::JRef<js::Number>(json[last]).value<int>();
-    next += js::JRef<js::Number>(json[last - 1]).value<int>();
+    auto next = js::NRef<js::Number>(json[last]).value<int>();
+    next += js::NRef<js::Number>(json[last - 1]).value<int>();
     // Expand the array by one and add next in sequence
     json[last + 1] = next;
   }

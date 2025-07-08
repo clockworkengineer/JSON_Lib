@@ -36,13 +36,13 @@ static Node typeToNode(const JSON::InitializerListTypes &type)
 inline Node::Node(const JSON::ArrayInitializer &array)
 {
   *this = make<Array>();
-  for (const auto &entry : array) { JRef<Array>(*this).add(typeToNode(entry)); }
+  for (const auto &entry : array) { NRef<Array>(*this).add(typeToNode(entry)); }
 }
 // Construct Node Object from initializer list
 inline Node::Node(const JSON::ObjectInitializer &object)
 {
   *this = make<Object>();
-  for (const auto &[fst, snd] : object) { JRef<Object>(*this).add(Object::Entry(fst, typeToNode(snd))); }
+  for (const auto &[fst, snd] : object) { NRef<Object>(*this).add(Object::Entry(fst, typeToNode(snd))); }
 }
 
 }// namespace JSON_Lib

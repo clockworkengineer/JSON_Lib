@@ -12,7 +12,7 @@ public:
   // Create index to object key mapping and modify object key to use index
   virtual void onObject(JSON_Lib::Node &jNode) override
   {
-    for (auto &entry : JSON_Lib::JRef<JSON_Lib::Object>(jNode).value()) {
+    for (auto &entry : JSON_Lib::NRef<JSON_Lib::Object>(jNode).value()) {
       auto key = std::string(entry.getKey());
       if (!index.contains(key)) {
         index[key] = currentIndex;

@@ -16,7 +16,7 @@ public:
   // Add string details to analysis
   void onString(const JSON_Lib::Node &jNode) override
   {
-    const auto &jNodeString = JRef<JSON_Lib::String>(jNode);
+    const auto &jNodeString = NRef<JSON_Lib::String>(jNode);
     totalStrings++;
     sizeInBytes += sizeof(JSON_Lib::String);
     sizeInBytes += jNodeString.value().size();
@@ -26,7 +26,7 @@ public:
   // Add number details to analysis
   void onNumber(const JSON_Lib::Node &jNode) override
   {
-    const auto &jNodeNumber = JRef<JSON_Lib::Number>(jNode);
+    const auto &jNodeNumber = NRef<JSON_Lib::Number>(jNode);
     totalNumbers++;
     sizeInBytes += sizeof(JSON_Lib::Number);
     if (jNodeNumber.is<int>()) {
@@ -57,7 +57,7 @@ public:
   // Add array details to analysis
   void onArray(const JSON_Lib::Node &jNode) override
   {
-    const auto &jNodeArray = JRef<JSON_Lib::Array>(jNode);
+    const auto &jNodeArray = NRef<JSON_Lib::Array>(jNode);
     totalArrays++;
     sizeInBytes += sizeof(JSON_Lib::Array);
     maxArraySize = std::max(jNodeArray.size(), maxArraySize);
@@ -66,7 +66,7 @@ public:
   // Add object details to analysis
   void onObject(const JSON_Lib::Node &jNode) override
   {
-    const auto &jNodeObject = JRef<JSON_Lib::Object>(jNode);
+    const auto &jNodeObject = NRef<JSON_Lib::Object>(jNode);
     totalObjects++;
     sizeInBytes += sizeof(JSON_Lib::Object);
     maxObjectSize = std::max(jNodeObject.value().size(), maxObjectSize);

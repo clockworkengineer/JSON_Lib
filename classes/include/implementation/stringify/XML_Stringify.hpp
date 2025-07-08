@@ -54,7 +54,7 @@ private:
   }
   static void stringifyObject(const Node &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent)
   {
-    for (const auto &jNodeNext : JRef<Object>(jNode).value()) {
+    for (const auto &jNodeNext : NRef<Object>(jNode).value()) {
       std::string elementName { jNodeNext.getKey()} ;
       std::ranges::replace(elementName, ' ', '-');
       destination.add("<" + elementName + ">");
@@ -64,8 +64,8 @@ private:
   }
   static void stringifyArray(const Node &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
   {
-    if (JRef<Array>(jNode).value().size() > 1) {
-      for (const auto &bNodeNext : JRef<Array>(jNode).value()) {
+    if (NRef<Array>(jNode).value().size() > 1) {
+      for (const auto &bNodeNext : NRef<Array>(jNode).value()) {
         destination.add("<Row>");
         stringifyNodes(bNodeNext, destination, 0);
         destination.add("</Row>");
@@ -74,11 +74,11 @@ private:
   }
   static void stringifyNumber(const Node &jNode, IDestination &destination)
   {
-    destination.add(std::to_string(JRef<Number>(jNode).value<long long>()));
+    destination.add(std::to_string(NRef<Number>(jNode).value<long long>()));
   }
   static void stringifyBoolean(const Node &jNode, IDestination &destination)
   {
-    if (JRef<Boolean>(jNode).value()) {
+    if (NRef<Boolean>(jNode).value()) {
       destination.add("True");
     } else {
       destination.add("False");
@@ -87,7 +87,7 @@ private:
   static void stringifyNull([[maybe_unused]]const Node &jNode, [[maybe_unused]]IDestination &destination) {}
   static void stringifyString(const Node &jNode, IDestination &destination)
   {
-    destination.add(xmlTranslator->to(JRef<String>(jNode).value()));
+    destination.add(xmlTranslator->to(NRef<String>(jNode).value()));
   }
 
   inline static std::unique_ptr<ITranslator> xmlTranslator;

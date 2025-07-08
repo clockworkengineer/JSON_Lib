@@ -47,42 +47,42 @@ TEST_CASE("Check JSON parsing of simple types and check values.", "[JSON][Parse]
   {
     BufferSource jsonSource{ R"("example string")" };
     json.parse(jsonSource);
-    REQUIRE(JRef<String>(json.root()).value() == "example string");
+    REQUIRE(NRef<String>(json.root()).value() == "example string");
   }
   SECTION("Parse an string (another example string) and check its value.", "[JSON][Parse][Simple][Validate]")
   {
     BufferSource jsonSource{ R"("another example string")" };
     json.parse(jsonSource);
-    REQUIRE(JRef<String>(json.root()).value() == "another example string");
+    REQUIRE(NRef<String>(json.root()).value() == "another example string");
   }
   SECTION("Parse an number (6767) and check its value.", "[JSON][Parse][Simple][Validate]")
   {
     BufferSource jsonSource{ "6767" };
     json.parse(jsonSource);
-    REQUIRE(JRef<Number>(json.root()).value<int>() == 6767);
+    REQUIRE(NRef<Number>(json.root()).value<int>() == 6767);
   }
   SECTION("Parse an number (190000) and check its value.", "[JSON][Parse][Simple][Validate]")
   {
     BufferSource jsonSource{ "190000" };
     json.parse(jsonSource);
-    REQUIRE(JRef<Number>(json.root()).value<int>() == 190000);
+    REQUIRE(NRef<Number>(json.root()).value<int>() == 190000);
   }
   SECTION("Parse an boolean (true) and check its value.", "[JSON][Parse][Simple][Validate]")
   {
     BufferSource jsonSource{ "true" };
     json.parse(jsonSource);
-    REQUIRE(JRef<Boolean>(json.root()).value() == true);
+    REQUIRE(NRef<Boolean>(json.root()).value() == true);
   }
   SECTION("Parse an boolean (false) and check its value.", "[JSON][Parse][Simple][Validate]")
   {
     BufferSource jsonSource{ "false" };
     json.parse(jsonSource);
-    REQUIRE(JRef<Boolean>(json.root()).value() == false);
+    REQUIRE(NRef<Boolean>(json.root()).value() == false);
   }
   SECTION("Parse an null and check its value.", "[JSON][Parse][Simple][Validate]")
   {
     BufferSource jsonSource{ "null" };
     json.parse(jsonSource);
-    REQUIRE(JRef<Null>(json.root()).value() == nullptr);
+    REQUIRE(NRef<Null>(json.root()).value() == nullptr);
   }
 }

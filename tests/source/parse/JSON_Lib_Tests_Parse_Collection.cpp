@@ -52,26 +52,26 @@ TEST_CASE("Check JSON parsing of collection types and check values.", "[JSON][Pa
     BufferSource jsonSource{ R"({"Name":"Robert","Age":15})" };
     json.parse(jsonSource);
     REQUIRE_FALSE(!isA<Object>(json.root()));
-    REQUIRE(JRef<Object>(json.root()).size() == 2);
-    REQUIRE(JRef<Object>(json.root()).contains("Name"));
-    REQUIRE(JRef<Object>(json.root()).contains("Age"));
+    REQUIRE(NRef<Object>(json.root()).size() == 2);
+    REQUIRE(NRef<Object>(json.root()).contains("Name"));
+    REQUIRE(NRef<Object>(json.root()).contains("Age"));
     REQUIRE_FALSE(!isA<String>(json.root()["Name"]));
     REQUIRE_FALSE(!isA<Number>(json.root()["Age"]));
-    REQUIRE(JRef<String>((json.root())["Name"]).value() == "Robert");
-    REQUIRE(JRef<Number>((json.root())["Age"]).value<int>() == 15);
+    REQUIRE(NRef<String>((json.root())["Name"]).value() == "Robert");
+    REQUIRE(NRef<Number>((json.root())["Age"]).value<int>() == 15);
   }
   SECTION(R"(Parse an array [777,9000,"apples"] and check its value.)", "[JSON][Parse][Collection][validate]")
   {
     BufferSource jsonSource{ R"([777,9000,"apples"])" };
     json.parse(jsonSource);
     REQUIRE_FALSE(!isA<Array>(json.root()));
-    REQUIRE(JRef<Array>(json.root()).size() == 3);
+    REQUIRE(NRef<Array>(json.root()).size() == 3);
     REQUIRE_FALSE(!isA<Number>(json.root()[0]));
     REQUIRE_FALSE(!isA<Number>(json.root()[1]));
     REQUIRE_FALSE(!isA<String>(json.root()[2]));
-    REQUIRE(JRef<Number>((json.root())[0]).value<int>() == 777);
-    REQUIRE(JRef<Number>((json.root())[1]).value<int>() == 9000);
-    REQUIRE(JRef<String>((json.root())[2]).value() == "apples");
+    REQUIRE(NRef<Number>((json.root())[0]).value<int>() == 777);
+    REQUIRE(NRef<Number>((json.root())[1]).value<int>() == 9000);
+    REQUIRE(NRef<String>((json.root())[2]).value() == "apples");
   }
   SECTION(R"(Parse object {"City":"Southampton","Population":500000} and check its value.)",
     "[JSON][Parse][Collection][validate]")

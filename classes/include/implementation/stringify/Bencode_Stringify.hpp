@@ -50,7 +50,7 @@ private:
   static void stringifyObject(const Node &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent)
   {
     destination.add('d');
-    for (auto &entry : JRef<Object>(jNode).value()) {
+    for (auto &entry : NRef<Object>(jNode).value()) {
       stringifyNodes(entry.getKeyNode(), destination, 0);
       stringifyNodes(entry.getNode(), destination, 0);
     }
@@ -59,16 +59,16 @@ private:
   static void stringifyArray(const Node &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
   {
     destination.add('l');
-    for (auto &entry : JRef<Array>(jNode).value()) { stringifyNodes(entry, destination, 0); }
+    for (auto &entry : NRef<Array>(jNode).value()) { stringifyNodes(entry, destination, 0); }
     destination.add("e");
   }
   static void stringifyNumber(const Node &jNode, IDestination &destination)
   {
-    destination.add("i" + std::to_string(JRef<Number>(jNode).value<long long>()) + "e");
+    destination.add("i" + std::to_string(NRef<Number>(jNode).value<long long>()) + "e");
   }
   static void stringifyBoolean(const Node &jNode, IDestination &destination)
   {
-    if (JRef<Boolean>(jNode).value()) {
+    if (NRef<Boolean>(jNode).value()) {
       destination.add("4:True");
     } else {
       destination.add("5:False");
@@ -77,7 +77,7 @@ private:
   static void stringifyNull([[maybe_unused]]const Node &jNode, IDestination &destination) { destination.add("4:null"); }
   static void stringifyString(const Node &jNode, IDestination &destination)
   {
-    const auto jsonString = JRef<String>(jNode).value();
+    const auto jsonString = NRef<String>(jNode).value();
     destination.add((std::to_string(static_cast<int>(jsonString.length())) + ":").append(jsonString));
   }
 

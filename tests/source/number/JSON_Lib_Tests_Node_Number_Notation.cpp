@@ -11,8 +11,8 @@ TEST_CASE("Check Node Number floating point notation.", "[JSON][Node][Number][Fl
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!JRef<Number>(json["latitude"]).is<float>());
-    REQUIRE_FALSE(!JRef<Number>(json["longitude"]).is<float>());
+    REQUIRE_FALSE(!NRef<Number>(json["latitude"]).is<float>());
+    REQUIRE_FALSE(!NRef<Number>(json["longitude"]).is<float>());
     BufferDestination jsonDestination;
     Number::setNotation(Number::numberNotation::normal);
     Number::setPrecision(6);
@@ -24,8 +24,8 @@ TEST_CASE("Check Node Number floating point notation.", "[JSON][Node][Number][Fl
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!JRef<Number>(json["latitude"]).is<float>());
-    REQUIRE_FALSE(!JRef<Number>(json["longitude"]).is<float>());
+    REQUIRE_FALSE(!NRef<Number>(json["latitude"]).is<float>());
+    REQUIRE_FALSE(!NRef<Number>(json["longitude"]).is<float>());
     BufferDestination jsonDestination;
     Number::setNotation(Number::numberNotation::fixed);
     jsonDestination.clear();
@@ -38,8 +38,8 @@ TEST_CASE("Check Node Number floating point notation.", "[JSON][Node][Number][Fl
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!JRef<Number>(json["latitude"]).is<float>());
-    REQUIRE_FALSE(!JRef<Number>(json["longitude"]).is<float>());
+    REQUIRE_FALSE(!NRef<Number>(json["latitude"]).is<float>());
+    REQUIRE_FALSE(!NRef<Number>(json["longitude"]).is<float>());
     BufferDestination jsonDestination;
     Number::setNotation(Number::numberNotation::scientific);
     jsonDestination.clear();

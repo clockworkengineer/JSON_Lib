@@ -22,15 +22,15 @@ std::string prefixTestDataPath(const std::string &jsonFileName) {
 void checkArray(const Node &jNode)
 {// Array ["Dog",1964,true,null]
   REQUIRE_FALSE(!isA<Array>(jNode));
-  REQUIRE(JRef<Array>(jNode).size() == 4);
+  REQUIRE(NRef<Array>(jNode).size() == 4);
   REQUIRE_FALSE(!isA<String>(jNode[0]));
   REQUIRE_FALSE(!isA<Number>(jNode[1]));
   REQUIRE_FALSE(!isA<Boolean>(jNode[2]));
   REQUIRE_FALSE(!isA<Null>(jNode[3]));
-  REQUIRE(JRef<String>(jNode[0]).value() == "Dog");
-  REQUIRE(JRef<Number>(jNode[1]).value<int>() == 1964);
-  REQUIRE(JRef<Boolean>(jNode[2]).value() == true);
-  REQUIRE(JRef<Null>(jNode[3]).value() == nullptr);
+  REQUIRE(NRef<String>(jNode[0]).value() == "Dog");
+  REQUIRE(NRef<Number>(jNode[1]).value<int>() == 1964);
+  REQUIRE(NRef<Boolean>(jNode[2]).value() == true);
+  REQUIRE(NRef<Null>(jNode[3]).value() == nullptr);
 }
 /// <summary>
 /// Verify that an Node Object has the correct parsed format.
@@ -40,13 +40,13 @@ void checkArray(const Node &jNode)
 void checkObject(const Node &jNode)
 {// {"City":"Southampton","Population":500000}
   REQUIRE_FALSE(!isA<Object>(jNode));
-  REQUIRE(JRef<Object>(jNode).size() == 2);
-  REQUIRE(JRef<Object>(jNode).contains("City"));
-  REQUIRE(JRef<Object>(jNode).contains("Population"));
+  REQUIRE(NRef<Object>(jNode).size() == 2);
+  REQUIRE(NRef<Object>(jNode).contains("City"));
+  REQUIRE(NRef<Object>(jNode).contains("Population"));
   REQUIRE_FALSE(!isA<String>(jNode["City"]));
   REQUIRE_FALSE(!isA<Number>(jNode["Population"]));
-  REQUIRE(JRef<String>(jNode["City"]).value() == "Southampton");
-  REQUIRE(JRef<Number>(jNode["Population"]).value<int>() == 500000);
+  REQUIRE(NRef<String>(jNode["City"]).value() == "Southampton");
+  REQUIRE(NRef<Number>(jNode["Population"]).value<int>() == 500000);
 }
 /// <summary>
 /// Strip white space from source JSON and place the remainder in destination.

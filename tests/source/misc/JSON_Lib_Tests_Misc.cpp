@@ -47,8 +47,8 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][Node][R-Value-Refe
   SECTION("Parse with R-Value reference (Buffer).", "[JSON][Node][R-Value-Reference]")
   {
     json.parse(BufferSource{ R"({"City":"Southampton","Population":500000 })" });
-    REQUIRE(JRef<Object>(json.root()).size() == 2);
-    REQUIRE(JRef<String>((json.root())["City"]).value() == "Southampton");
+    REQUIRE(NRef<Object>(json.root()).size() == 2);
+    REQUIRE(NRef<String>((json.root())["City"]).value() == "Southampton");
   }
   SECTION("Parse/Stringify both with R-Value reference (File).", "[JSON][Node][R-Value-Reference]")
   {

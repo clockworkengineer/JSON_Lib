@@ -11,8 +11,8 @@ TEST_CASE("Check Node Number floating point precision.", "[JSON][Node][Number][F
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!JRef<Number>(json["latitude"]).is<float>());
-    REQUIRE_FALSE(!JRef<Number>(json["longitude"]).is<float>());
+    REQUIRE_FALSE(!NRef<Number>(json["latitude"]).is<float>());
+    REQUIRE_FALSE(!NRef<Number>(json["longitude"]).is<float>());
     BufferDestination jsonDestination;
     Number::setPrecision(6);
     json.stringify(jsonDestination);
@@ -23,8 +23,8 @@ TEST_CASE("Check Node Number floating point precision.", "[JSON][Node][Number][F
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!JRef<Number>(json["latitude"]).is<float>());
-    REQUIRE_FALSE(!JRef<Number>(json["longitude"]).is<float>());
+    REQUIRE_FALSE(!NRef<Number>(json["latitude"]).is<float>());
+    REQUIRE_FALSE(!NRef<Number>(json["longitude"]).is<float>());
     BufferDestination jsonDestination;
     Number::setPrecision(7);
     json.stringify(jsonDestination);
@@ -36,8 +36,8 @@ TEST_CASE("Check Node Number floating point precision.", "[JSON][Node][Number][F
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
     BufferSource jsonSource{ expected };
     json.parse(jsonSource);
-    REQUIRE_FALSE(!JRef<Number>(json["latitude"]).is<float>());
-    REQUIRE_FALSE(!JRef<Number>(json["longitude"]).is<float>());
+    REQUIRE_FALSE(!NRef<Number>(json["latitude"]).is<float>());
+    REQUIRE_FALSE(!NRef<Number>(json["longitude"]).is<float>());
     BufferDestination jsonDestination;
     Number::setPrecision(8);
     json.stringify(jsonDestination);
@@ -49,8 +49,8 @@ TEST_CASE("Check Node Number floating point precision.", "[JSON][Node][Number][F
 //     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };
 //     BufferSource jsonSource{ expected };
 //     json.parse(jsonSource);
-//     REQUIRE_FALSE(!JRef<Number>(json["latitude"]).is<float>());
-//     REQUIRE_FALSE(!JRef<Number>(json["longitude"]).is<float>());
+//     REQUIRE_FALSE(!NRef<Number>(json["latitude"]).is<float>());
+//     REQUIRE_FALSE(!NRef<Number>(json["longitude"]).is<float>());
 //     BufferDestination jsonDestination;
 //     Number::setPrecision(std::numeric_limits<long double>::digits10 + 1);
 //     json.stringify(jsonDestination);

@@ -149,10 +149,10 @@ Node Default_Parser::parseObject(ISource &source, const ITranslator &translator,
   source.next();
   source.ignoreWS();
   if (source.current() != '}') {
-    JRef<Object>(jNodeObject).add(parseObjectEntry(source, translator,parserDepth));
+    NRef<Object>(jNodeObject).add(parseObjectEntry(source, translator,parserDepth));
     while (source.current() == ',') {
       source.next();
-      JRef<Object>(jNodeObject).add(parseObjectEntry(source, translator, parserDepth));
+      NRef<Object>(jNodeObject).add(parseObjectEntry(source, translator, parserDepth));
     }
   }
   if (source.current() != '}') { throw SyntaxError(source.getPosition(), "Missing closing '}' in object definition."); }
@@ -172,10 +172,10 @@ Node Default_Parser::parseArray(ISource &source, const ITranslator &translator, 
   source.next();
   source.ignoreWS();
   if (source.current() != ']') {
-    JRef<Array>(jNodeArray).add(parseNodes(source, translator,parserDepth+1));
+    NRef<Array>(jNodeArray).add(parseNodes(source, translator,parserDepth+1));
     while (source.current() == ',') {
       source.next();
-      JRef<Array>(jNodeArray).add(parseNodes(source, translator, parserDepth+1));
+      NRef<Array>(jNodeArray).add(parseNodes(source, translator, parserDepth+1));
     }
   }
   if (source.current() != ']') { throw SyntaxError(source.getPosition(), "Missing closing ']' in array definition."); }

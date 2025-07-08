@@ -47,22 +47,22 @@ template<typename T> void checkNode(const Node &jNode)
     if (!isA<T>(jNode)) { throw Node::Error("Node not a hole."); }
   }
 }
-template<typename T> T &JRef(Node &jNode)
+template<typename T> T &NRef(Node &jNode)
 {
   checkNode<T>(jNode);
   return static_cast<T &>(jNode.getVariant());
 }
-template<typename T> const T &JRef(const Node &jNode)
+template<typename T> const T &NRef(const Node &jNode)
 {
   checkNode<T>(jNode);
   return static_cast<const T &>(jNode.getVariant());
 }
-template<typename T> T &JRef(Object::Entry &jNodeEntry)
+template<typename T> T &NRef(Object::Entry &jNodeEntry)
 {
   checkNode<T>(jNodeEntry.getNode());
   return static_cast<T &>(jNodeEntry.getNode().getVariant());
 }
-template<typename T> const T &JRef(const Object::Entry &jNodeEntry)
+template<typename T> const T &NRef(const Object::Entry &jNodeEntry)
 {
   checkNode<T>(jNodeEntry.getNode());
   return static_cast<const T &>(jNodeEntry.getNode().getVariant());
