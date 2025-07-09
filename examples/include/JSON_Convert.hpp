@@ -1,8 +1,5 @@
 #pragma once
 
-#include <set>
-#include <sstream>
-
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 
@@ -15,15 +12,15 @@ public:
   // Convert Number/Null/Boolean to String
   void onNumber(JSON_Lib::Node &jNode) override
   {
-    jNode = JSON_Lib::Node::make<JSON_Lib::String>(NRef<JSON_Lib::Number>(jNode).toString());
+    jNode = JSON_Lib::Node::make<JSON_Lib::String>(JSON_Lib::NRef<JSON_Lib::Number>(jNode).toString());
   }
   void onBoolean(JSON_Lib::Node &jNode) override
   {
-    jNode = JSON_Lib::Node::make<JSON_Lib::String>(NRef<JSON_Lib::Boolean>(jNode).toString());
+    jNode = JSON_Lib::Node::make<JSON_Lib::String>(JSON_Lib::NRef<JSON_Lib::Boolean>(jNode).toString());
   }
   void onNull(JSON_Lib::Node &jNode) override
   {
-    jNode = JSON_Lib::Node::make<JSON_Lib::String>(NRef<JSON_Lib::Null>(jNode).toString());
+    jNode = JSON_Lib::Node::make<JSON_Lib::String>(JSON_Lib::NRef<JSON_Lib::Null>(jNode).toString());
   }
 
 private:
