@@ -33,7 +33,7 @@ set(JSON_SOURCES
 set(JSON_INCLUDES
   JSON_Config.hpp
   ./classes/include/JSON.hpp
-  ./classes/include/implementation/JSON_Core.hpp
+  ./classes/include/JSON_Core.hpp
   ./classes/include/implementation/JSON_Impl.hpp
   ./classes/include/implementation/common/JSON_Error.hpp
   ./classes/include/implementation/variants/JSON_Variant.hpp
