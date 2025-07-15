@@ -96,7 +96,7 @@ target_precompile_headers(${JSON_LIBRARY_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR
 add_subdirectory(tests)
 
 # Add exmaples
-add_subdirectory(examples)
+# add_subdirectory(examples)
 
 # install
 install(TARGETS ${JSON_LIBRARY_NAME} DESTINATION lib)
