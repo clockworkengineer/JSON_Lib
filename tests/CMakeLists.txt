@@ -1,14 +1,12 @@
-cmake_minimum_required(VERSION 3.18.1)
-
-project("JSON_Lib Unit Tests" VERSION 1.1.0 DESCRIPTION "JSON C++ Library Catch Unit Tests" LANGUAGES CXX)
-
 # Get Catch2 from repository
-Include(FetchContent)
+include(FetchContent)
+include(CTest)
 
 FetchContent_Declare(
   Catch2
   GIT_REPOSITORY https://github.com/catchorg/Catch2.git
   GIT_TAG v3.6.0
+  GIT_SHALLOW TRUE
 )
 
 FetchContent_MakeAvailable(Catch2)
@@ -55,15 +53,14 @@ set(TEST_SOURCES
   source/stringify/JSON_Lib_Tests_Stringify_Print.cpp
   source/misc/JSON_Lib_Tests_Misc.cpp
   source/misc/JSON_Lib_Tests_Helper.cpp
-  source/traverse/JSON_Lib_Tests_Traverse.cpp
-  source/stringify/JSON_Lib_Tests_Stringify_YAML.cpp)
+  source/traverse/JSON_Lib_Tests_Traverse.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
-target_include_directories(${TEST_EXECUTABLE} PUBLIC ${PROJECT_CURRENT_SOURCE_DIR}/include ./include)
+target_include_directories(${TEST_EXECUTABLE} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(${TEST_EXECUTABLE} ${JSON_LIBRARY_NAME} Catch2::Catch2WithMain)
 target_precompile_headers(${TEST_EXECUTABLE} REUSE_FROM JSON_Lib)
 
 add_test(NAME ${TEST_EXECUTABLE} COMMAND ${TEST_EXECUTABLE})
 
 add_custom_command(TARGET ${TEST_EXECUTABLE} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/files files)
-add_custom_command(TARGET ${TEST_EXECUTABLE} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/files ${PROJECT_BINARY_DIR}/files)
+add_custom_command(TARGET ${TEST_EXECUTABLE} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/files ${CMAKE_CURRENT_BINARY_DIR}/files)

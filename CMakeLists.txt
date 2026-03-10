@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18.1)
+cmake_minimum_required(VERSION 3.23)
 
 project("JSON_Lib" VERSION 1.1.0 DESCRIPTION "JSON C++ Library" LANGUAGES CXX)
 
@@ -9,12 +9,18 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Compiler options
 if(MSVC)
-  add_compile_options(/W4)
+  add_compile_options(/W4 /WX /MP)
   set(PLATFORM "windows")
 else()
   add_compile_options(-Wall -Werror -pedantic)
   set(PLATFORM "linux")
 endif()
+
+# Enable compile_commands.json for IDE tooling (clangd, etc.)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Option to build unit tests (can be disabled with -DBUILD_TESTING=OFF)
+option(BUILD_TESTING "Build unit tests" ON)
 
 # Setup library version
 configure_file(JSON_Config.h.in JSON_Config.hpp)
@@ -94,9 +100,11 @@ target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
 target_precompile_headers(${JSON_LIBRARY_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/stdafx.h)
 
 # Add tests
-add_subdirectory(tests)
+if(BUILD_TESTING)
+  add_subdirectory(tests)
+endif()
 
-# Add exmaples
+# Add examples
 add_subdirectory(examples)
 
 # install

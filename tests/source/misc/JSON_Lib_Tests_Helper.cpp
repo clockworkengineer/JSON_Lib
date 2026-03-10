@@ -1,17 +1,17 @@
 #include "JSON_Lib_Tests.hpp"
+#include <random>
 
 /// <summary>
 /// Prefix path to test data file name.
 /// </summary>
 /// <param name="jsonFileName">Test JSON data file name</param>
 /// <returns>Full path to test data file</returns>
-std::string prefixTestDataPath(const std::string &jsonFileName) {
+std::string prefixTestDataPath(const std::string &jsonFileName)
+{
   if (std::filesystem::is_directory("./files")) {
-    return (std::filesystem::current_path() / "./files" / jsonFileName)
-        .string();
+    return (std::filesystem::current_path() / "./files" / jsonFileName).string();
   } else {
-    return (std::filesystem::current_path() / "../files" / jsonFileName)
-        .string();
+    return (std::filesystem::current_path() / "../files" / jsonFileName).string();
   }
 }
 /// <summary>
@@ -64,11 +64,11 @@ std::string stripWhiteSpace(const std::string &jsonBuffer)
 /// Generate unique file name.
 /// </summary>
 /// <returns>Unique torrent file name</returns>
-std::string generateRandomFileName(void) {
-  std::filesystem::path namepath = std::tmpnam(nullptr);
-  std::string result { std::filesystem::temp_directory_path().string() };
-  result.push_back(std::filesystem::path::preferred_separator);
-  return result+namepath.filename().string();
+std::string generateRandomFileName(void)
+{
+  std::mt19937 gen(std::random_device{}());
+  std::uniform_int_distribution<uint32_t> dis;
+  return (std::filesystem::temp_directory_path() / ("json_tmp_" + std::to_string(dis(gen)))).string();
 }
 std::string generateEscapes(const unsigned char first, const unsigned char last)
 {
@@ -79,7 +79,7 @@ std::string generateEscapes(const unsigned char first, const unsigned char last)
     result += digits[utf16Char >> 12 & 0x0f];
     result += digits[utf16Char >> 8 & 0x0f];
     result += digits[utf16Char >> 4 & 0x0f];
-    result += digits[utf16Char&0x0f];
+    result += digits[utf16Char & 0x0f];
   }
   return result;
 }
