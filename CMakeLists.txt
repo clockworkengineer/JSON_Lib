@@ -93,10 +93,11 @@ target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
 # Pre-compiled headers
 target_precompile_headers(${JSON_LIBRARY_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/stdafx.h)
 
+# Add tests
 add_subdirectory(tests)
 
 # Add exmaples
-# add_subdirectory(examples)
+add_subdirectory(examples)
 
 # install
 install(TARGETS ${JSON_LIBRARY_NAME} DESTINATION lib)
