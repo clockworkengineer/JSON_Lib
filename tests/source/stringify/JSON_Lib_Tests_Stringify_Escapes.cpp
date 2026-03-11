@@ -124,4 +124,84 @@ TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSO
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == expected);
   }
+  SECTION(R"(Stringify JSON string with all single-char escapes combined (\b\t\n\f\r\"\\) to buffer.)",
+    "[JSON][Stringify][Escapes]")
+  {
+    const std::string expected{ R"("abcdefghijklmnopqrstuvwxyz \b \t \n \f \r \" \\")" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == expected);
+  }
+  SECTION(R"(Stringify JSON string that starts with an escape ('\n...') to buffer and check value.)",
+    "[JSON][Stringify][Escapes]")
+  {
+    const std::string expected{ R"("\n abcdefghijklmnopqrstuvwxyz")" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == expected);
+  }
+  SECTION(R"(Stringify JSON string that ends with an escape ('...\t') to buffer and check value.)",
+    "[JSON][Stringify][Escapes]")
+  {
+    const std::string expected{ R"("abcdefghijklmnopqrstuvwxyz \t")" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == expected);
+  }
+  SECTION(
+    R"(Stringify JSON string that is only escape characters ('\b\t\n\f\r') to buffer.)", "[JSON][Stringify][Escapes]")
+  {
+    const std::string expected{ R"("\b\t\n\f\r")" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == expected);
+  }
+  SECTION(
+    R"(Stringify JSON string with unicode escape '\u0000' throws on null character.)", "[JSON][Stringify][Escapes]")
+  {
+    const std::string source{ R"("abcdefghijklmnopqrstuvwxyz \u0000")" };
+    BufferDestination jsonDestination;
+    REQUIRE_THROWS_AS(json.parse(BufferSource{ source }), JSON_Lib::Error);
+  }
+  SECTION(
+    R"(Stringify JSON string with unicode escape '\uFFFF' to buffer and check value.)", "[JSON][Stringify][Escapes]")
+  {
+    const std::string expected{ R"("abcdefghijklmnopqrstuvwxyz \uFFFF")" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == expected);
+  }
+  SECTION(R"(Stringify JSON object key containing an escape ({"key\n":1}) to buffer and check value.)",
+    "[JSON][Stringify][Escapes]")
+  {
+    const std::string expected{ R"({"key\n":1})" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == expected);
+  }
+  SECTION(R"(Stringify JSON array with escaped string elements (["\t","\n"]) to buffer and check value.)",
+    "[JSON][Stringify][Escapes]")
+  {
+    const std::string expected{ R"(["\t","\n"])" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == expected);
+  }
+  SECTION(R"(Stringify JSON string with multiple consecutive \u escapes ('\u0041\u0042\u0043') to buffer.)",
+    "[JSON][Stringify][Escapes]")
+  {
+    // \u0041=A,\u0042=B,\u0043=C — printable ASCII, so they round-trip as literals
+    const std::string source{ R"("abcdefghijklmnopqrstuvwxyz \u0041\u0042\u0043")" };
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ source });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == R"("abcdefghijklmnopqrstuvwxyz ABC")");
+  }
 }

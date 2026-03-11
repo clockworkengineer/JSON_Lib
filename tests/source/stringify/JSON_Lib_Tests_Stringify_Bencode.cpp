@@ -125,4 +125,76 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "d4:Testlleleleee");
   }
+  SECTION("Stringify an integer (0) to Bencode.", "[JSON][Stringify][Integer][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "0" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "i0e");
+  }
+  SECTION(R"(Stringify an empty string ("") to Bencode.)", "[JSON][Stringify][String][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"("")" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "0:");
+  }
+  SECTION(R"(Stringify a string with spaces ("hello world") to Bencode.)", "[JSON][Stringify][String][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"("hello world")" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "11:hello world");
+  }
+  SECTION(R"(Stringify an array of strings (["one","two","three"]) to Bencode.)", "[JSON][Stringify][Array][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"(["one","two","three"])" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "l3:one3:two5:threee");
+  }
+  SECTION(R"(Stringify an array of booleans ([true,false,true]) to Bencode.)", "[JSON][Stringify][Array][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"([true,false,true])" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "l4:True5:False4:Truee");
+  }
+  SECTION(R"(Stringify an array of nulls ([null,null]) to Bencode.)", "[JSON][Stringify][Array][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"([null,null])" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "l4:null4:nulle");
+  }
+  SECTION(R"(Stringify a nested object ({"outer":{"inner":42}}) to Bencode.)", "[JSON][Stringify][Object][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"outer":{"inner":42}})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "d5:outerd5:inneri42eee");
+  }
+  SECTION(
+    R"(Stringify an object with a boolean value ({"flag":true}) to Bencode.)", "[JSON][Stringify][Object][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"flag":true})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "d4:flag4:Truee");
+  }
+  SECTION(R"(Stringify an object with a null value ({"value":null}) to Bencode.)", "[JSON][Stringify][Object][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"value":null})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "d5:value4:nulle");
+  }
+  SECTION(R"(Stringify an object with array of strings ({"items":["a","b","c"]}) to Bencode.)",
+    "[JSON][Stringify][Object][Bencode]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"items":["a","b","c"]})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "d5:itemsl1:a1:b1:cee");
+  }
 }

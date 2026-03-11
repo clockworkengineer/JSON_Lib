@@ -107,6 +107,74 @@ TEST_CASE("Check Check printing of JSON to a buffer.", "[JSON][Print][Buffer]")
     json.print(jsonDestination);
     REQUIRE(jsonDestination.toString() == expected);
   }
+  SECTION("Print a string to a buffer (indent has no effect on primitives).", "[JSON][Print][Buffer]")
+  {
+    json.setIndent(4);
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"("hello world")" });
+    json.print(jsonDestination);
+    REQUIRE(jsonDestination.toString() == R"("hello world")");
+  }
+  SECTION("Print a boolean (true) to a buffer.", "[JSON][Print][Buffer]")
+  {
+    json.setIndent(4);
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "true" });
+    json.print(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "true");
+  }
+  SECTION("Print an integer (42) to a buffer.", "[JSON][Print][Buffer]")
+  {
+    json.setIndent(4);
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "42" });
+    json.print(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "42");
+  }
+  SECTION("Print a null to a buffer.", "[JSON][Print][Buffer]")
+  {
+    json.setIndent(4);
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "null" });
+    json.print(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "null");
+  }
+  SECTION("Print a single-element array to a buffer.", "[JSON][Print][Array][Buffer]")
+  {
+    const std::string expected{ R"([
+    42
+])" };
+    json.setIndent(4);
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.print(jsonDestination);
+    REQUIRE(jsonDestination.toString() == expected);
+  }
+  SECTION("Print a single-element object to a buffer.", "[JSON][Print][Object][Buffer]")
+  {
+    const std::string expected{ R"({
+    "key": 1
+})" };
+    json.setIndent(4);
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ expected });
+    json.print(jsonDestination);
+    REQUIRE(jsonDestination.toString() == expected);
+  }
+  SECTION("Print idempotency: re-parse printed output and re-print gives same result.", "[JSON][Print][Buffer]")
+  {
+    json.setIndent(4);
+    const std::string source{ R"({\n    "name": "Alice",\n    "age": 30\n})" };
+    // First print
+    BufferDestination first;
+    json.parse(BufferSource{ R"({"name":"Alice","age":30})" });
+    json.print(first);
+    // Re-parse and re-print
+    BufferDestination second;
+    json.parse(BufferSource{ first.toString() });
+    json.print(second);
+    REQUIRE(first.toString() == second.toString());
+  }
 }
 // ========================================
 // Pretty printing of sample JSON to a file
@@ -298,6 +366,33 @@ TEST_CASE("Check Check setting of print indentation.", "[JSON][Print][Indent]")
   {
     REQUIRE_THROWS_AS(json.setIndent(-4), JSON_Lib::Error);
     REQUIRE_THROWS_WITH(json.setIndent(-4), "JSON Error: Invalid print indentation value.");
+  }
+  SECTION("Set indent to 2 and print a simple object to a buffer.", "[JSON][Print][Ident][Buffer]")
+  {
+    const std::string expected{ R"({
+  "name": "Alice",
+  "age": 30
+})" };
+    BufferDestination jsonDestination;
+    json.setIndent(2);
+    json.parse(BufferSource{ expected });
+    json.print(jsonDestination);
+    json.setIndent(4);
+    REQUIRE(jsonDestination.toString() == expected);
+  }
+  SECTION("Set indent to 2 and print a nested object to a buffer.", "[JSON][Print][Ident][Buffer]")
+  {
+    const std::string expected{ R"({
+  "outer": {
+    "inner": 99
+  }
+})" };
+    BufferDestination jsonDestination;
+    json.setIndent(2);
+    json.parse(BufferSource{ expected });
+    json.print(jsonDestination);
+    json.setIndent(4);
+    REQUIRE(jsonDestination.toString() == expected);
   }
 }
 // =======================

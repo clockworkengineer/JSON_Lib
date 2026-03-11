@@ -144,8 +144,8 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
     BufferDestination jsonDestination;
     json.parse(BufferSource{ R"({"City":"London","Population":[1,2,3,4,5]})" });
     json.stringify(jsonDestination);
-    REQUIRE(
-      jsonDestination.toString() == "---\n\"City\": \"London\"\n\"Population\": \n  - 1\n  - 2\n  - 3\n  - 4\n  - 5\n...\n");
+    REQUIRE(jsonDestination.toString()
+            == "---\n\"City\": \"London\"\n\"Population\": \n  - 1\n  - 2\n  - 3\n  - 4\n  - 5\n...\n");
   }
   SECTION(
     R"(Stringify a nested object ([true,"Out of time",7.89043e+18,{"key":4444}]) to a buffer and check its
@@ -221,9 +221,87 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
   SECTION("Stringify from dictionary key containing escapes.", "[JSON][Stringify][Object][YAML]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource( "{ \"test\n\t\u0001\": 33333 } " ));
+    json.parse(BufferSource("{ \"test\n\t\u0001\": 33333 } "));
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "---\n\"test\\n\\t\\u0001\": 33333\n...\n");
   }
-
+  SECTION("Stringify an integer (0) to YAML.", "[JSON][Stringify][Integer][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "0" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n0\n...\n");
+  }
+  SECTION(R"(Stringify an empty string ("") to YAML.)", "[JSON][Stringify][String][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"("")" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n\"\"\n...\n");
+  }
+  SECTION(R"(Stringify a string with spaces ("hello world") to YAML.)", "[JSON][Stringify][String][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"("hello world")" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n\"hello world\"\n...\n");
+  }
+  SECTION(R"(Stringify a single-element array ([42]) to YAML.)", "[JSON][Stringify][Array][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "[42]" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n- 42\n...\n");
+  }
+  SECTION(R"(Stringify an array of strings (["apple","banana","cherry"]) to YAML.)", "[JSON][Stringify][Array][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"(["apple","banana","cherry"])" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n- \"apple\"\n- \"banana\"\n- \"cherry\"\n...\n");
+  }
+  SECTION(R"(Stringify an array of booleans ([true,false,true]) to YAML.)", "[JSON][Stringify][Array][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"([true,false,true])" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n- true\n- false\n- true\n...\n");
+  }
+  SECTION(
+    R"(Stringify an array of objects ([{"name":"Alice"},{"name":"Bob"}]) to YAML.)", "[JSON][Stringify][Array][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"([{"name":"Alice"},{"name":"Bob"}])" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n- \"name\": \"Alice\"\n- \"name\": \"Bob\"\n...\n");
+  }
+  SECTION(R"(Stringify a nested object ({"outer":{"inner":42}}) to YAML.)", "[JSON][Stringify][Object][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"outer":{"inner":42}})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n\"outer\": \n  \"inner\": 42\n...\n");
+  }
+  SECTION(R"(Stringify an object with a null value ({"value":null}) to YAML.)", "[JSON][Stringify][Object][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"value":null})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n\"value\": null\n...\n");
+  }
+  SECTION(R"(Stringify an object with a boolean value ({"flag":true}) to YAML.)", "[JSON][Stringify][Object][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"flag":true})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n\"flag\": true\n...\n");
+  }
+  SECTION(R"(Stringify an object with array of strings ({"tags":["one","two","three"]}) to YAML.)",
+    "[JSON][Stringify][Object][YAML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"tags":["one","two","three"]})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == "---\n\"tags\": \n  - \"one\"\n  - \"two\"\n  - \"three\"\n...\n");
+  }
 }

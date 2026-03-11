@@ -70,7 +70,8 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
   //   json.stringify(destination);
   //   REQUIRE(
   //     destination.toString()
-  //     == R"(<?xml version="1.0" encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;</root>)");
+  //     == R"(<?xml version="1.0"
+  //     encoding="UTF-8"?><root>abcdefghijklmnopqrstuvwxyz&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;&#xFFFD;</root>)");
   //   // 0xFFFD means no such character in UTF8 (generated for 128-255; but can use syntax \u0080 etc).
   // }
   SECTION("Stringify a boolean (true) to XML.", "[JSON][Stringify][Boolean][XML]")
@@ -243,5 +244,92 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString()
             == R"(<?xml version="1.0" encoding="UTF-8"?><root><Test><Row></Row><Row></Row><Row></Row></Test></root>)");
+  }
+  SECTION("Stringify an integer (0) to XML.", "[JSON][Stringify][Integer][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "0" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root>0</root>)");
+  }
+  SECTION(R"(Stringify an empty string ("") to XML.)", "[JSON][Stringify][String][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"("")" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root></root>)");
+  }
+  SECTION(R"(Stringify a single-element array ([42]) to XML (size==1 suppresses Row wrapper, emits nothing).)",
+    "[JSON][Stringify][Array][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ "[42]" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root></root>)");
+  }
+  SECTION(R"(Stringify an array of strings (["a","b","c"]) to XML.)", "[JSON][Stringify][Array][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"(["a","b","c"])" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString()
+            == R"(<?xml version="1.0" encoding="UTF-8"?><root><Row>a</Row><Row>b</Row><Row>c</Row></root>)");
+  }
+  SECTION(R"(Stringify an array of booleans ([true,false]) to XML.)", "[JSON][Stringify][Array][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"([true,false])" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString()
+            == R"(<?xml version="1.0" encoding="UTF-8"?><root><Row>True</Row><Row>False</Row></root>)");
+  }
+  SECTION(R"(Stringify an array of nulls ([null,null]) to XML.)", "[JSON][Stringify][Array][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"([null,null])" });
+    json.stringify(jsonDestination);
+    REQUIRE(
+      jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root><Row></Row><Row></Row></root>)");
+  }
+  SECTION(R"(Stringify an object with a boolean value ({"flag":true}) to XML.)", "[JSON][Stringify][Object][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"flag":true})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root><flag>True</flag></root>)");
+  }
+  SECTION(R"(Stringify an object with a null value ({"value":null}) to XML.)", "[JSON][Stringify][Object][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"value":null})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root><value></value></root>)");
+  }
+  SECTION(R"(Stringify a nested object ({"outer":{"inner":42}}) to XML.)", "[JSON][Stringify][Object][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"outer":{"inner":42}})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString()
+            == R"(<?xml version="1.0" encoding="UTF-8"?><root><outer><inner>42</inner></outer></root>)");
+  }
+  SECTION(R"(Stringify an object key with a space ({"first name":"Alice"}) to XML — space becomes '-'.)",
+    "[JSON][Stringify][Object][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"first name":"Alice"})" });
+    json.stringify(jsonDestination);
+    REQUIRE(jsonDestination.toString()
+            == R"(<?xml version="1.0" encoding="UTF-8"?><root><first-name>Alice</first-name></root>)");
+  }
+  SECTION(R"(Stringify an object with array of strings ({"tags":["one","two","three"]}) to XML.)",
+    "[JSON][Stringify][Object][XML]")
+  {
+    BufferDestination jsonDestination;
+    json.parse(BufferSource{ R"({"tags":["one","two","three"]})" });
+    json.stringify(jsonDestination);
+    REQUIRE(
+      jsonDestination.toString()
+      == R"(<?xml version="1.0" encoding="UTF-8"?><root><tags><Row>one</Row><Row>two</Row><Row>three</Row></tags></root>)");
   }
 }
