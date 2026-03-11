@@ -134,4 +134,71 @@ TEST_CASE("Check use of Node constructors.", "[JSON][Node][Constructor]")
     REQUIRE(NRef<Number>(object["key3"][2]).value<int>() == 7);
     REQUIRE(NRef<Number>(object["key3"][3]).value<int>() == 8);
   }
+  SECTION("Default constructed Node is empty.", "[JSON][Node][Constructor]")
+  {
+    Node jNode;
+    REQUIRE(jNode.isEmpty());
+  }
+  SECTION("Construct Node(true).", "[JSON][Node][Constructor][Boolean]")
+  {
+    Node jNode(true);
+    REQUIRE(isA<Boolean>(jNode));
+    REQUIRE(NRef<Boolean>(jNode).value());
+  }
+  SECTION("Construct Node(std::string).", "[JSON][Node][Constructor][String]")
+  {
+    Node jNode(std::string("hello std string"));
+    REQUIRE(isA<String>(jNode));
+    REQUIRE(NRef<String>(jNode).value() == "hello std string");
+  }
+  SECTION("Array size() matches element count after construction.", "[JSON][Node][Constructor][Array]")
+  {
+    Node jNode{ 10, 20, 30 };
+    REQUIRE(isA<Array>(jNode));
+    REQUIRE(NRef<Array>(jNode).size() == 3);
+  }
+  SECTION("Object size() and contains() after construction.", "[JSON][Node][Constructor][Object]")
+  {
+    Node jNode{ { "a", 1 }, { "b", 2 } };
+    REQUIRE(isA<Object>(jNode));
+    auto &obj = NRef<Object>(jNode);
+    REQUIRE(obj.size() == 2);
+    REQUIRE(obj.contains("a"));
+    REQUIRE(obj.contains("b"));
+    REQUIRE_FALSE(obj.contains("c"));
+  }
+  SECTION("Construct array Node with string, boolean and null elements.", "[JSON][Node][Constructor][Array]")
+  {
+    Node jNode{ Node("hello"), Node(true), Node(nullptr) };
+    REQUIRE(isA<Array>(jNode));
+    auto &array = NRef<Array>(jNode).value();
+    REQUIRE(array.size() == 3);
+    REQUIRE(isA<String>(array[0]));
+    REQUIRE(NRef<String>(array[0]).value() == "hello");
+    REQUIRE(isA<Boolean>(array[1]));
+    REQUIRE(NRef<Boolean>(array[1]).value());
+    REQUIRE(isA<Null>(array[2]));
+  }
+  SECTION("Construct object Node with string and boolean values.", "[JSON][Node][Constructor][Object]")
+  {
+    Node jNode{ { "name", Node("Alice") }, { "active", Node(true) } };
+    REQUIRE(isA<Object>(jNode));
+    auto &obj = NRef<Object>(jNode);
+    REQUIRE(NRef<String>(obj["name"]).value() == "Alice");
+    REQUIRE(NRef<Boolean>(obj["active"]).value());
+  }
+  SECTION("Node::make<Hole>() returns a Hole variant.", "[JSON][Node][Constructor]")
+  {
+    Node jNode = Node::make<Hole>();
+    REQUIRE(isA<Hole>(jNode));
+  }
+  SECTION("Node move construction leaves source empty.", "[JSON][Node][Constructor]")
+  {
+    Node source(42);
+    REQUIRE_FALSE(source.isEmpty());
+    Node dest(std::move(source));
+    REQUIRE(isA<Number>(dest));
+    REQUIRE(NRef<Number>(dest).value<int>() == 42);
+    REQUIRE(source.isEmpty());
+  }
 }

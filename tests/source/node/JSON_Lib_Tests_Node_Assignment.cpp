@@ -135,4 +135,66 @@ TEST_CASE("Check use of Node assigment operators.", "[JSON][Node][Assignment]")
     REQUIRE(NRef<Number>(object["key3"][2]).value<int>() == 7);
     REQUIRE(NRef<Number>(object["key3"][3]).value<int>() == 8);
   }
+  SECTION("Newly created Node is empty.", "[JSON][Node][Assignment]") { REQUIRE(jNode.isEmpty()); }
+  SECTION("Node is not empty after assignment.", "[JSON][Node][Assignment]")
+  {
+    jNode = 42;
+    REQUIRE_FALSE(jNode.isEmpty());
+  }
+  SECTION("Assign true boolean to Node.", "[JSON][Node][Assignment][Boolean]")
+  {
+    jNode = true;
+    REQUIRE(isA<Boolean>(jNode));
+    REQUIRE(NRef<Boolean>(jNode).value());
+  }
+  SECTION("Reassign Node from integer to string changes variant type.", "[JSON][Node][Assignment]")
+  {
+    jNode = 99;
+    REQUIRE(isA<Number>(jNode));
+    jNode = std::string("hello");
+    REQUIRE(isA<String>(jNode));
+    REQUIRE(NRef<String>(jNode).value() == "hello");
+  }
+}
+
+TEST_CASE("Check Node type checking and indexing edge cases.", "[JSON][Node][Assignment]")
+{
+  Node jNode;
+  SECTION("NRef on wrong type throws Node::Error.", "[JSON][Node][Assignment][Exception]")
+  {
+    jNode = 999;
+    REQUIRE_THROWS_AS(NRef<String>(jNode), Node::Error);
+    REQUIRE_THROWS_WITH(NRef<String>(jNode), "Node Error: Node not a string.");
+  }
+  SECTION("NRef on correct type does not throw.", "[JSON][Node][Assignment]")
+  {
+    jNode = 999;
+    REQUIRE_NOTHROW(NRef<Number>(jNode));
+    REQUIRE(NRef<Number>(jNode).value<int>() == 999);
+  }
+  SECTION("Out-of-bounds const array index throws Node::Error.", "[JSON][Node][Assignment][Exception]")
+  {
+    jNode = { 1, 2, 3 };
+    const Node &constNode = jNode;
+    REQUIRE_THROWS_AS(constNode[10], Node::Error);
+    REQUIRE_THROWS_WITH(constNode[10], "Node Error: Invalid index used to access array.");
+  }
+  SECTION("Non-const out-of-bounds array index auto-resizes array with Holes.", "[JSON][Node][Assignment]")
+  {
+    jNode = { 1, 2 };
+    jNode[4] = 99;
+    REQUIRE(isA<Array>(jNode));
+    auto &array = NRef<Array>(jNode).value();
+    REQUIRE(array.size() == 5);
+    REQUIRE(isA<Hole>(array[2]));
+    REQUIRE(isA<Hole>(array[3]));
+    REQUIRE(NRef<Number>(array[4]).value<int>() == 99);
+  }
+  SECTION("Missing key const object access throws Node::Error.", "[JSON][Node][Assignment][Exception]")
+  {
+    jNode = { { "key1", 1 } };
+    const Node &constNode = jNode;
+    REQUIRE_THROWS_AS(constNode["missing"], Node::Error);
+    REQUIRE_THROWS_WITH(constNode["missing"], "Node Error: Invalid key used to access object.");
+  }
 }
