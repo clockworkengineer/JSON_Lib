@@ -136,4 +136,60 @@ TEST_CASE("Check Node Number conversion.", "[JSON][Node][Number]")
     REQUIRE_FALSE(!NRef<Number>(json.root()).is<float>());
     REQUIRE_FALSE(!equalFloatingPoint(NRef<Number>(json.root()).value<float>(), -9223372036854775808.0f, 0.0001));
   }
+  SECTION("Zero parses as int.", "[JSON][Node][Number]")
+  {
+    json.parse(BufferSource{ "0" });
+    REQUIRE(NRef<Number>(json.root()).is<int>());
+    REQUIRE(NRef<Number>(json.root()).value<int>() == 0);
+  }
+  SECTION("Negative small integer parses as int.", "[JSON][Node][Number][Int]")
+  {
+    json.parse(BufferSource{ "-12345" });
+    REQUIRE(NRef<Number>(json.root()).is<int>());
+    REQUIRE(NRef<Number>(json.root()).value<int>() == -12345);
+  }
+  SECTION("Negative float parses as float.", "[JSON][Node][Number][Float]")
+  {
+    json.parse(BufferSource{ "-678.899" });
+    REQUIRE(NRef<Number>(json.root()).is<float>());
+    REQUIRE_FALSE(!equalFloatingPoint(NRef<Number>(json.root()).value<float>(), -678.899f, 0.001));
+  }
+  SECTION("Integer just beyond int range parses as long.", "[JSON][Node][Number][Long]")
+  {
+    // 2147483648 = INT_MAX + 1, fits in long but not int
+    json.parse(BufferSource{ "2147483648" });
+    REQUIRE_FALSE(NRef<Number>(json.root()).is<int>());
+    REQUIRE(NRef<Number>(json.root()).value<long long>() == 2147483648ll);
+  }
+  SECTION("Double converted to int via value<int>().", "[JSON][Node][Number][Double]")
+  {
+    json.parse(BufferSource{ "9.99" });
+    const auto &num = NRef<Number>(json.root());
+    REQUIRE((num.is<float>() || num.is<double>()));
+    // value<int>() truncates (floors) the floating-point result
+    REQUIRE(num.value<int>() == 9);
+  }
+  SECTION("Double converted to float via value<float>().", "[JSON][Node][Number][Double]")
+  {
+    json.parse(BufferSource{ "3.141592653589793" });
+    // Number may store as float or double depending on precision needed
+    REQUIRE(NRef<Number>(json.root()).value<double>() != 0.0);
+    REQUIRE_FALSE(!equalFloatingPoint(NRef<Number>(json.root()).value<float>(), 3.14159f, 0.0001));
+  }
+  SECTION("toString() on a parsed integer.", "[JSON][Node][Number]")
+  {
+    json.parse(BufferSource{ "42" });
+    REQUIRE(NRef<Number>(json.root()).toString() == "42");
+  }
+  SECTION("toString() on a parsed negative integer.", "[JSON][Node][Number]")
+  {
+    json.parse(BufferSource{ "-99" });
+    REQUIRE(NRef<Number>(json.root()).toString() == "-99");
+  }
+  SECTION("toString() on a parsed float contains a decimal point.", "[JSON][Node][Number]")
+  {
+    json.parse(BufferSource{ "1.5" });
+    const std::string s = NRef<Number>(json.root()).toString();
+    REQUIRE(s.find('.') != std::string::npos);
+  }
 }
