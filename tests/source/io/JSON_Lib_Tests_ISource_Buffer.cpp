@@ -110,4 +110,71 @@ TEST_CASE("Check ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
     //  No translation of carriage return/linefeed occurs
     REQUIRE(result == "[true\r\n,\"Out of time\"\r\n,7.89043e+18\r\n,true\r\n]");
   }
+  SECTION("Create BufferSource, move to end, reset and verify current() returns first character.",
+    "[JSON][ISource][Buffer][Reset]")
+  {
+    BufferSource source{ R"({"key":1})" };
+    while (source.more()) { source.next(); }
+    source.reset();
+    REQUIRE(source.current() == '{');
+  }
+  SECTION(
+    "Create BufferSource, advance, reset and verify getPosition() returns {1,1}.", "[JSON][ISource][Buffer][Reset]")
+  {
+    BufferSource source{ R"({"key":1})" };
+    source.next();
+    source.next();
+    source.reset();
+    REQUIRE(source.getPosition() == std::make_pair(1L, 1L));
+  }
+  SECTION("Create BufferSource and verify getPosition() tracks line and column correctly.",
+    "[JSON][ISource][Buffer][Position]")
+  {
+    // next() increments column then, if the NEW current char is '\n', bumps lineNo and resets column to 1.
+    // So getPosition() reflects where the source *is now*, not where it just came from.
+    BufferSource source{ "ab\ncd" };
+    REQUIRE(source.getPosition() == std::make_pair(1L, 1L));// on 'a'  line=1, col=1
+    source.next();// advance to 'b', col becomes 2
+    REQUIRE(source.getPosition() == std::make_pair(1L, 2L));// on 'b'  line=1, col=2
+    source.next();// advance to '\n' -> lineNo++, col=1
+    REQUIRE(source.getPosition() == std::make_pair(2L, 1L));// on '\n' line=2, col=1
+    source.next();// advance to 'c', col becomes 2
+    REQUIRE(source.getPosition() == std::make_pair(2L, 2L));// on 'c'  line=2, col=2
+  }
+  SECTION("Create BufferSource, call ignoreWS() when already on non-whitespace - position should not change.",
+    "[JSON][ISource][Buffer][Whitespace]")
+  {
+    BufferSource source{ R"({"key":1})" };
+    REQUIRE(source.position() == 0);
+    source.ignoreWS();
+    REQUIRE(source.position() == 0);
+    REQUIRE(source.current() == '{');
+  }
+  SECTION("Create BufferSource and check match() fails gracefully when target is longer than remaining buffer.",
+    "[JSON][ISource][Buffer][Match]")
+  {
+    BufferSource source{ "ab" };
+    REQUIRE_FALSE(source.match("abcde"));
+    // After failed match, position must be restored
+    REQUIRE(source.position() == 0);
+    REQUIRE(source.current() == 'a');
+  }
+  SECTION("Create BufferSource and check match() in middle of stream advances to character after match.",
+    "[JSON][ISource][Buffer][Match]")
+  {
+    BufferSource source{ R"([true,"key"])" };
+    source.next();// move past '['
+    REQUIRE(source.match("true"));
+    REQUIRE(source.position() == 5);
+    REQUIRE(source.current() == ',');
+  }
+  SECTION("Create BufferSource with a single character.", "[JSON][ISource][Buffer][Construct]")
+  {
+    BufferSource source{ "x" };
+    REQUIRE(source.more());
+    REQUIRE(source.current() == 'x');
+    source.next();
+    REQUIRE_FALSE(source.more());
+    REQUIRE(source.current() == static_cast<char>(EOF));
+  }
 }

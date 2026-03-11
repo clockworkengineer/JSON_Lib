@@ -9,7 +9,7 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
   }
   SECTION("Check that File position() works correctly.", "[JSON][ISource][File][Position]")
   {
-    const std::string testFileName{  generateRandomFileName() };
+    const std::string testFileName{ generateRandomFileName() };
     JSON::toFile(testFileName, R"([true  , "Out of time",  7.89043e+18, true])");
     FileSource source{ testFileName };
     while (source.more() && !source.match("time")) { source.next(); }
@@ -151,5 +151,101 @@ TEST_CASE("Check ISource (File) interface.", "[JSON][ISource][File]")
     REQUIRE(result == "[true\n,\"Out of time\"\n,7.89043e+18\n,true\n]");
     source.close();
     std::filesystem::remove(testFileName);
+  }
+  SECTION("Create a FileSource that contains bare carriage return and verify it is passed through unchanged.",
+    "[JSON][ISource][File][Linefeed]")
+  {
+    std::string result;
+    const std::string testFileName{ generateRandomFileName() };
+    // Write raw bytes with a bare \r (not followed by \n)
+    {
+      std::ofstream out{ testFileName, std::ios::binary };
+      out << "a\rb";
+    }
+    FileSource source{ testFileName };
+    while (source.more()) {
+      result.push_back(source.current());
+      source.next();
+    }
+    // A bare \r (not followed by \n) is passed through as-is; only \r\n pairs are collapsed to \n
+    REQUIRE(result == "a\rb");
+    source.close();
+    std::filesystem::remove(testFileName);
+  }
+  SECTION("Create FileSource, move to end, reset and verify current() returns first character.",
+    "[JSON][ISource][File][Reset]")
+  {
+    const std::string testFileName{ prefixTestDataPath(kSingleJSONFile) };
+    FileSource source{ testFileName };
+    while (source.more()) { source.next(); }
+    source.reset();
+    REQUIRE(source.current() == '{');
+  }
+  SECTION("Create FileSource, advance, reset and verify getPosition() returns {1,1}.", "[JSON][ISource][File][Reset]")
+  {
+    const std::string testFileName{ prefixTestDataPath(kSingleJSONFile) };
+    FileSource source{ testFileName };
+    source.next();
+    source.next();
+    source.reset();
+    REQUIRE(source.getPosition() == std::make_pair(1L, 1L));
+  }
+  SECTION(
+    "Create FileSource and verify getPosition() tracks line and column correctly.", "[JSON][ISource][File][Position]")
+  {
+    const std::string testFileName{ generateRandomFileName() };
+    JSON::toFile(testFileName, "ab\ncd");
+    FileSource source{ testFileName };
+    REQUIRE(source.getPosition() == std::make_pair(1L, 1L));// on 'a'
+    source.next();// advance to 'b'
+    REQUIRE(source.getPosition() == std::make_pair(1L, 2L));// on 'b' line=1,col=2
+    source.next();// advance to '\n' -> lineNo++, col=1
+    REQUIRE(source.getPosition() == std::make_pair(2L, 1L));// on '\n' line=2,col=1
+    source.next();// advance to 'c'
+    REQUIRE(source.getPosition() == std::make_pair(2L, 2L));// on 'c' line=2,col=2
+    source.close();
+    std::filesystem::remove(testFileName);
+  }
+  SECTION("Create FileSource, call ignoreWS() on non-whitespace char - position should not change.",
+    "[JSON][ISource][File][Whitespace]")
+  {
+    const std::string testFileName{ prefixTestDataPath(kSingleJSONFile) };
+    FileSource source{ testFileName };
+    REQUIRE(source.position() == 0);
+    source.ignoreWS();
+    REQUIRE(source.position() == 0);
+    REQUIRE(source.current() == '{');
+  }
+  SECTION("Create FileSource and check match() fails gracefully when target is longer than remaining file.",
+    "[JSON][ISource][File][Match]")
+  {
+    const std::string testFileName{ generateRandomFileName() };
+    JSON::toFile(testFileName, "ab");
+    FileSource source{ testFileName };
+    REQUIRE_FALSE(source.match("abcde"));
+    // position must be restored after failed match
+    REQUIRE(source.position() == 0);
+    REQUIRE(source.current() == 'a');
+    source.close();
+    std::filesystem::remove(testFileName);
+  }
+  SECTION(
+    "Create FileSource and check match() mid-stream advances to character after match.", "[JSON][ISource][File][Match]")
+  {
+    const std::string testFileName{ generateRandomFileName() };
+    JSON::toFile(testFileName, R"([true,"key"])");
+    FileSource source{ testFileName };
+    source.next();// move past '['
+    REQUIRE(source.match("true"));
+    REQUIRE(source.position() == 5);
+    REQUIRE(source.current() == ',');
+    source.close();
+    std::filesystem::remove(testFileName);
+  }
+  SECTION("Create FileSource and check getFileName() returns the correct path.", "[JSON][ISource][File][GetFileName]")
+  {
+    const std::string testFileName{ prefixTestDataPath(kSingleJSONFile) };
+    FileSource source{ testFileName };
+    REQUIRE(source.getFileName() == testFileName);
   }
 }

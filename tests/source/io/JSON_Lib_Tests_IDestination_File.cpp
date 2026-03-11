@@ -66,7 +66,7 @@ TEST_CASE("Check IDestination (File) interface.", "[JSON][IDestination][File]")
     REQUIRE(JSON::fromFile(fileName) == ("65767"));
     std::filesystem::remove(fileName);
   }
-  SECTION("Create FileDestination and add content with linefeeds.", "[JSON][IDestination][Buffer][Linefeed]")
+  SECTION("Create FileDestination and add content with linefeeds.", "[JSON][IDestination][File][Linefeed]")
   {
     const std::string fileName{ generateRandomFileName() };
     FileDestination file{ fileName };
@@ -75,8 +75,80 @@ TEST_CASE("Check IDestination (File) interface.", "[JSON][IDestination][File]")
     file.add("22222\n");
     file.add("33333\n");
     file.close();
+    // Each '\n' is expanded to '\r\n' on disk, giving 18 chars + 3 extra = 21
     REQUIRE(std::filesystem::file_size(filePath) == 21);
     REQUIRE(JSON::fromFile(fileName) == ("65767\n22222\n33333\n"));
+    std::filesystem::remove(fileName);
+  }
+  SECTION("Create FileDestination, add char and verify content.", "[JSON][IDestination][File][Add]")
+  {
+    const std::string fileName{ generateRandomFileName() };
+    FileDestination file{ fileName };
+    file.add('X');
+    file.close();
+    REQUIRE(JSON::fromFile(fileName) == "X");
+    std::filesystem::remove(fileName);
+  }
+  SECTION("Create FileDestination, add a std::string_view and check result.", "[JSON][IDestination][File][Add]")
+  {
+    const std::string fileName{ generateRandomFileName() };
+    FileDestination file{ fileName };
+    std::filesystem::path filePath{ fileName };
+    std::string_view sv{ "hello" };
+    file.add(sv);
+    file.close();
+    REQUIRE(std::filesystem::file_size(filePath) == 5);
+    REQUIRE(JSON::fromFile(fileName) == "hello");
+    std::filesystem::remove(fileName);
+  }
+  SECTION("Create FileDestination and check last() returns the most recently added character.",
+    "[JSON][IDestination][File][Last]")
+  {
+    const std::string fileName{ generateRandomFileName() };
+    FileDestination file{ fileName };
+    file.add("abc");
+    REQUIRE(file.last() == 'c');
+    file.add('Z');
+    REQUIRE(file.last() == 'Z');
+    file.close();
+    std::filesystem::remove(fileName);
+  }
+  SECTION("Create FileDestination and check size() grows correctly.", "[JSON][IDestination][File][Size]")
+  {
+    const std::string fileName{ generateRandomFileName() };
+    FileDestination file{ fileName };
+    REQUIRE(file.size() == 0);
+    file.add("ab");
+    REQUIRE(file.size() == 2);
+    file.add('c');
+    REQUIRE(file.size() == 3);
+    file.close();
+    std::filesystem::remove(fileName);
+  }
+  SECTION("Create FileDestination and check getFileName() returns the correct path.",
+    "[JSON][IDestination][File][GetFileName]")
+  {
+    const std::string fileName{ generateRandomFileName() };
+    FileDestination file{ fileName };
+    REQUIRE(file.getFileName() == fileName);
+    file.close();
+    std::filesystem::remove(fileName);
+  }
+  SECTION("Create FileDestination and use with JSON stringify.", "[JSON][IDestination][File][Stringify]")
+  {
+    const std::string fileName{ generateRandomFileName() };
+    const JSON json(R"({"key":42})");
+    {
+      FileDestination file{ fileName };
+      json.stringify(file);
+      file.close();
+    }
+    const std::string result{ JSON::fromFile(fileName) };
+    REQUIRE_FALSE(result.empty());
+    const JSON roundtrip(result);
+    BufferDestination buffer;
+    roundtrip.stringify(buffer);
+    REQUIRE(result == buffer.toString());
     std::filesystem::remove(fileName);
   }
 }
