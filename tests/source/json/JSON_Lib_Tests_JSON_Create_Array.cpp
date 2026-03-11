@@ -145,4 +145,66 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
     REQUIRE(jsonDestination.toString()
             == R"([null,null,null,null,null,[1.0,2.0,3,4.333,"5.0","test test test test",false,null]])");
   }
+  SECTION("Create JSON array using ArrayInitializer constructor and validate.", "[JSON][Create][Array][initializer]")
+  {
+    const JSON json{ JSON::ArrayInitializer{ 1, 2.5, "three", true, nullptr } };
+    REQUIRE_FALSE(!isA<Array>(json.root()));
+    REQUIRE(NRef<Array>(json.root()).size() == 5);
+    REQUIRE(NRef<Number>(json.root()[0]).value<int>() == 1);
+    REQUIRE_FALSE(!equalFloatingPoint(NRef<Number>(json.root()[1]).value<double>(), 2.5, 0.0001));
+    REQUIRE(NRef<String>(json.root()[2]).value() == "three");
+    REQUIRE(NRef<Boolean>(json.root()[3]).value() == true);
+    REQUIRE(NRef<Null>(json.root()[4]).value() == nullptr);
+  }
+  SECTION("Initialise root JSON array entry containing false boolean and validate.", "[JSON][Create][Array][Boolean]")
+  {
+    JSON json;
+    json[0] = false;
+    REQUIRE_FALSE(!isA<Boolean>(json[0]));
+    REQUIRE(NRef<Boolean>(json.root()[0]).value() == false);
+  }
+  SECTION("Overwrite an existing array element and validate.", "[JSON][Create][Array][Overwrite]")
+  {
+    JSON json;
+    json[0] = 42;
+    REQUIRE(NRef<Number>(json.root()[0]).value<int>() == 42);
+    json[0] = "replaced";
+    REQUIRE_FALSE(!isA<String>(json[0]));
+    REQUIRE(NRef<String>(json.root()[0]).value() == "replaced");
+  }
+  SECTION("Build array sequentially and verify size().", "[JSON][Create][Array][Size]")
+  {
+    JSON json;
+    json[0] = 10;
+    json[1] = 20;
+    json[2] = 30;
+    REQUIRE(NRef<Array>(json.root()).size() == 3);
+    BufferDestination dest;
+    REQUIRE_NOTHROW(json.stringify(dest));
+    REQUIRE(dest.toString() == "[10,20,30]");
+  }
+  SECTION("Access out-of-bounds index on const array throws Node::Error.", "[JSON][Create][Array][Exception]")
+  {
+    const JSON json(R"([1,2,3])");
+    REQUIRE_THROWS_AS(json.root()[5], Node::Error);
+    REQUIRE_THROWS_WITH(json.root()[5], "Node Error: Invalid index used to access array.");
+  }
+  SECTION("Create three-level nested array and stringify.", "[JSON][Create][Array][Nested]")
+  {
+    JSON json;
+    json[0][0][0] = 99;
+    BufferDestination dest;
+    REQUIRE_NOTHROW(json.stringify(dest));
+    REQUIRE(dest.toString() == "[[[99]]]");
+  }
+  SECTION("Create JSON array and print() produces non-empty formatted output.", "[JSON][Create][Array][Print]")
+  {
+    const JSON json(R"([1,"two",true,null])");
+    BufferDestination dest;
+    REQUIRE_NOTHROW(json.print(dest));
+    REQUIRE_FALSE(dest.toString().empty());
+    // Printed output must contain each original value
+    REQUIRE(dest.toString().find("two") != std::string::npos);
+    REQUIRE(dest.toString().find("true") != std::string::npos);
+  }
 }
