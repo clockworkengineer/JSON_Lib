@@ -239,4 +239,118 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     REQUIRE(analyzer.totalNumbers == 2);
     REQUIRE(analyzer.totalBoolean == 1);
   }
+  SECTION("Decode a bool (false) and traverse", "[JSON][Traverse][Boolean]")
+  {
+    BufferSource source{ "false" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 1);
+    REQUIRE(analyzer.totalBoolean == 1);
+  }
+  SECTION("Decode an Integer (0) and traverse", "[JSON][Traverse][Integer]")
+  {
+    BufferSource source{ "0" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 1);
+    REQUIRE(analyzer.totalInteger == 1);
+    REQUIRE(analyzer.totalNumbers == 1);
+  }
+  SECTION(R"(Decode an empty string ("") and traverse)", "[JSON][Traverse][String]")
+  {
+    BufferSource source{ R"("")" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 1);
+    REQUIRE(analyzer.totalStrings == 1);
+  }
+  SECTION("Decode an empty array ([]) and traverse", "[JSON][Traverse][Array]")
+  {
+    BufferSource source{ "[]" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 1);
+    REQUIRE(analyzer.totalArrays == 1);
+    REQUIRE(analyzer.totalNumbers == 0);
+  }
+  SECTION("Decode an empty object ({}) and traverse", "[JSON][Traverse][Object]")
+  {
+    BufferSource source{ "{}" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 1);
+    REQUIRE(analyzer.totalObjects == 1);
+    REQUIRE(analyzer.totalNumbers == 0);
+  }
+  SECTION(R"(Decode an array of strings (["one","two","three"]) and traverse)", "[JSON][Traverse][Array]")
+  {
+    BufferSource source{ R"(["one","two","three"])" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 4);
+    REQUIRE(analyzer.totalArrays == 1);
+    REQUIRE(analyzer.totalStrings == 3);
+  }
+  SECTION("Decode an array of booleans ([true,false,true]) and traverse", "[JSON][Traverse][Array]")
+  {
+    BufferSource source{ "[true,false,true]" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 4);
+    REQUIRE(analyzer.totalArrays == 1);
+    REQUIRE(analyzer.totalBoolean == 3);
+  }
+  SECTION("Decode an array of nulls ([null,null,null]) and traverse", "[JSON][Traverse][Array]")
+  {
+    BufferSource source{ "[null,null,null]" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 4);
+    REQUIRE(analyzer.totalArrays == 1);
+    REQUIRE(analyzer.totalNull == 3);
+  }
+  SECTION("Decode an array of arrays ([[1,2],[3,4]]) and traverse", "[JSON][Traverse][Array]")
+  {
+    BufferSource source{ "[[1,2],[3,4]]" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 7);
+    REQUIRE(analyzer.totalArrays == 3);
+    REQUIRE(analyzer.totalNumbers == 4);
+  }
+  SECTION(R"(Decode a deeply nested object ({"a":{"b":{"c":1}}}) and traverse)", "[JSON][Traverse][Object]")
+  {
+    BufferSource source{ R"({"a":{"b":{"c":1}}})" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 4);
+    REQUIRE(analyzer.totalObjects == 3);
+    REQUIRE(analyzer.totalNumbers == 1);
+    REQUIRE(analyzer.totalInteger == 1);
+  }
+  SECTION(R"(Decode an object with mixed types ({"name":"Alice","age":30,"active":true,"score":null}) and traverse)",
+    "[JSON][Traverse][Object]")
+  {
+    BufferSource source{ R"({"name":"Alice","age":30,"active":true,"score":null})" };
+    bEncode.parse(source);
+    JSON_Analyzer analyzer;
+    bEncode.traverse(analyzer);
+    REQUIRE(analyzer.totalNodes == 5);
+    REQUIRE(analyzer.totalObjects == 1);
+    REQUIRE(analyzer.totalStrings == 1);
+    REQUIRE(analyzer.totalNumbers == 1);
+    REQUIRE(analyzer.totalInteger == 1);
+    REQUIRE(analyzer.totalBoolean == 1);
+    REQUIRE(analyzer.totalNull == 1);
+  }
 }
