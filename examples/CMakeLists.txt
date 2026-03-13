@@ -11,7 +11,9 @@ file(GLOB EXAMPLE_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/source/ "${CMAKE_
 
 # Build each program
 foreach(EXAMPLE_PROGRAM ${EXAMPLE_SOURCES})
-  process_file(${EXAMPLE_PROGRAM})
+  if(NOT ${EXAMPLE_PROGRAM} STREQUAL "JSON_Custom_Struct.cpp" AND NOT ${EXAMPLE_PROGRAM} STREQUAL "JSON_Pretty_Print.cpp")
+    process_file(${EXAMPLE_PROGRAM})
+  endif()
 endforeach(EXAMPLE_PROGRAM ${EXAMPLE_SOURCES})
 
 add_custom_command(TARGET JSON_Parse_File.cpp POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/files ${CMAKE_CURRENT_BINARY_DIR}/files)
