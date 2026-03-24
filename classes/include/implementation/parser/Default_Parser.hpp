@@ -2,6 +2,7 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
+#include "JSON_Char_Constants.hpp"
 
 namespace JSON_Lib {
 
@@ -26,41 +27,48 @@ public:
 
 private:
   // Parse JSON
-  [[nodiscard]] static Object::Entry parseObjectEntry(ISource &source, const ITranslator &translator, unsigned long parserDepth);
-  [[nodiscard]] static Node parseString(ISource &source, const ITranslator &translator, [[maybe_unused]] unsigned long parserDepth);
-  [[nodiscard]] static Node parseNumber(ISource &source, [[maybe_unused]] const ITranslator &translator, [[maybe_unused]] unsigned long parserDepth);
-  [[nodiscard]] static Node parseBoolean(ISource &source, [[maybe_unused]] const ITranslator &translator, [[maybe_unused]] unsigned long parserDepth);
-  [[nodiscard]] static Node parseNull(ISource &source, [[maybe_unused]] const ITranslator &translator, [[maybe_unused]] unsigned long parserDepth);
+  [[nodiscard]] static Object::Entry
+    parseObjectEntry(ISource &source, const ITranslator &translator, unsigned long parserDepth);
+  [[nodiscard]] static Node
+    parseString(ISource &source, const ITranslator &translator, [[maybe_unused]] unsigned long parserDepth);
+  [[nodiscard]] static Node parseNumber(ISource &source,
+    [[maybe_unused]] const ITranslator &translator,
+    [[maybe_unused]] unsigned long parserDepth);
+  [[nodiscard]] static Node parseBoolean(ISource &source,
+    [[maybe_unused]] const ITranslator &translator,
+    [[maybe_unused]] unsigned long parserDepth);
+  [[nodiscard]] static Node parseNull(ISource &source,
+    [[maybe_unused]] const ITranslator &translator,
+    [[maybe_unused]] unsigned long parserDepth);
   [[nodiscard]] static Node parseObject(ISource &source, const ITranslator &translator, unsigned long parserDepth);
   [[nodiscard]] static Node parseArray(ISource &source, const ITranslator &translator, unsigned long parserDepth);
   [[nodiscard]] static Node parseNodes(ISource &source, const ITranslator &translator, unsigned long parserDepth);
   // Parser routing table
   using ParseFunc = std::function<Node(ISource &, const ITranslator &, unsigned long parserDepth)>;
-  inline static std::map<char, ParseFunc> parsers = { { '{', parseObject },
-    { '[', parseArray },
+  inline static std::map<char, ParseFunc> parsers = { { JSON_Lib::kObjectBegin, parseObject },
+    { JSON_Lib::kArrayBegin, parseArray },
     { 't', parseBoolean },
     { 'f', parseBoolean },
     { 'n', parseNull },
-    { '"', parseString },
-    { '\'', parseString },
-    { '+', parseNumber },
-    { '-', parseNumber },
-    { '0', parseNumber },
-    { '1', parseNumber },
-    { '2', parseNumber },
-    { '3', parseNumber },
-    { '4', parseNumber },
-    { '5', parseNumber },
-    { '6', parseNumber },
-    { '7', parseNumber },
-    { '8', parseNumber },
-    { '9', parseNumber } };
+    { JSON_Lib::kStringQuote, parseString },
+    { JSON_Lib::kStringSingleQuote, parseString },
+    { JSON_Lib::kPlus, parseNumber },
+    { JSON_Lib::kMinus, parseNumber },
+    { JSON_Lib::kZero, parseNumber },
+    { JSON_Lib::kOne, parseNumber },
+    { JSON_Lib::kTwo, parseNumber },
+    { JSON_Lib::kThree, parseNumber },
+    { JSON_Lib::kFour, parseNumber },
+    { JSON_Lib::kFive, parseNumber },
+    { JSON_Lib::kSix, parseNumber },
+    { JSON_Lib::kSeven, parseNumber },
+    { JSON_Lib::kEight, parseNumber },
+    { JSON_Lib::kNine, parseNumber } };
 
   // Reference to JSON translator interface
   const ITranslator &jsonTranslator;
   // Maximum parser depth
-  inline static unsigned long maxParserDepth {kDefaultMaxParserDepth};
-
+  inline static unsigned long maxParserDepth{ kDefaultMaxParserDepth };
 };
 
 }// namespace JSON_Lib

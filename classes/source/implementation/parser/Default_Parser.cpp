@@ -22,8 +22,8 @@ namespace JSON_Lib {
 /// <returns>True then character is a valid escape character.</returns>
 bool validEscape(const char escape)
 {
-  return escape == '\\' || escape == 't' || escape == '"' || escape == 'b' || escape == 'f' || escape == 'n'
-         || escape == 'r' || escape == 'u';
+  return escape == JSON_Lib::kEscape || escape == 't' || escape == JSON_Lib::kStringQuote || escape == 'b'
+         || escape == 'f' || escape == 'n' || escape == 'r' || escape == 'u';
 }
 /// <summary>
 /// Extract a string from a JSON encoded source stream.
@@ -38,7 +38,7 @@ std::string extractString(ISource &source, const ITranslator &translator)
   if (source.current() != '"') { throw SyntaxError(source.getPosition(), "Missing opening '\"' on string."); }
   source.next();
   std::string extracted;
-  while (source.more() && source.current() != '"') {
+  while (source.more() && source.current() != JSON_Lib::kStringQuote) {
     if (source.current() == '\\') {
       extracted += '\\';
       source.next();
@@ -47,9 +47,7 @@ std::string extractString(ISource &source, const ITranslator &translator)
     }
     extracted += source.current();
     stringLength++;
-    if (stringLength>String::getMaxStringLength()) {
-      throw SyntaxError("String size exceeds maximum allowed size.");
-    }
+    if (stringLength > String::getMaxStringLength()) { throw SyntaxError("String size exceeds maximum allowed size."); }
     source.next();
   }
   if (source.current() != '"') { throw SyntaxError(source.getPosition(), "Missing closing '\"' on string."); }
@@ -65,7 +63,8 @@ std::string extractString(ISource &source, const ITranslator &translator)
 /// <returns>True on end of number</returns>
 bool endOfNumber(const ISource &source)
 {
-  return source.isWS() || source.current() == ',' || source.current() == ']' || source.current() == '}';
+  return source.isWS() || source.current() == JSON_Lib::kComma || source.current() == JSON_Lib::kArrayEnd
+         || source.current() == JSON_Lib::kObjectEnd;
 }
 /// <summary>
 /// Parse an Object key/value pair from a JSON encoded source stream.
@@ -74,14 +73,17 @@ bool endOfNumber(const ISource &source)
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Object key/value pair.</returns>
-Object::Entry Default_Parser::parseObjectEntry(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
+Object::Entry
+  Default_Parser::parseObjectEntry(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
   source.ignoreWS();
   const std::string key{ extractString(source, translator) };
   source.ignoreWS();
-  if (source.current() != ':') { throw SyntaxError(source.getPosition(), "Missing ':' in key value pair."); }
+  if (source.current() != JSON_Lib::kColon) {
+    throw SyntaxError(source.getPosition(), "Missing ':' in key value pair.");
+  }
   source.next();
-  return {key, parseNodes(source, translator, parserDepth + 1)};
+  return { key, parseNodes(source, translator, parserDepth + 1) };
 }
 /// <summary>
 /// Parse a string from a JSON source stream.
@@ -90,7 +92,9 @@ Object::Entry Default_Parser::parseObjectEntry(ISource &source, const ITranslato
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>String Node.</returns>
-Node Default_Parser::parseString(ISource &source, const ITranslator &translator,[[maybe_unused]] const unsigned long parserDepth)
+Node Default_Parser::parseString(ISource &source,
+  const ITranslator &translator,
+  [[maybe_unused]] const unsigned long parserDepth)
 {
   return Node::make<String>(extractString(source, translator));
 }
@@ -101,7 +105,9 @@ Node Default_Parser::parseString(ISource &source, const ITranslator &translator,
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Number Node.</returns>
-Node Default_Parser::parseNumber(ISource &source, [[maybe_unused]]const ITranslator &translator, [[maybe_unused]]const unsigned long parserDepth)
+Node Default_Parser::parseNumber(ISource &source,
+  [[maybe_unused]] const ITranslator &translator,
+  [[maybe_unused]] const unsigned long parserDepth)
 {
   std::string string;
   for (; source.more() && !endOfNumber(source); source.next()) { string += source.current(); }
@@ -118,7 +124,9 @@ Node Default_Parser::parseNumber(ISource &source, [[maybe_unused]]const ITransla
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Boolean Node.</returns>
-Node Default_Parser::parseBoolean(ISource &source,  [[maybe_unused]]const ITranslator &translator,[[maybe_unused]] const unsigned long parserDepth)
+Node Default_Parser::parseBoolean(ISource &source,
+  [[maybe_unused]] const ITranslator &translator,
+  [[maybe_unused]] const unsigned long parserDepth)
 {
   if (source.match("true")) { return Node::make<Boolean>(true); }
   if (source.match("false")) { return Node::make<Boolean>(false); }
@@ -131,7 +139,9 @@ Node Default_Parser::parseBoolean(ISource &source,  [[maybe_unused]]const ITrans
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Null Node.</returns>
-Node Default_Parser::parseNull(ISource &source,  [[maybe_unused]]const ITranslator &translator, [[maybe_unused]]const unsigned long parserDepth)
+Node Default_Parser::parseNull(ISource &source,
+  [[maybe_unused]] const ITranslator &translator,
+  [[maybe_unused]] const unsigned long parserDepth)
 {
   if (!source.match("null")) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
   return Node::make<Null>();
@@ -149,13 +159,15 @@ Node Default_Parser::parseObject(ISource &source, const ITranslator &translator,
   source.next();
   source.ignoreWS();
   if (source.current() != '}') {
-    NRef<Object>(jNodeObject).add(parseObjectEntry(source, translator,parserDepth));
+    NRef<Object>(jNodeObject).add(parseObjectEntry(source, translator, parserDepth));
     while (source.current() == ',') {
       source.next();
       NRef<Object>(jNodeObject).add(parseObjectEntry(source, translator, parserDepth));
     }
   }
-  if (source.current() != '}') { throw SyntaxError(source.getPosition(), "Missing closing '}' in object definition."); }
+  if (source.current() != JSON_Lib::kObjectEnd) {
+    throw SyntaxError(source.getPosition(), "Missing closing '}' in object definition.");
+  }
   source.next();
   return jNodeObject;
 }
@@ -172,13 +184,15 @@ Node Default_Parser::parseArray(ISource &source, const ITranslator &translator, 
   source.next();
   source.ignoreWS();
   if (source.current() != ']') {
-    NRef<Array>(jNodeArray).add(parseNodes(source, translator,parserDepth+1));
+    NRef<Array>(jNodeArray).add(parseNodes(source, translator, parserDepth + 1));
     while (source.current() == ',') {
       source.next();
-      NRef<Array>(jNodeArray).add(parseNodes(source, translator, parserDepth+1));
+      NRef<Array>(jNodeArray).add(parseNodes(source, translator, parserDepth + 1));
     }
   }
-  if (source.current() != ']') { throw SyntaxError(source.getPosition(), "Missing closing ']' in array definition."); }
+  if (source.current() != JSON_Lib::kArrayEnd) {
+    throw SyntaxError(source.getPosition(), "Missing closing ']' in array definition.");
+  }
   source.next();
   return jNodeArray;
 }
@@ -193,15 +207,13 @@ Node Default_Parser::parseArray(ISource &source, const ITranslator &translator, 
 /// <returns>Pointer to Node.</returns>
 Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
-  if (parserDepth>=getMaxParserDepth()) {
-    throw SyntaxError("Maximum parser depth exceeded.");
-  }
+  if (parserDepth >= getMaxParserDepth()) { throw SyntaxError("Maximum parser depth exceeded."); }
   source.ignoreWS();
   const auto it = parsers.find(source.current());
   if (it == parsers.end()) {
     throw SyntaxError(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null.");
   }
-  Node jNode = it->second(source, translator,  parserDepth);
+  Node jNode = it->second(source, translator, parserDepth);
   source.ignoreWS();
   return jNode;
 }
