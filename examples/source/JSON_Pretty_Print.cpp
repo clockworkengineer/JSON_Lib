@@ -33,8 +33,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     minOut << json.stringify(js::StringifyFormat::Minified);
     minOut.close();
     PLOG_INFO << "Minified JSON written to: " << minifiedFile;
-  }
-  catch (const std::exception &ex) {
+  } catch (const std::exception &ex) {
     PLOG_ERROR << ex.what();
     return 1;
   }

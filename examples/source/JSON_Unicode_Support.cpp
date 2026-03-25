@@ -26,8 +26,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     std::cout << "Greeting: " << json["greeting"].asString() << std::endl;
     std::cout << "Emoji: " << json["emoji"].asString() << std::endl;
     std::cout << "Full JSON: " << json.stringify(js::StringifyFormat::Pretty) << std::endl;
-  }
-  catch (const std::exception &ex) {
+  } catch (const std::exception &ex) {
     PLOG_ERROR << ex.what();
     return 1;
   }
