@@ -185,6 +185,6 @@ TEST_CASE("Check JSON::version() api.", "[JSON][Version]")
   SECTION("version() returns a non-empty string.", "[JSON][Version]") { REQUIRE_FALSE(JSON::version().empty()); }
   SECTION("version() string contains the version number.", "[JSON][Version]")
   {
-    REQUIRE(JSON::version().find("1.1.0") != std::string::npos);
+    REQUIRE(JSON::version().find("1.2.0") != std::string::npos);
   }
 }
