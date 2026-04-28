@@ -53,7 +53,8 @@ set(TEST_SOURCES
   source/stringify/JSON_Lib_Tests_Stringify_Print.cpp
   source/misc/JSON_Lib_Tests_Misc.cpp
   source/misc/JSON_Lib_Tests_Helper.cpp
-  source/traverse/JSON_Lib_Tests_Traverse.cpp)
+  source/traverse/JSON_Lib_Tests_Traverse.cpp
+  source/benchmark/JSON_Lib_Tests_Benchmark.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
