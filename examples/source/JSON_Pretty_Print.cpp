@@ -23,14 +23,18 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     json.parse(js::FileSource{ inputFile });
 
     // Pretty-print
+    js::BufferDestination prettyDest;
+    json.print(prettyDest);
     std::ofstream prettyOut(prettyFile);
-    prettyOut << json.stringify(js::StringifyFormat::Pretty);
+    prettyOut << prettyDest.toString();
     prettyOut.close();
     PLOG_INFO << "Pretty-printed JSON written to: " << prettyFile;
 
     // Minify
+    js::BufferDestination minDest;
+    json.stringify(minDest);
     std::ofstream minOut(minifiedFile);
-    minOut << json.stringify(js::StringifyFormat::Minified);
+    minOut << minDest.toString();
     minOut.close();
     PLOG_INFO << "Minified JSON written to: " << minifiedFile;
   } catch (const std::exception &ex) {

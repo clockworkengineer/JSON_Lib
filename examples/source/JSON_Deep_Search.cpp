@@ -14,15 +14,24 @@ namespace js = JSON_Lib;
 #include <iostream>
 
 // Recursively search for all values with the given key
+static std::string nodeToString(const js::Node &node)
+{
+  js::BufferDestination destination;
+  js::Default_Stringify{}.stringify(node, destination, 0);
+  return destination.toString();
+}
+
 void findAllByKey(const js::Node &node, const std::string &key, std::vector<std::string> &results)
 {
-  if (node.isObject()) {
-    for (const auto &[k, v] : node.asObject()) {
-      if (k == key) { results.push_back(v.stringify()); }
-      findAllByKey(v, key, results);
+  if (js::isA<js::Object>(node)) {
+    for (const auto &entry : js::NRef<js::Object>(node).value()) {
+      const std::string_view entryKey = entry.getKey();
+      const js::Node &entryNode = entry.getNode();
+      if (entryKey == key) { results.push_back(nodeToString(entryNode)); }
+      findAllByKey(entryNode, key, results);
     }
-  } else if (node.isArray()) {
-    for (const auto &item : node.asArray()) { findAllByKey(item, key, results); }
+  } else if (js::isA<js::Array>(node)) {
+    for (const auto &item : js::NRef<js::Array>(node).value()) { findAllByKey(item, key, results); }
   }
 }
 

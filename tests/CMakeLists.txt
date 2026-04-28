@@ -53,8 +53,7 @@ set(TEST_SOURCES
   source/stringify/JSON_Lib_Tests_Stringify_Print.cpp
   source/misc/JSON_Lib_Tests_Misc.cpp
   source/misc/JSON_Lib_Tests_Helper.cpp
-  source/traverse/JSON_Lib_Tests_Traverse.cpp
-  source/benchmark/JSON_Lib_Tests_Benchmark.cpp)
+  source/traverse/JSON_Lib_Tests_Traverse.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -64,6 +63,15 @@ target_precompile_headers(${TEST_EXECUTABLE} REUSE_FROM JSON_Lib)
 # Use Catch2's test discovery for VS Code Test Explorer integration
 include(Catch)
 catch_discover_tests(${TEST_EXECUTABLE})
+
+set(BENCHMARK_EXECUTABLE ${JSON_LIBRARY_NAME}_Benchmarks)
+set(BENCHMARK_SOURCES
+  source/benchmark/JSON_Lib_Tests_Benchmark.cpp)
+add_executable(${BENCHMARK_EXECUTABLE} ${BENCHMARK_SOURCES})
+target_include_directories(${BENCHMARK_EXECUTABLE} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(${BENCHMARK_EXECUTABLE} ${JSON_LIBRARY_NAME} Catch2::Catch2WithMain)
+target_precompile_headers(${BENCHMARK_EXECUTABLE} REUSE_FROM JSON_Lib)
+catch_discover_tests(${BENCHMARK_EXECUTABLE})
 
 add_custom_command(TARGET ${TEST_EXECUTABLE} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/files files)
 add_custom_command(TARGET ${TEST_EXECUTABLE} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/files ${CMAKE_CURRENT_BINARY_DIR}/files)

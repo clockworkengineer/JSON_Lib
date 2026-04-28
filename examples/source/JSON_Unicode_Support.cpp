@@ -23,9 +23,12 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     js::JSON json;
     json.parse(js::BufferSource{ unicodeJSON });
 
-    std::cout << "Greeting: " << json["greeting"].asString() << std::endl;
-    std::cout << "Emoji: " << json["emoji"].asString() << std::endl;
-    std::cout << "Full JSON: " << json.stringify(js::StringifyFormat::Pretty) << std::endl;
+    std::cout << "Greeting: " << js::NRef<js::String>(json["greeting"]).value() << std::endl;
+    std::cout << "Emoji: " << js::NRef<js::String>(json["emoji"]).value() << std::endl;
+
+    js::BufferDestination fullDest;
+    json.print(fullDest);
+    std::cout << "Full JSON: " << fullDest.toString() << std::endl;
   } catch (const std::exception &ex) {
     PLOG_ERROR << ex.what();
     return 1;
