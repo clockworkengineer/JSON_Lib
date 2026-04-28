@@ -3,7 +3,8 @@
 namespace JSON_Lib {
 
 // Construct Node from raw values
-template<typename T> Node::Node(T value)
+template<typename T, typename>
+Node::Node(T value)
 {
   if constexpr (std::is_same_v<T, bool>) {
     *this = Node::make<Boolean>(value);
@@ -11,10 +12,8 @@ template<typename T> Node::Node(T value)
     *this = Node::make<Number>(value);
   } else if constexpr (std::is_same_v<T, std::nullptr_t>) {
     *this = make<Null>();
-  } else if constexpr (std::is_same_v<T, const char *> || std::is_same_v<T, std::string>) {
+  } else if constexpr (std::is_convertible_v<T, std::string_view>) {
     *this = Node::make<String>(value);
-  } else if constexpr (std::is_convertible_v<T, std::unique_ptr<Variant>>) {
-    jNodeVariant = std::move(value);
   }
 }
 // Convert an initializer list type to JMode

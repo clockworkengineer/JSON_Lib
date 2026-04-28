@@ -59,7 +59,9 @@ private:
     if (!NRef<Object>(jNode).value().empty()) {
       for (const auto &entryNode : NRef<Object>(jNode).value()) {
         destination.add(calculateIndent(destination, indent));
-        destination.add("\"" + yamlTranslator->to(NRef<String>(entryNode.getKeyNode()).value()) + "\"");
+        destination.add("\"");
+        destination.add(yamlTranslator->to(entryNode.getKey()));
+        destination.add("\"");
         destination.add(": ");
         if (isA<Array>(entryNode.getNode()) || isA<Object>(entryNode.getNode())) { destination.add('\n'); }
         stringifyNodes(entryNode.getNode(), destination, indent + 2);

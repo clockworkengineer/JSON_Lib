@@ -58,24 +58,34 @@ private:
       throw Error("Unknown Node type encountered during stringification.");
     }
   }
+  static void addIndent(IDestination &destination, const unsigned long indent)
+  {
+    for (unsigned long count = 0; count < indent; ++count) {
+      destination.add(' ');
+    }
+  }
+
   static void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long indent)
   {
     size_t commaCount = NRef<Object>(jNode).value().size() - 1;
     destination.add('{');
     if (indent != 0) { destination.add('\n'); }
     for (auto &entry : NRef<Object>(jNode).value()) {
-      if (indent != 0) { destination.add(std::string(indent, ' ')); }
-      stringifyNodes(entry.getKeyNode(), destination, indent != 0 ? indent + printIndent : 0);
-      destination.add(":");
-      if (indent != 0) { destination.add(" "); }
+      if (indent != 0) { addIndent(destination, indent); }
+      stringifyNodes(Node(entry.getKey()), destination, indent != 0 ? indent + printIndent : 0);
+      destination.add(':');
+      if (indent != 0) { destination.add(' '); }
       stringifyNodes(entry.getNode(), destination, indent != 0 ? indent + printIndent : 0);
       if (commaCount-- > 0) {
-        destination.add(",");
+        destination.add(',');
         if (indent != 0) { destination.add('\n'); }
       }
     }
-    if (indent != 0) { destination.add("\n" + std::string(indent - printIndent, ' ')); }
-    destination.add("}");
+    if (indent != 0) {
+      destination.add('\n');
+      addIndent(destination, indent - printIndent);
+    }
+    destination.add('}');
   }
   static void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long indent)
   {
@@ -106,7 +116,9 @@ private:
   static void stringifyNull([[maybe_unused]]const Node &jNode, IDestination &destination) { destination.add(Null::toString()); }
   static void stringifyString(const Node &jNode, IDestination &destination)
   {
-    destination.add('"' + jsonTranslator->to(NRef<String>(jNode).toString()) + '"');
+    destination.add('"');
+    destination.add(jsonTranslator->to(NRef<String>(jNode).toString()));
+    destination.add('"');
   }
 
   inline static std::unique_ptr<ITranslator> jsonTranslator;

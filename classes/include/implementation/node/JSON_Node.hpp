@@ -1,9 +1,17 @@
 #pragma once
 
+#include <memory>
+#include <stdexcept>
+#include <string_view>
+#include <type_traits>
+#include <utility>
+
 namespace JSON_Lib {
 
 struct Node
 {
+  explicit Node(std::unique_ptr<Variant> variant) : jNodeVariant(std::move(variant)) {}
+
   // Node Error
   struct Error final : std::runtime_error
   {
@@ -11,7 +19,12 @@ struct Node
   };
   // Constructors/Destructors
   Node() = default;
-  template<typename T> explicit Node(T value);
+  template<typename T, typename = std::enable_if_t<
+      std::is_same_v<T, bool> ||
+      std::is_arithmetic_v<T> ||
+      std::is_same_v<T, std::nullptr_t> ||
+      std::is_convertible_v<T, std::string_view>>>
+  explicit Node(T value);
   Node(const JSON::ArrayInitializer &array);
   Node(const JSON::ObjectInitializer &object);
   Node(const Node &other) = delete;

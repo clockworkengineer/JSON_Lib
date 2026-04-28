@@ -51,7 +51,7 @@ private:
   {
     destination.add('d');
     for (auto &entry : NRef<Object>(jNode).value()) {
-      stringifyNodes(entry.getKeyNode(), destination, 0);
+      stringifyNodes(Node(entry.getKey()), destination, 0);
       stringifyNodes(entry.getNode(), destination, 0);
     }
     destination.add("e");

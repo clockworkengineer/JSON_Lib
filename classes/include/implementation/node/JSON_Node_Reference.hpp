@@ -1,5 +1,7 @@
 #pragma once
 
+#include <type_traits>
+
 namespace JSON_Lib {
 
 // =======================
@@ -31,20 +33,22 @@ template<typename T> bool isA(const Node &jNode)
 // =========================
 template<typename T> void checkNode(const Node &jNode)
 {
-  if constexpr (std::is_same_v<T, String>) {
-    if (!isA<T>(jNode)) { throw Node::Error("Node not a string."); }
-  } else if constexpr (std::is_same_v<T, Number>) {
-    if (!isA<T>(jNode)) { throw Node::Error("Node not a number."); }
-  } else if constexpr (std::is_same_v<T, Array>) {
-    if (!isA<T>(jNode)) { throw Node::Error("Node not an array."); }
-  } else if constexpr (std::is_same_v<T, Object>) {
-    if (!isA<T>(jNode)) { throw Node::Error("Node not an object."); }
-  } else if constexpr (std::is_same_v<T, Boolean>) {
-    if (!isA<T>(jNode)) { throw Node::Error("Node not a boolean."); }
-  } else if constexpr (std::is_same_v<T, Null>) {
-    if (!isA<T>(jNode)) { throw Node::Error("Node not a null."); }
-  }else if constexpr (std::is_same_v<T, Hole>) {
-    if (!isA<T>(jNode)) { throw Node::Error("Node not a hole."); }
+  if (!isA<T>(jNode)) {
+    if constexpr (std::is_same_v<T, String>) {
+      throw Node::Error("Node not a string.");
+    } else if constexpr (std::is_same_v<T, Number>) {
+      throw Node::Error("Node not a number.");
+    } else if constexpr (std::is_same_v<T, Array>) {
+      throw Node::Error("Node not an array.");
+    } else if constexpr (std::is_same_v<T, Object>) {
+      throw Node::Error("Node not an object.");
+    } else if constexpr (std::is_same_v<T, Boolean>) {
+      throw Node::Error("Node not a boolean.");
+    } else if constexpr (std::is_same_v<T, Null>) {
+      throw Node::Error("Node not a null.");
+    } else if constexpr (std::is_same_v<T, Hole>) {
+      throw Node::Error("Node not a hole.");
+    }
   }
 }
 template<typename T> T &NRef(Node &jNode)
