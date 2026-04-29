@@ -12,6 +12,8 @@ struct ObjectEntry
 {
   ObjectEntry(const std::string_view &key, Node &jNode) : key(key), jNode(std::move(jNode)) {}
   ObjectEntry(const std::string_view &key, Node &&jNode) : key(key), jNode(std::move(jNode)) {}
+  ObjectEntry(const char *key, Node &&jNode) : key(key), jNode(std::move(jNode)) {}
+  ObjectEntry(std::string &&key, Node &&jNode) : key(std::move(key)), jNode(std::move(jNode)) {}
   [[nodiscard]] std::string_view getKey() const { return key; }
   [[nodiscard]] Node &getNode() { return jNode; }
   [[nodiscard]] const Node &getNode() const { return jNode; }

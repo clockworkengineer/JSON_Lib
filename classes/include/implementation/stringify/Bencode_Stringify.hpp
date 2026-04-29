@@ -51,7 +51,7 @@ private:
   {
     destination.add('d');
     for (auto &entry : NRef<Object>(jNode).value()) {
-      stringifyNodes(Node(entry.getKey()), destination, 0);
+      stringifyString(entry.getKey(), destination);
       stringifyNodes(entry.getNode(), destination, 0);
     }
     destination.add("e");
@@ -79,6 +79,10 @@ private:
   {
     const auto jsonString = NRef<String>(jNode).value();
     destination.add((std::to_string(static_cast<int>(jsonString.length())) + ":").append(jsonString));
+  }
+  static void stringifyString(const std::string_view &value, IDestination &destination)
+  {
+    destination.add((std::to_string(static_cast<int>(value.length())) + ":").append(value));
   }
 
   inline static std::unique_ptr<ITranslator> bencodeTranslator;

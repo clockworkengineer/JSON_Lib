@@ -72,7 +72,7 @@ private:
     if (indent != 0) { destination.add('\n'); }
     for (auto &entry : NRef<Object>(jNode).value()) {
       if (indent != 0) { addIndent(destination, indent); }
-      stringifyNodes(Node(entry.getKey()), destination, indent != 0 ? indent + printIndent : 0);
+      stringifyString(entry.getKey(), destination);
       destination.add(':');
       if (indent != 0) { destination.add(' '); }
       stringifyNodes(entry.getNode(), destination, indent != 0 ? indent + printIndent : 0);
@@ -118,6 +118,12 @@ private:
   {
     destination.add('"');
     destination.add(jsonTranslator->to(NRef<String>(jNode).toString()));
+    destination.add('"');
+  }
+  static void stringifyString(const std::string_view &value, IDestination &destination)
+  {
+    destination.add('"');
+    destination.add(jsonTranslator->to(value));
     destination.add('"');
   }
 
