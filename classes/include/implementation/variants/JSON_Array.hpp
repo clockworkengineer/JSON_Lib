@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+#include <vector>
 
 namespace JSON_Lib {
 
@@ -21,6 +22,8 @@ struct Array
   void reserve(const std::size_t capacity) { jNodeArray.reserve(capacity); }
   // Return the size of array
   [[nodiscard]] std::size_t size() const { return jNodeArray.size(); }
+  // Return the current capacity of array storage
+  [[nodiscard]] std::size_t capacity() const { return jNodeArray.capacity(); }
   // Return reference to array base
   Entries &value() { return jNodeArray; }
   [[nodiscard]] const Entries &value() const { return jNodeArray; }

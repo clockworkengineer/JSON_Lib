@@ -1,8 +1,10 @@
 #pragma once
 
+#include <algorithm>
 #include <functional>
 #include <string>
 #include <string_view>
+#include <vector>
 #include <unordered_map>
 
 namespace JSON_Lib {
@@ -27,6 +29,10 @@ struct Object
 {
   using Entry = ObjectEntry;
   using Entries = std::vector<Entry>;
+
+#if JSON_LIB_EMBEDDED
+  using Index = std::vector<std::size_t>;
+#else
   struct StringHash
   {
     using is_transparent = void;
@@ -40,6 +46,7 @@ struct Object
     [[nodiscard]] bool operator()(const std::string &lhs, const std::string &rhs) const noexcept { return lhs == rhs; }
   };
   using Index = std::unordered_map<std::string, std::size_t, StringHash, StringEqual>;
+#endif
   // Constructors/Destructors
   Object() = default;
   Object(const Object &other) = default;
@@ -51,14 +58,31 @@ struct Object
   template<typename T> void add(T &&entry)
   {
     const auto key = entry.getKey();
+#if JSON_LIB_EMBEDDED
+    if (contains(key)) { throw Node::Error("Duplicate key used to add object entry."); }
+    jNodeObject.emplace_back(std::forward<T>(entry));
+    const auto insertedIndex = jNodeObject.size() - 1;
+    const auto insertPosition = std::lower_bound(
+      jNodeIndex.begin(), jNodeIndex.end(), key,
+      [this](const std::size_t lhs, const std::string_view rhs) {
+        return jNodeObject[lhs].getKey() < rhs;
+      }
+    );
+    jNodeIndex.insert(insertPosition, insertedIndex);
+#else
     if (jNodeIndex.contains(key)) { throw Node::Error("Duplicate key used to add object entry."); }
     jNodeObject.emplace_back(std::forward<T>(entry));
     jNodeIndex.emplace(jNodeObject.back().getKey(), jNodeObject.size() - 1);
+#endif
   }
   // Return true if an object contains a given key
   [[nodiscard]] bool contains(const std::string_view &key) const
   {
+#if JSON_LIB_EMBEDDED
+    return findIndex(key) != jNodeIndex.end();
+#else
     return jNodeIndex.find(key) != jNodeIndex.end();
+#endif
   }
   // Return number of entries in an object
   [[nodiscard]] int size() const { return static_cast<int>(jNodeObject.size()); }
@@ -66,7 +90,11 @@ struct Object
   void reserve(const std::size_t capacity)
   {
     jNodeObject.reserve(capacity);
+#if JSON_LIB_EMBEDDED
     jNodeIndex.reserve(capacity);
+#else
+    jNodeIndex.reserve(capacity);
+#endif
   }
   // Return object entry for a given key
   Node &operator[](const std::string_view &key) { return jNodeObject[getIndex(key)].getNode(); }
@@ -74,24 +102,54 @@ struct Object
   // Find object entry for a given key without throwing
   [[nodiscard]] Node *find(const std::string_view &key)
   {
+#if JSON_LIB_EMBEDDED
+    const auto it = findIndex(key);
+    return it != jNodeIndex.end() ? &jNodeObject[*it].getNode() : nullptr;
+#else
     const auto it = jNodeIndex.find(key);
     return it != jNodeIndex.end() ? &jNodeObject[it->second].getNode() : nullptr;
+#endif
   }
   [[nodiscard]] const Node *find(const std::string_view &key) const
   {
+#if JSON_LIB_EMBEDDED
+    const auto it = findIndex(key);
+    return it != jNodeIndex.end() ? &jNodeObject[*it].getNode() : nullptr;
+#else
     const auto it = jNodeIndex.find(key);
     return it != jNodeIndex.end() ? &jNodeObject[it->second].getNode() : nullptr;
+#endif
   }
   // Return reference to base of object entries
   Entries &value() { return jNodeObject; }
   [[nodiscard]] const Entries &value() const { return jNodeObject; }
 
 private:
+#if JSON_LIB_EMBEDDED
+  [[nodiscard]] auto findIndex(const std::string_view &key) const
+  {
+    return std::lower_bound(
+      jNodeIndex.begin(), jNodeIndex.end(), key,
+      [this](const std::size_t lhs, const std::string_view rhs) {
+        return jNodeObject[lhs].getKey() < rhs;
+      }
+    );
+  }
+#endif
+
   [[nodiscard]] std::size_t getIndex(const std::string_view &key) const
   {
+#if JSON_LIB_EMBEDDED
+    const auto it = findIndex(key);
+    if (it == jNodeIndex.end() || jNodeObject[*it].getKey() != key) {
+      throw Node::Error("Invalid key used to access object.");
+    }
+    return *it;
+#else
     const auto it = jNodeIndex.find(key);
     if (it == jNodeIndex.end()) { throw Node::Error("Invalid key used to access object."); }
     return it->second;
+#endif
   }
 
   // Object entries list
