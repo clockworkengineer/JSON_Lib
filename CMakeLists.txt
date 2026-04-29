@@ -41,8 +41,44 @@ option(BUILD_EXAMPLES "Build examples" OFF)
 # Option to enable link-time optimization on the JSON library target
 option(JSON_LIB_ENABLE_LTO "Enable link-time optimization" ON)
 
-# Option to install only public API headers instead of all internal headers
-option(JSON_LIB_EXPORT_INTERFACE "Install only public headers" ON)
+# Embedded build options
+option(JSON_LIB_EMBEDDED "Enable embedded-friendly build configuration" OFF)
+option(JSON_LIB_NO_EXCEPTIONS "Disable exception support" OFF)
+option(JSON_LIB_NO_HEAP "Disable heap allocation support" OFF)
+option(JSON_LIB_ALLOCATOR_INTERFACE "Enable custom allocator/pool interface" OFF)
+
+# Embedded build enforces smaller runtime and disables test/examples when enabled
+if(JSON_LIB_EMBEDDED)
+  message(STATUS "Configuring JSON_Lib for embedded-friendly build")
+  set(BUILD_TESTING OFF CACHE BOOL "Build unit tests" FORCE)
+  set(BUILD_EXAMPLES OFF CACHE BOOL "Build examples" FORCE)
+  set(JSON_LIB_ENABLE_LTO OFF CACHE BOOL "Enable link-time optimization" FORCE)
+endif()
+
+# Configure embedded mode values for generated config header
+if(JSON_LIB_EMBEDDED)
+  set(JSON_LIB_EMBEDDED_VALUE 1)
+else()
+  set(JSON_LIB_EMBEDDED_VALUE 0)
+endif()
+
+if(JSON_LIB_NO_EXCEPTIONS)
+  set(JSON_LIB_NO_EXCEPTIONS_VALUE 1)
+else()
+  set(JSON_LIB_NO_EXCEPTIONS_VALUE 0)
+endif()
+
+if(JSON_LIB_NO_HEAP)
+  set(JSON_LIB_NO_HEAP_VALUE 1)
+else()
+  set(JSON_LIB_NO_HEAP_VALUE 0)
+endif()
+
+if(JSON_LIB_ALLOCATOR_INTERFACE)
+  set(JSON_LIB_ALLOCATOR_INTERFACE_VALUE 1)
+else()
+  set(JSON_LIB_ALLOCATOR_INTERFACE_VALUE 0)
+endif()
 
 # Configure version header
 configure_file(JSON_Config.h.in JSON_Config.hpp)
@@ -148,6 +184,22 @@ target_include_directories(JSON_Lib_Parser PRIVATE
 )
 
 target_precompile_headers(JSON_Lib_Parser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/stdafx.h)
+
+# Dedicated embedded compile flag set
+add_library(JSON_Lib_Embedded INTERFACE)
+
+target_compile_definitions(JSON_Lib_Embedded INTERFACE
+  $<$<BOOL:${JSON_LIB_EMBEDDED}>:JSON_LIB_EMBEDDED>
+  $<$<BOOL:${JSON_LIB_NO_EXCEPTIONS}>:JSON_LIB_NO_EXCEPTIONS>
+  $<$<BOOL:${JSON_LIB_NO_HEAP}>:JSON_LIB_NO_HEAP>
+  $<$<BOOL:${JSON_LIB_ALLOCATOR_INTERFACE}>:JSON_LIB_ALLOCATOR_INTERFACE>
+)
+
+target_link_libraries(JSON_Lib_Core PRIVATE JSON_Lib_Embedded)
+
+target_link_libraries(JSON_Lib_Parser PRIVATE JSON_Lib_Embedded)
+
+target_link_libraries(JSON_Lib_Stringify INTERFACE JSON_Lib_Embedded)
 
 # Create the public JSON_Lib wrapper target from component object libraries
 add_library(${JSON_LIBRARY_NAME} STATIC
