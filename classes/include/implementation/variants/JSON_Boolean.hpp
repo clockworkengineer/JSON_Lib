@@ -2,11 +2,11 @@
 
 namespace JSON_Lib {
 
-struct Boolean : Variant
+struct Boolean
 {
   // Constructors/Destructors
-  Boolean() : Variant(Type::boolean) {}
-  explicit Boolean(const bool boolean) : Variant(Type::boolean), jNodeBoolean(boolean) {}
+  Boolean() = default;
+  explicit Boolean(const bool boolean) : jNodeBoolean(boolean) {}
   Boolean(const Boolean &other) = default;
   Boolean &operator=(const Boolean &other) = default;
   Boolean(Boolean &&other) = default;

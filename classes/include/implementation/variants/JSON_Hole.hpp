@@ -2,10 +2,10 @@
 
 namespace JSON_Lib {
 
-struct Hole : Variant
+struct Hole
 {
   // Constructors/Destructors
-  Hole() : Variant(Type::hole) {}
+  Hole() = default;
   Hole(const Hole &other) = default;
   Hole &operator=(const Hole &other) = default;
   Hole(Hole &&other) = default;

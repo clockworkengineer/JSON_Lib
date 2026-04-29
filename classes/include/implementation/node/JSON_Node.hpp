@@ -70,9 +70,33 @@ struct Node
   const Node &operator[](const std::string_view &key) const;
   Node &operator[](std::size_t index);
   const Node &operator[](std::size_t index) const;
-  // Get reference to Node variant
-  Variant &getVariant() { return getVariantImpl(jNodeVariant); }
-  [[nodiscard]] const Variant &getVariant() const { return getVariantImpl(jNodeVariant); }
+  template<typename T> using BaseType = std::remove_cv_t<T>;
+  template<typename T> using StorageType = std::conditional_t<
+      std::is_same_v<BaseType<T>, Object>, std::unique_ptr<Object>,
+      std::conditional_t<std::is_same_v<BaseType<T>, Array>, std::unique_ptr<Array>, BaseType<T>>>;
+
+  template<typename T> [[nodiscard]] bool is() const
+  {
+    return std::holds_alternative<StorageType<T>>(jNodeVariant);
+  }
+
+  template<typename T> T &get()
+  {
+    if constexpr (std::is_same_v<BaseType<T>, Object> || std::is_same_v<BaseType<T>, Array>) {
+      return *std::get<StorageType<T>>(jNodeVariant);
+    } else {
+      return std::get<StorageType<T>>(jNodeVariant);
+    }
+  }
+
+  template<typename T> const T &get() const
+  {
+    if constexpr (std::is_same_v<BaseType<T>, Object> || std::is_same_v<BaseType<T>, Array>) {
+      return *std::get<StorageType<T>>(jNodeVariant);
+    } else {
+      return std::get<StorageType<T>>(jNodeVariant);
+    }
+  }
   // Make Node
   template<typename T, typename... Args> static auto make(Args &&...args)
   {
@@ -86,9 +110,6 @@ struct Node
   }
 
 private:
-  static Variant &getVariantImpl(Storage &storage);
-  static const Variant &getVariantImpl(const Storage &storage);
-
   Storage jNodeVariant;
   bool jNodeEmpty{true};
 };

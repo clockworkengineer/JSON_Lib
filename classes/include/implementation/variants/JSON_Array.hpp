@@ -2,12 +2,12 @@
 
 namespace JSON_Lib {
 
-struct Array : Variant
+struct Array
 {
   using Entry = Node;
   using Entries = std::vector<Entry>;
   // Constructors/Destructors
-  Array() : Variant(Type::array) {}
+  Array() = default;
   Array(const Array &other) = default;
   Array &operator=(const Array &other) = default;
   Array(Array &&other) = default;

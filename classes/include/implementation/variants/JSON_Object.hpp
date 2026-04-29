@@ -21,7 +21,7 @@ private:
   Node jNode;
 };
 
-struct Object : Variant
+struct Object
 {
   using Entry = ObjectEntry;
   using Entries = std::vector<Entry>;
@@ -39,7 +39,7 @@ struct Object : Variant
   };
   using Index = std::unordered_map<std::string, std::size_t, StringHash, StringEqual>;
   // Constructors/Destructors
-  Object() : Variant(Type::object) {}
+  Object() = default;
   Object(const Object &other) = default;
   Object &operator=(const Object &other) = default;
   Object(Object &&other) = default;

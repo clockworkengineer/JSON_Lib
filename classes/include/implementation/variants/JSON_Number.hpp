@@ -2,7 +2,7 @@
 
 namespace JSON_Lib {
 
-struct Number : Variant
+struct Number
 {
   // Number values variant
   using Values = std::variant<std::monostate, int, long, long long, float, double, long double>;
@@ -11,7 +11,7 @@ struct Number : Variant
   // Floating point notation
   enum class numberNotation { normal = 0, fixed, scientific };
   // Constructors/Destructors
-  Number() : Variant(Type::number) {}
+  Number() = default;
   template<typename T> explicit Number(T value);
   Number(const Number &other) = default;
   Number &operator=(const Number &other) = default;
@@ -55,7 +55,7 @@ private:
   inline static auto numberNotation{ numberNotation::normal };
 };
 // Construct Number from value
-template<typename T> Number::Number(T value) : Variant(Type::number)
+template<typename T> Number::Number(T value)
 {
   if constexpr (std::is_same_v<T, std::string>) {
     convertNumber(value);

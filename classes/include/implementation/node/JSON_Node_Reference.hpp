@@ -10,19 +10,19 @@ namespace JSON_Lib {
 template<typename T> bool isA(const Node &jNode)
 {
   if constexpr (std::is_same_v<T, String>) {
-    return jNode.getVariant().getNodeType() == Variant::Type::string;
+    return jNode.template is<String>();
   } else if constexpr (std::is_same_v<T, Number>) {
-    return jNode.getVariant().getNodeType() == Variant::Type::number;
+    return jNode.template is<Number>();
   } else if constexpr (std::is_same_v<T, Array>) {
-    return jNode.getVariant().getNodeType() == Variant::Type::array;
+    return jNode.template is<Array>();
   } else if constexpr (std::is_same_v<T, Object>) {
-    return jNode.getVariant().getNodeType() == Variant::Type::object;
+    return jNode.template is<Object>();
   } else if constexpr (std::is_same_v<T, Boolean>) {
-    return jNode.getVariant().getNodeType() == Variant::Type::boolean;
+    return jNode.template is<Boolean>();
   } else if constexpr (std::is_same_v<T, Null>) {
-    return jNode.getVariant().getNodeType() == Variant::Type::null;
+    return jNode.template is<Null>();
   } else if constexpr (std::is_same_v<T, Hole>) {
-    return jNode.getVariant().getNodeType() == Variant::Type::hole;
+    return jNode.template is<Hole>();
   } else {
     return false;
   }
@@ -54,21 +54,21 @@ template<typename T> void checkNode(const Node &jNode)
 template<typename T> T &NRef(Node &jNode)
 {
   checkNode<T>(jNode);
-  return static_cast<T &>(jNode.getVariant());
+  return jNode.template get<T>();
 }
 template<typename T> const T &NRef(const Node &jNode)
 {
   checkNode<T>(jNode);
-  return static_cast<const T &>(jNode.getVariant());
+  return jNode.template get<T>();
 }
 template<typename T> T &NRef(Object::Entry &jNodeEntry)
 {
   checkNode<T>(jNodeEntry.getNode());
-  return static_cast<T &>(jNodeEntry.getNode().getVariant());
+  return jNodeEntry.getNode().template get<T>();
 }
 template<typename T> const T &NRef(const Object::Entry &jNodeEntry)
 {
   checkNode<T>(jNodeEntry.getNode());
-  return static_cast<const T &>(jNodeEntry.getNode().getVariant());
+  return jNodeEntry.getNode().template get<T>();
 }
 }// namespace JSON_Lib

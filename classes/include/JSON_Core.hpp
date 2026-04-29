@@ -4,7 +4,6 @@
 // =====================
 #include "JSON_Config.hpp"
 #include "JSON_Interfaces.hpp"
-#include "JSON_Variant.hpp"
 #include "JSON_Hole.hpp"
 #include "JSON_Number.hpp"
 #include "JSON_String.hpp"
@@ -13,7 +12,6 @@
 #include "JSON_Node.hpp"
 #include "JSON_Object.hpp"
 #include "JSON_Array.hpp"
-#include "JSON_Node_Impl.hpp"
 #include "JSON_Node_Reference.hpp"
 #include "JSON_Node_Creation.hpp"
 #include "JSON_Node_Index.hpp"
