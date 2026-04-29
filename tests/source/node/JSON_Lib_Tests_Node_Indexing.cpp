@@ -75,6 +75,24 @@ TEST_CASE("Check use of Node indexing operators.", "[JSON][Node][Index]")
     REQUIRE(NRef<Number>(jsonMut.root()[1]).value<int>() == 99);
     REQUIRE(NRef<Number>(jsonMut.root()[2]).value<int>() == 3);
   }
+  SECTION("Object find returns nullptr for missing key.", "[JSON][Node][Index]")
+  {
+    Node jNode = Node::make<Object>();
+    NRef<Object>(jNode).reserve(2);
+    NRef<Object>(jNode).add(Object::Entry("name", Node("Alice")));
+    REQUIRE(NRef<Object>(jNode).find("name") != nullptr);
+    REQUIRE(NRef<Object>(jNode).find("name")->isEmpty() == false);
+    REQUIRE(NRef<Object>(jNode).find("missing") == nullptr);
+  }
+  SECTION("Array reserve keeps size unchanged.", "[JSON][Node][Index]")
+  {
+    Node jNode = Node::make<Array>();
+    NRef<Array>(jNode).reserve(8);
+    REQUIRE(NRef<Array>(jNode).size() == 0);
+    NRef<Array>(jNode).add(Node(42));
+    REQUIRE(NRef<Array>(jNode).size() == 1);
+    REQUIRE(NRef<Number>(jNode[0]).value<int>() == 42);
+  }
   SECTION("Const reference indexing into parsed object.", "[JSON][Node][Index]")
   {
     json.parse(BufferSource{ R"({"key":123})" });

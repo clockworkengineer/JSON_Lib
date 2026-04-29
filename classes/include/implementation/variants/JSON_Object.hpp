@@ -60,9 +60,26 @@ struct Object
   }
   // Return number of entries in an object
   [[nodiscard]] int size() const { return static_cast<int>(jNodeObject.size()); }
+  // Reserve storage for object entries and index buckets
+  void reserve(const std::size_t capacity)
+  {
+    jNodeObject.reserve(capacity);
+    jNodeIndex.reserve(capacity);
+  }
   // Return object entry for a given key
   Node &operator[](const std::string_view &key) { return jNodeObject[getIndex(key)].getNode(); }
   const Node &operator[](const std::string_view &key) const { return jNodeObject[getIndex(key)].getNode(); }
+  // Find object entry for a given key without throwing
+  [[nodiscard]] Node *find(const std::string_view &key)
+  {
+    const auto it = jNodeIndex.find(key);
+    return it != jNodeIndex.end() ? &jNodeObject[it->second].getNode() : nullptr;
+  }
+  [[nodiscard]] const Node *find(const std::string_view &key) const
+  {
+    const auto it = jNodeIndex.find(key);
+    return it != jNodeIndex.end() ? &jNodeObject[it->second].getNode() : nullptr;
+  }
   // Return reference to base of object entries
   Entries &value() { return jNodeObject; }
   [[nodiscard]] const Entries &value() const { return jNodeObject; }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cassert>
+
 namespace JSON_Lib {
 
 struct Array
@@ -15,6 +17,8 @@ struct Array
   ~Array() = default;
   // Add array element
   void add(Entry bNode) { jNodeArray.emplace_back(std::move(bNode)); }
+  // Reserve storage for array elements
+  void reserve(const std::size_t capacity) { jNodeArray.reserve(capacity); }
   // Return the size of array
   [[nodiscard]] std::size_t size() const { return jNodeArray.size(); }
   // Return reference to array base
@@ -34,9 +38,10 @@ struct Array
   // Resize Array
   void resize(const std::size_t index)
   {
+    const auto oldSize = jNodeArray.size();
     jNodeArray.resize(index + 1);
-    for (auto &entry : jNodeArray) {
-      if (entry.isEmpty()) { entry = Node::make<Hole>(); }
+    for (auto i = oldSize; i < jNodeArray.size(); ++i) {
+      if (jNodeArray[i].isEmpty()) { jNodeArray[i] = Node::make<Hole>(); }
     }
   }
 
