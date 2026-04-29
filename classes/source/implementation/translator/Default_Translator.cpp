@@ -8,18 +8,19 @@
 // Dependencies: C++20 - Language standard features used.
 //
 
+#include <array>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 
 namespace JSON_Lib {
 
-static const std::vector<std::pair<const char, const char>> escapeSequences{ { '\\', '\\' },
-  { 't', '\t' },
-  { '"', '\"' },
-  { 'b', '\b' },
-  { 'f', '\f' },
-  { 'n', '\n' },
-  { 'r', '\r' } };
+static constexpr std::array<std::pair<char, char>, 7> escapeSequences{{ {'\\', '\\'},
+  {'t', '\t'},
+  {'"', '\"'},
+  {'b', '\b'},
+  {'f', '\f'},
+  {'n', '\n'},
+  {'r', '\r'} }};
 
 /// <summary>
 /// Convert \uxxxx escape sequences in a string to their correct sequence
@@ -55,12 +56,13 @@ char16_t decodeUTF16(std::string_view::const_iterator &current, const ptrdiff_t 
 std::string encodeUTF16(const char16_t utf16Char)
 {
   std::string utf8Buffer;
-  const auto digits = "0123456789ABCDEF";
-  utf8Buffer += "\\u";
+  static constexpr std::string_view digits{"0123456789ABCDEF"};
+  static constexpr std::string_view unicodePrefix{"\\u"};
+  utf8Buffer += unicodePrefix;
   utf8Buffer += digits[utf16Char >> 12 & 0x0f];
   utf8Buffer += digits[utf16Char >> 8 & 0x0f];
   utf8Buffer += digits[utf16Char >> 4 & 0x0f];
-  utf8Buffer += digits[utf16Char&0x0f];
+  utf8Buffer += digits[utf16Char & 0x0f];
   return utf8Buffer;
 }
 /// <summary>

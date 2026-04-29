@@ -131,8 +131,10 @@ Node Default_Parser::parseBoolean(ISource &source,
   const ITranslator &,
   unsigned long)
 {
-  if (source.match(std::string_view("true"))) { return Node::make<Boolean>(true); }
-  if (source.match(std::string_view("false"))) { return Node::make<Boolean>(false); }
+  static constexpr std::string_view kTrueToken{"true"};
+  static constexpr std::string_view kFalseToken{"false"};
+  if (source.match(kTrueToken)) { return Node::make<Boolean>(true); }
+  if (source.match(kFalseToken)) { return Node::make<Boolean>(false); }
   throw SyntaxError(source.getPosition(), "Invalid boolean value.");
 }
 /// <summary>
@@ -146,7 +148,8 @@ Node Default_Parser::parseNull(ISource &source,
   const ITranslator &,
   unsigned long)
 {
-  if (!source.match(std::string_view("null"))) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
+  static constexpr std::string_view kNullToken{"null"};
+  if (!source.match(kNullToken)) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
   return Node::make<Null>();
 }
 /// <summary>

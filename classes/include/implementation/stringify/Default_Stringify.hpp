@@ -76,11 +76,14 @@ private:
     }
   }
 
+  static constexpr char kQuote = '"';
+  static constexpr char kSpace = ' ';
+
   void appendQuotedString(const std::string_view &value, IDestination &destination) const
   {
-    destination.add('"');
+    destination.add(kQuote);
     destination.add(jsonTranslator->to(value));
-    destination.add('"');
+    destination.add(kQuote);
   }
 
   void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long indent) const
