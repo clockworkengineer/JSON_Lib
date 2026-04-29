@@ -42,6 +42,7 @@ set(TEST_SOURCES
   source/parse/JSON_Lib_Tests_Parse_Collection.cpp
   source/parse/JSON_Lib_Tests_Parse_Whitespace.cpp
   source/parse/JSON_Lib_Tests_Parse_Exceptions.cpp
+  source/parse/JSON_Lib_Tests_Parse_Large.cpp
   source/stringify/JSON_Lib_Tests_Stringify_Misc.cpp
   source/stringify/JSON_Lib_Tests_Stringify_Escapes.cpp
   source/stringify/JSON_Lib_Tests_Stringify_Simple.cpp
