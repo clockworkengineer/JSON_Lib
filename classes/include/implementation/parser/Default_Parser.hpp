@@ -43,27 +43,6 @@ private:
   [[nodiscard]] static Node parseObject(ISource &source, const ITranslator &translator, unsigned long parserDepth);
   [[nodiscard]] static Node parseArray(ISource &source, const ITranslator &translator, unsigned long parserDepth);
   [[nodiscard]] static Node parseNodes(ISource &source, const ITranslator &translator, unsigned long parserDepth);
-  // Parser routing table
-  using ParseFunc = std::function<Node(ISource &, const ITranslator &, unsigned long parserDepth)>;
-  inline static std::map<char, ParseFunc> parsers = { { JSON_Lib::kObjectBegin, parseObject },
-    { JSON_Lib::kArrayBegin, parseArray },
-    { 't', parseBoolean },
-    { 'f', parseBoolean },
-    { 'n', parseNull },
-    { JSON_Lib::kStringQuote, parseString },
-    { JSON_Lib::kStringSingleQuote, parseString },
-    { JSON_Lib::kPlus, parseNumber },
-    { JSON_Lib::kMinus, parseNumber },
-    { JSON_Lib::kZero, parseNumber },
-    { JSON_Lib::kOne, parseNumber },
-    { JSON_Lib::kTwo, parseNumber },
-    { JSON_Lib::kThree, parseNumber },
-    { JSON_Lib::kFour, parseNumber },
-    { JSON_Lib::kFive, parseNumber },
-    { JSON_Lib::kSix, parseNumber },
-    { JSON_Lib::kSeven, parseNumber },
-    { JSON_Lib::kEight, parseNumber },
-    { JSON_Lib::kNine, parseNumber } };
 
   // Reference to JSON translator interface
   const ITranslator &jsonTranslator;

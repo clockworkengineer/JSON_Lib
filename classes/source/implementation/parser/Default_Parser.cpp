@@ -209,11 +209,43 @@ Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, 
 {
   if (parserDepth >= getMaxParserDepth()) { throw SyntaxError("Maximum parser depth exceeded."); }
   source.ignoreWS();
-  const auto it = parsers.find(source.current());
-  if (it == parsers.end()) {
-    throw SyntaxError(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null.");
+  const char nextChar = source.current();
+  Node jNode;
+  switch (nextChar) {
+    case JSON_Lib::kObjectBegin:
+      jNode = parseObject(source, translator, parserDepth);
+      break;
+    case JSON_Lib::kArrayBegin:
+      jNode = parseArray(source, translator, parserDepth);
+      break;
+    case JSON_Lib::kStringQuote:
+    case JSON_Lib::kStringSingleQuote:
+      jNode = parseString(source, translator, parserDepth);
+      break;
+    case JSON_Lib::kPlus:
+    case JSON_Lib::kMinus:
+    case JSON_Lib::kZero:
+    case JSON_Lib::kOne:
+    case JSON_Lib::kTwo:
+    case JSON_Lib::kThree:
+    case JSON_Lib::kFour:
+    case JSON_Lib::kFive:
+    case JSON_Lib::kSix:
+    case JSON_Lib::kSeven:
+    case JSON_Lib::kEight:
+    case JSON_Lib::kNine:
+      jNode = parseNumber(source, translator, parserDepth);
+      break;
+    case 't':
+    case 'f':
+      jNode = parseBoolean(source, translator, parserDepth);
+      break;
+    case 'n':
+      jNode = parseNull(source, translator, parserDepth);
+      break;
+    default:
+      throw SyntaxError(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null.");
   }
-  Node jNode = it->second(source, translator, parserDepth);
   source.ignoreWS();
   return jNode;
 }
