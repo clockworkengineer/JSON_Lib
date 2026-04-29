@@ -12,8 +12,14 @@
 
 #include "JSON_Impl.hpp"
 
+#if !JSON_LIB_NO_STDIO
+#include <fstream>
+#include <sstream>
+#endif
+
 namespace JSON_Lib {
 
+#if !JSON_LIB_NO_STDIO
 /// <summary>
 /// Write JSON string to a file stream.
 /// </summary>
@@ -167,4 +173,5 @@ void JSON_Impl::toFile(const std::string_view &fileName, const std::string_view 
   }
   jsonFile.close();
 }
+#endif // !JSON_LIB_NO_STDIO
 }// namespace JSON_Lib

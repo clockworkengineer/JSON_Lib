@@ -46,6 +46,7 @@ option(JSON_LIB_EMBEDDED "Enable embedded-friendly build configuration" OFF)
 option(JSON_LIB_NO_EXCEPTIONS "Disable exception support" OFF)
 option(JSON_LIB_NO_HEAP "Disable heap allocation support" OFF)
 option(JSON_LIB_ALLOCATOR_INTERFACE "Enable custom allocator/pool interface" OFF)
+option(JSON_LIB_NO_STDIO "Disable stdio/file I/O support" OFF)
 
 # Embedded build enforces smaller runtime and disables test/examples when enabled
 if(JSON_LIB_EMBEDDED)
@@ -53,6 +54,7 @@ if(JSON_LIB_EMBEDDED)
   set(BUILD_TESTING OFF CACHE BOOL "Build unit tests" FORCE)
   set(BUILD_EXAMPLES OFF CACHE BOOL "Build examples" FORCE)
   set(JSON_LIB_ENABLE_LTO OFF CACHE BOOL "Enable link-time optimization" FORCE)
+  set(JSON_LIB_NO_STDIO ON CACHE BOOL "Disable stdio/file I/O support" FORCE)
 endif()
 
 # Configure embedded mode values for generated config header
@@ -78,6 +80,12 @@ if(JSON_LIB_ALLOCATOR_INTERFACE)
   set(JSON_LIB_ALLOCATOR_INTERFACE_VALUE 1)
 else()
   set(JSON_LIB_ALLOCATOR_INTERFACE_VALUE 0)
+endif()
+
+if(JSON_LIB_NO_STDIO)
+  set(JSON_LIB_NO_STDIO_VALUE 1)
+else()
+  set(JSON_LIB_NO_STDIO_VALUE 0)
 endif()
 
 # Configure version header
@@ -194,6 +202,7 @@ target_compile_definitions(JSON_Lib_Embedded INTERFACE
   $<$<BOOL:${JSON_LIB_NO_EXCEPTIONS}>:JSON_LIB_NO_EXCEPTIONS>
   $<$<BOOL:${JSON_LIB_NO_HEAP}>:JSON_LIB_NO_HEAP>
   $<$<BOOL:${JSON_LIB_ALLOCATOR_INTERFACE}>:JSON_LIB_ALLOCATOR_INTERFACE>
+  $<$<BOOL:${JSON_LIB_NO_STDIO}>:JSON_LIB_NO_STDIO>
 )
 
 target_link_libraries(JSON_Lib_Core PRIVATE JSON_Lib_Embedded)

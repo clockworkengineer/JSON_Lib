@@ -8,11 +8,21 @@
 /// <returns>Full path to test data file</returns>
 std::string prefixTestDataPath(const std::string &jsonFileName)
 {
-  if (std::filesystem::is_directory("./files")) {
-    return (std::filesystem::current_path() / "./files" / jsonFileName).string();
-  } else {
-    return (std::filesystem::current_path() / "../files" / jsonFileName).string();
+  const auto cwd = std::filesystem::current_path();
+  const std::vector<std::filesystem::path> candidates = {
+    cwd / "./files",
+    cwd / "../tests/files",
+    cwd / "../files",
+    cwd / "../examples/files"
+  };
+
+  for (const auto &candidate : candidates) {
+    if (std::filesystem::is_directory(candidate)) {
+      return (candidate / jsonFileName).string();
+    }
   }
+
+  return (cwd / jsonFileName).string();
 }
 /// <summary>
 /// Verify that an Node Array has the correct parsed format.

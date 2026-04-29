@@ -78,11 +78,13 @@ public:
   // Get JSON array entry at index
   Node &operator[](std::size_t index);
   const Node &operator[](std::size_t index) const;
+#if !JSON_LIB_NO_STDIO
   // Read/Write JSON from the file
   static std::string fromFile(const std::string_view &fileName);
   static void toFile(const std::string_view &fileName, const std::string_view &jsonString, Format format = Format::utf8);
   // Get JSON file format
   static Format getFileFormat(const std::string_view &fileName);
+#endif
 
 private:
   // JSON implementation

@@ -27,6 +27,7 @@ set(TEST_SOURCES
   source/io/JSON_Lib_Tests_ISource_Buffer.cpp
   source/io/JSON_Lib_Tests_ISource_File.cpp
   source/io/JSON_Lib_Tests_IDestination_Buffer.cpp
+  source/io/JSON_Lib_Tests_IDestination_FixedBuffer.cpp
   source/io/JSON_Lib_Tests_IDestination_File.cpp
   source/io/JSON_Lib_Tests_File_GetFormat.cpp
   source/io/JSON_Lib_Tests_File_FromFile.cpp

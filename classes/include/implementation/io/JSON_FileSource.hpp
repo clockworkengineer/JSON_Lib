@@ -1,5 +1,14 @@
 #pragma once
 
+#include <filesystem>
+#include <fstream>
+#include <string>
+#include <string_view>
+
+#if JSON_LIB_NO_STDIO
+#error "FileSource is disabled when JSON_LIB_NO_STDIO is enabled."
+#endif
+
 namespace JSON_Lib {
 
 class FileSource final : public ISource

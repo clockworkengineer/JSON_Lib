@@ -79,6 +79,13 @@ TEST_CASE("Check ISource (Buffer) interface.", "[JSON][ISource][Buffer]")
     REQUIRE_THROWS_AS(BufferSource(""), ISource::Error);
     REQUIRE_THROWS_WITH(BufferSource(""), "ISource Error: Empty source buffer passed to be parsed.");
   }
+  SECTION("Create BufferSource from string_view without owning a std::string.", "[JSON][ISource][Buffer][View]")
+  {
+    const std::string_view text{R"({"key":true})"};
+    BufferSource source{text};
+    REQUIRE(source.current() == '{');
+    REQUIRE(source.position() == 0);
+  }
   SECTION("Create BufferSource and then try to read off the end.", "[JSON][ISource][Buffer][Exception]")
   {
     auto source{ BufferSource(buffer) };

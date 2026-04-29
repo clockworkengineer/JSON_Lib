@@ -56,35 +56,35 @@ TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stri
   SECTION("Stringify a null to Bencode.", "[JSON][Stringify][Simple][Bencode]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { "null" } });
+    json.parse(BufferSource{ "null" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "4:null");
   }
   SECTION("Stringify an array to Bencode.", "[JSON][Stringify][Array][Bencode]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { "[1,444,555,666,67.99]" } });
+    json.parse(BufferSource{ "[1,444,555,666,67.99]" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "li1ei444ei555ei666ei67ee");
   }
   SECTION("Stringify an empty array to Bencode.", "[JSON][Stringify][Array][Bencode]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { "[]" } });
+    json.parse(BufferSource{ "[]" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "le");
   }
   SECTION("Stringify an object to Bencode.", "[JSON][Stringify][Object][Bencode]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { R"({"Age":77,"Name":"Rob"})" } });
+    json.parse(BufferSource{ R"({"Age":77,"Name":"Rob"})" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "d3:Agei77e4:Name3:Robe");
   }
   SECTION("Stringify an empty object to Bencode.", "[JSON][Stringify][Object][Bencode]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { R"({})" } });
+    json.parse(BufferSource{ R"({})" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "de");
   }
