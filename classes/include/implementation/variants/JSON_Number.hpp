@@ -133,6 +133,6 @@ template<typename T> T Number::getAs() const
   if (const auto pValue = std::get_if<float>(&jNodeNumber)) { return convertTo<T>(*pValue); }
   if (const auto pValue = std::get_if<double>(&jNodeNumber)) { return convertTo<T>(*pValue); }
   if (const auto pValue = std::get_if<long double>(&jNodeNumber)) { return convertTo<T>(*pValue); }
-  throw Node::Error("Could not convert unknown type.");
+  throw std::runtime_error("Number Error: Could not convert unknown type.");
 }
 }// namespace JSON_Lib
