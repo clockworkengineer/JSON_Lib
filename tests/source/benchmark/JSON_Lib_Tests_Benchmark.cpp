@@ -105,4 +105,23 @@ TEST_CASE("Benchmark JSON parse/stringify/traverse performance.", "[Benchmark]")
     json.traverse(action);
     return json.root().isEmpty();
   };
+
+  BENCHMARK("Embedded fixed buffer stringify")
+  {
+    EmbeddedJSON embedded;
+    embedded.parse(BufferSource{ R"({"a":1,"b":2,"c":3})" });
+    FixedBufferDestination<64> destination;
+    embedded.stringify(destination);
+    return destination.size();
+  };
+
+  BENCHMARK("Embedded parse and stringify with fixed destination")
+  {
+    EmbeddedJSON embedded;
+    const auto payload = R"({"status":"ok","count":123})";
+    embedded.parse(BufferSource{payload});
+    FixedBufferDestination<128> destination;
+    embedded.stringify(destination);
+    return destination.size();
+  };
 }
