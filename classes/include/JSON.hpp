@@ -1,5 +1,13 @@
 #pragma once
 
+#include <cstdint>
+#include <initializer_list>
+#include <memory>
+#include <string>
+#include <string_view>
+#include <variant>
+
+#include "JSON_Config.hpp"
 #include "implementation/common/JSON_Error.hpp"
 
 namespace JSON_Lib {
@@ -13,6 +21,8 @@ class ISource;
 class IDestination;
 class IAction;
 class JSON_Impl;
+struct String;
+class Default_Parser;
 struct Node;
 
 class JSON
@@ -89,5 +99,26 @@ public:
 private:
   // JSON implementation
   const std::unique_ptr<JSON_Impl> implementation;
+};
+
+class EmbeddedJSON final : public JSON
+{
+public:
+  using JSON::JSON;
+  using Format = JSON::Format;
+  using InitializerListTypes = JSON::InitializerListTypes;
+  using ArrayInitializer = JSON::ArrayInitializer;
+  using ObjectInitializer = JSON::ObjectInitializer;
+
+  static constexpr bool isEmbeddedBuild() noexcept { return JSON_LIB_EMBEDDED; }
+  static constexpr bool isExceptionFreeBuild() noexcept { return JSON_LIB_NO_EXCEPTIONS; }
+  static constexpr bool isNoStdIoBuild() noexcept { return JSON_LIB_NO_STDIO; }
+  static constexpr bool isNoDynamicMemoryBuild() noexcept { return JSON_LIB_NO_DYNAMIC_MEMORY; }
+
+  struct Limits
+  {
+    static uint64_t maxStringLength() noexcept;
+    static unsigned long maxParserDepth() noexcept;
+  };
 };
 }// namespace JSON_Lib

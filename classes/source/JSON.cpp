@@ -132,4 +132,7 @@ void JSON::toFile(const std::string_view &fileName, const std::string_view &json
 /// <param name="fileName">JSON file name</param>
 /// <returns>JSON file format.</returns>
 JSON::Format JSON::getFileFormat(const std::string_view &fileName) { return JSON_Impl::getFileFormat(fileName); }
+
+uint64_t EmbeddedJSON::Limits::maxStringLength() noexcept { return String::getMaxStringLength(); }
+unsigned long EmbeddedJSON::Limits::maxParserDepth() noexcept { return Default_Parser::getMaxParserDepth(); }
 }// namespace JSON_Lib

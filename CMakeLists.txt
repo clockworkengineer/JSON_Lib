@@ -45,6 +45,7 @@ option(JSON_LIB_ENABLE_LTO "Enable link-time optimization" ON)
 option(JSON_LIB_EMBEDDED "Enable embedded-friendly build configuration" OFF)
 option(JSON_LIB_NO_EXCEPTIONS "Disable exception support" OFF)
 option(JSON_LIB_NO_HEAP "Disable heap allocation support" OFF)
+option(JSON_LIB_NO_DYNAMIC_MEMORY "Disable dynamic memory usage" OFF)
 option(JSON_LIB_ALLOCATOR_INTERFACE "Enable custom allocator/pool interface" OFF)
 option(JSON_LIB_NO_STDIO "Disable stdio/file I/O support" OFF)
 
@@ -70,10 +71,21 @@ else()
   set(JSON_LIB_NO_EXCEPTIONS_VALUE 0)
 endif()
 
+if(JSON_LIB_NO_HEAP OR JSON_LIB_NO_DYNAMIC_MEMORY)
+  set(JSON_LIB_NO_HEAP ON CACHE BOOL "Disable heap allocation support" FORCE)
+  set(JSON_LIB_NO_DYNAMIC_MEMORY ON CACHE BOOL "Disable dynamic memory usage" FORCE)
+endif()
+
 if(JSON_LIB_NO_HEAP)
   set(JSON_LIB_NO_HEAP_VALUE 1)
 else()
   set(JSON_LIB_NO_HEAP_VALUE 0)
+endif()
+
+if(JSON_LIB_NO_DYNAMIC_MEMORY)
+  set(JSON_LIB_NO_DYNAMIC_MEMORY_VALUE 1)
+else()
+  set(JSON_LIB_NO_DYNAMIC_MEMORY_VALUE 0)
 endif()
 
 if(JSON_LIB_ALLOCATOR_INTERFACE)
@@ -201,6 +213,7 @@ target_compile_definitions(JSON_Lib_Embedded INTERFACE
   $<$<BOOL:${JSON_LIB_EMBEDDED}>:JSON_LIB_EMBEDDED>
   $<$<BOOL:${JSON_LIB_NO_EXCEPTIONS}>:JSON_LIB_NO_EXCEPTIONS>
   $<$<BOOL:${JSON_LIB_NO_HEAP}>:JSON_LIB_NO_HEAP>
+  $<$<BOOL:${JSON_LIB_NO_DYNAMIC_MEMORY}>:JSON_LIB_NO_DYNAMIC_MEMORY>
   $<$<BOOL:${JSON_LIB_ALLOCATOR_INTERFACE}>:JSON_LIB_ALLOCATOR_INTERFACE>
   $<$<BOOL:${JSON_LIB_NO_STDIO}>:JSON_LIB_NO_STDIO>
 )

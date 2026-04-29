@@ -17,6 +17,7 @@ JSON_Lib is a C++ library for parsing, manipulating, and serializing JSON data. 
 ## Core Classes
 
 - **JSON**: Main class for parsing, manipulating, and serializing JSON data. Provides methods for parsing from strings, files, and buffers, as well as serializing to strings and files.
+- **EmbeddedJSON**: Dedicated embedded API entrypoint that mirrors the desktop `JSON` facade while exposing embedded build policy checks and runtime limits.
 - **Node**: Represents a node in the JSON tree (object, array, string, number, boolean, or null). Used for type-safe access and manipulation.
 - **Object**: Represents a JSON object (key-value pairs). Provides methods for iterating and accessing members.
 - **Array**: Represents a JSON array (ordered list of values). Provides methods for iterating and modifying elements.
@@ -28,6 +29,9 @@ JSON_Lib is a C++ library for parsing, manipulating, and serializing JSON data. 
 - `JSON::parse(FileSource)`: Parses JSON from a file.
 - `JSON::stringify(IDestination) const`: Serializes the JSON object to a destination (file, buffer, etc.).
 - `JSON::version() const`: Returns the library version string.
+- `EmbeddedJSON::Limits::maxStringLength()`: Returns the current embedded string limit.
+- `EmbeddedJSON::Limits::maxParserDepth()`: Returns the current parser depth limit.
+- `EmbeddedJSON::isEmbeddedBuild()`: Indicates whether the build is configured for embedded mode.
 - `Node::as_string()`, `Node::as_int()`, `Node::as_bool()`: Type-safe accessors for node values.
 - `Object::operator[]`: Access object members by key.
 - `Array::push_back(const Node&)`: Append a value to an array.
@@ -61,6 +65,22 @@ int main() {
 		int age = json["age"].as_int();
 		bool isAdmin = json["is_admin"].as_bool();
 		std::cout << "Name: " << name << ", Age: " << age << ", Admin: " << (isAdmin ? "Yes" : "No") << "\n";
+}
+```
+
+### Embedded API
+```cpp
+#include "JSON.hpp"
+#include "implementation/io/JSON_BufferSource.hpp"
+#include "implementation/io/JSON_BufferDestination.hpp"
+
+int main() {
+    JSON_Lib::EmbeddedJSON embedded;
+    embedded.parse(JSON_Lib::BufferSource{R"({"key":123})"});
+    JSON_Lib::BufferDestination destination;
+    embedded.stringify(destination);
+    std::cout << destination.toString();
+    std::cout << "max string length=" << JSON_Lib::EmbeddedJSON::Limits::maxStringLength() << "\n";
 }
 ```
 
