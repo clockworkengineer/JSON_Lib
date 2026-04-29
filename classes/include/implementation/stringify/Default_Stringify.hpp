@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string_view>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 
@@ -65,23 +66,34 @@ private:
     }
   }
 
+  static void appendQuotedString(const std::string_view &value, IDestination &destination)
+  {
+    destination.add('"');
+    destination.add(jsonTranslator->to(value));
+    destination.add('"');
+  }
+
   static void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long indent)
   {
-    size_t commaCount = NRef<Object>(jNode).value().size() - 1;
+    const auto &entries = NRef<Object>(jNode).value();
+    const bool pretty = indent != 0;
+    const size_t commaCountStart = entries.size() > 0 ? entries.size() - 1 : 0;
+    size_t commaCount = commaCountStart;
+
     destination.add('{');
-    if (indent != 0) { destination.add('\n'); }
-    for (auto &entry : NRef<Object>(jNode).value()) {
-      if (indent != 0) { addIndent(destination, indent); }
+    if (pretty) { destination.add('\n'); }
+    for (auto &entry : entries) {
+      if (pretty) { addIndent(destination, indent); }
       stringifyString(entry.getKey(), destination);
       destination.add(':');
-      if (indent != 0) { destination.add(' '); }
-      stringifyNodes(entry.getNode(), destination, indent != 0 ? indent + printIndent : 0);
+      if (pretty) { destination.add(' '); }
+      stringifyNodes(entry.getNode(), destination, pretty ? indent + printIndent : 0);
       if (commaCount-- > 0) {
         destination.add(',');
-        if (indent != 0) { destination.add('\n'); }
+        if (pretty) { destination.add('\n'); }
       }
     }
-    if (indent != 0) {
+    if (pretty) {
       destination.add('\n');
       addIndent(destination, indent - printIndent);
     }
@@ -89,21 +101,26 @@ private:
   }
   static void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long indent)
   {
+    const auto &elements = NRef<Array>(jNode).value();
+    const bool pretty = indent != 0;
     destination.add('[');
-    if (!NRef<Array>(jNode).value().empty()) {
-      size_t commaCount = NRef<Array>(jNode).value().size() - 1;
-      if (indent != 0) { destination.add('\n'); }
-      for (auto &entry : NRef<Array>(jNode).value()) {
-        if (indent != 0) { destination.add(std::string(indent, ' ')); }
-        stringifyNodes(entry, destination, indent != 0 ? indent + printIndent : 0);
+    if (!elements.empty()) {
+      size_t commaCount = elements.size() - 1;
+      if (pretty) { destination.add('\n'); }
+      for (auto &entry : elements) {
+        if (pretty) { addIndent(destination, indent); }
+        stringifyNodes(entry, destination, pretty ? indent + printIndent : 0);
         if (commaCount-- > 0) {
-          destination.add(",");
-          if (indent != 0) { destination.add('\n'); }
+          destination.add(',');
+          if (pretty) { destination.add('\n'); }
         }
       }
-      if (indent != 0) { destination.add("\n" + std::string(indent - printIndent, ' ')); }
+      if (pretty) {
+        destination.add('\n');
+        addIndent(destination, indent - printIndent);
+      }
     }
-    destination.add("]");
+    destination.add(']');
   }
   static void stringifyNumber(const Node &jNode, IDestination &destination)
   {
@@ -113,18 +130,14 @@ private:
   {
     destination.add(NRef<Boolean>(jNode).toString());
   }
-  static void stringifyNull([[maybe_unused]]const Node &jNode, IDestination &destination) { destination.add(Null::toString()); }
+  static void stringifyNull([[maybe_unused]]const Node &jNode, IDestination &destination) { destination.add("null"); }
   static void stringifyString(const Node &jNode, IDestination &destination)
   {
-    destination.add('"');
-    destination.add(jsonTranslator->to(NRef<String>(jNode).toString()));
-    destination.add('"');
+    appendQuotedString(NRef<String>(jNode).value(), destination);
   }
   static void stringifyString(const std::string_view &value, IDestination &destination)
   {
-    destination.add('"');
-    destination.add(jsonTranslator->to(value));
-    destination.add('"');
+    appendQuotedString(value, destination);
   }
 
   inline static std::unique_ptr<ITranslator> jsonTranslator;
