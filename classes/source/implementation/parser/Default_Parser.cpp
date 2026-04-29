@@ -8,6 +8,7 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
+#include <array>
 #include <string_view>
 
 namespace JSON_Lib {
@@ -32,29 +33,28 @@ bool validEscape(const char escape)
 /// <param name="source">Source of JSON.</param>
 /// <param name="translator">String translator.</param>
 /// <returns>Extracted string</returns>
-std::string extractString(ISource &source, const ITranslator &translator)
+String extractString(ISource &source, const ITranslator &translator)
 {
   uint64_t stringLength = 0;
   bool translateEscapes = false;
   if (source.current() != '"') { throw SyntaxError(source.getPosition(), "Missing opening '\"' on string."); }
   source.next();
-  std::string extracted;
+  String extracted;
   extracted.reserve(64);
   while (source.more() && source.current() != JSON_Lib::kStringQuote) {
     if (source.current() == '\\') {
-      extracted += '\\';
+      extracted.append('\\');
       source.next();
       if (!validEscape(source.current())) { extracted.pop_back(); }
       translateEscapes = true;
     }
-    extracted += source.current();
+    extracted.append(source.current());
     stringLength++;
     if (stringLength > String::getMaxStringLength()) { throw SyntaxError("String size exceeds maximum allowed size."); }
     source.next();
   }
   if (source.current() != '"') { throw SyntaxError(source.getPosition(), "Missing closing '\"' on string."); }
-  // Need to translate escapes to UTF8
-  if (translateEscapes) { extracted = translator.from(extracted); }
+  if (translateEscapes) { extracted = String{translator.from(extracted.value())}; }
   source.next();
   return extracted;
 }
@@ -79,7 +79,7 @@ Object::Entry
   Default_Parser::parseObjectEntry(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
   source.ignoreWS();
-  const std::string key{ extractString(source, translator) };
+  const std::string key{ extractString(source, translator).value() };
   source.ignoreWS();
   if (source.current() != JSON_Lib::kColon) {
     throw SyntaxError(source.getPosition(), "Missing ':' in key value pair.");
@@ -111,11 +111,18 @@ Node Default_Parser::parseNumber(ISource &source,
   const ITranslator &,
   unsigned long)
 {
-  std::string numberText;
-  numberText.reserve(32);
-  for (; source.more() && !endOfNumber(source); source.next()) { numberText += source.current(); }
-  if (Number number{ numberText }; number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>()
-                               || number.is<double>() || number.is<long double>()) {
+  static constexpr std::size_t kMaxNumberLength = 64;
+  std::array<char, kMaxNumberLength> numberText{};
+  std::size_t numberLength = 0;
+  while (source.more() && !endOfNumber(source)) {
+    if (numberLength >= numberText.size()) { throw SyntaxError("Number size exceeds maximum allowed length."); }
+    numberText[numberLength++] = source.current();
+    source.next();
+  }
+  const std::string_view numberView(numberText.data(), numberLength);
+  Number number{ numberView };
+  if (number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>() || number.is<double>()
+      || number.is<long double>()) {
     return Node::make<Number>(number);
   }
   throw SyntaxError(source.getPosition(), "Invalid numeric value.");

@@ -20,6 +20,7 @@ struct Number
   enum class numberNotation { normal = 0, fixed, scientific };
   // Constructors/Destructors
   Number() = default;
+  explicit Number(const std::string_view &value) { convertNumber(value); }
   template<typename T> explicit Number(T value);
   Number(const Number &other) = default;
   Number &operator=(const Number &other) = default;

@@ -7,6 +7,7 @@
 //
 
 #include "JSON_Impl.hpp"
+#include <string>
 
 namespace JSON_Lib {
 
@@ -30,9 +31,8 @@ void JSON_Impl::setIndent(const long indent)
 }
 std::string JSON_Impl::version()
 {
-  std::stringstream versionString;
-  versionString << "JSON_Lib Version  " << JSON_VERSION_MAJOR << "." << JSON_VERSION_MINOR << "." << JSON_VERSION_PATCH;
-  return versionString.str();
+  return std::string("JSON_Lib Version  ") + std::to_string(JSON_VERSION_MAJOR) + "." + std::to_string(JSON_VERSION_MINOR)
+         + "." + std::to_string(JSON_VERSION_PATCH);
 }
 void JSON_Impl::parse(ISource &source) { jNodeRoot = jsonParser->parse(source); }
 Result<Node> JSON_Impl::parseResult(ISource &source)
