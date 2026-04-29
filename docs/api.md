@@ -84,6 +84,22 @@ int main() {
 }
 ```
 
+### Embedded API details
+- `EmbeddedJSON` is a lightweight facade built for embedded-friendly builds.
+- It exposes compile-time policy checks:
+  - `EmbeddedJSON::isEmbeddedBuild()`
+  - `EmbeddedJSON::isExceptionFreeBuild()`
+  - `EmbeddedJSON::isNoStdIoBuild()`
+  - `EmbeddedJSON::isNoDynamicMemoryBuild()`
+- It also exposes runtime limits for embedded operation:
+  - `EmbeddedJSON::Limits::maxStringLength()`
+  - `EmbeddedJSON::Limits::maxParserDepth()`
+- Use `BufferSource` and `BufferDestination` for zero-copy buffer-backed input/output.
+- For deterministic output, prefer `FixedBufferDestination<N>` and check overflow behavior.
+
+### Embedded example
+A working example is available at `examples/source/JSON_Embedded_Buffer_API.cpp`.
+
 ### Creating and Serializing JSON
 ```cpp
 #include "json_lib.h"
