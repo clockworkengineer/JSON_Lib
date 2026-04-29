@@ -59,18 +59,24 @@ void JSON::strip(ISource &&source, IDestination &&destination)  { JSON_Impl::str
 /// <param name="source">Source for JSON encoded bytes.</param>
 void JSON::parse(ISource &source) const { implementation->parse(source); }
 void JSON::parse(ISource &&source) const { implementation->parse(source); }
+Result<Node> JSON::parseResult(ISource &source) const { return implementation->parseResult(source); }
+Result<Node> JSON::parseResult(ISource &&source) const { return implementation->parseResult(source); }
 /// <summary>
 /// Traverse Node structure and build its JSON string (no whitespace) on destination stream.
 /// </summary>
 /// <param name="destination">Destination stream for stringified JSON.</param>
 void JSON::stringify(IDestination &destination) const { implementation->stringify(destination); }
 void JSON::stringify(IDestination &&destination) const { implementation->stringify(destination); }
+Result<void> JSON::stringifyResult(IDestination &destination) const { return implementation->stringifyResult(destination); }
+Result<void> JSON::stringifyResult(IDestination &&destination) const { return implementation->stringifyResult(destination); }
 /// <summary>
 /// Traverse Node structure and build its JSON string (pretty printed) on destination stream.
 /// </summary>
 /// <param name="destination">Destination stream for stringified JSON.</param>
 void JSON::print(IDestination &destination) const { implementation->print(destination); }
 void JSON::print(IDestination &&destination) const { implementation->print(destination); }
+Result<void> JSON::printResult(IDestination &destination) const { return implementation->printResult(destination); }
+Result<void> JSON::printResult(IDestination &&destination) const { return implementation->printResult(destination); }
 /// <summary>
 /// Set print indent value.
 /// </summary>

@@ -24,6 +24,7 @@ public:
   static unsigned long getMaxParserDepth() { return maxParserDepth; }
 
   Node parse(ISource &source) override;
+  Result<Node> parseResult(ISource &source) override;
 
 private:
   // Parse JSON

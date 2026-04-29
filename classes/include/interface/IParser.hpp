@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include "implementation/common/JSON_Error.hpp"
+
 namespace JSON_Lib {
 
 // ====================
@@ -29,6 +32,7 @@ public:
   // =================
   // Parse JSON source
   // =================
-virtual Node parse(ISource &source) = 0;
+  virtual Node parse(ISource &source) = 0;
+  virtual Result<Node> parseResult(ISource &source);
 };
 }// namespace JSON_Lib

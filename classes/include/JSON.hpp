@@ -1,5 +1,7 @@
 #pragma once
 
+#include "implementation/common/JSON_Error.hpp"
+
 namespace JSON_Lib {
 
 // =========================
@@ -45,12 +47,18 @@ public:
   // Parse JSON into the tree
   void parse(ISource &source) const;
   void parse(ISource &&source) const;
+  Result<Node> parseResult(ISource &source) const;
+  Result<Node> parseResult(ISource &&source) const;
   // Create JSON text string from Node tree (no whitespace)
   void stringify(IDestination &destination) const;
   void stringify(IDestination &&destination) const;
+  Result<void> stringifyResult(IDestination &destination) const;
+  Result<void> stringifyResult(IDestination &&destination) const;
   // Create JSON text string from Node tree (pretty printed)
   void print(IDestination &destination) const;
   void print(IDestination &&destination) const;
+  Result<void> printResult(IDestination &destination) const;
+  Result<void> printResult(IDestination &&destination) const;
   // Strip whitespace from JSON string
   static void strip(ISource &source, IDestination &destination);
   static void strip(ISource &source, IDestination &&destination) ;

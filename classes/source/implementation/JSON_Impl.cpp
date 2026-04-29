@@ -35,15 +35,45 @@ std::string JSON_Impl::version()
   return versionString.str();
 }
 void JSON_Impl::parse(ISource &source) { jNodeRoot = jsonParser->parse(source); }
+Result<Node> JSON_Impl::parseResult(ISource &source)
+{
+  auto result = jsonParser->parseResult(source);
+  if (result.ok() && result.value) { jNodeRoot = std::move(*result.value); }
+  return result;
+}
 void JSON_Impl::stringify(IDestination &destination) const
 {
   if (jNodeRoot.isEmpty()) { throw Error("No JSON to stringify."); }
   jsonStringify->stringify(jNodeRoot, destination, 0);
 }
+Result<void> JSON_Impl::stringifyResult(IDestination &destination) const
+{
+  if (jNodeRoot.isEmpty()) {
+    return {Status::InvalidInput, {}, {0, 0}};
+  }
+  try {
+    jsonStringify->stringify(jNodeRoot, destination, 0);
+    return {Status::Ok, {}, {0, 0}};
+  } catch (const std::exception &ex) {
+    return {Status::UnknownError, ex.what(), {0, 0}};
+  }
+}
 void JSON_Impl::print(IDestination &destination) const
 {
   if (jNodeRoot.isEmpty()) { throw Error("No JSON to print."); }
   jsonStringify->stringify(jNodeRoot, destination, jsonStringify->getIndent());
+}
+Result<void> JSON_Impl::printResult(IDestination &destination) const
+{
+  if (jNodeRoot.isEmpty()) {
+    return {Status::InvalidInput, {}, {0, 0}};
+  }
+  try {
+    jsonStringify->stringify(jNodeRoot, destination, jsonStringify->getIndent());
+    return {Status::Ok, {}, {0, 0}};
+  } catch (const std::exception &ex) {
+    return {Status::UnknownError, ex.what(), {0, 0}};
+  }
 }
 void JSON_Impl::strip(ISource &source, IDestination &destination)
 {// Note: That it is assumed that the JSON on the source stream is valid with no errors.

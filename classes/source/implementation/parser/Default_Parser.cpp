@@ -262,4 +262,16 @@ Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, 
 /// <param name="source">Source of JSON.</param>
 /// <returns>Pointer to Node.</returns>
 Node Default_Parser::parse(ISource &source) { return parseNodes(source, jsonTranslator, 1); }
+Result<Node> Default_Parser::parseResult(ISource &source)
+{
+  try {
+    return {Status::Ok, std::make_unique<Node>(parseNodes(source, jsonTranslator, 1)), {}, {0, 0}};
+  } catch (const SyntaxError &ex) {
+    return {Status::SyntaxError, nullptr, ex.what(), source.getPosition()};
+  } catch (const Error &ex) {
+    return {Status::UnknownError, nullptr, ex.what(), source.getPosition()};
+  } catch (const std::exception &ex) {
+    return {Status::UnknownError, nullptr, ex.what(), source.getPosition()};
+  }
+}
 }// namespace JSON_Lib

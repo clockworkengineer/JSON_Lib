@@ -1,6 +1,48 @@
 #pragma once
 
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <string_view>
+#include <utility>
+
 namespace JSON_Lib {
+
+enum class Status : uint8_t
+{
+  Ok = 0,
+  SyntaxError,
+  OutOfMemory,
+  InvalidKey,
+  InvalidIndex,
+  UnsupportedEncoding,
+  InvalidInput,
+  NoData,
+  UnknownError
+};
+
+template<typename T>
+struct Result
+{
+  Status status{Status::Ok};
+  std::unique_ptr<T> value;
+  std::string message;
+  std::pair<long, long> position{0, 0};
+
+  [[nodiscard]] bool ok() const noexcept { return status == Status::Ok; }
+  [[nodiscard]] T &unwrap() { return *value; }
+  [[nodiscard]] const T &unwrap() const { return *value; }
+};
+
+template<>
+struct Result<void>
+{
+  Status status{Status::Ok};
+  std::string message;
+  std::pair<long, long> position{0, 0};
+
+  [[nodiscard]] bool ok() const noexcept { return status == Status::Ok; }
+};
 
 // JSON error types
 struct Error final : std::runtime_error

@@ -20,10 +20,13 @@ public:
   static std::string version();
   // Parse JSON into Node tree
   void parse(ISource &source);
+  Result<Node> parseResult(ISource &source);
   // Create JSON text string (no white space) from Node tree
   void stringify(IDestination &destination) const;
+  Result<void> stringifyResult(IDestination &destination) const;
   // Create JSON structured text string (pretty print) from Node tree
   void print(IDestination &destination) const;
+  Result<void> printResult(IDestination &destination) const;
   // Strip whitespace from JSON string
   static void strip(ISource &source, IDestination &destination);
   // Get the root of JSON tree

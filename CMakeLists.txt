@@ -89,6 +89,7 @@ set(JSON_LIBRARY_NAME ${PROJECT_NAME})
 set(JSON_CORE_SOURCES
   classes/source/JSON.cpp
   classes/source/implementation/JSON_Impl.cpp
+  classes/source/interface/IParser.cpp
   classes/source/implementation/file/JSON_File.cpp
   classes/source/implementation/translator/Default_Translator.cpp
   classes/source/implementation/converter/${PLATFORM}/JSON_Converter.cpp
