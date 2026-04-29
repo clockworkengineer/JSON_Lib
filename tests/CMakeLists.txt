@@ -57,6 +57,18 @@ set(TEST_SOURCES
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(${TEST_EXECUTABLE} PRIVATE
+  ${PROJECT_SOURCE_DIR}/classes/include/interface
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/common
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/node
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/converter
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/translator
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/parser
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify
+)
 target_link_libraries(${TEST_EXECUTABLE} ${JSON_LIBRARY_NAME} Catch2::Catch2WithMain)
 target_precompile_headers(${TEST_EXECUTABLE} REUSE_FROM JSON_Lib_Core)
 
@@ -69,6 +81,18 @@ set(BENCHMARK_SOURCES
   source/benchmark/JSON_Lib_Tests_Benchmark.cpp)
 add_executable(${BENCHMARK_EXECUTABLE} ${BENCHMARK_SOURCES})
 target_include_directories(${BENCHMARK_EXECUTABLE} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(${BENCHMARK_EXECUTABLE} PRIVATE
+  ${PROJECT_SOURCE_DIR}/classes/include/interface
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/common
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/node
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/converter
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/translator
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/parser
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify
+)
 target_link_libraries(${BENCHMARK_EXECUTABLE} ${JSON_LIBRARY_NAME} Catch2::Catch2WithMain)
 target_precompile_headers(${BENCHMARK_EXECUTABLE} REUSE_FROM JSON_Lib_Core)
 catch_discover_tests(${BENCHMARK_EXECUTABLE})

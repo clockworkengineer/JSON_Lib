@@ -115,7 +115,7 @@ target_include_directories(JSON_Lib_Stringify INTERFACE
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation>
 )
 
-target_include_directories(JSON_Lib_Core PUBLIC
+target_include_directories(JSON_Lib_Core PRIVATE
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include>
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/interface>
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation>
@@ -132,7 +132,7 @@ target_include_directories(JSON_Lib_Core PUBLIC
 
 target_precompile_headers(JSON_Lib_Core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/stdafx.h)
 
-target_include_directories(JSON_Lib_Parser PUBLIC
+target_include_directories(JSON_Lib_Parser PRIVATE
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include>
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/interface>
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation>
@@ -155,20 +155,10 @@ add_library(${JSON_LIBRARY_NAME} STATIC
   $<TARGET_OBJECTS:JSON_Lib_Parser>
 )
 
-target_link_libraries(${JSON_LIBRARY_NAME} PUBLIC JSON_Lib_Stringify)
+target_link_libraries(${JSON_LIBRARY_NAME} PRIVATE JSON_Lib_Stringify)
 
 target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/interface>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/common>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/node>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/io>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/converter>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/translator>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/variants>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/parser>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify>
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
   $<INSTALL_INTERFACE:include>
 )
@@ -200,7 +190,6 @@ install(TARGETS ${JSON_LIBRARY_NAME}
 if(JSON_LIB_EXPORT_INTERFACE)
   install(FILES
     ${PROJECT_SOURCE_DIR}/classes/include/JSON.hpp
-    ${PROJECT_SOURCE_DIR}/classes/include/JSON_Core.hpp
     ${PROJECT_SOURCE_DIR}/classes/include/JSON_Config.hpp
     ${PROJECT_SOURCE_DIR}/classes/include/interface/JSON_Interfaces.hpp
     ${PROJECT_SOURCE_DIR}/classes/include/interface/IAction.hpp
@@ -210,7 +199,6 @@ if(JSON_LIB_EXPORT_INTERFACE)
     ${PROJECT_SOURCE_DIR}/classes/include/interface/IParser.hpp
     ${PROJECT_SOURCE_DIR}/classes/include/interface/IStringify.hpp
     DESTINATION include)
-  install(DIRECTORY ${PROJECT_SOURCE_DIR}/classes/include/implementation DESTINATION include/implementation FILES_MATCHING PATTERN "*.hpp")
 else()
   install(FILES ${JSON_INCLUDES} DESTINATION include)
 endif()
