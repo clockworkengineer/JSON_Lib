@@ -67,7 +67,7 @@ void processEntry(const js::Object::Entry &entry)
   PLOG_INFO << entryJSON;
 }
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+int main(int, char **)
 {
   try {
     // Initialise logging.

@@ -27,37 +27,37 @@ public:
   // ============================
   // Node encountered so process
   // ============================
-  virtual void onNode([[maybe_unused]] Node &jNode) { }
-  virtual void onNode([[maybe_unused]] const Node &jNode) { }
+  virtual void onNode(Node &) { }
+  virtual void onNode(const Node &) { }
   // =============================
   // String encountered so process
   // =============================
-  virtual void onString([[maybe_unused]] Node &jNode) { }
-  virtual void onString([[maybe_unused]] const Node &jNode) { }
+  virtual void onString(Node &) { }
+  virtual void onString(const Node &) { }
   // =============================
   // Number encountered so process
   // =============================
-  virtual void onNumber([[maybe_unused]] Node &jNode) { }
-  virtual void onNumber([[maybe_unused]] const Node &jNode) { }
+  virtual void onNumber(Node &) { }
+  virtual void onNumber(const Node &) { }
   // ==============================
   // Boolean encountered so process
   // ==============================
-  virtual void onBoolean([[maybe_unused]] Node &jNode) { }
-  virtual void onBoolean([[maybe_unused]] const Node &jNode) { }
+  virtual void onBoolean(Node &) { }
+  virtual void onBoolean(const Node &) { }
   // ===========================
   // Null encountered so process
   // ===========================
-  virtual void onNull([[maybe_unused]] Node &jNode) { }
-  virtual void onNull([[maybe_unused]] const Node &jNode) { }
+  virtual void onNull(Node &) { }
+  virtual void onNull(const Node &) { }
   // ============================
   // Array encountered so process
   // ============================
-  virtual void onArray([[maybe_unused]] Node &jNode) { }
-  virtual void onArray([[maybe_unused]] const Node &jNode) { }
+  virtual void onArray(Node &) { }
+  virtual void onArray(const Node &) { }
   // =============================
   // Object encountered so process
   // =============================
-  virtual void onObject([[maybe_unused]] Node &jNode) { }
-  virtual void onObject([[maybe_unused]] const Node &jNode) { }
+  virtual void onObject(Node &) { }
+  virtual void onObject(const Node &) { }
 };
 }// namespace JSON_Lib

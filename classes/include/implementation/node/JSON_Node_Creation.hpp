@@ -27,7 +27,7 @@ static Node typeToNode(const JSON::InitializerListTypes &type)
   if (const auto pValue = std::get_if<long double>(&type)) { return Node(*pValue); }
   if (const auto pValue = std::get_if<bool>(&type)) { return Node(*pValue); }
   if (const auto pValue = std::get_if<std::string>(&type)) { return Node(*pValue); }
-  if ([[maybe_unused]] auto pValue = std::get_if<std::nullptr_t>(&type)) { return Node(nullptr); }
+  if (const auto pValue = std::get_if<std::nullptr_t>(&type)) { return Node(nullptr); }
   if (const auto pValue = std::get_if<Node>(&type)) { return std::move(*const_cast<Node *>(pValue)); }
   throw Node::Error("Node for unsupported type could not be created.");
 }

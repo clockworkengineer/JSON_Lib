@@ -17,7 +17,7 @@ namespace js = JSON_Lib;
 /// <returns>JSON settings file name.</returns>
 std::string jsonSettingsFile() { return (std::filesystem::current_path() / "files" / "settings.json").string(); }
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+int main(int, char **)
 {
   try {
     // Initialise logging.

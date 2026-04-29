@@ -96,7 +96,7 @@ Object::Entry
 /// <returns>String Node.</returns>
 Node Default_Parser::parseString(ISource &source,
   const ITranslator &translator,
-  [[maybe_unused]] const unsigned long parserDepth)
+  unsigned long)
 {
   return Node::make<String>(extractString(source, translator));
 }
@@ -108,8 +108,8 @@ Node Default_Parser::parseString(ISource &source,
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Number Node.</returns>
 Node Default_Parser::parseNumber(ISource &source,
-  [[maybe_unused]] const ITranslator &translator,
-  [[maybe_unused]] const unsigned long parserDepth)
+  const ITranslator &,
+  unsigned long)
 {
   std::string numberText;
   numberText.reserve(32);
@@ -128,8 +128,8 @@ Node Default_Parser::parseNumber(ISource &source,
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Boolean Node.</returns>
 Node Default_Parser::parseBoolean(ISource &source,
-  [[maybe_unused]] const ITranslator &translator,
-  [[maybe_unused]] const unsigned long parserDepth)
+  const ITranslator &,
+  unsigned long)
 {
   if (source.match(std::string_view("true"))) { return Node::make<Boolean>(true); }
   if (source.match(std::string_view("false"))) { return Node::make<Boolean>(false); }
@@ -143,8 +143,8 @@ Node Default_Parser::parseBoolean(ISource &source,
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Null Node.</returns>
 Node Default_Parser::parseNull(ISource &source,
-  [[maybe_unused]] const ITranslator &translator,
-  [[maybe_unused]] const unsigned long parserDepth)
+  const ITranslator &,
+  unsigned long)
 {
   if (!source.match(std::string_view("null"))) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
   return Node::make<Null>();

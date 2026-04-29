@@ -12,7 +12,7 @@
 namespace js = JSON_Lib;
 namespace fs = std::filesystem;
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+int main(int, char **)
 {
   try {
     // Initialise logging.

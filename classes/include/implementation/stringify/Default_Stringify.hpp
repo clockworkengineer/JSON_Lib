@@ -142,7 +142,7 @@ private:
   {
     destination.add(NRef<Boolean>(jNode).toString());
   }
-  static void stringifyNull([[maybe_unused]]const Node &jNode, IDestination &destination)
+  static void stringifyNull(const Node &, IDestination &destination)
   {
     destination.add("null");
   }

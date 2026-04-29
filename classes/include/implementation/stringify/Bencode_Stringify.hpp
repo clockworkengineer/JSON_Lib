@@ -31,7 +31,7 @@ public:
   }
 
 private:
-  static void stringifyNodes(const Node &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
+  static void stringifyNodes(const Node &jNode, IDestination &destination, const unsigned long)
   {
     if (isA<Number>(jNode)) {
       stringifyNumber(jNode, destination);
@@ -50,7 +50,7 @@ private:
       throw Error("Unknown Node type encountered during stringification.");
     }
   }
-  static void stringifyObject(const Node &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent)
+  static void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long)
   {
     destination.add('d');
     for (auto &entry : NRef<Object>(jNode).value()) {
@@ -59,7 +59,7 @@ private:
     }
     destination.add("e");
   }
-  static void stringifyArray(const Node &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
+  static void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long)
   {
     destination.add('l');
     for (auto &entry : NRef<Array>(jNode).value()) { stringifyNodes(entry, destination, 0); }
@@ -77,7 +77,7 @@ private:
       destination.add("5:False");
     }
   }
-  static void stringifyNull([[maybe_unused]]const Node &jNode, IDestination &destination) { destination.add("4:null"); }
+  static void stringifyNull(const Node &, IDestination &destination) { destination.add("4:null"); }
   static void stringifyString(const Node &jNode, IDestination &destination)
   {
     const auto jsonString = NRef<String>(jNode).value();

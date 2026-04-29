@@ -81,7 +81,7 @@ Node &JSON_Impl::operator[](const std::string_view &key)
   try {
     if (jNodeRoot.isEmpty()) { jNodeRoot = Node::make<Object>(); }
     return jNodeRoot[key];
-  } catch ([[maybe_unused]] Node::Error &error) {
+  } catch (Node::Error &) {
     NRef<Object>(jNodeRoot).add(Object::Entry(key, Node::make<Hole>()));
     return jNodeRoot[key];
   }
@@ -92,7 +92,7 @@ Node &JSON_Impl::operator[](const std::size_t index)
   try {
     if (jNodeRoot.isEmpty()) { jNodeRoot = Node::make<Array>(); }
     return jNodeRoot[index];
-  } catch ([[maybe_unused]] Node::Error &error) {
+  } catch (Node::Error &) {
     NRef<Array>(jNodeRoot).resize(index);
     return jNodeRoot[index];
   }

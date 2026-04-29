@@ -35,7 +35,7 @@ void findAllByKey(const js::Node &node, const std::string &key, std::vector<std:
   }
 }
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+int main(int, char **)
 {
   try {
     init(plog::debug, "JSON_Deep_Search.log");

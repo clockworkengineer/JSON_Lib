@@ -52,9 +52,8 @@ private:
   // integer then floating point types are tried.
   void convertNumber(const std::string_view &number)
   {
-    [[maybe_unused]] auto ok = stringToNumber<int>(number) || stringToNumber<long>(number)
-                               || stringToNumber<long long>(number) || stringToNumber<float>(number)
-                               || stringToNumber<double>(number) || stringToNumber<long double>(number);
+    stringToNumber<int>(number) || stringToNumber<long>(number) || stringToNumber<long long>(number)
+      || stringToNumber<float>(number) || stringToNumber<double>(number) || stringToNumber<long double>(number);
   }
   // Number values (variant)
   Values jNodeNumber;
@@ -87,7 +86,7 @@ template<typename T> bool Number::stringToNumber(const std::string_view &number)
       if (end != number.size()) { return false; }
       *this = Number(value);
       return true;
-    } catch ([[maybe_unused]] const std::exception &) {
+    } catch (const std::exception &) {
       return false;
     }
   } else if constexpr (std::is_same_v<T, double>) {
@@ -97,7 +96,7 @@ template<typename T> bool Number::stringToNumber(const std::string_view &number)
       if (end != number.size()) { return false; }
       *this = Number(value);
       return true;
-    } catch ([[maybe_unused]] const std::exception &) {
+    } catch (const std::exception &) {
       return false;
     }
   } else if constexpr (std::is_same_v<T, long double>) {
@@ -107,7 +106,7 @@ template<typename T> bool Number::stringToNumber(const std::string_view &number)
       if (end != number.size()) { return false; }
       *this = Number(value);
       return true;
-    } catch ([[maybe_unused]] const std::exception &) {
+    } catch (const std::exception &) {
       return false;
     }
   } else {

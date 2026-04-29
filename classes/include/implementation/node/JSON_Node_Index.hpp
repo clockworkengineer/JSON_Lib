@@ -19,7 +19,7 @@ inline Node &Node::operator[](const std::size_t index)
   try {
     if (isA<Hole>(*this)) { *this = make<Array>(); }
     return NRef<Array>(*this)[index];
-  } catch ([[maybe_unused]] const Error &error) {
+  } catch (const Error &) {
     NRef<Array>(*this).resize(index);
     return NRef<Array>(*this)[index];
   }

@@ -7,9 +7,9 @@ public:
 
   ~JSON_Analyzer() override = default;
   // Add Node details to analysis
-  void onNode([[maybe_unused]] const Node &jNode) override { totalNodes++; }
+  void onNode(const Node &) override { totalNodes++; }
   // Add string details to analysis
-  void onString([[maybe_unused]] const Node &jNode) override { totalStrings++; }
+  void onString(const Node &) override { totalStrings++; }
   // Add number details to analysis
   void onNumber(const Node &jNode) override
   {
@@ -31,13 +31,13 @@ public:
     }
   }
 
-  void onBoolean([[maybe_unused]] const Node &jNode) override { totalBoolean++; }
+  void onBoolean(const Node &) override { totalBoolean++; }
   // Add null details to analysis
-  void onNull([[maybe_unused]] const Node &jNode) override { totalNull++; }
+  void onNull(const Node &) override { totalNull++; }
   // Add array details to analysis
-  void onArray([[maybe_unused]] const Node &jNode) override { totalArrays++; }
+  void onArray(const Node &) override { totalArrays++; }
   // Add object details to analysis
-  void onObject([[maybe_unused]] const Node &jNode) override { totalObjects++; }
+  void onObject(const Node &) override { totalObjects++; }
 
   // JSON analysis data
   // Node

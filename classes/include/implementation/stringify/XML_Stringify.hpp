@@ -28,7 +28,7 @@ public:
   /// <param name="destination">Destination stream for stringified XML.</param>
   /// <param name="indent">Current print indentation.</param>
   void
-    stringify(const Node &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const override
+    stringify(const Node &jNode, IDestination &destination, const unsigned long) const override
   {
     destination.add(R"(<?xml version="1.0" encoding="UTF-8"?>)");
     destination.add("<root>");
@@ -37,7 +37,7 @@ public:
   }
 
 private:
-  void stringifyNodes(const Node &jNode, IDestination &destination, [[maybe_unused]] const long indent) const
+  void stringifyNodes(const Node &jNode, IDestination &destination, const long) const
   {
     if (isA<Number>(jNode)) {
       stringifyNumber(jNode, destination);
@@ -55,7 +55,7 @@ private:
       throw Error("Unknown Node type encountered during stringification.");
     }
   }
-  void stringifyObject(const Node &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const
+  void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long) const
   {
     for (const auto &jNodeNext : NRef<Object>(jNode).value()) {
       std::string elementName { jNodeNext.getKey()} ;
@@ -65,7 +65,7 @@ private:
       destination.add("</" + elementName + ">");
     }
   }
-  void stringifyArray(const Node &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent) const
+  void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long) const
   {
     if (NRef<Array>(jNode).value().size() > 1) {
       for (const auto &bNodeNext : NRef<Array>(jNode).value()) {
@@ -87,7 +87,7 @@ private:
       destination.add("False");
     }
   }
-  static void stringifyNull([[maybe_unused]]const Node &jNode, [[maybe_unused]]IDestination &destination) {}
+  static void stringifyNull(const Node &, IDestination &) {}
   void stringifyString(const Node &jNode, IDestination &destination) const
   {
     destination.add(xmlTranslator->to(NRef<String>(jNode).value()));

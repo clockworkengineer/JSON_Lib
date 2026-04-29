@@ -14,7 +14,7 @@ struct Person {
   int age;
 };
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+int main(int, char **)
 {
   try {
     init(plog::debug, "JSON_Custom_Struct_Serialization.log");

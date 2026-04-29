@@ -9,7 +9,7 @@
 
 namespace js = JSON_Lib;
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+int main(int, char **)
 {
   init(plog::debug, "JSON_Error_Handling.log");
   PLOG_INFO << "JSON_Error_Handling started ...";

@@ -28,7 +28,7 @@ public:
   /// <param name="destination">Destination stream for stringified YAML.</param>
   /// <param name="indent">Current print indentation.</param>
   void
-    stringify(const Node &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const override
+    stringify(const Node &jNode, IDestination &destination, const unsigned long) const override
   {
     destination.add("---\n");
     stringifyNodes(jNode, destination, 0);

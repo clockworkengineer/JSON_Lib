@@ -12,7 +12,7 @@
 
 namespace js = JSON_Lib;
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+int main(int, char **)
 {
   try {
     const js::JSON json(js::makeStringify<js::YAML_Stringify>());

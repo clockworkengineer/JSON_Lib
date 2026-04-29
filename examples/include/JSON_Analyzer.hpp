@@ -9,7 +9,7 @@ public:
   JSON_Analyzer() = default;
   ~JSON_Analyzer() override = default;
   // Add Node details to analysis
-  void onNode([[maybe_unused]] const JSON_Lib::Node &jNode) override { totalNodes++; }
+  void onNode(const JSON_Lib::Node &) override { totalNodes++; }
   // Add string details to analysis
   void onString(const JSON_Lib::Node &jNode) override
   {
@@ -40,13 +40,13 @@ public:
       totalLongDouble++;
     }
   }
-  void onBoolean([[maybe_unused]] const JSON_Lib::Node &jNode) override
+  void onBoolean(const JSON_Lib::Node &) override
   {
     totalBoolean++;
     sizeInBytes += sizeof(JSON_Lib::Boolean);
   }
   // Add null details to analysis
-  void onNull([[maybe_unused]] const JSON_Lib::Node &jNode) override
+  void onNull(const JSON_Lib::Node &) override
   {
     totalNull++;
     sizeInBytes += sizeof(JSON_Lib::Null);
@@ -58,7 +58,7 @@ public:
     totalArrays++;
     sizeInBytes += sizeof(JSON_Lib::Array);
     maxArraySize = std::max(jNodeArray.size(), maxArraySize);
-    for ([[maybe_unused]] auto &jNodeEntry : jNodeArray.value()) { sizeInBytes += sizeof(JSON_Lib::Node); }
+    sizeInBytes += jNodeArray.value().size() * sizeof(JSON_Lib::Node);
   }
   // Add object details to analysis
   void onObject(const JSON_Lib::Node &jNode) override

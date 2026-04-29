@@ -13,7 +13,7 @@ public:
   ~XML_Translator() override = default;
 
   // Convert to/from XML escaped characters
-  [[nodiscard]] std::string from([[maybe_unused]] const std::string_view &escapedString) const override { return std::string(escapedString); }
+  [[nodiscard]] std::string from(const std::string_view &escapedString) const override { return std::string(escapedString); }
   [[nodiscard]] std::string to(const std::string_view &rawString) const override
   {
     std::string translated;

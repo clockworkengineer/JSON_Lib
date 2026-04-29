@@ -27,7 +27,7 @@ void processJSONFile(const std::string &fileName)
   PLOG_INFO << "Finished " << fileName << ".";
 }
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+int main(int, char **)
 {
   // Initialise logging.
   init(plog::debug, "JSON_Convert_File.log");

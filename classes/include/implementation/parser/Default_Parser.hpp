@@ -30,16 +30,16 @@ private:
   [[nodiscard]] static Object::Entry
     parseObjectEntry(ISource &source, const ITranslator &translator, unsigned long parserDepth);
   [[nodiscard]] static Node
-    parseString(ISource &source, const ITranslator &translator, [[maybe_unused]] unsigned long parserDepth);
+    parseString(ISource &source, const ITranslator &translator, unsigned long parserDepth);
   [[nodiscard]] static Node parseNumber(ISource &source,
-    [[maybe_unused]] const ITranslator &translator,
-    [[maybe_unused]] unsigned long parserDepth);
+    const ITranslator &translator,
+    unsigned long parserDepth);
   [[nodiscard]] static Node parseBoolean(ISource &source,
-    [[maybe_unused]] const ITranslator &translator,
-    [[maybe_unused]] unsigned long parserDepth);
+    const ITranslator &translator,
+    unsigned long parserDepth);
   [[nodiscard]] static Node parseNull(ISource &source,
-    [[maybe_unused]] const ITranslator &translator,
-    [[maybe_unused]] unsigned long parserDepth);
+    const ITranslator &translator,
+    unsigned long parserDepth);
   [[nodiscard]] static Node parseObject(ISource &source, const ITranslator &translator, unsigned long parserDepth);
   [[nodiscard]] static Node parseArray(ISource &source, const ITranslator &translator, unsigned long parserDepth);
   [[nodiscard]] static Node parseNodes(ISource &source, const ITranslator &translator, unsigned long parserDepth);
