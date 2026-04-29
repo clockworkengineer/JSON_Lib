@@ -1,5 +1,10 @@
 #pragma once
 
+#include <stdexcept>
+#include <string>
+#include <string_view>
+#include <utility>
+
 namespace JSON_Lib {
   
 // ========================
@@ -66,12 +71,12 @@ public:
   // ===============================================================
   // Is current string a match at the current source stream position
   // ===============================================================
-  [[nodiscard]] bool match(const std::string &targetString)
+  [[nodiscard]] bool match(const std::string_view &targetString)
   {
     long index = 0;
     while (more() && current() == targetString[index]) {
       next();
-      if (++index == static_cast<long>(targetString.length())) { return true; }
+      if (++index == static_cast<long>(targetString.size())) { return true; }
     }
     backup(index);
     return false;

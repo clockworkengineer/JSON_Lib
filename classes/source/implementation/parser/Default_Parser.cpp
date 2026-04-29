@@ -8,6 +8,7 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
+#include <string_view>
 
 namespace JSON_Lib {
 
@@ -38,6 +39,7 @@ std::string extractString(ISource &source, const ITranslator &translator)
   if (source.current() != '"') { throw SyntaxError(source.getPosition(), "Missing opening '\"' on string."); }
   source.next();
   std::string extracted;
+  extracted.reserve(64);
   while (source.more() && source.current() != JSON_Lib::kStringQuote) {
     if (source.current() == '\\') {
       extracted += '\\';
@@ -109,9 +111,10 @@ Node Default_Parser::parseNumber(ISource &source,
   [[maybe_unused]] const ITranslator &translator,
   [[maybe_unused]] const unsigned long parserDepth)
 {
-  std::string string;
-  for (; source.more() && !endOfNumber(source); source.next()) { string += source.current(); }
-  if (Number number{ string }; number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>()
+  std::string numberText;
+  numberText.reserve(32);
+  for (; source.more() && !endOfNumber(source); source.next()) { numberText += source.current(); }
+  if (Number number{ numberText }; number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>()
                                || number.is<double>() || number.is<long double>()) {
     return Node::make<Number>(number);
   }
@@ -128,8 +131,8 @@ Node Default_Parser::parseBoolean(ISource &source,
   [[maybe_unused]] const ITranslator &translator,
   [[maybe_unused]] const unsigned long parserDepth)
 {
-  if (source.match("true")) { return Node::make<Boolean>(true); }
-  if (source.match("false")) { return Node::make<Boolean>(false); }
+  if (source.match(std::string_view("true"))) { return Node::make<Boolean>(true); }
+  if (source.match(std::string_view("false"))) { return Node::make<Boolean>(false); }
   throw SyntaxError(source.getPosition(), "Invalid boolean value.");
 }
 /// <summary>
@@ -143,7 +146,7 @@ Node Default_Parser::parseNull(ISource &source,
   [[maybe_unused]] const ITranslator &translator,
   [[maybe_unused]] const unsigned long parserDepth)
 {
-  if (!source.match("null")) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
+  if (!source.match(std::string_view("null"))) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
   return Node::make<Null>();
 }
 /// <summary>

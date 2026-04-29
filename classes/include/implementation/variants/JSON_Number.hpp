@@ -1,5 +1,13 @@
 #pragma once
 
+#include <charconv>
+#include <iomanip>
+#include <sstream>
+#include <string>
+#include <string_view>
+#include <type_traits>
+#include <variant>
+
 namespace JSON_Lib {
 
 struct Number
@@ -66,29 +74,44 @@ template<typename T> Number::Number(T value)
 // Convert string to specific numeric type (returns true on success)
 template<typename T> bool Number::stringToNumber(const std::string_view &number)
 {
-  {
+  if constexpr (std::is_same_v<T, int> || std::is_same_v<T, long> || std::is_same_v<T, long long>) {
+    T value{};
+    const auto result = std::from_chars(number.data(), number.data() + number.size(), value, kStringConversionBase);
+    if (result.ec != std::errc() || result.ptr != number.data() + number.size()) { return false; }
+    *this = Number(value);
+    return true;
+  } else if constexpr (std::is_same_v<T, float>) {
     try {
       std::size_t end = 0;
-      T value;
-      if constexpr (std::is_same_v<T, int>) {
-        value = std::stoi(number.data(), &end, kStringConversionBase);
-      } else if constexpr (std::is_same_v<T, long>) {
-        value = std::stol(number.data(), &end, kStringConversionBase);
-      } else if constexpr (std::is_same_v<T, long long>) {
-        value = std::stoll(number.data(), &end, kStringConversionBase);
-      } else if constexpr (std::is_same_v<T, float>) {
-        value = std::stof(number.data(), &end);
-      } else if constexpr (std::is_same_v<T, double>) {
-        value = std::stod(number.data(), &end);
-      } else if constexpr (std::is_same_v<T, long double>) {
-        value = std::stold(number.data(), &end);
-      }
+      const float value = std::stof(number.data(), &end);
       if (end != number.size()) { return false; }
       *this = Number(value);
-    } catch ([[maybe_unused]] const std::exception &ex) {
+      return true;
+    } catch ([[maybe_unused]] const std::exception &) {
       return false;
     }
-    return true;
+  } else if constexpr (std::is_same_v<T, double>) {
+    try {
+      std::size_t end = 0;
+      const double value = std::stod(number.data(), &end);
+      if (end != number.size()) { return false; }
+      *this = Number(value);
+      return true;
+    } catch ([[maybe_unused]] const std::exception &) {
+      return false;
+    }
+  } else if constexpr (std::is_same_v<T, long double>) {
+    try {
+      std::size_t end = 0;
+      const long double value = std::stold(number.data(), &end);
+      if (end != number.size()) { return false; }
+      *this = Number(value);
+      return true;
+    } catch ([[maybe_unused]] const std::exception &) {
+      return false;
+    }
+  } else {
+    static_assert(std::is_same_v<T, void>, "Unsupported numeric type.");
   }
 }
 // Number to string
