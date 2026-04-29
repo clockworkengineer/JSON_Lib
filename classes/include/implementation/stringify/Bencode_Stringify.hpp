@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 
@@ -9,7 +10,9 @@ class Bencode_Stringify final : public IStringify
 {
 public:
   explicit Bencode_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
-      {bencodeTranslator = std::move(translator);}
+      : bencodeTranslator(std::move(translator))
+  {
+  }
   Bencode_Stringify &operator=(const Bencode_Stringify &other) = delete;
   Bencode_Stringify(Bencode_Stringify &&other) = delete;
   Bencode_Stringify &operator=(Bencode_Stringify &&other) = delete;
@@ -85,7 +88,7 @@ private:
     destination.add((std::to_string(static_cast<int>(value.length())) + ":").append(value));
   }
 
-  inline static std::unique_ptr<ITranslator> bencodeTranslator;
+  std::unique_ptr<ITranslator> bencodeTranslator;
 };
 
 

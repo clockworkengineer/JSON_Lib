@@ -24,6 +24,10 @@ JSON_Impl::JSON_Impl(IStringify *stringify, IParser *parser)
     jsonStringify.reset(stringify);
   }
 }
+void JSON_Impl::setIndent(const long indent)
+{
+  Default_Stringify::setDefaultIndent(indent);
+}
 std::string JSON_Impl::version()
 {
   std::stringstream versionString;

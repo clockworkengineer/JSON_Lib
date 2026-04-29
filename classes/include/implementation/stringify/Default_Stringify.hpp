@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <string_view>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
@@ -10,7 +11,9 @@ class Default_Stringify final : public IStringify
 {
 public:
   explicit Default_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
-    {jsonTranslator=std::move(translator);}
+    : jsonTranslator(std::move(translator))
+  {
+  }
   Default_Stringify(const Default_Stringify &other) = delete;
   Default_Stringify &operator=(const Default_Stringify &other) = delete;
   Default_Stringify(Default_Stringify &&other) = delete;
@@ -26,20 +29,26 @@ public:
   /// <param name="indent">Current print indentation.</param>
   void stringify(const Node &jNode, IDestination &destination, const unsigned long indent) const override
   {
-    stringifyNodes(jNode,destination, indent);
+    stringifyNodes(jNode, destination, indent);
   }
 
   // Set print ident value
   void setIndent(const long indent) override
   {
     if (indent < 0) { throw JSON_Lib::Error("Invalid print indentation value."); }
-    printIndent = indent;
+    defaultPrintIndent = indent;
   }
   //  Set indent value
-  long getIndent() const override { return printIndent; }
+  long getIndent() const override { return defaultPrintIndent; }
+
+  static void setDefaultIndent(const long indent)
+  {
+    if (indent < 0) { throw JSON_Lib::Error("Invalid print indentation value."); }
+    defaultPrintIndent = indent;
+  }
 
 private:
-  static void stringifyNodes(const Node &jNode, IDestination &destination, const unsigned long indent)
+  void stringifyNodes(const Node &jNode, IDestination &destination, const unsigned long indent) const
   {
     if (isA<Number>(jNode)) {
       stringifyNumber(jNode, destination);
@@ -59,6 +68,7 @@ private:
       throw Error("Unknown Node type encountered during stringification.");
     }
   }
+
   static void addIndent(IDestination &destination, const unsigned long indent)
   {
     for (unsigned long count = 0; count < indent; ++count) {
@@ -66,14 +76,14 @@ private:
     }
   }
 
-  static void appendQuotedString(const std::string_view &value, IDestination &destination)
+  void appendQuotedString(const std::string_view &value, IDestination &destination) const
   {
     destination.add('"');
     destination.add(jsonTranslator->to(value));
     destination.add('"');
   }
 
-  static void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long indent)
+  void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long indent) const
   {
     const auto &entries = NRef<Object>(jNode).value();
     const bool pretty = indent != 0;
@@ -87,7 +97,7 @@ private:
       stringifyString(entry.getKey(), destination);
       destination.add(':');
       if (pretty) { destination.add(' '); }
-      stringifyNodes(entry.getNode(), destination, pretty ? indent + printIndent : 0);
+      stringifyNodes(entry.getNode(), destination, pretty ? indent + defaultPrintIndent : 0);
       if (commaCount-- > 0) {
         destination.add(',');
         if (pretty) { destination.add('\n'); }
@@ -95,11 +105,12 @@ private:
     }
     if (pretty) {
       destination.add('\n');
-      addIndent(destination, indent - printIndent);
+      addIndent(destination, indent - defaultPrintIndent);
     }
     destination.add('}');
   }
-  static void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long indent)
+
+  void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long indent) const
   {
     const auto &elements = NRef<Array>(jNode).value();
     const bool pretty = indent != 0;
@@ -109,7 +120,7 @@ private:
       if (pretty) { destination.add('\n'); }
       for (auto &entry : elements) {
         if (pretty) { addIndent(destination, indent); }
-        stringifyNodes(entry, destination, pretty ? indent + printIndent : 0);
+        stringifyNodes(entry, destination, pretty ? indent + defaultPrintIndent : 0);
         if (commaCount-- > 0) {
           destination.add(',');
           if (pretty) { destination.add('\n'); }
@@ -117,11 +128,12 @@ private:
       }
       if (pretty) {
         destination.add('\n');
-        addIndent(destination, indent - printIndent);
+        addIndent(destination, indent - defaultPrintIndent);
       }
     }
     destination.add(']');
   }
+
   static void stringifyNumber(const Node &jNode, IDestination &destination)
   {
     destination.add(NRef<Number>(jNode).toString());
@@ -130,18 +142,21 @@ private:
   {
     destination.add(NRef<Boolean>(jNode).toString());
   }
-  static void stringifyNull([[maybe_unused]]const Node &jNode, IDestination &destination) { destination.add("null"); }
-  static void stringifyString(const Node &jNode, IDestination &destination)
+  static void stringifyNull([[maybe_unused]]const Node &jNode, IDestination &destination)
+  {
+    destination.add("null");
+  }
+  void stringifyString(const Node &jNode, IDestination &destination) const
   {
     appendQuotedString(NRef<String>(jNode).value(), destination);
   }
-  static void stringifyString(const std::string_view &value, IDestination &destination)
+  void stringifyString(const std::string_view &value, IDestination &destination) const
   {
     appendQuotedString(value, destination);
   }
 
-  inline static std::unique_ptr<ITranslator> jsonTranslator;
-  inline static long printIndent{ 4 };
+  std::unique_ptr<ITranslator> jsonTranslator;
+  inline static long defaultPrintIndent{ 4 };
 };
 
 }// namespace JSON_Lib

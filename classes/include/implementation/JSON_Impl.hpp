@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 
@@ -38,7 +39,7 @@ public:
   void traverse(IAction &action);
   void traverse(IAction &action) const;
   // Set print ident value
-  static void setIndent(const long indent) { jsonStringify->setIndent(indent); }
+  static void setIndent(const long indent);
   // Read/Write JSON from a file
   static std::string fromFile(const std::string_view &fileName);
   static void toFile(const std::string_view &fileName, const std::string_view &jsonString, JSON::Format format);
@@ -50,12 +51,10 @@ private:
   template<typename T> static void traverseNodes(T &jNode, IAction &action);
   // Root of JSON tree
   Node jNodeRoot;
-  // Pointer to JSON parser interface
-  inline static std::unique_ptr<IParser> jsonParser;
-  // Pointer to JSON stringify interface
-  inline static std::unique_ptr<IStringify> jsonStringify;
-  // Pointer to JSON translator interface
-  inline static std::unique_ptr<ITranslator> jsonTranslator;
+  // Parser/stringifier/translator instances for this JSON object.
+  std::unique_ptr<IParser> jsonParser;
+  std::unique_ptr<IStringify> jsonStringify;
+  std::unique_ptr<ITranslator> jsonTranslator;
 };
 /// <summary>
 /// Recursively traverse Node tree calling IAction methods and possibly

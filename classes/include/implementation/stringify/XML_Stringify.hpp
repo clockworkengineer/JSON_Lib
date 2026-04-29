@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "XML_Translator.hpp"
@@ -10,7 +11,9 @@ class XML_Stringify final : public IStringify
 {
 public:
   explicit XML_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<XML_Translator>())
-    {xmlTranslator = std::move(translator);}
+    : xmlTranslator(std::move(translator))
+  {
+  }
   XML_Stringify(const XML_Stringify &other) = delete;
   XML_Stringify &operator=(const XML_Stringify &other) = delete;
   XML_Stringify(XML_Stringify &&other) = delete;
@@ -34,7 +37,7 @@ public:
   }
 
 private:
-  static void stringifyNodes(const Node &jNode, IDestination &destination, [[maybe_unused]] const long indent)
+  void stringifyNodes(const Node &jNode, IDestination &destination, [[maybe_unused]] const long indent) const
   {
     if (isA<Number>(jNode)) {
       stringifyNumber(jNode, destination);
@@ -52,7 +55,7 @@ private:
       throw Error("Unknown Node type encountered during stringification.");
     }
   }
-  static void stringifyObject(const Node &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent)
+  void stringifyObject(const Node &jNode, IDestination &destination, [[maybe_unused]] const unsigned long indent) const
   {
     for (const auto &jNodeNext : NRef<Object>(jNode).value()) {
       std::string elementName { jNodeNext.getKey()} ;
@@ -62,7 +65,7 @@ private:
       destination.add("</" + elementName + ">");
     }
   }
-  static void stringifyArray(const Node &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent)
+  void stringifyArray(const Node &jNode, IDestination &destination, [[maybe_unused]]const unsigned long indent) const
   {
     if (NRef<Array>(jNode).value().size() > 1) {
       for (const auto &bNodeNext : NRef<Array>(jNode).value()) {
@@ -85,12 +88,12 @@ private:
     }
   }
   static void stringifyNull([[maybe_unused]]const Node &jNode, [[maybe_unused]]IDestination &destination) {}
-  static void stringifyString(const Node &jNode, IDestination &destination)
+  void stringifyString(const Node &jNode, IDestination &destination) const
   {
     destination.add(xmlTranslator->to(NRef<String>(jNode).value()));
   }
 
-  inline static std::unique_ptr<ITranslator> xmlTranslator;
+  std::unique_ptr<ITranslator> xmlTranslator;
 };
 
 }// namespace JSON_Lib

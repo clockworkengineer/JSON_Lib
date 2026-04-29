@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 
@@ -10,7 +11,9 @@ class YAML_Stringify final : public IStringify
 public:
   // Constructors/destructors
   explicit YAML_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
-     {yamlTranslator = std::move(translator); }
+     : yamlTranslator(std::move(translator))
+  {
+  }
   YAML_Stringify(const YAML_Stringify &other) = delete;
   YAML_Stringify &operator=(const YAML_Stringify &other) = delete;
   YAML_Stringify(YAML_Stringify &&other) = delete;
@@ -38,7 +41,7 @@ private:
     if (destination.last() == '\n') { return std::string(indent, ' '); }
     return std::string("");
   }
-  static void stringifyNodes(const Node &jNode, IDestination &destination, const unsigned long indent)
+  void stringifyNodes(const Node &jNode, IDestination &destination, const unsigned long indent) const
   {
     if (isA<Object>(jNode)) {
       stringifyObject(jNode, destination, indent);
@@ -54,7 +57,7 @@ private:
       stringifyNull(jNode, destination);
     }
   }
-  static void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long indent)
+  void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long indent) const
   {
     if (!NRef<Object>(jNode).value().empty()) {
       for (const auto &entryNode : NRef<Object>(jNode).value()) {
@@ -70,7 +73,7 @@ private:
       destination.add("{}\n");
     }
   }
-  static void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long indent)
+  void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long indent) const
   {
     std::string spaces(indent, ' ');
     if (!NRef<Array>(jNode).value().empty()) {
@@ -94,11 +97,11 @@ private:
   {
     destination.add(NRef<Null>(jNode).toString() + "\n");
   }
-  static void stringifyString(const Node &jNode, IDestination &destination)
+  void stringifyString(const Node &jNode, IDestination &destination) const
   {
     destination.add("\"" + yamlTranslator->to(NRef<String>(jNode).value()) + "\"" + "\n");
   }
 
-  inline static std::unique_ptr<ITranslator> yamlTranslator;
+  std::unique_ptr<ITranslator> yamlTranslator;
 };
 }// namespace JSON_Lib
