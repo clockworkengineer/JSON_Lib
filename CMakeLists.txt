@@ -15,11 +15,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Compiler warnings and platform
 if(MSVC)
   add_compile_options(/W4 /WX /MP)
+
   if(JSON_LIB_OPTIMIZATION_LEVEL STREQUAL "O0")
     add_compile_options(/Od)
   elseif(JSON_LIB_OPTIMIZATION_LEVEL STREQUAL "O2" OR JSON_LIB_OPTIMIZATION_LEVEL STREQUAL "O3")
     add_compile_options(/O2)
   endif()
+
   set(PLATFORM "windows")
 else()
   add_compile_options(-Wall -Werror -pedantic)
@@ -32,10 +34,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Option to build unit tests
 option(BUILD_TESTING "Build unit tests" ON)
+
 # Option to build examples
 option(BUILD_EXAMPLES "Build examples" OFF)
+
 # Option to enable link-time optimization on the JSON library target
 option(JSON_LIB_ENABLE_LTO "Enable link-time optimization" ON)
+
 # Option to install only public API headers instead of all internal headers
 option(JSON_LIB_EXPORT_INTERFACE "Install only public headers" ON)
 
@@ -45,13 +50,16 @@ configure_file(JSON_Config.h.in JSON_Config.hpp)
 # Library name
 set(JSON_LIBRARY_NAME ${PROJECT_NAME})
 
-set(JSON_SOURCES
+set(JSON_CORE_SOURCES
   classes/source/JSON.cpp
   classes/source/implementation/JSON_Impl.cpp
   classes/source/implementation/file/JSON_File.cpp
   classes/source/implementation/translator/Default_Translator.cpp
-  classes/source/implementation/parser/Default_Parser.cpp
   classes/source/implementation/converter/${PLATFORM}/JSON_Converter.cpp
+)
+
+set(JSON_PARSER_SOURCES
+  classes/source/implementation/parser/Default_Parser.cpp
 )
 
 set(JSON_INCLUDES
@@ -94,8 +102,61 @@ set(JSON_INCLUDES
   classes/include/interface/IStringify.hpp
 )
 
-# Create the JSON_Lib library
-add_library(${JSON_LIBRARY_NAME} ${JSON_SOURCES} ${JSON_INCLUDES})
+# Create modular JSON_Lib targets
+add_library(JSON_Lib_Core OBJECT ${JSON_CORE_SOURCES})
+add_library(JSON_Lib_Parser OBJECT ${JSON_PARSER_SOURCES})
+add_library(JSON_Lib_Stringify INTERFACE)
+
+target_include_directories(JSON_Lib_Stringify INTERFACE
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/translator>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/interface>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation>
+)
+
+target_include_directories(JSON_Lib_Core PUBLIC
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/interface>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/common>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/node>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/io>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/converter>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/translator>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/variants>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/parser>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify>
+  $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
+)
+
+target_precompile_headers(JSON_Lib_Core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/stdafx.h)
+
+target_include_directories(JSON_Lib_Parser PUBLIC
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/interface>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/common>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/node>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/io>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/converter>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/translator>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/variants>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/parser>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify>
+  $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
+)
+
+target_precompile_headers(JSON_Lib_Parser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/stdafx.h)
+
+# Create the public JSON_Lib wrapper target from component object libraries
+add_library(${JSON_LIBRARY_NAME} STATIC
+  $<TARGET_OBJECTS:JSON_Lib_Core>
+  $<TARGET_OBJECTS:JSON_Lib_Parser>
+)
+
+target_link_libraries(${JSON_LIBRARY_NAME} PUBLIC JSON_Lib_Stringify)
+
 target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include>
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/interface>
@@ -118,9 +179,6 @@ if(JSON_LIB_ENABLE_LTO)
   set_property(TARGET ${JSON_LIBRARY_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()
 
-# Precompiled headers
-target_precompile_headers(${JSON_LIBRARY_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/stdafx.h)
-
 # Add tests if enabled
 if(BUILD_TESTING)
   add_subdirectory(tests)
@@ -138,6 +196,7 @@ install(TARGETS ${JSON_LIBRARY_NAME}
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
 )
+
 if(JSON_LIB_EXPORT_INTERFACE)
   install(FILES
     ${PROJECT_SOURCE_DIR}/classes/include/JSON.hpp
