@@ -17,7 +17,8 @@ struct String
   [[nodiscard]] std::string_view value() { return jNodeString; }
   [[nodiscard]] std::string_view value() const { return jNodeString; }
   // Return string representation of value
-  [[nodiscard]] std::string toString() const { return jNodeString; }
+  [[nodiscard]] const std::string &toString() const noexcept { return jNodeString; }
+  [[nodiscard]] std::string_view toStringView() const noexcept { return jNodeString; }
   // Set/get maximum string length
   static void setMaxStringLength(const uint64_t length) { maxStringLength = length; }
   static uint64_t getMaxStringLength() { return maxStringLength; }
