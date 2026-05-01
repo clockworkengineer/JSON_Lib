@@ -194,3 +194,38 @@ TEST_CASE("EmbeddedJSON::Limits compile-time constants match expected defaults",
   REQUIRE(EmbeddedJSON::Limits::kMaxParserDepth > 0);
   REQUIRE(EmbeddedJSON::Limits::kMaxStringLength > 0);
 }
+
+// Minimal IAction for traverseNoThrow tests
+namespace {
+struct CountingAction final : IAction
+{
+  void onNode(Node &) override          { ++nodes; }
+  void onNode(const Node &) override    { ++nodes; }
+  void onString(const Node &) override  {}
+  void onNumber(const Node &) override  {}
+  void onBoolean(const Node &) override {}
+  void onNull(const Node &) override    {}
+  void onArray(const Node &) override   {}
+  void onObject(const Node &) override  {}
+  int nodes{0};
+};
+} // namespace
+
+TEST_CASE("EmbeddedJSON traverseNoThrow on populated tree succeeds", "[JSON][Embedded][Traverse]")
+{
+  EmbeddedJSON embedded;
+  embedded.parse(BufferSource{R"({"a":1,"b":true})"});
+  CountingAction action;
+  const auto result = embedded.traverseNoThrow(action);
+  REQUIRE(result.ok());
+  REQUIRE(action.nodes > 0);
+}
+
+TEST_CASE("EmbeddedJSON traverseNoThrow on empty JSON returns InvalidInput", "[JSON][Embedded][Traverse]")
+{
+  EmbeddedJSON embedded;// no parse — empty root
+  CountingAction action;
+  const auto result = embedded.traverseNoThrow(action);
+  REQUIRE_FALSE(result.ok());
+  REQUIRE(result.status == Status::InvalidInput);
+}

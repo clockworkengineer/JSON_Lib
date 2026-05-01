@@ -77,6 +77,8 @@ public:
   // Traverse JSON tree
   void traverse(IAction &action);
   void traverse(IAction &action) const;
+  Result<void> traverseResult(IAction &action);
+  Result<void> traverseResult(IAction &action) const;
   // Set print ident value
   static void setIndent(long indent);
   // Get the root of JSON tree
@@ -122,6 +124,8 @@ public:
   Result<void> stringifyNoThrow(IDestination &&destination) const { return stringifyResult(std::move(destination)); }
   Result<void> printNoThrow(IDestination &destination) const  { return printResult(destination); }
   Result<void> printNoThrow(IDestination &&destination) const { return printResult(std::move(destination)); }
+  Result<void> traverseNoThrow(IAction &action)       { return traverseResult(action); }
+  Result<void> traverseNoThrow(IAction &action) const { return traverseResult(action); }
 
   struct Limits
   {

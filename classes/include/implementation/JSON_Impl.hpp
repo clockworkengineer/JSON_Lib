@@ -42,6 +42,8 @@ public:
   // Traverse JSON tree
   void traverse(IAction &action);
   void traverse(IAction &action) const;
+  Result<void> runTraverse(IAction &action);
+  Result<void> runTraverse(IAction &action) const;
   // Set print ident value
   static void setIndent(const long indent);
 #if !JSON_LIB_NO_STDIO

@@ -91,6 +91,8 @@ void JSON::setIndent(const long indent) { JSON_Impl::setIndent(indent); }
 void JSON::traverse(IAction &action) { implementation->traverse(action); }
 // Traverse using const JSON so cannot change JSON tree
 void JSON::traverse(IAction &action) const { std::as_const(*implementation).traverse(action); }
+Result<void> JSON::traverseResult(IAction &action) { return implementation->runTraverse(action); }
+Result<void> JSON::traverseResult(IAction &action) const { return std::as_const(*implementation).runTraverse(action); }
 /// <summary>
 /// Return object entry for the passed in keys.
 /// </summary>

@@ -108,6 +108,30 @@ void JSON_Impl::traverse(IAction &action) const
   if (jNodeRoot.isEmpty()) { JSON_THROW(Error("No JSON to traverse.")); }
   traverseNodes(jNodeRoot, action);
 }
+Result<void> JSON_Impl::runTraverse(IAction &action)
+{
+  if (jNodeRoot.isEmpty()) {
+    return {Status::InvalidInput, {}, {0, 0}};
+  }
+  try {
+    traverseNodes(jNodeRoot, action);
+    return {Status::Ok, {}, {0, 0}};
+  } catch (const std::exception &ex) {
+    return {Status::UnknownError, ex.what(), {0, 0}};
+  }
+}
+Result<void> JSON_Impl::runTraverse(IAction &action) const
+{
+  if (jNodeRoot.isEmpty()) {
+    return {Status::InvalidInput, {}, {0, 0}};
+  }
+  try {
+    traverseNodes(jNodeRoot, action);
+    return {Status::Ok, {}, {0, 0}};
+  } catch (const std::exception &ex) {
+    return {Status::UnknownError, ex.what(), {0, 0}};
+  }
+}
 Node &JSON_Impl::operator[](const std::string_view &key)
 {
   try {
