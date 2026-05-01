@@ -4,6 +4,7 @@
 #include <string_view>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
+#include "JSON_StringUtils.hpp"
 
 namespace JSON_Lib {
 
@@ -69,22 +70,7 @@ private:
     }
   }
 
-  static void addIndent(IDestination &destination, const unsigned long indent)
-  {
-    for (unsigned long count = 0; count < indent; ++count) {
-      destination.add(' ');
-    }
-  }
 
-  static constexpr char kQuote = '"';
-  static constexpr char kSpace = ' ';
-
-  void appendQuotedString(const std::string_view &value, IDestination &destination) const
-  {
-    destination.add(kQuote);
-    destination.add(jsonTranslator->to(value));
-    destination.add(kQuote);
-  }
 
   void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long indent) const
   {
@@ -151,11 +137,11 @@ private:
   }
   void stringifyString(const Node &jNode, IDestination &destination) const
   {
-    appendQuotedString(NRef<String>(jNode).value(), destination);
+    appendQuotedString(NRef<String>(jNode).value(), destination, *jsonTranslator);
   }
   void stringifyString(const std::string_view &value, IDestination &destination) const
   {
-    appendQuotedString(value, destination);
+    appendQuotedString(value, destination, *jsonTranslator);
   }
 
   std::unique_ptr<ITranslator> jsonTranslator;

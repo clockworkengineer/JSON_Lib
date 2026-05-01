@@ -1,11 +1,11 @@
 #pragma once
 
+#include "JSON_StoragePolicy.hpp"
 #include <algorithm>
 #include <functional>
 #include <string>
 #include <string_view>
 #include <vector>
-#include <unordered_map>
 
 namespace JSON_Lib {
 
@@ -30,23 +30,7 @@ struct Object
   using Entry = ObjectEntry;
   using Entries = std::vector<Entry>;
 
-#if JSON_LIB_EMBEDDED
-  using Index = std::vector<std::size_t>;
-#else
-  struct StringHash
-  {
-    using is_transparent = void;
-    [[nodiscard]] std::size_t operator()(std::string_view value) const noexcept { return std::hash<std::string_view>{}(value); }
-    [[nodiscard]] std::size_t operator()(const std::string &value) const noexcept { return std::hash<std::string_view>{}(value); }
-  };
-  struct StringEqual
-  {
-    using is_transparent = void;
-    [[nodiscard]] bool operator()(std::string_view lhs, std::string_view rhs) const noexcept { return lhs == rhs; }
-    [[nodiscard]] bool operator()(const std::string &lhs, const std::string &rhs) const noexcept { return lhs == rhs; }
-  };
-  using Index = std::unordered_map<std::string, std::size_t, StringHash, StringEqual>;
-#endif
+  using Index = detail::ObjectIndex;
   // Constructors/Destructors
   Object() = default;
   Object(const Object &other) = default;
@@ -90,11 +74,7 @@ struct Object
   void reserve(const std::size_t capacity)
   {
     jNodeObject.reserve(capacity);
-#if JSON_LIB_EMBEDDED
     jNodeIndex.reserve(capacity);
-#else
-    jNodeIndex.reserve(capacity);
-#endif
   }
   // Return object entry for a given key
   Node &operator[](const std::string_view &key) { return jNodeObject[getIndex(key)].getNode(); }
