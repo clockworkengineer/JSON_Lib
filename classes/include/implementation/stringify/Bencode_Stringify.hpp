@@ -61,7 +61,9 @@ private:
   }
   static void stringifyNumber(const Node &jNode, IDestination &destination)
   {
-    destination.add("i" + std::to_string(NRef<Number>(jNode).value<long long>()) + "e");
+    destination.add('i');
+    destination.add(std::to_string(NRef<Number>(jNode).value<long long>()));
+    destination.add('e');
   }
   static void stringifyBoolean(const Node &jNode, IDestination &destination)
   {
@@ -74,12 +76,13 @@ private:
   static void stringifyNull(const Node &, IDestination &destination) { destination.add("4:null"); }
   static void stringifyString(const Node &jNode, IDestination &destination)
   {
-    const auto jsonString = NRef<String>(jNode).value();
-    destination.add((std::to_string(static_cast<int>(jsonString.length())) + ":").append(jsonString));
+    stringifyString(NRef<String>(jNode).value(), destination);
   }
   static void stringifyString(const std::string_view &value, IDestination &destination)
   {
-    destination.add((std::to_string(static_cast<int>(value.length())) + ":").append(value));
+    destination.add(std::to_string(static_cast<int>(value.length())));
+    destination.add(':');
+    destination.add(value);
   }
 
   std::unique_ptr<ITranslator> bencodeTranslator;
