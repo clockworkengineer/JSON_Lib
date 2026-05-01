@@ -1,5 +1,6 @@
 #pragma once
 #include "JSON_Throw.hpp"
+#include "ISource.hpp"
 
 #include <cstring>
 #include <string>

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "JSON.hpp"
-#include "implementation/io/JSON_BufferSource.hpp"
-#include "implementation/io/JSON_BufferDestination.hpp"
+#include "implementation/io/JSON_Sources.hpp"
+#include "implementation/io/JSON_Destinations.hpp"
 
 int main()
 {
