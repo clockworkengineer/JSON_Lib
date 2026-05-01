@@ -51,17 +51,21 @@ void JSON_Impl::stringify(IDestination &destination) const
   if (jNodeRoot.isEmpty()) { throw Error("No JSON to stringify."); }
   jsonStringify->stringify(jNodeRoot, destination, 0);
 }
-Result<void> JSON_Impl::stringifyResult(IDestination &destination) const
+Result<void> JSON_Impl::runStringify(IDestination &destination, unsigned long indent) const
 {
   if (jNodeRoot.isEmpty()) {
     return {Status::InvalidInput, {}, {0, 0}};
   }
   try {
-    jsonStringify->stringify(jNodeRoot, destination, 0);
+    jsonStringify->stringify(jNodeRoot, destination, indent);
     return {Status::Ok, {}, {0, 0}};
   } catch (const std::exception &ex) {
     return {Status::UnknownError, ex.what(), {0, 0}};
   }
+}
+Result<void> JSON_Impl::stringifyResult(IDestination &destination) const
+{
+  return runStringify(destination, 0);
 }
 void JSON_Impl::print(IDestination &destination) const
 {
@@ -70,15 +74,7 @@ void JSON_Impl::print(IDestination &destination) const
 }
 Result<void> JSON_Impl::printResult(IDestination &destination) const
 {
-  if (jNodeRoot.isEmpty()) {
-    return {Status::InvalidInput, {}, {0, 0}};
-  }
-  try {
-    jsonStringify->stringify(jNodeRoot, destination, jsonStringify->getIndent());
-    return {Status::Ok, {}, {0, 0}};
-  } catch (const std::exception &ex) {
-    return {Status::UnknownError, ex.what(), {0, 0}};
-  }
+  return runStringify(destination, jsonStringify->getIndent());
 }
 void JSON_Impl::strip(ISource &source, IDestination &destination)
 {// Note: That it is assumed that the JSON on the source stream is valid with no errors.

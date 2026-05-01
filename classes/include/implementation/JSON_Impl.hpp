@@ -52,6 +52,8 @@ public:
 #endif
 
 private:
+  // Helper: empty-guard + try/catch wrapper for stringify operations
+  Result<void> runStringify(IDestination &destination, unsigned long indent) const;
   // Traverse JSON tree
   template<typename T> static void traverseNodes(T &jNode, IAction &action);
   // Root of JSON tree
