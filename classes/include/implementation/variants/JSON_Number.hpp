@@ -29,6 +29,8 @@ struct Number
   ~Number() = default;
   // Is number a int/long/long long/float/double/long double ?
   template<typename T> [[nodiscard]] bool is() const { return std::get_if<T>(&jNodeNumber) != nullptr; }
+  // Did the number parse successfully (i.e. variant is not monostate)?
+  [[nodiscard]] bool isValid() const noexcept { return !std::holds_alternative<std::monostate>(jNodeNumber); }
   // Return numbers value int/long long/float/double/long double.
   // Note: Can still return a integer value for a floating point.
   template<typename T> [[nodiscard]] T value() const { return getAs<T>(); }
@@ -80,30 +82,17 @@ template<typename T> bool Number::stringToNumber(const std::string_view &number)
     if (result.ec != std::errc() || result.ptr != number.data() + number.size()) { return false; }
     *this = Number(value);
     return true;
-  } else if constexpr (std::is_same_v<T, float>) {
+  } else if constexpr (std::is_floating_point_v<T>) {
     try {
       std::size_t end = 0;
-      const float value = std::stof(number.data(), &end);
-      if (end != number.size()) { return false; }
-      *this = Number(value);
-      return true;
-    } catch (const std::exception &) {
-      return false;
-    }
-  } else if constexpr (std::is_same_v<T, double>) {
-    try {
-      std::size_t end = 0;
-      const double value = std::stod(number.data(), &end);
-      if (end != number.size()) { return false; }
-      *this = Number(value);
-      return true;
-    } catch (const std::exception &) {
-      return false;
-    }
-  } else if constexpr (std::is_same_v<T, long double>) {
-    try {
-      std::size_t end = 0;
-      const long double value = std::stold(number.data(), &end);
+      T value{};
+      if constexpr (std::is_same_v<T, float>) {
+        value = std::stof(number.data(), &end);
+      } else if constexpr (std::is_same_v<T, double>) {
+        value = std::stod(number.data(), &end);
+      } else {
+        value = std::stold(number.data(), &end);
+      }
       if (end != number.size()) { return false; }
       *this = Number(value);
       return true;

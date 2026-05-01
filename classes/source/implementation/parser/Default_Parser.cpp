@@ -121,8 +121,7 @@ Node Default_Parser::parseNumber(ISource &source,
   }
   const std::string_view numberView(numberText.data(), numberLength);
   Number number{ numberView };
-  if (number.is<int>() || number.is<long>() || number.is<long long>() || number.is<float>() || number.is<double>()
-      || number.is<long double>()) {
+  if (number.isValid()) {
     return Node::make<Number>(number);
   }
   throw SyntaxError(source.getPosition(), "Invalid numeric value.");
