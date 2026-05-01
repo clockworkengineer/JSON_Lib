@@ -1,156 +1,354 @@
 # JSON_Lib API Reference
 
-This document provides an overview of the public API for the JSON_Lib library, including class descriptions, function signatures, and usage notes.
-
 ## Table of Contents
-- [Overview](#overview)
-- [Core Classes](#core-classes)
-- [Key Functions](#key-functions)
-- [Error Handling](#error-handling)
-- [Examples](#examples)
+
+- [Namespace and headers](#namespace-and-headers)
+- [JSON class](#json-class)
+- [EmbeddedJSON class](#embeddedjson-class)
+- [Node and accessors](#node-and-accessors)
+- [Sources (input)](#sources-input)
+- [Destinations (output)](#destinations-output)
+- [Result\<T\> — exception-free API](#resultt--exception-free-api)
+- [Error handling](#error-handling)
+- [Traversal — IAction](#traversal--iaction)
+- [Stringify backends](#stringify-backends)
+- [Build config macros](#build-config-macros)
 
 ---
 
-## Overview
-JSON_Lib is a C++ library for parsing, manipulating, and serializing JSON data. It is designed for performance, compliance, and ease of use.
+## Namespace and headers
 
-## Core Classes
+All public types live in `namespace JSON_Lib`.
 
-- **JSON**: Main class for parsing, manipulating, and serializing JSON data. Provides methods for parsing from strings, files, and buffers, as well as serializing to strings and files.
-- **EmbeddedJSON**: Dedicated embedded API entrypoint that mirrors the desktop `JSON` facade while exposing embedded build policy checks and runtime limits.
-- **Node**: Represents a node in the JSON tree (object, array, string, number, boolean, or null). Used for type-safe access and manipulation.
-- **Object**: Represents a JSON object (key-value pairs). Provides methods for iterating and accessing members.
-- **Array**: Represents a JSON array (ordered list of values). Provides methods for iterating and modifying elements.
-- **IAction**: Interface for custom actions during traversal (see examples for analyzers and converters).
+```cpp
+#include "JSON.hpp"                                   // JSON, EmbeddedJSON, Node
+#include "implementation/io/JSON_Sources.hpp"         // BufferSource, FixedBufferSource, FileSource
+#include "implementation/io/JSON_Destinations.hpp"    // BufferDestination, FixedBufferDestination, FileDestination
+#include "JSON_Config.hpp"                            // generated compile-time macros (auto-included via JSON.hpp)
+```
 
-## Key Functions
+---
 
-- `JSON::parse(const std::string& jsonStr)`: Parses a JSON string and returns a JSON object.
-- `JSON::parse(FileSource)`: Parses JSON from a file.
-- `JSON::stringify(IDestination) const`: Serializes the JSON object to a destination (file, buffer, etc.).
-- `JSON::version() const`: Returns the library version string.
-- `EmbeddedJSON::Limits::maxStringLength()`: Returns the current embedded string limit.
-- `EmbeddedJSON::Limits::maxParserDepth()`: Returns the current parser depth limit.
-- `EmbeddedJSON::isEmbeddedBuild()`: Indicates whether the build is configured for embedded mode.
-- `Node::as_string()`, `Node::as_int()`, `Node::as_bool()`: Type-safe accessors for node values.
-- `Object::operator[]`: Access object members by key.
-- `Array::push_back(const Node&)`: Append a value to an array.
-- `IAction::onNode`, `onString`, `onNumber`, etc.: Custom traversal hooks for advanced processing.
+## JSON class
 
-## Error Handling
-JSON_Lib uses exception-based error handling. Most parsing and type errors throw `std::exception` or custom error types. Always use try-catch blocks:
+`JSON` is the primary façade for parsing, manipulating, and serializing JSON.
+
+### Constructors
+
+| Constructor | Description |
+|---|---|
+| `JSON(IStringify* = nullptr, IParser* = nullptr)` | Default; accepts optional custom stringify/parser |
+| `JSON(std::string_view jsonString)` | Construct and parse a JSON string immediately |
+| `JSON(ArrayInitializer)` | Construct a JSON array from an initializer list |
+| `JSON(ObjectInitializer)` | Construct a JSON object from an initializer list |
+
+Copy and move are deleted. `JSON` is non-copyable, non-movable.
+
+### Static methods
+
+```cpp
+static std::string version();
+static void setIndent(long indent);                            // indent for print()
+
+// File helpers (disabled when JSON_LIB_NO_STDIO == 1)
+static std::string fromFile(std::string_view fileName);
+static void        toFile(std::string_view fileName,
+                          std::string_view jsonString,
+                          Format format = Format::utf8);
+static Format      getFileFormat(std::string_view fileName);
+```
+
+### Parse
+
+```cpp
+void parse(ISource &source) const;
+void parse(ISource &&source) const;
+Result<Node> parseResult(ISource &source) const;   // exception-free
+Result<Node> parseResult(ISource &&source) const;
+```
+
+### Stringify (compact)
+
+```cpp
+void stringify(IDestination &destination) const;
+void stringify(IDestination &&destination) const;
+Result<void> stringifyResult(IDestination &destination) const;
+Result<void> stringifyResult(IDestination &&destination) const;
+```
+
+### Print (pretty)
+
+```cpp
+void print(IDestination &destination) const;
+void print(IDestination &&destination) const;
+Result<void> printResult(IDestination &destination) const;
+Result<void> printResult(IDestination &&destination) const;
+```
+
+### Strip whitespace
+
+```cpp
+static void strip(ISource &source,  IDestination &destination);
+static void strip(ISource &source,  IDestination &&destination);
+static void strip(ISource &&source, IDestination &destination);
+static void strip(ISource &&source, IDestination &&destination);
+```
+
+### Traverse
+
+```cpp
+void traverse(IAction &action);
+void traverse(IAction &action) const;
+Result<void> traverseResult(IAction &action);
+Result<void> traverseResult(IAction &action) const;
+```
+
+### Node access
+
+```cpp
+Node &root();
+const Node &root() const;
+Node &operator[](std::string_view key);         // object member
+Node &operator[](std::size_t index);            // array element
+```
+
+### File format enum
+
+```cpp
+enum class Format : uint8_t { utf8, utf8BOM, utf16BE, utf16LE, utf32BE, utf32LE };
+```
+
+---
+
+## EmbeddedJSON class
+
+`EmbeddedJSON` inherits from `JSON` and adds:
+
+- Compile-time policy queries (all `constexpr`, `noexcept`)
+- Exception-free (`NoThrow`) variants of every mutable operation
+- `Limits` struct for resource-bound introspection
+
+```cpp
+class EmbeddedJSON final : public JSON { ... };
+```
+
+### Compile-time policy queries
+
+```cpp
+static constexpr bool isEmbeddedBuild()       noexcept;  // JSON_LIB_EMBEDDED
+static constexpr bool isExceptionFreeBuild()  noexcept;  // JSON_LIB_NO_EXCEPTIONS
+static constexpr bool isNoStdIoBuild()        noexcept;  // JSON_LIB_NO_STDIO
+static constexpr bool isNoDynamicMemoryBuild()noexcept;  // JSON_LIB_NO_DYNAMIC_MEMORY
+```
+
+### Exception-free API
+
+```cpp
+Result<Node> parseNoThrow(ISource &source) const;
+Result<Node> parseNoThrow(ISource &&source) const;
+Result<void> stringifyNoThrow(IDestination &destination) const;
+Result<void> stringifyNoThrow(IDestination &&destination) const;
+Result<void> printNoThrow(IDestination &destination) const;
+Result<void> printNoThrow(IDestination &&destination) const;
+Result<void> traverseNoThrow(IAction &action);
+Result<void> traverseNoThrow(IAction &action) const;
+```
+
+### Limits
+
+```cpp
+struct Limits {
+    // Compile-time values (reflect CMake overrides; 0 = library default)
+    static constexpr unsigned long kMaxParserDepth  = ...;  // default 10
+    static constexpr uint64_t      kMaxStringLength = ...;  // default 16384
+
+    // Runtime accessors (authoritative; may be changed at startup)
+    static uint64_t      maxStringLength() noexcept;
+    static unsigned long maxParserDepth()  noexcept;
+};
+```
+
+---
+
+## Node and accessors
+
+`Node` is a variant that holds one of: `Object`, `Array`, `String`, `Number`, `Boolean`, `Null`, or `Hole`.
+
+Access node values via `NRef<T>`:
+
+```cpp
+namespace js = JSON_Lib;
+
+js::JSON json;
+json.parse(js::BufferSource{R"({"name":"Alice","score":42,"active":true})"});
+
+std::string name = js::NRef<js::String> (json["name"]).value();
+int         score= js::NRef<js::Number> (json["score"]).value<int>();
+bool        active=js::NRef<js::Boolean>(json["active"]).value();
+```
+
+Array access:
+
+```cpp
+json.parse(js::BufferSource{R"([10,20,30])"});
+int first = js::NRef<js::Number>(json[0]).value<int>();
+```
+
+---
+
+## Sources (input)
+
+All sources implement `ISource`.
+
+| Class | Description |
+|---|---|
+| `BufferSource(std::string)` | Heap-owned string buffer |
+| `BufferSource(std::string_view)` | Borrowed string view |
+| `FixedBufferSource(const char*, size_t)` | Zero-heap; borrows a raw byte region (ROM-safe) |
+| `FileSource(std::string_view)` | Reads from a file (disabled when `JSON_LIB_NO_STDIO == 1`) |
+
+Include `"implementation/io/JSON_Sources.hpp"` for all of the above.
+
+---
+
+## Destinations (output)
+
+All destinations implement `IDestination`.
+
+| Class | Description |
+|---|---|
+| `BufferDestination` | Heap-backed `std::string`; `toString()` returns result |
+| `FixedBufferDestination<N>` | Stack-allocated array of `N` bytes; no heap required |
+| `FileDestination(std::string_view)` | Writes to a file (disabled when `JSON_LIB_NO_STDIO == 1`) |
+
+Include `"implementation/io/JSON_Destinations.hpp"` for all of the above.
+
+### FixedBufferDestination<N> notes
+
+```cpp
+js::FixedBufferDestination<256> dest;
+json.stringify(dest);
+
+const char*  raw  = dest.data();
+std::size_t  len  = dest.size();
+std::string  str  = dest.toString();
+
+// When JSON_LIB_NO_EXCEPTIONS == 1, overflow sets a flag instead of throwing
+#if JSON_LIB_NO_EXCEPTIONS
+if (dest.overflowed()) { /* handle */ }
+dest.clearOverflow();
+#endif
+```
+
+---
+
+## Result\<T\> — exception-free API
+
+`Result<T>` is returned by all `...Result` and `...NoThrow` methods.
+
+```cpp
+template<typename T>
+struct Result {
+    Status      status;           // Status::Ok on success
+    std::unique_ptr<T> value;     // valid when ok()
+    std::string message;          // error description when !ok()
+    std::pair<long,long> position;// {line, column} on parse errors
+
+    bool ok()      const noexcept;
+    T&   unwrap();                // asserts ok()
+};
+
+template<>
+struct Result<void> {
+    Status      status;
+    std::string message;
+    std::pair<long,long> position;
+    bool ok() const noexcept;
+};
+```
+
+`Status` values: `Ok`, `SyntaxError`, `OutOfMemory`, `InvalidKey`, `InvalidIndex`, `UnsupportedEncoding`, `InvalidInput`, `NoData`, `UnknownError`.
+
+---
+
+## Error handling
+
+Default (exceptions enabled) builds throw on any parse, type, or I/O error:
 
 ```cpp
 try {
-	js::JSON json;
-	json.parse(js::FileSource{"input.json"});
-} catch (const std::exception& ex) {
-	std::cerr << "Error: " << ex.what() << std::endl;
+    js::JSON json;
+    json.parse(js::FileSource{"input.json"});
+} catch (const std::exception &ex) {
+    std::cerr << ex.what() << "\n";
 }
 ```
 
-See also the `examples/` directory for error handling patterns.
+Exception-free builds (or when using `EmbeddedJSON`):
 
-
-## Examples
-
-### Basic Parsing
 ```cpp
-#include "json_lib.h"
-
-int main() {
-		std::string json_string = R"({\"name\": \"John\", \"age\": 30, \"is_admin\": true})";
-		JsonLib::Json json = JsonLib::Json::parse(json_string);
-		std::string name = json["name"].as_string();
-		int age = json["age"].as_int();
-		bool isAdmin = json["is_admin"].as_bool();
-		std::cout << "Name: " << name << ", Age: " << age << ", Admin: " << (isAdmin ? "Yes" : "No") << "\n";
+js::EmbeddedJSON embedded;
+auto result = embedded.parseNoThrow(js::BufferSource{jsonText});
+if (!result.ok()) {
+    // result.message contains the error description
+    // result.position.first / .second give the line/column
 }
 ```
 
-### Embedded API
+---
+
+## Traversal — IAction
+
+Implement `IAction` to walk the JSON tree without materializing copies:
+
 ```cpp
-#include "JSON.hpp"
-#include "implementation/io/JSON_BufferSource.hpp"
-#include "implementation/io/JSON_BufferDestination.hpp"
-
-int main() {
-    JSON_Lib::EmbeddedJSON embedded;
-    embedded.parse(JSON_Lib::BufferSource{R"({"key":123})"});
-    JSON_Lib::BufferDestination destination;
-    embedded.stringify(destination);
-    std::cout << destination.toString();
-    std::cout << "max string length=" << JSON_Lib::EmbeddedJSON::Limits::maxStringLength() << "\n";
-}
-```
-
-### Embedded API details
-- `EmbeddedJSON` is a lightweight facade built for embedded-friendly builds.
-- It exposes compile-time policy checks:
-  - `EmbeddedJSON::isEmbeddedBuild()`
-  - `EmbeddedJSON::isExceptionFreeBuild()`
-  - `EmbeddedJSON::isNoStdIoBuild()`
-  - `EmbeddedJSON::isNoDynamicMemoryBuild()`
-- It also exposes runtime limits for embedded operation:
-  - `EmbeddedJSON::Limits::maxStringLength()`
-  - `EmbeddedJSON::Limits::maxParserDepth()`
-- Use `BufferSource` and `BufferDestination` for zero-copy buffer-backed input/output.
-- For deterministic output, prefer `FixedBufferDestination<N>` and check overflow behavior.
-
-### Embedded example
-A working example is available at `examples/source/JSON_Embedded_Buffer_API.cpp`.
-
-### Creating and Serializing JSON
-```cpp
-#include "json_lib.h"
-
-JsonLib::Json json;
-json["name"] = "Alice";
-json["age"] = 30;
-std::string out = json.stringify();
-```
-
-### File Parsing and Stringifying
-```cpp
-#include "JSON_Utility.hpp"
-namespace js = JSON_Lib;
-js::JSON json;
-json.parse(js::FileSource{"input.json"});
-json.stringify(js::FileDestination{"output.json"});
-```
-
-### Custom Struct Serialization
-```cpp
-struct Person {
-	std::string name;
-	int age;
+struct MyAction : JSON_Lib::IAction {
+    void onString(const JSON_Lib::String &s) override { ... }
+    void onNumber(const JSON_Lib::Number &n) override { ... }
+    // onBoolean, onNull, onArray, onObject overrides as needed
 };
-Person p{"Alice", 30};
-js::JSON json;
-json["name"] = p.name;
-json["age"] = p.age;
-json.stringify(js::FileDestination{"person.json"});
-// Deserialize
-js::JSON jsonIn;
-jsonIn.parse(js::FileSource{"person.json"});
-Person p2;
-p2.name = js::NRef<js::String>(jsonIn["name"]).value();
-p2.age = js::NRef<js::Number>(jsonIn["age"]).value<int>();
+
+MyAction action;
+json.traverse(action);
 ```
 
-### HTTP Integration (Pseudo-code)
-```cpp
-// Fetch JSON from API (requires external HTTP library)
-std::string jsonResponse = R"({\"message\":\"Hello from API!\"})";
-js::JSON json;
-json.parse(js::BufferSource{jsonResponse});
-std::cout << js::NRef<js::String>(json["message"]).value();
-```
+See `examples/include/JSON_Analyzer.hpp` and `JSON_Convert.hpp` for ready-made implementations.
 
 ---
 
-For more details, refer to the [Guide](guide.md) or the source code documentation.
+## Stringify backends
+
+The library ships four stringify headers (header-only, no extra link step):
+
+| Header | Output format |
+|---|---|
+| `implementation/stringify/Default_Stringify.hpp` | Compact JSON (default) |
+| `implementation/stringify/Bencode_Stringify.hpp` | Bencode |
+| `implementation/stringify/XML_Stringify.hpp` | XML |
+| `implementation/stringify/YAML_Stringify.hpp` | YAML |
+
+Pass a custom `IStringify*` to the `JSON` constructor, or use the dedicated example programs (`JSON_Files_To_Bencode.cpp`, `JSON_Files_To_XML.cpp`, `JSON_Files_To_YAML.cpp`).
 
 ---
 
-For more details, refer to the [Guide](guide.md) or the source code documentation.
+## Build config macros
+
+Generated into `JSON_Config.hpp` (in the CMake binary dir) at configure time.
+
+| Macro | Type | Source |
+|---|---|---|
+| `JSON_VERSION_MAJOR/MINOR/PATCH` | `int` | CMake project version |
+| `JSON_LIB_EMBEDDED` | `0` or `1` | `-DJSON_LIB_EMBEDDED=ON` |
+| `JSON_LIB_NO_EXCEPTIONS` | `0` or `1` | `-DJSON_LIB_NO_EXCEPTIONS=ON` |
+| `JSON_LIB_NO_HEAP` | `0` or `1` | `-DJSON_LIB_NO_HEAP=ON` |
+| `JSON_LIB_NO_DYNAMIC_MEMORY` | `0` or `1` | `-DJSON_LIB_NO_DYNAMIC_MEMORY=ON` |
+| `JSON_LIB_NO_STDIO` | `0` or `1` | `-DJSON_LIB_NO_STDIO=ON` |
+| `JSON_LIB_ALLOCATOR_INTERFACE` | `0` or `1` | `-DJSON_LIB_ALLOCATOR_INTERFACE=ON` |
+| `JSON_LIB_MAX_PARSER_DEPTH` | `unsigned long` | `-DJSON_LIB_MAX_PARSER_DEPTH=N` |
+| `JSON_LIB_MAX_STRING_LENGTH` | `uint64_t` | `-DJSON_LIB_MAX_STRING_LENGTH=N` |
+
+`JSON_LIB_NO_HEAP` and `JSON_LIB_NO_DYNAMIC_MEMORY` are kept in sync by CMake — setting either sets both.
+
+---
+
+For usage walkthroughs see [guide.md](guide.md).
