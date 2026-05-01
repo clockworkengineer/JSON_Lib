@@ -144,7 +144,7 @@ std::string Default_Translator::from(const std::string_view &escapedString) cons
     if (current != escapedString.end()) {
       // Single character
       if (fromEscape.contains(*current)) {
-        utf16Buffer += fromEscape[static_cast<char>(*current)];
+        utf16Buffer += fromEscape.at(static_cast<char>(*current));
         ++current;
       }
       // UTF16 "\uxxxx"
@@ -180,7 +180,7 @@ std::string Default_Translator::to(const std::string_view &rawString) const
     // Control characters
     if (toEscape.contains(utf16Char)) {
       escapedString += '\\';
-      escapedString += toEscape[utf16Char];
+      escapedString += toEscape.at(utf16Char);
     }
     // ASCII
     else if (isASCII(utf16Char) && std::isprint(utf16Char)) {

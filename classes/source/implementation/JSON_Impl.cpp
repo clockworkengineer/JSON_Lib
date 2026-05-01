@@ -31,8 +31,13 @@ void JSON_Impl::setIndent(const long indent)
 }
 std::string JSON_Impl::version()
 {
-  return std::string("JSON_Lib Version  ") + std::to_string(JSON_VERSION_MAJOR) + "." + std::to_string(JSON_VERSION_MINOR)
-         + "." + std::to_string(JSON_VERSION_PATCH);
+  std::string v;
+  v.reserve(32);
+  v.append("JSON_Lib Version  ")
+   .append(std::to_string(JSON_VERSION_MAJOR)).append(".")
+   .append(std::to_string(JSON_VERSION_MINOR)).append(".")
+   .append(std::to_string(JSON_VERSION_PATCH));
+  return v;
 }
 void JSON_Impl::parse(ISource &source) { jNodeRoot = jsonParser->parse(source); }
 Result<Node> JSON_Impl::parseResult(ISource &source)

@@ -31,7 +31,7 @@ public:
 
 private:
   // To/From escape sequence lookup maps
-  mutable std::unordered_map<char, char16_t> fromEscape;
-  mutable std::unordered_map<char16_t, char> toEscape;
+  std::unordered_map<char, char16_t> fromEscape;
+  std::unordered_map<char16_t, char> toEscape;
 };
 }// namespace JSON_Lib
