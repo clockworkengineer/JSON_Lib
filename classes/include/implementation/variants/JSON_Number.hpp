@@ -1,12 +1,17 @@
 #pragma once
 
+#include "JSON_Config.hpp"
 #include <charconv>
-#include <iomanip>
-#include <sstream>
 #include <string>
 #include <string_view>
 #include <type_traits>
 #include <variant>
+#if JSON_LIB_EMBEDDED
+#include <array>
+#else
+#include <iomanip>
+#include <sstream>
+#endif
 
 namespace JSON_Lib {
 
@@ -106,8 +111,18 @@ template<typename T> bool Number::stringToNumber(const std::string_view &number)
 // Number to string
 template<typename T> std::string Number::numberToString(const T &number) const
 {
-  std::ostringstream os;
   if constexpr (std::is_floating_point_v<T>) {
+#if JSON_LIB_EMBEDDED
+    std::array<char, 64> buf{};
+    std::chars_format fmt = std::chars_format::general;
+    if (numberNotation == numberNotation::fixed)       fmt = std::chars_format::fixed;
+    else if (numberNotation == numberNotation::scientific) fmt = std::chars_format::scientific;
+    const auto [ptr, ec] = std::to_chars(buf.data(), buf.data() + buf.size(), number, fmt, numberPrecision);
+    std::string result(buf.data(), ptr);
+    if (result.find('.') == std::string::npos) { result += ".0"; }
+    return result;
+#else
+    std::ostringstream os;
     switch (numberNotation) {
     case numberNotation::normal:
       os << std::defaultfloat << std::setprecision(numberPrecision) << number;
@@ -122,10 +137,13 @@ template<typename T> std::string Number::numberToString(const T &number) const
       os << std::setprecision(numberPrecision) << number;
     }
     if (os.str().find('.') == std::string::npos) { return os.str() + ".0"; }
+    return os.str();
+#endif
   } else {
+    std::ostringstream os;
     os << number;
+    return os.str();
   }
-  return os.str();
 }
 // Convert value to another specified type
 template<typename T, typename U> T Number::convertTo(U value) const
