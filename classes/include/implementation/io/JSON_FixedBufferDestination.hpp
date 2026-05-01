@@ -5,10 +5,12 @@
 #include <string>
 #include <string_view>
 
+#include "JSON_DestinationBase.hpp"
+
 namespace JSON_Lib {
 
 template <std::size_t N>
-class FixedBufferDestination final : public IDestination
+class FixedBufferDestination final : public DestinationBase
 {
 public:
   FixedBufferDestination() = default;
@@ -38,19 +40,18 @@ public:
   {
     if (size_ >= N) { throw Error("Fixed buffer destination overflow."); }
     buffer_[size_++] = ch;
-    lastChar_ = ch;
+    trackLast(ch);
   }
 
   void clear() override
   {
     size_ = 0;
-    lastChar_ = 0;
+    trackLast(0);
   }
 
   [[nodiscard]] const char *data() const noexcept { return buffer_.data(); }
   [[nodiscard]] std::size_t size() const noexcept { return size_; }
   [[nodiscard]] std::string toString() const { return std::string(buffer_.data(), size_); }
-  [[nodiscard]] char last() override { return lastChar_; }
 
 private:
   void add(const char *bytes, std::size_t length)
@@ -58,13 +59,12 @@ private:
     if (length == 0) { return; }
     if (size_ + length > N) { throw Error("Fixed buffer destination overflow."); }
     std::memcpy(buffer_.data() + size_, bytes, length);
-    lastChar_ = buffer_[size_ + length - 1];
+    trackLast(buffer_[size_ + length - 1]);
     size_ += length;
   }
 
   std::array<char, N> buffer_{};
   std::size_t size_{};
-  char lastChar_{};
 };
 
 } // namespace JSON_Lib

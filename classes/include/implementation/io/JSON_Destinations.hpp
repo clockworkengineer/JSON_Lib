@@ -1,5 +1,6 @@
 #pragma once
 
+#include "JSON_DestinationBase.hpp"
 #include "JSON_BufferDestination.hpp"
 #include "JSON_FixedBufferDestination.hpp"
 

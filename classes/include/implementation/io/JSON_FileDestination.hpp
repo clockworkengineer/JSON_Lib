@@ -5,13 +5,15 @@
 #include <string>
 #include <string_view>
 
+#include "JSON_DestinationBase.hpp"
+
 #if JSON_LIB_NO_STDIO
 #error "FileDestination is disabled when JSON_LIB_NO_STDIO is enabled."
 #endif
 
 namespace JSON_Lib {
 
-class FileDestination final : public IDestination
+class FileDestination final : public DestinationBase
 {
 public:
   explicit FileDestination(const std::string_view &filename) : filename(filename)
@@ -34,26 +36,26 @@ public:
       destination.put(ch);
       fileSize++;
     }
-    lastChar = ch;
+    trackLast(ch);
   }
   void add(const std::string &bytes) override
   {
     for (const auto ch : bytes) { add(ch); }
     destination.flush();
-    lastChar = bytes.back();
+    trackLast(bytes.back());
   }
   void add(const std::string_view &bytes) override
   {
     for (const auto ch : bytes) { add(ch); }
     destination.flush();
-    lastChar = bytes.back();
+    trackLast(bytes.back());
   }
   void add(const char *bytes) override
   {
     const std::size_t len = strlen(bytes);
     for (std::size_t index = 0; index < len; index++) { add(bytes[index]); }
     destination.flush();
-    lastChar = bytes[len - 1];
+    trackLast(bytes[len - 1]);
   }
   void clear() override
   {
@@ -61,17 +63,15 @@ public:
     destination.open(filename.c_str(), std::ios_base::binary | std::ios_base::trunc);
     if (!destination.is_open()) { throw Error("File output stream failed to open or could not be created."); }
     fileSize = 0;
-    lastChar = 0;
+    trackLast(0);
   }
   std::string getFileName() { return filename; }
   void close() { destination.close(); }
   std::size_t size() const { return fileSize; }
-  [[nodiscard]] char last() override { return lastChar; }
 
 private:
   std::ofstream destination;
   std::string filename;
   std::size_t fileSize{};
-  char lastChar{};
 };
 }// namespace JSON_Lib
