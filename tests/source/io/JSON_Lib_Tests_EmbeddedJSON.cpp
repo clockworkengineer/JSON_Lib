@@ -94,3 +94,20 @@ TEST_CASE("FixedBufferSource rejects zero length", "[JSON][Embedded][FixedBuffer
   constexpr char json[] = "{}";
   REQUIRE_THROWS_AS((FixedBufferSource{ json, 0 }), ISource::Error);
 }
+
+#if JSON_LIB_NO_EXCEPTIONS
+TEST_CASE("FixedBufferDestination overflow sets flag when NO_EXCEPTIONS", "[JSON][Embedded][FixedBufferDestination][NoExceptions]")
+{
+  FixedBufferDestination<4> dest;
+  dest.add("12345"); // 5 bytes > capacity 4
+  REQUIRE(dest.overflowed());
+  dest.clearOverflow();
+  REQUIRE_FALSE(dest.overflowed());
+}
+#else
+TEST_CASE("FixedBufferDestination overflow throws in normal build", "[JSON][Embedded][FixedBufferDestination][Overflow]")
+{
+  FixedBufferDestination<4> dest;
+  REQUIRE_THROWS_AS(dest.add("12345"), IDestination::Error);
+}
+#endif
