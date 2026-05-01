@@ -1,4 +1,5 @@
 #pragma once
+#include "JSON_Throw.hpp"
 
 #include "JSON_Config.hpp"
 #include <charconv>
@@ -166,7 +167,7 @@ template<typename T> T Number::getAs() const
   return std::visit([&](const auto &v) -> T {
     using V = std::decay_t<decltype(v)>;
     if constexpr (std::is_same_v<V, std::monostate>) {
-      throw std::runtime_error("Number Error: Could not convert unknown type.");
+      JSON_THROW(std::runtime_error("Number Error: Could not convert unknown type."));
     } else {
       return convertTo<T>(v);
     }

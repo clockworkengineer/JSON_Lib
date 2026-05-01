@@ -1,4 +1,5 @@
 #pragma once
+#include "JSON_Throw.hpp"
 
 #include <cstring>
 #include <string>
@@ -50,7 +51,7 @@ public:
 
   void next() override
   {
-    if (!more()) { throw Error("Tried to read past and of buffer."); }
+    if (!more()) { JSON_THROW(Error("Tried to read past and of buffer.")); }
     bufferPosition++;
     column++;
     if (current() == kLineFeed) {
@@ -73,7 +74,7 @@ public:
 private:
   static void checkNotEmpty(bool empty)
   {
-    if (empty) { throw Error("Empty source buffer passed to be parsed."); }
+    if (empty) { JSON_THROW(Error("Empty source buffer passed to be parsed.")); }
   }
   void backup(const unsigned long length) override { bufferPosition -= length; }
 

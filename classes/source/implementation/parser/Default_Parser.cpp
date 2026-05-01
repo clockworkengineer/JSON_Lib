@@ -8,6 +8,7 @@
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
+#include "JSON_Throw.hpp"
 #include <array>
 #include <string_view>
 
@@ -37,7 +38,7 @@ String extractString(ISource &source, const ITranslator &translator)
 {
   uint64_t stringLength = 0;
   bool translateEscapes = false;
-  if (source.current() != '"') { throw SyntaxError(source.getPosition(), "Missing opening '\"' on string."); }
+  if (source.current() != '"') { JSON_THROW(SyntaxError(source.getPosition(), "Missing opening '\"' on string.")); }
   source.next();
   String extracted;
   extracted.reserve(64);
@@ -50,10 +51,10 @@ String extractString(ISource &source, const ITranslator &translator)
     }
     extracted.append(source.current());
     stringLength++;
-    if (stringLength > String::getMaxStringLength()) { throw SyntaxError("String size exceeds maximum allowed size."); }
+    if (stringLength > String::getMaxStringLength()) { JSON_THROW(SyntaxError("String size exceeds maximum allowed size.")); }
     source.next();
   }
-  if (source.current() != '"') { throw SyntaxError(source.getPosition(), "Missing closing '\"' on string."); }
+  if (source.current() != '"') { JSON_THROW(SyntaxError(source.getPosition(), "Missing closing '\"' on string.")); }
   if (translateEscapes) { extracted = String{translator.from(extracted.value())}; }
   source.next();
   return extracted;
@@ -82,7 +83,7 @@ Object::Entry
   std::string key{ extractString(source, translator).value() };
   source.ignoreWS();
   if (source.current() != JSON_Lib::kColon) {
-    throw SyntaxError(source.getPosition(), "Missing ':' in key value pair.");
+    JSON_THROW(SyntaxError(source.getPosition(), "Missing ':' in key value pair."));
   }
   source.next();
   return { std::move(key), parseNodes(source, translator, parserDepth + 1) };
@@ -115,7 +116,7 @@ Node Default_Parser::parseNumber(ISource &source,
   std::array<char, kMaxNumberLength> numberText{};
   std::size_t numberLength = 0;
   while (source.more() && !endOfNumber(source)) {
-    if (numberLength >= numberText.size()) { throw SyntaxError("Number size exceeds maximum allowed length."); }
+    if (numberLength >= numberText.size()) { JSON_THROW(SyntaxError("Number size exceeds maximum allowed length.")); }
     numberText[numberLength++] = source.current();
     source.next();
   }
@@ -124,7 +125,7 @@ Node Default_Parser::parseNumber(ISource &source,
   if (number.isValid()) {
     return Node::make<Number>(number);
   }
-  throw SyntaxError(source.getPosition(), "Invalid numeric value.");
+  JSON_THROW(SyntaxError(source.getPosition(), "Invalid numeric value."));
 }
 /// <summary>
 /// Parse a boolean from a JSON source stream.
@@ -141,7 +142,7 @@ Node Default_Parser::parseBoolean(ISource &source,
   static constexpr std::string_view kFalseToken{"false"};
   if (source.match(kTrueToken)) { return Node::make<Boolean>(true); }
   if (source.match(kFalseToken)) { return Node::make<Boolean>(false); }
-  throw SyntaxError(source.getPosition(), "Invalid boolean value.");
+  JSON_THROW(SyntaxError(source.getPosition(), "Invalid boolean value."));
 }
 /// <summary>
 /// Parse a null from a JSON source stream.
@@ -155,7 +156,7 @@ Node Default_Parser::parseNull(ISource &source,
   unsigned long)
 {
   static constexpr std::string_view kNullToken{"null"};
-  if (!source.match(kNullToken)) { throw SyntaxError(source.getPosition(), "Invalid null value."); }
+  if (!source.match(kNullToken)) { JSON_THROW(SyntaxError(source.getPosition(), "Invalid null value.")); }
   return Node::make<Null>();
 }
 /// <summary>
@@ -186,7 +187,7 @@ static Node parseCollection(ISource &source,
       NRef<NodeType>(jNode).add(parseElement(source, translator, parserDepth));
     }
   }
-  if (source.current() != closeChar) { throw SyntaxError(source.getPosition(), missingCloseMsg); }
+  if (source.current() != closeChar) { JSON_THROW(SyntaxError(source.getPosition(), missingCloseMsg)); }
   source.next();
   return jNode;
 }
@@ -219,7 +220,7 @@ Node Default_Parser::parseArray(ISource &source, const ITranslator &translator, 
 /// <returns>Pointer to Node.</returns>
 Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
-  if (parserDepth >= getMaxParserDepth()) { throw SyntaxError("Maximum parser depth exceeded."); }
+  if (parserDepth >= getMaxParserDepth()) { JSON_THROW(SyntaxError("Maximum parser depth exceeded.")); }
   source.ignoreWS();
   const char nextChar = source.current();
   Node jNode;
@@ -256,7 +257,7 @@ Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, 
       jNode = parseNull(source, translator, parserDepth);
       break;
     default:
-      throw SyntaxError(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null.");
+      JSON_THROW(SyntaxError(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null."));
   }
   source.ignoreWS();
   return jNode;

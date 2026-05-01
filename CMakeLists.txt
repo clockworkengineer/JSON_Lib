@@ -58,6 +58,13 @@ if(JSON_LIB_EMBEDDED)
   set(JSON_LIB_NO_STDIO ON CACHE BOOL "Disable stdio/file I/O support" FORCE)
 endif()
 
+# No-exceptions build disables tests/examples (PCH compiled with flag would mismatch test TUs)
+if(JSON_LIB_NO_EXCEPTIONS AND NOT JSON_LIB_EMBEDDED)
+  message(STATUS "Configuring JSON_Lib for no-exceptions build (tests/examples disabled)")
+  set(BUILD_TESTING OFF CACHE BOOL "Build unit tests" FORCE)
+  set(BUILD_EXAMPLES OFF CACHE BOOL "Build examples" FORCE)
+endif()
+
 # Configure embedded mode values for generated config header
 macro(json_lib_set_flag_value OPTION_NAME)
   if(${OPTION_NAME})

@@ -1,4 +1,5 @@
 #pragma once
+#include "JSON_Throw.hpp"
 
 #include <fstream>
 #include <string>
@@ -43,7 +44,7 @@ public:
   {
     if (destination.is_open()) { destination.close(); }
     destination.open(filename.c_str(), std::ios_base::binary | std::ios_base::trunc);
-    if (!destination.is_open()) { throw Error("File output stream failed to open or could not be created."); }
+    if (!destination.is_open()) { JSON_THROW(Error("File output stream failed to open or could not be created.")); }
     fileSize = 0;
     trackLast(0);
   }

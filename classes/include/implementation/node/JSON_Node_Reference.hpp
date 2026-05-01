@@ -1,4 +1,5 @@
 #pragma once
+#include "JSON_Throw.hpp"
 
 #include <string>
 #include <string_view>
@@ -33,7 +34,7 @@ template<typename T> constexpr std::string_view nodeTypeName()
 template<typename T> void checkNode(const Node &jNode)
 {
   if (!isA<T>(jNode)) {
-    throw Node::Error(std::string("Node not ").append(nodeTypeName<T>()).append("."));
+    JSON_THROW(Node::Error(std::string("Node not ").append(nodeTypeName<T>()).append(".")));
   }
 }
 template<typename T> T &NRef(Node &jNode)

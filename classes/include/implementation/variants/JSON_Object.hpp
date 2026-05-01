@@ -1,4 +1,5 @@
 #pragma once
+#include "JSON_Throw.hpp"
 
 #include "JSON_StoragePolicy.hpp"
 #include <algorithm>
@@ -41,7 +42,7 @@ struct Object
   template<typename T> void add(T &&entry)
   {
     const auto key = entry.getKey();
-    if (contains(key)) { throw Node::Error("Duplicate key used to add object entry."); }
+    if (contains(key)) { JSON_THROW(Node::Error("Duplicate key used to add object entry.")); }
     jNodeObject.emplace_back(std::forward<T>(entry));
 #if JSON_LIB_EMBEDDED
     const auto insertedIndex = jNodeObject.size() - 1;
@@ -109,7 +110,7 @@ private:
   [[nodiscard]] std::size_t getIndex(const std::string_view &key) const
   {
     const auto idx = lookupKey(key);
-    if (idx == npos) { throw Node::Error("Invalid key used to access object."); }
+    if (idx == npos) { JSON_THROW(Node::Error("Invalid key used to access object.")); }
     return idx;
   }
 

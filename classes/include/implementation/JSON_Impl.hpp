@@ -1,4 +1,5 @@
 #pragma once
+#include "JSON_Throw.hpp"
 
 #include <memory>
 #include "JSON.hpp"
@@ -86,7 +87,7 @@ template<typename T> void JSON_Impl::traverseNodes(T &jNode, IAction &action)
       for (auto &entry : NRef<Array>(jNode).value()) { traverseNodes(entry, action); }
     },
     [&](const Hole &) {},
-    [&](const std::monostate &) { throw Error("Unknown Node type encountered during tree traversal."); }
+    [&](const std::monostate &) { JSON_THROW(Error("Unknown Node type encountered during tree traversal.")); }
   });
 }
 }// namespace JSON_Lib

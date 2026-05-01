@@ -7,6 +7,7 @@
 //
 
 #include "JSON_Impl.hpp"
+#include "JSON_Throw.hpp"
 #include <string>
 
 namespace JSON_Lib {
@@ -48,7 +49,7 @@ Result<Node> JSON_Impl::parseResult(ISource &source)
 }
 void JSON_Impl::stringify(IDestination &destination) const
 {
-  if (jNodeRoot.isEmpty()) { throw Error("No JSON to stringify."); }
+  if (jNodeRoot.isEmpty()) { JSON_THROW(Error("No JSON to stringify.")); }
   jsonStringify->stringify(jNodeRoot, destination, 0);
 }
 Result<void> JSON_Impl::runStringify(IDestination &destination, unsigned long indent) const
@@ -69,7 +70,7 @@ Result<void> JSON_Impl::stringifyResult(IDestination &destination) const
 }
 void JSON_Impl::print(IDestination &destination) const
 {
-  if (jNodeRoot.isEmpty()) { throw Error("No JSON to print."); }
+  if (jNodeRoot.isEmpty()) { JSON_THROW(Error("No JSON to print.")); }
   jsonStringify->stringify(jNodeRoot, destination, jsonStringify->getIndent());
 }
 Result<void> JSON_Impl::printResult(IDestination &destination) const
@@ -99,12 +100,12 @@ void JSON_Impl::strip(ISource &source, IDestination &destination)
 }
 void JSON_Impl::traverse(IAction &action)
 {
-  if (jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
+  if (jNodeRoot.isEmpty()) { JSON_THROW(Error("No JSON to traverse.")); }
   traverseNodes(jNodeRoot, action);
 }
 void JSON_Impl::traverse(IAction &action) const
 {
-  if (jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
+  if (jNodeRoot.isEmpty()) { JSON_THROW(Error("No JSON to traverse.")); }
   traverseNodes(jNodeRoot, action);
 }
 Node &JSON_Impl::operator[](const std::string_view &key)

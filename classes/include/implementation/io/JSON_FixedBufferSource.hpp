@@ -1,4 +1,5 @@
 #pragma once
+#include "JSON_Throw.hpp"
 
 #include <cstddef>
 #include "ISource.hpp"
@@ -17,7 +18,7 @@ class FixedBufferSource final : public ISource
 public:
   FixedBufferSource(const char *data, std::size_t length) : data_(data), length_(length)
   {
-    if (data == nullptr || length == 0) { throw Error("Empty source buffer passed to be parsed."); }
+    if (data == nullptr || length == 0) { JSON_THROW(Error("Empty source buffer passed to be parsed.")); }
   }
 
   FixedBufferSource() = delete;
@@ -35,7 +36,7 @@ public:
 
   void next() override
   {
-    if (!more()) { throw Error("Tried to read past end of buffer."); }
+    if (!more()) { JSON_THROW(Error("Tried to read past end of buffer.")); }
     ++position_;
     ++column;
     if (current() == kLineFeed) {

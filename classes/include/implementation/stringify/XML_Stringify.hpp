@@ -1,4 +1,5 @@
 #pragma once
+#include "JSON_Throw.hpp"
 
 #include <memory>
 #include "JSON.hpp"
@@ -43,7 +44,7 @@ private:
       [&](const Hole &) { stringifyNull(jNode, destination); },
       [&](const Object &) { stringifyObject(jNode, destination, 0); },
       [&](const Array &) { stringifyArray(jNode, destination, 0); },
-      [&](const std::monostate &) { throw Error("Unknown Node type encountered during stringification."); }
+      [&](const std::monostate &) { JSON_THROW(Error("Unknown Node type encountered during stringification.")); }
     });
   }
   void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long) const

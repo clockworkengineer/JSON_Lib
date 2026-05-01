@@ -1,4 +1,5 @@
 #pragma once
+#include "JSON_Throw.hpp"
 
 #include <vector>
 
@@ -41,7 +42,7 @@ private:
   [[nodiscard]] std::size_t checkBounds(const std::size_t index) const
   {
     if (index < jNodeArray.size()) { return index; }
-    throw Node::Error("Invalid index used to access array.");
+    JSON_THROW(Node::Error("Invalid index used to access array."));
   }
 
   // Array entries list
