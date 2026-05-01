@@ -28,13 +28,13 @@ struct Node
   };
   // Constructors/Destructors
   Node() = default;
-  explicit Node(std::unique_ptr<Object> value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
-  explicit Node(std::unique_ptr<Array> value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
-  explicit Node(Number value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
-  explicit Node(String value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
-  explicit Node(Boolean value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
-  explicit Node(Null value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
-  explicit Node(Hole value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
+  explicit Node(std::unique_ptr<Object> value) : jNodeVariant(std::move(value)) {}
+  explicit Node(std::unique_ptr<Array> value) : jNodeVariant(std::move(value)) {}
+  explicit Node(Number value) : jNodeVariant(std::move(value)) {}
+  explicit Node(String value) : jNodeVariant(std::move(value)) {}
+  explicit Node(Boolean value) : jNodeVariant(std::move(value)) {}
+  explicit Node(Null value) : jNodeVariant(std::move(value)) {}
+  explicit Node(Hole value) : jNodeVariant(std::move(value)) {}
   template<typename T, typename = std::enable_if_t<
       std::is_same_v<T, bool> ||
       std::is_arithmetic_v<T> ||
@@ -45,18 +45,15 @@ struct Node
   Node(const JSON::ObjectInitializer &object);
   Node(const Node &other) = delete;
   Node &operator=(const Node &other) = delete;
-  Node(Node &&other) noexcept : jNodeVariant(std::move(other.jNodeVariant)), jNodeEmpty(other.jNodeEmpty)
+  Node(Node &&other) noexcept : jNodeVariant(std::move(other.jNodeVariant))
   {
     other.jNodeVariant = std::monostate{};
-    other.jNodeEmpty = true;
   }
   Node &operator=(Node &&other) noexcept
   {
     if (this != &other) {
       jNodeVariant = std::move(other.jNodeVariant);
-      jNodeEmpty = other.jNodeEmpty;
       other.jNodeVariant = std::monostate{};
-      other.jNodeEmpty = true;
     }
     return *this;
   }
@@ -64,7 +61,7 @@ struct Node
   // Assignment operators
   template<typename T> Node &operator=(T value) { return *this = Node(value); }
   // Has the variant been created
-  [[nodiscard]] bool isEmpty() const { return jNodeEmpty || std::holds_alternative<std::monostate>(jNodeVariant); }
+  [[nodiscard]] bool isEmpty() const { return std::holds_alternative<std::monostate>(jNodeVariant); }
   // Indexing operators
   Node &operator[](const std::string_view &key);
   const Node &operator[](const std::string_view &key) const;
@@ -111,6 +108,5 @@ struct Node
 
 private:
   Storage jNodeVariant;
-  bool jNodeEmpty{true};
 };
 }// namespace JSON_Lib
