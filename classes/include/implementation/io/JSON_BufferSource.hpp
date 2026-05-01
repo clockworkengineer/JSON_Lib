@@ -12,27 +12,27 @@ class BufferSource final : public ISource
 public:
   explicit BufferSource(const std::string &buffer) : ownedBuffer(buffer), buffer(ownedBuffer)
   {
-    if (this->buffer.empty()) { throw Error("Empty source buffer passed to be parsed."); }
+    checkNotEmpty(this->buffer.empty());
   }
 
   explicit BufferSource(std::string &&buffer) : ownedBuffer(std::move(buffer)), buffer(ownedBuffer)
   {
-    if (ownedBuffer.empty()) { throw Error("Empty source buffer passed to be parsed."); }
+    checkNotEmpty(ownedBuffer.empty());
   }
 
   explicit BufferSource(const char *buffer) : buffer(buffer, buffer ? std::strlen(buffer) : 0)
   {
-    if (buffer == nullptr || buffer[0] == '\0') { throw Error("Empty source buffer passed to be parsed."); }
+    checkNotEmpty(buffer == nullptr || buffer[0] == '\0');
   }
 
   explicit BufferSource(const std::string_view &buffer) : buffer(buffer)
   {
-    if (buffer.empty()) { throw Error("Empty source buffer passed to be parsed."); }
+    checkNotEmpty(buffer.empty());
   }
 
   BufferSource(const char *buffer, std::size_t length) : buffer(buffer, length)
   {
-    if (buffer == nullptr || length == 0) { throw Error("Empty source buffer passed to be parsed."); }
+    checkNotEmpty(buffer == nullptr || length == 0);
   }
 
   BufferSource() = delete;
@@ -71,6 +71,10 @@ public:
   [[nodiscard]] std::size_t position() const override { return bufferPosition; }
 
 private:
+  static void checkNotEmpty(bool empty)
+  {
+    if (empty) { throw Error("Empty source buffer passed to be parsed."); }
+  }
   void backup(const unsigned long length) override { bufferPosition -= length; }
 
   std::size_t bufferPosition = 0;
