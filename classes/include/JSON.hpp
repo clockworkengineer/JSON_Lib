@@ -125,6 +125,10 @@ public:
 
   struct Limits
   {
+    // Compile-time resource limits (reflect JSON_LIB_MAX_PARSER_DEPTH / JSON_LIB_MAX_STRING_LENGTH)
+    static constexpr unsigned long kMaxParserDepth  = JSON_LIB_MAX_PARSER_DEPTH  ? JSON_LIB_MAX_PARSER_DEPTH  : 10UL;
+    static constexpr uint64_t      kMaxStringLength = JSON_LIB_MAX_STRING_LENGTH ? JSON_LIB_MAX_STRING_LENGTH : 16384ULL;
+    // Runtime accessors (may differ if changed via set* at startup)
     static uint64_t maxStringLength() noexcept;
     static unsigned long maxParserDepth() noexcept;
   };

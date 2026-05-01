@@ -2,12 +2,17 @@
 
 #include <string>
 #include <string_view>
+#include "JSON_Config.hpp"
 
 namespace JSON_Lib {
 
 struct String
 {
+#if JSON_LIB_MAX_STRING_LENGTH
+  constexpr static int64_t kDefMaxStringLength = JSON_LIB_MAX_STRING_LENGTH;
+#else
   constexpr static int64_t kDefMaxStringLength = 16*1024;
+#endif
   // Constructors/Destructors
   String() = default;
   explicit String(const std::string_view &string) : jNodeString(string) {}

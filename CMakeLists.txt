@@ -48,6 +48,9 @@ option(JSON_LIB_NO_HEAP "Disable heap allocation support" OFF)
 option(JSON_LIB_NO_DYNAMIC_MEMORY "Disable dynamic memory usage" OFF)
 option(JSON_LIB_ALLOCATOR_INTERFACE "Enable custom allocator/pool interface" OFF)
 option(JSON_LIB_NO_STDIO "Disable stdio/file I/O support" OFF)
+# Compile-time resource limits (0 = use library default)
+set(JSON_LIB_MAX_PARSER_DEPTH  "0" CACHE STRING "Override default maximum JSON parse depth (0 = use default of 10)")
+set(JSON_LIB_MAX_STRING_LENGTH "0" CACHE STRING "Override default maximum JSON string length in bytes (0 = use default of 16384)")
 
 # Embedded build enforces smaller runtime and disables test/examples when enabled
 if(JSON_LIB_EMBEDDED)
@@ -86,6 +89,10 @@ json_lib_set_flag_value(JSON_LIB_NO_HEAP)
 json_lib_set_flag_value(JSON_LIB_NO_DYNAMIC_MEMORY)
 json_lib_set_flag_value(JSON_LIB_ALLOCATOR_INTERFACE)
 json_lib_set_flag_value(JSON_LIB_NO_STDIO)
+
+# Numeric resource-limit overrides — pass value directly (0 means "use library default")
+set(JSON_LIB_MAX_PARSER_DEPTH_VALUE  ${JSON_LIB_MAX_PARSER_DEPTH})
+set(JSON_LIB_MAX_STRING_LENGTH_VALUE ${JSON_LIB_MAX_STRING_LENGTH})
 
 # Configure version header
 configure_file(JSON_Config.h.in JSON_Config.hpp)

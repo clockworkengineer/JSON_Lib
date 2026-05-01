@@ -183,3 +183,14 @@ TEST_CASE("FixedBufferSource null pointer throws in normal build", "[JSON][Embed
   REQUIRE_THROWS_AS((FixedBufferSource{nullptr, 0}), ISource::Error);
 }
 #endif
+
+TEST_CASE("EmbeddedJSON::Limits compile-time constants match expected defaults", "[JSON][Embedded][Limits]")
+{
+  // kMaxParserDepth reflects JSON_LIB_MAX_PARSER_DEPTH (0 → default 10)
+  REQUIRE(EmbeddedJSON::Limits::kMaxParserDepth == EmbeddedJSON::Limits::maxParserDepth());
+  // kMaxStringLength reflects JSON_LIB_MAX_STRING_LENGTH (0 → default 16384)
+  REQUIRE(EmbeddedJSON::Limits::kMaxStringLength == EmbeddedJSON::Limits::maxStringLength());
+  // Sanity: defaults are positive
+  REQUIRE(EmbeddedJSON::Limits::kMaxParserDepth > 0);
+  REQUIRE(EmbeddedJSON::Limits::kMaxStringLength > 0);
+}

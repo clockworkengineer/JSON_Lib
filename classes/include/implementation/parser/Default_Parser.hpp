@@ -3,6 +3,7 @@
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "JSON_Char_Constants.hpp"
+#include "JSON_Config.hpp"
 
 namespace JSON_Lib {
 
@@ -10,7 +11,11 @@ class Default_Parser final : public IParser
 {
 public:
   // Default maximum parser depth
+#if JSON_LIB_MAX_PARSER_DEPTH
+  constexpr static unsigned long kDefaultMaxParserDepth = JSON_LIB_MAX_PARSER_DEPTH;
+#else
   constexpr static unsigned long kDefaultMaxParserDepth = 10;
+#endif
 
   explicit Default_Parser(ITranslator &translator) : jsonTranslator(translator) {}
   Default_Parser(const Default_Parser &other) = delete;
