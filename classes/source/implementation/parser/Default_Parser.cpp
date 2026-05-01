@@ -271,6 +271,13 @@ Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, 
 Node Default_Parser::parse(ISource &source) { return parseNodes(source, jsonTranslator, 1); }
 Result<Node> Default_Parser::parseResult(ISource &source)
 {
+#if JSON_LIB_NO_EXCEPTIONS
+  // Under NO_EXCEPTIONS, sources that fail construction (e.g. FixedBufferSource{nullptr,0})
+  // set an invalid state rather than throwing. Detect this before parseNodes can abort.
+  if (!source.more()) {
+    return {Status::InvalidInput, nullptr, "Empty or invalid source buffer.", source.getPosition()};
+  }
+#endif
   try {
     return {Status::Ok, std::make_unique<Node>(parseNodes(source, jsonTranslator, 1)), {}, {0, 0}};
   } catch (const SyntaxError &ex) {

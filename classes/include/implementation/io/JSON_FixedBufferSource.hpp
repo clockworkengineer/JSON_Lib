@@ -18,7 +18,11 @@ class FixedBufferSource final : public ISource
 public:
   FixedBufferSource(const char *data, std::size_t length) : data_(data), length_(length)
   {
+#if JSON_LIB_NO_EXCEPTIONS
+    if (data == nullptr || length == 0) { valid_ = false; return; }
+#else
     if (data == nullptr || length == 0) { JSON_THROW(Error("Empty source buffer passed to be parsed.")); }
+#endif
   }
 
   FixedBufferSource() = delete;
@@ -45,7 +49,7 @@ public:
     }
   }
 
-  [[nodiscard]] bool more() const override { return position_ < length_; }
+  [[nodiscard]] bool more() const override { return valid_ && position_ < length_; }
 
   void reset() override
   {
@@ -55,6 +59,9 @@ public:
   }
 
   [[nodiscard]] std::size_t position() const override { return position_; }
+#if JSON_LIB_NO_EXCEPTIONS
+  [[nodiscard]] bool valid() const noexcept { return valid_; }
+#endif
 
 private:
   void backup(const unsigned long length) override { position_ -= length; }
@@ -62,6 +69,7 @@ private:
   const char *data_;
   std::size_t length_;
   std::size_t position_{0};
+  bool valid_{true};
 };
 
 }// namespace JSON_Lib

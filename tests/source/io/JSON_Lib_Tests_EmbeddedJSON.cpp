@@ -165,3 +165,21 @@ TEST_CASE("EmbeddedJSON stringify integer JSON produces correct output", "[JSON]
   REQUIRE(str.find("\"b\":-99") != std::string::npos);
   REQUIRE(str.find("\"c\":0") != std::string::npos);
 }
+
+#if JSON_LIB_NO_EXCEPTIONS
+TEST_CASE("FixedBufferSource null pointer sets valid false under NO_EXCEPTIONS", "[JSON][Embedded][FixedBufferSource][NoExceptions]")
+{
+  FixedBufferSource src{nullptr, 0};
+  REQUIRE_FALSE(src.valid());
+  REQUIRE_FALSE(src.more());
+  EmbeddedJSON embedded;
+  const auto result = embedded.parseNoThrow(src);
+  REQUIRE_FALSE(result.ok());
+  REQUIRE(result.status == Status::InvalidInput);
+}
+#else
+TEST_CASE("FixedBufferSource null pointer throws in normal build", "[JSON][Embedded][FixedBufferSource]")
+{
+  REQUIRE_THROWS_AS((FixedBufferSource{nullptr, 0}), ISource::Error);
+}
+#endif
