@@ -51,23 +51,16 @@ public:
 private:
   void stringifyNodes(const Node &jNode, IDestination &destination, const unsigned long indent) const
   {
-    if (isA<Number>(jNode)) {
-      stringifyNumber(jNode, destination);
-    } else if (isA<String>(jNode)) {
-      stringifyString(jNode, destination);
-    } else if (isA<Boolean>(jNode)) {
-      stringifyBoolean(jNode, destination);
-    } else if (isA<Null>(jNode)) {
-      stringifyNull(jNode, destination);
-    } else if (isA<Hole>(jNode)) {
-      destination.add(Hole::toString());
-    } else if (isA<Object>(jNode)) {
-      stringifyObject(jNode, destination, indent);
-    } else if (isA<Array>(jNode)) {
-      stringifyArray(jNode, destination, indent);
-    } else {
-      throw Error("Unknown Node type encountered during stringification.");
-    }
+    jNode.visit(overloaded{
+      [&](const Number &) { stringifyNumber(jNode, destination); },
+      [&](const String &) { stringifyString(jNode, destination); },
+      [&](const Boolean &) { stringifyBoolean(jNode, destination); },
+      [&](const Null &) { stringifyNull(jNode, destination); },
+      [&](const Hole &) { destination.add(Hole::toString()); },
+      [&](const Object &) { stringifyObject(jNode, destination, indent); },
+      [&](const Array &) { stringifyArray(jNode, destination, indent); },
+      [&](const std::monostate &) { throw Error("Unknown Node type encountered during stringification."); }
+    });
   }
 
 

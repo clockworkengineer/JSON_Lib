@@ -94,6 +94,21 @@ struct Node
       return std::get<StorageType<T>>(jNodeVariant);
     }
   }
+  // Visit — calls vis with the concrete stored type (unwraps unique_ptr<Object/Array>)
+  template<typename Visitor>
+  auto visit(Visitor &&vis) const
+  {
+    return std::visit([&vis](const auto &v) -> decltype(auto) {
+      using T = std::decay_t<decltype(v)>;
+      if constexpr (std::is_same_v<T, std::unique_ptr<Object>>) {
+        return vis(*v);
+      } else if constexpr (std::is_same_v<T, std::unique_ptr<Array>>) {
+        return vis(*v);
+      } else {
+        return vis(v);
+      }
+    }, jNodeVariant);
+  }
   // Make Node
   template<typename T, typename... Args> static auto make(Args &&...args)
   {
@@ -109,4 +124,9 @@ struct Node
 private:
   Storage jNodeVariant;
 };
+
+// Visitor helper — inherit from multiple lambdas
+template<typename... Ts> struct overloaded : Ts... { using Ts::operator()...; };
+template<typename... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+
 }// namespace JSON_Lib

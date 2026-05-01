@@ -33,22 +33,16 @@ public:
 private:
   static void stringifyNodes(const Node &jNode, IDestination &destination, const unsigned long)
   {
-    if (isA<Number>(jNode)) {
-      stringifyNumber(jNode, destination);
-    } else if (isA<String>(jNode)) {
-      stringifyString(jNode, destination);
-    } else if (isA<Boolean>(jNode)) {
-      stringifyBoolean(jNode, destination);
-    } else if (isA<Null>(jNode)) {
-      stringifyNull(jNode, destination);
-    } else if (isA<Hole>(jNode)) {
-    } else if (isA<Object>(jNode)) {
-      stringifyObject(jNode, destination, 0);
-    } else if (isA<Array>(jNode)) {
-      stringifyArray(jNode, destination, 0);
-    } else {
-      throw Error("Unknown Node type encountered during stringification.");
-    }
+    jNode.visit(overloaded{
+      [&](const Number &) { stringifyNumber(jNode, destination); },
+      [&](const String &) { stringifyString(jNode, destination); },
+      [&](const Boolean &) { stringifyBoolean(jNode, destination); },
+      [&](const Null &) { stringifyNull(jNode, destination); },
+      [&](const Hole &) {},
+      [&](const Object &) { stringifyObject(jNode, destination, 0); },
+      [&](const Array &) { stringifyArray(jNode, destination, 0); },
+      [&](const std::monostate &) { throw Error("Unknown Node type encountered during stringification."); }
+    });
   }
   static void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long)
   {
