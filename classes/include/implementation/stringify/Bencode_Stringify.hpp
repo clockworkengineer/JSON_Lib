@@ -13,6 +13,7 @@ public:
       : bencodeTranslator(std::move(translator))
   {
   }
+  Bencode_Stringify(const Bencode_Stringify &other) = delete;
   Bencode_Stringify &operator=(const Bencode_Stringify &other) = delete;
   Bencode_Stringify(Bencode_Stringify &&other) = delete;
   Bencode_Stringify &operator=(Bencode_Stringify &&other) = delete;

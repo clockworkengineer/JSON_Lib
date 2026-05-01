@@ -34,11 +34,7 @@ public:
   }
 
   // Set print ident value
-  void setIndent(const long indent) override
-  {
-    if (indent < 0) { throw JSON_Lib::Error("Invalid print indentation value."); }
-    defaultPrintIndent = indent;
-  }
+  void setIndent(const long indent) override { setDefaultIndent(indent); }
   //  Set indent value
   long getIndent() const override { return defaultPrintIndent; }
 

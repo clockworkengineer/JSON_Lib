@@ -57,7 +57,11 @@ private:
         destination.add('"');
         destination.add(yamlTranslator->to(entryNode.getKey()));
         destination.add("\": ");
-        if (isA<Array>(entryNode.getNode()) || isA<Object>(entryNode.getNode())) { destination.add('\n'); }
+        entryNode.getNode().visit(overloaded{
+          [&](const Array &)  { destination.add('\n'); },
+          [&](const Object &) { destination.add('\n'); },
+          [&](const auto &)   {}
+        });
         stringifyNodes(entryNode.getNode(), destination, indent + 2);
       }
     } else {

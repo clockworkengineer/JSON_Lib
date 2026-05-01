@@ -8,7 +8,7 @@ namespace JSON_Lib {
 /// @brief Append `count` space characters to destination.
 inline void addIndent(IDestination &destination, const unsigned long count)
 {
-  for (unsigned long i = 0; i < count; ++i) { destination.add(' '); }
+  if (count > 0) { destination.add(std::string(count, ' ')); }
 }
 
 /// @brief Append a translated, double-quoted string value to destination.
