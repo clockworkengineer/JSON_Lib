@@ -11,6 +11,7 @@
 #include <array>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
+#include "JSON_Throw.hpp"
 
 namespace JSON_Lib {
 
@@ -46,7 +47,7 @@ char16_t decodeUTF16(std::string_view::const_iterator &current, const ptrdiff_t 
       return utf16value;
     }
   }
-  throw Default_Translator::Error("Syntax error detected.");
+  JSON_THROW(Default_Translator::Error("Syntax error detected."));
 }
 /// <summary>
 /// Convert UTF16 character into its \uxxxx encoded escape sequence.
@@ -144,7 +145,7 @@ std::string Default_Translator::from(const std::string_view &escapedString) cons
     if (current != escapedString.end()) {
       // Single character
       if (fromEscape.contains(*current)) {
-        utf16Buffer += fromEscape[static_cast<char>(*current)];
+        utf16Buffer += fromEscape.at(static_cast<char>(*current));
         ++current;
       }
       // UTF16 "\uxxxx"
@@ -158,13 +159,13 @@ std::string Default_Translator::from(const std::string_view &escapedString) cons
       }
       // Invalid escaped character
       else {
-        throw Error("Invalid escaped character.");
+        JSON_THROW(Error("Invalid escaped character."));
       }
     } else {
-      throw Error("Premature and of character escape sequence.");
+      JSON_THROW(Error("Premature and of character escape sequence."));
     }
   }
-  if (unpairedSurrogatesInBuffer(utf16Buffer)) { throw Error("Unpaired surrogate found."); }
+  if (unpairedSurrogatesInBuffer(utf16Buffer)) { JSON_THROW(Error("Unpaired surrogate found.")); }
   return toUtf8(utf16Buffer);
 }
 /// <summary>
@@ -180,7 +181,7 @@ std::string Default_Translator::to(const std::string_view &rawString) const
     // Control characters
     if (toEscape.contains(utf16Char)) {
       escapedString += '\\';
-      escapedString += toEscape[utf16Char];
+      escapedString += toEscape.at(utf16Char);
     }
     // ASCII
     else if (isASCII(utf16Char) && std::isprint(utf16Char)) {

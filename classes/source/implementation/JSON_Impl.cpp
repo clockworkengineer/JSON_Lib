@@ -7,6 +7,8 @@
 //
 
 #include "JSON_Impl.hpp"
+#include "JSON_Throw.hpp"
+#include <string>
 
 namespace JSON_Lib {
 
@@ -30,20 +32,50 @@ void JSON_Impl::setIndent(const long indent)
 }
 std::string JSON_Impl::version()
 {
-  std::stringstream versionString;
-  versionString << "JSON_Lib Version  " << JSON_VERSION_MAJOR << "." << JSON_VERSION_MINOR << "." << JSON_VERSION_PATCH;
-  return versionString.str();
+  std::string v;
+  v.reserve(32);
+  v.append("JSON_Lib Version  ")
+   .append(std::to_string(JSON_VERSION_MAJOR)).append(".")
+   .append(std::to_string(JSON_VERSION_MINOR)).append(".")
+   .append(std::to_string(JSON_VERSION_PATCH));
+  return v;
 }
 void JSON_Impl::parse(ISource &source) { jNodeRoot = jsonParser->parse(source); }
+Result<Node> JSON_Impl::parseResult(ISource &source)
+{
+  auto result = jsonParser->parseResult(source);
+  if (result.ok() && result.value) { jNodeRoot = std::move(*result.value); }
+  return result;
+}
 void JSON_Impl::stringify(IDestination &destination) const
 {
-  if (jNodeRoot.isEmpty()) { throw Error("No JSON to stringify."); }
+  if (jNodeRoot.isEmpty()) { JSON_THROW(Error("No JSON to stringify.")); }
   jsonStringify->stringify(jNodeRoot, destination, 0);
+}
+Result<void> JSON_Impl::runStringify(IDestination &destination, unsigned long indent) const
+{
+  if (jNodeRoot.isEmpty()) {
+    return {Status::InvalidInput, {}, {0, 0}};
+  }
+  try {
+    jsonStringify->stringify(jNodeRoot, destination, indent);
+    return {Status::Ok, {}, {0, 0}};
+  } catch (const std::exception &ex) {
+    return {Status::UnknownError, ex.what(), {0, 0}};
+  }
+}
+Result<void> JSON_Impl::stringifyResult(IDestination &destination) const
+{
+  return runStringify(destination, 0);
 }
 void JSON_Impl::print(IDestination &destination) const
 {
-  if (jNodeRoot.isEmpty()) { throw Error("No JSON to print."); }
+  if (jNodeRoot.isEmpty()) { JSON_THROW(Error("No JSON to print.")); }
   jsonStringify->stringify(jNodeRoot, destination, jsonStringify->getIndent());
+}
+Result<void> JSON_Impl::printResult(IDestination &destination) const
+{
+  return runStringify(destination, jsonStringify->getIndent());
 }
 void JSON_Impl::strip(ISource &source, IDestination &destination)
 {// Note: That it is assumed that the JSON on the source stream is valid with no errors.
@@ -68,13 +100,37 @@ void JSON_Impl::strip(ISource &source, IDestination &destination)
 }
 void JSON_Impl::traverse(IAction &action)
 {
-  if (jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
+  if (jNodeRoot.isEmpty()) { JSON_THROW(Error("No JSON to traverse.")); }
   traverseNodes(jNodeRoot, action);
 }
 void JSON_Impl::traverse(IAction &action) const
 {
-  if (jNodeRoot.isEmpty()) { throw Error("No JSON to traverse."); }
+  if (jNodeRoot.isEmpty()) { JSON_THROW(Error("No JSON to traverse.")); }
   traverseNodes(jNodeRoot, action);
+}
+Result<void> JSON_Impl::runTraverse(IAction &action)
+{
+  if (jNodeRoot.isEmpty()) {
+    return {Status::InvalidInput, {}, {0, 0}};
+  }
+  try {
+    traverseNodes(jNodeRoot, action);
+    return {Status::Ok, {}, {0, 0}};
+  } catch (const std::exception &ex) {
+    return {Status::UnknownError, ex.what(), {0, 0}};
+  }
+}
+Result<void> JSON_Impl::runTraverse(IAction &action) const
+{
+  if (jNodeRoot.isEmpty()) {
+    return {Status::InvalidInput, {}, {0, 0}};
+  }
+  try {
+    traverseNodes(jNodeRoot, action);
+    return {Status::Ok, {}, {0, 0}};
+  } catch (const std::exception &ex) {
+    return {Status::UnknownError, ex.what(), {0, 0}};
+  }
 }
 Node &JSON_Impl::operator[](const std::string_view &key)
 {

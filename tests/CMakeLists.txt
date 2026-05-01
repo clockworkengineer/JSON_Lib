@@ -27,6 +27,8 @@ set(TEST_SOURCES
   source/io/JSON_Lib_Tests_ISource_Buffer.cpp
   source/io/JSON_Lib_Tests_ISource_File.cpp
   source/io/JSON_Lib_Tests_IDestination_Buffer.cpp
+  source/io/JSON_Lib_Tests_IDestination_FixedBuffer.cpp
+  source/io/JSON_Lib_Tests_EmbeddedJSON.cpp
   source/io/JSON_Lib_Tests_IDestination_File.cpp
   source/io/JSON_Lib_Tests_File_GetFormat.cpp
   source/io/JSON_Lib_Tests_File_FromFile.cpp
@@ -54,22 +56,12 @@ set(TEST_SOURCES
   source/stringify/JSON_Lib_Tests_Stringify_Print.cpp
   source/misc/JSON_Lib_Tests_Misc.cpp
   source/misc/JSON_Lib_Tests_Helper.cpp
+  source/misc/JSON_Lib_Tests_DRY_Regression.cpp
   source/traverse/JSON_Lib_Tests_Traverse.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(${TEST_EXECUTABLE} PRIVATE
-  ${PROJECT_SOURCE_DIR}/classes/include/interface
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/common
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/node
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/converter
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/translator
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/parser
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify
-)
+target_include_directories(${TEST_EXECUTABLE} PRIVATE ${JSON_IMPL_INCLUDE_DIRS})
 target_link_libraries(${TEST_EXECUTABLE} ${JSON_LIBRARY_NAME} Catch2::Catch2WithMain)
 target_precompile_headers(${TEST_EXECUTABLE} REUSE_FROM JSON_Lib_Core)
 
@@ -77,26 +69,20 @@ target_precompile_headers(${TEST_EXECUTABLE} REUSE_FROM JSON_Lib_Core)
 include(Catch)
 catch_discover_tests(${TEST_EXECUTABLE})
 
+# Helper: configure a Catch2 test/benchmark executable with shared settings
+function(json_lib_add_test_target TARGET SOURCES_VAR)
+  add_executable(${TARGET} ${${SOURCES_VAR}})
+  target_include_directories(${TARGET} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+  target_include_directories(${TARGET} PRIVATE ${JSON_IMPL_INCLUDE_DIRS})
+  target_link_libraries(${TARGET} ${JSON_LIBRARY_NAME} Catch2::Catch2WithMain)
+  target_precompile_headers(${TARGET} REUSE_FROM JSON_Lib_Core)
+  catch_discover_tests(${TARGET})
+endfunction()
+
 set(BENCHMARK_EXECUTABLE ${JSON_LIBRARY_NAME}_Benchmarks)
 set(BENCHMARK_SOURCES
   source/benchmark/JSON_Lib_Tests_Benchmark.cpp)
-add_executable(${BENCHMARK_EXECUTABLE} ${BENCHMARK_SOURCES})
-target_include_directories(${BENCHMARK_EXECUTABLE} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(${BENCHMARK_EXECUTABLE} PRIVATE
-  ${PROJECT_SOURCE_DIR}/classes/include/interface
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/common
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/node
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/converter
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/translator
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/parser
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify
-)
-target_link_libraries(${BENCHMARK_EXECUTABLE} ${JSON_LIBRARY_NAME} Catch2::Catch2WithMain)
-target_precompile_headers(${BENCHMARK_EXECUTABLE} REUSE_FROM JSON_Lib_Core)
-catch_discover_tests(${BENCHMARK_EXECUTABLE})
+json_lib_add_test_target(${BENCHMARK_EXECUTABLE} BENCHMARK_SOURCES)
 
 add_custom_command(TARGET ${TEST_EXECUTABLE} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/files files)
 add_custom_command(TARGET ${TEST_EXECUTABLE} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/files ${CMAKE_CURRENT_BINARY_DIR}/files)

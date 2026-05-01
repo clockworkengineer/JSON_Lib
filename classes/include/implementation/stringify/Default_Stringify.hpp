@@ -1,24 +1,22 @@
 #pragma once
+#include "JSON_Throw.hpp"
 
 #include <memory>
 #include <string_view>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
+#include "JSON_StringUtils.hpp"
+#include "JSON_StringifierBase.hpp"
 
 namespace JSON_Lib {
 
-class Default_Stringify final : public IStringify
+class Default_Stringify final : public StringifierBase
 {
 public:
   explicit Default_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
-    : jsonTranslator(std::move(translator))
+    : StringifierBase(std::move(translator))
   {
   }
-  Default_Stringify(const Default_Stringify &other) = delete;
-  Default_Stringify &operator=(const Default_Stringify &other) = delete;
-  Default_Stringify(Default_Stringify &&other) = delete;
-  Default_Stringify &operator=(Default_Stringify &&other) = delete;
-  ~Default_Stringify() override = default;
 
   /// <summary>
   /// Recursively traverse Node structure encoding it into JSON string on
@@ -33,66 +31,38 @@ public:
   }
 
   // Set print ident value
-  void setIndent(const long indent) override
-  {
-    if (indent < 0) { throw JSON_Lib::Error("Invalid print indentation value."); }
-    defaultPrintIndent = indent;
-  }
+  void setIndent(const long indent) override { setDefaultIndent(indent); }
   //  Set indent value
   long getIndent() const override { return defaultPrintIndent; }
 
   static void setDefaultIndent(const long indent)
   {
-    if (indent < 0) { throw JSON_Lib::Error("Invalid print indentation value."); }
+    if (indent < 0) { JSON_THROW(JSON_Lib::Error("Invalid print indentation value.")); }
     defaultPrintIndent = indent;
   }
 
 private:
   void stringifyNodes(const Node &jNode, IDestination &destination, const unsigned long indent) const
   {
-    if (isA<Number>(jNode)) {
-      stringifyNumber(jNode, destination);
-    } else if (isA<String>(jNode)) {
-      stringifyString(jNode, destination);
-    } else if (isA<Boolean>(jNode)) {
-      stringifyBoolean(jNode, destination);
-    } else if (isA<Null>(jNode)) {
-      stringifyNull(jNode, destination);
-    } else if (isA<Hole>(jNode)) {
-      destination.add(Hole::toString());
-    } else if (isA<Object>(jNode)) {
-      stringifyObject(jNode, destination, indent);
-    } else if (isA<Array>(jNode)) {
-      stringifyArray(jNode, destination, indent);
-    } else {
-      throw Error("Unknown Node type encountered during stringification.");
-    }
+    jNode.visit(overloaded{
+      [&](const Number &) { stringifyNumber(jNode, destination); },
+      [&](const String &) { stringifyString(jNode, destination); },
+      [&](const Boolean &) { stringifyBoolean(jNode, destination); },
+      [&](const Null &) { stringifyNull(jNode, destination); },
+      [&](const Hole &) { destination.add(Hole::toString()); },
+      [&](const Object &) { stringifyObject(jNode, destination, indent); },
+      [&](const Array &) { stringifyArray(jNode, destination, indent); },
+      [&](const std::monostate &) { JSON_THROW(Error("Unknown Node type encountered during stringification.")); }
+    });
   }
 
-  static void addIndent(IDestination &destination, const unsigned long indent)
-  {
-    for (unsigned long count = 0; count < indent; ++count) {
-      destination.add(' ');
-    }
-  }
 
-  static constexpr char kQuote = '"';
-  static constexpr char kSpace = ' ';
-
-  void appendQuotedString(const std::string_view &value, IDestination &destination) const
-  {
-    destination.add(kQuote);
-    destination.add(jsonTranslator->to(value));
-    destination.add(kQuote);
-  }
 
   void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long indent) const
   {
     const auto &entries = NRef<Object>(jNode).value();
     const bool pretty = indent != 0;
-    const size_t commaCountStart = entries.size() > 0 ? entries.size() - 1 : 0;
-    size_t commaCount = commaCountStart;
-
+    size_t commaCount = entries.empty() ? 0 : entries.size() - 1;
     destination.add('{');
     if (pretty) { destination.add('\n'); }
     for (auto &entry : entries) {
@@ -101,15 +71,9 @@ private:
       destination.add(':');
       if (pretty) { destination.add(' '); }
       stringifyNodes(entry.getNode(), destination, pretty ? indent + defaultPrintIndent : 0);
-      if (commaCount-- > 0) {
-        destination.add(',');
-        if (pretty) { destination.add('\n'); }
-      }
+      addCommaNewline(destination, pretty, commaCount);
     }
-    if (pretty) {
-      destination.add('\n');
-      addIndent(destination, indent - defaultPrintIndent);
-    }
+    addPrettyTrailer(destination, pretty, indent, static_cast<unsigned long>(defaultPrintIndent));
     destination.add('}');
   }
 
@@ -124,15 +88,9 @@ private:
       for (auto &entry : elements) {
         if (pretty) { addIndent(destination, indent); }
         stringifyNodes(entry, destination, pretty ? indent + defaultPrintIndent : 0);
-        if (commaCount-- > 0) {
-          destination.add(',');
-          if (pretty) { destination.add('\n'); }
-        }
+        addCommaNewline(destination, pretty, commaCount);
       }
-      if (pretty) {
-        destination.add('\n');
-        addIndent(destination, indent - defaultPrintIndent);
-      }
+      addPrettyTrailer(destination, pretty, indent, static_cast<unsigned long>(defaultPrintIndent));
     }
     destination.add(']');
   }
@@ -151,14 +109,12 @@ private:
   }
   void stringifyString(const Node &jNode, IDestination &destination) const
   {
-    appendQuotedString(NRef<String>(jNode).value(), destination);
+    appendQuotedString(NRef<String>(jNode).value(), destination, *translator_);
   }
   void stringifyString(const std::string_view &value, IDestination &destination) const
   {
-    appendQuotedString(value, destination);
+    appendQuotedString(value, destination, *translator_);
   }
-
-  std::unique_ptr<ITranslator> jsonTranslator;
   inline static long defaultPrintIndent{ 4 };
 };
 

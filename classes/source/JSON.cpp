@@ -59,18 +59,24 @@ void JSON::strip(ISource &&source, IDestination &&destination)  { JSON_Impl::str
 /// <param name="source">Source for JSON encoded bytes.</param>
 void JSON::parse(ISource &source) const { implementation->parse(source); }
 void JSON::parse(ISource &&source) const { implementation->parse(source); }
+Result<Node> JSON::parseResult(ISource &source) const { return implementation->parseResult(source); }
+Result<Node> JSON::parseResult(ISource &&source) const { return implementation->parseResult(source); }
 /// <summary>
 /// Traverse Node structure and build its JSON string (no whitespace) on destination stream.
 /// </summary>
 /// <param name="destination">Destination stream for stringified JSON.</param>
 void JSON::stringify(IDestination &destination) const { implementation->stringify(destination); }
 void JSON::stringify(IDestination &&destination) const { implementation->stringify(destination); }
+Result<void> JSON::stringifyResult(IDestination &destination) const { return implementation->stringifyResult(destination); }
+Result<void> JSON::stringifyResult(IDestination &&destination) const { return implementation->stringifyResult(destination); }
 /// <summary>
 /// Traverse Node structure and build its JSON string (pretty printed) on destination stream.
 /// </summary>
 /// <param name="destination">Destination stream for stringified JSON.</param>
 void JSON::print(IDestination &destination) const { implementation->print(destination); }
 void JSON::print(IDestination &&destination) const { implementation->print(destination); }
+Result<void> JSON::printResult(IDestination &destination) const { return implementation->printResult(destination); }
+Result<void> JSON::printResult(IDestination &&destination) const { return implementation->printResult(destination); }
 /// <summary>
 /// Set print indent value.
 /// </summary>
@@ -85,6 +91,8 @@ void JSON::setIndent(const long indent) { JSON_Impl::setIndent(indent); }
 void JSON::traverse(IAction &action) { implementation->traverse(action); }
 // Traverse using const JSON so cannot change JSON tree
 void JSON::traverse(IAction &action) const { std::as_const(*implementation).traverse(action); }
+Result<void> JSON::traverseResult(IAction &action) { return implementation->runTraverse(action); }
+Result<void> JSON::traverseResult(IAction &action) const { return std::as_const(*implementation).runTraverse(action); }
 /// <summary>
 /// Return object entry for the passed in keys.
 /// </summary>
@@ -109,6 +117,7 @@ const Node &JSON::root() const { return implementation->root(); }
 /// </summary>
 /// <param name="fileName">JSON file name</param>
 /// <returns>JSON string.</returns>
+#if !JSON_LIB_NO_STDIO
 std::string JSON::fromFile(const std::string_view &fileName) { return JSON_Impl::fromFile(fileName); }
 /// <summary>
 /// Create an JSON file and write JSON string to it.
@@ -126,4 +135,10 @@ void JSON::toFile(const std::string_view &fileName, const std::string_view &json
 /// <param name="fileName">JSON file name</param>
 /// <returns>JSON file format.</returns>
 JSON::Format JSON::getFileFormat(const std::string_view &fileName) { return JSON_Impl::getFileFormat(fileName); }
+#endif
+
+uint64_t EmbeddedJSON::Limits::maxStringLength() noexcept { return String::getMaxStringLength(); }
+unsigned long EmbeddedJSON::Limits::maxParserDepth() noexcept { return Default_Parser::getMaxParserDepth(); }
+Result<Node> EmbeddedJSON::parseNoThrow(ISource &source) const { return parseResult(source); }
+Result<Node> EmbeddedJSON::parseNoThrow(ISource &&source) const { return parseResult(source); }
 }// namespace JSON_Lib

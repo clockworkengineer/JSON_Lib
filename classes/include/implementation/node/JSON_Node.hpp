@@ -1,8 +1,8 @@
 #pragma once
 
 #include <memory>
-#include <stdexcept>
 #include <string_view>
+#include "JSON_ErrorBase.hpp"
 #include <type_traits>
 #include <utility>
 #include <variant>
@@ -24,17 +24,17 @@ struct Node
   // Node Error
   struct Error final : std::runtime_error
   {
-    explicit Error(const std::string_view &message) : std::runtime_error(std::string("Node Error: ").append(message)) {}
+    explicit Error(const std::string_view &message) : std::runtime_error(makeTaggedError("Node", message)) {}
   };
   // Constructors/Destructors
   Node() = default;
-  explicit Node(std::unique_ptr<Object> value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
-  explicit Node(std::unique_ptr<Array> value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
-  explicit Node(Number value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
-  explicit Node(String value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
-  explicit Node(Boolean value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
-  explicit Node(Null value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
-  explicit Node(Hole value) : jNodeVariant(std::move(value)), jNodeEmpty(false) {}
+  explicit Node(std::unique_ptr<Object> value) : jNodeVariant(std::move(value)) {}
+  explicit Node(std::unique_ptr<Array> value) : jNodeVariant(std::move(value)) {}
+  explicit Node(Number value) : jNodeVariant(std::move(value)) {}
+  explicit Node(String value) : jNodeVariant(std::move(value)) {}
+  explicit Node(Boolean value) : jNodeVariant(std::move(value)) {}
+  explicit Node(Null value) : jNodeVariant(std::move(value)) {}
+  explicit Node(Hole value) : jNodeVariant(std::move(value)) {}
   template<typename T, typename = std::enable_if_t<
       std::is_same_v<T, bool> ||
       std::is_arithmetic_v<T> ||
@@ -45,18 +45,15 @@ struct Node
   Node(const JSON::ObjectInitializer &object);
   Node(const Node &other) = delete;
   Node &operator=(const Node &other) = delete;
-  Node(Node &&other) noexcept : jNodeVariant(std::move(other.jNodeVariant)), jNodeEmpty(other.jNodeEmpty)
+  Node(Node &&other) noexcept : jNodeVariant(std::move(other.jNodeVariant))
   {
     other.jNodeVariant = std::monostate{};
-    other.jNodeEmpty = true;
   }
   Node &operator=(Node &&other) noexcept
   {
     if (this != &other) {
       jNodeVariant = std::move(other.jNodeVariant);
-      jNodeEmpty = other.jNodeEmpty;
       other.jNodeVariant = std::monostate{};
-      other.jNodeEmpty = true;
     }
     return *this;
   }
@@ -64,7 +61,7 @@ struct Node
   // Assignment operators
   template<typename T> Node &operator=(T value) { return *this = Node(value); }
   // Has the variant been created
-  [[nodiscard]] bool isEmpty() const { return jNodeEmpty || std::holds_alternative<std::monostate>(jNodeVariant); }
+  [[nodiscard]] bool isEmpty() const { return std::holds_alternative<std::monostate>(jNodeVariant); }
   // Indexing operators
   Node &operator[](const std::string_view &key);
   const Node &operator[](const std::string_view &key) const;
@@ -97,6 +94,21 @@ struct Node
       return std::get<StorageType<T>>(jNodeVariant);
     }
   }
+  // Visit — calls vis with the concrete stored type (unwraps unique_ptr<Object/Array>)
+  template<typename Visitor>
+  auto visit(Visitor &&vis) const
+  {
+    return std::visit([&vis](const auto &v) -> decltype(auto) {
+      using T = std::decay_t<decltype(v)>;
+      if constexpr (std::is_same_v<T, std::unique_ptr<Object>>) {
+        return vis(*v);
+      } else if constexpr (std::is_same_v<T, std::unique_ptr<Array>>) {
+        return vis(*v);
+      } else {
+        return vis(v);
+      }
+    }, jNodeVariant);
+  }
   // Make Node
   template<typename T, typename... Args> static auto make(Args &&...args)
   {
@@ -111,6 +123,10 @@ struct Node
 
 private:
   Storage jNodeVariant;
-  bool jNodeEmpty{true};
 };
+
+// Visitor helper — inherit from multiple lambdas
+template<typename... Ts> struct overloaded : Ts... { using Ts::operator()...; };
+template<typename... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+
 }// namespace JSON_Lib

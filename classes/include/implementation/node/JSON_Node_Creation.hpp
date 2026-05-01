@@ -19,17 +19,18 @@ Node::Node(T value)
 // Convert an initializer list type to JMode
 static Node typeToNode(const JSON::InitializerListTypes &type)
 {
-  if (const auto pValue = std::get_if<int>(&type)) { return Node(*pValue); }
-  if (const auto pValue = std::get_if<long>(&type)) { return Node(*pValue); }
-  if (const auto pValue = std::get_if<long long>(&type)) { return Node(*pValue); }
-  if (const auto pValue = std::get_if<float>(&type)) { return Node(*pValue); }
-  if (const auto pValue = std::get_if<double>(&type)) { return Node(*pValue); }
-  if (const auto pValue = std::get_if<long double>(&type)) { return Node(*pValue); }
-  if (const auto pValue = std::get_if<bool>(&type)) { return Node(*pValue); }
-  if (const auto pValue = std::get_if<std::string>(&type)) { return Node(*pValue); }
-  if (const auto pValue = std::get_if<std::nullptr_t>(&type)) { return Node(nullptr); }
-  if (const auto pValue = std::get_if<Node>(&type)) { return std::move(*const_cast<Node *>(pValue)); }
-  throw Node::Error("Node for unsupported type could not be created.");
+  return std::visit(overloaded{
+    [](int v)           -> Node { return Node(v); },
+    [](long v)          -> Node { return Node(v); },
+    [](long long v)     -> Node { return Node(v); },
+    [](float v)         -> Node { return Node(v); },
+    [](double v)        -> Node { return Node(v); },
+    [](long double v)   -> Node { return Node(v); },
+    [](bool v)          -> Node { return Node(v); },
+    [](const std::string &v) -> Node { return Node(v); },
+    [](std::nullptr_t)  -> Node { return Node(nullptr); },
+    [](const Node &v)   -> Node { return std::move(*const_cast<Node *>(&v)); }
+  }, type);
 }
 // Construct Node Array from initializer list
 inline Node::Node(const JSON::ArrayInitializer &array)

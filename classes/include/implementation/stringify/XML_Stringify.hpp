@@ -1,24 +1,21 @@
 #pragma once
+#include "JSON_Throw.hpp"
 
 #include <memory>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "XML_Translator.hpp"
+#include "JSON_StringifierBase.hpp"
 
 namespace JSON_Lib {
 
-class XML_Stringify final : public IStringify
+class XML_Stringify final : public StringifierBase
 {
 public:
   explicit XML_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<XML_Translator>())
-    : xmlTranslator(std::move(translator))
+    : StringifierBase(std::move(translator))
   {
   }
-  XML_Stringify(const XML_Stringify &other) = delete;
-  XML_Stringify &operator=(const XML_Stringify &other) = delete;
-  XML_Stringify(XML_Stringify &&other) = delete;
-  XML_Stringify &operator=(XML_Stringify &&other) = delete;
-  ~XML_Stringify() override = default;
 
   /// <summary>
   /// Recursively traverse Node structure encoding it into XML string on
@@ -39,30 +36,29 @@ public:
 private:
   void stringifyNodes(const Node &jNode, IDestination &destination, const long) const
   {
-    if (isA<Number>(jNode)) {
-      stringifyNumber(jNode, destination);
-    } else if (isA<String>(jNode)) {
-      stringifyString(jNode, destination);
-    } else if (isA<Boolean>(jNode)) {
-      stringifyBoolean(jNode, destination);
-    } else if (isA<Null>(jNode) || isA<Hole>(jNode)) {
-      stringifyNull(jNode, destination);
-    } else if (isA<Object>(jNode)) {
-      stringifyObject(jNode, destination, 0);
-    } else if (isA<Array>(jNode)) {
-      stringifyArray(jNode, destination, 0);
-    } else {
-      throw Error("Unknown Node type encountered during stringification.");
-    }
+    jNode.visit(overloaded{
+      [&](const Number &) { stringifyNumber(jNode, destination); },
+      [&](const String &) { stringifyString(jNode, destination); },
+      [&](const Boolean &) { stringifyBoolean(jNode, destination); },
+      [&](const Null &) { stringifyNull(jNode, destination); },
+      [&](const Hole &) { stringifyNull(jNode, destination); },
+      [&](const Object &) { stringifyObject(jNode, destination, 0); },
+      [&](const Array &) { stringifyArray(jNode, destination, 0); },
+      [&](const std::monostate &) { JSON_THROW(Error("Unknown Node type encountered during stringification.")); }
+    });
   }
   void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long) const
   {
     for (const auto &jNodeNext : NRef<Object>(jNode).value()) {
-      std::string elementName { jNodeNext.getKey()} ;
+      std::string elementName { jNodeNext.getKey()};
       std::ranges::replace(elementName, ' ', '-');
-      destination.add("<" + elementName + ">");
+      destination.add('<');
+      destination.add(elementName);
+      destination.add('>');
       stringifyNodes(jNodeNext.getNode(), destination, 0);
-      destination.add("</" + elementName + ">");
+      destination.add("</");
+      destination.add(elementName);
+      destination.add('>');
     }
   }
   void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long) const
@@ -90,10 +86,8 @@ private:
   static void stringifyNull(const Node &, IDestination &) {}
   void stringifyString(const Node &jNode, IDestination &destination) const
   {
-    destination.add(xmlTranslator->to(NRef<String>(jNode).value()));
+    destination.add(translator_->to(NRef<String>(jNode).value()));
   }
-
-  std::unique_ptr<ITranslator> xmlTranslator;
 };
 
 }// namespace JSON_Lib

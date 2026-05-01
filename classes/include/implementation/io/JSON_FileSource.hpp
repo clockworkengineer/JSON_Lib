@@ -1,4 +1,14 @@
 #pragma once
+#include "JSON_Throw.hpp"
+
+#include <filesystem>
+#include <fstream>
+#include <string>
+#include <string_view>
+
+#if JSON_LIB_NO_STDIO
+#error "FileSource is disabled when JSON_LIB_NO_STDIO is enabled."
+#endif
 
 namespace JSON_Lib {
 
@@ -8,7 +18,7 @@ public:
   explicit FileSource(const std::string_view &filename) : filename(filename)
   {
     source.open(filename.data(), std::ios_base::binary);
-    if (!source.is_open()) { throw Error("File input stream failed to open or does not exist."); }
+    if (!source.is_open()) { JSON_THROW(Error("File input stream failed to open or does not exist.")); }
   }
   FileSource() = delete;
   FileSource(const FileSource &other) = delete;
@@ -20,7 +30,7 @@ public:
   char current() const override { return static_cast<char>(source.peek()); }
   void next() override
   {
-    if (!more()) { throw Error("Tried to read past end of file."); }
+    if (!more()) { JSON_THROW(Error("Tried to read past end of file.")); }
     source.get();
     if (current() == kCarriageReturn) {
       source.get();

@@ -1,4 +1,5 @@
 #pragma once
+#include "JSON_Throw.hpp"
 
 #include <memory>
 #include "JSON.hpp"
@@ -20,10 +21,13 @@ public:
   static std::string version();
   // Parse JSON into Node tree
   void parse(ISource &source);
+  Result<Node> parseResult(ISource &source);
   // Create JSON text string (no white space) from Node tree
   void stringify(IDestination &destination) const;
+  Result<void> stringifyResult(IDestination &destination) const;
   // Create JSON structured text string (pretty print) from Node tree
   void print(IDestination &destination) const;
+  Result<void> printResult(IDestination &destination) const;
   // Strip whitespace from JSON string
   static void strip(ISource &source, IDestination &destination);
   // Get the root of JSON tree
@@ -38,15 +42,21 @@ public:
   // Traverse JSON tree
   void traverse(IAction &action);
   void traverse(IAction &action) const;
+  Result<void> runTraverse(IAction &action);
+  Result<void> runTraverse(IAction &action) const;
   // Set print ident value
   static void setIndent(const long indent);
+#if !JSON_LIB_NO_STDIO
   // Read/Write JSON from a file
   static std::string fromFile(const std::string_view &fileName);
   static void toFile(const std::string_view &fileName, const std::string_view &jsonString, JSON::Format format);
   // Get JSON file format
   static JSON::Format getFileFormat(const std::string_view &fileName);
+#endif
 
 private:
+  // Helper: empty-guard + try/catch wrapper for stringify operations
+  Result<void> runStringify(IDestination &destination, unsigned long indent) const;
   // Traverse JSON tree
   template<typename T> static void traverseNodes(T &jNode, IAction &action);
   // Root of JSON tree
@@ -65,22 +75,21 @@ private:
 template<typename T> void JSON_Impl::traverseNodes(T &jNode, IAction &action)
 {
   action.onNode(jNode);
-  if (isA<Number>(jNode)) {
-    action.onNumber(jNode);
-  } else if (isA<String>(jNode)) {
-    action.onString(jNode);
-  } else if (isA<Boolean>(jNode)) {
-    action.onBoolean(jNode);
-  } else if (isA<Null>(jNode)) {
-    action.onNull(jNode);
-  } else if (isA<Object>(jNode)) {
-    action.onObject(jNode);
-    for (auto &entry : NRef<Object>(jNode).value()) { traverseNodes(entry.getNode(), action); }
-  } else if (isA<Array>(jNode)) {
-    action.onArray(jNode);
-    for (auto &entry : NRef<Array>(jNode).value()) { traverseNodes(entry, action); }
-  } else if (!isA<Hole>(jNode)) {
-    throw Error("Unknown Node type encountered during tree traversal.");
-  }
+  jNode.visit(overloaded{
+    [&](const Number &) { action.onNumber(jNode); },
+    [&](const String &) { action.onString(jNode); },
+    [&](const Boolean &) { action.onBoolean(jNode); },
+    [&](const Null &) { action.onNull(jNode); },
+    [&](const Object &) {
+      action.onObject(jNode);
+      for (auto &entry : NRef<Object>(jNode).value()) { traverseNodes(entry.getNode(), action); }
+    },
+    [&](const Array &) {
+      action.onArray(jNode);
+      for (auto &entry : NRef<Array>(jNode).value()) { traverseNodes(entry, action); }
+    },
+    [&](const Hole &) {},
+    [&](const std::monostate &) { JSON_THROW(Error("Unknown Node type encountered during tree traversal.")); }
+  });
 }
 }// namespace JSON_Lib

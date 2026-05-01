@@ -106,35 +106,35 @@ TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringi
   SECTION("Stringify a null to YAML.", "[JSON][Stringify][Simple][YAML]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { "null" } });
+    json.parse(BufferSource{ "null" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "---\nnull\n...\n");
   }
   SECTION("Stringify an array to YAML.", "[JSON][Stringify][Array][YAML]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { "[1,444,555,666,67.99]" } });
+    json.parse(BufferSource{ "[1,444,555,666,67.99]" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "---\n- 1\n- 444\n- 555\n- 666\n- 67.99\n...\n");
   }
   SECTION("Stringify an empty array to YAML.", "[JSON][Stringify][Array][YAML]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { "[]" } });
+    json.parse(BufferSource{ "[]" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "---\n[]\n...\n");
   }
   SECTION("Stringify an object to YAML.", "[JSON][Stringify][Object][YAML]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { R"({"Age":77,"Name":"Rob"})" } });
+    json.parse(BufferSource{ R"({"Age":77,"Name":"Rob"})" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "---\n\"Age\": 77\n\"Name\": \"Rob\"\n...\n");
   }
   SECTION("Stringify an empty object to YAML.", "[JSON][Stringify][Object][YAML]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { R"({})" } });
+    json.parse(BufferSource{ R"({})" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == "---\n{}\n...\n");
   }

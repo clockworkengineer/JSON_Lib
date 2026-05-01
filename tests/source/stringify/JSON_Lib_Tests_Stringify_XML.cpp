@@ -119,14 +119,14 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
   SECTION("Stringify a null to XML.", "[JSON][Stringify][Simple][XML]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { "null" } });
+    json.parse(BufferSource{ "null" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root></root>)");
   }
   SECTION("Stringify an array to XML.", "[JSON][Stringify][Array][XML]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { "[1,444,555,666,67.99]" } });
+    json.parse(BufferSource{ "[1,444,555,666,67.99]" });
     json.stringify(jsonDestination);
     REQUIRE(
       jsonDestination.toString()
@@ -135,14 +135,14 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
   SECTION("Stringify an empty array to XML.", "[JSON][Stringify][Array][XML]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { "[]" } });
+    json.parse(BufferSource{ "[]" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root></root>)");
   }
   SECTION("Stringify an object to XML.", "[JSON][Stringify][Object][XML]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { R"({"Age":77,"Name":"Rob"})" } });
+    json.parse(BufferSource{ R"({"Age":77,"Name":"Rob"})" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString()
             == R"(<?xml version="1.0" encoding="UTF-8"?><root><Age>77</Age><Name>Rob</Name></root>)");
@@ -150,7 +150,7 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
   SECTION("Stringify an empty object to XML.", "[JSON][Stringify][Object][XML]")
   {
     BufferDestination jsonDestination;
-    json.parse(BufferSource{ { R"({})" } });
+    json.parse(BufferSource{ R"({})" });
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root></root>)");
   }

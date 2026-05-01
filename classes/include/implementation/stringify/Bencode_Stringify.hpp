@@ -1,22 +1,20 @@
 #pragma once
+#include "JSON_Throw.hpp"
 
 #include <memory>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
+#include "JSON_StringifierBase.hpp"
 
 namespace JSON_Lib {
 
-class Bencode_Stringify final : public IStringify
+class Bencode_Stringify final : public StringifierBase
 {
 public:
   explicit Bencode_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
-      : bencodeTranslator(std::move(translator))
+      : StringifierBase(std::move(translator))
   {
   }
-  Bencode_Stringify &operator=(const Bencode_Stringify &other) = delete;
-  Bencode_Stringify(Bencode_Stringify &&other) = delete;
-  Bencode_Stringify &operator=(Bencode_Stringify &&other) = delete;
-  ~Bencode_Stringify() override = default;
 
   /// <summary>
   /// Recursively traverse Node structure encoding it into Bencode string on
@@ -33,22 +31,16 @@ public:
 private:
   static void stringifyNodes(const Node &jNode, IDestination &destination, const unsigned long)
   {
-    if (isA<Number>(jNode)) {
-      stringifyNumber(jNode, destination);
-    } else if (isA<String>(jNode)) {
-      stringifyString(jNode, destination);
-    } else if (isA<Boolean>(jNode)) {
-      stringifyBoolean(jNode, destination);
-    } else if (isA<Null>(jNode)) {
-      stringifyNull(jNode, destination);
-    } else if (isA<Hole>(jNode)) {
-    } else if (isA<Object>(jNode)) {
-      stringifyObject(jNode, destination, 0);
-    } else if (isA<Array>(jNode)) {
-      stringifyArray(jNode, destination, 0);
-    } else {
-      throw Error("Unknown Node type encountered during stringification.");
-    }
+    jNode.visit(overloaded{
+      [&](const Number &) { stringifyNumber(jNode, destination); },
+      [&](const String &) { stringifyString(jNode, destination); },
+      [&](const Boolean &) { stringifyBoolean(jNode, destination); },
+      [&](const Null &) { stringifyNull(jNode, destination); },
+      [&](const Hole &) {},
+      [&](const Object &) { stringifyObject(jNode, destination, 0); },
+      [&](const Array &) { stringifyArray(jNode, destination, 0); },
+      [&](const std::monostate &) { JSON_THROW(Error("Unknown Node type encountered during stringification.")); }
+    });
   }
   static void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long)
   {
@@ -67,7 +59,9 @@ private:
   }
   static void stringifyNumber(const Node &jNode, IDestination &destination)
   {
-    destination.add("i" + std::to_string(NRef<Number>(jNode).value<long long>()) + "e");
+    destination.add('i');
+    destination.add(std::to_string(NRef<Number>(jNode).value<long long>()));
+    destination.add('e');
   }
   static void stringifyBoolean(const Node &jNode, IDestination &destination)
   {
@@ -80,15 +74,15 @@ private:
   static void stringifyNull(const Node &, IDestination &destination) { destination.add("4:null"); }
   static void stringifyString(const Node &jNode, IDestination &destination)
   {
-    const auto jsonString = NRef<String>(jNode).value();
-    destination.add((std::to_string(static_cast<int>(jsonString.length())) + ":").append(jsonString));
+    stringifyString(NRef<String>(jNode).value(), destination);
   }
   static void stringifyString(const std::string_view &value, IDestination &destination)
   {
-    destination.add((std::to_string(static_cast<int>(value.length())) + ":").append(value));
+    destination.add(std::to_string(static_cast<int>(value.length())));
+    destination.add(':');
+    destination.add(value);
   }
 
-  std::unique_ptr<ITranslator> bencodeTranslator;
 };
 
 
