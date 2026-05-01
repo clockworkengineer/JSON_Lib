@@ -180,13 +180,7 @@ add_library(JSON_Lib_Core OBJECT ${JSON_CORE_SOURCES})
 add_library(JSON_Lib_Parser OBJECT ${JSON_PARSER_SOURCES})
 add_library(JSON_Lib_Stringify INTERFACE)
 
-target_include_directories(JSON_Lib_Stringify INTERFACE
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation/translator>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/interface>
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/implementation>
-)
+target_include_directories(JSON_Lib_Stringify INTERFACE ${JSON_IMPL_INCLUDE_DIRS})
 
 target_include_directories(JSON_Lib_Core PRIVATE ${JSON_IMPL_INCLUDE_DIRS})
 
