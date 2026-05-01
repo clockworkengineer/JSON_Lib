@@ -20,11 +20,6 @@ public:
     destination.open(filename.data(), std::ios_base::binary | std::ios_base::trunc);
   }
   FileDestination() = delete;
-  FileDestination(const FileDestination &other) = delete;
-  FileDestination &operator=(const FileDestination &other) = delete;
-  FileDestination(FileDestination &&other) = delete;
-  FileDestination &operator=(FileDestination &&other) = delete;
-  ~FileDestination() override = default;
 
   void add(const char ch) override
   {

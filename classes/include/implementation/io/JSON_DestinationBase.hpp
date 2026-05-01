@@ -14,6 +14,13 @@ namespace JSON_Lib {
 class DestinationBase : public IDestination
 {
 public:
+  DestinationBase() = default;
+  DestinationBase(const DestinationBase &) = delete;
+  DestinationBase &operator=(const DestinationBase &) = delete;
+  DestinationBase(DestinationBase &&) = delete;
+  DestinationBase &operator=(DestinationBase &&) = delete;
+  ~DestinationBase() override = default;
+
   [[nodiscard]] char last() override { return lastChar_; }
 
 protected:

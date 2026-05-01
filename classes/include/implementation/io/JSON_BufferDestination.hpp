@@ -12,11 +12,6 @@ class BufferDestination final : public DestinationBase
 {
 public:
   BufferDestination() = default;
-  BufferDestination(const BufferDestination &other) = delete;
-  BufferDestination &operator=(const BufferDestination &other) = delete;
-  BufferDestination(BufferDestination &&other) = delete;
-  BufferDestination &operator=(BufferDestination &&other) = delete;
-  ~BufferDestination() override = default;
 
   void add(const std::string &bytes) override
   {

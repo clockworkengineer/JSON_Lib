@@ -14,11 +14,6 @@ class FixedBufferDestination final : public DestinationBase
 {
 public:
   FixedBufferDestination() = default;
-  FixedBufferDestination(const FixedBufferDestination &other) = delete;
-  FixedBufferDestination &operator=(const FixedBufferDestination &other) = delete;
-  FixedBufferDestination(FixedBufferDestination &&other) = delete;
-  FixedBufferDestination &operator=(FixedBufferDestination &&other) = delete;
-  ~FixedBufferDestination() override = default;
 
   void add(const std::string &bytes) override
   {
