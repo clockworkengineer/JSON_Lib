@@ -190,11 +190,11 @@ This is purely additive — it does not remove any existing `JSON` method.
 3. Add tests verifying the no-throw methods return the correct `Result` on success and
    on empty-JSON error.
 
-### Phase 5: Validation
+### Phase 5: Validation ✅ COMPLETE
 
-1. Run full test suite — must pass 1879 assertions in 80 test cases.
-2. Verify embedded build (`-DJSON_LIB_EMBEDDED=ON`) compiles cleanly.
-3. Run benchmark suite to confirm no performance regression.
+1. ✅ Full test suite: **1892 assertions, 91 test cases** — all passed.
+2. ✅ Embedded build (`-DJSON_LIB_EMBEDDED=ON`): compiled cleanly, zero errors.
+3. ✅ Benchmark suite: all 2 benchmark test cases passed, no performance regression.
 
 ---
 
