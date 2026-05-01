@@ -115,6 +115,14 @@ public:
   static constexpr bool isNoStdIoBuild() noexcept { return JSON_LIB_NO_STDIO; }
   static constexpr bool isNoDynamicMemoryBuild() noexcept { return JSON_LIB_NO_DYNAMIC_MEMORY; }
 
+  // Exception-free API — preferred for embedded targets
+  Result<Node> parseNoThrow(ISource &source) const;
+  Result<Node> parseNoThrow(ISource &&source) const;
+  Result<void> stringifyNoThrow(IDestination &destination) const  { return stringifyResult(destination); }
+  Result<void> stringifyNoThrow(IDestination &&destination) const { return stringifyResult(std::move(destination)); }
+  Result<void> printNoThrow(IDestination &destination) const  { return printResult(destination); }
+  Result<void> printNoThrow(IDestination &&destination) const { return printResult(std::move(destination)); }
+
   struct Limits
   {
     static uint64_t maxStringLength() noexcept;

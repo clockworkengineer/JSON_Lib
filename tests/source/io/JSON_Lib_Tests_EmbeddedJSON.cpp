@@ -111,3 +111,45 @@ TEST_CASE("FixedBufferDestination overflow throws in normal build", "[JSON][Embe
   REQUIRE_THROWS_AS(dest.add("12345"), IDestination::Error);
 }
 #endif
+
+TEST_CASE("EmbeddedJSON parseNoThrow returns Ok on valid JSON", "[JSON][Embedded][NoThrow]")
+{
+  EmbeddedJSON embedded;
+  const auto result = embedded.parseNoThrow(BufferSource{ R"({"x":1})" });
+  REQUIRE(result.ok());
+}
+
+TEST_CASE("EmbeddedJSON stringifyNoThrow returns Ok after parse", "[JSON][Embedded][NoThrow]")
+{
+  EmbeddedJSON embedded;
+  embedded.parse(BufferSource{ R"({"x":1})" });
+  BufferDestination destination;
+  const auto result = embedded.stringifyNoThrow(destination);
+  REQUIRE(result.ok());
+  REQUIRE(destination.toString() == R"({"x":1})");
+}
+
+TEST_CASE("EmbeddedJSON stringifyNoThrow returns InvalidInput on empty JSON", "[JSON][Embedded][NoThrow]")
+{
+  EmbeddedJSON embedded;
+  BufferDestination destination;
+  const auto result = embedded.stringifyNoThrow(destination);
+  REQUIRE_FALSE(result.ok());
+  REQUIRE(result.status == Status::InvalidInput);
+}
+
+TEST_CASE("EmbeddedJSON printNoThrow returns Ok after parse", "[JSON][Embedded][NoThrow]")
+{
+  EmbeddedJSON embedded;
+  embedded.parse(BufferSource{ R"([1,2,3])" });
+  BufferDestination destination;
+  const auto result = embedded.printNoThrow(destination);
+  REQUIRE(result.ok());
+}
+
+TEST_CASE("EmbeddedJSON parseNoThrow rvalue overload", "[JSON][Embedded][NoThrow]")
+{
+  EmbeddedJSON embedded;
+  const auto result = embedded.parseNoThrow(BufferSource{ R"(true)" });
+  REQUIRE(result.ok());
+}

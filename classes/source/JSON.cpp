@@ -137,4 +137,6 @@ JSON::Format JSON::getFileFormat(const std::string_view &fileName) { return JSON
 
 uint64_t EmbeddedJSON::Limits::maxStringLength() noexcept { return String::getMaxStringLength(); }
 unsigned long EmbeddedJSON::Limits::maxParserDepth() noexcept { return Default_Parser::getMaxParserDepth(); }
+Result<Node> EmbeddedJSON::parseNoThrow(ISource &source) const { return parseResult(source); }
+Result<Node> EmbeddedJSON::parseNoThrow(ISource &&source) const { return parseResult(source); }
 }// namespace JSON_Lib
