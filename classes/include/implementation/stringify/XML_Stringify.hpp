@@ -4,21 +4,17 @@
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "XML_Translator.hpp"
+#include "JSON_StringifierBase.hpp"
 
 namespace JSON_Lib {
 
-class XML_Stringify final : public IStringify
+class XML_Stringify final : public StringifierBase
 {
 public:
   explicit XML_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<XML_Translator>())
-    : xmlTranslator(std::move(translator))
+    : StringifierBase(std::move(translator))
   {
   }
-  XML_Stringify(const XML_Stringify &other) = delete;
-  XML_Stringify &operator=(const XML_Stringify &other) = delete;
-  XML_Stringify(XML_Stringify &&other) = delete;
-  XML_Stringify &operator=(XML_Stringify &&other) = delete;
-  ~XML_Stringify() override = default;
 
   /// <summary>
   /// Recursively traverse Node structure encoding it into XML string on
@@ -89,10 +85,8 @@ private:
   static void stringifyNull(const Node &, IDestination &) {}
   void stringifyString(const Node &jNode, IDestination &destination) const
   {
-    destination.add(xmlTranslator->to(NRef<String>(jNode).value()));
+    destination.add(translator_->to(NRef<String>(jNode).value()));
   }
-
-  std::unique_ptr<ITranslator> xmlTranslator;
 };
 
 }// namespace JSON_Lib

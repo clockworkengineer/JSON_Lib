@@ -5,21 +5,17 @@
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "JSON_StringUtils.hpp"
+#include "JSON_StringifierBase.hpp"
 
 namespace JSON_Lib {
 
-class Default_Stringify final : public IStringify
+class Default_Stringify final : public StringifierBase
 {
 public:
   explicit Default_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
-    : jsonTranslator(std::move(translator))
+    : StringifierBase(std::move(translator))
   {
   }
-  Default_Stringify(const Default_Stringify &other) = delete;
-  Default_Stringify &operator=(const Default_Stringify &other) = delete;
-  Default_Stringify(Default_Stringify &&other) = delete;
-  Default_Stringify &operator=(Default_Stringify &&other) = delete;
-  ~Default_Stringify() override = default;
 
   /// <summary>
   /// Recursively traverse Node structure encoding it into JSON string on
@@ -112,14 +108,12 @@ private:
   }
   void stringifyString(const Node &jNode, IDestination &destination) const
   {
-    appendQuotedString(NRef<String>(jNode).value(), destination, *jsonTranslator);
+    appendQuotedString(NRef<String>(jNode).value(), destination, *translator_);
   }
   void stringifyString(const std::string_view &value, IDestination &destination) const
   {
-    appendQuotedString(value, destination, *jsonTranslator);
+    appendQuotedString(value, destination, *translator_);
   }
-
-  std::unique_ptr<ITranslator> jsonTranslator;
   inline static long defaultPrintIndent{ 4 };
 };
 

@@ -3,21 +3,17 @@
 #include <memory>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
+#include "JSON_StringifierBase.hpp"
 
 namespace JSON_Lib {
 
-class Bencode_Stringify final : public IStringify
+class Bencode_Stringify final : public StringifierBase
 {
 public:
   explicit Bencode_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
-      : bencodeTranslator(std::move(translator))
+      : StringifierBase(std::move(translator))
   {
   }
-  Bencode_Stringify(const Bencode_Stringify &other) = delete;
-  Bencode_Stringify &operator=(const Bencode_Stringify &other) = delete;
-  Bencode_Stringify(Bencode_Stringify &&other) = delete;
-  Bencode_Stringify &operator=(Bencode_Stringify &&other) = delete;
-  ~Bencode_Stringify() override = default;
 
   /// <summary>
   /// Recursively traverse Node structure encoding it into Bencode string on
@@ -86,7 +82,6 @@ private:
     destination.add(value);
   }
 
-  std::unique_ptr<ITranslator> bencodeTranslator;
 };
 
 

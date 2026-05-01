@@ -4,22 +4,17 @@
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
 #include "JSON_StringUtils.hpp"
+#include "JSON_StringifierBase.hpp"
 
 namespace JSON_Lib {
 
-class YAML_Stringify final : public IStringify
+class YAML_Stringify final : public StringifierBase
 {
 public:
-  // Constructors/destructors
   explicit YAML_Stringify(std::unique_ptr<ITranslator> translator = std::make_unique<Default_Translator>())
-     : yamlTranslator(std::move(translator))
+     : StringifierBase(std::move(translator))
   {
   }
-  YAML_Stringify(const YAML_Stringify &other) = delete;
-  YAML_Stringify &operator=(const YAML_Stringify &other) = delete;
-  YAML_Stringify(YAML_Stringify &&other) = delete;
-  YAML_Stringify &operator=(YAML_Stringify &&other) = delete;
-  ~YAML_Stringify() override = default;
 
   /// <summary>
   /// Recursively traverse Node structure encoding it into YAML string on
@@ -55,7 +50,7 @@ private:
       for (const auto &entryNode : NRef<Object>(jNode).value()) {
         addIndentIfNewline(destination, indent);
         destination.add('"');
-        destination.add(yamlTranslator->to(entryNode.getKey()));
+        destination.add(translator_->to(entryNode.getKey()));
         destination.add("\": ");
         entryNode.getNode().visit(overloaded{
           [&](const Array &)  { destination.add('\n'); },
@@ -98,10 +93,8 @@ private:
   void stringifyString(const Node &jNode, IDestination &destination) const
   {
     destination.add('"');
-    destination.add(yamlTranslator->to(NRef<String>(jNode).value()));
+    destination.add(translator_->to(NRef<String>(jNode).value()));
     destination.add("\"\n");
   }
-
-  std::unique_ptr<ITranslator> yamlTranslator;
 };
 }// namespace JSON_Lib
