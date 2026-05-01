@@ -45,8 +45,13 @@ struct Result<void>
 // JSON error types
 inline std::string formatPosition(const std::pair<long, long> &position, const std::string_view prefix)
 {
-  return std::string(prefix) + " [Line: " + std::to_string(position.first)
-       + " Column: " + std::to_string(position.second) + "]: ";
+  const auto line = std::to_string(position.first);
+  const auto col  = std::to_string(position.second);
+  std::string s;
+  s.reserve(prefix.size() + 12 + line.size() + col.size()); // " [Line:  Column: ]: " ~ 12
+  s.append(prefix).append(" [Line: ").append(line)
+   .append(" Column: ").append(col).append("]: ");
+  return s;
 }
 struct Error final : std::runtime_error
 {
