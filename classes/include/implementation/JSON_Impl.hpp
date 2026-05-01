@@ -70,22 +70,21 @@ private:
 template<typename T> void JSON_Impl::traverseNodes(T &jNode, IAction &action)
 {
   action.onNode(jNode);
-  if (isA<Number>(jNode)) {
-    action.onNumber(jNode);
-  } else if (isA<String>(jNode)) {
-    action.onString(jNode);
-  } else if (isA<Boolean>(jNode)) {
-    action.onBoolean(jNode);
-  } else if (isA<Null>(jNode)) {
-    action.onNull(jNode);
-  } else if (isA<Object>(jNode)) {
-    action.onObject(jNode);
-    for (auto &entry : NRef<Object>(jNode).value()) { traverseNodes(entry.getNode(), action); }
-  } else if (isA<Array>(jNode)) {
-    action.onArray(jNode);
-    for (auto &entry : NRef<Array>(jNode).value()) { traverseNodes(entry, action); }
-  } else if (!isA<Hole>(jNode)) {
-    throw Error("Unknown Node type encountered during tree traversal.");
-  }
+  jNode.visit(overloaded{
+    [&](const Number &) { action.onNumber(jNode); },
+    [&](const String &) { action.onString(jNode); },
+    [&](const Boolean &) { action.onBoolean(jNode); },
+    [&](const Null &) { action.onNull(jNode); },
+    [&](const Object &) {
+      action.onObject(jNode);
+      for (auto &entry : NRef<Object>(jNode).value()) { traverseNodes(entry.getNode(), action); }
+    },
+    [&](const Array &) {
+      action.onArray(jNode);
+      for (auto &entry : NRef<Array>(jNode).value()) { traverseNodes(entry, action); }
+    },
+    [&](const Hole &) {},
+    [&](const std::monostate &) { throw Error("Unknown Node type encountered during tree traversal."); }
+  });
 }
 }// namespace JSON_Lib

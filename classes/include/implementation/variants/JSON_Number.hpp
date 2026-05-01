@@ -150,12 +150,13 @@ template<typename T, typename U> T Number::convertTo(U value) const
 // Convert stored number to another specified type
 template<typename T> T Number::getAs() const
 {
-  if (const auto pValue = std::get_if<int>(&jNodeNumber)) { return convertTo<T>(*pValue); }
-  if (const auto pValue = std::get_if<long>(&jNodeNumber)) { return convertTo<T>(*pValue); }
-  if (const auto pValue = std::get_if<long long>(&jNodeNumber)) { return convertTo<T>(*pValue); }
-  if (const auto pValue = std::get_if<float>(&jNodeNumber)) { return convertTo<T>(*pValue); }
-  if (const auto pValue = std::get_if<double>(&jNodeNumber)) { return convertTo<T>(*pValue); }
-  if (const auto pValue = std::get_if<long double>(&jNodeNumber)) { return convertTo<T>(*pValue); }
-  throw std::runtime_error("Number Error: Could not convert unknown type.");
+  return std::visit([&](const auto &v) -> T {
+    using V = std::decay_t<decltype(v)>;
+    if constexpr (std::is_same_v<V, std::monostate>) {
+      throw std::runtime_error("Number Error: Could not convert unknown type.");
+    } else {
+      return convertTo<T>(v);
+    }
+  }, jNodeNumber);
 }
 }// namespace JSON_Lib
