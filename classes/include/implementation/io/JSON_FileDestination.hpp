@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstring>
 #include <fstream>
 #include <string>
 #include <string_view>
@@ -38,25 +37,13 @@ public:
     }
     trackLast(ch);
   }
-  void add(const std::string &bytes) override
-  {
-    for (const auto ch : bytes) { add(ch); }
-    destination.flush();
-    trackLast(bytes.back());
-  }
+  void add(const std::string &bytes) override { add(std::string_view{bytes}); }
   void add(const std::string_view &bytes) override
   {
     for (const auto ch : bytes) { add(ch); }
     destination.flush();
-    trackLast(bytes.back());
   }
-  void add(const char *bytes) override
-  {
-    const std::size_t len = strlen(bytes);
-    for (std::size_t index = 0; index < len; index++) { add(bytes[index]); }
-    destination.flush();
-    trackLast(bytes[len - 1]);
-  }
+  void add(const char *bytes) override { add(std::string_view{bytes}); }
   void clear() override
   {
     if (destination.is_open()) { destination.close(); }
