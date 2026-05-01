@@ -79,13 +79,13 @@ Object::Entry
   Default_Parser::parseObjectEntry(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
   source.ignoreWS();
-  const std::string key{ extractString(source, translator).value() };
+  std::string key{ extractString(source, translator).value() };
   source.ignoreWS();
   if (source.current() != JSON_Lib::kColon) {
     throw SyntaxError(source.getPosition(), "Missing ':' in key value pair.");
   }
   source.next();
-  return { key, parseNodes(source, translator, parserDepth + 1) };
+  return { std::move(key), parseNodes(source, translator, parserDepth + 1) };
 }
 /// <summary>
 /// Parse a string from a JSON source stream.
