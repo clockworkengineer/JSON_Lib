@@ -1,8 +1,8 @@
 #pragma once
 
 #include <memory>
-#include <stdexcept>
 #include <string_view>
+#include "JSON_ErrorBase.hpp"
 #include <type_traits>
 #include <utility>
 #include <variant>
@@ -24,7 +24,7 @@ struct Node
   // Node Error
   struct Error final : std::runtime_error
   {
-    explicit Error(const std::string_view &message) : std::runtime_error(std::string("Node Error: ").append(message)) {}
+    explicit Error(const std::string_view &message) : std::runtime_error(makeTaggedError("Node", message)) {}
   };
   // Constructors/Destructors
   Node() = default;

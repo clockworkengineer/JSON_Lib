@@ -1,9 +1,8 @@
 #pragma once
 
-#include <stdexcept>
-#include <string>
 #include <string_view>
 #include <utility>
+#include "JSON_ErrorBase.hpp"
 
 namespace JSON_Lib {
   
@@ -24,7 +23,7 @@ public:
   // =============
   struct Error final : std::runtime_error
   {
-    explicit Error(const std::string_view &message) : std::runtime_error(std::string("ISource Error: ").append(message)) {}
+    explicit Error(const std::string_view &message) : std::runtime_error(makeTaggedError("ISource", message)) {}
   };
   // ========================
   // Constructors/destructors
