@@ -2,7 +2,7 @@
 
 #include "JSON_StoragePolicy.hpp"
 #include <algorithm>
-#include <functional>
+#include <limits>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -42,9 +42,9 @@ struct Object
   template<typename T> void add(T &&entry)
   {
     const auto key = entry.getKey();
-#if JSON_LIB_EMBEDDED
     if (contains(key)) { throw Node::Error("Duplicate key used to add object entry."); }
     jNodeObject.emplace_back(std::forward<T>(entry));
+#if JSON_LIB_EMBEDDED
     const auto insertedIndex = jNodeObject.size() - 1;
     const auto insertPosition = std::lower_bound(
       jNodeIndex.begin(), jNodeIndex.end(), key,
@@ -54,20 +54,11 @@ struct Object
     );
     jNodeIndex.insert(insertPosition, insertedIndex);
 #else
-    if (jNodeIndex.contains(key)) { throw Node::Error("Duplicate key used to add object entry."); }
-    jNodeObject.emplace_back(std::forward<T>(entry));
     jNodeIndex.emplace(jNodeObject.back().getKey(), jNodeObject.size() - 1);
 #endif
   }
   // Return true if an object contains a given key
-  [[nodiscard]] bool contains(const std::string_view &key) const
-  {
-#if JSON_LIB_EMBEDDED
-    return findIndex(key) != jNodeIndex.end();
-#else
-    return jNodeIndex.find(key) != jNodeIndex.end();
-#endif
-  }
+  [[nodiscard]] bool contains(const std::string_view &key) const { return lookupKey(key) != npos; }
   // Return number of entries in an object
   [[nodiscard]] int size() const { return static_cast<int>(jNodeObject.size()); }
   // Reserve storage for object entries and index buckets
@@ -82,54 +73,45 @@ struct Object
   // Find object entry for a given key without throwing
   [[nodiscard]] Node *find(const std::string_view &key)
   {
-#if JSON_LIB_EMBEDDED
-    const auto it = findIndex(key);
-    return it != jNodeIndex.end() ? &jNodeObject[*it].getNode() : nullptr;
-#else
-    const auto it = jNodeIndex.find(key);
-    return it != jNodeIndex.end() ? &jNodeObject[it->second].getNode() : nullptr;
-#endif
+    const auto idx = lookupKey(key);
+    return idx != npos ? &jNodeObject[idx].getNode() : nullptr;
   }
   [[nodiscard]] const Node *find(const std::string_view &key) const
   {
-#if JSON_LIB_EMBEDDED
-    const auto it = findIndex(key);
-    return it != jNodeIndex.end() ? &jNodeObject[*it].getNode() : nullptr;
-#else
-    const auto it = jNodeIndex.find(key);
-    return it != jNodeIndex.end() ? &jNodeObject[it->second].getNode() : nullptr;
-#endif
+    const auto idx = lookupKey(key);
+    return idx != npos ? &jNodeObject[idx].getNode() : nullptr;
   }
   // Return reference to base of object entries
   Entries &value() { return jNodeObject; }
   [[nodiscard]] const Entries &value() const { return jNodeObject; }
 
 private:
-#if JSON_LIB_EMBEDDED
-  [[nodiscard]] auto findIndex(const std::string_view &key) const
+  // Sentinel for "key not found"
+  static constexpr std::size_t npos = std::numeric_limits<std::size_t>::max();
+
+  // Single unified key-to-index lookup; returns npos when not found.
+  [[nodiscard]] std::size_t lookupKey(const std::string_view &key) const
   {
-    return std::lower_bound(
+#if JSON_LIB_EMBEDDED
+    const auto it = std::lower_bound(
       jNodeIndex.begin(), jNodeIndex.end(), key,
       [this](const std::size_t lhs, const std::string_view rhs) {
         return jNodeObject[lhs].getKey() < rhs;
       }
     );
-  }
+    if (it != jNodeIndex.end() && jNodeObject[*it].getKey() == key) { return *it; }
+    return npos;
+#else
+    const auto it = jNodeIndex.find(key);
+    return it != jNodeIndex.end() ? it->second : npos;
 #endif
+  }
 
   [[nodiscard]] std::size_t getIndex(const std::string_view &key) const
   {
-#if JSON_LIB_EMBEDDED
-    const auto it = findIndex(key);
-    if (it == jNodeIndex.end() || jNodeObject[*it].getKey() != key) {
-      throw Node::Error("Invalid key used to access object.");
-    }
-    return *it;
-#else
-    const auto it = jNodeIndex.find(key);
-    if (it == jNodeIndex.end()) { throw Node::Error("Invalid key used to access object."); }
-    return it->second;
-#endif
+    const auto idx = lookupKey(key);
+    if (idx == npos) { throw Node::Error("Invalid key used to access object."); }
+    return idx;
   }
 
   // Object entries list
