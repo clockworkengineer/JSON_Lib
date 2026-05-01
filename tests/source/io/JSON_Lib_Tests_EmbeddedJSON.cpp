@@ -96,16 +96,18 @@ TEST_CASE("FixedBufferSource rejects zero length", "[JSON][Embedded][FixedBuffer
 }
 
 #if JSON_LIB_NO_EXCEPTIONS
-TEST_CASE("FixedBufferDestination overflow sets flag when NO_EXCEPTIONS", "[JSON][Embedded][FixedBufferDestination][NoExceptions]")
+TEST_CASE("FixedBufferDestination overflow sets flag when NO_EXCEPTIONS",
+  "[JSON][Embedded][FixedBufferDestination][NoExceptions]")
 {
   FixedBufferDestination<4> dest;
-  dest.add("12345"); // 5 bytes > capacity 4
+  dest.add("12345");// 5 bytes > capacity 4
   REQUIRE(dest.overflowed());
   dest.clearOverflow();
   REQUIRE_FALSE(dest.overflowed());
 }
 #else
-TEST_CASE("FixedBufferDestination overflow throws in normal build", "[JSON][Embedded][FixedBufferDestination][Overflow]")
+TEST_CASE("FixedBufferDestination overflow throws in normal build",
+  "[JSON][Embedded][FixedBufferDestination][Overflow]")
 {
   FixedBufferDestination<4> dest;
   REQUIRE_THROWS_AS(dest.add("12345"), IDestination::Error);
@@ -167,9 +169,10 @@ TEST_CASE("EmbeddedJSON stringify integer JSON produces correct output", "[JSON]
 }
 
 #if JSON_LIB_NO_EXCEPTIONS
-TEST_CASE("FixedBufferSource null pointer sets valid false under NO_EXCEPTIONS", "[JSON][Embedded][FixedBufferSource][NoExceptions]")
+TEST_CASE("FixedBufferSource null pointer sets valid false under NO_EXCEPTIONS",
+  "[JSON][Embedded][FixedBufferSource][NoExceptions]")
 {
-  FixedBufferSource src{nullptr, 0};
+  FixedBufferSource src{ nullptr, 0 };
   REQUIRE_FALSE(src.valid());
   REQUIRE_FALSE(src.more());
   EmbeddedJSON embedded;
@@ -180,7 +183,7 @@ TEST_CASE("FixedBufferSource null pointer sets valid false under NO_EXCEPTIONS",
 #else
 TEST_CASE("FixedBufferSource null pointer throws in normal build", "[JSON][Embedded][FixedBufferSource]")
 {
-  REQUIRE_THROWS_AS((FixedBufferSource{nullptr, 0}), ISource::Error);
+  REQUIRE_THROWS_AS((FixedBufferSource{ nullptr, 0 }), ISource::Error);
 }
 #endif
 
@@ -199,22 +202,22 @@ TEST_CASE("EmbeddedJSON::Limits compile-time constants match expected defaults",
 namespace {
 struct CountingAction final : IAction
 {
-  void onNode(Node &) override          { ++nodes; }
-  void onNode(const Node &) override    { ++nodes; }
-  void onString(const Node &) override  {}
-  void onNumber(const Node &) override  {}
+  void onNode(Node &) override { ++nodes; }
+  void onNode(const Node &) override { ++nodes; }
+  void onString(const Node &) override {}
+  void onNumber(const Node &) override {}
   void onBoolean(const Node &) override {}
-  void onNull(const Node &) override    {}
-  void onArray(const Node &) override   {}
-  void onObject(const Node &) override  {}
-  int nodes{0};
+  void onNull(const Node &) override {}
+  void onArray(const Node &) override {}
+  void onObject(const Node &) override {}
+  int nodes{ 0 };
 };
-} // namespace
+}// namespace
 
 TEST_CASE("EmbeddedJSON traverseNoThrow on populated tree succeeds", "[JSON][Embedded][Traverse]")
 {
   EmbeddedJSON embedded;
-  embedded.parse(BufferSource{R"({"a":1,"b":true})"});
+  embedded.parse(BufferSource{ R"({"a":1,"b":true})" });
   CountingAction action;
   const auto result = embedded.traverseNoThrow(action);
   REQUIRE(result.ok());
