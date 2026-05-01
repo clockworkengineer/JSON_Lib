@@ -125,3 +125,91 @@ TEST_CASE("Benchmark JSON parse/stringify/traverse performance.", "[Benchmark]")
     return destination.size();
   };
 }
+
+TEST_CASE("Benchmark object/array operations and pretty-print.", "[Benchmark][DRY]")
+{
+  const auto largeObjectJson = generateLargeObjectJSON(2000);
+  const auto largeArrayJson = generateLargeArrayJSON(10000);
+
+  BENCHMARK("Object contains() — 1000 hits in 2000-key object")
+  {
+    JSON json;
+    BufferSource source{ largeObjectJson };
+    json.parse(source);
+    const auto &obj = NRef<Object>(json.root());
+    std::size_t hits = 0;
+    for (int i = 0; i < 1000; ++i) {
+      if (obj.contains(std::string("key") + std::to_string(i))) { ++hits; }
+    }
+    return hits;
+  };
+
+  BENCHMARK("Object find() — 1000 hits in 2000-key object")
+  {
+    JSON json;
+    BufferSource source{ largeObjectJson };
+    json.parse(source);
+    const auto &obj = NRef<Object>(json.root());
+    std::size_t hits = 0;
+    for (int i = 0; i < 1000; ++i) {
+      if (obj.find(std::string("key") + std::to_string(i)) != nullptr) { ++hits; }
+    }
+    return hits;
+  };
+
+  BENCHMARK("Object find() — 1000 misses in 2000-key object")
+  {
+    JSON json;
+    BufferSource source{ largeObjectJson };
+    json.parse(source);
+    const auto &obj = NRef<Object>(json.root());
+    std::size_t misses = 0;
+    for (int i = 0; i < 1000; ++i) {
+      if (obj.find(std::string("absent") + std::to_string(i)) == nullptr) { ++misses; }
+    }
+    return misses;
+  };
+
+  BENCHMARK("Array random-access via operator[] — 10000 elements")
+  {
+    JSON json;
+    BufferSource source{ largeArrayJson };
+    json.parse(source);
+    const auto &arr = NRef<Array>(json.root());
+    std::size_t sum = 0;
+    for (std::size_t i = 0; i < arr.size(); i += 100) {
+      sum += static_cast<std::size_t>(NRef<Number>(arr[i]).value<long long>());
+    }
+    return sum;
+  };
+
+  BENCHMARK("Pretty-print large object")
+  {
+    JSON json;
+    BufferSource source{ largeObjectJson };
+    json.parse(source);
+    BufferDestination destination;
+    json.print(destination);
+    return destination.size();
+  };
+
+  BENCHMARK("Pretty-print large array")
+  {
+    JSON json;
+    BufferSource source{ largeArrayJson };
+    json.parse(source);
+    BufferDestination destination;
+    json.print(destination);
+    return destination.size();
+  };
+
+  BENCHMARK("Stringify large object (compact)")
+  {
+    JSON json;
+    BufferSource source{ largeObjectJson };
+    json.parse(source);
+    BufferDestination destination;
+    json.stringify(destination);
+    return destination.size();
+  };
+}
