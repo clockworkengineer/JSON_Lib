@@ -153,3 +153,15 @@ TEST_CASE("EmbeddedJSON parseNoThrow rvalue overload", "[JSON][Embedded][NoThrow
   const auto result = embedded.parseNoThrow(BufferSource{ R"(true)" });
   REQUIRE(result.ok());
 }
+
+TEST_CASE("EmbeddedJSON stringify integer JSON produces correct output", "[JSON][Embedded][Integer]")
+{
+  EmbeddedJSON embedded;
+  embedded.parse(BufferSource{ R"({"a":1,"b":-99,"c":0})" });
+  BufferDestination destination;
+  embedded.stringify(destination);
+  const auto str = destination.toString();
+  REQUIRE(str.find("\"a\":1") != std::string::npos);
+  REQUIRE(str.find("\"b\":-99") != std::string::npos);
+  REQUIRE(str.find("\"c\":0") != std::string::npos);
+}

@@ -140,9 +140,15 @@ template<typename T> std::string Number::numberToString(const T &number) const
     return os.str();
 #endif
   } else {
+#if JSON_LIB_EMBEDDED
+    std::array<char, 32> buf{};
+    const auto [ptr, ec] = std::to_chars(buf.data(), buf.data() + buf.size(), number);
+    return std::string(buf.data(), ptr);
+#else
     std::ostringstream os;
     os << number;
     return os.str();
+#endif
   }
 }
 // Convert value to another specified type
