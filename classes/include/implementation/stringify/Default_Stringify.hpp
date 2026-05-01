@@ -76,9 +76,7 @@ private:
   {
     const auto &entries = NRef<Object>(jNode).value();
     const bool pretty = indent != 0;
-    const size_t commaCountStart = entries.size() > 0 ? entries.size() - 1 : 0;
-    size_t commaCount = commaCountStart;
-
+    size_t commaCount = entries.empty() ? 0 : entries.size() - 1;
     destination.add('{');
     if (pretty) { destination.add('\n'); }
     for (auto &entry : entries) {
@@ -87,15 +85,9 @@ private:
       destination.add(':');
       if (pretty) { destination.add(' '); }
       stringifyNodes(entry.getNode(), destination, pretty ? indent + defaultPrintIndent : 0);
-      if (commaCount-- > 0) {
-        destination.add(',');
-        if (pretty) { destination.add('\n'); }
-      }
+      addCommaNewline(destination, pretty, commaCount);
     }
-    if (pretty) {
-      destination.add('\n');
-      addIndent(destination, indent - defaultPrintIndent);
-    }
+    addPrettyTrailer(destination, pretty, indent, static_cast<unsigned long>(defaultPrintIndent));
     destination.add('}');
   }
 
@@ -110,15 +102,9 @@ private:
       for (auto &entry : elements) {
         if (pretty) { addIndent(destination, indent); }
         stringifyNodes(entry, destination, pretty ? indent + defaultPrintIndent : 0);
-        if (commaCount-- > 0) {
-          destination.add(',');
-          if (pretty) { destination.add('\n'); }
-        }
+        addCommaNewline(destination, pretty, commaCount);
       }
-      if (pretty) {
-        destination.add('\n');
-        addIndent(destination, indent - defaultPrintIndent);
-      }
+      addPrettyTrailer(destination, pretty, indent, static_cast<unsigned long>(defaultPrintIndent));
     }
     destination.add(']');
   }

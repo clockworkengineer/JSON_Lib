@@ -58,11 +58,15 @@ private:
   void stringifyObject(const Node &jNode, IDestination &destination, const unsigned long) const
   {
     for (const auto &jNodeNext : NRef<Object>(jNode).value()) {
-      std::string elementName { jNodeNext.getKey()} ;
+      std::string elementName { jNodeNext.getKey()};
       std::ranges::replace(elementName, ' ', '-');
-      destination.add("<" + elementName + ">");
+      destination.add('<');
+      destination.add(elementName);
+      destination.add('>');
       stringifyNodes(jNodeNext.getNode(), destination, 0);
-      destination.add("</" + elementName + ">");
+      destination.add("</");
+      destination.add(elementName);
+      destination.add('>');
     }
   }
   void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long) const

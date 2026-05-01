@@ -3,6 +3,7 @@
 #include <memory>
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
+#include "JSON_StringUtils.hpp"
 
 namespace JSON_Lib {
 
@@ -36,11 +37,6 @@ public:
   }
 
 private:
-  static auto calculateIndent(IDestination &destination, const unsigned long indent)
-  {
-    if (destination.last() == '\n') { return std::string(indent, ' '); }
-    return std::string("");
-  }
   void stringifyNodes(const Node &jNode, IDestination &destination, const unsigned long indent) const
   {
     if (isA<Object>(jNode)) {
@@ -61,11 +57,10 @@ private:
   {
     if (!NRef<Object>(jNode).value().empty()) {
       for (const auto &entryNode : NRef<Object>(jNode).value()) {
-        destination.add(calculateIndent(destination, indent));
-        destination.add("\"");
+        addIndentIfNewline(destination, indent);
+        destination.add('"');
         destination.add(yamlTranslator->to(entryNode.getKey()));
-        destination.add("\"");
-        destination.add(": ");
+        destination.add("\": ");
         if (isA<Array>(entryNode.getNode()) || isA<Object>(entryNode.getNode())) { destination.add('\n'); }
         stringifyNodes(entryNode.getNode(), destination, indent + 2);
       }
@@ -75,10 +70,10 @@ private:
   }
   void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long indent) const
   {
-    std::string spaces(indent, ' ');
     if (!NRef<Array>(jNode).value().empty()) {
       for (const auto &jNodeNext : NRef<Array>(jNode).value()) {
-        destination.add(calculateIndent(destination, indent) + "- ");
+        addIndentIfNewline(destination, indent);
+        destination.add("- ");
         stringifyNodes(jNodeNext, destination, indent + 2);
       }
     } else {
@@ -87,19 +82,24 @@ private:
   }
   static void stringifyNumber(const Node &jNode, IDestination &destination)
   {
-    destination.add(NRef<Number>(jNode).toString() + "\n");
+    destination.add(NRef<Number>(jNode).toString());
+    destination.add('\n');
   }
   static void stringifyBoolean(const Node &jNode, IDestination &destination)
   {
-    destination.add(NRef<Boolean>(jNode).toString() + "\n");
+    destination.add(NRef<Boolean>(jNode).toString());
+    destination.add('\n');
   }
   static void stringifyNull(const Node &jNode, IDestination &destination)
   {
-    destination.add(NRef<Null>(jNode).toString() + "\n");
+    destination.add(NRef<Null>(jNode).toString());
+    destination.add('\n');
   }
   void stringifyString(const Node &jNode, IDestination &destination) const
   {
-    destination.add("\"" + yamlTranslator->to(NRef<String>(jNode).value()) + "\"" + "\n");
+    destination.add('"');
+    destination.add(yamlTranslator->to(NRef<String>(jNode).value()));
+    destination.add("\"\n");
   }
 
   std::unique_ptr<ITranslator> yamlTranslator;
