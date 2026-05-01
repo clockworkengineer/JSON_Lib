@@ -2,10 +2,10 @@
 
 TEST_CASE("EmbeddedJSON API entrypoint build checks", "[JSON][Embedded][API]")
 {
-  REQUIRE(EmbeddedJSON::isEmbeddedBuild() == JSON_LIB_EMBEDDED);
-  REQUIRE(EmbeddedJSON::isExceptionFreeBuild() == JSON_LIB_NO_EXCEPTIONS);
-  REQUIRE(EmbeddedJSON::isNoStdIoBuild() == JSON_LIB_NO_STDIO);
-  REQUIRE(EmbeddedJSON::isNoDynamicMemoryBuild() == JSON_LIB_NO_DYNAMIC_MEMORY);
+  REQUIRE(EmbeddedJSON::isEmbeddedBuild() == static_cast<bool>(JSON_LIB_EMBEDDED));
+  REQUIRE(EmbeddedJSON::isExceptionFreeBuild() == static_cast<bool>(JSON_LIB_NO_EXCEPTIONS));
+  REQUIRE(EmbeddedJSON::isNoStdIoBuild() == static_cast<bool>(JSON_LIB_NO_STDIO));
+  REQUIRE(EmbeddedJSON::isNoDynamicMemoryBuild() == static_cast<bool>(JSON_LIB_NO_DYNAMIC_MEMORY));
   REQUIRE(EmbeddedJSON::Limits::maxParserDepth() >= 1);
   REQUIRE(EmbeddedJSON::Limits::maxStringLength() >= 1);
 }
@@ -39,10 +39,10 @@ TEST_CASE("EmbeddedJSON fixed buffer stringify overflow", "[JSON][Embedded][Buff
 
 TEST_CASE("EmbeddedJSON validation of embedded build policies", "[JSON][Embedded][Policy]")
 {
-  REQUIRE(EmbeddedJSON::isEmbeddedBuild() == JSON_LIB_EMBEDDED);
-  REQUIRE(EmbeddedJSON::isExceptionFreeBuild() == JSON_LIB_NO_EXCEPTIONS);
-  REQUIRE(EmbeddedJSON::isNoStdIoBuild() == JSON_LIB_NO_STDIO);
-  REQUIRE(EmbeddedJSON::isNoDynamicMemoryBuild() == JSON_LIB_NO_DYNAMIC_MEMORY);
+  REQUIRE(EmbeddedJSON::isEmbeddedBuild() == static_cast<bool>(JSON_LIB_EMBEDDED));
+  REQUIRE(EmbeddedJSON::isExceptionFreeBuild() == static_cast<bool>(JSON_LIB_NO_EXCEPTIONS));
+  REQUIRE(EmbeddedJSON::isNoStdIoBuild() == static_cast<bool>(JSON_LIB_NO_STDIO));
+  REQUIRE(EmbeddedJSON::isNoDynamicMemoryBuild() == static_cast<bool>(JSON_LIB_NO_DYNAMIC_MEMORY));
   REQUIRE(EmbeddedJSON::Limits::maxParserDepth() >= 1);
   REQUIRE(EmbeddedJSON::Limits::maxStringLength() >= 1);
 }

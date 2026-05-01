@@ -19,7 +19,7 @@ if(MSVC)
   if(JSON_LIB_OPTIMIZATION_LEVEL STREQUAL "O0")
     add_compile_options(/Od)
   elseif(JSON_LIB_OPTIMIZATION_LEVEL STREQUAL "O2" OR JSON_LIB_OPTIMIZATION_LEVEL STREQUAL "O3")
-    add_compile_options(/O2)
+    add_compile_options($<$<NOT:$<CONFIG:Debug>>:/O2>)
   endif()
 
   set(PLATFORM "windows")
@@ -218,7 +218,6 @@ target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
 
 # Apply link-time optimization if enabled
 if(JSON_LIB_ENABLE_LTO)
-  set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
   set_property(TARGET ${JSON_LIBRARY_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()
 
