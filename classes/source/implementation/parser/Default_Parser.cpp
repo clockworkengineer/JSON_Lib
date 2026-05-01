@@ -166,48 +166,48 @@ Node Default_Parser::parseNull(ISource &source,
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Object Node (key/value pairs).</returns>
+/// Parse a collection (object or array) from a JSON source stream.
+/// Handles the open / first-element / comma-loop / check-close / advance pattern
+/// common to both containers.
+template<typename NodeType, typename ParseFn>
+static Node parseCollection(ISource &source,
+  const ITranslator &translator,
+  const unsigned long parserDepth,
+  const char closeChar,
+  const char *missingCloseMsg,
+  ParseFn parseElement)
+{
+  Node jNode = Node::make<NodeType>();
+  source.next();
+  source.ignoreWS();
+  if (source.current() != closeChar) {
+    NRef<NodeType>(jNode).add(parseElement(source, translator, parserDepth));
+    while (source.current() == ',') {
+      source.next();
+      NRef<NodeType>(jNode).add(parseElement(source, translator, parserDepth));
+    }
+  }
+  if (source.current() != closeChar) { throw SyntaxError(source.getPosition(), missingCloseMsg); }
+  source.next();
+  return jNode;
+}
 Node Default_Parser::parseObject(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
-  Node jNodeObject = Node::make<Object>();
-  source.next();
-  source.ignoreWS();
-  if (source.current() != '}') {
-    NRef<Object>(jNodeObject).add(parseObjectEntry(source, translator, parserDepth));
-    while (source.current() == ',') {
-      source.next();
-      NRef<Object>(jNodeObject).add(parseObjectEntry(source, translator, parserDepth));
-    }
-  }
-  if (source.current() != JSON_Lib::kObjectEnd) {
-    throw SyntaxError(source.getPosition(), "Missing closing '}' in object definition.");
-  }
-  source.next();
-  return jNodeObject;
+  return parseCollection<Object>(
+    source, translator, parserDepth,
+    JSON_Lib::kObjectEnd, "Missing closing '}' in object definition.",
+    [](ISource &src, const ITranslator &tr, unsigned long depth) {
+      return parseObjectEntry(src, tr, depth);
+    });
 }
-/// <summary>
-/// Parse an array from a JSON source stream.
-/// </summary>
-/// <param name="source">Source of JSON.</param>
-/// <param name="translator">String translator.</param>
-/// <param name="parserDepth">Current parser depth.</param>
-/// <returns>Array Node.</returns>
 Node Default_Parser::parseArray(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
 {
-  Node jNodeArray = Node::make<Array>();
-  source.next();
-  source.ignoreWS();
-  if (source.current() != ']') {
-    NRef<Array>(jNodeArray).add(parseNodes(source, translator, parserDepth + 1));
-    while (source.current() == ',') {
-      source.next();
-      NRef<Array>(jNodeArray).add(parseNodes(source, translator, parserDepth + 1));
-    }
-  }
-  if (source.current() != JSON_Lib::kArrayEnd) {
-    throw SyntaxError(source.getPosition(), "Missing closing ']' in array definition.");
-  }
-  source.next();
-  return jNodeArray;
+  return parseCollection<Array>(
+    source, translator, parserDepth,
+    JSON_Lib::kArrayEnd, "Missing closing ']' in array definition.",
+    [](ISource &src, const ITranslator &tr, unsigned long depth) {
+      return parseNodes(src, tr, depth + 1);
+    });
 }
 /// <summary>
 /// Recursively parse JSON source stream producing a Node structure
