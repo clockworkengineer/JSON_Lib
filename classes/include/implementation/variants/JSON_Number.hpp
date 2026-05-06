@@ -34,16 +34,16 @@ struct Number
   Number &operator=(Number &&other) = default;
   ~Number() = default;
   // Is number a int/long/long long/float/double/long double ?
-  template<typename T> [[nodiscard]] bool is() const { return std::get_if<T>(&jNodeNumber) != nullptr; }
+  template<typename T> JSON_LIB_NODISCARD bool is() const { return std::get_if<T>(&jNodeNumber) != nullptr; }
   // Did the number parse successfully (i.e. variant is not monostate)?
-  [[nodiscard]] bool isValid() const noexcept { return !std::holds_alternative<std::monostate>(jNodeNumber); }
+  JSON_LIB_NODISCARD bool isValid() const noexcept { return !std::holds_alternative<std::monostate>(jNodeNumber); }
   // Return numbers value int/long long/float/double/long double.
   // Note: Can still return a integer value for a floating point.
-  template<typename T> [[nodiscard]] T value() const { return getAs<T>(); }
+  template<typename T> JSON_LIB_NODISCARD T value() const { return getAs<T>(); }
   // Set numbers value to int/long/long long/float/double/long double
   template<typename T> void set(T number) { *this = Number(number); }
   // Return string representation of value
-  [[nodiscard]] std::string toString() const { return getAs<std::string>(); }
+  JSON_LIB_NODISCARD std::string toString() const { return getAs<std::string>(); }
   // Set floating point to string conversion parameters
    static void setPrecision(const int precision) { numberPrecision = precision; }
    static void setNotation(const numberNotation notation) { numberNotation = notation; }
@@ -52,11 +52,11 @@ private:
   // Convert string to specific numeric type (returns true on success)
   template<typename T> bool stringToNumber(const std::string_view &number);
   // Number to string
-  template<typename T> [[nodiscard]] std::string numberToString(const T &number) const;
+  template<typename T> JSON_LIB_NODISCARD std::string numberToString(const T &number) const;
   // Convert values to another specified type
-  template<typename T, typename U> [[nodiscard]] T convertTo(U value) const;
+  template<typename T, typename U> JSON_LIB_NODISCARD T convertTo(U value) const;
   // Convert values to another specified type
-  template<typename T> [[nodiscard]] T getAs() const;
+  template<typename T> JSON_LIB_NODISCARD T getAs() const;
   // Find the smallest type that can represent a number. Note: That if it cannot be held as an
   // integer then floating point types are tried.
   void convertNumber(const std::string_view &number)

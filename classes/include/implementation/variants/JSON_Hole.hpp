@@ -12,6 +12,6 @@ struct Hole
   Hole &operator=(Hole &&other) = default;
   ~Hole() = default;
   // Return string representation of value
-  [[nodiscard]] static std::string toString() { return "null"; }
+  JSON_LIB_NODISCARD static std::string toString() { return "null"; }
 };
 }// namespace JSON_Lib

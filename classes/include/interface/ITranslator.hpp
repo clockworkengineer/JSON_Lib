@@ -25,11 +25,11 @@ public:
   // Convert any escape sequences in a string to their correct sequence
   // of UTF-8 characters.
   // =====================================================================
-  [[nodiscard]] virtual std::string from(const std::string_view &escapedString) const = 0;
+  JSON_LIB_NODISCARD virtual std::string from(const std::string_view &escapedString) const = 0;
   // =========================================================================
   // Convert a string from raw character values (UTF8) so that it has character
   // escapes where applicable for its form.
   // =========================================================================
-  [[nodiscard]] virtual std::string to(const std::string_view &rawString) const = 0;
+  JSON_LIB_NODISCARD virtual std::string to(const std::string_view &rawString) const = 0;
 };
 }// namespace JSON_Lib

@@ -15,11 +15,11 @@ namespace detail {
 struct StringHash
 {
   using is_transparent = void;
-  [[nodiscard]] std::size_t operator()(std::string_view value) const noexcept
+  JSON_LIB_NODISCARD std::size_t operator()(std::string_view value) const noexcept
   {
     return std::hash<std::string_view>{}(value);
   }
-  [[nodiscard]] std::size_t operator()(const std::string &value) const noexcept
+  JSON_LIB_NODISCARD std::size_t operator()(const std::string &value) const noexcept
   {
     return std::hash<std::string_view>{}(value);
   }
@@ -29,8 +29,8 @@ struct StringHash
 struct StringEqual
 {
   using is_transparent = void;
-  [[nodiscard]] bool operator()(std::string_view lhs, std::string_view rhs) const noexcept { return lhs == rhs; }
-  [[nodiscard]] bool operator()(const std::string &lhs, const std::string &rhs) const noexcept { return lhs == rhs; }
+  JSON_LIB_NODISCARD bool operator()(std::string_view lhs, std::string_view rhs) const noexcept { return lhs == rhs; }
+  JSON_LIB_NODISCARD bool operator()(const std::string &lhs, const std::string &rhs) const noexcept { return lhs == rhs; }
 };
 
 /// @brief Hash-map object index (desktop build).

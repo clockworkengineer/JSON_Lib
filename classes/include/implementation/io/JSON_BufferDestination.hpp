@@ -46,8 +46,8 @@ public:
 
   void clear() override { buffer.clear(); }
 
-  [[nodiscard]] std::string toString() const { return buffer; }
-  [[nodiscard]] std::size_t size() const { return buffer.size(); }
+  JSON_LIB_NODISCARD std::string toString() const { return buffer; }
+  JSON_LIB_NODISCARD std::size_t size() const { return buffer.size(); }
 
 private:
   std::string buffer;

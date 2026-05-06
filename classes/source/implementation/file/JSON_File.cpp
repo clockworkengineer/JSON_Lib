@@ -128,6 +128,7 @@ std::string JSON_Impl::fromFile(const std::string_view &fileName)
   switch (format) {
   case JSON::Format::utf8BOM:
     jsonFile.seekg(3);// Move past byte order mark
+    JSON_LIB_FALLTHROUGH;
   case JSON::Format::utf8:
     translated = readJSONString(jsonFile);
     break;
@@ -162,6 +163,7 @@ void JSON_Impl::toFile(const std::string_view &fileName, const std::string_view 
   case JSON::Format::utf8BOM:
     jsonFile << static_cast<unsigned char>(0xEF) << static_cast<unsigned char>(0xBB)
              << static_cast<unsigned char>(0xBF);
+    JSON_LIB_FALLTHROUGH;
   case JSON::Format::utf8:
     writeJSONString(jsonFile, jsonString);
     break;

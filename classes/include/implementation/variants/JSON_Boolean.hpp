@@ -13,10 +13,10 @@ struct Boolean
   Boolean &operator=(Boolean &&other) = default;
   ~Boolean() = default;
   // Return reference boolean value
-  [[nodiscard]] bool &value() { return jNodeBoolean; }
-  [[nodiscard]] const bool &value() const { return jNodeBoolean; }
+  JSON_LIB_NODISCARD bool &value() { return jNodeBoolean; }
+  JSON_LIB_NODISCARD const bool &value() const { return jNodeBoolean; }
   // Return string representation of value
-  [[nodiscard]] std::string toString() const { return jNodeBoolean ? "true" : "false"; }
+  JSON_LIB_NODISCARD std::string toString() const { return jNodeBoolean ? "true" : "false"; }
 
 private:
   bool jNodeBoolean{};

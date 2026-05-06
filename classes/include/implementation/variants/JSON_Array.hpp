@@ -21,12 +21,12 @@ struct Array
   // Reserve storage for array elements
   void reserve(const std::size_t capacity) { jNodeArray.reserve(capacity); }
   // Return the size of array
-  [[nodiscard]] std::size_t size() const { return jNodeArray.size(); }
+  JSON_LIB_NODISCARD std::size_t size() const { return jNodeArray.size(); }
   // Return the current capacity of array storage
-  [[nodiscard]] std::size_t capacity() const { return jNodeArray.capacity(); }
+  JSON_LIB_NODISCARD std::size_t capacity() const { return jNodeArray.capacity(); }
   // Return reference to array base
   Entries &value() { return jNodeArray; }
-  [[nodiscard]] const Entries &value() const { return jNodeArray; }
+  JSON_LIB_NODISCARD const Entries &value() const { return jNodeArray; }
   // Array indexing operators
   Node &operator[](const std::size_t index) { return jNodeArray[checkBounds(index)]; }
   const Node &operator[](const std::size_t index) const { return jNodeArray[checkBounds(index)]; }
@@ -39,7 +39,7 @@ struct Array
   }
 
 private:
-  [[nodiscard]] std::size_t checkBounds(const std::size_t index) const
+  JSON_LIB_NODISCARD std::size_t checkBounds(const std::size_t index) const
   {
     if (index < jNodeArray.size()) { return index; }
     JSON_THROW(Node::Error("Invalid index used to access array."));

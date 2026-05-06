@@ -16,9 +16,9 @@ struct ObjectEntry
   ObjectEntry(std::string_view key, Node &&jNode) : key(key), jNode(std::move(jNode)) {}
   ObjectEntry(const char *key, Node &&jNode) : key(key), jNode(std::move(jNode)) {}
   ObjectEntry(std::string &&key, Node &&jNode) : key(std::move(key)), jNode(std::move(jNode)) {}
-  [[nodiscard]] std::string_view getKey() const { return key; }
-  [[nodiscard]] Node &getNode() { return jNode; }
-  [[nodiscard]] const Node &getNode() const { return jNode; }
+  JSON_LIB_NODISCARD std::string_view getKey() const { return key; }
+  JSON_LIB_NODISCARD Node &getNode() { return jNode; }
+  JSON_LIB_NODISCARD const Node &getNode() const { return jNode; }
 
 private:
   std::string key;
@@ -58,9 +58,9 @@ struct Object
 #endif
   }
   // Return true if an object contains a given key
-  [[nodiscard]] bool contains(const std::string_view &key) const { return lookupKey(key) != npos; }
+  JSON_LIB_NODISCARD bool contains(const std::string_view &key) const { return lookupKey(key) != npos; }
   // Return number of entries in an object
-  [[nodiscard]] int size() const { return static_cast<int>(jNodeObject.size()); }
+  JSON_LIB_NODISCARD int size() const { return static_cast<int>(jNodeObject.size()); }
   // Reserve storage for object entries and index buckets
   void reserve(const std::size_t capacity)
   {
@@ -71,26 +71,26 @@ struct Object
   Node &operator[](const std::string_view &key) { return jNodeObject[getIndex(key)].getNode(); }
   const Node &operator[](const std::string_view &key) const { return jNodeObject[getIndex(key)].getNode(); }
   // Find object entry for a given key without throwing
-  [[nodiscard]] Node *find(const std::string_view &key)
+  JSON_LIB_NODISCARD Node *find(const std::string_view &key)
   {
     const auto idx = lookupKey(key);
     return idx != npos ? &jNodeObject[idx].getNode() : nullptr;
   }
-  [[nodiscard]] const Node *find(const std::string_view &key) const
+  JSON_LIB_NODISCARD const Node *find(const std::string_view &key) const
   {
     const auto idx = lookupKey(key);
     return idx != npos ? &jNodeObject[idx].getNode() : nullptr;
   }
   // Return reference to base of object entries
   Entries &value() { return jNodeObject; }
-  [[nodiscard]] const Entries &value() const { return jNodeObject; }
+  JSON_LIB_NODISCARD const Entries &value() const { return jNodeObject; }
 
 private:
   // Sentinel for "key not found"
   static constexpr std::size_t npos = std::numeric_limits<std::size_t>::max();
 
   // Single unified key-to-index lookup; returns npos when not found.
-  [[nodiscard]] std::size_t lookupKey(const std::string_view &key) const
+  JSON_LIB_NODISCARD std::size_t lookupKey(const std::string_view &key) const
   {
 #if JSON_LIB_EMBEDDED
     const auto it = std::lower_bound(
@@ -107,7 +107,7 @@ private:
 #endif
   }
 
-  [[nodiscard]] std::size_t getIndex(const std::string_view &key) const
+  JSON_LIB_NODISCARD std::size_t getIndex(const std::string_view &key) const
   {
     const auto idx = lookupKey(key);
     if (idx == npos) { JSON_THROW(Node::Error("Invalid key used to access object.")); }

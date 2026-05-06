@@ -21,7 +21,7 @@ public:
   DestinationBase &operator=(DestinationBase &&) = delete;
   ~DestinationBase() override = default;
 
-  [[nodiscard]] char last() override { return lastChar_; }
+  JSON_LIB_NODISCARD char last() override { return lastChar_; }
 
 protected:
   void trackLast(char ch) noexcept { lastChar_ = ch; }

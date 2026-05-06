@@ -31,8 +31,8 @@ public:
   // Strip whitespace from JSON string
   static void strip(ISource &source, IDestination &destination);
   // Get the root of JSON tree
-  [[nodiscard]] Node &root() { return jNodeRoot; }
-  [[nodiscard]] const Node &root() const { return jNodeRoot; }
+  JSON_LIB_NODISCARD Node &root() { return jNodeRoot; }
+  JSON_LIB_NODISCARD const Node &root() const { return jNodeRoot; }
   // Search for JSON object entry with a given key
   Node &operator[](const std::string_view &key);
   const Node &operator[](const std::string_view &key) const;

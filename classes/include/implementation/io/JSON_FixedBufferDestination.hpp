@@ -50,11 +50,11 @@ public:
     trackLast(0);
   }
 
-  [[nodiscard]] const char *data() const noexcept { return buffer_.data(); }
-  [[nodiscard]] std::size_t size() const noexcept { return size_; }
-  [[nodiscard]] std::string toString() const { return std::string(buffer_.data(), size_); }
+  JSON_LIB_NODISCARD const char *data() const noexcept { return buffer_.data(); }
+  JSON_LIB_NODISCARD std::size_t size() const noexcept { return size_; }
+  JSON_LIB_NODISCARD std::string toString() const { return std::string(buffer_.data(), size_); }
 #if JSON_LIB_NO_EXCEPTIONS
-  [[nodiscard]] bool overflowed() const noexcept { return overflowed_; }
+  JSON_LIB_NODISCARD bool overflowed() const noexcept { return overflowed_; }
   void clearOverflow() noexcept { overflowed_ = false; }
 #endif
 

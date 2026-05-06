@@ -61,7 +61,7 @@ struct Node
   // Assignment operators
   template<typename T> Node &operator=(T value) { return *this = Node(value); }
   // Has the variant been created
-  [[nodiscard]] bool isEmpty() const { return std::holds_alternative<std::monostate>(jNodeVariant); }
+  JSON_LIB_NODISCARD bool isEmpty() const { return std::holds_alternative<std::monostate>(jNodeVariant); }
   // Indexing operators
   Node &operator[](const std::string_view &key);
   const Node &operator[](const std::string_view &key) const;
@@ -72,7 +72,7 @@ struct Node
       std::is_same_v<BaseType<T>, Object>, std::unique_ptr<Object>,
       std::conditional_t<std::is_same_v<BaseType<T>, Array>, std::unique_ptr<Array>, BaseType<T>>>;
 
-  template<typename T> [[nodiscard]] bool is() const
+  template<typename T> JSON_LIB_NODISCARD bool is() const
   {
     return std::holds_alternative<StorageType<T>>(jNodeVariant);
   }

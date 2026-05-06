@@ -22,18 +22,18 @@ struct String
   String &operator=(String &&other) = default;
   ~String() = default;
   // Return reference to string
-  [[nodiscard]] std::string_view value() { return jNodeString; }
-  [[nodiscard]] std::string_view value() const { return jNodeString; }
+  JSON_LIB_NODISCARD std::string_view value() { return jNodeString; }
+  JSON_LIB_NODISCARD std::string_view value() const { return jNodeString; }
   // Return string representation of value
-  [[nodiscard]] const std::string &toString() const noexcept { return jNodeString; }
-  [[nodiscard]] std::string_view toStringView() const noexcept { return jNodeString; }
+  JSON_LIB_NODISCARD const std::string &toString() const noexcept { return jNodeString; }
+  JSON_LIB_NODISCARD std::string_view toStringView() const noexcept { return jNodeString; }
   // Append and reserve helpers for parser string extraction
   void reserve(const std::size_t capacity) { jNodeString.reserve(capacity); }
   void append(char ch) { jNodeString.push_back(ch); }
   void append(const std::string_view &value) { jNodeString.append(value); }
   void pop_back() { jNodeString.pop_back(); }
   void clear() { jNodeString.clear(); }
-  [[nodiscard]] std::size_t size() const noexcept { return jNodeString.size(); }
+  JSON_LIB_NODISCARD std::size_t size() const noexcept { return jNodeString.size(); }
   // Set/get maximum string length
   static void setMaxStringLength(const uint64_t length) { maxStringLength = length; }
   static uint64_t getMaxStringLength() { return maxStringLength; }

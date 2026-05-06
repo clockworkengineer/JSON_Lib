@@ -33,22 +33,22 @@ public:
 
 private:
   // Parse JSON
-  [[nodiscard]] static Object::Entry
+  JSON_LIB_NODISCARD static Object::Entry
     parseObjectEntry(ISource &source, const ITranslator &translator, unsigned long parserDepth);
-  [[nodiscard]] static Node
+  JSON_LIB_NODISCARD static Node
     parseString(ISource &source, const ITranslator &translator, unsigned long parserDepth);
-  [[nodiscard]] static Node parseNumber(ISource &source,
+  JSON_LIB_NODISCARD static Node parseNumber(ISource &source,
     const ITranslator &translator,
     unsigned long parserDepth);
-  [[nodiscard]] static Node parseBoolean(ISource &source,
+  JSON_LIB_NODISCARD static Node parseBoolean(ISource &source,
     const ITranslator &translator,
     unsigned long parserDepth);
-  [[nodiscard]] static Node parseNull(ISource &source,
+  JSON_LIB_NODISCARD static Node parseNull(ISource &source,
     const ITranslator &translator,
     unsigned long parserDepth);
-  [[nodiscard]] static Node parseObject(ISource &source, const ITranslator &translator, unsigned long parserDepth);
-  [[nodiscard]] static Node parseArray(ISource &source, const ITranslator &translator, unsigned long parserDepth);
-  [[nodiscard]] static Node parseNodes(ISource &source, const ITranslator &translator, unsigned long parserDepth);
+  JSON_LIB_NODISCARD static Node parseObject(ISource &source, const ITranslator &translator, unsigned long parserDepth);
+  JSON_LIB_NODISCARD static Node parseArray(ISource &source, const ITranslator &translator, unsigned long parserDepth);
+  JSON_LIB_NODISCARD static Node parseNodes(ISource &source, const ITranslator &translator, unsigned long parserDepth);
 
   // Reference to JSON translator interface
   const ITranslator &jsonTranslator;
