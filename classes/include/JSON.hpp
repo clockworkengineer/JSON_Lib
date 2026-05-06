@@ -8,6 +8,7 @@
 #include <variant>
 
 #include "JSON_Config.hpp"
+#include "implementation/common/JSON_Attributes.hpp"
 #include "implementation/common/JSON_Error.hpp"
 
 namespace JSON_Lib {

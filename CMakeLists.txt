@@ -120,6 +120,7 @@ set(JSON_INCLUDES
   classes/include/JSON_Core.hpp
   classes/include/implementation/JSON_Impl.hpp
   classes/include/implementation/common/JSON_Error.hpp
+  classes/include/implementation/common/JSON_Attributes.hpp
   classes/include/implementation/variants/JSON_Hole.hpp
   classes/include/implementation/variants/JSON_Object.hpp
   classes/include/implementation/variants/JSON_Array.hpp
