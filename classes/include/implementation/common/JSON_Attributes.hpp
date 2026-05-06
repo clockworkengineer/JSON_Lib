@@ -63,7 +63,11 @@
 #endif
 
 #if defined(JSON_LIB_SHARED)
-  #define JSON_LIB_API JSON_LIB_EXPORT
+  #if defined(JSON_LIB_BUILDING_DLL)
+    #define JSON_LIB_API JSON_LIB_EXPORT
+  #else
+    #define JSON_LIB_API JSON_LIB_IMPORT
+  #endif
 #else
   #define JSON_LIB_API
 #endif

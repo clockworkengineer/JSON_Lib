@@ -41,6 +41,10 @@ option(BUILD_EXAMPLES "Build examples" OFF)
 # Option to enable link-time optimization on the JSON library target
 option(JSON_LIB_ENABLE_LTO "Enable link-time optimization" ON)
 
+# Visibility and install policy
+option(JSON_LIB_EXPORT_INTERFACE "Install only public headers" ON)
+option(JSON_LIB_BUILD_SHARED "Build JSON_Lib as shared library" OFF)
+
 # Embedded build options
 option(JSON_LIB_EMBEDDED "Enable embedded-friendly build configuration" OFF)
 option(JSON_LIB_NO_EXCEPTIONS "Disable exception support" OFF)
@@ -205,12 +209,29 @@ target_link_libraries(JSON_Lib_Parser PRIVATE JSON_Lib_Embedded)
 target_link_libraries(JSON_Lib_Stringify INTERFACE JSON_Lib_Embedded)
 
 # Create the public JSON_Lib wrapper target from component object libraries
-add_library(${JSON_LIBRARY_NAME} STATIC
-  $<TARGET_OBJECTS:JSON_Lib_Core>
-  $<TARGET_OBJECTS:JSON_Lib_Parser>
-)
+if(JSON_LIB_BUILD_SHARED)
+  add_library(${JSON_LIBRARY_NAME} SHARED
+    $<TARGET_OBJECTS:JSON_Lib_Core>
+    $<TARGET_OBJECTS:JSON_Lib_Parser>
+  )
+  set_target_properties(${JSON_LIBRARY_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+else()
+  add_library(${JSON_LIBRARY_NAME} STATIC
+    $<TARGET_OBJECTS:JSON_Lib_Core>
+    $<TARGET_OBJECTS:JSON_Lib_Parser>
+  )
+endif()
 
 target_link_libraries(${JSON_LIBRARY_NAME} PRIVATE JSON_Lib_Stringify)
+
+if(JSON_LIB_BUILD_SHARED AND NOT MSVC)
+  target_compile_options(${JSON_LIBRARY_NAME} PRIVATE -fvisibility=hidden -fvisibility-inlines-hidden)
+endif()
+
+target_compile_definitions(${JSON_LIBRARY_NAME} PRIVATE
+  $<$<BOOL:${JSON_LIB_BUILD_SHARED}>:JSON_LIB_SHARED>
+  $<$<BOOL:${JSON_LIB_BUILD_SHARED}>:JSON_LIB_BUILDING_DLL>
+)
 
 target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include>
@@ -252,6 +273,8 @@ if(JSON_LIB_EXPORT_INTERFACE)
     ${PROJECT_SOURCE_DIR}/classes/include/interface/ITranslator.hpp
     ${PROJECT_SOURCE_DIR}/classes/include/interface/IParser.hpp
     ${PROJECT_SOURCE_DIR}/classes/include/interface/IStringify.hpp
+    ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_Error.hpp
+    ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_Attributes.hpp
     DESTINATION include)
 else()
   install(FILES ${JSON_INCLUDES} DESTINATION include)
