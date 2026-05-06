@@ -31,9 +31,9 @@ public:
   }
 
   // Set print ident value
-  void setIndent(const long indent) override { setDefaultIndent(indent); }
+  void setIndent(const long indent) JSON_LIB_NOEXCEPT override { setDefaultIndent(indent); }
   //  Set indent value
-  long getIndent() const override { return defaultPrintIndent; }
+  long getIndent() const JSON_LIB_NOEXCEPT override { return defaultPrintIndent; }
 
   static void setDefaultIndent(const long indent)
   {

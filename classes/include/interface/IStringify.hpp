@@ -1,5 +1,6 @@
 #pragma once
 
+#include "implementation/common/JSON_Attributes.hpp"
 #include "JSON_ErrorBase.hpp"
 
 namespace JSON_Lib {
@@ -34,8 +35,8 @@ public:
   // =========================
   // Set/Get print indentation
   // =========================
-  JSON_LIB_NODISCARD virtual long getIndent() const { return 0; }
-  virtual void setIndent(long)  {}
+  JSON_LIB_NODISCARD virtual long getIndent() const JSON_LIB_NOEXCEPT { return 0; }
+  virtual void setIndent(long) JSON_LIB_NOEXCEPT {}
 };
 // Make custom stringify to pass to JSON constructor: Pointer is tidied up internally.
 template <typename T> IStringify *makeStringify() {

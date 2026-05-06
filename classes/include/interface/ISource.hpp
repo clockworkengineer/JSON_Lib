@@ -2,6 +2,7 @@
 
 #include <string_view>
 #include <utility>
+#include "implementation/common/JSON_Attributes.hpp"
 #include "JSON_ErrorBase.hpp"
 
 namespace JSON_Lib {
@@ -32,7 +33,7 @@ public:
   // =================
   // Current character
   // =================
-  JSON_LIB_NODISCARD virtual char current() const = 0;
+  JSON_LIB_NODISCARD virtual char current() const JSON_LIB_NOEXCEPT = 0;
   // ======================
   // Move to next character
   // ======================
@@ -40,7 +41,7 @@ public:
   // =======================================
   // Are there still more characters to read
   // ========================================
-  JSON_LIB_NODISCARD virtual bool more() const = 0;
+  JSON_LIB_NODISCARD virtual bool more() const JSON_LIB_NOEXCEPT = 0;
   // // ========================
   // // Backup length characters
   // // ========================
@@ -83,7 +84,7 @@ public:
   // ==================================
   // Get current source stream position
   // ==================================
-  JSON_LIB_NODISCARD std::pair<long, long> getPosition() const { return std::make_pair(lineNo, column); }
+  JSON_LIB_NODISCARD std::pair<long, long> getPosition() const JSON_LIB_NOEXCEPT { return std::make_pair(lineNo, column); }
 
 protected:
   // ========================

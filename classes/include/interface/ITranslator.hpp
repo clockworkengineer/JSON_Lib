@@ -1,5 +1,6 @@
 #pragma once
 
+#include "implementation/common/JSON_Attributes.hpp"
 #include "JSON_ErrorBase.hpp"
 
 namespace JSON_Lib {

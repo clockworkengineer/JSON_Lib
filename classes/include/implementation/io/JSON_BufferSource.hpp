@@ -44,7 +44,7 @@ public:
   BufferSource &operator=(BufferSource &&other) = delete;
   ~BufferSource() override = default;
 
-  JSON_LIB_NODISCARD char current() const override
+  JSON_LIB_NODISCARD char current() const JSON_LIB_NOEXCEPT override
   {
     if (more()) { return buffer[bufferPosition]; }
     return EOF;
@@ -61,7 +61,7 @@ public:
     }
   }
 
-  JSON_LIB_NODISCARD bool more() const override { return bufferPosition < buffer.size(); }
+  JSON_LIB_NODISCARD bool more() const JSON_LIB_NOEXCEPT override { return bufferPosition < buffer.size(); }
 
   void reset() override
   {
@@ -70,7 +70,7 @@ public:
     column = 1;
   }
 
-  JSON_LIB_NODISCARD std::size_t position() const override { return bufferPosition; }
+  JSON_LIB_NODISCARD std::size_t position() const JSON_LIB_NOEXCEPT override { return bufferPosition; }
 
 private:
   static void checkNotEmpty(bool empty)

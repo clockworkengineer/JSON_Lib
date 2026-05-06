@@ -32,7 +32,7 @@ public:
   FixedBufferSource &operator=(FixedBufferSource &&) = delete;
   ~FixedBufferSource() override = default;
 
-  JSON_LIB_NODISCARD char current() const override
+  JSON_LIB_NODISCARD char current() const JSON_LIB_NOEXCEPT override
   {
     if (more()) { return data_[position_]; }
     return static_cast<char>(EOF);
@@ -49,7 +49,7 @@ public:
     }
   }
 
-  JSON_LIB_NODISCARD bool more() const override { return valid_ && position_ < length_; }
+  JSON_LIB_NODISCARD bool more() const JSON_LIB_NOEXCEPT override { return valid_ && position_ < length_; }
 
   void reset() override
   {
@@ -58,7 +58,7 @@ public:
     column = 1;
   }
 
-  JSON_LIB_NODISCARD std::size_t position() const override { return position_; }
+  JSON_LIB_NODISCARD std::size_t position() const JSON_LIB_NOEXCEPT override { return position_; }
 #if JSON_LIB_NO_EXCEPTIONS
   JSON_LIB_NODISCARD bool valid() const noexcept { return valid_; }
 #endif

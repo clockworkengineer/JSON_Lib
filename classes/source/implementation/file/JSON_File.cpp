@@ -119,7 +119,7 @@ JSON::Format JSON_Impl::getFileFormat(const std::string_view &fileName)
 /// <returns>JSON string.</returns>
 std::string JSON_Impl::fromFile(const std::string_view &fileName)
 {
-  const auto kCRLF = "\x0D\x0A";
+  constexpr auto kCRLF = "\x0D\x0A";
   // Get file format
   const JSON::Format format = getFileFormat(fileName);
   // Read in JSON
@@ -143,7 +143,7 @@ std::string JSON_Impl::fromFile(const std::string_view &fileName)
   // Translate CRLF -> LF
   size_t pos = translated.find(kCRLF);
   while (pos != std::string::npos) {
-    const auto kLF = "\x0A";
+    constexpr auto kLF = "\x0A";
     translated.replace(pos, 2, kLF);
     pos = translated.find(kCRLF, pos + 1);
   }
