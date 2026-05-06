@@ -27,9 +27,9 @@ struct Result
   std::string message;
   std::pair<long, long> position{0, 0};
 
-  [[nodiscard]] bool ok() const noexcept { return status == Status::Ok; }
-  [[nodiscard]] T &unwrap() { return *value; }
-  [[nodiscard]] const T &unwrap() const { return *value; }
+  JSON_LIB_NODISCARD bool ok() const JSON_LIB_NOEXCEPT { return status == Status::Ok; }
+  JSON_LIB_NODISCARD T &unwrap() { return *value; }
+  JSON_LIB_NODISCARD const T &unwrap() const { return *value; }
 };
 
 template<>
@@ -39,7 +39,7 @@ struct Result<void>
   std::string message;
   std::pair<long, long> position{0, 0};
 
-  [[nodiscard]] bool ok() const noexcept { return status == Status::Ok; }
+  JSON_LIB_NODISCARD bool ok() const JSON_LIB_NOEXCEPT { return status == Status::Ok; }
 };
 
 // JSON error types

@@ -16,10 +16,28 @@
   #else
     #define JSON_LIB_FALLTHROUGH
   #endif
+  #if __has_cpp_attribute(maybe_unused)
+    #define JSON_LIB_MAYBE_UNUSED [[maybe_unused]]
+  #else
+    #define JSON_LIB_MAYBE_UNUSED
+  #endif
+  #if __has_cpp_attribute(likely)
+    #define JSON_LIB_LIKELY [[likely]]
+  #else
+    #define JSON_LIB_LIKELY
+  #endif
+  #if __has_cpp_attribute(unlikely)
+    #define JSON_LIB_UNLIKELY [[unlikely]]
+  #else
+    #define JSON_LIB_UNLIKELY
+  #endif
 #else
   #define JSON_LIB_NODISCARD
   #define JSON_LIB_DEPRECATED(message)
   #define JSON_LIB_FALLTHROUGH
+  #define JSON_LIB_MAYBE_UNUSED
+  #define JSON_LIB_LIKELY
+  #define JSON_LIB_UNLIKELY
 #endif
 
 #if defined(__cplusplus) && __cplusplus >= 201103L

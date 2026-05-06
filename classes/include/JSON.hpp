@@ -26,7 +26,7 @@ struct String;
 class Default_Parser;
 struct Node;
 
-class JSON
+class JSON_LIB_API JSON
 {
 public:
   // Possible JSON Node initializer list types
@@ -54,22 +54,22 @@ public:
   // Provide own destructor
   ~JSON();
   // Get JSON library version
-  [[nodiscard]] static std::string version();
+  JSON_LIB_NODISCARD static std::string version();
   // Parse JSON into the tree
   void parse(ISource &source) const;
   void parse(ISource &&source) const;
-  Result<Node> parseResult(ISource &source) const;
-  Result<Node> parseResult(ISource &&source) const;
+  JSON_LIB_NODISCARD Result<Node> parseResult(ISource &source) const;
+  JSON_LIB_NODISCARD Result<Node> parseResult(ISource &&source) const;
   // Create JSON text string from Node tree (no whitespace)
   void stringify(IDestination &destination) const;
   void stringify(IDestination &&destination) const;
-  Result<void> stringifyResult(IDestination &destination) const;
-  Result<void> stringifyResult(IDestination &&destination) const;
+  JSON_LIB_NODISCARD Result<void> stringifyResult(IDestination &destination) const;
+  JSON_LIB_NODISCARD Result<void> stringifyResult(IDestination &&destination) const;
   // Create JSON text string from Node tree (pretty printed)
   void print(IDestination &destination) const;
   void print(IDestination &&destination) const;
-  Result<void> printResult(IDestination &destination) const;
-  Result<void> printResult(IDestination &&destination) const;
+  JSON_LIB_NODISCARD Result<void> printResult(IDestination &destination) const;
+  JSON_LIB_NODISCARD Result<void> printResult(IDestination &&destination) const;
   // Strip whitespace from JSON string
   static void strip(ISource &source, IDestination &destination);
   static void strip(ISource &source, IDestination &&destination) ;
@@ -78,13 +78,13 @@ public:
   // Traverse JSON tree
   void traverse(IAction &action);
   void traverse(IAction &action) const;
-  Result<void> traverseResult(IAction &action);
-  Result<void> traverseResult(IAction &action) const;
+  JSON_LIB_NODISCARD Result<void> traverseResult(IAction &action);
+  JSON_LIB_NODISCARD Result<void> traverseResult(IAction &action) const;
   // Set print ident value
   static void setIndent(long indent);
   // Get the root of JSON tree
-  [[nodiscard]] Node &root();
-  [[nodiscard]] const Node &root() const;
+  JSON_LIB_NODISCARD Node &root();
+  JSON_LIB_NODISCARD const Node &root() const;
   // Search for JSON object entry with a given key
   Node &operator[](const std::string_view &key);
   const Node &operator[](const std::string_view &key) const;
@@ -104,7 +104,7 @@ private:
   const std::unique_ptr<JSON_Impl> implementation;
 };
 
-class EmbeddedJSON final : public JSON
+class JSON_LIB_API EmbeddedJSON final : public JSON
 {
 public:
   using JSON::JSON;
@@ -119,14 +119,14 @@ public:
   static constexpr bool isNoDynamicMemoryBuild() noexcept { return JSON_LIB_NO_DYNAMIC_MEMORY; }
 
   // Exception-free API — preferred for embedded targets
-  Result<Node> parseNoThrow(ISource &source) const;
-  Result<Node> parseNoThrow(ISource &&source) const;
-  Result<void> stringifyNoThrow(IDestination &destination) const  { return stringifyResult(destination); }
-  Result<void> stringifyNoThrow(IDestination &&destination) const { return stringifyResult(std::move(destination)); }
-  Result<void> printNoThrow(IDestination &destination) const  { return printResult(destination); }
-  Result<void> printNoThrow(IDestination &&destination) const { return printResult(std::move(destination)); }
-  Result<void> traverseNoThrow(IAction &action)       { return traverseResult(action); }
-  Result<void> traverseNoThrow(IAction &action) const { return traverseResult(action); }
+  JSON_LIB_NODISCARD Result<Node> parseNoThrow(ISource &source) const;
+  JSON_LIB_NODISCARD Result<Node> parseNoThrow(ISource &&source) const;
+  JSON_LIB_NODISCARD Result<void> stringifyNoThrow(IDestination &destination) const  { return stringifyResult(destination); }
+  JSON_LIB_NODISCARD Result<void> stringifyNoThrow(IDestination &&destination) const { return stringifyResult(std::move(destination)); }
+  JSON_LIB_NODISCARD Result<void> printNoThrow(IDestination &destination) const  { return printResult(destination); }
+  JSON_LIB_NODISCARD Result<void> printNoThrow(IDestination &&destination) const { return printResult(std::move(destination)); }
+  JSON_LIB_NODISCARD Result<void> traverseNoThrow(IAction &action)       { return traverseResult(action); }
+  JSON_LIB_NODISCARD Result<void> traverseNoThrow(IAction &action) const { return traverseResult(action); }
 
   struct Limits
   {
