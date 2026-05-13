@@ -77,16 +77,16 @@ bool endOfNumber(const ISource &source)
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Object key/value pair.</returns>
 Object::Entry
-  Default_Parser::parseObjectEntry(ISource &source, const ITranslator &translator, const unsigned long parserDepth, const unsigned long maxDepth)
+  Default_Parser::parseObjectEntry(ISource &source, const unsigned long parserDepth, const unsigned long maxDepth)
 {
   source.ignoreWS();
-  std::string key{ extractString(source, translator).value() };
+  std::string key{ extractString(source, jsonTranslator).value() };
   source.ignoreWS();
   if (source.current() != JSON_Lib::kColon) {
     JSON_THROW(SyntaxError(source.getPosition(), "Missing ':' in key value pair."));
   }
   source.next();
-  return { std::move(key), parseNodes(source, translator, parserDepth + 1, maxDepth) };
+  return { std::move(key), parseNodes(source, parserDepth + 1, maxDepth) };
 }
 /// <summary>
 /// Parse a string from a JSON source stream.
@@ -95,11 +95,9 @@ Object::Entry
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>String Node.</returns>
-Node Default_Parser::parseString(ISource &source,
-  const ITranslator &translator,
-  unsigned long)
+Node Default_Parser::parseString(ISource &source, unsigned long)
 {
-  return Node::make<String>(extractString(source, translator));
+  return Node::make<String>(extractString(source, jsonTranslator));
 }
 /// <summary>
 /// Parse a number from a JSON source stream.
@@ -108,9 +106,7 @@ Node Default_Parser::parseString(ISource &source,
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Number Node.</returns>
-Node Default_Parser::parseNumber(ISource &source,
-  const ITranslator &,
-  unsigned long)
+Node Default_Parser::parseNumber(ISource &source, unsigned long)
 {
   static constexpr std::size_t kMaxNumberLength = 64;
   std::array<char, kMaxNumberLength> numberText{};
@@ -134,9 +130,7 @@ Node Default_Parser::parseNumber(ISource &source,
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Boolean Node.</returns>
-Node Default_Parser::parseBoolean(ISource &source,
-  const ITranslator &,
-  unsigned long)
+Node Default_Parser::parseBoolean(ISource &source, unsigned long)
 {
   static constexpr std::string_view kTrueToken{"true"};
   static constexpr std::string_view kFalseToken{"false"};
@@ -151,9 +145,7 @@ Node Default_Parser::parseBoolean(ISource &source,
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Null Node.</returns>
-Node Default_Parser::parseNull(ISource &source,
-  const ITranslator &,
-  unsigned long)
+Node Default_Parser::parseNull(ISource &source, unsigned long)
 {
   static constexpr std::string_view kNullToken{"null"};
   if (!source.match(kNullToken)) { JSON_THROW(SyntaxError(source.getPosition(), "Invalid null value.")); }
@@ -171,7 +163,6 @@ Node Default_Parser::parseNull(ISource &source,
 /// common to both containers.
 template<typename NodeType, typename ParseFn>
 static Node parseCollection(ISource &source,
-  const ITranslator &translator,
   const unsigned long parserDepth,
   const char closeChar,
   const char *missingCloseMsg,
@@ -181,32 +172,32 @@ static Node parseCollection(ISource &source,
   source.next();
   source.ignoreWS();
   if (source.current() != closeChar) {
-    NRef<NodeType>(jNode).add(parseElement(source, translator, parserDepth));
+    NRef<NodeType>(jNode).add(parseElement(source, parserDepth));
     while (source.current() == ',') {
       source.next();
-      NRef<NodeType>(jNode).add(parseElement(source, translator, parserDepth));
+      NRef<NodeType>(jNode).add(parseElement(source, parserDepth));
     }
   }
   if (source.current() != closeChar) { JSON_THROW(SyntaxError(source.getPosition(), missingCloseMsg)); }
   source.next();
   return jNode;
 }
-Node Default_Parser::parseObject(ISource &source, const ITranslator &translator, const unsigned long parserDepth, const unsigned long maxDepth)
+Node Default_Parser::parseObject(ISource &source, const unsigned long parserDepth, const unsigned long maxDepth)
 {
   return parseCollection<Object>(
-    source, translator, parserDepth,
+    source, parserDepth,
     JSON_Lib::kObjectEnd, "Missing closing '}' in object definition.",
-    [maxDepth](ISource &src, const ITranslator &tr, unsigned long depth) {
-      return parseObjectEntry(src, tr, depth, maxDepth);
+    [this, maxDepth](ISource &src, unsigned long depth) {
+      return parseObjectEntry(src, depth, maxDepth);
     });
 }
-Node Default_Parser::parseArray(ISource &source, const ITranslator &translator, const unsigned long parserDepth, const unsigned long maxDepth)
+Node Default_Parser::parseArray(ISource &source, const unsigned long parserDepth, const unsigned long maxDepth)
 {
   return parseCollection<Array>(
-    source, translator, parserDepth,
+    source, parserDepth,
     JSON_Lib::kArrayEnd, "Missing closing ']' in array definition.",
-    [maxDepth](ISource &src, const ITranslator &tr, unsigned long depth) {
-      return parseNodes(src, tr, depth + 1, maxDepth);
+    [this, maxDepth](ISource &src, unsigned long depth) {
+      return parseNodes(src, depth + 1, maxDepth);
     });
 }
 /// <summary>
@@ -218,7 +209,7 @@ Node Default_Parser::parseArray(ISource &source, const ITranslator &translator, 
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Pointer to Node.</returns>
-Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, const unsigned long parserDepth, const unsigned long maxDepth)
+Node Default_Parser::parseNodes(ISource &source, const unsigned long parserDepth, const unsigned long maxDepth)
 {
   if (parserDepth >= maxDepth) { JSON_THROW(SyntaxError("Maximum parser depth exceeded.")); }
   source.ignoreWS();
@@ -226,14 +217,14 @@ Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, 
   Node jNode;
   switch (nextChar) {
     case JSON_Lib::kObjectBegin:
-      jNode = parseObject(source, translator, parserDepth, maxDepth);
+      jNode = parseObject(source, parserDepth, maxDepth);
       break;
     case JSON_Lib::kArrayBegin:
-      jNode = parseArray(source, translator, parserDepth, maxDepth);
+      jNode = parseArray(source, parserDepth, maxDepth);
       break;
     case JSON_Lib::kStringQuote:
     case JSON_Lib::kStringSingleQuote:
-      jNode = parseString(source, translator, parserDepth);
+      jNode = parseString(source, parserDepth);
       break;
     case JSON_Lib::kPlus:
     case JSON_Lib::kMinus:
@@ -247,14 +238,14 @@ Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, 
     case JSON_Lib::kSeven:
     case JSON_Lib::kEight:
     case JSON_Lib::kNine:
-      jNode = parseNumber(source, translator, parserDepth);
+      jNode = parseNumber(source, parserDepth);
       break;
     case 't':
     case 'f':
-      jNode = parseBoolean(source, translator, parserDepth);
+      jNode = parseBoolean(source, parserDepth);
       break;
     case 'n':
-      jNode = parseNull(source, translator, parserDepth);
+      jNode = parseNull(source, parserDepth);
       break;
     default:
       JSON_THROW(SyntaxError(source.getPosition(), "Missing String, Number, Boolean, Array, Object or Null."));
@@ -268,7 +259,7 @@ Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, 
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Pointer to Node.</returns>
-Node Default_Parser::parse(ISource &source) { return parseNodes(source, jsonTranslator, 1, m_maxParserDepth); }
+Node Default_Parser::parse(ISource &source) { return parseNodes(source, 1, m_maxParserDepth); }
 Result<Node> Default_Parser::parseResult(ISource &source)
 {
 #if JSON_LIB_NO_EXCEPTIONS
@@ -279,7 +270,7 @@ Result<Node> Default_Parser::parseResult(ISource &source)
   }
 #endif
   try {
-    return {Status::Ok, std::make_unique<Node>(parseNodes(source, jsonTranslator, 1, m_maxParserDepth)), {}, {0, 0}};
+    return {Status::Ok, std::make_unique<Node>(parseNodes(source, 1, m_maxParserDepth)), {}, {0, 0}};
   } catch (const SyntaxError &ex) {
     return {Status::SyntaxError, nullptr, ex.what(), source.getPosition()};
   } catch (const Error &ex) {

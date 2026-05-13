@@ -33,22 +33,19 @@ public:
 
 private:
   // Parse JSON
-  JSON_LIB_NODISCARD static Object::Entry
-    parseObjectEntry(ISource &source, const ITranslator &translator, unsigned long parserDepth, unsigned long maxDepth);
-  JSON_LIB_NODISCARD static Node
-    parseString(ISource &source, const ITranslator &translator, unsigned long parserDepth);
-  JSON_LIB_NODISCARD static Node parseNumber(ISource &source,
-    const ITranslator &translator,
+  JSON_LIB_NODISCARD Object::Entry
+    parseObjectEntry(ISource &source, unsigned long parserDepth, unsigned long maxDepth);
+  JSON_LIB_NODISCARD Node
+    parseString(ISource &source, unsigned long parserDepth);
+  JSON_LIB_NODISCARD Node parseNumber(ISource &source,
     unsigned long parserDepth);
-  JSON_LIB_NODISCARD static Node parseBoolean(ISource &source,
-    const ITranslator &translator,
+  JSON_LIB_NODISCARD Node parseBoolean(ISource &source,
     unsigned long parserDepth);
-  JSON_LIB_NODISCARD static Node parseNull(ISource &source,
-    const ITranslator &translator,
+  JSON_LIB_NODISCARD Node parseNull(ISource &source,
     unsigned long parserDepth);
-  JSON_LIB_NODISCARD static Node parseObject(ISource &source, const ITranslator &translator, unsigned long parserDepth, unsigned long maxDepth);
-  JSON_LIB_NODISCARD static Node parseArray(ISource &source, const ITranslator &translator, unsigned long parserDepth, unsigned long maxDepth);
-  JSON_LIB_NODISCARD static Node parseNodes(ISource &source, const ITranslator &translator, unsigned long parserDepth, unsigned long maxDepth);
+  JSON_LIB_NODISCARD Node parseObject(ISource &source, unsigned long parserDepth, unsigned long maxDepth);
+  JSON_LIB_NODISCARD Node parseArray(ISource &source, unsigned long parserDepth, unsigned long maxDepth);
+  JSON_LIB_NODISCARD Node parseNodes(ISource &source, unsigned long parserDepth, unsigned long maxDepth);
 
   // Reference to JSON translator interface
   const ITranslator &jsonTranslator;
