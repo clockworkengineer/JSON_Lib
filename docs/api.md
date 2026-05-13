@@ -12,6 +12,7 @@
 - [Error handling](#error-handling)
 - [Traversal — IAction](#traversal--iaction)
 - [Stringify backends](#stringify-backends)
+- [Thread safety](#thread-safety)
 - [Build config macros](#build-config-macros)
 
 ---
@@ -328,6 +329,28 @@ The library ships four stringify headers (header-only, no extra link step):
 | `implementation/stringify/YAML_Stringify.hpp` | YAML |
 
 Pass a custom `IStringify*` to the `JSON` constructor, or use the dedicated example programs (`JSON_Files_To_Bencode.cpp`, `JSON_Files_To_XML.cpp`, `JSON_Files_To_YAML.cpp`).
+
+---
+
+## Thread safety
+
+`JSON_Lib` does **not** provide internal synchronisation.
+
+### Rules
+
+| Scenario | Safe? | Notes |
+|---|---|---|
+| One `JSON` instance per thread, no shared state writes | ✅ Yes | Recommended pattern |
+| Multiple threads reading the same `JSON` instance (parse already done, no writes) | ✅ Yes | Pure read access is safe |
+| Multiple threads each calling `parse()` or `stringify()` on the **same** `JSON` instance | ❌ No | External lock required |
+| Concurrent writes to `Default_Parser::maxParserDepth` | ❌ No | `inline static` — data race |
+| Concurrent writes to `String::maxStringLength` | ❌ No | `inline static` — data race |
+
+### Recommendations
+
+- **One `JSON` instance per thread** (or per task on an RTOS). `JSON` is non-copyable and non-movable.
+- Set `Default_Parser::maxParserDepth` and `String::maxStringLength` **once at program startup**, before spawning threads.
+- For RTOS targets that cannot allocate per-task `JSON` objects, guard the shared instance with a mutex.
 
 ---
 

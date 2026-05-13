@@ -166,6 +166,20 @@ See the compliance report for full details.
 
 ---
 
+## Thread Safety
+
+`JSON_Lib` does **not** provide internal synchronisation. Follow these rules when using the library from multiple threads:
+
+| Rule | Rationale |
+|---|---|
+| Create one `JSON` instance **per thread**. | `JSON` is non-copyable and non-movable; sharing a single instance between threads without external locking causes data races. |
+| Do not modify `Default_Parser::maxParserDepth` or `String::maxStringLength` after startup. | These are `inline static` values shared across all instances and all threads. Concurrent writes are a data race. |
+| Read-only access to a `JSON` object from multiple threads is safe **only** if no thread is simultaneously writing. | Standard read-sharing rules apply. |
+
+> **Recommendation for multi-threaded code:** Construct one `JSON` instance per thread (or per task on an RTOS). Set any global limits once at program startup, before spawning threads.
+
+---
+
 ## Contributing
 
 Contributions are welcome. Please:
