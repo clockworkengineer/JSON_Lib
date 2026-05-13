@@ -2,24 +2,10 @@
 // =====================
 // JSON core definitions
 // =====================
-#include "JSON_Config.hpp"
-#include "JSON_Interfaces.hpp"
-#include "JSON_Hole.hpp"
-#include "JSON_Number.hpp"
-#include "JSON_String.hpp"
-#include "JSON_Boolean.hpp"
-#include "JSON_Null.hpp"
-#include "JSON_Node.hpp"
-#include "JSON_Object.hpp"
-#include "JSON_Array.hpp"
-#include "JSON_Node_Reference.hpp"
-#include "JSON_Node_Creation.hpp"
-#include "JSON_Node_Index.hpp"
-#include "JSON_Sources.hpp"
-#include "JSON_Destinations.hpp"
-#include "JSON_Converter.hpp"
-#include "JSON_Error.hpp"
-#include "Default_Translator.hpp"
-#include "Default_Parser.hpp"
-#include "Default_Stringify.hpp"
+// NOTE: JSON_Core.hpp is retained for backwards compatibility.
+// Prefer the focused sub-headers:
+//   JSON_Node_Core.hpp   — node types, variants and interfaces
+//   JSON_IO_Core.hpp     — sources and destinations
+//   JSON_Parser_Core.hpp — parser, translator and stringify
+#include "JSON_Parser_Core.hpp"
 

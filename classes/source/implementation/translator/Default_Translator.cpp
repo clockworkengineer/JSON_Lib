@@ -10,7 +10,8 @@
 
 #include <array>
 #include "JSON.hpp"
-#include "JSON_Core.hpp"
+#include "JSON_Node_Core.hpp"
+#include "Default_Translator.hpp"
 #include "JSON_Throw.hpp"
 
 namespace JSON_Lib {

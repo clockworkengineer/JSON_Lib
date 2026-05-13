@@ -1,5 +1,5 @@
 #include "JSON.hpp"
-#include "JSON_Core.hpp"
+#include "JSON_Node_Core.hpp"
 
 namespace JSON_Lib {
 
