@@ -30,16 +30,14 @@ public:
     stringifyNodes(jNode, destination, indent);
   }
 
-  // Set print ident value
-  void setIndent(const long indent) JSON_LIB_NOEXCEPT override { setDefaultIndent(indent); }
-  //  Set indent value
-  long getIndent() const JSON_LIB_NOEXCEPT override { return defaultPrintIndent; }
-
-  static void setDefaultIndent(const long indent)
+  // Set print indent value
+  void setIndent(const long indent) override
   {
     if (indent < 0) { JSON_THROW(JSON_Lib::Error("Invalid print indentation value.")); }
-    defaultPrintIndent = indent;
+    m_indent = indent;
   }
+  // Get print indent value
+  long getIndent() const JSON_LIB_NOEXCEPT override { return m_indent; }
 
 private:
   void stringifyNodes(const Node &jNode, IDestination &destination, const unsigned long indent) const
@@ -70,10 +68,10 @@ private:
       stringifyString(entry.getKey(), destination);
       destination.add(':');
       if (pretty) { destination.add(' '); }
-      stringifyNodes(entry.getNode(), destination, pretty ? indent + defaultPrintIndent : 0);
+      stringifyNodes(entry.getNode(), destination, pretty ? indent + m_indent : 0);
       addCommaNewline(destination, pretty, commaCount);
     }
-    addPrettyTrailer(destination, pretty, indent, static_cast<unsigned long>(defaultPrintIndent));
+    addPrettyTrailer(destination, pretty, indent, static_cast<unsigned long>(m_indent));
     destination.add('}');
   }
 
@@ -87,10 +85,10 @@ private:
       if (pretty) { destination.add('\n'); }
       for (auto &entry : elements) {
         if (pretty) { addIndent(destination, indent); }
-        stringifyNodes(entry, destination, pretty ? indent + defaultPrintIndent : 0);
+        stringifyNodes(entry, destination, pretty ? indent + m_indent : 0);
         addCommaNewline(destination, pretty, commaCount);
       }
-      addPrettyTrailer(destination, pretty, indent, static_cast<unsigned long>(defaultPrintIndent));
+      addPrettyTrailer(destination, pretty, indent, static_cast<unsigned long>(m_indent));
     }
     destination.add(']');
   }
@@ -115,7 +113,7 @@ private:
   {
     appendQuotedString(value, destination, *translator_);
   }
-  inline static long defaultPrintIndent{ 4 };
+  long m_indent{ 4 };
 };
 
 }// namespace JSON_Lib

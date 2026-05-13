@@ -82,7 +82,7 @@ Result<void> JSON::printResult(IDestination &&destination) const { return implem
 /// Set print indent value.
 /// </summary>
 /// <param name="indent">Pretty print indent value.</param>
-void JSON::setIndent(const long indent) { JSON_Impl::setIndent(indent); }
+void JSON::setIndent(const long indent) { implementation->setIndent(indent); }
 /// <summary>
 /// Recursively traverse Node structure calling IAction methods (read-only)
 ///  or to change the JSON tree node directly.

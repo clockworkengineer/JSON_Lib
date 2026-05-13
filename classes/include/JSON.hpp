@@ -81,7 +81,7 @@ public:
   JSON_LIB_NODISCARD Result<void> traverseResult(IAction &action);
   JSON_LIB_NODISCARD Result<void> traverseResult(IAction &action) const;
   // Set print ident value
-  static void setIndent(long indent);
+  void setIndent(long indent);
   // Get the root of JSON tree
   JSON_LIB_NODISCARD Node &root();
   JSON_LIB_NODISCARD const Node &root() const;

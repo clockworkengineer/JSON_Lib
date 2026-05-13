@@ -63,11 +63,11 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][Node][R-Value-Refe
   {
     const std::string generatedFileName{ generateRandomFileName() };
     json.parse(BufferSource{ R"([1,2,3])" });
-    JSON::setIndent(4);
+    json.setIndent(4);
     json.print(FileDestination{ generatedFileName });
     REQUIRE_FALSE(JSON::fromFile(generatedFileName).empty());
     std::filesystem::remove(generatedFileName);
-    JSON::setIndent(4);
+    json.setIndent(4);
   }
   SECTION("Strip with R-Value reference source.", "[JSON][Node][R-Value-Reference]")
   {

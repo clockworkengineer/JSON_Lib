@@ -36,7 +36,7 @@ public:
   // Set/Get print indentation
   // =========================
   JSON_LIB_NODISCARD virtual long getIndent() const JSON_LIB_NOEXCEPT { return 0; }
-  virtual void setIndent(long) JSON_LIB_NOEXCEPT {}
+  virtual void setIndent(long) {}
 };
 // Make a custom stringify to pass to the JSON constructor.
 template <typename T> std::unique_ptr<IStringify> makeStringify() {

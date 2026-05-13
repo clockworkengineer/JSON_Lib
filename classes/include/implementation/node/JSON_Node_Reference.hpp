@@ -57,4 +57,12 @@ template<typename T> const T &NRef(const Object::Entry &jNodeEntry)
   checkNode<T>(jNodeEntry.getNode());
   return jNodeEntry.getNode().template get<T>();
 }
+
+// =============================================
+// Readable aliases for NRef (legacy: use NRef)
+// =============================================
+template<typename T> T &as(Node &jNode) { return NRef<T>(jNode); }
+template<typename T> const T &as(const Node &jNode) { return NRef<T>(jNode); }
+template<typename T> T &as(Object::Entry &jNodeEntry) { return NRef<T>(jNodeEntry); }
+template<typename T> const T &as(const Object::Entry &jNodeEntry) { return NRef<T>(jNodeEntry); }
 }// namespace JSON_Lib

@@ -45,7 +45,7 @@ public:
   Result<void> runTraverse(IAction &action);
   Result<void> runTraverse(IAction &action) const;
   // Set print ident value
-  static void setIndent(const long indent);
+  void setIndent(const long indent);
 #if !JSON_LIB_NO_STDIO
   // Read/Write JSON from a file
   static std::string fromFile(const std::string_view &fileName);
