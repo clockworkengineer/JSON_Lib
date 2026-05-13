@@ -366,7 +366,6 @@ Generated into `JSON_Config.hpp` (in the CMake binary dir) at configure time.
 | `JSON_LIB_NO_HEAP` | `0` or `1` | `-DJSON_LIB_NO_HEAP=ON` |
 | `JSON_LIB_NO_DYNAMIC_MEMORY` | `0` or `1` | `-DJSON_LIB_NO_DYNAMIC_MEMORY=ON` |
 | `JSON_LIB_NO_STDIO` | `0` or `1` | `-DJSON_LIB_NO_STDIO=ON` |
-| `JSON_LIB_ALLOCATOR_INTERFACE` | `0` or `1` | `-DJSON_LIB_ALLOCATOR_INTERFACE=ON` |
 | `JSON_LIB_MAX_PARSER_DEPTH` | `unsigned long` | `-DJSON_LIB_MAX_PARSER_DEPTH=N` |
 | `JSON_LIB_MAX_STRING_LENGTH` | `uint64_t` | `-DJSON_LIB_MAX_STRING_LENGTH=N` |
 

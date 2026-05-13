@@ -482,7 +482,6 @@ Example programs: `JSON_Files_To_Bencode.cpp`, `JSON_Files_To_XML.cpp`, `JSON_Fi
 | `JSON_LIB_NO_HEAP` | `OFF` | Disable heap use; implies `NO_DYNAMIC_MEMORY` |
 | `JSON_LIB_NO_DYNAMIC_MEMORY` | `OFF` | Disable dynamic memory; implies `NO_HEAP` |
 | `JSON_LIB_NO_STDIO` | `OFF` | Disable `FileSource`/`FileDestination` |
-| `JSON_LIB_ALLOCATOR_INTERFACE` | `OFF` | Expose custom allocator hook |
 | `JSON_LIB_MAX_PARSER_DEPTH` | `0` | Override parse depth limit (0 = use default 10) |
 | `JSON_LIB_MAX_STRING_LENGTH` | `0` | Override string length limit (0 = use default 16384) |
 

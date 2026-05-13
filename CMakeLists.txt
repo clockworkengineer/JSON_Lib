@@ -50,7 +50,6 @@ option(JSON_LIB_EMBEDDED "Enable embedded-friendly build configuration" OFF)
 option(JSON_LIB_NO_EXCEPTIONS "Disable exception support" OFF)
 option(JSON_LIB_NO_HEAP "Disable heap allocation support" OFF)
 option(JSON_LIB_NO_DYNAMIC_MEMORY "Disable dynamic memory usage" OFF)
-option(JSON_LIB_ALLOCATOR_INTERFACE "Enable custom allocator/pool interface" OFF)
 option(JSON_LIB_NO_STDIO "Disable stdio/file I/O support" OFF)
 
 # Compile-time resource limits (0 = use library default)
@@ -92,7 +91,6 @@ endif()
 
 json_lib_set_flag_value(JSON_LIB_NO_HEAP)
 json_lib_set_flag_value(JSON_LIB_NO_DYNAMIC_MEMORY)
-json_lib_set_flag_value(JSON_LIB_ALLOCATOR_INTERFACE)
 json_lib_set_flag_value(JSON_LIB_NO_STDIO)
 
 # Numeric resource-limit overrides — pass value directly (0 means "use library default")
@@ -198,7 +196,6 @@ target_compile_definitions(JSON_Lib_Embedded INTERFACE
   $<$<BOOL:${JSON_LIB_NO_EXCEPTIONS}>:JSON_LIB_NO_EXCEPTIONS>
   $<$<BOOL:${JSON_LIB_NO_HEAP}>:JSON_LIB_NO_HEAP>
   $<$<BOOL:${JSON_LIB_NO_DYNAMIC_MEMORY}>:JSON_LIB_NO_DYNAMIC_MEMORY>
-  $<$<BOOL:${JSON_LIB_ALLOCATOR_INTERFACE}>:JSON_LIB_ALLOCATOR_INTERFACE>
   $<$<BOOL:${JSON_LIB_NO_STDIO}>:JSON_LIB_NO_STDIO>
 )
 
