@@ -16,6 +16,12 @@ public:
     : StringifierBase(std::move(translator))
   {
   }
+  /// @brief Convenience constructor — takes ownership of a raw translator pointer.
+  /// Allows passing a custom translator without subclassing IStringify.
+  explicit Default_Stringify(ITranslator *translator)
+    : StringifierBase(std::unique_ptr<ITranslator>(translator))
+  {
+  }
 
   /// <summary>
   /// Recursively traverse Node structure encoding it into JSON string on
