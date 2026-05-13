@@ -17,7 +17,7 @@ Node::Node(T value)
   }
 }
 // Convert an initializer list type to JMode
-static Node typeToNode(const JSON::InitializerListTypes &type)
+inline Node typeToNode(const JSON::InitializerListTypes &type)
 {
   return std::visit(overloaded{
     [](int v)           -> Node { return Node(v); },
