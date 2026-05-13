@@ -28,7 +28,7 @@ int main(int, char **)
 
     js::BufferDestination fullDest;
     json.print(fullDest);
-    std::cout << "Full JSON: " << fullDest.toString() << std::endl;
+    std::cout << "Full JSON: " << fullDest.view() << std::endl;
   } catch (const std::exception &ex) {
     PLOG_ERROR << ex.what();
     return 1;

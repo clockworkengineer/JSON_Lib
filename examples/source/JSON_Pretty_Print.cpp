@@ -26,7 +26,7 @@ int main(int, char **)
     js::BufferDestination prettyDest;
     json.print(prettyDest);
     std::ofstream prettyOut(prettyFile);
-    prettyOut << prettyDest.toString();
+    prettyOut << prettyDest.view();
     prettyOut.close();
     PLOG_INFO << "Pretty-printed JSON written to: " << prettyFile;
 
@@ -34,7 +34,7 @@ int main(int, char **)
     js::BufferDestination minDest;
     json.stringify(minDest);
     std::ofstream minOut(minifiedFile);
-    minOut << minDest.toString();
+    minOut << minDest.view();
     minOut.close();
     PLOG_INFO << "Minified JSON written to: " << minifiedFile;
   } catch (const std::exception &ex) {
