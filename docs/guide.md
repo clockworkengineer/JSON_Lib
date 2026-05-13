@@ -9,6 +9,7 @@
 - [Serializing JSON](#serializing-json)
 - [File I/O](#file-io)
 - [Error handling](#error-handling)
+- [Exception-free Result\<T\> workflow](#exception-free-resultt-workflow)
 - [Embedded and resource-constrained builds](#embedded-and-resource-constrained-builds)
 - [Custom struct serialization](#custom-struct-serialization)
 - [Traversal and custom actions](#traversal-and-custom-actions)
@@ -192,6 +193,121 @@ if (!result.ok()) {
 auto sr = embedded.stringifyNoThrow(js::FixedBufferDestination<256>{});
 if (!sr.ok()) { /* sr.message */ }
 ```
+
+---
+
+## Exception-free Result\<T\> workflow
+
+Every throwing method on `JSON` and `EmbeddedJSON` has a `...Result` counterpart that returns a `Result<T>` instead of throwing.
+This lets you use JSON_Lib safely on targets where C++ exceptions are disabled (`-fno-exceptions`) or simply undesirable.
+
+### `Result<T>` structure
+
+```cpp
+template<typename T>
+struct Result {
+    Status                status;    // Status::Ok on success
+    std::unique_ptr<T>    value;     // valid only when ok()
+    std::string           message;   // human-readable error description
+    std::pair<long,long>  position;  // {lineNo, column} where the error occurred
+
+    bool ok()      const noexcept;   // true iff status == Status::Ok
+    T   &unwrap();                   // dereferences value (UB if !ok())
+};
+
+template<>
+struct Result<void> {
+    Status                status;
+    std::string           message;
+    std::pair<long,long>  position;
+
+    bool ok() const noexcept;
+};
+```
+
+`Status` values: `Ok`, `SyntaxError`, `OutOfMemory`, `InvalidKey`, `InvalidIndex`,
+`UnsupportedEncoding`, `InvalidInput`, `NoData`, `UnknownError`.
+
+### Parse — full workflow
+
+```cpp
+#include "JSON.hpp"
+#include "implementation/io/JSON_Sources.hpp"
+#include "implementation/io/JSON_Destinations.hpp"
+
+namespace js = JSON_Lib;
+
+js::JSON json;
+auto result = json.parseResult(js::BufferSource{jsonText});
+
+// 1. Check success
+if (!result.ok()) {
+    std::fprintf(stderr, "parse error at line %ld col %ld: %s\n",
+        result.position.first,
+        result.position.second,
+        result.message.c_str());
+    return false;
+}
+
+// 2. Use the tree — result.value is a std::unique_ptr<Node>
+//    (for parseResult the Node has already been stored in json.root();
+//     result.value is unused for this overload)
+std::string name = js::NRef<js::String>(json["name"]).value();
+```
+
+### Stringify / print
+
+```cpp
+js::BufferDestination dest;
+auto sr = json.stringifyResult(dest);
+if (!sr.ok()) {
+    // sr.status, sr.message, sr.position available
+}
+
+auto pr = json.printResult(dest);
+if (!pr.ok()) { /* ... */ }
+```
+
+### Traverse
+
+```cpp
+Counter counter;
+auto tr = json.traverseResult(counter);
+if (!tr.ok()) { /* tr.message */ }
+```
+
+### Switching on `Status`
+
+```cpp
+switch (result.status) {
+    case js::Status::Ok:               /* success */ break;
+    case js::Status::SyntaxError:      /* bad JSON */ break;
+    case js::Status::InvalidKey:       /* key not found */ break;
+    case js::Status::InvalidIndex:     /* array out of bounds */ break;
+    case js::Status::UnsupportedEncoding: /* unknown BOM/encoding */ break;
+    default:                           /* other */ break;
+}
+```
+
+### Using `EmbeddedJSON` exception-free variants
+
+`EmbeddedJSON` exposes `parseNoThrow`, `stringifyNoThrow`, `printNoThrow`, and `traverseNoThrow`
+which are identical in behaviour to the `...Result` overloads but carry the `NoThrow` name
+convention that embedded code-review tools recognise:
+
+```cpp
+js::EmbeddedJSON embedded;
+js::FixedBufferDestination<256> out;
+
+auto r = embedded.parseNoThrow(js::FixedBufferSource{kConfig, sizeof(kConfig)-1});
+if (!r.ok()) { handle_error(r.message); return; }
+
+auto sr = embedded.stringifyNoThrow(out);
+if (!sr.ok()) { handle_error(sr.message); return; }
+```
+
+> **Tip:** Prefer `...Result` / `NoThrow` overloads in all new code that needs to run without
+> exceptions, especially on RTOS targets where stack-unwinding tables may be stripped.
 
 ---
 
