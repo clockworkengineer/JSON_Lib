@@ -13,6 +13,16 @@
 
 namespace JSON_Lib {
 
+// -----------------------------------------------------------------------
+// pImpl idiom: the JSON class is the public API façade.  Every instance
+// method delegates to JSON_Impl (held as a unique_ptr<JSON_Impl> impl_).
+// This keeps the library's internal headers out of the public interface
+// and allows the implementation to change without recompiling callers.
+//
+// To follow a method's logic, find its counterpart in JSON_Impl.hpp /
+// JSON_Impl.cpp — the JSON:: body is always a one-line forward to impl_.
+// -----------------------------------------------------------------------
+
 // =========================
 // JSON forward declarations
 // =========================
