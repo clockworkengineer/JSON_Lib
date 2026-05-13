@@ -123,9 +123,10 @@ TEST_CASE("Check Node indexing on directly constructed nodes.", "[JSON][Node][In
     REQUIRE(isA<Object>(jNode));
     REQUIRE(NRef<String>(jNode["name"]).value() == "Alice");
   }
-  SECTION("Build array via numeric indexing on a Hole Node (auto-resize).", "[JSON][Node][Index]")
+  SECTION("Build array via explicit resize on a Hole Node.", "[JSON][Node][Index]")
   {
     Node jNode = Node::make<Hole>();
+    jNode.resize(2);
     jNode[2] = 42;
     REQUIRE(isA<Array>(jNode));
     REQUIRE(NRef<Array>(jNode).size() == 3);

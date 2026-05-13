@@ -94,6 +94,8 @@ public:
   // Get JSON array entry at index
   Node &operator[](std::size_t index);
   const Node &operator[](std::size_t index) const;
+  // Resize the root array explicitly without silent growth.
+  void resize(std::size_t index);
 #if !JSON_LIB_NO_STDIO
   // Read/Write JSON from the file
   static std::string fromFile(const std::string_view &fileName);

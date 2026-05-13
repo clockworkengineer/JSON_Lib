@@ -39,6 +39,8 @@ public:
   // Get JSON array element at index
   Node &operator[](std::size_t index);
   const Node &operator[](std::size_t index) const;
+  // Resize array root to support explicit array growth
+  void resize(std::size_t index);
   // Traverse JSON tree
   void traverse(IAction &action);
   void traverse(IAction &action) const;

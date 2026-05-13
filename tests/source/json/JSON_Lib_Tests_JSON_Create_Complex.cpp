@@ -31,9 +31,13 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
     JSON json;
     json["pi"] = 3.141;
     json["happy"] = true;
-    json["name"][5] = "Niels";
+    auto &nameArray = json["name"];
+    nameArray.resize(5);
+    nameArray[5] = "Niels";
     json["nothing"] = nullptr;
-    json["answer"]["everything"][5] = 42;
+    auto &everythingArray = json["answer"]["everything"];
+    everythingArray.resize(5);
+    everythingArray[5] = 42;
     BufferDestination jsonDestination;
     REQUIRE_NOTHROW(json.stringify(jsonDestination));
     REQUIRE(
@@ -145,6 +149,7 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
   SECTION("Create an array of objects and stringify.", "[JSON][Create][Complex][ArrayOfObjects]")
   {
     JSON json;
+    json.resize(1);
     json[0] = Node{ { { "name", "Alice" }, { "age", 30 } } };
     json[1] = Node{ { { "name", "Bob" }, { "age", 25 } } };
     BufferDestination dest;
@@ -164,10 +169,14 @@ TEST_CASE("Check JSON create complex JSON structures.", "[JSON][Create][Complex]
   SECTION("Deep mixed nesting: array inside array inside object.", "[JSON][Create][Complex][Deep]")
   {
     JSON json;
-    json["grid"][0][0] = 1;
-    json["grid"][0][1] = 2;
-    json["grid"][1][0] = 3;
-    json["grid"][1][1] = 4;
+    auto &grid = json["grid"];
+    grid.resize(1);
+    grid[0].resize(1);
+    grid[1].resize(1);
+    grid[0][0] = 1;
+    grid[0][1] = 2;
+    grid[1][0] = 3;
+    grid[1][1] = 4;
     BufferDestination dest;
     REQUIRE_NOTHROW(json.stringify(dest));
     REQUIRE(dest.toString() == R"({"grid":[[1,2],[3,4]]})");

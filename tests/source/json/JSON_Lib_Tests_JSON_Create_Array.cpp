@@ -19,6 +19,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Initialise root JSON array with one entry containing a integer.", "[JSON][Create][Array][Number]")
   {
     JSON json;
+    json.resize(0);
     json[0] = 300;
     REQUIRE_FALSE(!isA<Number>(json[0]));
     REQUIRE(NRef<Number>(json.root()[0]).value<int>() == 300);
@@ -26,6 +27,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Initialise root JSON array with one entry containing a long.", "[JSON][Create][Array][Number]")
   {
     JSON json;
+    json.resize(0);
     json[0] = 30000l;
     REQUIRE_FALSE(!isA<Number>(json[0]));
     REQUIRE(NRef<Number>(json.root()[0]).value<long>() == 30000);
@@ -33,6 +35,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Initialise root JSON array with one entry containing a long long.", "[JSON][Create][Array][Number]")
   {
     JSON json;
+    json.resize(0);
     json[0] = 30000ll;
     REQUIRE_FALSE(!isA<Number>(json[0]));
     REQUIRE(NRef<Number>(json.root()[0]).value<long long>() == 30000);
@@ -40,6 +43,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Initialise root JSON array with one entry containing a float.", "[JSON][Create][Array][Number]")
   {
     JSON json;
+    json.resize(0);
     json[0] = 3.141f;
     REQUIRE_FALSE(!isA<Number>(json[0]));
     REQUIRE_FALSE(!equalFloatingPoint(NRef<Number>(json.root()[0]).value<float>(), 3.141f, 0.0001));
@@ -47,6 +51,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Initialise root JSON array with one entry containing a double.", "[JSON][Create][Array][Number]")
   {
     JSON json;
+    json.resize(0);
     json[0] = 3.141l;
     REQUIRE_FALSE(!isA<Number>(json[0]));
     REQUIRE_FALSE(!equalFloatingPoint(NRef<Number>(json.root()[0]).value<long double>(), 3.141l, 0.0001));
@@ -54,6 +59,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Initialise root JSON array with one entry containing a long double.", "[JSON][Create][Array][Number]")
   {
     JSON json;
+    json.resize(0);
     json[0] = 3.141;
     REQUIRE_FALSE(!isA<Number>(json[0]));
     REQUIRE_FALSE(!equalFloatingPoint(NRef<Number>(json.root()[0]).value<double>(), 3.141, 0.0001));
@@ -61,6 +67,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Initialise root JSON array with one entry containing a const char *.", "[JSON][Create][Array][String]")
   {
     JSON json;
+    json.resize(0);
     json[0] = "robert";
     REQUIRE_FALSE(!isA<String>(json[0]));
     REQUIRE(NRef<String>(json.root()[0]).value() == "robert");
@@ -68,6 +75,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Initialise root JSON array with one entry containing a std::string.", "[JSON][Create][Array][String]")
   {
     JSON json;
+    json.resize(0);
     json[0] = std::string{ "robert" };
     REQUIRE_FALSE(!isA<String>(json[0]));
     REQUIRE(NRef<String>(json.root()[0]).value() == "robert");
@@ -75,6 +83,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Initialise root JSON array with one entry containing a boolean.", "[JSON][Create][Array][Boolean]")
   {
     JSON json;
+    json.resize(0);
     json[0] = true;
     REQUIRE_FALSE(!isA<Boolean>(json[0]));
     REQUIRE_FALSE(!NRef<Boolean>(json.root()[0]).value());
@@ -82,6 +91,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Initialise root JSON array with one entry containing a null.", "[JSON][Create][Array][null]")
   {
     JSON json;
+    json.resize(0);
     json[0] = nullptr;
     REQUIRE_FALSE(!isA<Null>(json[0]));
     REQUIRE(NRef<Null>(json.root()[0]).value() == nullptr);
@@ -89,6 +99,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Create two level array with null at the base and stringify.", "[JSON][Create][Array][null]")
   {
     JSON json;
+    json[0].resize(0);
     json[0][0] = nullptr;
     REQUIRE_FALSE(!isA<Null>(json[0][0]));
     REQUIRE(NRef<Null>(json.root()[0][0]).value() == nullptr);
@@ -99,6 +110,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Create array with free spaces string at the base and stringify.", "[JSON][Create][Array][null]")
   {
     JSON json;
+    json.resize(5);
     json[5] = "test";
     REQUIRE_FALSE(!isA<String>(json[5]));
     REQUIRE(NRef<String>(json.root()[5]).value() == "test");
@@ -109,6 +121,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Create array with free spaces add an number at the base and stringify.", "[JSON][Create][Array][null]")
   {
     JSON json;
+    json.resize(5);
     json[5] = "test";
     REQUIRE_FALSE(!isA<String>(json[5]));
     REQUIRE(NRef<String>(json.root()[5]).value() == "test");
@@ -122,6 +135,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Create array with initializer list assignment.", "[JSON][Create][Array][initializer]")
   {
     JSON json;
+    json.resize(5);
     json[5] = { 1.0, 2.0, 3, 4.333, "5.0", "test test test test", false, nullptr };
     REQUIRE_FALSE(!isA<Number>(json[5][0]));
     REQUIRE_FALSE(!isA<Number>(json[5][1]));
@@ -166,6 +180,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Overwrite an existing array element and validate.", "[JSON][Create][Array][Overwrite]")
   {
     JSON json;
+    json.resize(0);
     json[0] = 42;
     REQUIRE(NRef<Number>(json.root()[0]).value<int>() == 42);
     json[0] = "replaced";
@@ -175,6 +190,7 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   SECTION("Build array sequentially and verify size().", "[JSON][Create][Array][Size]")
   {
     JSON json;
+    json.resize(2);
     json[0] = 10;
     json[1] = 20;
     json[2] = 30;
@@ -191,8 +207,8 @@ TEST_CASE("Check JSON array creation api.", "[JSON][Create][Array]")
   }
   SECTION("Create three-level nested array and stringify.", "[JSON][Create][Array][Nested]")
   {
-    JSON json;
-    json[0][0][0] = 99;
+    JSON json;    json[0].resize(0);
+    json[0][0].resize(0);    json[0][0][0] = 99;
     BufferDestination dest;
     REQUIRE_NOTHROW(json.stringify(dest));
     REQUIRE(dest.toString() == "[[[99]]]");

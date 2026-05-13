@@ -102,12 +102,9 @@ Result<void> JSON::traverseResult(IAction &action) const { return std::as_const(
 /// <param name="key">Object entry (Node) key.</param>
 Node &JSON::operator[](const std::string_view &key) { return (*implementation)[key]; }
 const Node &JSON::operator[](const std::string_view &key) const { return (*implementation)[key]; }
-/// <summary>
-/// Return array entry for the passed in index.
-/// </summary>
-/// <param name="index">Array entry (Node) index.</param>
 Node &JSON::operator[](const std::size_t index) { return (*implementation)[index]; }
 const Node &JSON::operator[](const std::size_t index) const { return (*implementation)[index]; }
+void JSON::resize(const std::size_t index) { implementation->resize(index); }
 /// <summary>
 /// Return root of JSON tree.
 /// </summary>

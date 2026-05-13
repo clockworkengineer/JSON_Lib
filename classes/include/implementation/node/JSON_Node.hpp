@@ -67,6 +67,7 @@ struct Node
   const Node &operator[](const std::string_view &key) const;
   Node &operator[](std::size_t index);
   const Node &operator[](std::size_t index) const;
+  void resize(std::size_t index);
   template<typename T> using BaseType = std::remove_cv_t<T>;
   template<typename T> using StorageType = std::conditional_t<
       std::is_same_v<BaseType<T>, Object>, std::unique_ptr<Object>,

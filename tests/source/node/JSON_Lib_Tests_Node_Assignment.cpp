@@ -179,9 +179,10 @@ TEST_CASE("Check Node type checking and indexing edge cases.", "[JSON][Node][Ass
     REQUIRE_THROWS_AS(constNode[10], Node::Error);
     REQUIRE_THROWS_WITH(constNode[10], "Node Error: Invalid index used to access array.");
   }
-  SECTION("Non-const out-of-bounds array index auto-resizes array with Holes.", "[JSON][Node][Assignment]")
+  SECTION("Resize a Hole array before assigning a distant index.", "[JSON][Node][Assignment]")
   {
     jNode = { 1, 2 };
+    jNode.resize(4);
     jNode[4] = 99;
     REQUIRE(isA<Array>(jNode));
     auto &array = NRef<Array>(jNode).value();

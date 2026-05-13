@@ -147,13 +147,18 @@ Node &JSON_Impl::operator[](const std::string_view &key)
 const Node &JSON_Impl::operator[](const std::string_view &key) const { return jNodeRoot[key]; }
 Node &JSON_Impl::operator[](const std::size_t index)
 {
-  try {
-    if (jNodeRoot.isEmpty()) { jNodeRoot = Node::make<Array>(); }
-    return jNodeRoot[index];
-  } catch (Node::Error &) {
+  if (jNodeRoot.isEmpty()) {
+    jNodeRoot = Node::make<Array>();
     NRef<Array>(jNodeRoot).resize(index);
     return jNodeRoot[index];
   }
+  return jNodeRoot[index];
 }
 const Node &JSON_Impl::operator[](const std::size_t index) const { return jNodeRoot[index]; }
+
+void JSON_Impl::resize(std::size_t index)
+{
+  if (jNodeRoot.isEmpty()) { jNodeRoot = Node::make<Array>(); }
+  jNodeRoot.resize(index);
+}
 }// namespace JSON_Lib
