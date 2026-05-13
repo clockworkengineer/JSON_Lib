@@ -18,6 +18,32 @@ struct Node;
 /// visits each node in the JSON tree.  The non-const overloads allow
 /// in-place tree modification; the const overloads are for read-only
 /// inspection.  Default implementations are no-ops.
+///
+/// ## Traversal contract
+///
+/// Traversal is **pre-order depth-first**.  For every node the following
+/// sequence is guaranteed:
+///
+///   1. `onNode(node)` — fires unconditionally for every node.
+///   2. Type-specific callback — fires immediately after `onNode`:
+///      - Leaf nodes  : `onNumber`, `onString`, `onBoolean`, or `onNull`.
+///      - `Object`    : `onObject`, then step 1–2 recurse for each entry
+///                      value in insertion order.
+///      - `Array`     : `onArray`, then step 1–2 recurse for each element
+///                      in index order.
+///      - `Hole`      : no type-specific callback.
+///
+/// Example call sequence for `{ "x": [1, 2] }`:
+/// @code
+///   onNode(objectNode)
+///   onObject(objectNode)
+///     onNode(arrayNode)          // value of "x"
+///     onArray(arrayNode)
+///       onNode(numberNode_1)
+///       onNumber(numberNode_1)
+///       onNode(numberNode_2)
+///       onNumber(numberNode_2)
+/// @endcode
 class IAction
 {
 public:
