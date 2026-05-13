@@ -38,8 +38,8 @@ public:
   JSON_LIB_NODISCARD virtual long getIndent() const JSON_LIB_NOEXCEPT { return 0; }
   virtual void setIndent(long) JSON_LIB_NOEXCEPT {}
 };
-// Make custom stringify to pass to JSON constructor: Pointer is tidied up internally.
-template <typename T> IStringify *makeStringify() {
-  return std::make_unique<T>().release();
+// Make a custom stringify to pass to the JSON constructor.
+template <typename T> std::unique_ptr<IStringify> makeStringify() {
+  return std::make_unique<T>();
 }
 }// namespace JSON_Lib

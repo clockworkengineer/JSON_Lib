@@ -12,18 +12,18 @@
 
 namespace JSON_Lib {
 
-JSON_Impl::JSON_Impl(IStringify *stringify, IParser *parser)
+JSON_Impl::JSON_Impl(std::unique_ptr<IStringify> stringify, std::unique_ptr<IParser> parser)
 {
   jsonTranslator = std::make_unique<Default_Translator>();
   if (parser == nullptr) {
     jsonParser = std::make_unique<Default_Parser>(*jsonTranslator);
   } else {
-    jsonParser.reset(parser);
+    jsonParser = std::move(parser);
   }
   if (stringify == nullptr) {
     jsonStringify = std::make_unique<Default_Stringify>();
   } else {
-    jsonStringify.reset(stringify);
+    jsonStringify = std::move(stringify);
   }
 }
 void JSON_Impl::setIndent(const long indent)

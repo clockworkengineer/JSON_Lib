@@ -11,7 +11,7 @@ class JSON_Impl
 {
 public:
   // Constructors/Destructors
-  JSON_Impl(IStringify *stringify, IParser *parser);
+  JSON_Impl(std::unique_ptr<IStringify> stringify, std::unique_ptr<IParser> parser);
   JSON_Impl(const JSON_Impl &other) = delete;
   JSON_Impl &operator=(const JSON_Impl &other) = delete;
   JSON_Impl(JSON_Impl &&other) = delete;
