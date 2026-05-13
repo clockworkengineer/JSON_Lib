@@ -9,10 +9,19 @@ class Default_Parser final : public IParser
 {
 public:
   // Default maximum parser depth
+  //
+  // Controls how deeply nested a JSON document may be before the parser aborts
+  // with "Maximum parser depth exceeded".  Many real-world documents (Kubernetes
+  // manifests, MongoDB BSON-derived JSON, deeply nested configs) exceed depth 10.
+  // 128 is a pragmatic default that handles virtually all real documents while
+  // still providing a safety bound against deeply-recursive DoS payloads.
+  //
+  // Override at configure time via -DJSON_LIB_MAX_PARSER_DEPTH=N, or at
+  // runtime per-instance via setMaxParserDepth(n).
 #if JSON_LIB_MAX_PARSER_DEPTH
   constexpr static unsigned long kDefaultMaxParserDepth = JSON_LIB_MAX_PARSER_DEPTH;
 #else
-  constexpr static unsigned long kDefaultMaxParserDepth = 10;
+  constexpr static unsigned long kDefaultMaxParserDepth = 128;
 #endif
 
   explicit Default_Parser(ITranslator &translator) : jsonTranslator(translator) {}
