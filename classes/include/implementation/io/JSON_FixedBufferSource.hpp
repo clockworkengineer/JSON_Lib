@@ -40,7 +40,8 @@ public:
 
   void next() override
   {
-    if (!more()) { JSON_THROW(Error("Tried to read past end of buffer.")); }
+    if (!valid_) { return; }
+    if (position_ >= length_) { JSON_THROW(Error("Tried to read past end of buffer.")); }
     ++position_;
     ++column;
     if (current() == kLineFeed) {
@@ -59,9 +60,7 @@ public:
   }
 
   JSON_LIB_NODISCARD std::size_t position() const JSON_LIB_NOEXCEPT override { return position_; }
-#if JSON_LIB_NO_EXCEPTIONS
   JSON_LIB_NODISCARD bool valid() const noexcept { return valid_; }
-#endif
 
 private:
   void backup(const unsigned long length) override { position_ -= length; }
