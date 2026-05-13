@@ -118,8 +118,7 @@ TEST_CASE("Benchmark JSON parse/stringify/traverse performance.", "[Benchmark]")
   BENCHMARK("Embedded parse and stringify with fixed destination")
   {
     EmbeddedJSON embedded;
-    const auto payload = R"({"status":"ok","count":123})";
-    embedded.parse(BufferSource{payload});
+    embedded.parse(BufferSource{R"({"status":"ok","count":123})"});
     FixedBufferDestination<128> destination;
     embedded.stringify(destination);
     return destination.size();

@@ -2,7 +2,6 @@
 #include "JSON_Throw.hpp"
 #include "ISource.hpp"
 
-#include <cstring>
 #include <string>
 #include <string_view>
 #include <type_traits>
@@ -22,9 +21,13 @@ public:
     checkNotEmpty(ownedBuffer.empty());
   }
 
-  explicit BufferSource(const char *buffer) : buffer(buffer, buffer ? std::strlen(buffer) : 0)
+  /// @brief String-literal overload — uses compile-time size so no strlen is
+  /// needed and no embedded-null truncation can occur.  Preferred over any
+  /// runtime (const char*) path for string literals.
+  template<std::size_t N>
+  explicit BufferSource(const char (&literal)[N]) : buffer(literal, N - 1)
   {
-    checkNotEmpty(buffer == nullptr || buffer[0] == '\0');
+    checkNotEmpty(N <= 1);
   }
 
   explicit BufferSource(const std::string_view &buffer) : buffer(buffer)
