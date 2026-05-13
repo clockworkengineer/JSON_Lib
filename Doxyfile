@@ -1,0 +1,80 @@
+# Doxyfile for JSON_Lib
+# Generated as part of the documentation infrastructure (task 2a).
+# Run: doxygen Doxyfile   (from the repository root)
+# Output: docs/doxygen/html/index.html
+
+#---------------------------------------------------------------------------
+# Project
+#---------------------------------------------------------------------------
+PROJECT_NAME           = "JSON_Lib"
+PROJECT_NUMBER         = 1.2.0
+PROJECT_BRIEF          = "Modern C++23 JSON parsing and serialisation library"
+OUTPUT_DIRECTORY       = docs/doxygen
+
+#---------------------------------------------------------------------------
+# Input
+#---------------------------------------------------------------------------
+INPUT                  = classes/include \
+                         classes/source
+RECURSIVE              = YES
+FILE_PATTERNS          = *.hpp *.cpp *.h
+EXCLUDE                = build/ \
+                         _deps/ \
+                         classes/include/implementation/common/JSON_Attributes.hpp
+EXCLUDE_PATTERNS       = */build/* \
+                         */_deps/*
+
+#---------------------------------------------------------------------------
+# Extraction
+#---------------------------------------------------------------------------
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+INTERNAL_DOCS          = NO
+
+#---------------------------------------------------------------------------
+# Build options
+#---------------------------------------------------------------------------
+JAVADOC_AUTOBRIEF      = NO
+QT_AUTOBRIEF           = NO
+MULTILINE_CPP_IS_BRIEF = NO
+INHERIT_DOCS           = YES
+SEPARATE_MEMBER_PAGES  = NO
+TAB_SIZE               = 2
+
+#---------------------------------------------------------------------------
+# Output formats
+#---------------------------------------------------------------------------
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+GENERATE_LATEX         = NO
+GENERATE_XML           = NO
+GENERATE_MAN           = NO
+
+#---------------------------------------------------------------------------
+# Source browsing
+#---------------------------------------------------------------------------
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = NO
+REFERENCES_RELATION    = YES
+VERBATIM_HEADERS       = YES
+
+#---------------------------------------------------------------------------
+# Preprocessing
+#---------------------------------------------------------------------------
+ENABLE_PREPROCESSING   = YES
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = NO
+PREDEFINED             = JSON_LIB_NODISCARD= \
+                         JSON_LIB_NOEXCEPT= \
+                         JSON_LIB_INLINE=inline
+
+#---------------------------------------------------------------------------
+# Dot / graphs (optional — requires Graphviz)
+#---------------------------------------------------------------------------
+HAVE_DOT               = NO
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = YES
+INCLUDE_GRAPH          = YES
+INCLUDED_BY_GRAPH      = YES

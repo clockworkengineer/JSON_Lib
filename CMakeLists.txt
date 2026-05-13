@@ -262,6 +262,17 @@ install(TARGETS ${JSON_LIBRARY_NAME}
   RUNTIME DESTINATION bin
 )
 
+# Optional Doxygen documentation target
+find_package(Doxygen OPTIONAL_COMPONENTS dot)
+if(DOXYGEN_FOUND)
+  add_custom_target(docs
+    COMMAND ${DOXYGEN_EXECUTABLE} ${PROJECT_SOURCE_DIR}/Doxyfile
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    COMMENT "Generating API documentation with Doxygen"
+    VERBATIM
+  )
+endif()
+
 if(JSON_LIB_EXPORT_INTERFACE)
   install(FILES
     ${PROJECT_SOURCE_DIR}/classes/include/JSON.hpp
