@@ -56,10 +56,10 @@ public:
   // Get JSON library version
   JSON_LIB_NODISCARD static std::string version();
   // Parse JSON into the tree
-  void parse(ISource &source) const;
-  void parse(ISource &&source) const;
-  JSON_LIB_NODISCARD Result<Node> parseResult(ISource &source) const;
-  JSON_LIB_NODISCARD Result<Node> parseResult(ISource &&source) const;
+  void parse(ISource &source);
+  void parse(ISource &&source);
+  JSON_LIB_NODISCARD Result<Node> parseResult(ISource &source);
+  JSON_LIB_NODISCARD Result<Node> parseResult(ISource &&source);
   // Create JSON text string from Node tree (no whitespace)
   void stringify(IDestination &destination) const;
   void stringify(IDestination &&destination) const;
@@ -119,8 +119,8 @@ public:
   static constexpr bool isNoDynamicMemoryBuild() noexcept { return JSON_LIB_NO_DYNAMIC_MEMORY; }
 
   // Exception-free API — preferred for embedded targets
-  JSON_LIB_NODISCARD Result<Node> parseNoThrow(ISource &source) const;
-  JSON_LIB_NODISCARD Result<Node> parseNoThrow(ISource &&source) const;
+  JSON_LIB_NODISCARD Result<Node> parseNoThrow(ISource &source);
+  JSON_LIB_NODISCARD Result<Node> parseNoThrow(ISource &&source);
   JSON_LIB_NODISCARD Result<void> stringifyNoThrow(IDestination &destination) const  { return stringifyResult(destination); }
   JSON_LIB_NODISCARD Result<void> stringifyNoThrow(IDestination &&destination) const { return stringifyResult(std::move(destination)); }
   JSON_LIB_NODISCARD Result<void> printNoThrow(IDestination &destination) const  { return printResult(destination); }

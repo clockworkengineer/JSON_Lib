@@ -4,7 +4,7 @@
 
 TEST_CASE("Check JSON stringification to YAML of simple types.", "[JSON][Stringify][Simple][YAML]")
 {
-  const JSON json(makeStringify<YAML_Stringify>());
+  JSON json(makeStringify<YAML_Stringify>());
   SECTION("Stringify a string (abcdefghijklmnopqrstuvwxyz) to YAML.", "[JSON][Stringify][String][YAML]")
   {
     BufferDestination jsonDestination;

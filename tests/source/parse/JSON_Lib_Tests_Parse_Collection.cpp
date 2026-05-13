@@ -2,7 +2,7 @@
 
 TEST_CASE("Check JSON parsing of collection types (array,object).", "[JSON][Parse][Collection]")
 {
-  const JSON json;
+  JSON json;
   SECTION(R"(Parse an object ({"name":"Robert","Age":15}).)", "[JSON][Parse][Collection]")
   {
     BufferSource jsonSource{ R"({"name":"Robert","Age":15})" };
@@ -73,7 +73,7 @@ TEST_CASE("Check JSON parsing of collection types (array,object).", "[JSON][Pars
 
 TEST_CASE("Check JSON parsing of collection types and check values.", "[JSON][Parse][Collection][validate]")
 {
-  const JSON json;
+  JSON json;
   SECTION(R"(Parse an object {"name":"Robert","Age":15} and check its value.)", "[JSON][Parse][Collection][validate]")
   {
     BufferSource jsonSource{ R"({"Name":"Robert","Age":15})" };

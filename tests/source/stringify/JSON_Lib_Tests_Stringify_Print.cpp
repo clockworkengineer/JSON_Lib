@@ -2,7 +2,7 @@
 
 TEST_CASE("Check Check printing of JSON to a buffer.", "[JSON][Print][Buffer]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Print a simple array to a buffer.", "[JSON][Print][Array][Buffer]")
   {
     const std::string expected{ R"([
@@ -181,7 +181,7 @@ TEST_CASE("Check Check printing of JSON to a buffer.", "[JSON][Print][Buffer]")
 // ========================================
 TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Print a simple array to a file.", "[JSON][Print][Array][File]")
   {
     const std::string expected{ R"([
@@ -309,7 +309,7 @@ TEST_CASE("Check Check printing of JSON to a file.", "[JSON][Print][File]")
 // =========================
 TEST_CASE("Check Check setting of print indentation.", "[JSON][Print][Indent]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Set ident to 8 and print JSON to a buffer.", "[JSON][Print][Ident][Buffer]")
   {
     const std::string expected{ R"({
@@ -400,7 +400,7 @@ TEST_CASE("Check Check setting of print indentation.", "[JSON][Print][Indent]")
 // =======================
 TEST_CASE("Check JSON print of list of example JSON files.", "[JSON][Print]")
 {
-  const JSON json;
+  JSON json;
   TEST_FILE_LIST(testFile);
   SECTION("Print to  buffer and check value.", "[JSON][Print][Buffer]")
   {

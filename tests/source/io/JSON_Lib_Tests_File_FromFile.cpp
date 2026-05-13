@@ -68,7 +68,7 @@ TEST_CASE("Checks for fromFile() api.", "[JSON][FromFile]")
   }
   SECTION("Check that fromFile() result can be successfully parsed.", "[JSON][FromFile][Parse]")
   {
-    const JSON json;
+    JSON json;
     REQUIRE_NOTHROW(json.parse(BufferSource{ JSON::fromFile(prefixTestDataPath(kSingleJSONFile)) }));
     REQUIRE(isA<Object>(json.root()));
   }

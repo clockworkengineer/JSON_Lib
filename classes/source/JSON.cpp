@@ -58,10 +58,10 @@ void JSON::strip(ISource &&source, IDestination &&destination)  { JSON_Impl::str
 /// Create Node structure by parsing JSON on the source stream.
 /// </summary>
 /// <param name="source">Source for JSON encoded bytes.</param>
-void JSON::parse(ISource &source) const { implementation->parse(source); }
-void JSON::parse(ISource &&source) const { implementation->parse(source); }
-Result<Node> JSON::parseResult(ISource &source) const { return implementation->parseResult(source); }
-Result<Node> JSON::parseResult(ISource &&source) const { return implementation->parseResult(source); }
+void JSON::parse(ISource &source) { implementation->parse(source); }
+void JSON::parse(ISource &&source) { implementation->parse(source); }
+Result<Node> JSON::parseResult(ISource &source) { return implementation->parseResult(source); }
+Result<Node> JSON::parseResult(ISource &&source) { return implementation->parseResult(source); }
 /// <summary>
 /// Traverse Node structure and build its JSON string (no whitespace) on destination stream.
 /// </summary>
@@ -140,6 +140,6 @@ JSON::Format JSON::getFileFormat(const std::string_view &fileName) { return JSON
 
 uint64_t EmbeddedJSON::Limits::maxStringLength() noexcept { return String::getMaxStringLength(); }
 unsigned long EmbeddedJSON::Limits::maxParserDepth() noexcept { return Default_Parser::getMaxParserDepth(); }
-Result<Node> EmbeddedJSON::parseNoThrow(ISource &source) const { return parseResult(source); }
-Result<Node> EmbeddedJSON::parseNoThrow(ISource &&source) const { return parseResult(source); }
+Result<Node> EmbeddedJSON::parseNoThrow(ISource &source) { return parseResult(source); }
+Result<Node> EmbeddedJSON::parseNoThrow(ISource &&source) { return parseResult(source); }
 }// namespace JSON_Lib

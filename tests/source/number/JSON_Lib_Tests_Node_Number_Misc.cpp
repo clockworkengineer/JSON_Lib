@@ -2,7 +2,7 @@
 
 TEST_CASE("Check Node Number conversion exceptions.", "[JSON][Node][Number][Exceptions]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Check integer with invalid characters.", "[JSON][Node][Number][Exceptions]")
   {
     BufferSource jsonSource{ "4345u334u" };

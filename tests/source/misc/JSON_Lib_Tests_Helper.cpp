@@ -65,7 +65,7 @@ void checkObject(const Node &jNode)
 /// <returns></returns>
 std::string stripWhiteSpace(const std::string &jsonBuffer)
 {
-  const JSON json;
+  JSON json;
   BufferDestination destination;
   json.strip(BufferSource{ jsonBuffer }, destination);
   return destination.toString();

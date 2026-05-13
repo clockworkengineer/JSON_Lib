@@ -64,13 +64,13 @@ public:
 
 TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
 {
-  const JSON bEncode;
+  JSON bEncode;
   SECTION("Decode an Integer (266) and traverse", "[JSON][Traverse][Integer]")
   {
     BufferSource source{ "266" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalInteger == 1);
     REQUIRE(analyzer.totalNumbers == 1);
@@ -81,7 +81,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "-266" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalInteger == 1);
     REQUIRE(analyzer.totalNumbers == 1);
@@ -92,7 +92,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "2147483647" };// sizeof(int) == sizeof(long)
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalInteger == 1);
     REQUIRE(analyzer.totalNumbers == 1);
@@ -102,7 +102,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "-2147483648" };// sizeof(int) == sizeof(long)
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalInteger == 1);
     REQUIRE(analyzer.totalNumbers == 1);
@@ -112,7 +112,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "2147483648" };// INT_MAX+1
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     if constexpr (sizeof(int) == sizeof(long)) {
       REQUIRE(analyzer.totalLongLong == 1);
@@ -127,7 +127,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "-2147483649" };// INT_MIN-1
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     if constexpr (sizeof(int) == sizeof(long)) {
       REQUIRE(analyzer.totalLongLong == 1);
@@ -141,7 +141,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "32.11999" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalFloat == 1);
     REQUIRE(analyzer.totalNumbers == 1);
@@ -151,7 +151,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "3.402823466e+39" };
     bEncode.parse(source);// sizeof(double) == sizeof(long double)
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalDouble == 1);
     REQUIRE(analyzer.totalNumbers == 1);
@@ -161,7 +161,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "1.7976931348623158e+308" };
     bEncode.parse(source);// sizeof(double) == sizeof(long double)
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalDouble == 1);
     REQUIRE(analyzer.totalNumbers == 1);
@@ -171,7 +171,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "true" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalBoolean == 1);
   }
@@ -180,7 +180,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "\"test\"" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalStrings == 1);
   }
@@ -189,7 +189,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "[1,2,3,4]" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 5);
     REQUIRE(analyzer.totalNumbers == 4);
     REQUIRE(analyzer.totalArrays == 1);
@@ -199,7 +199,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "{\"one\" : 1, \"two\" : 2, \"three\" : 3 }" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 4);
     REQUIRE(analyzer.totalNumbers == 3);
     REQUIRE(analyzer.totalObjects == 1);
@@ -209,7 +209,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "null" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNull == 1);
   }
   SECTION(
@@ -218,7 +218,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "{\"City\":\"London\",\"Population\":[1,2,3,4,5]}" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 8);
     REQUIRE(analyzer.totalObjects == 1);
     REQUIRE(analyzer.totalArrays == 1);
@@ -231,7 +231,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "[true,\"Out of time\",7.89043e+18,{\"key\":4444}]" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 6);
     REQUIRE(analyzer.totalObjects == 1);
     REQUIRE(analyzer.totalArrays == 1);
@@ -244,7 +244,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "false" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalBoolean == 1);
   }
@@ -253,7 +253,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "0" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalInteger == 1);
     REQUIRE(analyzer.totalNumbers == 1);
@@ -263,7 +263,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ R"("")" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalStrings == 1);
   }
@@ -272,7 +272,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "[]" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalArrays == 1);
     REQUIRE(analyzer.totalNumbers == 0);
@@ -282,7 +282,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "{}" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 1);
     REQUIRE(analyzer.totalObjects == 1);
     REQUIRE(analyzer.totalNumbers == 0);
@@ -292,7 +292,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ R"(["one","two","three"])" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 4);
     REQUIRE(analyzer.totalArrays == 1);
     REQUIRE(analyzer.totalStrings == 3);
@@ -302,7 +302,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "[true,false,true]" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 4);
     REQUIRE(analyzer.totalArrays == 1);
     REQUIRE(analyzer.totalBoolean == 3);
@@ -312,7 +312,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "[null,null,null]" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 4);
     REQUIRE(analyzer.totalArrays == 1);
     REQUIRE(analyzer.totalNull == 3);
@@ -322,7 +322,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ "[[1,2],[3,4]]" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 7);
     REQUIRE(analyzer.totalArrays == 3);
     REQUIRE(analyzer.totalNumbers == 4);
@@ -332,7 +332,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ R"({"a":{"b":{"c":1}}})" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 4);
     REQUIRE(analyzer.totalObjects == 3);
     REQUIRE(analyzer.totalNumbers == 1);
@@ -344,7 +344,7 @@ TEST_CASE("JSON BNode tree traverse tests ", "[JSON][Traverse]")
     BufferSource source{ R"({"name":"Alice","age":30,"active":true,"score":null})" };
     bEncode.parse(source);
     JSON_Analyzer analyzer;
-    bEncode.traverse(analyzer);
+    std::as_const(bEncode).traverse(analyzer);
     REQUIRE(analyzer.totalNodes == 5);
     REQUIRE(analyzer.totalObjects == 1);
     REQUIRE(analyzer.totalStrings == 1);

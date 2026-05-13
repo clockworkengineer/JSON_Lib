@@ -43,7 +43,7 @@ TEST_CASE("Check translation of surrogate pairs.", "[JSON][Translator]")
 
 TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][Node][R-Value-Reference]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Parse with R-Value reference (Buffer).", "[JSON][Node][R-Value-Reference]")
   {
     json.parse(BufferSource{ R"({"City":"Southampton","Population":500000 })" });
@@ -94,7 +94,7 @@ TEST_CASE("Check R-Value reference parse/stringify.", "[JSON][Node][R-Value-Refe
 
 TEST_CASE("Check white space stripping.", "[JSON][Parse][Strip]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Strip JSON with containing whitespace.", "[JSON][Parse][Strip]")
   {
     BufferSource jsonSource{ "[1,  \t 2,3,4,5,6,7  ]" };

@@ -2,7 +2,7 @@
 
 TEST_CASE("Check JSON stringification of a list of example JSON files.", "[JSON][Stringify]")
 {
-  const JSON json;
+  JSON json;
   TEST_FILE_LIST(testFile);
   SECTION("Stringify to  buffer and check value.", "[JSON][Stringify][Buffer]")
   {

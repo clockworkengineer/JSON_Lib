@@ -2,7 +2,7 @@
 
 TEST_CASE("Check Node Number conversion.", "[JSON][Node][Number]")
 {
-  const JSON json;
+  JSON json;
   // Note: That floating point -> integer will be rounded up/down
   SECTION("Float converted to int.", "[JSON][Node][Number][Float]")
   {

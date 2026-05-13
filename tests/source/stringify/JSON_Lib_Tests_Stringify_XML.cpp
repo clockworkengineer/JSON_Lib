@@ -3,7 +3,7 @@
 
 TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringify][Simple][XML]")
 {
-  const JSON json(makeStringify<XML_Stringify>());
+  JSON json(makeStringify<XML_Stringify>());
   SECTION("Stringify a string (abcdefghijklmnopqrstuvwxyz) to XML.", "[JSON][Stringify][String][XML]")
   {
     BufferDestination jsonDestination;

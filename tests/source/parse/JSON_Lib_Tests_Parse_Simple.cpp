@@ -2,7 +2,7 @@
 
 TEST_CASE("Check JSON parsing of simple types (number,string,boolean,null).", "[JSON][Parse][Simple]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Parse an string (example string).", "[JSON][Parse][Simple]")
   {
     BufferSource jsonSource{ R"("example string")" };
@@ -42,7 +42,7 @@ TEST_CASE("Check JSON parsing of simple types (number,string,boolean,null).", "[
 }
 TEST_CASE("Check JSON parsing of simple types and check values.", "[JSON][Parse][Simple][Validate]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Parse an string (example string) and check its value.", "[JSON][Parse][Simple][Validate]")
   {
     BufferSource jsonSource{ R"("example string")" };
@@ -88,7 +88,7 @@ TEST_CASE("Check JSON parsing of simple types and check values.", "[JSON][Parse]
 }
 TEST_CASE("Check JSON parsing of numbers (negative, float, large).", "[JSON][Parse][Simple][Number]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Parse negative integer (-1024) and check value.", "[JSON][Parse][Simple][Number]")
   {
     json.parse(BufferSource{ "-1024" });
@@ -139,7 +139,7 @@ TEST_CASE("Check JSON parsing of numbers (negative, float, large).", "[JSON][Par
 }
 TEST_CASE("Check JSON parsing of strings (edge cases).", "[JSON][Parse][Simple][String]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Parse a string containing only spaces and check value.", "[JSON][Parse][Simple][String]")
   {
     json.parse(BufferSource{ R"("   ")" });
@@ -163,7 +163,7 @@ TEST_CASE("Check JSON parsing of strings (edge cases).", "[JSON][Parse][Simple][
 }
 TEST_CASE("Check JSON parsing resets correctly between parses.", "[JSON][Parse][Simple][Reset]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Parse integer then string; root reflects latest parse.", "[JSON][Parse][Simple][Reset]")
   {
     BufferSource s1{ "42" };

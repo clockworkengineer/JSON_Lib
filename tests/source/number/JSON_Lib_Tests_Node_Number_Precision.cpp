@@ -5,7 +5,7 @@
 // =====================================
 TEST_CASE("Check Node Number floating point precision.", "[JSON][Node][Number][Float][Precision]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Floating point precision to 6 (default).", "[JSON][Node][Number][Float][Precision]")
   {
     std::string expected{ R"({"latitude":39.068341,"longitude":-70.741615})" };

@@ -3,7 +3,7 @@
 
 TEST_CASE("Check JSON stringification to Bencode of simple types.", "[JSON][Stringify][Simple][Bencode]")
 {
-  const JSON json(makeStringify<Bencode_Stringify>());
+  JSON json(makeStringify<Bencode_Stringify>());
   SECTION("Stringify a string (abcdefghijklmnopqrstuvwxyz) to Bencode.", "[JSON][Stringify][String][Bencode]")
   {
     BufferDestination jsonDestination;

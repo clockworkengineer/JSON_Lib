@@ -2,7 +2,7 @@
 
 TEST_CASE("Check Node reference functions work.", "[JSON][Node][Reference]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Number reference.", "[JSON][Node][Reference][Number]")
   {
     BufferSource jsonSource{ "45500" };
@@ -45,7 +45,7 @@ TEST_CASE("Check Node reference functions work.", "[JSON][Node][Reference]")
 
 TEST_CASE("Check Node reference function exceptions.", "[JSON][Node][Reference][Exception]")
 {
-  const JSON json;
+  JSON json;
   SECTION("String reference an number.", "[JSON][Node][Reference][String]")
   {
     BufferSource jsonSource{ "45500" };

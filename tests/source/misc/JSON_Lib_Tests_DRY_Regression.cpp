@@ -15,7 +15,7 @@ using namespace JSON_Lib;
 TEST_CASE("Object lookup via contains, find and operator[].", "[DRY][Object][Lookup]")
 {
   // Build object directly through Node API
-  const JSON json;
+  JSON json;
   json.parse(BufferSource{ R"({"alpha":1,"beta":2,"gamma":3})" });
   const Node &root = json.root();
 
@@ -56,7 +56,7 @@ TEST_CASE("Object lookup via contains, find and operator[].", "[DRY][Object][Loo
 
 TEST_CASE("Object lookup with keys containing special characters.", "[DRY][Object][Lookup][special]")
 {
-  const JSON json;
+  JSON json;
   json.parse(BufferSource{ R"({"key with spaces":true,"key/slash":false})" });
   const Node &root = json.root();
 
@@ -151,7 +151,7 @@ TEST_CASE("Node::visit dispatches to correct type.", "[DRY][Node][Visit]")
   }
   SECTION("visit dispatches Object (unwraps unique_ptr).", "[DRY][Node][Visit][Object]")
   {
-    const JSON json;
+    JSON json;
     json.parse(BufferSource{ R"({"k":1})" });
     bool called = false;
     json.root().visit(overloaded{
@@ -162,7 +162,7 @@ TEST_CASE("Node::visit dispatches to correct type.", "[DRY][Node][Visit]")
   }
   SECTION("visit dispatches Array (unwraps unique_ptr).", "[DRY][Node][Visit][Array]")
   {
-    const JSON json;
+    JSON json;
     json.parse(BufferSource{ R"([1,2,3])" });
     bool called = false;
     json.root().visit(overloaded{
@@ -180,7 +180,7 @@ TEST_CASE("Node::visit dispatches to correct type.", "[DRY][Node][Visit]")
 
 TEST_CASE("Compact and pretty-print stringify round-trips.", "[DRY][Stringify][RoundTrip]")
 {
-  const JSON json;
+  JSON json;
 
   SECTION("Compact object round-trip.", "[DRY][Stringify][RoundTrip][Object][Compact]")
   {

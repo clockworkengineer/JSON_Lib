@@ -2,7 +2,7 @@
 
 TEST_CASE("Check parser generated exceptions.", "[JSON][Parse][Exception]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Parse missing terminating '\"' in string.", "[JSON][Parse][Exception]")
   {
     BufferSource jsonSource{ R"({ "one" : "Apple })" };

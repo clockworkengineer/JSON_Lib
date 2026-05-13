@@ -2,7 +2,7 @@
 
 TEST_CASE("Check JSON object for decoding of strings with escape characters.", "[JSON][Parse][Escapes]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Parse JSON string with escapes '\\t' to buffer and check value.", "[JSON][Parse][Escapes]")
   {
     BufferSource jsonSource{ R"("abcdefghijklmnopqrstuvwxyz \t ")" };
@@ -167,7 +167,7 @@ TEST_CASE("Check JSON object for decoding of strings with escape characters.", "
 
 TEST_CASE("Check JSON parser throws on invalid escape sequences.", "[JSON][Parse][Escapes][Exception]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Parse JSON string with incomplete '\\u' escape (3 hex digits) and expect ITranslator::Error.",
     "[JSON][Parse][Escapes][Exception]")
   {

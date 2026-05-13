@@ -24,7 +24,7 @@ TEST_CASE("Check JSON parsing of a list of example JSON files.", "[JSON][Parse][
 }
 TEST_CASE("Check string overflow handling.", "[Bencode][String][Overflow]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Default max string 16K", "[Bencode][Parse][String]") { REQUIRE(String::getMaxStringLength() == 16 * 1024); }
   SECTION("Parse a string larger than the max allowed length of 16K", "[Bencode][Parse][String]")
   {
@@ -34,7 +34,7 @@ TEST_CASE("Check string overflow handling.", "[Bencode][String][Overflow]")
 }
 TEST_CASE("Check parse depth handling.", "[JSON][Parse][Depth]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Parse 2 nested list.", "[Bencode][Parse][Depth]") { REQUIRE_NOTHROW(json.parse(BufferSource("[[]]"))); }
   SECTION("Parse 11 nested list.", "[Bencode][Parse][Depth]")
   {
@@ -61,7 +61,7 @@ TEST_CASE("Check parse depth handling.", "[JSON][Parse][Depth]")
 }
 TEST_CASE("Check parse depth boundary conditions.", "[JSON][Parse][Depth][Boundary]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Parse array nested 9 levels deep (one below max) succeeds.", "[JSON][Parse][Depth][Boundary]")
   {
     REQUIRE_NOTHROW(json.parse(BufferSource("[[[[[[[[[]]]]]]]]]]")));
@@ -91,7 +91,7 @@ TEST_CASE("Check parse depth boundary conditions.", "[JSON][Parse][Depth][Bounda
 }
 TEST_CASE("Check string max length can be configured.", "[JSON][Parse][String][MaxLength]")
 {
-  const JSON json;
+  JSON json;
   SECTION("kDefMaxStringLength constant equals 16K.", "[JSON][Parse][String][MaxLength]") {
     REQUIRE(String::kDefMaxStringLength == 16 * 1024);
   }

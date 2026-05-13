@@ -2,7 +2,7 @@
 
 TEST_CASE("Check JSON parsing of various whitespace characters are ignored.", "[JSON][Parse][Whitespace]")
 {
-  const JSON json;
+  JSON json;
   std::string ws = "";
   SECTION(R"(Parse an array ["Dog",1964,true,null] with no whitespace.)", "[JSON][Parse][Whitespace]")
   {
@@ -85,7 +85,7 @@ TEST_CASE("Check JSON parsing of various whitespace characters are ignored.", "[
 }
 TEST_CASE("Check whitespace is ignored around simple scalar values.", "[JSON][Parse][Whitespace][Scalar]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Whitespace surrounding a number is ignored.", "[JSON][Parse][Whitespace][Scalar]")
   {
     json.parse(BufferSource{ "  \t 42 \n " });
@@ -118,7 +118,7 @@ TEST_CASE("Check whitespace is ignored around simple scalar values.", "[JSON][Pa
 }
 TEST_CASE("Check values are correct after parsing with whitespace.", "[JSON][Parse][Whitespace][Values]")
 {
-  const JSON json;
+  JSON json;
   SECTION(R"(Array ["Dog",1964,true,null] values correct after parsing with ' \t\n' whitespace.)",
     "[JSON][Parse][Whitespace][Values]")
   {
@@ -144,7 +144,7 @@ TEST_CASE("Check values are correct after parsing with whitespace.", "[JSON][Par
 }
 TEST_CASE("Check JSON parsing of Windows-style (\\r\\n) line endings.", "[JSON][Parse][Whitespace][CRLF]")
 {
-  const JSON json;
+  JSON json;
   SECTION(R"(Parse array with \r\n line endings.)", "[JSON][Parse][Whitespace][CRLF]")
   {
     json.parse(BufferSource{ "[\r\n  \"item1\",\r\n  42\r\n]" });
@@ -162,7 +162,7 @@ TEST_CASE("Check JSON parsing of Windows-style (\\r\\n) line endings.", "[JSON][
 }
 TEST_CASE("Check JSON parsing of pretty-printed (multiline) JSON.", "[JSON][Parse][Whitespace][Multiline]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Parse pretty-printed object with newlines and indentation.", "[JSON][Parse][Whitespace][Multiline]")
   {
     const std::string prettyJSON = R"({

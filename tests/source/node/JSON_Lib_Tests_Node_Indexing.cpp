@@ -2,7 +2,7 @@
 
 TEST_CASE("Check use of Node indexing operators.", "[JSON][Node][Index]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Parse dictionary and check its components using indexing.", "[JSON][Node][Index]")
   {
     BufferSource jsonSource{ R"({"City":"Southampton","Population":500000})" };
@@ -39,8 +39,8 @@ TEST_CASE("Check use of Node indexing operators.", "[JSON][Node][Index]")
   {
     BufferSource jsonSource{ R"([777,9000,"apples"])" };
     json.parse(jsonSource);
-    REQUIRE_THROWS_AS(isA<Array>(json.root()[3]), Node::Error);
-    REQUIRE_THROWS_WITH(isA<Array>(json.root()[3]), "Node Error: Invalid index used to access array.");
+    REQUIRE_THROWS_AS(isA<Array>(std::as_const(json).root()[3]), Node::Error);
+    REQUIRE_THROWS_WITH(isA<Array>(std::as_const(json).root()[3]), "Node Error: Invalid index used to access array.");
   }
   SECTION("Parse nested object and index into inner object.", "[JSON][Node][Index]")
   {

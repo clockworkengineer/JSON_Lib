@@ -2,7 +2,7 @@
 
 TEST_CASE("Check JSON stringification of strings with escape characters.", "[JSON][Stringify][Escapes]")
 {
-  const JSON json;
+  JSON json;
   SECTION("Stringify JSON string with escapes '/' to buffer and check value.", "[JSON][Stringify][Escapes]")
   {
     const std::string expected{ R"("abcdefghijklmnopqrstuvwxyz / \t ")" };
