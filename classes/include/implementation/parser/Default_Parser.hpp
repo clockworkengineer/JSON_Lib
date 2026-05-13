@@ -24,9 +24,9 @@ public:
   Default_Parser &operator=(Default_Parser &&other) = delete;
   ~Default_Parser() override = default;
 
-  // Get/Set parser max recursion depth
-  static void setMaxParserDepth(const unsigned long depth) { maxParserDepth = depth; }
-  static unsigned long getMaxParserDepth() { return maxParserDepth; }
+  // Get/Set parser max recursion depth (instance — not shared across JSON objects)
+  void setMaxParserDepth(unsigned long depth) override { m_maxParserDepth = depth; }
+  unsigned long getMaxParserDepth() const noexcept override { return m_maxParserDepth; }
 
   Node parse(ISource &source) override;
   Result<Node> parseResult(ISource &source) override;
@@ -34,7 +34,7 @@ public:
 private:
   // Parse JSON
   JSON_LIB_NODISCARD static Object::Entry
-    parseObjectEntry(ISource &source, const ITranslator &translator, unsigned long parserDepth);
+    parseObjectEntry(ISource &source, const ITranslator &translator, unsigned long parserDepth, unsigned long maxDepth);
   JSON_LIB_NODISCARD static Node
     parseString(ISource &source, const ITranslator &translator, unsigned long parserDepth);
   JSON_LIB_NODISCARD static Node parseNumber(ISource &source,
@@ -46,14 +46,14 @@ private:
   JSON_LIB_NODISCARD static Node parseNull(ISource &source,
     const ITranslator &translator,
     unsigned long parserDepth);
-  JSON_LIB_NODISCARD static Node parseObject(ISource &source, const ITranslator &translator, unsigned long parserDepth);
-  JSON_LIB_NODISCARD static Node parseArray(ISource &source, const ITranslator &translator, unsigned long parserDepth);
-  JSON_LIB_NODISCARD static Node parseNodes(ISource &source, const ITranslator &translator, unsigned long parserDepth);
+  JSON_LIB_NODISCARD static Node parseObject(ISource &source, const ITranslator &translator, unsigned long parserDepth, unsigned long maxDepth);
+  JSON_LIB_NODISCARD static Node parseArray(ISource &source, const ITranslator &translator, unsigned long parserDepth, unsigned long maxDepth);
+  JSON_LIB_NODISCARD static Node parseNodes(ISource &source, const ITranslator &translator, unsigned long parserDepth, unsigned long maxDepth);
 
   // Reference to JSON translator interface
   const ITranslator &jsonTranslator;
-  // Maximum parser depth
-  inline static unsigned long maxParserDepth{ kDefaultMaxParserDepth };
+  // Maximum parser depth (per-instance — not shared across JSON objects)
+  unsigned long m_maxParserDepth{ kDefaultMaxParserDepth };
 };
 
 }// namespace JSON_Lib

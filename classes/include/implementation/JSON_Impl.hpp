@@ -46,6 +46,9 @@ public:
   Result<void> runTraverse(IAction &action) const;
   // Set print ident value
   void setIndent(const long indent);
+  // Set/get maximum parser recursion depth
+  void setMaxParserDepth(unsigned long depth);
+  JSON_LIB_NODISCARD unsigned long getMaxParserDepth() const noexcept;
 #if !JSON_LIB_NO_STDIO
   // Read/Write JSON from a file
   static std::string fromFile(const std::string_view &fileName);

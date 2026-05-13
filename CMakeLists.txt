@@ -264,6 +264,7 @@ install(TARGETS ${JSON_LIBRARY_NAME}
 
 # Optional Doxygen documentation target
 find_package(Doxygen OPTIONAL_COMPONENTS dot)
+
 if(DOXYGEN_FOUND)
   add_custom_target(docs
     COMMAND ${DOXYGEN_EXECUTABLE} ${PROJECT_SOURCE_DIR}/Doxyfile

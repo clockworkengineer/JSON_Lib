@@ -30,6 +30,8 @@ void JSON_Impl::setIndent(const long indent)
 {
   jsonStringify->setIndent(indent);
 }
+void JSON_Impl::setMaxParserDepth(const unsigned long depth) { jsonParser->setMaxParserDepth(depth); }
+unsigned long JSON_Impl::getMaxParserDepth() const noexcept { return jsonParser->getMaxParserDepth(); }
 std::string JSON_Impl::version()
 {
   std::string v;

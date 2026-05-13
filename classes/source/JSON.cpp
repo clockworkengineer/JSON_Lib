@@ -83,6 +83,8 @@ Result<void> JSON::printResult(IDestination &&destination) const { return implem
 /// </summary>
 /// <param name="indent">Pretty print indent value.</param>
 void JSON::setIndent(const long indent) { implementation->setIndent(indent); }
+void JSON::setMaxParserDepth(const unsigned long depth) { implementation->setMaxParserDepth(depth); }
+unsigned long JSON::getMaxParserDepth() const noexcept { return implementation->getMaxParserDepth(); }
 /// <summary>
 /// Recursively traverse Node structure calling IAction methods (read-only)
 ///  or to change the JSON tree node directly.
@@ -139,7 +141,7 @@ JSON::Format JSON::getFileFormat(const std::string_view &fileName) { return JSON
 #endif
 
 uint64_t EmbeddedJSON::Limits::maxStringLength() noexcept { return String::getMaxStringLength(); }
-unsigned long EmbeddedJSON::Limits::maxParserDepth() noexcept { return Default_Parser::getMaxParserDepth(); }
+unsigned long EmbeddedJSON::Limits::maxParserDepth() noexcept { return EmbeddedJSON::Limits::kMaxParserDepth; }
 Result<Node> EmbeddedJSON::parseNoThrow(ISource &source) { return parseResult(source); }
 Result<Node> EmbeddedJSON::parseNoThrow(ISource &&source) { return parseResult(source); }
 }// namespace JSON_Lib

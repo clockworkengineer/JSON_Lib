@@ -42,5 +42,13 @@ public:
   /// @param source The input stream to read from.
   /// @return A Result containing the root Node on success, or an error status.
   virtual Result<Node> parseResult(ISource &source);
+
+  /// @brief Set the maximum recursion depth for this parser instance.
+  /// @param depth Maximum nesting depth; zero restores the compile-time default.
+  virtual void setMaxParserDepth(unsigned long /*depth*/) {}
+
+  /// @brief Return the maximum recursion depth for this parser instance.
+  /// @return Current maximum depth (default: compile-time @c kDefaultMaxParserDepth).
+  virtual unsigned long getMaxParserDepth() const noexcept { return 0; }
 };
 }// namespace JSON_Lib

@@ -43,20 +43,20 @@ TEST_CASE("Check parse depth handling.", "[JSON][Parse][Depth]")
   }
   SECTION("Get default maximum parser depth.", "[Bencode][Parse][Depth]")
   {
-    REQUIRE(Default_Parser::getMaxParserDepth() == 10);
+    REQUIRE(json.getMaxParserDepth() == 10);
   }
   SECTION("Set default maximum parser depth.", "[Bencode][Parse][Depth]")
   {
-    Default_Parser::setMaxParserDepth(20);
-    REQUIRE(Default_Parser::getMaxParserDepth() == 20);
-    Default_Parser::setMaxParserDepth(Default_Parser::kDefaultMaxParserDepth);
+    json.setMaxParserDepth(20);
+    REQUIRE(json.getMaxParserDepth() == 20);
+    json.setMaxParserDepth(Default_Parser::kDefaultMaxParserDepth);
   }
   SECTION("Set default maximum parser depth and check new value works.", "[Bencode][Parse][Depth]")
   {
-    Default_Parser::setMaxParserDepth(20);
-    REQUIRE(Default_Parser::getMaxParserDepth() == 20);
+    json.setMaxParserDepth(20);
+    REQUIRE(json.getMaxParserDepth() == 20);
     REQUIRE_NOTHROW(json.parse(BufferSource("[[[[[[[[[[[]]]]]]]]]]]")));
-    Default_Parser::setMaxParserDepth(Default_Parser::kDefaultMaxParserDepth);
+    json.setMaxParserDepth(Default_Parser::kDefaultMaxParserDepth);
   }
 }
 TEST_CASE("Check parse depth boundary conditions.", "[JSON][Parse][Depth][Boundary]")

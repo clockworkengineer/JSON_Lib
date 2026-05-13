@@ -82,6 +82,9 @@ public:
   JSON_LIB_NODISCARD Result<void> traverseResult(IAction &action) const;
   // Set print ident value
   void setIndent(long indent);
+  // Set/get maximum parser recursion depth
+  void setMaxParserDepth(unsigned long depth);
+  JSON_LIB_NODISCARD unsigned long getMaxParserDepth() const noexcept;
   // Get the root of JSON tree
   JSON_LIB_NODISCARD Node &root();
   JSON_LIB_NODISCARD const Node &root() const;

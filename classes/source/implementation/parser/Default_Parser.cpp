@@ -77,7 +77,7 @@ bool endOfNumber(const ISource &source)
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Object key/value pair.</returns>
 Object::Entry
-  Default_Parser::parseObjectEntry(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
+  Default_Parser::parseObjectEntry(ISource &source, const ITranslator &translator, const unsigned long parserDepth, const unsigned long maxDepth)
 {
   source.ignoreWS();
   std::string key{ extractString(source, translator).value() };
@@ -86,7 +86,7 @@ Object::Entry
     JSON_THROW(SyntaxError(source.getPosition(), "Missing ':' in key value pair."));
   }
   source.next();
-  return { std::move(key), parseNodes(source, translator, parserDepth + 1) };
+  return { std::move(key), parseNodes(source, translator, parserDepth + 1, maxDepth) };
 }
 /// <summary>
 /// Parse a string from a JSON source stream.
@@ -191,22 +191,22 @@ static Node parseCollection(ISource &source,
   source.next();
   return jNode;
 }
-Node Default_Parser::parseObject(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
+Node Default_Parser::parseObject(ISource &source, const ITranslator &translator, const unsigned long parserDepth, const unsigned long maxDepth)
 {
   return parseCollection<Object>(
     source, translator, parserDepth,
     JSON_Lib::kObjectEnd, "Missing closing '}' in object definition.",
-    [](ISource &src, const ITranslator &tr, unsigned long depth) {
-      return parseObjectEntry(src, tr, depth);
+    [maxDepth](ISource &src, const ITranslator &tr, unsigned long depth) {
+      return parseObjectEntry(src, tr, depth, maxDepth);
     });
 }
-Node Default_Parser::parseArray(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
+Node Default_Parser::parseArray(ISource &source, const ITranslator &translator, const unsigned long parserDepth, const unsigned long maxDepth)
 {
   return parseCollection<Array>(
     source, translator, parserDepth,
     JSON_Lib::kArrayEnd, "Missing closing ']' in array definition.",
-    [](ISource &src, const ITranslator &tr, unsigned long depth) {
-      return parseNodes(src, tr, depth + 1);
+    [maxDepth](ISource &src, const ITranslator &tr, unsigned long depth) {
+      return parseNodes(src, tr, depth + 1, maxDepth);
     });
 }
 /// <summary>
@@ -218,18 +218,18 @@ Node Default_Parser::parseArray(ISource &source, const ITranslator &translator, 
 /// <param name="translator">String translator.</param>
 /// <param name="parserDepth">Current parser depth.</param>
 /// <returns>Pointer to Node.</returns>
-Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, const unsigned long parserDepth)
+Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, const unsigned long parserDepth, const unsigned long maxDepth)
 {
-  if (parserDepth >= getMaxParserDepth()) { JSON_THROW(SyntaxError("Maximum parser depth exceeded.")); }
+  if (parserDepth >= maxDepth) { JSON_THROW(SyntaxError("Maximum parser depth exceeded.")); }
   source.ignoreWS();
   const char nextChar = source.current();
   Node jNode;
   switch (nextChar) {
     case JSON_Lib::kObjectBegin:
-      jNode = parseObject(source, translator, parserDepth);
+      jNode = parseObject(source, translator, parserDepth, maxDepth);
       break;
     case JSON_Lib::kArrayBegin:
-      jNode = parseArray(source, translator, parserDepth);
+      jNode = parseArray(source, translator, parserDepth, maxDepth);
       break;
     case JSON_Lib::kStringQuote:
     case JSON_Lib::kStringSingleQuote:
@@ -268,7 +268,7 @@ Node Default_Parser::parseNodes(ISource &source, const ITranslator &translator, 
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Pointer to Node.</returns>
-Node Default_Parser::parse(ISource &source) { return parseNodes(source, jsonTranslator, 1); }
+Node Default_Parser::parse(ISource &source) { return parseNodes(source, jsonTranslator, 1, m_maxParserDepth); }
 Result<Node> Default_Parser::parseResult(ISource &source)
 {
 #if JSON_LIB_NO_EXCEPTIONS
@@ -279,7 +279,7 @@ Result<Node> Default_Parser::parseResult(ISource &source)
   }
 #endif
   try {
-    return {Status::Ok, std::make_unique<Node>(parseNodes(source, jsonTranslator, 1)), {}, {0, 0}};
+    return {Status::Ok, std::make_unique<Node>(parseNodes(source, jsonTranslator, 1, m_maxParserDepth)), {}, {0, 0}};
   } catch (const SyntaxError &ex) {
     return {Status::SyntaxError, nullptr, ex.what(), source.getPosition()};
   } catch (const Error &ex) {
