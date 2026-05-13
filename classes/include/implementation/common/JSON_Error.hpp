@@ -20,7 +20,7 @@ enum class Status : uint8_t
 };
 
 template<typename T>
-struct Result
+struct [[nodiscard]] Result
 {
   Status status{Status::Ok};
   std::unique_ptr<T> value;
@@ -33,7 +33,7 @@ struct Result
 };
 
 template<>
-struct Result<void>
+struct [[nodiscard]] Result<void>
 {
   Status status{Status::Ok};
   std::string message;
