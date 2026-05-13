@@ -3,6 +3,7 @@
 #include <memory>
 #include "IStringify.hpp"
 #include "ITranslator.hpp"
+#include "JSON_StringUtils.hpp"
 
 namespace JSON_Lib {
 

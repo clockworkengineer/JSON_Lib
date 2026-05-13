@@ -3,7 +3,6 @@
 #include <memory>
 #include "JSON.hpp"
 #include "JSON_Node_Core.hpp"
-#include "JSON_StringUtils.hpp"
 #include "JSON_StringifierBase.hpp"
 
 namespace JSON_Lib {
