@@ -41,10 +41,10 @@ struct Object
   // Add Entry to Object
   template<typename T> void add(T &&entry)
   {
+#if JSON_LIB_EMBEDDED
     const auto key = entry.getKey();
     if (contains(key)) { JSON_THROW(Node::Error("Duplicate key used to add object entry.")); }
     jNodeObject.emplace_back(std::forward<T>(entry));
-#if JSON_LIB_EMBEDDED
     const auto insertedIndex = jNodeObject.size() - 1;
     const auto insertPosition = std::lower_bound(
       jNodeIndex.begin(), jNodeIndex.end(), key,
@@ -54,7 +54,15 @@ struct Object
     );
     jNodeIndex.insert(insertPosition, insertedIndex);
 #else
-    jNodeIndex.emplace(jNodeObject.back().getKey(), jNodeObject.size() - 1);
+    // Attempt the hash-map insert first; it detects duplicates in O(1) without
+    // a separate contains() scan.
+    const auto idx = jNodeObject.size();
+    jNodeObject.emplace_back(std::forward<T>(entry));
+    const auto [it, inserted] = jNodeIndex.emplace(jNodeObject.back().getKey(), idx);
+    if (!inserted) {
+      jNodeObject.pop_back();
+      JSON_THROW(Node::Error("Duplicate key used to add object entry."));
+    }
 #endif
   }
   // Return true if an object contains a given key
