@@ -51,7 +51,7 @@ String extractString(ISource &source, const ITranslator &translator)
     }
     extracted.append(source.current());
     stringLength++;
-    if (stringLength > String::getMaxStringLength()) { JSON_THROW(SyntaxError("String size exceeds maximum allowed size.")); }
+    if (stringLength > extracted.getMaxStringLength()) { JSON_THROW(SyntaxError("String size exceeds maximum allowed size.")); }
     source.next();
   }
   if (source.current() != '"') { JSON_THROW(SyntaxError(source.getPosition(), "Missing closing '\"' on string.")); }

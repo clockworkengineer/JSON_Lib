@@ -25,10 +25,10 @@ TEST_CASE("Check JSON parsing of a list of example JSON files.", "[JSON][Parse][
 TEST_CASE("Check string overflow handling.", "[Bencode][String][Overflow]")
 {
   JSON json;
-  SECTION("Default max string 16K", "[Bencode][Parse][String]") { REQUIRE(String::getMaxStringLength() == 16 * 1024); }
+  SECTION("Default max string 16K", "[Bencode][Parse][String]") { REQUIRE(getDefaultStringLength() == 16 * 1024); }
   SECTION("Parse a string larger than the max allowed length of 16K", "[Bencode][Parse][String]")
   {
-    REQUIRE_THROWS_WITH(json.parse(BufferSource{ "[\"" + std::string(String::getMaxStringLength() + 1, '0') + "\"]" }),
+    REQUIRE_THROWS_WITH(json.parse(BufferSource{ "[\"" + std::string(getDefaultStringLength() + 1, '0') + "\"]" }),
       "JSON Syntax Error: String size exceeds maximum allowed size.");
   }
 }
@@ -95,21 +95,21 @@ TEST_CASE("Check string max length can be configured.", "[JSON][Parse][String][M
   SECTION("kDefMaxStringLength constant equals 16K.", "[JSON][Parse][String][MaxLength]") {
     REQUIRE(String::kDefMaxStringLength == 16 * 1024);
   }
-  SECTION("Set smaller max string length and parse string exactly at that limit succeeds.", "[JSON][Parse][String][MaxLength]") {
-    String::setMaxStringLength(100);
+  SECTION("Set smaller default max string length and parse string exactly at that limit succeeds.", "[JSON][Parse][String][MaxLength]") {
+    setDefaultStringLength(100);
     REQUIRE_NOTHROW(json.parse(BufferSource{ "[\"" + std::string(100, 'x') + "\"]" }));
-    String::setMaxStringLength(String::kDefMaxStringLength);
+    setDefaultStringLength(String::kDefMaxStringLength);
   }
-  SECTION("Set smaller max string length and parse string exceeding it throws.", "[JSON][Parse][String][MaxLength]") {
-    String::setMaxStringLength(100);
+  SECTION("Set smaller default max string length and parse string exceeding it throws.", "[JSON][Parse][String][MaxLength]") {
+    setDefaultStringLength(100);
     REQUIRE_THROWS_WITH(json.parse(BufferSource{ "[\"" + std::string(101, 'x') + "\"]" }),
       "JSON Syntax Error: String size exceeds maximum allowed size.");
-    String::setMaxStringLength(String::kDefMaxStringLength);
+    setDefaultStringLength(String::kDefMaxStringLength);
   }
   SECTION("Restore max string length to default and verify.", "[JSON][Parse][String][MaxLength]") {
-    String::setMaxStringLength(50);
-    String::setMaxStringLength(String::kDefMaxStringLength);
-    REQUIRE(String::getMaxStringLength() == static_cast<uint64_t>(16 * 1024));
+    setDefaultStringLength(50);
+    setDefaultStringLength(String::kDefMaxStringLength);
+    REQUIRE(getDefaultStringLength() == static_cast<uint64_t>(16 * 1024));
   }
 }
 

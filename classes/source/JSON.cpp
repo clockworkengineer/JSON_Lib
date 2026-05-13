@@ -140,7 +140,7 @@ void JSON::toFile(const std::string_view &fileName, const std::string_view &json
 JSON::Format JSON::getFileFormat(const std::string_view &fileName) { return JSON_Impl::getFileFormat(fileName); }
 #endif
 
-uint64_t EmbeddedJSON::Limits::maxStringLength() noexcept { return String::getMaxStringLength(); }
+uint64_t EmbeddedJSON::Limits::maxStringLength() noexcept { return getDefaultStringLength(); }
 unsigned long EmbeddedJSON::Limits::maxParserDepth() noexcept { return EmbeddedJSON::Limits::kMaxParserDepth; }
 Result<Node> EmbeddedJSON::parseNoThrow(ISource &source) { return parseResult(source); }
 Result<Node> EmbeddedJSON::parseNoThrow(ISource &&source) { return parseResult(source); }

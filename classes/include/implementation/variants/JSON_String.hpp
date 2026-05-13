@@ -6,6 +6,8 @@
 
 namespace JSON_Lib {
 
+extern inline uint64_t g_defaultStringLength;
+
 struct String
 {
 #if JSON_LIB_MAX_STRING_LENGTH
@@ -14,8 +16,16 @@ struct String
   constexpr static int64_t kDefMaxStringLength = 16*1024;
 #endif
   // Constructors/Destructors
-  String() = default;
-  explicit String(const std::string_view &string) : jNodeString(string) {}
+  String() : m_maxStringLength(g_defaultStringLength ? g_defaultStringLength : kDefMaxStringLength) {}
+  explicit String(const std::string_view &string)
+    : jNodeString(string), m_maxStringLength(g_defaultStringLength ? g_defaultStringLength : kDefMaxStringLength)
+  {}
+  String(const std::string_view &string, const uint64_t maxStringLength)
+    : jNodeString(string), m_maxStringLength(maxStringLength)
+  {}
+  explicit String(const uint64_t maxStringLength)
+    : m_maxStringLength(maxStringLength)
+  {}
   String(const String &other) = default;
   String &operator=(const String &other) = default;
   String(String &&other) = default;
@@ -35,11 +45,17 @@ struct String
   void clear() { jNodeString.clear(); }
   JSON_LIB_NODISCARD std::size_t size() const noexcept { return jNodeString.size(); }
   // Set/get maximum string length
-  static void setMaxStringLength(const uint64_t length) { maxStringLength = length; }
-  static uint64_t getMaxStringLength() { return maxStringLength; }
+  void setMaxStringLength(const uint64_t length) { m_maxStringLength = length; }
+  JSON_LIB_NODISCARD uint64_t getMaxStringLength() const noexcept { return m_maxStringLength; }
 
 private:
   std::string jNodeString;
-  inline static uint64_t maxStringLength { kDefMaxStringLength};
+  uint64_t m_maxStringLength{ g_defaultStringLength ? g_defaultStringLength : kDefMaxStringLength };
 };
+
+inline uint64_t g_defaultStringLength = String::kDefMaxStringLength;
+
+inline void setDefaultStringLength(const uint64_t length) { g_defaultStringLength = length; }
+inline uint64_t getDefaultStringLength() noexcept { return g_defaultStringLength; }
+
 }// namespace JSON_Lib
