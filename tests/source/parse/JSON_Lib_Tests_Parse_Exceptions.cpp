@@ -122,12 +122,11 @@ TEST_CASE("Check parser generated exceptions.", "[JSON][Parse][Exception]")
   }
   SECTION("Parse JSON exceeding maximum parser depth.", "[JSON][Parse][Exception]")
   {
-    json.setMaxParserDepth(3);
+    const ScopedMaxDepth scopedDepth(json, 3);
     BufferSource jsonSource{ R"([[[[1]]]])" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), SyntaxError);
     jsonSource.reset();
     REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Syntax Error: Maximum parser depth exceeded.");
-    json.setMaxParserDepth(Default_Parser::kDefaultMaxParserDepth);
   }
   SECTION("Parse multi-line JSON with a syntax error on line 2.", "[JSON][Parse][Exception]")
   {

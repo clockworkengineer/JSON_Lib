@@ -43,3 +43,53 @@ std::string generateEscapes(unsigned char first, unsigned char last);
 template<typename T> bool equalFloatingPoint(T a, T b, double epsilon) { return (std::fabs(a - b) <= epsilon); }
 
 using namespace JSON_Lib;
+
+struct ScopedMaxDepth final
+{
+  JSON &json;
+  unsigned long saved;
+
+  explicit ScopedMaxDepth(JSON &jsonRef, unsigned long depth)
+    : json(jsonRef), saved(jsonRef.getMaxParserDepth())
+  {
+    json.setMaxParserDepth(depth);
+  }
+
+  ~ScopedMaxDepth() { json.setMaxParserDepth(saved); }
+
+  ScopedMaxDepth(const ScopedMaxDepth &) = delete;
+  ScopedMaxDepth &operator=(const ScopedMaxDepth &) = delete;
+};
+
+struct ScopedMaxStringLength final
+{
+  uint64_t saved;
+
+  explicit ScopedMaxStringLength(uint64_t length)
+    : saved(getDefaultStringLength())
+  {
+    setDefaultStringLength(length);
+  }
+
+  ~ScopedMaxStringLength() { setDefaultStringLength(saved); }
+
+  ScopedMaxStringLength(const ScopedMaxStringLength &) = delete;
+  ScopedMaxStringLength &operator=(const ScopedMaxStringLength &) = delete;
+};
+
+struct ScopedIndent final
+{
+  IStringify &stringify;
+  long saved;
+
+  explicit ScopedIndent(IStringify &stringifyRef, long indent)
+    : stringify(stringifyRef), saved(stringifyRef.getIndent())
+  {
+    stringify.setIndent(indent);
+  }
+
+  ~ScopedIndent() { stringify.setIndent(saved); }
+
+  ScopedIndent(const ScopedIndent &) = delete;
+  ScopedIndent &operator=(const ScopedIndent &) = delete;
+};

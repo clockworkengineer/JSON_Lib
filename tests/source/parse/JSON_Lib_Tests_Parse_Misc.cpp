@@ -48,16 +48,14 @@ TEST_CASE("Check parse depth handling.", "[JSON][Parse][Depth]")
   }
   SECTION("Set default maximum parser depth.", "[Bencode][Parse][Depth]")
   {
-    json.setMaxParserDepth(20);
+    const ScopedMaxDepth scopedDepth(json, 20);
     REQUIRE(json.getMaxParserDepth() == 20);
-    json.setMaxParserDepth(Default_Parser::kDefaultMaxParserDepth);
   }
   SECTION("Set default maximum parser depth and check new value works.", "[Bencode][Parse][Depth]")
   {
-    json.setMaxParserDepth(20);
+    const ScopedMaxDepth scopedDepth(json, 20);
     REQUIRE(json.getMaxParserDepth() == 20);
     REQUIRE_NOTHROW(json.parse(BufferSource("[[[[[[[[[[[]]]]]]]]]]]")));
-    json.setMaxParserDepth(Default_Parser::kDefaultMaxParserDepth);
   }
 }
 TEST_CASE("Check parse depth boundary conditions.", "[JSON][Parse][Depth][Boundary]")
@@ -116,18 +114,16 @@ TEST_CASE("Check string max length can be configured.", "[JSON][Parse][String][M
     REQUIRE(String::kDefMaxStringLength == 16 * 1024);
   }
   SECTION("Set smaller default max string length and parse string exactly at that limit succeeds.", "[JSON][Parse][String][MaxLength]") {
-    setDefaultStringLength(100);
+    const ScopedMaxStringLength scopedStringLength(100);
     REQUIRE_NOTHROW(json.parse(BufferSource{ "[\"" + std::string(100, 'x') + "\"]" }));
-    setDefaultStringLength(String::kDefMaxStringLength);
   }
   SECTION("Set smaller default max string length and parse string exceeding it throws.", "[JSON][Parse][String][MaxLength]") {
-    setDefaultStringLength(100);
+    const ScopedMaxStringLength scopedStringLength(100);
     REQUIRE_THROWS_WITH(json.parse(BufferSource{ "[\"" + std::string(101, 'x') + "\"]" }),
       "JSON Syntax Error: String size exceeds maximum allowed size.");
-    setDefaultStringLength(String::kDefMaxStringLength);
   }
   SECTION("Restore max string length to default and verify.", "[JSON][Parse][String][MaxLength]") {
-    setDefaultStringLength(50);
+    const ScopedMaxStringLength scopedStringLength(50);
     setDefaultStringLength(String::kDefMaxStringLength);
     REQUIRE(getDefaultStringLength() == static_cast<uint64_t>(16 * 1024));
   }
