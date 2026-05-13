@@ -12,54 +12,69 @@ struct Node;
 // ==========================================================
 // Interface for the action events during JSON tree traversal
 // ==========================================================
+/// @brief Callback interface invoked during JSON tree traversal.
+///
+/// Implement this interface to inspect or mutate nodes as the traverser
+/// visits each node in the JSON tree.  The non-const overloads allow
+/// in-place tree modification; the const overloads are for read-only
+/// inspection.  Default implementations are no-ops.
 class IAction
 {
 public:
-  // =============
-  // IAction Error
-  // =============
+  /// @brief Exception type thrown by IAction implementations.
   struct Error final : std::runtime_error
   {
     explicit Error(const std::string_view &message) : std::runtime_error(makeTaggedError("IAction", message)) {}
   };
-  // ========================
-  // Constructors/destructors
-  // ========================
   virtual ~IAction() = default;
-  // ============================
-  // Node encountered so process
-  // ============================
-  virtual void onNode(Node &) { }
-  virtual void onNode(const Node &) { }
-  // =============================
-  // String encountered so process
-  // =============================
-  virtual void onString(Node &) { }
-  virtual void onString(const Node &) { }
-  // =============================
-  // Number encountered so process
-  // =============================
-  virtual void onNumber(Node &) { }
-  virtual void onNumber(const Node &) { }
-  // ==============================
-  // Boolean encountered so process
-  // ==============================
-  virtual void onBoolean(Node &) { }
-  virtual void onBoolean(const Node &) { }
-  // ===========================
-  // Null encountered so process
-  // ===========================
-  virtual void onNull(Node &) { }
-  virtual void onNull(const Node &) { }
-  // ============================
-  // Array encountered so process
-  // ============================
-  virtual void onArray(Node &) { }
-  virtual void onArray(const Node &) { }
-  // =============================
-  // Object encountered so process
-  // =============================
-  virtual void onObject(Node &) { }
-  virtual void onObject(const Node &) { }
+
+  /// @brief Called for every node visited, before the type-specific callback.
+  /// @param jNode The node currently being visited (mutable).
+  virtual void onNode(Node &jNode) { }
+  /// @brief Called for every node visited, before the type-specific callback.
+  /// @param jNode The node currently being visited (read-only).
+  virtual void onNode(const Node &jNode) { }
+
+  /// @brief Called when a String node is visited.
+  /// @param jNode The String node (mutable).
+  virtual void onString(Node &jNode) { }
+  /// @brief Called when a String node is visited.
+  /// @param jNode The String node (read-only).
+  virtual void onString(const Node &jNode) { }
+
+  /// @brief Called when a Number node is visited.
+  /// @param jNode The Number node (mutable).
+  virtual void onNumber(Node &jNode) { }
+  /// @brief Called when a Number node is visited.
+  /// @param jNode The Number node (read-only).
+  virtual void onNumber(const Node &jNode) { }
+
+  /// @brief Called when a Boolean node is visited.
+  /// @param jNode The Boolean node (mutable).
+  virtual void onBoolean(Node &jNode) { }
+  /// @brief Called when a Boolean node is visited.
+  /// @param jNode The Boolean node (read-only).
+  virtual void onBoolean(const Node &jNode) { }
+
+  /// @brief Called when a Null node is visited.
+  /// @param jNode The Null node (mutable).
+  virtual void onNull(Node &jNode) { }
+  /// @brief Called when a Null node is visited.
+  /// @param jNode The Null node (read-only).
+  virtual void onNull(const Node &jNode) { }
+
+  /// @brief Called when an Array node is visited (before its children).
+  /// @param jNode The Array node (mutable).
+  virtual void onArray(Node &jNode) { }
+  /// @brief Called when an Array node is visited (before its children).
+  /// @param jNode The Array node (read-only).
+  virtual void onArray(const Node &jNode) { }
+
+  /// @brief Called when an Object node is visited (before its children).
+  /// @param jNode The Object node (mutable).
+  virtual void onObject(Node &jNode) { }
+  /// @brief Called when an Object node is visited (before its children).
+  /// @param jNode The Object node (read-only).
+  virtual void onObject(const Node &jNode) { }
 };
 }// namespace JSON_Lib
