@@ -11,7 +11,10 @@ namespace JSON_Lib {
 class BufferDestination final : public DestinationBase
 {
 public:
-  BufferDestination() = default;
+  explicit BufferDestination(std::size_t reserveBytes = 0)
+  {
+    if (reserveBytes > 0) { buffer.reserve(reserveBytes); }
+  }
 
   void add(const std::string &bytes) override
   {
