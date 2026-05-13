@@ -279,6 +279,8 @@ Result<Node> Default_Parser::parseResult(ISource &source)
     return {Status::UnknownError, nullptr, ex.what(), source.getPosition()};
   } catch (const std::exception &ex) {
     return {Status::UnknownError, nullptr, ex.what(), source.getPosition()};
+  } catch (...) {
+    return {Status::UnknownError, nullptr, "Unknown exception during parse.", source.getPosition()};
   }
 }
 }// namespace JSON_Lib

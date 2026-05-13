@@ -64,6 +64,8 @@ Result<void> JSON_Impl::runStringify(IDestination &destination, unsigned long in
     return {Status::Ok, {}, {0, 0}};
   } catch (const std::exception &ex) {
     return {Status::UnknownError, ex.what(), {0, 0}};
+  } catch (...) {
+    return {Status::UnknownError, "Unknown exception during stringify.", {0, 0}};
   }
 }
 Result<void> JSON_Impl::stringifyResult(IDestination &destination) const
@@ -120,6 +122,8 @@ Result<void> JSON_Impl::runTraverse(IAction &action)
     return {Status::Ok, {}, {0, 0}};
   } catch (const std::exception &ex) {
     return {Status::UnknownError, ex.what(), {0, 0}};
+  } catch (...) {
+    return {Status::UnknownError, "Unknown exception during traverse.", {0, 0}};
   }
 }
 Result<void> JSON_Impl::runTraverse(IAction &action) const
@@ -132,6 +136,8 @@ Result<void> JSON_Impl::runTraverse(IAction &action) const
     return {Status::Ok, {}, {0, 0}};
   } catch (const std::exception &ex) {
     return {Status::UnknownError, ex.what(), {0, 0}};
+  } catch (...) {
+    return {Status::UnknownError, "Unknown exception during traverse.", {0, 0}};
   }
 }
 Node &JSON_Impl::operator[](const std::string_view &key)
