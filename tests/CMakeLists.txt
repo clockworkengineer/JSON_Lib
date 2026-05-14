@@ -2,14 +2,20 @@
 include(FetchContent)
 include(CTest)
 
-FetchContent_Declare(
-  Catch2
-  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG v3.6.0
-  GIT_SHALLOW TRUE
-)
+# Try to find Catch2 if already installed (e.g. in CI environments)
+find_package(Catch2 3 QUIET)
 
-FetchContent_MakeAvailable(Catch2)
+# Fall back to FetchContent if not found
+if(NOT Catch2_FOUND)
+  FetchContent_Declare(
+    Catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+    GIT_TAG v3.6.0
+    GIT_SHALLOW TRUE
+  )
+
+  FetchContent_MakeAvailable(Catch2)
+endif()
 
 # Enable unit tests
 enable_testing()
