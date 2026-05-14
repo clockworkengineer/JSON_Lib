@@ -221,6 +221,10 @@ endif()
 
 target_link_libraries(${JSON_LIBRARY_NAME} PRIVATE JSON_Lib_Stringify)
 
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9.0")
+  target_link_libraries(${JSON_LIBRARY_NAME} PRIVATE stdc++fs)
+endif()
+
 if(JSON_LIB_BUILD_SHARED AND NOT MSVC)
   target_compile_options(${JSON_LIBRARY_NAME} PRIVATE -fvisibility=hidden -fvisibility-inlines-hidden)
 endif()
