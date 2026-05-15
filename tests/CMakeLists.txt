@@ -1,5 +1,3 @@
-# Get Catch2 from repository
-include(FetchContent)
 include(CTest)
 
 # Try to find Catch2 if already installed (e.g. in CI environments)
@@ -7,6 +5,7 @@ find_package(Catch2 3 QUIET)
 
 # Fall back to FetchContent if not found
 if(NOT Catch2_FOUND)
+  include(FetchContent)
   FetchContent_Declare(
     Catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
