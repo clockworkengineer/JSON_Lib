@@ -19,7 +19,7 @@ namespace js = JSON_Lib;
 void processJSONFile(const std::string &fileName)
 {
   PLOG_INFO << "Analyzing " << fileName;
-  const js::JSON json;
+  js::JSON json;
   JSON_Analyzer jsonAnalyzer;
   json.parse(js::FileSource{ fileName });
   json.traverse(jsonAnalyzer);

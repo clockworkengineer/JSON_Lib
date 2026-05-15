@@ -1,5 +1,7 @@
 #include <iostream>
 #include "JSON.hpp"
+#include "interface/IParser.hpp"
+#include "interface/IStringify.hpp"
 #include "implementation/io/JSON_Sources.hpp"
 #include "implementation/io/JSON_Destinations.hpp"
 

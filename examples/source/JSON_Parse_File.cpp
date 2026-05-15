@@ -26,7 +26,7 @@ void processJSONFile(const std::string &fileName)
     return chrono::duration_cast<chrono::microseconds>(stop - start).count();
   };
   PLOG_INFO << "Processing " << fileName;
-  const js::JSON json;
+  js::JSON json;
   js::BufferDestination jsonDestination;
   // Parse from file
   auto start = chrono::high_resolution_clock::now();

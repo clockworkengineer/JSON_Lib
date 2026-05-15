@@ -76,7 +76,7 @@ int main(int, char **)
     // Log version
     PLOG_INFO << js::JSON().version();
     // Parse in settings file
-    const js::JSON json;
+    js::JSON json;
     json.parse(js::FileSource{ jsonSettingsFile() });
     auto &settingsRoot = json.root();
     // Node root has to be an object

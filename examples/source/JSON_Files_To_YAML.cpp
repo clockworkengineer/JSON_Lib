@@ -15,7 +15,7 @@ namespace js = JSON_Lib;
 int main(int, char **)
 {
   try {
-    const js::JSON json(js::makeStringify<js::YAML_Stringify>());
+    js::JSON json(js::makeStringify<js::YAML_Stringify>());
     // Initialise logging.
     init(plog::debug, "JSON_Files_To_YAML.log");
     PLOG_INFO << "JSON_Files_To_YAML started ...";

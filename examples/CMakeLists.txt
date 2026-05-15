@@ -10,7 +10,7 @@ foreach(EXAMPLE_PROGRAM ${EXAMPLE_SOURCES})
 
   if(_exclude_idx EQUAL -1)
     add_executable(${EXAMPLE_PROGRAM} source/${EXAMPLE_PROGRAM})
-    target_include_directories(${EXAMPLE_PROGRAM} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include/external)
+    target_include_directories(${EXAMPLE_PROGRAM} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include/external)
     target_include_directories(${EXAMPLE_PROGRAM} PRIVATE ${JSON_IMPL_INCLUDE_DIRS})
     target_link_libraries(${EXAMPLE_PROGRAM} JSON_Lib)
     install(TARGETS ${EXAMPLE_PROGRAM} DESTINATION bin)

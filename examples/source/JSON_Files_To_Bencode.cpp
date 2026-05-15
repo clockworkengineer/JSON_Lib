@@ -15,7 +15,7 @@ namespace js = JSON_Lib;
 int main(int, char **)
 {
   try {
-    const js::JSON json(js::makeStringify<js::Bencode_Stringify>());
+    js::JSON json(js::makeStringify<js::Bencode_Stringify>());
     // Initialise logging.
     init(plog::debug, "JSON_Files_To_Bencode.log");
     PLOG_INFO << "JSON_Files_To_Bencode started ...";
