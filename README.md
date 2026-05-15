@@ -24,6 +24,16 @@
 - C++ compiler with C++23 support (GCC 13+, Clang 16+, MSVC 19.36+)
 - CMake 3.21 or later
 
+## Dependencies
+
+`JSON_Lib` has **zero runtime dependencies** beyond the C++ standard library.
+
+- Library runtime: C++ standard library only
+- Build system: CMake 3.21+
+- Tests/benchmarks only: Catch2 (resolved via `find_package(Catch2 3)` or fetched via CMake `FetchContent`)
+
+Applications linking `JSON_Lib` do not need to ship or install any third-party runtime package.
+
 ### Build
 
 ```sh
