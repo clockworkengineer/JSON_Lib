@@ -11,6 +11,9 @@
 #include "JSON_Error.hpp"
 #include "JSON_Throw.hpp"
 
+#include <codecvt>
+#include <locale>
+
 namespace JSON_Lib {
 
 static std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> utf16Converter;

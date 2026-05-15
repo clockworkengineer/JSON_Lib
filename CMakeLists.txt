@@ -65,7 +65,7 @@ if(JSON_LIB_EMBEDDED)
   set(JSON_LIB_NO_STDIO ON CACHE BOOL "Disable stdio/file I/O support" FORCE)
 endif()
 
-# No-exceptions build disables tests/examples (PCH compiled with flag would mismatch test TUs)
+# No-exceptions build disables tests/examples
 if(JSON_LIB_NO_EXCEPTIONS AND NOT JSON_LIB_EMBEDDED)
   message(STATUS "Configuring JSON_Lib for no-exceptions build (tests/examples disabled)")
   set(BUILD_TESTING OFF CACHE BOOL "Build unit tests" FORCE)
@@ -182,11 +182,7 @@ target_include_directories(JSON_Lib_Stringify INTERFACE ${JSON_IMPL_INCLUDE_DIRS
 
 target_include_directories(JSON_Lib_Core PRIVATE ${JSON_IMPL_INCLUDE_DIRS})
 
-target_precompile_headers(JSON_Lib_Core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/stdafx.h)
-
 target_include_directories(JSON_Lib_Parser PRIVATE ${JSON_IMPL_INCLUDE_DIRS})
-
-target_precompile_headers(JSON_Lib_Parser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/stdafx.h)
 
 # Dedicated embedded compile flag set
 add_library(JSON_Lib_Embedded INTERFACE)

@@ -68,7 +68,6 @@ add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(${TEST_EXECUTABLE} PRIVATE ${JSON_IMPL_INCLUDE_DIRS})
 target_link_libraries(${TEST_EXECUTABLE} ${JSON_LIBRARY_NAME} Catch2::Catch2WithMain)
-target_precompile_headers(${TEST_EXECUTABLE} REUSE_FROM JSON_Lib_Core)
 
 # Use Catch2's test discovery for VS Code Test Explorer integration
 include(Catch)
@@ -80,7 +79,6 @@ function(json_lib_add_test_target TARGET SOURCES_VAR)
   target_include_directories(${TARGET} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
   target_include_directories(${TARGET} PRIVATE ${JSON_IMPL_INCLUDE_DIRS})
   target_link_libraries(${TARGET} ${JSON_LIBRARY_NAME} Catch2::Catch2WithMain)
-  target_precompile_headers(${TARGET} REUSE_FROM JSON_Lib_Core)
   catch_discover_tests(${TARGET})
 endfunction()
 
