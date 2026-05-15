@@ -12,6 +12,24 @@
 #include "JSON_Impl.hpp"
 
 namespace JSON_Lib {
+void JSON::parse(const std::string_view &jsonStr) {
+  parse(BufferSource{jsonStr});
+}
+void JSON::parse(const char *jsonStr) {
+  parse(BufferSource{std::string_view(jsonStr)});
+}
+Result<Node> JSON::parseResult(const std::string_view &jsonStr) {
+  return parseResult(BufferSource{jsonStr});
+}
+Result<Node> JSON::parseResult(const char *jsonStr) {
+  return parseResult(BufferSource{std::string_view(jsonStr)});
+}
+
+std::string JSON::stringifyToString() const {
+  BufferDestination dest;
+  stringify(dest);
+  return dest.toString();
+}
 
 /// <summary>
 /// JSON constructor. Set any custom converter or translator here.

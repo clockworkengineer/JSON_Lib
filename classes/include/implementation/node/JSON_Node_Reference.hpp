@@ -59,10 +59,15 @@ template<typename T> const T &NRef(const Object::Entry &jNodeEntry)
 }
 
 // =============================================
-// Readable aliases for NRef (legacy: use NRef)
+// Readable aliases for NRef (preferred: use as<T>, legacy: NRef<T>)
 // =============================================
+/// @brief Readable alias for NRef<T>(Node&)
 template<typename T> T &as(Node &jNode) { return NRef<T>(jNode); }
+/// @brief Readable alias for NRef<T>(const Node&)
 template<typename T> const T &as(const Node &jNode) { return NRef<T>(jNode); }
+/// @brief Readable alias for NRef<T>(Object::Entry&)
 template<typename T> T &as(Object::Entry &jNodeEntry) { return NRef<T>(jNodeEntry); }
+/// @brief Readable alias for NRef<T>(const Object::Entry&)
 template<typename T> const T &as(const Object::Entry &jNodeEntry) { return NRef<T>(jNodeEntry); }
+// NRef<T> is retained for backward compatibility but is considered legacy.
 }// namespace JSON_Lib

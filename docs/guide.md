@@ -59,8 +59,7 @@ target_include_directories(my_app PRIVATE
 namespace js = JSON_Lib;
 
 // From a string in memory
-js::JSON json;
-json.parse(js::BufferSource{R"({"name":"Alice","score":100})"});
+json.parse(R"({"name":"Alice","score":100})");
 
 // From a file
 json.parse(js::FileSource{"data.json"});
@@ -191,6 +190,8 @@ if (!result.ok()) {
 
 ```cpp
 auto sr = embedded.stringifyNoThrow(js::FixedBufferDestination<256>{});
+    std::string compact = json.stringifyToString();
+    std::cout << compact << "\n";
 if (!sr.ok()) { /* sr.message */ }
 ```
 

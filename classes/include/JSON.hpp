@@ -39,6 +39,15 @@ struct Node;
 class JSON_LIB_API JSON
 {
 public:
+  // Overloads for parse and parseResult accepting std::string_view and const char*
+  void parse(const std::string_view &jsonStr);
+  void parse(const char *jsonStr);
+  JSON_LIB_NODISCARD Result<Node> parseResult(const std::string_view &jsonStr);
+  JSON_LIB_NODISCARD Result<Node> parseResult(const char *jsonStr);
+
+  // Helper: stringify to std::string
+  std::string stringifyToString() const;
+public:
   // Possible JSON Node initializer list types
   using InitializerListTypes =
     std::variant<int, long, long long, float, double, long double, bool, std::string, std::nullptr_t, Node>;
@@ -96,7 +105,9 @@ public:
   void setMaxParserDepth(unsigned long depth);
   JSON_LIB_NODISCARD unsigned long getMaxParserDepth() const noexcept;
   // Get the root of JSON tree
+  /// @brief Returns a mutable reference to the root node (modifies tree).
   JSON_LIB_NODISCARD Node &root();
+  /// @brief Returns a const reference to the root node (read-only).
   JSON_LIB_NODISCARD const Node &root() const;
   // Search for JSON object entry with a given key
   Node &operator[](const std::string_view &key);

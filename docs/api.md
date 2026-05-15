@@ -38,18 +38,57 @@ All public types live in `namespace JSON_Lib`.
 
 | Constructor | Description |
 |---|---|
-| `JSON(IStringify* = nullptr, IParser* = nullptr)` | Default; accepts optional custom stringify/parser |
+| `JSON(std::unique_ptr<IStringify> = nullptr, std::unique_ptr<IParser> = nullptr)` | Default; accepts optional custom stringify/parser |
 | `JSON(std::string_view jsonString)` | Construct and parse a JSON string immediately |
 | `JSON(ArrayInitializer)` | Construct a JSON array from an initializer list |
 | `JSON(ObjectInitializer)` | Construct a JSON object from an initializer list |
 
 Copy and move are deleted. `JSON` is non-copyable, non-movable.
 
-### Static methods
+### Methods
 
 ```cpp
-static std::string version();
-static void setIndent(long indent);                            // indent for print()
+// Parse overloads
+void parse(ISource &source);
+void parse(ISource &&source);
+void parse(const std::string_view &jsonStr);
+void parse(const char *jsonStr);
+Result<Node> parseResult(ISource &source);
+Result<Node> parseResult(ISource &&source);
+Result<Node> parseResult(const std::string_view &jsonStr);
+Result<Node> parseResult(const char *jsonStr);
+
+// Stringify helpers
+void stringify(IDestination &destination) const;
+void stringify(IDestination &&destination) const;
+Result<void> stringifyResult(IDestination &destination) const;
+Result<void> stringifyResult(IDestination &&destination) const;
+std::string stringifyToString() const;
+
+// Print (pretty)
+void print(IDestination &destination) const;
+void print(IDestination &&destination) const;
+Result<void> printResult(IDestination &destination) const;
+Result<void> printResult(IDestination &&destination) const;
+
+// Strip whitespace
+static void strip(ISource &source,  IDestination &destination);
+static void strip(ISource &source,  IDestination &&destination);
+static void strip(ISource &&source, IDestination &destination);
+static void strip(ISource &&source, IDestination &&destination);
+
+// Traverse
+void traverse(IAction &action);
+void traverse(IAction &action) const;
+Result<void> traverseResult(IAction &action);
+Result<void> traverseResult(IAction &action) const;
+
+// Node access
+Node &root();
+const Node &root() const;
+Node &operator[](std::string_view key);
+Node &operator[](std::size_t index);
+void resize(std::size_t index);
 
 // File helpers (disabled when JSON_LIB_NO_STDIO == 1)
 static std::string fromFile(std::string_view fileName);
@@ -57,6 +96,9 @@ static void        toFile(std::string_view fileName,
                           std::string_view jsonString,
                           Format format = Format::utf8);
 static Format      getFileFormat(std::string_view fileName);
+
+// Version
+static std::string version();
 ```
 
 ### Parse
