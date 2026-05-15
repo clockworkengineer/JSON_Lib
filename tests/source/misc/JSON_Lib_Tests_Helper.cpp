@@ -1,6 +1,47 @@
 #include "JSON_Lib_Tests.hpp"
 #include <random>
 
+namespace {
+std::filesystem::path getSafeCurrentPath()
+{
+  std::error_code ec;
+  const auto cwd = std::filesystem::current_path(ec);
+  if (!ec && !cwd.empty()) {
+    return cwd;
+  }
+  return {};
+}
+
+std::filesystem::path resolveTestFilesDirectory()
+{
+  std::vector<std::filesystem::path> candidates;
+
+  // Resolve from this source file location first so tests do not depend on process CWD.
+  const std::filesystem::path helperSourcePath{ __FILE__ };
+  const auto helperDir = helperSourcePath.parent_path();
+  if (!helperDir.empty()) {
+    candidates.emplace_back(helperDir / "../../files");
+  }
+
+  const auto cwd = getSafeCurrentPath();
+  if (!cwd.empty()) {
+    candidates.emplace_back(cwd / "./files");
+    candidates.emplace_back(cwd / "../tests/files");
+    candidates.emplace_back(cwd / "../files");
+    candidates.emplace_back(cwd / "../examples/files");
+  }
+
+  for (const auto &candidate : candidates) {
+    std::error_code ec;
+    if (std::filesystem::is_directory(candidate, ec) && !ec) {
+      return candidate;
+    }
+  }
+
+  return cwd;
+}
+}
+
 /// <summary>
 /// Prefix path to test data file name.
 /// </summary>
@@ -8,21 +49,8 @@
 /// <returns>Full path to test data file</returns>
 std::string prefixTestDataPath(const std::string &jsonFileName)
 {
-  const auto cwd = std::filesystem::current_path();
-  const std::vector<std::filesystem::path> candidates = {
-    cwd / "./files",
-    cwd / "../tests/files",
-    cwd / "../files",
-    cwd / "../examples/files"
-  };
-
-  for (const auto &candidate : candidates) {
-    if (std::filesystem::is_directory(candidate)) {
-      return (candidate / jsonFileName).string();
-    }
-  }
-
-  return (cwd / jsonFileName).string();
+  const auto basePath = resolveTestFilesDirectory();
+  return (basePath / jsonFileName).string();
 }
 /// <summary>
 /// Verify that an Node Array has the correct parsed format.

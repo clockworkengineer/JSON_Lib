@@ -133,7 +133,7 @@ TEST_CASE("Check JSON object creation api.", "[JSON][Create][Object]")
   }
   SECTION("Create JSON object using ObjectInitializer constructor and validate.", "[JSON][Create][Object][Initializer]")
   {
-    const JSON json{ JSON::ObjectInitializer{ { "city", "London" }, { "pop", 9000000 }, { "active", true } } };
+    const JSON json(JSON::ObjectInitializer{ { "city", "London" }, { "pop", 9000000 }, { "active", true } });
     REQUIRE_FALSE(!isA<Object>(json.root()));
     REQUIRE(NRef<Object>(json.root()).size() == 3);
     REQUIRE(NRef<String>(json.root()["city"]).value() == "London");
