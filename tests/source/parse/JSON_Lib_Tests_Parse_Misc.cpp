@@ -29,7 +29,7 @@ TEST_CASE("Check string overflow handling.", "[Bencode][String][Overflow]")
   SECTION("Parse a string larger than the max allowed length of 16K", "[Bencode][Parse][String]")
   {
     REQUIRE_THROWS_WITH(json.parse(BufferSource{ "[\"" + std::string(getDefaultStringLength() + 1, '0') + "\"]" }),
-      "JSON Syntax Error [Line: 1 Column: 103]: String size exceeds maximum allowed size.");
+      "JSON Syntax Error [Line: 1 Column: 16387]: String size exceeds maximum allowed size.");
   }
 }
 TEST_CASE("Check parse depth handling.", "[JSON][Parse][Depth]")

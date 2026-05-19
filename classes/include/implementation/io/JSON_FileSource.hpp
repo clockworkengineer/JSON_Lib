@@ -30,7 +30,7 @@ public:
   char current() const JSON_LIB_NOEXCEPT override
   {
     const auto nextChar = source.peek();
-    if (nextChar == EOF) { return '\0'; }
+    if (nextChar == EOF) { return static_cast<char>(EOF); }
     return static_cast<char>(nextChar);
   }
   void next() override
