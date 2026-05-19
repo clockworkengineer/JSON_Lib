@@ -66,6 +66,7 @@ set(TEST_SOURCES
   source/misc/JSON_Lib_Tests_Misc.cpp
   source/misc/JSON_Lib_Tests_Helper.cpp
   source/misc/JSON_Lib_Tests_Compatibility.cpp
+  source/misc/JSON_Lib_Tests_PublicFacade.cpp
   source/misc/JSON_Lib_Tests_DRY_Regression.cpp
   source/traverse/JSON_Lib_Tests_Traverse.cpp)
 

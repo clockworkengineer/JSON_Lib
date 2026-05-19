@@ -44,6 +44,7 @@ cmake --build .
 `JSON_Lib` has **zero runtime dependencies** beyond the C++ standard library.
 
 - Library runtime: C++ standard library only
+- Public headers are deliberately designed to include only standard headers and internal API headers
 - Build system: CMake 3.21+
 - Tests/benchmarks only: Catch2 (resolved via `find_package(Catch2 3)` or fetched via CMake `FetchContent`)
 
