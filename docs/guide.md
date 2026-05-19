@@ -37,6 +37,16 @@ cmake ..
 cmake --build .
 ```
 
+### Public headers and internal boundaries
+
+Use the public façade header whenever possible:
+
+```cpp
+#include "JSON_Lib.hpp"
+```
+
+Avoid direct inclusion of `implementation/*` headers in application code. The public headers exposed by `JSON_Lib.hpp`, `JSON.hpp`, and `JSON_IO.hpp` are the stable API surface, while implementation headers are only installed when required by these public headers.
+
 ### Link against your project
 
 ```cmake
@@ -522,8 +532,9 @@ Example programs: `JSON_Files_To_Bencode.cpp`, `JSON_Files_To_XML.cpp`, `JSON_Fi
 | Option | Default | Effect |
 |---|---|---|
 | `BUILD_TESTING` | `ON` | Compile unit tests (Catch2, fetched automatically) |
-| `BUILD_EXAMPLES` | `ON` | Compile example programs |
+| `BUILD_EXAMPLES` | `OFF` | Compile example programs |
 | `JSON_LIB_ENABLE_LTO` | `ON` | Enable link-time optimization on `JSON_Lib` |
+| `JSON_LIB_EXPORT_INTERFACE` | `ON` | Install only public headers by default |
 | `JSON_LIB_OPTIMIZATION_LEVEL` | `O2` | Compiler optimization flag (`O0`–`Ofast`) |
 | `JSON_LIB_EMBEDDED` | `OFF` | Preset: embedded-friendly build |
 | `JSON_LIB_NO_EXCEPTIONS` | `OFF` | Compile with `-fno-exceptions`; disables tests/examples |
@@ -532,6 +543,8 @@ Example programs: `JSON_Files_To_Bencode.cpp`, `JSON_Files_To_XML.cpp`, `JSON_Fi
 | `JSON_LIB_NO_STDIO` | `OFF` | Disable `FileSource`/`FileDestination` |
 | `JSON_LIB_MAX_PARSER_DEPTH` | `0` | Override parse depth limit (0 = use default 10) |
 | `JSON_LIB_MAX_STRING_LENGTH` | `0` | Override string length limit (0 = use default 16384) |
+
+> Note: `JSON_LIB_ENABLE_LTO` is enabled by default but is automatically disabled when `JSON_LIB_OPTIMIZATION_LEVEL` is set to `O0`.
 
 ### CMake build targets
 

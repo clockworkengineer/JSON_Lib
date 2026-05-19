@@ -49,8 +49,9 @@ cmake --build .
 | Option | Default | Description |
 |---|---|---|
 | `BUILD_TESTING` | `ON` | Build unit tests |
-| `BUILD_EXAMPLES` | `ON` | Build example programs |
+| `BUILD_EXAMPLES` | `OFF` | Build example programs |
 | `JSON_LIB_ENABLE_LTO` | `ON` | Enable link-time optimization |
+| `JSON_LIB_EXPORT_INTERFACE` | `ON` | Install only public headers by default |
 | `JSON_LIB_OPTIMIZATION_LEVEL` | `O2` | Compiler optimization (`O0`–`Ofast`) |
 | `JSON_LIB_EMBEDDED` | `OFF` | Enable embedded-friendly build preset |
 | `JSON_LIB_NO_EXCEPTIONS` | `OFF` | Disable C++ exceptions (`-fno-exceptions`) |
@@ -59,6 +60,19 @@ cmake --build .
 | `JSON_LIB_NO_STDIO` | `OFF` | Disable file / stdio support |
 | `JSON_LIB_MAX_PARSER_DEPTH` | `0` | Override max parse depth (0 = library default of 10) |
 | `JSON_LIB_MAX_STRING_LENGTH` | `0` | Override max string length in bytes (0 = library default of 16384) |
+
+> `JSON_LIB_ENABLE_LTO` is only applied when the build uses an optimization level other than `O0`. If `O0` is selected, CMake will disable LTO and keep the build faster for debug-style use.
+
+To run the benchmark suite:
+
+```sh
+git clone <repository-url>
+cd JSON_Lib
+mkdir build && cd build
+cmake ..
+cmake --build . --target JSON_Lib_Benchmarks
+./tests/JSON_Lib_Benchmarks
+```
 
 Enabling `JSON_LIB_EMBEDDED` automatically sets `BUILD_TESTING=OFF`, `BUILD_EXAMPLES=OFF`, `JSON_LIB_ENABLE_LTO=OFF`, and `JSON_LIB_NO_STDIO=ON`.
 

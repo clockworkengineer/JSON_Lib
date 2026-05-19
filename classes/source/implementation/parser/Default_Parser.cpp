@@ -45,25 +45,25 @@ String extractString(ISource &source, const ITranslator &translator)
   String extracted;
   extracted.reserve(64);
   while (source.more() && source.current() != JSON_Lib::kStringQuote) {
-    if (source.current() == '\\') {
+    if (source.current() == '\\') JSON_LIB_UNLIKELY {
       extracted.append('\\');
       source.next();
-      if (!source.more()) {
+      if (!source.more()) JSON_LIB_UNLIKELY {
         JSON_THROW(SyntaxError(source.getPosition(), "Unexpected end of input in string escape sequence."));
       }
-      if (!validEscape(source.current())) {
+      if (!validEscape(source.current())) JSON_LIB_UNLIKELY {
         JSON_THROW(SyntaxError(source.getPosition(), "Invalid escape sequence in string."));
       }
       translateEscapes = true;
     }
     extracted.append(source.current());
     stringLength++;
-    if (stringLength > extracted.getMaxStringLength()) {
+    if (stringLength > extracted.getMaxStringLength()) JSON_LIB_UNLIKELY {
       JSON_THROW(SyntaxError(source.getPosition(), "String size exceeds maximum allowed size."));
     }
     source.next();
   }
-  if (source.current() != '"') { JSON_THROW(SyntaxError(source.getPosition(), "Missing closing '\"' on string.")); }
+  if (source.current() != '"') JSON_LIB_UNLIKELY { JSON_THROW(SyntaxError(source.getPosition(), "Missing closing '\"' on string.")); }
   if (translateEscapes) { extracted = String{translator.from(extracted.value())}; }
   source.next();
   return extracted;
@@ -121,7 +121,7 @@ Node Default_Parser::parseNumber(ISource &source, unsigned long)
   std::array<char, kMaxNumberLength> numberText{};
   std::size_t numberLength = 0;
   while (source.more() && !endOfNumber(source)) {
-    if (numberLength >= numberText.size()) { JSON_THROW(SyntaxError("Number size exceeds maximum allowed length.")); }
+    if (numberLength >= numberText.size()) JSON_LIB_UNLIKELY { JSON_THROW(SyntaxError("Number size exceeds maximum allowed length.")); }
     numberText[numberLength++] = source.current();
     source.next();
   }
@@ -220,9 +220,7 @@ Node Default_Parser::parseArray(ISource &source, const unsigned long parserDepth
 /// <returns>Pointer to Node.</returns>
 Node Default_Parser::parseNodes(ISource &source, const unsigned long parserDepth, const unsigned long maxDepth)
 {
-  if (parserDepth >= maxDepth) {
-    JSON_THROW(SyntaxError(source.getPosition(), "Maximum parser depth exceeded."));
-  }
+  if (parserDepth >= maxDepth) JSON_LIB_UNLIKELY { JSON_THROW(SyntaxError(source.getPosition(), "Maximum parser depth exceeded.")); }
   source.ignoreWS();
   const char nextChar = source.current();
   Node jNode;

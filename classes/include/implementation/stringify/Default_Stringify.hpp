@@ -67,12 +67,12 @@ private:
     const bool pretty = indent != 0;
     size_t commaCount = entries.empty() ? 0 : entries.size() - 1;
     destination.add('{');
-    if (pretty) { destination.add('\n'); }
+    if (pretty) JSON_LIB_UNLIKELY { destination.add('\n'); }
     for (auto &entry : entries) {
-      if (pretty) { addIndent(destination, indent); }
+      if (pretty) JSON_LIB_UNLIKELY { addIndent(destination, indent); }
       stringifyString(entry.getKey(), destination);
       destination.add(':');
-      if (pretty) { destination.add(' '); }
+      if (pretty) JSON_LIB_UNLIKELY { destination.add(' '); }
       stringifyNodes(entry.getNode(), destination, pretty ? indent + m_indent : 0);
       addCommaNewline(destination, pretty, commaCount);
     }
@@ -85,11 +85,11 @@ private:
     const auto &elements = NRef<Array>(jNode).value();
     const bool pretty = indent != 0;
     destination.add('[');
-    if (!elements.empty()) {
+    if (!elements.empty()) JSON_LIB_LIKELY {
       size_t commaCount = elements.size() - 1;
-      if (pretty) { destination.add('\n'); }
+      if (pretty) JSON_LIB_UNLIKELY { destination.add('\n'); }
       for (auto &entry : elements) {
-        if (pretty) { addIndent(destination, indent); }
+        if (pretty) JSON_LIB_UNLIKELY { addIndent(destination, indent); }
         stringifyNodes(entry, destination, pretty ? indent + m_indent : 0);
         addCommaNewline(destination, pretty, commaCount);
       }

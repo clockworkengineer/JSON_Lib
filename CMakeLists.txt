@@ -237,10 +237,15 @@ target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
   $<INSTALL_INTERFACE:include>
 )
+add_library(JSON_Lib::JSON_Lib ALIAS ${JSON_LIBRARY_NAME})
 
 # Apply link-time optimization if enabled
 if(JSON_LIB_ENABLE_LTO)
-  set_property(TARGET ${JSON_LIBRARY_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+  if(JSON_LIB_OPTIMIZATION_LEVEL STREQUAL "O0")
+    message(WARNING "JSON_LIB_ENABLE_LTO is enabled but JSON_LIB_OPTIMIZATION_LEVEL is O0; disabling link-time optimization.")
+  else()
+    set_property(TARGET ${JSON_LIBRARY_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+  endif()
 endif()
 
 # Add tests if enabled
@@ -254,12 +259,65 @@ if(BUILD_EXAMPLES)
 endif()
 
 # Install rules
+set(JSON_PUBLIC_HEADERS
+  ${PROJECT_SOURCE_DIR}/classes/include/JSON_Lib.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/JSON.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/JSON_IO.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/JSON_IO_Core.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/JSON_Node_Core.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/JSON_Core.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/JSON_Parser_Core.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/JSON_Config.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/interface/JSON_Interfaces.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/interface/IAction.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/interface/ISource.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/interface/IDestination.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/interface/ITranslator.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/interface/IParser.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/interface/IStringify.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_Error.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_Attributes.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_Throw.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_StringUtils.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/JSON_Char_Constants.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io/JSON_Sources.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io/JSON_BufferSource.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io/JSON_FixedBufferSource.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io/JSON_FileSource.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io/JSON_Destinations.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io/JSON_DestinationBase.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io/JSON_BufferDestination.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io/JSON_FixedBufferDestination.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io/JSON_FileDestination.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants/JSON_Hole.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants/JSON_Number.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants/JSON_String.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants/JSON_Boolean.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants/JSON_Null.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/node/JSON_Node.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/node/JSON_Object.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/node/JSON_Array.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/node/JSON_Node_Reference.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/node/JSON_Node_Creation.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/node/JSON_Node_Index.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/converter/JSON_Converter.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/translator/Default_Translator.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/parser/Default_Parser.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify/Default_Stringify.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify/JSON_StringifierBase.hpp
+)
 install(TARGETS ${JSON_LIBRARY_NAME}
   EXPORT ${PROJECT_NAME}Targets
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
 )
+
+if(JSON_LIB_EXPORT_INTERFACE)
+  install(FILES ${JSON_PUBLIC_HEADERS} DESTINATION include)
+else()
+  install(FILES ${JSON_INCLUDES} DESTINATION include)
+endif()
 
 # Optional Doxygen documentation target
 find_package(Doxygen OPTIONAL_COMPONENTS dot)
@@ -273,20 +331,3 @@ if(DOXYGEN_FOUND)
   )
 endif()
 
-if(JSON_LIB_EXPORT_INTERFACE)
-  install(FILES
-    ${PROJECT_SOURCE_DIR}/classes/include/JSON.hpp
-    ${PROJECT_SOURCE_DIR}/classes/include/JSON_Config.hpp
-    ${PROJECT_SOURCE_DIR}/classes/include/interface/JSON_Interfaces.hpp
-    ${PROJECT_SOURCE_DIR}/classes/include/interface/IAction.hpp
-    ${PROJECT_SOURCE_DIR}/classes/include/interface/ISource.hpp
-    ${PROJECT_SOURCE_DIR}/classes/include/interface/IDestination.hpp
-    ${PROJECT_SOURCE_DIR}/classes/include/interface/ITranslator.hpp
-    ${PROJECT_SOURCE_DIR}/classes/include/interface/IParser.hpp
-    ${PROJECT_SOURCE_DIR}/classes/include/interface/IStringify.hpp
-    ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_Error.hpp
-    ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_Attributes.hpp
-    DESTINATION include)
-else()
-  install(FILES ${JSON_INCLUDES} DESTINATION include)
-endif()
