@@ -27,7 +27,12 @@ public:
   FileSource &operator=(FileSource &&other) = delete;
   ~FileSource() override = default;
 
-  char current() const JSON_LIB_NOEXCEPT override { return static_cast<char>(source.peek()); }
+  char current() const JSON_LIB_NOEXCEPT override
+  {
+    const auto nextChar = source.peek();
+    if (nextChar == EOF) { return '\0'; }
+    return static_cast<char>(nextChar);
+  }
   void next() override
   {
     if (!more()) { JSON_THROW(Error("Tried to read past end of file.")); }

@@ -29,7 +29,7 @@ TEST_CASE("Check string overflow handling.", "[Bencode][String][Overflow]")
   SECTION("Parse a string larger than the max allowed length of 16K", "[Bencode][Parse][String]")
   {
     REQUIRE_THROWS_WITH(json.parse(BufferSource{ "[\"" + std::string(getDefaultStringLength() + 1, '0') + "\"]" }),
-      "JSON Syntax Error: String size exceeds maximum allowed size.");
+      "JSON Syntax Error [Line: 1 Column: 103]: String size exceeds maximum allowed size.");
   }
 }
 TEST_CASE("Check parse depth handling.", "[JSON][Parse][Depth]")
@@ -40,7 +40,7 @@ TEST_CASE("Check parse depth handling.", "[JSON][Parse][Depth]")
   {
     REQUIRE_THROWS_WITH(
       json.parse(BufferSource(std::string(129, '[') + std::string(129, ']'))),
-      "JSON Syntax Error: Maximum parser depth exceeded.");
+      "JSON Syntax Error [Line: 1 Column: 128]: Maximum parser depth exceeded.");
   }
   SECTION("Get default maximum parser depth.", "[Bencode][Parse][Depth]")
   {
@@ -69,13 +69,13 @@ TEST_CASE("Check parse depth boundary conditions.", "[JSON][Parse][Depth][Bounda
   {
     REQUIRE_THROWS_WITH(
       json.parse(BufferSource(std::string(128, '[') + std::string(128, ']'))),
-      "JSON Syntax Error: Maximum parser depth exceeded.");
+      "JSON Syntax Error [Line: 1 Column: 128]: Maximum parser depth exceeded.");
   }
   SECTION("Parse array nested beyond max depth (129 levels) throws.", "[JSON][Parse][Depth][Boundary]")
   {
     REQUIRE_THROWS_WITH(
       json.parse(BufferSource(std::string(129, '[') + std::string(129, ']'))),
-      "JSON Syntax Error: Maximum parser depth exceeded.");
+      "JSON Syntax Error [Line: 1 Column: 128]: Maximum parser depth exceeded.");
   }
   SECTION("Parse object nested 126 levels deep (one below max) succeeds.", "[JSON][Parse][Depth][Boundary]")
   {
@@ -92,7 +92,7 @@ TEST_CASE("Check parse depth boundary conditions.", "[JSON][Parse][Depth][Bounda
     deepObj += "{}";
     for (int i = 0; i < 127; i++) deepObj += "}";
     REQUIRE_THROWS_WITH(json.parse(BufferSource(deepObj)),
-      "JSON Syntax Error: Maximum parser depth exceeded.");
+      "JSON Syntax Error [Line: 1 Column: 636]: Maximum parser depth exceeded.");
   }
   SECTION("Parse object nested beyond max depth (128 levels) throws.", "[JSON][Parse][Depth][Boundary]")
   {
@@ -101,7 +101,7 @@ TEST_CASE("Check parse depth boundary conditions.", "[JSON][Parse][Depth][Bounda
     deepObj += "{}";
     for (int i = 0; i < 128; i++) deepObj += "}";
     REQUIRE_THROWS_WITH(json.parse(BufferSource(deepObj)),
-      "JSON Syntax Error: Maximum parser depth exceeded.");
+      "JSON Syntax Error [Line: 1 Column: 636]: Maximum parser depth exceeded.");
   }
   SECTION("kDefaultMaxParserDepth constant equals 128.", "[JSON][Parse][Depth][Boundary]") {
     REQUIRE(Default_Parser::kDefaultMaxParserDepth == 128);
@@ -120,7 +120,7 @@ TEST_CASE("Check string max length can be configured.", "[JSON][Parse][String][M
   SECTION("Set smaller default max string length and parse string exceeding it throws.", "[JSON][Parse][String][MaxLength]") {
     const ScopedMaxStringLength scopedStringLength(100);
     REQUIRE_THROWS_WITH(json.parse(BufferSource{ "[\"" + std::string(101, 'x') + "\"]" }),
-      "JSON Syntax Error: String size exceeds maximum allowed size.");
+      "JSON Syntax Error [Line: 1 Column: 103]: String size exceeds maximum allowed size.");
   }
   SECTION("Restore max string length to default and verify.", "[JSON][Parse][String][MaxLength]") {
     const ScopedMaxStringLength scopedStringLength(50);

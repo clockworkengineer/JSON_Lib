@@ -155,13 +155,13 @@ TEST_CASE("Check JSON object for decoding of strings with escape characters.", "
     REQUIRE(NRef<String>(json.root()[1]).value() == "ghi\njkl");
     REQUIRE(NRef<String>(json.root()[2]).value() == R"(mn\op)");
   }
-  SECTION("Parse JSON string with unrecognized escape '\\q' and verify it is silently treated as 'q'.",
-    "[JSON][Parse][Escapes]")
+  SECTION("Parse JSON string with unrecognized escape '\\q' and expect a syntax error.",
+    "[JSON][Parse][Escapes][Exception]")
   {
     BufferSource jsonSource{ R"("abc \q def")" };
-    json.parse(jsonSource);
-    // '\q' is not a recognised JSON escape: the translator drops the '\' and keeps 'q'
-    REQUIRE(NRef<String>(json.root()).value() == "abc q def");
+    REQUIRE_THROWS_AS(json.parse(jsonSource), SyntaxError);
+    jsonSource.reset();
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Syntax Error [Line: 1 Column: 7]: Invalid escape sequence in string.");
   }
 }
 

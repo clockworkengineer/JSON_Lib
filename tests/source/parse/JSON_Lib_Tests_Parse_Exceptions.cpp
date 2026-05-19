@@ -120,13 +120,32 @@ TEST_CASE("Check parser generated exceptions.", "[JSON][Parse][Exception]")
     REQUIRE_THROWS_WITH(
       json.parse(jsonSource), "JSON Syntax Error [Line: 1 Column: 2]: Missing opening '\"' on string.");
   }
+  SECTION("parseResult returns a SyntaxError result for invalid JSON.", "[JSON][Parse][Result]")
+  {
+    BufferSource jsonSource{ R"({ "one" : "Apple })" };
+    auto result = json.parseResult(jsonSource);
+    REQUIRE_FALSE(result.ok());
+    REQUIRE(result.status == Status::SyntaxError);
+    REQUIRE(result.message == "JSON Syntax Error [Line: 1 Column: 19]: Missing closing '\"' on string.");
+    REQUIRE(result.position == std::pair<long, long>{1, 19});
+  }
+  SECTION("EmbeddedJSON parseNoThrow returns a SyntaxError result for invalid JSON.", "[JSON][Parse][Result][Embedded]")
+  {
+    EmbeddedJSON embedded;
+    BufferSource jsonSource{ R"({ "key" : trrue })" };
+    auto result = embedded.parseNoThrow(jsonSource);
+    REQUIRE_FALSE(result.ok());
+    REQUIRE(result.status == Status::SyntaxError);
+    REQUIRE(result.message == "JSON Syntax Error [Line: 1 Column: 13]: Invalid boolean value.");
+    REQUIRE(result.position == std::pair<long, long>{1, 13});
+  }
   SECTION("Parse JSON exceeding maximum parser depth.", "[JSON][Parse][Exception]")
   {
     const ScopedMaxDepth scopedDepth(json, 3);
     BufferSource jsonSource{ R"([[[[1]]]])" };
     REQUIRE_THROWS_AS(json.parse(jsonSource), SyntaxError);
     jsonSource.reset();
-    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Syntax Error: Maximum parser depth exceeded.");
+    REQUIRE_THROWS_WITH(json.parse(jsonSource), "JSON Syntax Error [Line: 1 Column: 3]: Maximum parser depth exceeded.");
   }
   SECTION("Parse multi-line JSON with a syntax error on line 2.", "[JSON][Parse][Exception]")
   {

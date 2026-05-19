@@ -27,8 +27,8 @@ namespace JSON_Lib {
 /// <returns>True then character is a valid escape character.</returns>
 bool validEscape(const char escape)
 {
-  return escape == JSON_Lib::kEscape || escape == 't' || escape == JSON_Lib::kStringQuote || escape == 'b'
-         || escape == 'f' || escape == 'n' || escape == 'r' || escape == 'u';
+  return escape == JSON_Lib::kEscape || escape == '/' || escape == 't' || escape == JSON_Lib::kStringQuote
+         || escape == 'b' || escape == 'f' || escape == 'n' || escape == 'r' || escape == 'u';
 }
 /// <summary>
 /// Extract a string from a JSON encoded source stream.
@@ -48,12 +48,19 @@ String extractString(ISource &source, const ITranslator &translator)
     if (source.current() == '\\') {
       extracted.append('\\');
       source.next();
-      if (!validEscape(source.current())) { extracted.pop_back(); }
+      if (!source.more()) {
+        JSON_THROW(SyntaxError(source.getPosition(), "Unexpected end of input in string escape sequence."));
+      }
+      if (!validEscape(source.current())) {
+        JSON_THROW(SyntaxError(source.getPosition(), "Invalid escape sequence in string."));
+      }
       translateEscapes = true;
     }
     extracted.append(source.current());
     stringLength++;
-    if (stringLength > extracted.getMaxStringLength()) { JSON_THROW(SyntaxError("String size exceeds maximum allowed size.")); }
+    if (stringLength > extracted.getMaxStringLength()) {
+      JSON_THROW(SyntaxError(source.getPosition(), "String size exceeds maximum allowed size."));
+    }
     source.next();
   }
   if (source.current() != '"') { JSON_THROW(SyntaxError(source.getPosition(), "Missing closing '\"' on string.")); }
@@ -213,7 +220,9 @@ Node Default_Parser::parseArray(ISource &source, const unsigned long parserDepth
 /// <returns>Pointer to Node.</returns>
 Node Default_Parser::parseNodes(ISource &source, const unsigned long parserDepth, const unsigned long maxDepth)
 {
-  if (parserDepth >= maxDepth) { JSON_THROW(SyntaxError("Maximum parser depth exceeded.")); }
+  if (parserDepth >= maxDepth) {
+    JSON_THROW(SyntaxError(source.getPosition(), "Maximum parser depth exceeded."));
+  }
   source.ignoreWS();
   const char nextChar = source.current();
   Node jNode;
