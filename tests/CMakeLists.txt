@@ -21,6 +21,8 @@ enable_testing()
 
 set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
+# Unit test source files are grouped by feature area for easier navigation and extension.
+# Add new tests in the matching feature subfolder, then register the file here.
 set(TEST_SOURCES
   source/node/JSON_Lib_Tests_Node_Assignment.cpp
   source/node/JSON_Lib_Tests_Node_Construct.cpp
@@ -51,6 +53,7 @@ set(TEST_SOURCES
   source/parse/JSON_Lib_Tests_Parse_Whitespace.cpp
   source/parse/JSON_Lib_Tests_Parse_Exceptions.cpp
   source/parse/JSON_Lib_Tests_Parse_Large.cpp
+  source/parse/JSON_Lib_Tests_Parse_Result.cpp
   source/stringify/JSON_Lib_Tests_Stringify_Misc.cpp
   source/stringify/JSON_Lib_Tests_Stringify_Escapes.cpp
   source/stringify/JSON_Lib_Tests_Stringify_Simple.cpp

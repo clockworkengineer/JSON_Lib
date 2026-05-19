@@ -404,6 +404,34 @@ cmake \
   ..
 ```
 
+### Test build matrix
+
+The library supports several verification modes. Use `BUILD_TESTING=ON` to enable unit tests.
+
+| Build variant | CMake flags | Notes |
+|---|---|---|
+| Default tests | `-DBUILD_TESTING=ON` | Standard unit test build | 
+| Embedded preset + tests | `-DJSON_LIB_EMBEDDED=ON -DBUILD_TESTING=ON -DBUILD_EXAMPLES=OFF` | Embedded policies enabled, file I/O disabled | 
+| No exceptions | `-DJSON_LIB_NO_EXCEPTIONS=ON -DBUILD_TESTING=ON` | Exercise `parseResult` / `stringifyResult` and `NoThrow` APIs |
+| No stdio | `-DJSON_LIB_NO_STDIO=ON -DBUILD_TESTING=ON` | File I/O sources/destinations are disabled |
+| No dynamic memory | `-DJSON_LIB_NO_DYNAMIC_MEMORY=ON -DBUILD_TESTING=ON` | Enforces embedded memory policy |
+
+Run tests from the build directory:
+
+```sh
+cmake -S . -B build -DBUILD_TESTING=ON -DBUILD_EXAMPLES=OFF
+cmake --build build --target JSON_Lib_Unit_Tests
+ctest --test-dir build --output-on-failure
+```
+
+For an embedded-style tests build:
+
+```sh
+cmake -S . -B build-embedded -DJSON_LIB_EMBEDDED=ON -DBUILD_TESTING=ON -DBUILD_EXAMPLES=OFF -DJSON_LIB_ENABLE_LTO=OFF
+cmake --build build-embedded --target JSON_Lib_Unit_Tests
+ctest --test-dir build-embedded --output-on-failure
+```
+
 ### Using EmbeddedJSON
 
 ```cpp

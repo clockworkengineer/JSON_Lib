@@ -74,6 +74,24 @@ cmake --build . --target JSON_Lib_Benchmarks
 ./tests/JSON_Lib_Benchmarks
 ```
 
+### Running tests
+
+```sh
+mkdir build && cd build
+cmake -DBUILD_TESTING=ON -DBUILD_EXAMPLES=OFF ..
+cmake --build . --target JSON_Lib_Unit_Tests
+ctest --output-on-failure
+```
+
+For embedded-mode tests:
+
+```sh
+mkdir build-embedded && cd build-embedded
+cmake -DJSON_LIB_EMBEDDED=ON -DBUILD_TESTING=ON -DBUILD_EXAMPLES=OFF -DJSON_LIB_ENABLE_LTO=OFF ..
+cmake --build . --target JSON_Lib_Unit_Tests
+ctest --output-on-failure
+```
+
 Enabling `JSON_LIB_EMBEDDED` automatically sets `BUILD_TESTING=OFF`, `BUILD_EXAMPLES=OFF`, `JSON_LIB_ENABLE_LTO=OFF`, and `JSON_LIB_NO_STDIO=ON`.
 
 Use CMake presets for constrained builds:
