@@ -1,5 +1,51 @@
 #pragma once
 
+#ifndef __has_cpp_attribute
+  #define __has_cpp_attribute(x) 0
+#endif
+
+#if defined(_MSC_VER)
+  #define JSON_LIB_COMPILER_MSVC 1
+#else
+  #define JSON_LIB_COMPILER_MSVC 0
+#endif
+
+#if defined(__clang__)
+  #define JSON_LIB_COMPILER_CLANG 1
+#else
+  #define JSON_LIB_COMPILER_CLANG 0
+#endif
+
+#if defined(__GNUC__) && !defined(__clang__)
+  #define JSON_LIB_COMPILER_GCC 1
+#else
+  #define JSON_LIB_COMPILER_GCC 0
+#endif
+
+#if !JSON_LIB_COMPILER_MSVC && !JSON_LIB_COMPILER_CLANG && !JSON_LIB_COMPILER_GCC
+  #define JSON_LIB_COMPILER_UNKNOWN 1
+#else
+  #define JSON_LIB_COMPILER_UNKNOWN 0
+#endif
+
+#if defined(_WIN32) || defined(_WIN64)
+  #define JSON_LIB_PLATFORM_WINDOWS 1
+#else
+  #define JSON_LIB_PLATFORM_WINDOWS 0
+#endif
+
+#if defined(__unix__) || defined(__unix) || defined(unix) || defined(__APPLE__) || defined(__MACH__)
+  #define JSON_LIB_PLATFORM_UNIX 1
+#else
+  #define JSON_LIB_PLATFORM_UNIX 0
+#endif
+
+#if JSON_LIB_PLATFORM_UNIX
+  #define JSON_LIB_PLATFORM_POSIX 1
+#else
+  #define JSON_LIB_PLATFORM_POSIX 0
+#endif
+
 #if defined(__has_cpp_attribute)
   #if __has_cpp_attribute(nodiscard)
     #define JSON_LIB_NODISCARD [[nodiscard]]

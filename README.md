@@ -24,6 +24,21 @@
 - C++ compiler with C++23 support (GCC 13+, Clang 16+, MSVC 19.36+)
 - CMake 3.21 or later
 
+## Portability
+
+JSON_Lib is designed to build on major C++23 toolchains and is portable across Windows, Linux, and macOS.
+The library exposes compatibility macros in `classes/include/implementation/common/JSON_Attributes.hpp`:
+`JSON_LIB_COMPILER_MSVC`, `JSON_LIB_COMPILER_CLANG`, `JSON_LIB_COMPILER_GCC`, `JSON_LIB_COMPILER_UNKNOWN`,
+`JSON_LIB_PLATFORM_WINDOWS`, `JSON_LIB_PLATFORM_UNIX`, and `JSON_LIB_PLATFORM_POSIX`.
+
+To validate a specific compiler build:
+
+```sh
+mkdir build-clang && cd build-clang
+cmake -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_STANDARD=23 ..
+cmake --build .
+```
+
 ## Dependencies
 
 `JSON_Lib` has **zero runtime dependencies** beyond the C++ standard library.
