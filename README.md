@@ -62,6 +62,23 @@ cmake --build .
 
 Enabling `JSON_LIB_EMBEDDED` automatically sets `BUILD_TESTING=OFF`, `BUILD_EXAMPLES=OFF`, `JSON_LIB_ENABLE_LTO=OFF`, and `JSON_LIB_NO_STDIO=ON`.
 
+Use CMake presets for constrained builds:
+
+```sh
+cmake -DJSON_LIB_EMBEDDED=ON ..
+```
+
+For a custom exception-free embedded configuration:
+
+```sh
+cmake \
+  -DJSON_LIB_NO_EXCEPTIONS=ON \
+  -DJSON_LIB_NO_STDIO=ON \
+  -DJSON_LIB_MAX_PARSER_DEPTH=5 \
+  -DJSON_LIB_MAX_STRING_LENGTH=2048 \
+  ..
+```
+
 ### Link in your project
 
 ```cmake
@@ -154,6 +171,7 @@ cmake -DJSON_LIB_NO_EXCEPTIONS=ON -DJSON_LIB_NO_STDIO=ON -DJSON_LIB_MAX_PARSER_D
 
 - **API Reference:** [docs/api.md](docs/api.md)
 - **User Guide:** [docs/guide.md](docs/guide.md)
+- **Architecture Overview:** [docs/architecture.md](docs/architecture.md)
 - **Compliance Report:** [docs/JSON_Lib_Compliance_Report.md](docs/JSON_Lib_Compliance_Report.md)
 - **Examples:** `examples/source/` — file conversion, schema validation, embedded API, custom serialization, streaming, and more.
 

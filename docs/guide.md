@@ -53,8 +53,7 @@ target_include_directories(my_app PRIVATE
 ## Parsing JSON
 
 ```cpp
-#include "JSON.hpp"
-#include "implementation/io/JSON_Sources.hpp"
+#include "JSON_Lib.hpp"
 
 namespace js = JSON_Lib;
 
@@ -88,6 +87,13 @@ js::JSON arr(js::JSON::ArrayInitializer{1, 2.5, "three", true});
 js::JSON json;
 json.parse(js::BufferSource{"{}"}); // start with empty object
 json["count"] = 7;
+
+// Direct node construction
+js::Node root(js::JSON::ObjectInitializer{
+    {"name", "Charlie"},
+    {"active", true},
+});
+json.root() = std::move(root);
 ```
 
 ---
@@ -108,6 +114,11 @@ bool admin = js::NRef<js::Boolean>(json["admin"]).value();
 // Array element
 int first = js::NRef<js::Number>(json[0]).value<int>();
 
+// Safe key checks
+if (json.contains("name")) {
+    std::string name = js::NRef<js::String>(json.at("name")).value();
+}
+
 // Nested access
 std::string city = js::NRef<js::String>(json["address"]["city"]).value();
 ```
@@ -117,7 +128,7 @@ std::string city = js::NRef<js::String>(json["address"]["city"]).value();
 ## Serializing JSON
 
 ```cpp
-#include "implementation/io/JSON_Destinations.hpp"
+#include "JSON_Lib.hpp"
 
 // Compact JSON into a heap string
 js::BufferDestination buf;
@@ -156,6 +167,41 @@ File helpers are compiled out when `JSON_LIB_NO_STDIO == 1`.
 
 ---
 
+## Custom parser and stringify injection
+
+`JSON_Lib` supports custom parsing and serialization implementations via `IParser` and `IStringify`.
+
+```cpp
+#include "JSON_Lib.hpp"
+
+namespace js = JSON_Lib;
+
+struct MyParser : js::IParser {
+    js::Node parse(js::ISource &source) override {
+        // Implement your own parse strategy or delegate to an existing parser.
+        throw js::IParser::Error("custom parser not implemented");
+    }
+};
+
+struct MyStringify : js::IStringify {
+    void stringify(const js::Node &jNode, js::IDestination &destination, unsigned long indent) const override {
+        // Emit custom output for the JSON node tree.
+        (void)jNode;
+        (void)destination;
+        (void)indent;
+    }
+};
+
+namespace js = JSON_Lib;
+
+js::JSON json(js::makeStringify<MyStringify>(), std::make_unique<MyParser>());
+json.parse(js::BufferSource{R"({"hello":"world"})"});
+js::BufferDestination out;
+json.stringify(out);
+```
+
+---
+
 ## Error handling
 
 ### Exception-based (default)
@@ -190,9 +236,14 @@ if (!result.ok()) {
 
 ```cpp
 auto sr = embedded.stringifyNoThrow(js::FixedBufferDestination<256>{});
-    std::string compact = json.stringifyToString();
-    std::cout << compact << "\n";
-if (!sr.ok()) { /* sr.message */ }
+if (!sr.ok()) { std::fprintf(stderr, "error: %s\n", sr.message.c_str()); }
+```
+
+To serialize a ready JSON tree into a string buffer:
+
+```cpp
+std::string compact = json.stringifyToString();
+std::cout << compact << "\n";
 ```
 
 ---
@@ -232,9 +283,7 @@ struct Result<void> {
 ### Parse — full workflow
 
 ```cpp
-#include "JSON.hpp"
-#include "implementation/io/JSON_Sources.hpp"
-#include "implementation/io/JSON_Destinations.hpp"
+#include "JSON_Lib.hpp"
 
 namespace js = JSON_Lib;
 
@@ -339,9 +388,7 @@ cmake \
 ### Using EmbeddedJSON
 
 ```cpp
-#include "JSON.hpp"
-#include "implementation/io/JSON_Sources.hpp"
-#include "implementation/io/JSON_Destinations.hpp"
+#include "JSON_Lib.hpp"
 
 namespace js = JSON_Lib;
 
@@ -533,7 +580,7 @@ Example programs: `JSON_Files_To_Bencode.cpp`, `JSON_Files_To_XML.cpp`, `JSON_Fi
 | `file not found` on `JSON_Interfaces.hpp` | Missing impl include dirs | Add `${JSON_IMPL_INCLUDE_DIRS}` as PRIVATE include to your target |
 | PCH error `Unable to resolve full path` | `REUSE_FROM JSON_Lib` on examples | Use `REUSE_FROM JSON_Lib_Core` (the static wrapper has no sources) |
 | Link error on `FileSource`/`FileDestination` | `JSON_LIB_NO_STDIO=ON` | Disable the flag, or use `BufferSource`/`BufferDestination` |
-| `FixedBufferDestination` not found | Wrong destination header | Include `implementation/io/JSON_Destinations.hpp` |
+| `FixedBufferDestination` not found | Wrong destination header | Include `JSON_IO.hpp` |
 | Overflow with `FixedBufferDestination` | Buffer too small | Increase `N`, or check `overflowed()` and resize |
 | Large integers parsed incorrectly | C++ type narrowing | Use `value<long long>()` or `value<double>()` explicitly |
 
