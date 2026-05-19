@@ -103,6 +103,28 @@ target_link_libraries(<your-target> PRIVATE JSON_Lib)
 
 ## Basic Usage
 
+### Custom backend injection
+
+```cpp
+#include "JSON_Lib.hpp"
+
+namespace js = JSON_Lib;
+
+struct MyCustomParser final : public js::IParser {
+  js::Node parse(js::ISource &source) override {
+    // Custom parse logic goes here.
+    return js::Node(js::JSON::ObjectInitializer{{"custom", true}});
+  }
+};
+
+js::JSON::Options options;
+options.setStringify(js::makeStringify<js::XML_Stringify>())
+       .setParser(std::make_unique<MyCustomParser>());
+js::JSON json(std::move(options));
+```
+
+### Basic parsing and serialization
+
 ```cpp
 #include "JSON_Lib.hpp"
 

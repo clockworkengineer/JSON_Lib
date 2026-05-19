@@ -38,9 +38,19 @@ All public types live in `namespace JSON_Lib`.
 | Constructor | Description |
 |---|---|
 | `JSON(std::unique_ptr<IStringify> = nullptr, std::unique_ptr<IParser> = nullptr)` | Default; accepts optional custom stringify/parser |
+| `JSON(Options options)` | Default; use an options object to configure parser/stringify backends |
 | `JSON(std::string_view jsonString)` | Construct and parse a JSON string immediately |
 | `JSON(ArrayInitializer)` | Construct a JSON array from an initializer list |
 | `JSON(ObjectInitializer)` | Construct a JSON object from an initializer list |
+
+`JSON::Options` is the preferred way to configure backend plugins, keeping parser and stringify construction separate from payload initialization.
+
+```cpp
+JSON::Options options;
+options.setStringify(JSON_Lib::makeStringify<JSON_Lib::XML_Stringify>());
+options.setParser(std::make_unique<MyCustomParser>());
+JSON json(std::move(options));
+```
 
 Copy and move are deleted. `JSON` is non-copyable, non-movable.
 

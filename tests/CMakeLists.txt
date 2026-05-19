@@ -29,6 +29,7 @@ set(TEST_SOURCES
   source/json/JSON_Lib_Tests_JSON_Create_Complex.cpp
   source/json/JSON_Lib_Tests_JSON_Create_Array.cpp
   source/json/JSON_Lib_Tests_JSON_Create_Simple.cpp
+  source/json/JSON_Lib_Tests_JSON_CustomBackend.cpp
   source/io/JSON_Lib_Tests_ISource_Buffer.cpp
   source/io/JSON_Lib_Tests_ISource_File.cpp
   source/io/JSON_Lib_Tests_IDestination_Buffer.cpp

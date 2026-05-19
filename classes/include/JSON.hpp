@@ -10,6 +10,8 @@
 #include "JSON_Config.hpp"
 #include "implementation/common/JSON_Attributes.hpp"
 #include "implementation/common/JSON_Error.hpp"
+#include "interface/IParser.hpp"
+#include "interface/IStringify.hpp"
 
 namespace JSON_Lib {
 
@@ -39,6 +41,30 @@ struct Node;
 class JSON_LIB_API JSON
 {
 public:
+  struct Options
+  {
+    std::unique_ptr<IStringify> stringify;
+    std::unique_ptr<IParser> parser;
+
+    Options() = default;
+    Options(Options &&) = default;
+    Options &operator=(Options &&) = default;
+    Options(const Options &) = delete;
+    Options &operator=(const Options &) = delete;
+
+    Options &setStringify(std::unique_ptr<IStringify> value)
+    {
+      stringify = std::move(value);
+      return *this;
+    }
+
+    Options &setParser(std::unique_ptr<IParser> value)
+    {
+      parser = std::move(value);
+      return *this;
+    }
+  };
+
   // Overloads for parse and parseResult accepting std::string_view and const char*
   void parse(const std::string_view &jsonStr);
   void parse(const char *jsonStr);
@@ -59,6 +85,7 @@ public:
   enum class Format : uint8_t { utf8 = 0, utf8BOM, utf16BE, utf16LE, utf32BE, utf32LE };
   // Pass any user defined translator/converter here
   explicit JSON(std::unique_ptr<IStringify> stringify=nullptr, std::unique_ptr<IParser> parser=nullptr);
+  explicit JSON(Options options);
   // Pass in default JSON to parse
   explicit JSON(const std::string_view &jsonString);
   // Construct an array

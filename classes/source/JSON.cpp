@@ -40,6 +40,11 @@ JSON::JSON(std::unique_ptr<IStringify> stringify, std::unique_ptr<IParser> parse
   : implementation(std::make_unique<JSON_Impl>(std::move(stringify), std::move(parser)))
 {
 }
+
+JSON::JSON(Options options)
+  : JSON(std::move(options.stringify), std::move(options.parser))
+{
+}
 /// <summary>
 /// JSON constructor (array).
 /// </summary>

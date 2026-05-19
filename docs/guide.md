@@ -439,6 +439,15 @@ unsigned long depth = js::EmbeddedJSON::Limits::maxParserDepth();
 uint64_t      len   = js::EmbeddedJSON::Limits::maxStringLength();
 ```
 
+These values are also available as compile-time constants, which is useful for static configuration checks and buffer sizing in embedded builds:
+
+```cpp
+static_assert(js::EmbeddedJSON::Limits::kMaxParserDepth > 0);
+static_assert(js::EmbeddedJSON::Limits::kMaxStringLength > 0);
+```
+
+Use `EmbeddedJSON::Limits` whenever your embedded application needs to adapt to the configured parser depth or string-size bounds.
+
 ---
 
 ## Custom struct serialization
