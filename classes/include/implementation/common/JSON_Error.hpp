@@ -60,6 +60,15 @@ struct Error final : std::runtime_error
     : std::runtime_error(formatPosition(position, "JSON Error").append(message))
   {}
 };
+struct UnsupportedEncodingError final : public std::runtime_error
+{
+  explicit UnsupportedEncodingError(const std::string_view &message)
+    : std::runtime_error(makeTaggedError("JSON UnsupportedEncoding", message))
+  {}
+  explicit UnsupportedEncodingError(const std::pair<long, long> &position, const std::string_view &message = "")
+    : std::runtime_error(formatPosition(position, "JSON UnsupportedEncoding Error").append(message))
+  {}
+};
 struct SyntaxError final : std::runtime_error
 {
   explicit SyntaxError(const std::string_view &message) : std::runtime_error(makeTaggedError("JSON Syntax", message)) {}

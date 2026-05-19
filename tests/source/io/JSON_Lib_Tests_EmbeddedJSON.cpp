@@ -156,6 +156,19 @@ TEST_CASE("EmbeddedJSON parseNoThrow rvalue overload", "[JSON][Embedded][NoThrow
   REQUIRE(result.ok());
 }
 
+TEST_CASE("EmbeddedJSON parseNoThrow returns UnsupportedEncoding on invalid UTF-8", "[JSON][Embedded][NoThrow][UnsupportedEncoding]")
+{
+  EmbeddedJSON embedded;
+  std::string invalidUtf8 = "[\"";
+  invalidUtf8.push_back(static_cast<char>(0xC0));
+  invalidUtf8 += "\"]";
+
+  const auto result = embedded.parseNoThrow(BufferSource{invalidUtf8});
+  REQUIRE_FALSE(result.ok());
+  REQUIRE(result.status == Status::UnsupportedEncoding);
+  REQUIRE(result.message.find("Invalid UTF-8 sequence in string.") != std::string::npos);
+}
+
 TEST_CASE("EmbeddedJSON stringify integer JSON produces correct output", "[JSON][Embedded][Integer]")
 {
   EmbeddedJSON embedded;

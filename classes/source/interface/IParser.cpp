@@ -9,6 +9,8 @@ Result<Node> IParser::parseResult(ISource &source)
     return {Status::Ok, std::make_unique<Node>(parse(source)), {}, {0, 0}};
   } catch (const SyntaxError &ex) {
     return {Status::SyntaxError, nullptr, ex.what(), source.getPosition()};
+  } catch (const UnsupportedEncodingError &ex) {
+    return {Status::UnsupportedEncoding, nullptr, ex.what(), source.getPosition()};
   } catch (const Error &ex) {
     return {Status::InvalidInput, nullptr, ex.what(), source.getPosition()};
   } catch (const std::exception &ex) {

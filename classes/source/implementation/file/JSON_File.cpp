@@ -48,7 +48,7 @@ void writeJSONString(std::ofstream &jsonFile, const std::u16string_view &jsonStr
       jsonFile.put(static_cast<char>(ch >> 8));
     }
   } else {
-    JSON_THROW(Error("Unsupported JSON file format (Byte Order Mark) specified in call to writeJSONString()."));
+    JSON_THROW(UnsupportedEncodingError("Unsupported JSON file format (Byte Order Mark) specified in call to writeJSONString()."));
   }
 }
 
@@ -83,7 +83,7 @@ std::u16string readJSONString(std::ifstream &jsonFile, const JSON::Format format
       utf16String.push_back(ch16);
     }
   } else {
-    JSON_THROW(Error("Unsupported JSON file format (Byte Order Mark) specified in call to readJSONString()."));
+    JSON_THROW(UnsupportedEncodingError("Unsupported JSON file format (Byte Order Mark) specified in call to readJSONString()."));
   }
   return utf16String;
 }
@@ -97,15 +97,21 @@ std::u16string readJSONString(std::ifstream &jsonFile, const JSON::Format format
 JSON::Format JSON_Impl::getFileFormat(const std::string_view &fileName)
 {
   std::ifstream jsonFile{ fileName.data(), std::ios_base::binary };
-  uint32_t byteOrderMark = static_cast<unsigned char>(jsonFile.get()) << 24;
-  byteOrderMark |= static_cast<unsigned char>(jsonFile.get()) << 16;
-  byteOrderMark |= static_cast<unsigned char>(jsonFile.get()) << 8;
-  byteOrderMark |= static_cast<unsigned char>(jsonFile.get());
-  if (byteOrderMark == 0x0000FEFF) { return JSON::Format::utf32BE; }
-  if (byteOrderMark == 0xFFFE0000) { return JSON::Format::utf32LE; }
-  if ((byteOrderMark & 0xFFFFFF00) == 0xEFBBBF00) { return JSON::Format::utf8BOM; }
-  if ((byteOrderMark & 0xFFFF0000) == 0xFEFF0000) { return JSON::Format::utf16BE; }
-  if ((byteOrderMark & 0xFFFF0000) == 0xFFFE0000) { return JSON::Format::utf16LE; }
+  const unsigned char first  = static_cast<unsigned char>(jsonFile.get());
+  const unsigned char second = static_cast<unsigned char>(jsonFile.get());
+  const unsigned char third  = static_cast<unsigned char>(jsonFile.get());
+  const unsigned char fourth = static_cast<unsigned char>(jsonFile.get());
+
+  if (first == 0x00u && second == 0x00u && third == 0xFEu && fourth == 0xFFu) { return JSON::Format::utf32BE; }
+  if (first == 0xFFu && second == 0xFEu && third == 0x00u && fourth == 0x00u) { return JSON::Format::utf32LE; }
+  if (first == 0xEFu && second == 0xBBu) {
+    if (third != 0xBFu) {
+      JSON_THROW(UnsupportedEncodingError("Invalid UTF-8 Byte Order Mark sequence detected."));
+    }
+    return JSON::Format::utf8BOM;
+  }
+  if (first == 0xFEu && second == 0xFFu) { return JSON::Format::utf16BE; }
+  if (first == 0xFFu && second == 0xFEu) { return JSON::Format::utf16LE; }
   jsonFile.close();
   return JSON::Format::utf8;
 }
@@ -137,7 +143,7 @@ std::string JSON_Impl::fromFile(const std::string_view &fileName)
     translated = toUtf8(readJSONString(jsonFile, format));
     break;
   default:
-    JSON_THROW(Error("Unsupported JSON file format (Byte Order Mark) encountered."));
+    JSON_THROW(UnsupportedEncodingError("Unsupported JSON file format (Byte Order Mark) encountered."));
   }
   jsonFile.close();
   // Translate CRLF -> LF
@@ -172,7 +178,7 @@ void JSON_Impl::toFile(const std::string_view &fileName, const std::string_view 
     writeJSONString(jsonFile, toUtf16(jsonString), format);
     break;
   default:
-    JSON_THROW(Error("Unsupported JSON file format (Byte Order Mark) specified."));
+    JSON_THROW(UnsupportedEncodingError("Unsupported JSON file format (Byte Order Mark) specified."));
   }
   jsonFile.close();
 }

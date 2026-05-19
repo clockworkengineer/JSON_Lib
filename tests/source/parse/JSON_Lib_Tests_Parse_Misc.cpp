@@ -129,3 +129,19 @@ TEST_CASE("Check string max length can be configured.", "[JSON][Parse][String][M
   }
 }
 
+TEST_CASE("Check invalid UTF-8 sequences in strings are rejected.", "[JSON][Parse][UTF8][Invalid]")
+{
+  JSON json;
+  std::string invalidUtf8 = "[\"";
+  invalidUtf8.push_back(static_cast<char>(0xC0));
+  invalidUtf8 += "\"]";
+
+  bool exceptionMatched = false;
+  try {
+    json.parse(BufferSource{invalidUtf8});
+  } catch (const UnsupportedEncodingError &ex) {
+    exceptionMatched = std::string(ex.what()).find("Invalid UTF-8 sequence in string.") != std::string::npos;
+  }
+  REQUIRE(exceptionMatched);
+}
+

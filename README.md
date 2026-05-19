@@ -58,7 +58,7 @@ cmake --build .
 | `JSON_LIB_NO_HEAP` | `OFF` | Disable heap allocation |
 | `JSON_LIB_NO_DYNAMIC_MEMORY` | `OFF` | Disable dynamic memory use |
 | `JSON_LIB_NO_STDIO` | `OFF` | Disable file / stdio support |
-| `JSON_LIB_MAX_PARSER_DEPTH` | `0` | Override max parse depth (0 = library default of 10) |
+| `JSON_LIB_MAX_PARSER_DEPTH` | `0` | Override max parse depth (0 = library default of 128) |
 | `JSON_LIB_MAX_STRING_LENGTH` | `0` | Override max string length in bytes (0 = library default of 16384) |
 
 > `JSON_LIB_ENABLE_LTO` is only applied when the build uses an optimization level other than `O0`. If `O0` is selected, CMake will disable LTO and keep the build faster for debug-style use.

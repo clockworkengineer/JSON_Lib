@@ -85,7 +85,7 @@ TEST_CASE("Checks for toFile() api.", "[JSON][ToFile]")
     std::string testFile{ prefixTestDataPath(generateRandomFileName()) };
     std::string expected{ R"([true  , "Out of time",  7.89043e+18, true])" };
     REQUIRE_THROWS_WITH(JSON::toFile(testFile, expected, JSON::Format::utf32BE),
-      "JSON Error: Unsupported JSON file format (Byte Order Mark) specified.");
+      "JSON UnsupportedEncoding Error: Unsupported JSON file format (Byte Order Mark) specified.");
     std::filesystem::remove(testFile);
   }
   SECTION("Check that toFile() works with UTF32LE.", "[JSON][ToFile][UTF32LE]")
@@ -93,7 +93,7 @@ TEST_CASE("Checks for toFile() api.", "[JSON][ToFile]")
     std::string testFile{ prefixTestDataPath(generateRandomFileName()) };
     std::string expected{ R"([true  , "Out of time",  7.89043e+18, true])" };
     REQUIRE_THROWS_WITH(JSON::toFile(testFile, expected, JSON::Format::utf32LE),
-      "JSON Error: Unsupported JSON file format (Byte Order Mark) specified.");
+      "JSON UnsupportedEncoding Error: Unsupported JSON file format (Byte Order Mark) specified.");
     std::filesystem::remove(testFile);
   }
 }

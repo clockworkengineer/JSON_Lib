@@ -369,9 +369,18 @@ if (!sr.ok()) { handle_error(sr.message); return; }
 > **Tip:** Prefer `...Result` / `NoThrow` overloads in all new code that needs to run without
 > exceptions, especially on RTOS targets where stack-unwinding tables may be stripped.
 
----
+## Security and strict parse semantics
 
-## Embedded and resource-constrained builds
+JSON_Lib treats untrusted input conservatively:
+- Raw control characters inside JSON strings are rejected.
+- Invalid UTF-8 sequences in string values are rejected.
+- Incomplete or unrecognized BOM sequences in JSON files are treated as unsupported encoding.
+- Nested objects and arrays are capped by `JSON_LIB_MAX_PARSER_DEPTH`.
+- String content is capped by `JSON_LIB_MAX_STRING_LENGTH`.
+- Use `parseResult` / `parseNoThrow` to observe parse failures through `Status::SyntaxError` or `Status::UnsupportedEncoding`.
+
+Use build-time overrides to harden parser behavior in constrained or security-sensitive deployments.
+
 
 ### Build presets
 
@@ -429,7 +438,7 @@ if (out.overflowed()) { handle_overflow(); }
 
 | CMake variable | Macro | Default |
 |---|---|---|
-| `JSON_LIB_MAX_PARSER_DEPTH` | `JSON_LIB_MAX_PARSER_DEPTH` | 10 |
+| `JSON_LIB_MAX_PARSER_DEPTH` | `JSON_LIB_MAX_PARSER_DEPTH` | 128 |
 | `JSON_LIB_MAX_STRING_LENGTH` | `JSON_LIB_MAX_STRING_LENGTH` | 16384 |
 
 Access at runtime:
@@ -550,7 +559,7 @@ Example programs: `JSON_Files_To_Bencode.cpp`, `JSON_Files_To_XML.cpp`, `JSON_Fi
 | `JSON_LIB_NO_HEAP` | `OFF` | Disable heap use; implies `NO_DYNAMIC_MEMORY` |
 | `JSON_LIB_NO_DYNAMIC_MEMORY` | `OFF` | Disable dynamic memory; implies `NO_HEAP` |
 | `JSON_LIB_NO_STDIO` | `OFF` | Disable `FileSource`/`FileDestination` |
-| `JSON_LIB_MAX_PARSER_DEPTH` | `0` | Override parse depth limit (0 = use default 10) |
+| `JSON_LIB_MAX_PARSER_DEPTH` | `0` | Override parse depth limit (0 = use default 128) |
 | `JSON_LIB_MAX_STRING_LENGTH` | `0` | Override string length limit (0 = use default 16384) |
 
 > Note: `JSON_LIB_ENABLE_LTO` is enabled by default but is automatically disabled when `JSON_LIB_OPTIMIZATION_LEVEL` is set to `O0`.

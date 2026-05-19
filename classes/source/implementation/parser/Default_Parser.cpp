@@ -16,6 +16,71 @@
 
 namespace JSON_Lib {
 
+static bool isUtf8Continuation(const unsigned char byte) noexcept
+{
+  return (byte & 0xC0u) == 0x80u;
+}
+
+static void appendUtf8Sequence(ISource &source, String &extracted, uint64_t &stringLength)
+{
+  const auto first = static_cast<unsigned char>(source.current());
+  if (first < 0xC2u || first > 0xF4u) {
+    JSON_THROW(UnsupportedEncodingError(source.getPosition(), "Invalid UTF-8 sequence in string."));
+  }
+
+  auto appendByte = [&](unsigned char byte) {
+    extracted.append(static_cast<char>(byte));
+    if (++stringLength > extracted.getMaxStringLength()) JSON_LIB_UNLIKELY {
+      JSON_THROW(SyntaxError(source.getPosition(), "String size exceeds maximum allowed size."));
+    }
+  };
+
+  size_t expectedBytes = 0;
+  if ((first & 0xE0u) == 0xC0u) {
+    expectedBytes = 1;
+    if (first <= 0xC1u) {
+      JSON_THROW(UnsupportedEncodingError(source.getPosition(), "Invalid UTF-8 sequence in string."));
+    }
+  } else if ((first & 0xF0u) == 0xE0u) {
+    expectedBytes = 2;
+  } else if ((first & 0xF8u) == 0xF0u) {
+    expectedBytes = 3;
+    if (first > 0xF4u) {
+      JSON_THROW(UnsupportedEncodingError(source.getPosition(), "Invalid UTF-8 sequence in string."));
+    }
+  } else {
+    JSON_THROW(UnsupportedEncodingError(source.getPosition(), "Invalid UTF-8 sequence in string."));
+  }
+
+  appendByte(first);
+  source.next();
+  for (size_t idx = 0; idx < expectedBytes; ++idx) {
+    if (!source.more()) {
+      JSON_THROW(UnsupportedEncodingError(source.getPosition(), "Invalid UTF-8 sequence in string."));
+    }
+    const auto nextByte = static_cast<unsigned char>(source.current());
+    if (!isUtf8Continuation(nextByte)) {
+      JSON_THROW(UnsupportedEncodingError(source.getPosition(), "Invalid UTF-8 sequence in string."));
+    }
+    if (idx == 0) {
+      if (first == 0xE0u && nextByte < 0xA0u) {
+        JSON_THROW(UnsupportedEncodingError(source.getPosition(), "Invalid UTF-8 sequence in string."));
+      }
+      if (first == 0xEDu && nextByte > 0x9Fu) {
+        JSON_THROW(UnsupportedEncodingError(source.getPosition(), "Invalid UTF-8 surrogate in string."));
+      }
+      if (first == 0xF0u && nextByte < 0x90u) {
+        JSON_THROW(UnsupportedEncodingError(source.getPosition(), "Invalid UTF-8 sequence in string."));
+      }
+      if (first == 0xF4u && nextByte > 0x8Fu) {
+        JSON_THROW(UnsupportedEncodingError(source.getPosition(), "Invalid UTF-8 sequence in string."));
+      }
+    }
+    appendByte(nextByte);
+    source.next();
+  }
+}
+
 /// <summary>
 /// Check whether character is a valid-escaped character or is just
 /// normally escaped ASCII character. Only a few characters are valid
@@ -55,13 +120,27 @@ String extractString(ISource &source, const ITranslator &translator)
         JSON_THROW(SyntaxError(source.getPosition(), "Invalid escape sequence in string."));
       }
       translateEscapes = true;
+      extracted.append(source.current());
+      stringLength++;
+      if (stringLength > extracted.getMaxStringLength()) JSON_LIB_UNLIKELY {
+        JSON_THROW(SyntaxError(source.getPosition(), "String size exceeds maximum allowed size."));
+      }
+      source.next();
+      continue;
     }
-    extracted.append(source.current());
-    stringLength++;
-    if (stringLength > extracted.getMaxStringLength()) JSON_LIB_UNLIKELY {
-      JSON_THROW(SyntaxError(source.getPosition(), "String size exceeds maximum allowed size."));
+
+    const auto currentByte = static_cast<unsigned char>(source.current());
+    if (currentByte < 0x80u) {
+      extracted.append(source.current());
+      stringLength++;
+      if (stringLength > extracted.getMaxStringLength()) JSON_LIB_UNLIKELY {
+        JSON_THROW(SyntaxError(source.getPosition(), "String size exceeds maximum allowed size."));
+      }
+      source.next();
+      continue;
     }
-    source.next();
+
+    appendUtf8Sequence(source, extracted, stringLength);
   }
   if (source.current() != '"') JSON_LIB_UNLIKELY { JSON_THROW(SyntaxError(source.getPosition(), "Missing closing '\"' on string.")); }
   if (translateEscapes) { extracted = String{translator.from(extracted.value())}; }
@@ -282,8 +361,10 @@ Result<Node> Default_Parser::parseResult(ISource &source)
     return {Status::Ok, std::make_unique<Node>(parseNodes(source, 1, m_maxParserDepth)), {}, {0, 0}};
   } catch (const SyntaxError &ex) {
     return {Status::SyntaxError, nullptr, ex.what(), source.getPosition()};
+  } catch (const UnsupportedEncodingError &ex) {
+    return {Status::UnsupportedEncoding, nullptr, ex.what(), source.getPosition()};
   } catch (const Error &ex) {
-    return {Status::UnknownError, nullptr, ex.what(), source.getPosition()};
+    return {Status::InvalidInput, nullptr, ex.what(), source.getPosition()};
   } catch (const std::exception &ex) {
     return {Status::UnknownError, nullptr, ex.what(), source.getPosition()};
   } catch (...) {

@@ -223,7 +223,7 @@ Result<void> traverseNoThrow(IAction &action) const;
 ```cpp
 struct Limits {
     // Compile-time values (reflect CMake overrides; 0 = library default)
-    static constexpr unsigned long kMaxParserDepth  = ...;  // default 10
+    static constexpr unsigned long kMaxParserDepth  = ...;  // default 128
     static constexpr uint64_t      kMaxStringLength = ...;  // default 16384
 
     // Runtime accessors (authoritative; may be changed at startup)

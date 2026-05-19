@@ -31,14 +31,14 @@ TEST_CASE("Checks for fromFile() api.", "[JSON][FromFile]")
     std::string testFile{ prefixTestDataPath("testfile025.json") };
     std::string expected{ R"([true  , "Out of time",  7.89043e+18, true])" };
     REQUIRE_THROWS_WITH(
-      JSON::fromFile(testFile), "JSON Error: Unsupported JSON file format (Byte Order Mark) encountered.");
+      JSON::fromFile(testFile), "JSON UnsupportedEncoding Error: Unsupported JSON file format (Byte Order Mark) encountered.");
   }
   SECTION("Check that fromFile() works with UTF32LE.", "[JSON][FromFile][UTF32LE]")
   {
     std::string testFile{ prefixTestDataPath("testfile026.json") };
     std::string expected{ R"([true  , "Out of time",  7.89043e+18, true])" };
     REQUIRE_THROWS_WITH(
-      JSON::fromFile(testFile), "JSON Error: Unsupported JSON file format (Byte Order Mark) encountered.");
+      JSON::fromFile(testFile), "JSON UnsupportedEncoding Error: Unsupported JSON file format (Byte Order Mark) encountered.");
   }
   SECTION("Check that fromFile() works with UTF16LE and leading spaces.", "[JSON][FromFile][UTF16LE][Whitespace]")
   {
@@ -76,4 +76,19 @@ TEST_CASE("Checks for fromFile() api.", "[JSON][FromFile]")
   {
     REQUIRE(JSON::fromFile(prefixTestDataPath(kNonExistantJSONFile)).empty());
   }
+}
+
+TEST_CASE("Check that fromFile() rejects invalid UTF-8 BOM sequences.", "[JSON][FromFile][BOM][Invalid]")
+{
+  std::string testFile{ generateRandomFileName() };
+  {
+    std::ofstream out{ testFile, std::ios::binary };
+    out.put(static_cast<char>(0xEF));
+    out.put(static_cast<char>(0xBB));
+    out.put(static_cast<char>(0x00));
+    out << R"({\"x\":1})";
+  }
+  REQUIRE_THROWS_WITH(JSON::fromFile(testFile),
+    "JSON UnsupportedEncoding Error: Invalid UTF-8 Byte Order Mark sequence detected.");
+  std::filesystem::remove(testFile);
 }
