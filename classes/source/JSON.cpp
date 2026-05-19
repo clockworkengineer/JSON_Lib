@@ -96,6 +96,10 @@ void JSON::print(IDestination &destination) const { implementation->print(destin
 void JSON::print(IDestination &&destination) const { implementation->print(destination); }
 Result<void> JSON::printResult(IDestination &destination) const { return implementation->printResult(destination); }
 Result<void> JSON::printResult(IDestination &&destination) const { return implementation->printResult(destination); }
+void JSON::prettyPrint(IDestination &destination) const { print(destination); }
+void JSON::prettyPrint(IDestination &&destination) const { print(std::move(destination)); }
+Result<void> JSON::prettyPrintResult(IDestination &destination) const { return printResult(destination); }
+Result<void> JSON::prettyPrintResult(IDestination &&destination) const { return printResult(std::move(destination)); }
 /// <summary>
 /// Set print indent value.
 /// </summary>
@@ -120,8 +124,13 @@ Result<void> JSON::traverseResult(IAction &action) const { return std::as_const(
 /// <param name="key">Object entry (Node) key.</param>
 Node &JSON::operator[](const std::string_view &key) { return (*implementation)[key]; }
 const Node &JSON::operator[](const std::string_view &key) const { return (*implementation)[key]; }
+JSON_LIB_NODISCARD bool JSON::contains(const std::string_view &key) const { return root().is<Object>() ? NRef<const Object>(root()).contains(key) : false; }
+JSON_LIB_NODISCARD Node &JSON::at(const std::string_view &key) { return NRef<Object>(root())[key]; }
+JSON_LIB_NODISCARD const Node &JSON::at(const std::string_view &key) const { return NRef<const Object>(root())[key]; }
 Node &JSON::operator[](const std::size_t index) { return (*implementation)[index]; }
 const Node &JSON::operator[](const std::size_t index) const { return (*implementation)[index]; }
+JSON_LIB_NODISCARD Node &JSON::at(const std::size_t index) { return NRef<Array>(root())[index]; }
+JSON_LIB_NODISCARD const Node &JSON::at(const std::size_t index) const { return NRef<const Array>(root())[index]; }
 void JSON::resize(const std::size_t index) { implementation->resize(index); }
 /// <summary>
 /// Return root of JSON tree.

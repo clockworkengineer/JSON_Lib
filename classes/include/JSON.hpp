@@ -89,6 +89,11 @@ public:
   void print(IDestination &&destination) const;
   JSON_LIB_NODISCARD Result<void> printResult(IDestination &destination) const;
   JSON_LIB_NODISCARD Result<void> printResult(IDestination &&destination) const;
+  // Pretty-print helpers (alias for Print)
+  void prettyPrint(IDestination &destination) const;
+  void prettyPrint(IDestination &&destination) const;
+  JSON_LIB_NODISCARD Result<void> prettyPrintResult(IDestination &destination) const;
+  JSON_LIB_NODISCARD Result<void> prettyPrintResult(IDestination &&destination) const;
   // Strip whitespace from JSON string
   static void strip(ISource &source, IDestination &destination);
   static void strip(ISource &source, IDestination &&destination) ;
@@ -112,9 +117,14 @@ public:
   // Search for JSON object entry with a given key
   Node &operator[](const std::string_view &key);
   const Node &operator[](const std::string_view &key) const;
+  JSON_LIB_NODISCARD bool contains(const std::string_view &key) const;
+  JSON_LIB_NODISCARD Node &at(const std::string_view &key);
+  JSON_LIB_NODISCARD const Node &at(const std::string_view &key) const;
   // Get JSON array entry at index
   Node &operator[](std::size_t index);
   const Node &operator[](std::size_t index) const;
+  JSON_LIB_NODISCARD Node &at(std::size_t index);
+  JSON_LIB_NODISCARD const Node &at(std::size_t index) const;
   // Resize the root array explicitly without silent growth.
   void resize(std::size_t index);
 #if !JSON_LIB_NO_STDIO

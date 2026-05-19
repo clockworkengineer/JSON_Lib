@@ -22,9 +22,8 @@
 All public types live in `namespace JSON_Lib`.
 
 ```cpp
-#include "JSON.hpp"                                   // JSON, EmbeddedJSON, Node
-#include "implementation/io/JSON_Sources.hpp"         // BufferSource, FixedBufferSource, FileSource
-#include "implementation/io/JSON_Destinations.hpp"    // BufferDestination, FixedBufferDestination, FileDestination
+#include "JSON_Lib.hpp"                              // JSON, EmbeddedJSON, Node, sources, destinations
+#include "JSON_IO.hpp"                               // optional separate I/O helpers
 #include "JSON_Config.hpp"                            // generated compile-time macros (auto-included via JSON.hpp)
 ```
 
@@ -70,6 +69,11 @@ void print(IDestination &destination) const;
 void print(IDestination &&destination) const;
 Result<void> printResult(IDestination &destination) const;
 Result<void> printResult(IDestination &&destination) const;
+// Pretty-print aliases
+void prettyPrint(IDestination &destination) const;
+void prettyPrint(IDestination &&destination) const;
+Result<void> prettyPrintResult(IDestination &destination) const;
+Result<void> prettyPrintResult(IDestination &&destination) const;
 
 // Strip whitespace
 static void strip(ISource &source,  IDestination &destination);
@@ -87,7 +91,14 @@ Result<void> traverseResult(IAction &action) const;
 Node &root();
 const Node &root() const;
 Node &operator[](std::string_view key);
+const Node &operator[](std::string_view key) const;
+JSON_LIB_NODISCARD bool contains(const std::string_view &key) const;
+JSON_LIB_NODISCARD Node &at(const std::string_view &key);
+JSON_LIB_NODISCARD const Node &at(const std::string_view &key) const;
 Node &operator[](std::size_t index);
+const Node &operator[](std::size_t index) const;
+JSON_LIB_NODISCARD Node &at(std::size_t index);
+JSON_LIB_NODISCARD const Node &at(std::size_t index) const;
 void resize(std::size_t index);
 
 // File helpers (disabled when JSON_LIB_NO_STDIO == 1)

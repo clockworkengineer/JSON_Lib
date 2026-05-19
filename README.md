@@ -73,9 +73,7 @@ target_link_libraries(<your-target> PRIVATE JSON_Lib)
 ## Basic Usage
 
 ```cpp
-#include "JSON.hpp"
-#include "implementation/io/JSON_Sources.hpp"
-#include "implementation/io/JSON_Destinations.hpp"
+#include "JSON_Lib.hpp"
 
 namespace js = JSON_Lib;
 
@@ -119,9 +117,7 @@ json.stringify(dest);
 Use the `EmbeddedJSON` façade for targets where heap, exceptions, or stdio may be unavailable.
 
 ```cpp
-#include "JSON.hpp"
-#include "implementation/io/JSON_Sources.hpp"
-#include "implementation/io/JSON_Destinations.hpp"
+#include "JSON_Lib.hpp"
 
 namespace js = JSON_Lib;
 
