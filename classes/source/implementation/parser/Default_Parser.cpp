@@ -347,7 +347,15 @@ Node Default_Parser::parseNodes(ISource &source, const unsigned long parserDepth
 /// </summary>
 /// <param name="source">Source of JSON.</param>
 /// <returns>Pointer to Node.</returns>
-Node Default_Parser::parse(ISource &source) { return parseNodes(source, 1, m_maxParserDepth); }
+Node Default_Parser::parse(ISource &source)
+{
+  Node result = parseNodes(source, 1, m_maxParserDepth);
+  source.ignoreWS();
+  if (source.more()) {
+    JSON_THROW(SyntaxError(source.getPosition(), "Unexpected trailing characters after JSON value."));
+  }
+  return result;
+}
 Result<Node> Default_Parser::parseResult(ISource &source)
 {
 #if JSON_LIB_NO_EXCEPTIONS
@@ -358,7 +366,7 @@ Result<Node> Default_Parser::parseResult(ISource &source)
   }
 #endif
   try {
-    return {Status::Ok, std::make_unique<Node>(parseNodes(source, 1, m_maxParserDepth)), {}, {0, 0}};
+    return {Status::Ok, std::make_unique<Node>(parse(source)), {}, {0, 0}};
   } catch (const SyntaxError &ex) {
     return {Status::SyntaxError, nullptr, ex.what(), source.getPosition()};
   } catch (const UnsupportedEncodingError &ex) {

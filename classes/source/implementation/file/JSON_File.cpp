@@ -97,6 +97,9 @@ std::u16string readJSONString(std::ifstream &jsonFile, const JSON::Format format
 JSON::Format JSON_Impl::getFileFormat(const std::string_view &fileName)
 {
   std::ifstream jsonFile{ fileName.data(), std::ios_base::binary };
+  if (!jsonFile.is_open()) {
+    return JSON::Format::utf8;
+  }
   const unsigned char first  = static_cast<unsigned char>(jsonFile.get());
   const unsigned char second = static_cast<unsigned char>(jsonFile.get());
   const unsigned char third  = static_cast<unsigned char>(jsonFile.get());
@@ -130,6 +133,9 @@ std::string JSON_Impl::fromFile(const std::string_view &fileName)
   const JSON::Format format = getFileFormat(fileName);
   // Read in JSON
   std::ifstream jsonFile{ fileName.data(), std::ios_base::binary };
+  if (!jsonFile.is_open()) {
+    return {};
+  }
   std::string translated;
   switch (format) {
   case JSON::Format::utf8BOM:
@@ -165,6 +171,9 @@ std::string JSON_Impl::fromFile(const std::string_view &fileName)
 void JSON_Impl::toFile(const std::string_view &fileName, const std::string_view &jsonString, const JSON::Format format)
 {
   std::ofstream jsonFile{ fileName.data(), std::ios::binary };
+  if (!jsonFile.is_open()) {
+    JSON_THROW(Error("File output stream failed to open or cannot be created."));
+  }
   switch (format) {
   case JSON::Format::utf8BOM:
     jsonFile << static_cast<unsigned char>(0xEF) << static_cast<unsigned char>(0xBB)

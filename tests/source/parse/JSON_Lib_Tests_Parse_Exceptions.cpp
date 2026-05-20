@@ -120,6 +120,14 @@ TEST_CASE("Check parser generated exceptions.", "[JSON][Parse][Exception]")
     REQUIRE_THROWS_WITH(
       json.parse(jsonSource), "JSON Syntax Error [Line: 1 Column: 2]: Missing opening '\"' on string.");
   }
+  SECTION("Parse JSON with trailing content after the root value.", "[JSON][Parse][Exception]")
+  {
+    BufferSource jsonSource{ R"({"key":1} extra)" };
+    REQUIRE_THROWS_AS(json.parse(jsonSource), SyntaxError);
+    jsonSource.reset();
+    REQUIRE_THROWS_WITH(json.parse(jsonSource),
+      "JSON Syntax Error [Line: 1 Column: 11]: Unexpected trailing characters after JSON value.");
+  }
   SECTION("parseResult returns a SyntaxError result for invalid JSON.", "[JSON][Parse][Result]")
   {
     BufferSource jsonSource{ R"({ "one" : "Apple })" };
@@ -128,6 +136,15 @@ TEST_CASE("Check parser generated exceptions.", "[JSON][Parse][Exception]")
     REQUIRE(result.status == Status::SyntaxError);
     REQUIRE(result.message == "JSON Syntax Error [Line: 1 Column: 19]: Missing closing '\"' on string.");
     REQUIRE(result.position == std::pair<long, long>{1, 19});
+  }
+  SECTION("parseResult returns a SyntaxError result for trailing content.", "[JSON][Parse][Result]")
+  {
+    BufferSource jsonSource{ R"({"key":1} extra)" };
+    auto result = json.parseResult(jsonSource);
+    REQUIRE_FALSE(result.ok());
+    REQUIRE(result.status == Status::SyntaxError);
+    REQUIRE(result.message == "JSON Syntax Error [Line: 1 Column: 11]: Unexpected trailing characters after JSON value.");
+    REQUIRE(result.position == std::pair<long, long>{1, 11});
   }
   SECTION("EmbeddedJSON parseNoThrow returns a SyntaxError result for invalid JSON.", "[JSON][Parse][Result][Embedded]")
   {

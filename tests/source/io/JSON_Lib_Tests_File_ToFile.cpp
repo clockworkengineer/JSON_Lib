@@ -80,6 +80,12 @@ TEST_CASE("Checks for toFile() api.", "[JSON][ToFile]")
     REQUIRE(JSON::fromFile(testFile) == expected);
     std::filesystem::remove(testFile);
   }
+  SECTION("Check that toFile() rejects nonexistent output directories.", "[JSON][ToFile][Error]")
+  {
+    const std::string testFile{ prefixTestDataPath("missing_dir/test.json") };
+    const std::string expected{ R"({"key":"value"})" };
+    REQUIRE_THROWS_AS(JSON::toFile(testFile, expected), Error);
+  }
   SECTION("Check that toFile() works with UTF32BE.", "[JSON][ToFile][UTF32BE]")
   {
     std::string testFile{ prefixTestDataPath(generateRandomFileName()) };
