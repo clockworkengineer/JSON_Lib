@@ -64,7 +64,13 @@ Use the public façade header whenever possible:
 #include "JSON_Lib.hpp"
 ```
 
-Avoid direct inclusion of `implementation/*` headers in application code. The public headers exposed by `JSON_Lib.hpp`, `JSON.hpp`, and `JSON_IO.hpp` are the stable API surface, while implementation headers are only installed when required by these public headers.
+`JSON_Lib.hpp` exposes the main API surface including `JSON`, `EmbeddedJSON`, and the common `Node` types. For code that only needs sources and destinations, prefer:
+
+```cpp
+#include "JSON_IO.hpp"
+```
+
+Avoid direct inclusion of `implementation/*` headers in application code. The public headers exposed by `JSON_Lib.hpp`, `JSON.hpp`, and `JSON_IO.hpp` are the stable API surface, while implementation headers are only installed to satisfy those public headers.
 
 ### Link against your project
 
@@ -411,6 +417,8 @@ cmake -DJSON_LIB_EMBEDDED=ON ..
 
 This automatically applies: `BUILD_TESTING=OFF`, `BUILD_EXAMPLES=OFF`, `JSON_LIB_ENABLE_LTO=OFF`, `JSON_LIB_NO_STDIO=ON`.
 
+The embedded preset is the recommended starting point for constrained deployments. It is designed to disable file I/O and reduce runtime requirements while preserving the same public `JSON`/`EmbeddedJSON` API.
+
 Or pick individual flags:
 
 ```sh
@@ -426,6 +434,11 @@ cmake \
 ### Test build matrix
 
 The library supports several verification modes. Use `BUILD_TESTING=ON` to enable unit tests.
+
+- `JSON_LIB_NO_EXCEPTIONS=ON` disables exceptions and disables tests/examples unless `JSON_LIB_EMBEDDED` already manages those flags.
+- `JSON_LIB_NO_STDIO=ON` compiles out file-based sources and destinations, leaving only buffer-based I/O.
+- `JSON_LIB_NO_HEAP=ON` implies `JSON_LIB_NO_DYNAMIC_MEMORY=ON` and restricts the library to heapless operation where supported.
+
 
 | Build variant | CMake flags | Notes |
 |---|---|---|

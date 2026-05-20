@@ -3,26 +3,25 @@
 ## Goal
 Create a concrete refactor plan that implements the library attributes defined in `notes/attributes.md` while preserving the current design strengths of `JSON_Lib`.
 
-This plan maps the 10 quality attributes to concrete tasks for `JSON_Lib` and identifies the key files and subsystems that should be improved.
+The plan maps the 10 quality attributes to specific improvements in the current library, using the existing public façade, CMake build structure, and embedded-friendly support as the baseline.
 
 ---
 
-## Summary of findings
+## Findings
 
-The library already has strong foundations:
-- Modern C++23 API with `JSON` and `EmbeddedJSON` façades
-- Modular build via CMake and object libraries
-- Zero runtime third-party dependencies
-- Embedded/no-exceptions/no-stdio build modes
-- Existing docs (`README.md`, `docs/api.md`) and tests under `tests/source`
+The repository already demonstrates the intended library attributes in these ways:
+- `classes/include/JSON_Lib.hpp` provides a root public facade
+- `JSON` and `EmbeddedJSON` support both exception-based and exception-free APIs
+- `CMakeLists.txt` offers embedded flags, compile-time limits, and public header installation controls
+- Documentation exists for architecture, API, and usage, but it needs closer synchronization to current public and build behavior
+- The codebase already separates public interfaces from internal implementation headers, but the install/include exposure is broader than the ideal public API
 
-Key opportunities for refactor:
-- public API clarity and consistency
-- stronger, synchronized documentation
-- better reliability through focused validation and error handling
-- more maintainable module separation and build configuration
-- improved test coverage for policy and edge-case behavior
-- explicit security and portability validation
+Key refactor opportunities:
+- tighten public API surface and install layout
+- align docs with actual CMake options and supported build modes
+- harden parser validation, error result handling, and embedded constraints
+- extend test coverage for library modes and edge cases
+- ensure portability macros and compiler-specific behavior are explicit
 
 ---
 
@@ -35,19 +34,21 @@ Objectives:
 - reduce confusion between public and internal headers
 - improve naming clarity for common operations
 
-Tasks:
-- create a single public header facade such as `include/JSON_Lib.hpp` that exposes only stable public types and hides internal implementation headers
-- add `JSON::prettyPrint()` alias to complement `print()` and deprecate `print()` later if desired
-- add explicit `JSON::contains(std::string_view key) const` and `JSON::at(std::string_view key) const` to avoid ambiguous `operator[]` semantics for object access
-- document `JSON::operator[](size_t)` clearly as array-element access and add bounds-safe `at(size_t)` if missing
-- unify overloads in `JSON.hpp` so `const std::string_view&` is the canonical input type and `const char*` overloads are wrappers
-- expose public input/output helpers through a dedicated public header rather than direct `implementation/io` includes
+Concrete tasks:
+- retain `classes/include/JSON_Lib.hpp` as the single public facade and avoid installing internal `implementation/*` headers
+- keep `classes/include/JSON.hpp` as the stable public `JSON` interface and document its methods clearly
+- preserve `JSON::contains()` and `JSON::at()` as explicit safe accessors for object and array access
+- confirm `operator[]` semantics are documented as mutable access and `at()` is bounds-checked
+- ensure all public API overloads favor `std::string_view` and treat `const char*` overloads as convenience wrappers
+- keep I/O helpers centralized in `classes/include/JSON_IO.hpp`, not in internal implementation headers
 
 Primary files:
 - `classes/include/JSON.hpp`
+- `classes/include/JSON_Lib.hpp`
+- `classes/include/JSON_IO.hpp`
 - `classes/include/implementation/io/JSON_Sources.hpp`
 - `classes/include/implementation/io/JSON_Destinations.hpp`
-- `classes/include/implementation/common/JSON_Attributes.hpp`
+- `CMakeLists.txt`
 - `README.md`
 - `docs/api.md`
 
@@ -57,55 +58,57 @@ Objectives:
 - document usage, build options, embedded constraints, and unsupported edge cases
 - keep docs aligned with code and API surface
 
-Tasks:
-- update `docs/api.md` to match the current public interface and remove internal implementation references from public docs
-- create or extend `docs/guide.md` with a dedicated section for embedded builds, exception-free usage, and limit configuration
-- add a `docs/architecture.md` or `docs/module-overview.md` describing the `JSON`, `EmbeddedJSON`, parser, stringify, source, destination, and node layers
-- add example snippets for: custom parser/stringify injection, file I/O, embedded no-exception mode, and direct `Node` construction
-- ensure `README.md` build instructions and CMake option table remain accurate and include example `cmake` invocations
+Concrete tasks:
+- update `README.md` so the build option table and examples match the active `CMakeLists.txt` behavior
+- refresh `docs/api.md` to describe the exact public API available through `JSON_Lib.hpp` and `JSON_IO.hpp`
+- extend `docs/guide.md` with focused sections on embedded builds, no-exceptions mode, no-stdio mode, and resource limits
+- strengthen `docs/architecture.md` to show public vs internal module boundaries and installation expectations
+- add targeted examples for custom parser/stringifier injection, file I/O, `EmbeddedJSON` usage, and direct `Node` creation
 
 Primary files:
 - `README.md`
 - `docs/api.md`
 - `docs/guide.md`
+- `docs/architecture.md`
 - `examples/`
 
 ### 3. High Reliability
 
 Objectives:
-- ensure parser and serializer work predictably across valid/invalid inputs
+- ensure parser and serializer behave predictably across both valid and invalid inputs
 - centralize and harden error reporting
 
-Tasks:
-- audit `JSON_Error.hpp` and `JSON_Error.cpp` to ensure error codes/messages are consistent, descriptive, and stable
-- add regression tests for malformed JSON, invalid BOMs, invalid Unicode, and parser depth/length limit exceedance
-- tighten validation in `Default_Parser` and `JSON_FileSource` for invalid inputs rather than allow undefined behavior
-- expose any policy or limit failures clearly through `Result<T>` in the exception-free API
+Concrete tasks:
+- audit `classes/include/implementation/common/JSON_Error.hpp` and related implementation to ensure stable error messages and result semantics
+- strengthen `classes/source/implementation/parser/Default_Parser.cpp` to reject malformed JSON, invalid BOMs, and invalid UTF sequences
+- verify `JSON_LIB_MAX_PARSER_DEPTH` and `JSON_LIB_MAX_STRING_LENGTH` are enforced in parser and string-handling code paths
+- add regression tests for malformed JSON, invalid encodings, parse depth exhaustion, large strings, and invalid file inputs
+- ensure `Result<T>` is used consistently on no-throw paths and that public `Result` helpers return clear diagnostics
 
 Primary files:
 - `classes/include/implementation/common/JSON_Error.hpp`
-- `classes/source/implementation/parser/Default_Parser.cpp`
 - `classes/include/implementation/parser/Default_Parser.hpp`
-- `tests/source/parse/` and `tests/source/stringify/`
+- `classes/source/implementation/parser/Default_Parser.cpp`
+- `classes/source/implementation/file/JSON_File.cpp`
+- `tests/source/`
 
 ### 4. Performance and Efficiency
 
 Objectives:
-- preserve and document the library's performance posture
-- optimize hot paths without compromising safety
+- preserve the library’s performance posture while avoiding unnecessary overhead
+- optimize hot paths without sacrificing safety
 
-Tasks:
-- verify `JSON_LIB_LIKELY` / `JSON_LIB_UNLIKELY` are used effectively in parser and stringify hot loops
-- remove unnecessary copies in public APIs and prefer `std::string_view` / references when safe
-- add or refresh benchmark targets in `examples/` or `tests/benchmarks` to capture parse/stringify times and memory behavior
-- validate `JSON_LIB_ENABLE_LTO` / `JSON_LIB_OPTIMIZATION_LEVEL` interaction in `CMakeLists.txt`
-- add a performance audit checklist for future changes
+Concrete tasks:
+- verify public APIs accept `std::string_view` and avoid unnecessary string copies
+- inspect parser and stringify implementations for efficient branch handling and minimal data movement
+- add or refresh benchmark coverage to capture parse/stringify performance and real-world memory use
+- validate that `JSON_LIB_ENABLE_LTO` is correctly applied when optimization is enabled and disabled safely for `O0`
 
 Primary files:
 - `CMakeLists.txt`
 - `classes/source/implementation/parser/Default_Parser.cpp`
 - `classes/source/implementation/stringify/*`
-- benchmark sources if present
+- benchmark entry points and build targets
 
 ### 5. Maintainability
 
@@ -113,83 +116,86 @@ Objectives:
 - make the codebase easier to understand and extend
 - reduce coupling between public API and implementation details
 
-Tasks:
-- reorganize `classes/include` into stable public headers and internal implementation headers, with clear folder separation
-- keep `classes/include/implementation` private to library internals and not installed as public API
-- add or update a coding style / contribution guide section for header usage, naming, and target boundaries
-- simplify `CMakeLists.txt` by using modern target properties and fewer manual include directory lists
-- ensure `JSON_Config.hpp` is generated only for public config macros and does not expose internal build machinery
+Concrete tasks:
+- maintain a clear separation between stable public headers and internal implementation headers
+- simplify the `CMakeLists.txt` include setup by exposing only the public interface to consumers and keeping implementation includes private
+- document header and interface conventions in `docs/architecture.md` or `docs/guide.md`
+- ensure `JSON_Config.hpp` is generated only for public macros and does not expose unnecessary internal build machinery
+- keep the internal implementation modular and self-contained, using `JSON_Lib_Core`, `JSON_Lib_Parser`, and `JSON_Lib_Stringify` layers correctly
 
 Primary files:
 - `CMakeLists.txt`
 - `classes/include/JSON.hpp`
+- `classes/include/JSON_Lib.hpp`
+- `classes/include/JSON_IO.hpp`
 - `classes/include/implementation/*`
 
 ### 6. Flexibility and Customization
 
 Objectives:
-- preserve the library's extensibility for custom translators and parsers
-- document and broaden customization hooks
+- preserve the library’s extensibility for custom translators, parsers, and I/O backends
+- make customization hooks discoverable and documented
 
-Tasks:
-- document the custom parser/stringify injection APIs in `docs/api.md` and `README.md`
-- consider exposing a `JSON::Options` or `JSON::Settings` struct for parse/stringify policies instead of only constructor arguments
-- add tests for custom backend injection and fallback behavior when custom I/O components are replaced
-- extend `EmbeddedJSON::Limits` documentation with practical usage examples
+Concrete tasks:
+- document `JSON::Options`, `IParser`, `IStringify`, `ISource`, and `IDestination` in `docs/api.md`
+- add tests covering custom backend injection and optional fallback behavior
+- ensure `EmbeddedJSON::Limits` is documented and available to embedded users as a reliable policy signal
+- keep public interfaces stable for future extension while still allowing custom backend substitution
 
 Primary files:
 - `classes/include/JSON.hpp`
 - `classes/include/interface/IParser.hpp`
 - `classes/include/interface/IStringify.hpp`
 - `docs/api.md`
+- `docs/guide.md`
 
 ### 7. Strong Security
 
 Objectives:
-- protect the host application from malformed input and resource abuse
-- make build-time policies explicit and auditable
+- protect host code from malformed input and resource abuse
+- make compile-time and runtime policies explicit
 
-Tasks:
-- verify strict UTF/BOM validation in the parser and disallow invalid encodings
-- ensure `JSON_LIB_MAX_PARSER_DEPTH` and `JSON_LIB_MAX_STRING_LENGTH` are enforced in all code paths, including exception-free mode
-- improve `no heap` / `no dynamic memory` build documentation and add tests to confirm behavior under those flags
-- add a security section to docs describing the library’s strict parse semantics and any safe subset guarantees
+Concrete tasks:
+- enforce strict parse semantics for invalid UTF, BOMs, and structural violations
+- verify limit enforcement for parser depth and string length across all workflows
+- add tests for `JSON_LIB_NO_HEAP`, `JSON_LIB_NO_DYNAMIC_MEMORY`, and `JSON_LIB_NO_STDIO` build modes
+- document the library’s safety boundaries and policy guarantees in `docs/guide.md`
 
 Primary files:
 - `classes/include/implementation/parser/Default_Parser.hpp`
 - `classes/source/implementation/parser/Default_Parser.cpp`
-- `classes/source/implementation/io/JSON_File.cpp`
+- `classes/source/implementation/file/JSON_File.cpp`
 - `docs/guide.md`
 
 ### 8. High Testability
 
 Objectives:
 - make it easy to verify correctness and prevent regressions
-- ensure all build modes are covered by automated tests
+- ensure all supported build modes are covered by tests
 
-Tasks:
-- extend test coverage for embedded/no-exceptions/no-stdio/no-dynamic-memory builds
-- add component tests for `JSON::parseResult`, `JSON::stringifyResult`, and `EmbeddedJSON::parseNoThrow`
-- add tests for public API aliases and deprecated names if introduced
-- document test-running commands and build matrix for `BUILD_TESTING`, `BUILD_EXAMPLES`, and embedded presets
-- make `tests/CMakeLists.txt` and `tests/source` layout easier to find and extend
+Concrete tasks:
+- expand unit tests for `EmbeddedJSON::parseNoThrow`, `stringifyNoThrow`, and `traverseNoThrow`
+- add coverage for no-exceptions, no-dynamic-memory, no-stdio, and embedded configuration builds
+- document the test build workflow and presets in `README.md`
+- make `tests/CMakeLists.txt` easy to extend and ensure it includes targeted reliability and embedded tests
+- consider moving policy-specific tests into dedicated folders for clarity
 
 Primary files:
 - `tests/CMakeLists.txt`
-- `tests/source/*`
+- `tests/source/`
 - `CMakeLists.txt`
 
 ### 9. Compatibility and Portability
 
 Objectives:
 - ensure the library builds cleanly across supported compilers and platforms
-- make platform-specific behavior explicit
+- make platform-specific behavior explicit and auditable
 
-Tasks:
-- ensure `JSON_Attributes.hpp` properly detects attributes on MSVC, GCC, Clang, and fallback compilers
-- add or update compiler-specific guard macros for Windows vs Linux path/I/O handling
-- add cross-compiler test targets or CI configuration to validate MSVC, GCC, and Clang builds
-- validate `std::string_view`, `std::variant`, and C++23 features are used in portable ways
+Concrete tasks:
+- verify compiler detection and attribute macros in `classes/include/implementation/common/JSON_Attributes.hpp`
+- ensure the public API does not expose platform-specific internals unintentionally
+- update documentation for supported compiler versions and OS platforms
+- validate `CMakeLists.txt` compiler flag behavior for MSVC, GCC, and Clang
 
 Primary files:
 - `classes/include/implementation/common/JSON_Attributes.hpp`
@@ -199,61 +205,63 @@ Primary files:
 ### 10. Low Dependency Footprint
 
 Objectives:
-- keep runtime dependency count minimal
-- make build-time dependencies explicit and easy to obtain
+- keep runtime dependencies minimal
+- make build-time dependencies explicit
 
-Tasks:
-- document that runtime dependencies are limited to the C++ standard library and that Catch2 is a test-only dependency
-- simplify build-time dependency setup by using `FetchContent` for Catch2 or documenting how to provide it
-- confirm no internal public header includes external dependencies beyond the standard library
-- keep installation targets restricted to the API headers and library artifact only
+Concrete tasks:
+- document that runtime dependencies are limited to the C++ standard library and that Catch2 is test-only
+- ensure public headers do not require any external dependencies beyond the standard library
+- confirm installed API includes only the intended public headers and not internal implementation headers
+- keep build configuration self-contained and avoid unnecessary third-party runtime requirements
 
 Primary files:
 - `README.md`
 - `CMakeLists.txt`
+- `classes/include/JSON_Lib.hpp`
 - `classes/include/JSON.hpp`
 
 ---
 
 ## Implementation roadmap
 
-### Phase 1: API and documentation cleanup
+### Phase 1: Public API and documentation cleanup
 
-1. add `include/JSON_Lib.hpp` or equivalent public header facade
-2. refine `JSON.hpp` public methods and add optional clarity helpers (`contains`, `at`, `prettyPrint` alias)
-3. segregate headers into public vs internal layout
-4. update `README.md`, `docs/api.md`, and `docs/guide.md` to reflect the public API and build options
-5. add a `docs/architecture.md` or architecture section
+1. verify and harden the `JSON_Lib.hpp` facade and public install interface
+2. synchronize `README.md`, `docs/api.md`, `docs/guide.md`, and `docs/architecture.md` with the current code and CMake options
+3. hide internal headers from installed API and ensure `implementation/*` is private to consumers
+4. add practical examples for embedded usage, custom backends, and file I/O
 
-### Phase 2: reliability, security, and test coverage
+### Phase 2: Reliability, security, and test coverage
 
-1. audit and harden error handling in `JSON_Error` and parser logic
-2. add targeted regression tests for invalid JSON and embedded build policies
-3. implement missing exception-free or limit-bound checks in parser/sources/destinations
-4. add test coverage for embedded/no-exceptions/no-stdio/no-dynamic-memory builds
+1. audit parser/error handling code for malformed input, limit enforcement, and no-exception semantics
+2. add regression tests for invalid JSON, invalid character encodings, parser depth limits, string-length limits, and embedded policy constraints
+3. verify `Result<T>` and no-throw APIs behave consistently across public methods
+4. add build-mode coverage for embedded-friendly presets and policy-driven tests
 
-### Phase 3: performance, portability, and release readiness
+### Phase 3: Performance, portability, and release readiness
 
-1. review hot-path annotations and benchmark support
-2. verify CMake build options and LTO settings across compilers
-3. add compatibility notes and compile-time attribute detection improvements
-4. document the final refactor in a release-oriented changelog or upgrade note
+1. verify `CMakeLists.txt` option behavior and LTO/optimization interactions
+2. add or refresh benchmark coverage for parse/stringify performance
+3. confirm portability macros and platform compatibility notes are complete
+4. finalize documentation, release notes, and API guidance for library consumers
 
 ---
 
 ## Validation checklist
 
-- [ ] public header facade exists and internal headers are hidden from installed API
-- [ ] docs reflect supported public methods, macros, and build presets
-- [ ] `notes/attributes.md` attributes are mapped to deliverables
-- [ ] tests cover parse/stringify, embedded mode, and error handling
-- [ ] `CMakeLists.txt` build options are consistent with README and docs
-- [ ] `JSON_Attributes.hpp` attribute macros provide portable annotations
-- [ ] security-related limits are enforced in both throw and no-throw code paths
-- [ ] runtime dependency footprint remains zero beyond the standard library
+- [ ] `JSON_Lib.hpp` remains the single public header façade and internal headers are hidden from installed API
+- [ ] documentation reflects the exact public API and supported build flags
+- [ ] tests cover parse/stringify, embedded/no-throw, no-stdio/no-dynamic-memory, invalid input, and custom backend cases
+- [ ] `CMakeLists.txt` build options are consistent with `README.md` and documented presets
+- [ ] error handling is centralized and consistent across throw and no-throw workflows
+- [ ] compiler/platform macros in `JSON_Attributes.hpp` are portable and correct
+- [ ] public headers do not expose non-standard runtime dependencies
+- [ ] performance tradeoffs are documented and LTO behavior is validated
+- [ ] security-related limits are enforced in both normal and embedded builds
+- [ ] the library’s public API is simpler to use and its implementation remains maintainable
 
 ---
 
 ## Notes
 
-This plan is intentionally concrete and implementation-focused. The next step is to convert each task into one or more pull requests or branch-level refactors, starting with API clarity and docs updates, then moving into reliability and test coverage.
+This refactor plan is intentionally concrete and mapped to the library’s existing public façade, documentation structure, CMake build layout, and embedded-friendly capabilities. Start with API clarity and documentation, then move to reliability and test coverage, and finish with portability and performance validation.
