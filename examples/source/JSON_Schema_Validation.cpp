@@ -2,10 +2,11 @@
 //
 // Description: Validate JSON files against a schema.
 //
-// Dependencies: C++20, PLOG, JSON_Lib.
+// Dependencies: C++20, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
+#include <iostream>
 // #include "JSON_Schema.hpp" // Uncomment if schema support exists
 
 namespace js = JSON_Lib;
@@ -13,9 +14,10 @@ namespace js = JSON_Lib;
 int main(int, char **)
 {
   try {
-    init(plog::debug, "JSON_Schema_Validation.log");
-    PLOG_INFO << "JSON_Schema_Validation started ...";
-    PLOG_INFO << js::JSON().version();
+        std::cout << "JSON_Schema_Validation started ..." << '\n';
+
+    std::cout << js::JSON().version() << '\n';
+
     // Example: Load schema and JSON file
     std::string schemaFile = "files/schema.json";
     std::string jsonFile = "files/data.json";
@@ -23,10 +25,12 @@ int main(int, char **)
     schema.parse(js::FileSource{ schemaFile });
     json.parse(js::FileSource{ jsonFile });
     // TODO: Add schema validation logic here
-    PLOG_INFO << "Schema and JSON loaded. (Validation logic not implemented)";
+    std::cout << "Schema and JSON loaded. (Validation logic not implemented)" << '\n';
+
     return 0;
   } catch (const std::exception &ex) {
-    PLOG_ERROR << "Error: " << ex.what();
+    std::cerr << "Error: " << ex.what() << '\n';
+
     return 1;
   }
 }

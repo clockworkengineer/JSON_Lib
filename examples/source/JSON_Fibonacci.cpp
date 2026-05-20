@@ -5,10 +5,11 @@
 // sequence to the array stored in fibonacci.json; if the file does
 // not exist, then create the initial sequence of [0,1].
 //
-// Dependencies: C++20, PLOG, JSON_Lib.
+// Dependencies: C++20, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
+#include <iostream>
 
 namespace js = JSON_Lib;
 
@@ -45,16 +46,18 @@ void nextFibonacci()
 int main(int, char **)
 {
   try {
-    // Initialise logging.
-    init(plog::debug, "JSON_Fibonacci.log");
-    PLOG_INFO << "JSON_Fibonacci started ...";
+        std::cout << "JSON_Fibonacci started ..." << '\n';
+
     // Log version
-    PLOG_INFO << js::JSON().version();
+    std::cout << js::JSON().version() << '\n';
+
     // Update current sequence
     nextFibonacci();
   } catch (std::exception &ex) {
-    PLOG_ERROR << "Error: " << ex.what();
+    std::cerr << "Error: " << ex.what() << '\n';
+
   }
-  PLOG_INFO << "JSON_Fibonacci exited.";
+  std::cout << "JSON_Fibonacci exited." << '\n';
+
   exit(EXIT_SUCCESS);
 }

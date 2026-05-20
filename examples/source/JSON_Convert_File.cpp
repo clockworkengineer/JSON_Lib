@@ -4,11 +4,12 @@
 // Description: For a each JSON file in a directory parse it, convert all
 // numbers, booleans and nulls to strings and save the result.
 //
-// Dependencies: C++20, PLOG, JSON_Lib.
+// Dependencies: C++20, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
 #include "JSON_Convert.hpp"
+#include <iostream>
 
 namespace js = JSON_Lib;
 
@@ -18,29 +19,33 @@ namespace js = JSON_Lib;
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName)
 {
-  PLOG_INFO << "Converting ... " << fileName;
+  std::cout << "Converting ... " << fileName << '\n';
+
   JSON_Convert jsonConverter;
   js::JSON json;
   json.parse(js::FileSource{ fileName });
   json.traverse(jsonConverter);
   json.print(js::FileDestination{ fileName + ".new" });
-  PLOG_INFO << "Finished " << fileName << ".";
+  std::cout << "Finished " << fileName << "." << '\n';
+
 }
 
 int main(int, char **)
 {
-  // Initialise logging.
-  init(plog::debug, "JSON_Convert_File.log");
-  PLOG_INFO << "JSON_Convert_File started ...";
-  PLOG_INFO << js::JSON().version();
+    std::cout << "JSON_Convert_File started ..." << '\n';
+
+  std::cout << js::JSON().version() << '\n';
+
   // Convert JSON files.
   for (auto &fileName : Utility::createJSONFileList()) {
     try {
       processJSONFile(fileName);
     } catch (std::exception &ex) {
-      PLOG_ERROR << "Error: " << ex.what();
+      std::cerr << "Error: " << ex.what() << '\n';
+
     }
   }
-  PLOG_INFO << "JSON_Convert_File exited.";
+  std::cout << "JSON_Convert_File exited." << '\n';
+
   exit(EXIT_SUCCESS);
 }

@@ -4,10 +4,11 @@
 // Description: Create JSON programmatically at runtime using a combination
 // of the JSON class, indexing/key operators plus the use of initializer lists.
 //
-// Dependencies: C++20, PLOG, JSON_Lib.
+// Dependencies: C++20, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
+#include <iostream>
 
 namespace js = JSON_Lib;
 namespace fs = std::filesystem;
@@ -15,11 +16,11 @@ namespace fs = std::filesystem;
 int main(int, char **)
 {
   try {
-    // Initialise logging.
-    init(plog::debug, "JSON_Create_At_Runtime.log");
-    PLOG_INFO << "JSON_Create_At_Runtime started ...";
+        std::cout << "JSON_Create_At_Runtime started ..." << '\n';
+
     // Log version
-    PLOG_INFO << js::JSON().version();
+    std::cout << js::JSON().version() << '\n';
+
     // create an empty structure (null)
     js::JSON json;
     // add a number stored as double (note the implicit conversion of
@@ -41,7 +42,8 @@ int main(int, char **)
     json["object2"] = { { "currency", "USD" }, { "array", js::Node{ 23.22, 33, 55, 99.99 } } };
     js::BufferDestination destination;
     json.stringify(destination);
-    PLOG_INFO << destination.view();
+    std::cout << destination.view() << '\n';
+
     destination.clear();
     // create JSON using an initializer list and nesting array/objects using Node{}.
     const js::JSON json2 = { { "pi", 3.141 },
@@ -52,10 +54,13 @@ int main(int, char **)
       { "list", js::Node{ 1, 0, 2 } },
       { "object", js::Node{ { "currency", "USD" }, { "value", js::Node{ 23.22, 33, 55, 99.99 } } } } };
     json2.stringify(destination);
-    PLOG_INFO << destination.view();
+    std::cout << destination.view() << '\n';
+
   } catch (std::exception &ex) {
-    PLOG_ERROR << "Error: " << ex.what();
+    std::cerr << "Error: " << ex.what() << '\n';
+
   }
-  PLOG_INFO << "JSON_Create_At_Runtime exited.";
+  std::cout << "JSON_Create_At_Runtime exited." << '\n';
+
   exit(EXIT_SUCCESS);
 }

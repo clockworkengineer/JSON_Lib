@@ -4,11 +4,12 @@
 // Description: For each JSON file in a directory parse it, then analyze its
 // JSON tree and produce an output report of the analysis.
 //
-// Dependencies: C++20, PLOG, JSON_Lib.
+// Dependencies: C++20, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
 #include "JSON_Analyzer.hpp"
+#include <iostream>
 
 namespace js = JSON_Lib;
 
@@ -18,32 +19,39 @@ namespace js = JSON_Lib;
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName)
 {
-  PLOG_INFO << "Analyzing " << fileName;
+  std::cout << "Analyzing " << fileName << '\n';
+
   js::JSON json;
   JSON_Analyzer jsonAnalyzer;
   json.parse(js::FileSource{ fileName });
   json.traverse(jsonAnalyzer);
-  PLOG_INFO << jsonAnalyzer.dump();
-  PLOG_INFO << "Finished " << fileName << ".";
+  std::cout << jsonAnalyzer.dump() << '\n';
+
+  std::cout << "Finished " << fileName << "." << '\n';
+
 }
 
 int main(int, char **)
 {
-  // Initialise logging.
-  init(plog::debug, "JSON_Analyze_File.log");
-  PLOG_INFO << "JSON_Analyze_File started ...";
+    std::cout << "JSON_Analyze_File started ..." << '\n';
+
   // Output JSON Lib version and data structure metrics
-  PLOG_INFO << js::JSON().version();
-  PLOG_INFO << JSON_Analyzer::dumpNumericSizes();
-  PLOG_INFO << JSON_Analyzer::dumpNodeSizes();
+  std::cout << js::JSON().version() << '\n';
+
+  std::cout << JSON_Analyzer::dumpNumericSizes() << '\n';
+
+  std::cout << JSON_Analyzer::dumpNodeSizes() << '\n';
+
   // Analyze JSON files.
   for (auto &fileName : Utility::createJSONFileList()) {
     try {
       processJSONFile(fileName);
     } catch (std::exception &ex) {
-      PLOG_ERROR << "Error: " << ex.what();
+      std::cerr << "Error: " << ex.what() << '\n';
+
     }
   }
-  PLOG_INFO << "JSON_Analyze_File exited.";
+  std::cout << "JSON_Analyze_File exited." << '\n';
+
   exit(EXIT_SUCCESS);
 }

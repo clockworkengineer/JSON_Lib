@@ -4,10 +4,11 @@
 // Description: For a each JSON file in a directory strip its white space characters
 // to a temporary file and then overwrite the existing file by renaming the temporary file.
 //
-// Dependencies: C++20, PLOG, JSON_Lib.
+// Dependencies: C++20, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
+#include <iostream>
 
 namespace js = JSON_Lib;
 
@@ -17,28 +18,32 @@ namespace js = JSON_Lib;
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName)
 {
-  PLOG_INFO << "Stripping " << fileName;
+  std::cout << "Stripping " << fileName << '\n';
+
   const js::JSON json;
   json.strip(js::FileSource{ fileName }, js::FileDestination{ fileName + ".stripped" });
   std::filesystem::rename(fileName + ".stripped", fileName);
-  PLOG_INFO << "Finished " << fileName << ".";
+  std::cout << "Finished " << fileName << "." << '\n';
+
 }
 
 int main(int, char **)
 {
-  // Initialise logging.
-  init(plog::debug, "JSON_Strip_Whitespace.log");
-  PLOG_INFO << "JSON_Strip_Whitespace started ...";
+    std::cout << "JSON_Strip_Whitespace started ..." << '\n';
+
   // Output JSON Lib version
-  PLOG_INFO << js::JSON().version();
+  std::cout << js::JSON().version() << '\n';
+
   // Strip JSON files.
   for (auto &fileName : Utility::createJSONFileList()) {
     try {
       processJSONFile(fileName);
     } catch (std::exception &ex) {
-    PLOG_ERROR << "Error: " << ex.what();
+    std::cerr << "Error: " << ex.what() << '\n';
+
     }
   }
-  PLOG_INFO << "JSON_Strip_Whitespace exited.";
+  std::cout << "JSON_Strip_Whitespace exited." << '\n';
+
   exit(EXIT_SUCCESS);
 }

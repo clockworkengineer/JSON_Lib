@@ -6,10 +6,11 @@
 // as stringification, but it is used to provide example code that traverses and
 // interprets the Node tree data.
 //
-// Dependencies: C++20, PLOG, JSON_Lib.
+// Dependencies: C++20, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
+#include <iostream>
 
 namespace js = JSON_Lib;
 
@@ -64,17 +65,18 @@ void processEntry(const js::Object::Entry &entry)
   } else {
     throw std::runtime_error("Invalid JSON settings file.");
   }
-  PLOG_INFO << entryJSON;
+  std::cout << entryJSON << '\n';
+
 }
 
 int main(int, char **)
 {
   try {
-    // Initialise logging.
-    init(plog::debug, "JSON_Display_Settings.log");
-    PLOG_INFO << "JSON_Display_Settings started ...";
+        std::cout << "JSON_Display_Settings started ..." << '\n';
+
     // Log version
-    PLOG_INFO << js::JSON().version();
+    std::cout << js::JSON().version() << '\n';
+
     // Parse in settings file
     js::JSON json;
     json.parse(js::FileSource{ jsonSettingsFile() });
@@ -82,11 +84,14 @@ int main(int, char **)
     // Node root has to be an object
     if (!js::isA<js::Object>(settingsRoot)) { throw std::runtime_error("Invalid JSON settings file."); }
     // Loop and process each top level entry
-    PLOG_INFO << "Displaying settings ...";
+    std::cout << "Displaying settings ..." << '\n';
+
     for (const auto &entry : js::NRef<js::Object>(settingsRoot).value()) { processEntry(entry); }
   } catch (std::exception &ex) {
-    PLOG_ERROR << "Error: " << ex.what();
+    std::cerr << "Error: " << ex.what() << '\n';
+
   }
-  PLOG_INFO << "JSON_Display_Settings exited.";
+  std::cout << "JSON_Display_Settings exited." << '\n';
+
   exit(EXIT_SUCCESS);
 }

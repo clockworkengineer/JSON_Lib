@@ -4,10 +4,11 @@
 // Description: Parse JSON example settings file and toggle the clang-tidy
 // enabled setting before writing it back to the settings file.
 //
-// Dependencies: C++20, PLOG, JSON_Lib.
+// Dependencies: C++20, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
+#include <iostream>
 
 namespace js = JSON_Lib;
 
@@ -20,11 +21,11 @@ std::string jsonSettingsFile() { return (std::filesystem::current_path() / "file
 int main(int, char **)
 {
   try {
-    // Initialise logging.
-    init(plog::debug, "JSON_Toggle_Setting.log");
-    PLOG_INFO << "JSON_Toggle_Setting started ...";
+        std::cout << "JSON_Toggle_Setting started ..." << '\n';
+
     // Log version
-    PLOG_INFO << js::JSON().version();
+    std::cout << js::JSON().version() << '\n';
+
     // Parse in settings file
     js::JSON json;
     json.parse(js::FileSource{ jsonSettingsFile() });
@@ -42,8 +43,10 @@ int main(int, char **)
     // Write back settings with toggled flag
     json.print(js::FileDestination{ jsonSettingsFile() });
   } catch (std::exception &ex) {
-    PLOG_ERROR << "Error: " << ex.what();
+    std::cerr << "Error: " << ex.what() << '\n';
+
   }
-  PLOG_INFO << "JSON_Toggle_Setting exited.";
+  std::cout << "JSON_Toggle_Setting exited." << '\n';
+
   exit(EXIT_SUCCESS);
 }

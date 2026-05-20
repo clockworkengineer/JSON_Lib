@@ -6,11 +6,12 @@
 // using indexes instead of key values (note the index are just numeric string values
 // starting at "0" and incrementing by one for each new key).
 //
-// Dependencies: C++20, PLOG, JSON_Lib.
+// Dependencies: C++20, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
 #include "JSON_Indexer.hpp"
+#include <iostream>
 
 namespace js = JSON_Lib;
 
@@ -23,30 +24,34 @@ namespace js = JSON_Lib;
 /// <param name="fileName">JSON file name</param>
 void processJSONFile(const std::string &fileName)
 {
-  PLOG_INFO << "Indexing " << fileName;
+  std::cout << "Indexing " << fileName << '\n';
+
   js::JSON json;
   JSON_Indexer jsonIndexer{ fileName };
   json.parse(js::FileSource{ fileName });
   json.traverse(jsonIndexer);
   json.stringify(js::FileDestination{ fileName + ".new" });
   jsonIndexer.save();
-  PLOG_INFO << "Finished " << fileName << ".";
+  std::cout << "Finished " << fileName << "." << '\n';
+
 }
 
 int main(int, char **)
 {
-  // Initialise logging.
-  init(plog::debug, "JSON_Index_File.log");
-  PLOG_INFO << "JSON_Index_File started ...";
-  PLOG_INFO << js::JSON().version();
+    std::cout << "JSON_Index_File started ..." << '\n';
+
+  std::cout << js::JSON().version() << '\n';
+
   // Analyze JSON files.
   for (auto &fileName : Utility::createJSONFileList()) {
     try {
       processJSONFile(fileName);
     } catch (std::exception &ex) {
-    PLOG_ERROR << "Error: " << ex.what();
+    std::cerr << "Error: " << ex.what() << '\n';
+
     }
   }
-  PLOG_INFO << "JSON_Index_File exited.";
+  std::cout << "JSON_Index_File exited." << '\n';
+
   exit(EXIT_SUCCESS);
 }

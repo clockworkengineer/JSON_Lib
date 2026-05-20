@@ -2,7 +2,7 @@
 //
 // Description: Recursively search for all values matching a given key in a JSON file.
 //
-// Dependencies: C++20, PLOG, JSON_Lib.
+// Dependencies: C++20, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
@@ -38,9 +38,10 @@ void findAllByKey(const js::Node &node, const std::string &key, std::vector<std:
 int main(int, char **)
 {
   try {
-    init(plog::debug, "JSON_Deep_Search.log");
-    PLOG_INFO << "JSON_Deep_Search started ...";
-    PLOG_INFO << js::JSON().version();
+        std::cout << "JSON_Deep_Search started ..." << '\n';
+
+    std::cout << js::JSON().version() << '\n';
+
     std::string inputFile = "files/testfile001.json";
     std::string searchKey = "id";// Change as needed
 
@@ -53,7 +54,8 @@ int main(int, char **)
     std::cout << "Found " << results.size() << " values for key '" << searchKey << "':\n";
     for (const auto &val : results) { std::cout << val << std::endl; }
   } catch (const std::exception &ex) {
-    PLOG_ERROR << ex.what();
+    std::cerr << ex.what() << '\n';
+
     return 1;
   }
   return 0;

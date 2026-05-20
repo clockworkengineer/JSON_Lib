@@ -4,11 +4,12 @@
 // Description: Use JSON_Lib to read in a torrent file then write
 // it out as JSON using a custom encoder.
 //
-// Dependencies: C++20, PLOG, JSON_Lib.
+// Dependencies: C++20, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
 #include "XML_Stringify.hpp"
+#include <iostream>
 
 namespace js = JSON_Lib;
 
@@ -16,18 +17,20 @@ int main(int, char **)
 {
   try {
     js::JSON json(js::makeStringify<js::XML_Stringify>());
-    // Initialise logging.
-    init(plog::debug, "JSON_Files_To_XML.log");
-    PLOG_INFO << "JSON_Files_To_XML started ...";
-    PLOG_INFO << json.version();
+        std::cout << "JSON_Files_To_XML started ..." << '\n';
+
+    std::cout << json.version() << '\n';
+
     for (const auto &jsonFileName : Utility::createJSONFileList()) {
       json.parse(js::FileSource(jsonFileName));
       json.stringify(js::FileDestination(Utility::createFileName(jsonFileName, ".xml")));
-      PLOG_INFO << "Created file " << Utility::createFileName(jsonFileName, ".xml") << " from " << jsonFileName;
+      std::cout << "Created file " << Utility::createFileName(jsonFileName, ".xml") << " from " << jsonFileName << '\n';
+
     }
   } catch (const std::exception &ex) {
-    PLOG_ERROR << "Error Processing Torrent File: [" << ex.what() << "]\n";
+    std::cerr << "Error Processing Torrent File: [" << ex.what() << "]\n";
   }
-  PLOG_INFO << "JSON_Files_To_XML exited.";
+  std::cout << "JSON_Files_To_XML exited." << '\n';
+
   exit(EXIT_SUCCESS);
 }

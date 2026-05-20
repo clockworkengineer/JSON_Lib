@@ -2,7 +2,7 @@
 //
 // Description: Demonstrate handling of Unicode/UTF-8 characters in JSON.
 //
-// Dependencies: C++20, PLOG, JSON_Lib.
+// Dependencies: C++20, JSON_Lib.
 //
 
 #include "JSON_Utility.hpp"
@@ -14,10 +14,10 @@ namespace js = JSON_Lib;
 int main(int, char **)
 {
   try {
-    init(plog::debug, "JSON_Unicode_Support.log");
-    PLOG_INFO << "JSON_Unicode_Support started ...";
-    PLOG_INFO << js::JSON().version();
+        std::cout << "JSON_Unicode_Support started ..." << '\n';
 
+    std::cout << js::JSON().version();
+ << '\n';
     // Example JSON with Unicode
     std::string unicodeJSON = R"({\"greeting\": \"こんにちは世界\", \"emoji\": \"😀\"})";
     js::JSON json;
@@ -30,7 +30,8 @@ int main(int, char **)
     json.print(fullDest);
     std::cout << "Full JSON: " << fullDest.view() << std::endl;
   } catch (const std::exception &ex) {
-    PLOG_ERROR << ex.what();
+    std::cerr << ex.what() << '\n';
+
     return 1;
   }
   return 0;

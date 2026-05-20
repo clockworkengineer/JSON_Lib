@@ -1,7 +1,9 @@
 #pragma once
 
-#include "plog/Initializers/RollingFileInitializer.h"
-#include "plog/Log.h"
+#include <algorithm>
+#include <filesystem>
+#include <string>
+#include <vector>
 
 #include "JSON.hpp"
 #include "JSON_Core.hpp"
@@ -15,8 +17,8 @@ public:
     for (auto &file : std::filesystem::directory_iterator((std::filesystem::current_path() / "files"))) {
       if (file.path().extension() == ".json") { fileList.push_back(file.path().string()); }
     }
-    sort(fileList.begin(), fileList.end());
-    return (fileList);
+    std::sort(fileList.begin(), fileList.end());
+    return fileList;
   }
   static std::string createFileName(const std::string &torrentFileName, const std::string newExtension)
   {
