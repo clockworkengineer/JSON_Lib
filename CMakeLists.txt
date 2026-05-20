@@ -12,6 +12,23 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Minimum supported compiler versions for C++23 compatibility
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "11.0")
+    message(FATAL_ERROR "JSON_Lib requires GCC 11.0 or later for C++23 support.")
+  endif()
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "14.0")
+    message(FATAL_ERROR "JSON_Lib requires Clang 14.0 or later for C++23 support.")
+  endif()
+elseif(MSVC)
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS "19.36")
+    message(FATAL_ERROR "JSON_Lib requires MSVC 19.36 or later for C++23 support.")
+  endif()
+else()
+  message(WARNING "JSON_Lib has not been validated with compiler ${CMAKE_CXX_COMPILER_ID}; compatibility macros may be incomplete.")
+endif()
+
 # Compiler warnings and platform
 if(MSVC)
   add_compile_options(/W4 /WX /MP)

@@ -12,6 +12,7 @@ TEST_CASE("JSON_Attributes compiler detection macros are available", "[Compatibi
 #else
   REQUIRE(JSON_LIB_COMPILER_UNKNOWN == 1);
 #endif
+  REQUIRE((JSON_LIB_COMPILER_MSVC + JSON_LIB_COMPILER_CLANG + JSON_LIB_COMPILER_GCC + JSON_LIB_COMPILER_UNKNOWN) == 1);
 }
 
 TEST_CASE("JSON_Attributes platform detection macros are available", "[Compatibility][Portability]")
