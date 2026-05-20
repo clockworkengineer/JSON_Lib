@@ -57,11 +57,21 @@ void writeJSONString(std::ofstream &jsonFile, const std::u16string_view &jsonStr
 /// </summary>
 /// <param name="jsonFile">JSON file stream</param>
 /// <returns>JSON string.</returns>
-std::string readJSONString(const std::ifstream &jsonFile)
+std::string readJSONString(std::ifstream &jsonFile)
 {
-  std::ostringstream jsonFileBuffer;
-  jsonFileBuffer << jsonFile.rdbuf();
-  return jsonFileBuffer.str();
+  const auto initialPosition = jsonFile.tellg();
+  if (initialPosition == -1) {
+    return {};
+  }
+  jsonFile.seekg(0, std::ios_base::end);
+  const auto length = jsonFile.tellg();
+  jsonFile.seekg(initialPosition, std::ios_base::beg);
+  std::string jsonString;
+  if (length > 0) {
+    jsonString.reserve(static_cast<std::size_t>(length));
+  }
+  jsonString.assign(std::istreambuf_iterator<char>(jsonFile), {});
+  return jsonString;
 }
 std::u16string readJSONString(std::ifstream &jsonFile, const JSON::Format format)
 {
