@@ -141,13 +141,16 @@ public:
   JSON_LIB_NODISCARD Node &root();
   /// @brief Returns a const reference to the root node (read-only).
   JSON_LIB_NODISCARD const Node &root() const;
-  // Search for JSON object entry with a given key
+  // Search for JSON object entry with a given key.
+  // Use `contains(key)` to test membership before calling `at(key)`.
+  // `operator[]` provides object member access.
   Node &operator[](const std::string_view &key);
   const Node &operator[](const std::string_view &key) const;
   JSON_LIB_NODISCARD bool contains(const std::string_view &key) const;
   JSON_LIB_NODISCARD Node &at(const std::string_view &key);
   JSON_LIB_NODISCARD const Node &at(const std::string_view &key) const;
-  // Get JSON array entry at index
+  // Get JSON array entry at index (mutable or const access).
+  // Use `at(index)` for explicit bounds-checked access semantics.
   Node &operator[](std::size_t index);
   const Node &operator[](std::size_t index) const;
   JSON_LIB_NODISCARD Node &at(std::size_t index);

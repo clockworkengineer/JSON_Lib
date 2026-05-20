@@ -271,7 +271,7 @@ All sources implement `ISource`.
 | `FixedBufferSource(const char*, size_t)` | Zero-heap; borrows a raw byte region (ROM-safe) |
 | `FileSource(std::string_view)` | Reads from a file (disabled when `JSON_LIB_NO_STDIO == 1`) |
 
-Include `"implementation/io/JSON_Sources.hpp"` for all of the above.
+Include `"JSON_IO.hpp"` for all of the above.
 
 ---
 
@@ -285,7 +285,7 @@ All destinations implement `IDestination`.
 | `FixedBufferDestination<N>` | Stack-allocated array of `N` bytes; no heap required |
 | `FileDestination(std::string_view)` | Writes to a file (disabled when `JSON_LIB_NO_STDIO == 1`) |
 
-Include `"implementation/io/JSON_Destinations.hpp"` for all of the above.
+Include `"JSON_IO.hpp"` for all of the above.
 
 ### FixedBufferDestination<N> notes
 
