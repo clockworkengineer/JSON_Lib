@@ -56,51 +56,51 @@ public:
 
   /// @brief Called for every node visited, before the type-specific callback.
   /// @param jNode The node currently being visited (mutable).
-  virtual void onNode(Node &jNode) { }
+  virtual void onNode(Node &) { }
   /// @brief Called for every node visited, before the type-specific callback.
   /// @param jNode The node currently being visited (read-only).
-  virtual void onNode(const Node &jNode) { }
+  virtual void onNode(const Node &) { }
 
   /// @brief Called when a String node is visited.
   /// @param jNode The String node (mutable).
-  virtual void onString(Node &jNode) { }
+  virtual void onString(Node &) { }
   /// @brief Called when a String node is visited.
   /// @param jNode The String node (read-only).
-  virtual void onString(const Node &jNode) { }
+  virtual void onString(const Node &) { }
 
   /// @brief Called when a Number node is visited.
   /// @param jNode The Number node (mutable).
-  virtual void onNumber(Node &jNode) { }
+  virtual void onNumber(Node &) { }
   /// @brief Called when a Number node is visited.
   /// @param jNode The Number node (read-only).
-  virtual void onNumber(const Node &jNode) { }
+  virtual void onNumber(const Node &) { }
 
   /// @brief Called when a Boolean node is visited.
   /// @param jNode The Boolean node (mutable).
-  virtual void onBoolean(Node &jNode) { }
+  virtual void onBoolean(Node &) { }
   /// @brief Called when a Boolean node is visited.
   /// @param jNode The Boolean node (read-only).
-  virtual void onBoolean(const Node &jNode) { }
+  virtual void onBoolean(const Node &) { }
 
   /// @brief Called when a Null node is visited.
   /// @param jNode The Null node (mutable).
-  virtual void onNull(Node &jNode) { }
+  virtual void onNull(Node &) { }
   /// @brief Called when a Null node is visited.
   /// @param jNode The Null node (read-only).
-  virtual void onNull(const Node &jNode) { }
+  virtual void onNull(const Node &) { }
 
   /// @brief Called when an Array node is visited (before its children).
   /// @param jNode The Array node (mutable).
-  virtual void onArray(Node &jNode) { }
+  virtual void onArray(Node &) { }
   /// @brief Called when an Array node is visited (before its children).
   /// @param jNode The Array node (read-only).
-  virtual void onArray(const Node &jNode) { }
+  virtual void onArray(const Node &) { }
 
   /// @brief Called when an Object node is visited (before its children).
   /// @param jNode The Object node (mutable).
-  virtual void onObject(Node &jNode) { }
+  virtual void onObject(Node &) { }
   /// @brief Called when an Object node is visited (before its children).
   /// @param jNode The Object node (read-only).
-  virtual void onObject(const Node &jNode) { }
+  virtual void onObject(const Node &) { }
 };
 }// namespace JSON_Lib

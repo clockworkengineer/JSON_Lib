@@ -41,7 +41,7 @@ public:
 
   /// @brief Set the pretty-print indentation step.
   /// @param indent Number of spaces per indent level; must be >= 0.
-  virtual void setIndent(long indent) {}
+  virtual void setIndent(long) {}
 };
 
 /// @brief Factory helper: create a @c std::unique_ptr<IStringify> of type @p T.
