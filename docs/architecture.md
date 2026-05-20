@@ -24,6 +24,10 @@ This header exposes:
 - `JSON_IO.hpp` — optional I/O helper header
 - `JSON_Config.hpp` — generated compile-time flags (automatically included by `JSON.hpp`)
 
+The library exposes a single public include root at `classes/include`. Applications should not rely on `classes/include/implementation/*` headers directly; those are internal implementation details and are not part of the supported public API.
+
+`JSON_Config.hpp` is generated from `JSON_Config.h.in` and contains only public feature macros required by the installed headers. It does not expose internal build machinery or implementation-specific configuration details.
+
 ## Core library modules
 
 ### JSON façade

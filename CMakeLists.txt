@@ -260,6 +260,7 @@ endif()
 
 # Install rules
 set(JSON_PUBLIC_HEADERS
+  # Stable public interface headers
   ${PROJECT_SOURCE_DIR}/classes/include/JSON_Lib.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/JSON.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/JSON_IO.hpp
@@ -275,6 +276,8 @@ set(JSON_PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/classes/include/interface/ITranslator.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/interface/IParser.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/interface/IStringify.hpp
+
+  # Headers required to compile the public interface
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_Error.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_Attributes.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_Throw.hpp
