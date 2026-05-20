@@ -16,8 +16,7 @@ int main(int, char **)
   try {
         std::cout << "JSON_Unicode_Support started ..." << '\n';
 
-    std::cout << js::JSON().version();
- << '\n';
+    std::cout << js::JSON().version() << '\n';
     // Example JSON with Unicode
     std::string unicodeJSON = R"({\"greeting\": \"こんにちは世界\", \"emoji\": \"😀\"})";
     js::JSON json;

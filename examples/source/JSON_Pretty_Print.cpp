@@ -30,8 +30,7 @@ int main(int, char **)
     std::ofstream prettyOut(prettyFile);
     prettyOut << prettyDest.view();
     prettyOut.close();
-    std::cout << "Pretty-printed JSON written to: " << prettyFile;
- << '\n';
+    std::cout << "Pretty-printed JSON written to: " << prettyFile << '\n';
     // Minify
     js::BufferDestination minDest;
     json.stringify(minDest);
