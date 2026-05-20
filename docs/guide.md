@@ -50,6 +50,12 @@ cmake --build .
 
 ### Build and install
 
+The core library has no third-party runtime dependencies. Catch2 is required only for building and running tests, and Doxygen is optional only for generating documentation.
+
+
+The core library has no third-party runtime dependencies. Catch2 is required only for building and running tests, and Doxygen is optional only for generating documentation.
+
+
 ```sh
 git clone <repository-url>
 cd JSON_Lib
