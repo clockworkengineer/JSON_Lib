@@ -115,16 +115,24 @@ cmake --build . --target JSON_Lib_Unit_Tests
 ctest --output-on-failure
 ```
 
-For embedded-mode tests:
+For embedded-like validation builds that exercise no-exceptions, no-stdio, and no-dynamic-memory policy coverage:
 
 ```sh
 mkdir build-embedded && cd build-embedded
-cmake -DJSON_LIB_EMBEDDED=ON -DBUILD_TESTING=ON -DBUILD_EXAMPLES=OFF -DJSON_LIB_ENABLE_LTO=OFF ..
+cmake -DJSON_LIB_NO_EXCEPTIONS=ON -DJSON_LIB_NO_STDIO=ON -DJSON_LIB_NO_DYNAMIC_MEMORY=ON \
+      -DBUILD_TESTING=ON -DBUILD_EXAMPLES=OFF ..
 cmake --build . --target JSON_Lib_Unit_Tests
-ctest --output-on-failure
+ctest --output-on-failure -R Embedded
 ```
 
-Enabling `JSON_LIB_EMBEDDED` automatically sets `BUILD_TESTING=OFF`, `BUILD_EXAMPLES=OFF`, `JSON_LIB_ENABLE_LTO=OFF`, and `JSON_LIB_NO_STDIO=ON`.
+The `JSON_LIB_EMBEDDED` preset is intended for release or constrained deployment builds and, in the current CMake flow, disables unit testing by default. It also forces:
+
+- `BUILD_TESTING=OFF`
+- `BUILD_EXAMPLES=OFF`
+- `JSON_LIB_ENABLE_LTO=OFF`
+- `JSON_LIB_NO_STDIO=ON`
+
+If you need to validate embedded-like behavior in tests, use the explicit `NO_EXCEPTIONS`, `NO_STDIO`, and `NO_DYNAMIC_MEMORY` flags instead.
 
 Use CMake presets for constrained builds:
 
@@ -132,12 +140,13 @@ Use CMake presets for constrained builds:
 cmake -DJSON_LIB_EMBEDDED=ON ..
 ```
 
-For a custom exception-free embedded configuration:
+For a custom exception-free policy build:
 
 ```sh
 cmake \
   -DJSON_LIB_NO_EXCEPTIONS=ON \
   -DJSON_LIB_NO_STDIO=ON \
+  -DJSON_LIB_NO_DYNAMIC_MEMORY=ON \
   -DJSON_LIB_MAX_PARSER_DEPTH=5 \
   -DJSON_LIB_MAX_STRING_LENGTH=2048 \
   ..

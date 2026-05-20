@@ -22,6 +22,9 @@ enable_testing()
 set(TEST_EXECUTABLE ${JSON_LIBRARY_NAME}_Unit_Tests)
 
 # Unit test source files are grouped by feature area for easier navigation and extension.
+# Policy-specific tests (embedded, no-exceptions, no-stdio, no-dynamic-memory) can be added
+# in the matching feature subfolder under source/parse, source/io, source/stringify, or
+# a dedicated source/embedded directory if desired.
 # Add new tests in the matching feature subfolder, then register the file here.
 set(TEST_SOURCES
   source/node/JSON_Lib_Tests_Node_Assignment.cpp
