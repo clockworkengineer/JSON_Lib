@@ -396,13 +396,16 @@ if (!sr.ok()) { handle_error(sr.message); return; }
 
 ## Security and strict parse semantics
 
-JSON_Lib treats untrusted input conservatively:
+JSON_Lib treats untrusted input conservatively and makes its safety boundaries explicit:
 - Raw control characters inside JSON strings are rejected.
 - Invalid UTF-8 sequences in string values are rejected.
 - Incomplete or unrecognized BOM sequences in JSON files are treated as unsupported encoding.
+- Only a single JSON value is accepted; any trailing characters after the root value result in a syntax error.
 - Nested objects and arrays are capped by `JSON_LIB_MAX_PARSER_DEPTH`.
 - String content is capped by `JSON_LIB_MAX_STRING_LENGTH`.
-- Use `parseResult` / `parseNoThrow` to observe parse failures through `Status::SyntaxError` or `Status::UnsupportedEncoding`.
+- `JSON_LIB_NO_HEAP=ON` implies `JSON_LIB_NO_DYNAMIC_MEMORY=ON` and enforces heapless operation where supported.
+- `JSON_LIB_NO_STDIO=ON` compiles out file-based source and destination helpers, leaving buffer-based I/O only.
+- Use `parseResult` / `parseNoThrow` to observe parse failures through `Status::SyntaxError`, `Status::UnsupportedEncoding`, or `Status::InvalidInput`.
 
 Use build-time overrides to harden parser behavior in constrained or security-sensitive deployments.
 
