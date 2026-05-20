@@ -70,4 +70,20 @@ TEST_CASE("Custom backend injection through JSON constructor", "[JSON][Custom][I
     json.stringify(destination);
     REQUIRE(destination.toString() == "[CUSTOM]nonempty");
   }
+
+  SECTION("JSON::Options can configure both parser and stringify backends")
+  {
+    JSON::Options options;
+    options.setParser(std::make_unique<CustomParser>());
+    options.setStringify(std::make_unique<CustomStringify>());
+    JSON json(std::move(options));
+    json.parse(BufferSource{R"({"a":1})"});
+
+    REQUIRE(json.contains("custom"));
+    REQUIRE(NRef<Boolean>(json["custom"]).value() == true);
+
+    BufferDestination destination;
+    json.stringify(destination);
+    REQUIRE(destination.toString() == "[CUSTOM]nonempty");
+  }
 }

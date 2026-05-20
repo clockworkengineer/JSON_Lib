@@ -260,6 +260,61 @@ int first = js::NRef<js::Number>(json[0]).value<int>();
 
 ---
 
+## Custom backends and extension interfaces
+
+`JSON_Lib` supports custom parser and stringify backends through public interface types.
+
+### `JSON::Options`
+
+Use `JSON::Options` to configure parser and stringify backends in one object.
+
+```cpp
+JSON::Options options;
+options.setStringify(JSON_Lib::makeStringify<JSON_Lib::XML_Stringify>());
+options.setParser(std::make_unique<MyCustomParser>());
+JSON json(std::move(options));
+```
+
+The options object owns `std::unique_ptr<IStringify>` and `std::unique_ptr<IParser>` objects. This is the preferred way to configure backend plugins without overloading the `JSON` constructor.
+
+### `IParser`
+
+Implement `IParser` when you need a custom parse strategy. The interface requires:
+
+- `Node parse(ISource &source)`
+
+The default `IParser::parseResult(ISource &source)` helper is implemented by the interface and returns a `Result<Node>`.
+
+### `IStringify`
+
+Implement `IStringify` when you need a custom serialization backend. The interface requires:
+
+- `void stringify(const Node &jNode, IDestination &destination, unsigned long indent) const`
+- `void setIndent(long indent)`
+- `long getIndent() const noexcept`
+
+Use `JSON::makeStringify<T>()` to create a `std::unique_ptr<IStringify>` for concrete stringify implementations.
+
+### `ISource` and `IDestination`
+
+`ISource` is the input abstraction used by parsers. `IDestination` is the output abstraction used by stringify backends.
+
+Built-in sources:
+
+- `BufferSource`
+- `FixedBufferSource`
+- `FileSource` (disabled when `JSON_LIB_NO_STDIO == 1`)
+
+Built-in destinations:
+
+- `BufferDestination`
+- `FixedBufferDestination<N>`
+- `FileDestination` (disabled when `JSON_LIB_NO_STDIO == 1`)
+
+This shared abstraction enables custom parsers and stringifiers to work with the same I/O pipeline used by the rest of the library.
+
+---
+
 ## Sources (input)
 
 All sources implement `ISource`.
