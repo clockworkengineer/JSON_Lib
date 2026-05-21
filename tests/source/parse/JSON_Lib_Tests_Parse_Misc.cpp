@@ -145,3 +145,46 @@ TEST_CASE("Check invalid UTF-8 sequences in strings are rejected.", "[JSON][Pars
   REQUIRE(exceptionMatched);
 }
 
+TEST_CASE("Enforce strict JSON parse semantics for invalid non-JSON input.", "[JSON][Parse][Strict]")
+{
+  JSON json;
+  SECTION("Reject leading plus sign in numeric values.")
+  {
+    bool plusMatched = false;
+    try {
+      json.parse(BufferSource{"+1"});
+    } catch (const SyntaxError &ex) {
+      plusMatched = std::string(ex.what()).find("leading '+' sign") != std::string::npos;
+    }
+    REQUIRE(plusMatched);
+  }
+  SECTION("Reject single-quoted strings.")
+  {
+    bool singleQuoteMatched = false;
+    try {
+      json.parse(BufferSource{"['a']"});
+    } catch (const SyntaxError &ex) {
+      singleQuoteMatched = std::string(ex.what()).find("Single quoted strings are not valid JSON.") != std::string::npos;
+    }
+    REQUIRE(singleQuoteMatched);
+  }
+  SECTION("Reject UTF-8 BOM at the start of raw JSON input.")
+  {
+    std::string bomJson;
+    bomJson.push_back(static_cast<char>(0xEF));
+    bomJson.push_back(static_cast<char>(0xBB));
+    bomJson.push_back(static_cast<char>(0xBF));
+    bomJson += "[]";
+
+    bool bomMatched = false;
+    try {
+      json.parse(BufferSource{bomJson});
+    } catch (const UnsupportedEncodingError &ex) {
+      const std::string message = ex.what();
+      bomMatched = message.find("JSON UnsupportedEncoding Error") != std::string::npos &&
+                   message.find("Byte Order Mark") != std::string::npos;
+    }
+    REQUIRE(bomMatched);
+  }
+}
+

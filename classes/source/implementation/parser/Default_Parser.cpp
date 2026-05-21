@@ -288,6 +288,18 @@ Node Default_Parser::parseArray(ISource &source, const unsigned long parserDepth
       return parseNodes(src, depth + 1, maxDepth);
     });
 }
+
+static void validateUtf8Bom(ISource &source)
+{
+  if (!source.more() || static_cast<unsigned char>(source.current()) != 0xEFu) {
+    return;
+  }
+
+  if (source.match(std::string_view("\xEF\xBB\xBF"))) {
+    JSON_THROW(UnsupportedEncodingError(source.getPosition(), "JSON input must not start with a UTF-8 Byte Order Mark (BOM)."));
+  }
+}
+
 /// <summary>
 /// Recursively parse JSON source stream producing a Node structure
 /// representation  of it. Note: If no obvious match is found for
@@ -311,10 +323,14 @@ Node Default_Parser::parseNodes(ISource &source, const unsigned long parserDepth
       jNode = parseArray(source, parserDepth, maxDepth);
       break;
     case JSON_Lib::kStringQuote:
-    case JSON_Lib::kStringSingleQuote:
       jNode = parseString(source, parserDepth);
       break;
+    case JSON_Lib::kStringSingleQuote:
+      JSON_THROW(SyntaxError(source.getPosition(), "Single quoted strings are not valid JSON."));
+      break;
     case JSON_Lib::kPlus:
+      JSON_THROW(SyntaxError(source.getPosition(), "JSON does not allow a leading '+' sign for numbers."));
+      break;
     case JSON_Lib::kMinus:
     case JSON_Lib::kZero:
     case JSON_Lib::kOne:
@@ -349,6 +365,8 @@ Node Default_Parser::parseNodes(ISource &source, const unsigned long parserDepth
 /// <returns>Pointer to Node.</returns>
 Node Default_Parser::parse(ISource &source)
 {
+  source.ignoreWS();
+  validateUtf8Bom(source);
   Node result = parseNodes(source, 1, m_maxParserDepth);
   source.ignoreWS();
   if (source.more()) {
