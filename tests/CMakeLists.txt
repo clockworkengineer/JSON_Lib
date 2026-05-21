@@ -71,6 +71,7 @@ set(TEST_SOURCES
   source/misc/JSON_Lib_Tests_Compatibility.cpp
   source/misc/JSON_Lib_Tests_PublicFacade.cpp
   source/misc/JSON_Lib_Tests_DRY_Regression.cpp
+  source/misc/JSON_Lib_Tests_Build_Policy_CompileChecks.cpp
   source/traverse/JSON_Lib_Tests_Traverse.cpp)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
