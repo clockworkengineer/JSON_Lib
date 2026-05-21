@@ -70,8 +70,16 @@ option(JSON_LIB_NO_DYNAMIC_MEMORY "Disable dynamic memory usage" OFF)
 option(JSON_LIB_NO_STDIO "Disable stdio/file I/O support" OFF)
 
 # Compile-time resource limits (0 = use library default)
-set(JSON_LIB_MAX_PARSER_DEPTH "0" CACHE STRING "Override default maximum JSON parse depth (0 = use default of 10)")
-set(JSON_LIB_MAX_STRING_LENGTH "0" CACHE STRING "Override default maximum JSON string length in bytes (0 = use default of 16384)")
+set(JSON_LIB_MAX_PARSER_DEPTH "0" CACHE STRING "Override default maximum JSON parse depth (0 = use library default of 128)")
+set(JSON_LIB_MAX_STRING_LENGTH "0" CACHE STRING "Override default maximum JSON string length in bytes (0 = use library default of 16384)")
+
+# Validate numeric resource limit overrides
+if(NOT JSON_LIB_MAX_PARSER_DEPTH MATCHES "^[0-9]+$")
+  message(FATAL_ERROR "JSON_LIB_MAX_PARSER_DEPTH must be a non-negative integer.")
+endif()
+if(NOT JSON_LIB_MAX_STRING_LENGTH MATCHES "^[0-9]+$")
+  message(FATAL_ERROR "JSON_LIB_MAX_STRING_LENGTH must be a non-negative integer.")
+endif()
 
 # Embedded build enforces smaller runtime and disables test/examples when enabled
 if(JSON_LIB_EMBEDDED)
@@ -87,6 +95,16 @@ if(JSON_LIB_NO_EXCEPTIONS AND NOT JSON_LIB_EMBEDDED)
   message(STATUS "Configuring JSON_Lib for no-exceptions build (tests/examples disabled)")
   set(BUILD_TESTING OFF CACHE BOOL "Build unit tests" FORCE)
   set(BUILD_EXAMPLES OFF CACHE BOOL "Build examples" FORCE)
+endif()
+
+# Enforce no-heap / no-dynamic-memory policy consistency
+if(JSON_LIB_NO_HEAP AND NOT JSON_LIB_NO_DYNAMIC_MEMORY)
+  message(STATUS "JSON_LIB_NO_HEAP implies JSON_LIB_NO_DYNAMIC_MEMORY; enabling JSON_LIB_NO_DYNAMIC_MEMORY")
+  set(JSON_LIB_NO_DYNAMIC_MEMORY ON CACHE BOOL "Disable dynamic memory usage" FORCE)
+endif()
+if(JSON_LIB_NO_DYNAMIC_MEMORY AND NOT JSON_LIB_NO_HEAP)
+  message(STATUS "JSON_LIB_NO_DYNAMIC_MEMORY implies JSON_LIB_NO_HEAP; enabling JSON_LIB_NO_HEAP")
+  set(JSON_LIB_NO_HEAP ON CACHE BOOL "Disable heap allocation support" FORCE)
 endif()
 
 # Configure embedded mode values for generated config header
