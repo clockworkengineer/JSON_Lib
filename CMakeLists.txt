@@ -277,6 +277,7 @@ endif()
 
 # Install rules
 set(JSON_PUBLIC_HEADERS
+
   # Stable public interface headers
   ${PROJECT_SOURCE_DIR}/classes/include/JSON_Lib.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/JSON.hpp
