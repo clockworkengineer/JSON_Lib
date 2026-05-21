@@ -46,7 +46,7 @@ void JSON_Impl::parse(ISource &source) { jNodeRoot = jsonParser->parse(source); 
 Result<Node> JSON_Impl::parseResult(ISource &source)
 {
   auto result = jsonParser->parseResult(source);
-  if (result.ok() && result.value) { jNodeRoot = std::move(*result.value); }
+  if (result.ok()) { jNodeRoot = std::move(*result.value); }
   return result;
 }
 void JSON_Impl::stringify(IDestination &destination) const
@@ -57,15 +57,15 @@ void JSON_Impl::stringify(IDestination &destination) const
 Result<void> JSON_Impl::runStringify(IDestination &destination, unsigned long indent) const
 {
   if (jNodeRoot.isEmpty()) {
-    return {Status::InvalidInput, {}, {0, 0}};
+    return Result<void>::error(Status::InvalidInput, {}, {0, 0});
   }
   try {
     jsonStringify->stringify(jNodeRoot, destination, indent);
-    return {Status::Ok, {}, {0, 0}};
+    return Result<void>::success();
   } catch (const std::exception &ex) {
-    return {Status::UnknownError, ex.what(), {0, 0}};
+    return Result<void>::error(Status::UnknownError, ex.what(), {0, 0});
   } catch (...) {
-    return {Status::UnknownError, "Unknown exception during stringify.", {0, 0}};
+    return Result<void>::error(Status::UnknownError, "Unknown exception during stringify.", {0, 0});
   }
 }
 Result<void> JSON_Impl::stringifyResult(IDestination &destination) const
@@ -115,29 +115,29 @@ void JSON_Impl::traverse(IAction &action) const
 Result<void> JSON_Impl::runTraverse(IAction &action)
 {
   if (jNodeRoot.isEmpty()) {
-    return {Status::InvalidInput, {}, {0, 0}};
+    return Result<void>::error(Status::InvalidInput, {}, {0, 0});
   }
   try {
     traverseNodes(jNodeRoot, action);
-    return {Status::Ok, {}, {0, 0}};
+    return Result<void>::success();
   } catch (const std::exception &ex) {
-    return {Status::UnknownError, ex.what(), {0, 0}};
+    return Result<void>::error(Status::UnknownError, ex.what(), {0, 0});
   } catch (...) {
-    return {Status::UnknownError, "Unknown exception during traverse.", {0, 0}};
+    return Result<void>::error(Status::UnknownError, "Unknown exception during traverse.", {0, 0});
   }
 }
 Result<void> JSON_Impl::runTraverse(IAction &action) const
 {
   if (jNodeRoot.isEmpty()) {
-    return {Status::InvalidInput, {}, {0, 0}};
+    return Result<void>::error(Status::InvalidInput, {}, {0, 0});
   }
   try {
     traverseNodes(jNodeRoot, action);
-    return {Status::Ok, {}, {0, 0}};
+    return Result<void>::success();
   } catch (const std::exception &ex) {
-    return {Status::UnknownError, ex.what(), {0, 0}};
+    return Result<void>::error(Status::UnknownError, ex.what(), {0, 0});
   } catch (...) {
-    return {Status::UnknownError, "Unknown exception during traverse.", {0, 0}};
+    return Result<void>::error(Status::UnknownError, "Unknown exception during traverse.", {0, 0});
   }
 }
 Node &JSON_Impl::operator[](const std::string_view &key)

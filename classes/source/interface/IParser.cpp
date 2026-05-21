@@ -6,17 +6,17 @@ namespace JSON_Lib {
 Result<Node> IParser::parseResult(ISource &source)
 {
   try {
-    return {Status::Ok, std::make_unique<Node>(parse(source)), {}, {0, 0}};
+    return Result<Node>::ok(parse(source));
   } catch (const SyntaxError &ex) {
-    return {Status::SyntaxError, nullptr, ex.what(), source.getPosition()};
+    return Result<Node>::error(Status::SyntaxError, ex.what(), source.getPosition());
   } catch (const UnsupportedEncodingError &ex) {
-    return {Status::UnsupportedEncoding, nullptr, ex.what(), source.getPosition()};
+    return Result<Node>::error(Status::UnsupportedEncoding, ex.what(), source.getPosition());
   } catch (const Error &ex) {
-    return {Status::InvalidInput, nullptr, ex.what(), source.getPosition()};
+    return Result<Node>::error(Status::InvalidInput, ex.what(), source.getPosition());
   } catch (const std::exception &ex) {
-    return {Status::UnknownError, nullptr, ex.what(), source.getPosition()};
+    return Result<Node>::error(Status::UnknownError, ex.what(), source.getPosition());
   } catch (...) {
-    return {Status::UnknownError, nullptr, "Unknown exception during parse.", source.getPosition()};
+    return Result<Node>::error(Status::UnknownError, "Unknown exception during parse.", source.getPosition());
   }
 }
 

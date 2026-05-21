@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <optional>
 #include <utility>
 #include "JSON_ErrorBase.hpp"
 
@@ -23,11 +23,34 @@ template<typename T>
 struct [[nodiscard]] Result
 {
   Status status{Status::Ok};
-  std::unique_ptr<T> value;
+  std::optional<T> value;
   std::string message;
   std::pair<long, long> position{0, 0};
 
-  JSON_LIB_NODISCARD bool ok() const JSON_LIB_NOEXCEPT { return status == Status::Ok; }
+  JSON_LIB_NODISCARD static Result ok(T value)
+  {
+    Result result;
+    result.status = Status::Ok;
+    result.value = std::move(value);
+    return result;
+  }
+
+  JSON_LIB_NODISCARD static Result error(Status status,
+                                         std::string message,
+                                         std::pair<long, long> position = {0, 0})
+  {
+    Result result;
+    result.status = status;
+    result.message = std::move(message);
+    result.position = position;
+    return result;
+  }
+
+  JSON_LIB_NODISCARD bool ok() const JSON_LIB_NOEXCEPT
+  {
+    return status == Status::Ok && value.has_value();
+  }
+
   JSON_LIB_NODISCARD T &unwrap() { return *value; }
   JSON_LIB_NODISCARD const T &unwrap() const { return *value; }
 };
@@ -38,6 +61,24 @@ struct [[nodiscard]] Result<void>
   Status status{Status::Ok};
   std::string message;
   std::pair<long, long> position{0, 0};
+
+  JSON_LIB_NODISCARD static Result success()
+  {
+    Result result;
+    result.status = Status::Ok;
+    return result;
+  }
+
+  JSON_LIB_NODISCARD static Result error(Status status,
+                                         std::string message,
+                                         std::pair<long, long> position = {0, 0})
+  {
+    Result result;
+    result.status = status;
+    result.message = std::move(message);
+    result.position = position;
+    return result;
+  }
 
   JSON_LIB_NODISCARD bool ok() const JSON_LIB_NOEXCEPT { return status == Status::Ok; }
 };
