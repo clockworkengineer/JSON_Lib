@@ -94,10 +94,10 @@ cmake --build .
 | `JSON_LIB_ENABLE_LTO` | `ON` | Enable link-time optimization |
 | `JSON_LIB_EXPORT_INTERFACE` | `ON` | Install only public headers by default |
 | `JSON_LIB_OPTIMIZATION_LEVEL` | `O2` | Compiler optimization (`O0`–`Ofast`) |
-| `JSON_LIB_EMBEDDED` | `OFF` | Enable embedded-friendly build preset |
-| `JSON_LIB_NO_EXCEPTIONS` | `OFF` | Disable C++ exceptions (`-fno-exceptions`) |
-| `JSON_LIB_NO_HEAP` | `OFF` | Disable heap allocation |
-| `JSON_LIB_NO_DYNAMIC_MEMORY` | `OFF` | Disable dynamic memory use |
+| `JSON_LIB_EMBEDDED` | `OFF` | Enable embedded-friendly build preset; disables tests/examples and forces no-stdio |
+| `JSON_LIB_NO_EXCEPTIONS` | `OFF` | Disable C++ exceptions; disables tests/examples in non-embedded builds |
+| `JSON_LIB_NO_HEAP` | `OFF` | Disable heap allocation; implies `JSON_LIB_NO_DYNAMIC_MEMORY` |
+| `JSON_LIB_NO_DYNAMIC_MEMORY` | `OFF` | Disable dynamic memory use; implies `JSON_LIB_NO_HEAP` |
 | `JSON_LIB_NO_STDIO` | `OFF` | Disable file / stdio support |
 | `JSON_LIB_MAX_PARSER_DEPTH` | `0` | Override max parse depth (0 = library default of 128) |
 | `JSON_LIB_MAX_STRING_LENGTH` | `0` | Override max string length in bytes (0 = library default of 16384) |
@@ -129,10 +129,11 @@ For embedded-like validation builds that exercise no-exceptions, no-stdio, and n
 ```sh
 mkdir build-embedded && cd build-embedded
 cmake -DJSON_LIB_NO_EXCEPTIONS=ON -DJSON_LIB_NO_STDIO=ON -DJSON_LIB_NO_DYNAMIC_MEMORY=ON \
-      -DBUILD_TESTING=ON -DBUILD_EXAMPLES=OFF ..
-cmake --build . --target JSON_Lib_Unit_Tests
-ctest --output-on-failure -R Embedded
+      -DBUILD_EXAMPLES=OFF ..
+cmake --build .
 ```
+
+> Note: `JSON_LIB_NO_EXCEPTIONS=ON` disables `BUILD_TESTING` and `BUILD_EXAMPLES` in non-embedded builds, so explicit unit test targets are not available in this mode.
 
 The `JSON_LIB_EMBEDDED` preset is intended for release or constrained deployment builds and, in the current CMake flow, disables unit testing by default. It also forces:
 
@@ -158,8 +159,11 @@ cmake \
   -DJSON_LIB_NO_DYNAMIC_MEMORY=ON \
   -DJSON_LIB_MAX_PARSER_DEPTH=5 \
   -DJSON_LIB_MAX_STRING_LENGTH=2048 \
+  -DBUILD_EXAMPLES=OFF \
   ..
 ```
+
+> Note: In this mode, `JSON_LIB_NO_EXCEPTIONS=ON` will also disable unit tests.
 
 ### Link in your project
 

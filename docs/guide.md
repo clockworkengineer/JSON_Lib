@@ -446,7 +446,7 @@ cmake \
 
 The library supports several verification modes. Use `BUILD_TESTING=ON` to enable unit tests.
 
-- `JSON_LIB_NO_EXCEPTIONS=ON` disables exceptions and disables tests/examples unless `JSON_LIB_EMBEDDED` already manages those flags.
+- `JSON_LIB_NO_EXCEPTIONS=ON` disables exceptions and forces `BUILD_TESTING=OFF` and `BUILD_EXAMPLES=OFF` when `JSON_LIB_EMBEDDED` is not active.
 - `JSON_LIB_NO_STDIO=ON` compiles out file-based sources and destinations, leaving only buffer-based I/O.
 - `JSON_LIB_NO_HEAP=ON` implies `JSON_LIB_NO_DYNAMIC_MEMORY=ON` and restricts the library to heapless operation where supported.
 
@@ -454,10 +454,10 @@ The library supports several verification modes. Use `BUILD_TESTING=ON` to enabl
 | Build variant | CMake flags | Notes |
 |---|---|---|
 | Default tests | `-DBUILD_TESTING=ON` | Standard unit test build | 
-| Embedded preset + tests | `-DJSON_LIB_EMBEDDED=ON -DBUILD_TESTING=ON -DBUILD_EXAMPLES=OFF` | Embedded policies enabled, file I/O disabled | 
-| No exceptions | `-DJSON_LIB_NO_EXCEPTIONS=ON -DBUILD_TESTING=ON` | Exercise `parseResult` / `stringifyResult` and `NoThrow` APIs |
+| Embedded preset | `-DJSON_LIB_EMBEDDED=ON` | Embedded policies enabled, file I/O disabled, tests/examples disabled | 
+| No exceptions | `-DJSON_LIB_NO_EXCEPTIONS=ON` | Exception-free build; unit tests/examples disabled |
 | No stdio | `-DJSON_LIB_NO_STDIO=ON -DBUILD_TESTING=ON` | File I/O sources/destinations are disabled |
-| No dynamic memory | `-DJSON_LIB_NO_DYNAMIC_MEMORY=ON -DBUILD_TESTING=ON` | Enforces embedded memory policy |
+| No dynamic memory | `-DJSON_LIB_NO_DYNAMIC_MEMORY=ON -DBUILD_TESTING=ON` | Enforces embedded memory policy; implies no heap |
 
 Run tests from the build directory:
 

@@ -77,6 +77,7 @@ set(JSON_LIB_MAX_STRING_LENGTH "0" CACHE STRING "Override default maximum JSON s
 if(NOT JSON_LIB_MAX_PARSER_DEPTH MATCHES "^[0-9]+$")
   message(FATAL_ERROR "JSON_LIB_MAX_PARSER_DEPTH must be a non-negative integer.")
 endif()
+
 if(NOT JSON_LIB_MAX_STRING_LENGTH MATCHES "^[0-9]+$")
   message(FATAL_ERROR "JSON_LIB_MAX_STRING_LENGTH must be a non-negative integer.")
 endif()
@@ -102,6 +103,7 @@ if(JSON_LIB_NO_HEAP AND NOT JSON_LIB_NO_DYNAMIC_MEMORY)
   message(STATUS "JSON_LIB_NO_HEAP implies JSON_LIB_NO_DYNAMIC_MEMORY; enabling JSON_LIB_NO_DYNAMIC_MEMORY")
   set(JSON_LIB_NO_DYNAMIC_MEMORY ON CACHE BOOL "Disable dynamic memory usage" FORCE)
 endif()
+
 if(JSON_LIB_NO_DYNAMIC_MEMORY AND NOT JSON_LIB_NO_HEAP)
   message(STATUS "JSON_LIB_NO_DYNAMIC_MEMORY implies JSON_LIB_NO_HEAP; enabling JSON_LIB_NO_HEAP")
   set(JSON_LIB_NO_HEAP ON CACHE BOOL "Disable heap allocation support" FORCE)

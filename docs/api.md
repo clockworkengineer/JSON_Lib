@@ -489,6 +489,8 @@ Generated into `JSON_Config.hpp` (in the CMake binary dir) at configure time.
 
 `JSON_LIB_NO_HEAP` and `JSON_LIB_NO_DYNAMIC_MEMORY` are kept in sync by CMake — setting either sets both.
 
+When `JSON_LIB_MAX_PARSER_DEPTH` is configured as `0`, the library uses the default limit of `128`. When `JSON_LIB_MAX_STRING_LENGTH` is configured as `0`, the library uses the default limit of `16384`.
+
 ---
 
 For usage walkthroughs see [guide.md](guide.md).
