@@ -286,6 +286,7 @@ set(JSON_PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/classes/include/JSON_Core.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/JSON_Parser_Core.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/JSON_Config.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_ErrorBase.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/interface/JSON_Interfaces.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/interface/IAction.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/interface/ISource.hpp
