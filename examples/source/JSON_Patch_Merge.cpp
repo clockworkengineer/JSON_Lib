@@ -7,7 +7,6 @@
 // Note: Actual patch/merge logic depends on JSON_Lib support.
 
 #include "JSON_Utility.hpp"
-#include <iostream>
 // #include "JSON_Patch.hpp" // Uncomment if patch/merge support exists
 
 namespace js = JSON_Lib;

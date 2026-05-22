@@ -9,7 +9,6 @@
 
 namespace js = JSON_Lib;
 
-#include <iostream>
 
 int main(int, char **)
 {

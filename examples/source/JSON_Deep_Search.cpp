@@ -11,7 +11,6 @@ namespace js = JSON_Lib;
 
 #include <vector>
 #include <string>
-#include <iostream>
 
 // Recursively search for all values with the given key
 static std::string nodeToString(const js::Node &node)
