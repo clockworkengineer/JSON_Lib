@@ -323,3 +323,13 @@ Contributions are welcome. Please:
 ## License
 
 MIT License — see [LICENSE.txt](LICENSE.txt).
+
+---
+
+## Support / Buy Me A Coffee
+
+If you find `JSON_Lib` useful and would like to support its ongoing development, feel free to buy me a coffee!
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-orange.svg)](https://buymeacoffee.com/roberttizz1)
+
+[https://buymeacoffee.com/roberttizz1](https://buymeacoffee.com/roberttizz1)
