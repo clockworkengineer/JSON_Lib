@@ -36,13 +36,13 @@ std::string JSON::stringifyToString() const {
 /// </summary>
 /// <param name="stringify">Unique-ownership pointer to stringifier interface (nullptr = use default).</param>
 /// <param name="parser">Unique-ownership pointer to parser interface (nullptr = use default).</param>
-JSON::JSON(std::unique_ptr<IStringify> stringify, std::unique_ptr<IParser> parser)
-  : implementation(std::make_unique<JSON_Impl>(std::move(stringify), std::move(parser)))
+JSON::JSON(std::unique_ptr<IStringify> stringify, std::unique_ptr<IParser> parser, std::unique_ptr<ITranslator> translator)
+  : implementation(std::make_unique<JSON_Impl>(std::move(stringify), std::move(parser), std::move(translator)))
 {
 }
 
 JSON::JSON(Options options)
-  : JSON(std::move(options.stringify), std::move(options.parser))
+  : JSON(std::move(options.stringify), std::move(options.parser), std::move(options.translator))
 {
 }
 /// <summary>

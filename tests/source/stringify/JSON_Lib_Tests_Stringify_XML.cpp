@@ -259,13 +259,13 @@ TEST_CASE("Check JSON stringification to XML of simple types.", "[JSON][Stringif
     json.stringify(jsonDestination);
     REQUIRE(jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root></root>)");
   }
-  SECTION(R"(Stringify a single-element array ([42]) to XML (size==1 suppresses Row wrapper, emits nothing).)",
+  SECTION(R"(Stringify a single-element array ([42]) to XML (emits single Row wrapper).)",
     "[JSON][Stringify][Array][XML]")
   {
     BufferDestination jsonDestination;
     json.parse(BufferSource{ "[42]" });
     json.stringify(jsonDestination);
-    REQUIRE(jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root></root>)");
+    REQUIRE(jsonDestination.toString() == R"(<?xml version="1.0" encoding="UTF-8"?><root><Row>42</Row></root>)");
   }
   SECTION(R"(Stringify an array of strings (["a","b","c"]) to XML.)", "[JSON][Stringify][Array][XML]")
   {

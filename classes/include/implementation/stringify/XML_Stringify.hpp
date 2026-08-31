@@ -63,12 +63,10 @@ private:
   }
   void stringifyArray(const Node &jNode, IDestination &destination, const unsigned long) const
   {
-    if (NRef<Array>(jNode).value().size() > 1) {
-      for (const auto &bNodeNext : NRef<Array>(jNode).value()) {
-        destination.add("<Row>");
-        stringifyNodes(bNodeNext, destination, 0);
-        destination.add("</Row>");
-      }
+    for (const auto &bNodeNext : NRef<Array>(jNode).value()) {
+      destination.add("<Row>");
+      stringifyNodes(bNodeNext, destination, 0);
+      destination.add("</Row>");
     }
   }
   static void stringifyNumber(const Node &jNode, IDestination &destination)

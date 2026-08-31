@@ -12,6 +12,7 @@
 #include "implementation/common/JSON_Error.hpp"
 #include "interface/IParser.hpp"
 #include "interface/IStringify.hpp"
+#include "interface/ITranslator.hpp"
 
 namespace JSON_Lib {
 
@@ -33,6 +34,7 @@ class IParser;
 class ISource;
 class IDestination;
 class IAction;
+class ITranslator;
 class JSON_Impl;
 struct String;
 class Default_Parser;
@@ -45,6 +47,7 @@ public:
   {
     std::unique_ptr<IStringify> stringify;
     std::unique_ptr<IParser> parser;
+    std::unique_ptr<ITranslator> translator;
 
     Options() = default;
     Options(Options &&) = default;
@@ -61,6 +64,12 @@ public:
     Options &setParser(std::unique_ptr<IParser> value)
     {
       parser = std::move(value);
+      return *this;
+    }
+
+    Options &setTranslator(std::unique_ptr<ITranslator> value)
+    {
+      translator = std::move(value);
       return *this;
     }
   };
@@ -84,7 +93,7 @@ public:
   // JSON file formats
   enum class Format : uint8_t { utf8 = 0, utf8BOM, utf16BE, utf16LE, utf32BE, utf32LE };
   // Pass any user defined translator/converter here
-  explicit JSON(std::unique_ptr<IStringify> stringify=nullptr, std::unique_ptr<IParser> parser=nullptr);
+  explicit JSON(std::unique_ptr<IStringify> stringify=nullptr, std::unique_ptr<IParser> parser=nullptr, std::unique_ptr<ITranslator> translator=nullptr);
   explicit JSON(Options options);
   // Pass in default JSON to parse
   explicit JSON(const std::string_view &jsonString);

@@ -12,9 +12,13 @@
 
 namespace JSON_Lib {
 
-JSON_Impl::JSON_Impl(std::unique_ptr<IStringify> stringify, std::unique_ptr<IParser> parser)
+JSON_Impl::JSON_Impl(std::unique_ptr<IStringify> stringify, std::unique_ptr<IParser> parser, std::unique_ptr<ITranslator> translator)
 {
-  jsonTranslator = std::make_unique<Default_Translator>();
+  if (translator == nullptr) {
+    jsonTranslator = std::make_unique<Default_Translator>();
+  } else {
+    jsonTranslator = std::move(translator);
+  }
   if (parser == nullptr) {
     jsonParser = std::make_unique<Default_Parser>(*jsonTranslator);
   } else {

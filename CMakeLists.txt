@@ -145,6 +145,7 @@ set(JSON_CORE_SOURCES
   classes/source/implementation/JSON_Impl.cpp
   classes/source/interface/IParser.cpp
   classes/source/implementation/file/JSON_File.cpp
+  classes/source/implementation/file/JSON_FileIO.cpp
   classes/source/implementation/translator/Default_Translator.cpp
   classes/source/implementation/converter/${PLATFORM}/JSON_Converter.cpp
 )
@@ -189,11 +190,15 @@ set(JSON_INCLUDES
   classes/include/implementation/stringify/YAML_Stringify.hpp
   classes/include/interface/JSON_Interfaces.hpp
   classes/include/interface/IAction.hpp
+  classes/include/interface/INodeVisitor.hpp
+  classes/include/interface/IEncodingHandler.hpp
   classes/include/interface/ISource.hpp
   classes/include/interface/IDestination.hpp
   classes/include/interface/ITranslator.hpp
   classes/include/interface/IParser.hpp
   classes/include/interface/IStringify.hpp
+  classes/include/implementation/file/JSON_FileIO.hpp
+  classes/include/implementation/io/encoding/EncodingHandlers.hpp
 )
 
 # Shared implementation include directories used by library targets and tests
