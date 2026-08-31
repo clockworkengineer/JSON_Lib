@@ -210,9 +210,9 @@ File helpers are compiled out when `JSON_LIB_NO_STDIO == 1`.
 
 ---
 
-## Custom parser and stringify injection
+## Custom parser, stringify, and translator injection
 
-`JSON_Lib` supports custom parsing and serialization implementations via `IParser` and `IStringify`.
+`JSON_Lib` supports custom parsing, serialization, and string translation via abstract strategy interfaces (`IParser`, `IStringify`, `ITranslator`).
 
 ```cpp
 #include "JSON_Lib.hpp"
@@ -221,26 +221,53 @@ namespace js = JSON_Lib;
 
 struct MyParser : js::IParser {
     js::Node parse(js::ISource &source) override {
-        // Implement your own parse strategy or delegate to an existing parser.
+        // Implement custom parsing strategy.
         throw js::IParser::Error("custom parser not implemented");
     }
 };
 
 struct MyStringify : js::IStringify {
     void stringify(const js::Node &jNode, js::IDestination &destination, unsigned long indent) const override {
-        // Emit custom output for the JSON node tree.
+        // Emit custom serialized output.
         (void)jNode;
         (void)destination;
         (void)indent;
     }
 };
 
-namespace js = JSON_Lib;
+struct MyTranslator : js::ITranslator {
+    std::string from(const std::string_view &escaped) const override {
+        return std::string(escaped);
+    }
+    std::string to(const std::string_view &raw) const override {
+        return std::string(raw);
+    }
+};
 
-js::JSON json(js::makeStringify<MyStringify>(), std::make_unique<MyParser>());
-json.parse(js::BufferSource{R"({"hello":"world"})"});
-js::BufferDestination out;
-json.stringify(out);
+js::JSON::Options options;
+options.setStringify(std::make_unique<MyStringify>())
+       .setParser(std::make_unique<MyParser>())
+       .setTranslator(std::make_unique<MyTranslator>());
+
+js::JSON json(std::move(options));
+```
+
+### Extensible File Encodings (`IEncodingHandler`)
+
+File encoding formats (UTF-8, UTF-8 BOM, UTF-16 BE, UTF-16 LE) are managed by `IEncodingHandler` strategy implementations and created via `EncodingHandlerFactory`. Custom encoding handlers can implement `IEncodingHandler`:
+
+```cpp
+#include "IEncodingHandler.hpp"
+
+struct CustomEncodingHandler : public js::IEncodingHandler {
+    std::string read(std::ifstream &file) const override {
+        // Custom decode stream logic
+        return {};
+    }
+    void write(std::ofstream &file, const std::string_view &utf8Content) const override {
+        // Custom encode stream logic
+    }
+};
 ```
 
 ---

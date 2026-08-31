@@ -39,11 +39,13 @@ The library exposes a single public include root at `classes/include`. Applicati
 - file helpers (`fromFile`, `toFile`, `getFileFormat`)
 - embedded-friendly aliases (`prettyPrint`, `prettyPrintResult`)
 
-The façade delegates all work to `JSON_Impl`, which keeps internal details hidden from users.
+The façade delegates tree storage and parsing to `JSON_Impl`, while disk file I/O operations are delegated to `JSON_FileIO` and `IEncodingHandler` strategies, enforcing the Single Responsibility Principle.
 
 ### Implementation layer
 
 Internal implementation headers are located under `classes/include/implementation` and include:
+- `implementation/file` — `JSON_FileIO` dedicated file reading/writing service
+- `implementation/io/encoding` — `IEncodingHandler` strategy implementations (`Utf8EncodingHandler`, `Utf8BOMEncodingHandler`, `Utf16BEEncodingHandler`, `Utf16LEEncodingHandler`, `EncodingHandlerFactory`)
 - `implementation/common` — shared utilities such as `JSON_Attributes.hpp`, error handling, and macro definitions
 - `implementation/io` — source and destination abstractions for file, buffer, and fixed-size I/O
 - `implementation/node` — node indexing, references, and variant wrapper logic
@@ -52,18 +54,21 @@ Internal implementation headers are located under `classes/include/implementatio
 
 These headers are not part of the public installed API and should not be included directly by consumers.
 
-### Parser and stringify plug-ins
+### Parser, stringify, and translator plug-ins
 
-The library supports custom backends via `IParser` and `IStringify`:
+The library supports custom backends via strategy abstractions:
 - `IParser` allows custom JSON parsing strategies
 - `IStringify` allows custom serialization formats or output behavior
+- `ITranslator` allows custom string escaping and decoding strategies
 
-Custom backends are injected through the `JSON` constructor:
+Custom backends are injected through `JSON::Options` or the `JSON` constructor:
 
 ```cpp
-std::unique_ptr<js::IParser> customParser = ...;
-std::unique_ptr<js::IStringify> customStringify = ...;
-js::JSON json(std::move(customStringify), std::move(customParser));
+js::JSON::Options options;
+options.setStringify(js::makeStringify<js::XML_Stringify>())
+       .setParser(std::make_unique<MyCustomParser>())
+       .setTranslator(std::make_unique<MyCustomTranslator>());
+js::JSON json(std::move(options));
 ```
 
 ## Embedded and policy layer

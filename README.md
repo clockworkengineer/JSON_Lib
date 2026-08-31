@@ -7,9 +7,11 @@
 ## Features
 
 - C++23 with full `std::string_view`, concepts, and structured-binding support
+- Strict adherence to **SOLID** architectural design principles
 - Parse, create, traverse, and serialize JSON objects and arrays
 - Exception-based error handling **and** an exception-free `Result<T>` API for embedded/RTOS targets
-- Unicode and multi-encoding support (UTF-8, UTF-8 BOM, UTF-16 LE/BE, UTF-32 LE/BE)
+- Unicode and multi-encoding support (UTF-8, UTF-8 BOM, UTF-16 LE/BE, UTF-32 LE/BE) via extensible `IEncodingHandler` strategies
+- Fine-grained node visitors (`INodeVisitor`, `IValueVisitor`, `IContainerVisitor`)
 - Modular CMake build — library, tests, and examples are independent targets
 - Embedded-friendly build mode: no heap, no stdio, no exceptions, configurable resource limits
 - Pluggable stringify backends: compact JSON, pretty-print, Bencode, XML, YAML
@@ -191,7 +193,8 @@ struct MyCustomParser final : public js::IParser {
 
 js::JSON::Options options;
 options.setStringify(js::makeStringify<js::XML_Stringify>())
-       .setParser(std::make_unique<MyCustomParser>());
+       .setParser(std::make_unique<MyCustomParser>())
+       .setTranslator(std::make_unique<js::Default_Translator>());
 js::JSON json(std::move(options));
 ```
 
@@ -280,6 +283,7 @@ cmake -DJSON_LIB_NO_EXCEPTIONS=ON -DJSON_LIB_NO_STDIO=ON -DJSON_LIB_MAX_PARSER_D
 - **API Reference:** [docs/api.md](docs/api.md)
 - **User Guide:** [docs/guide.md](docs/guide.md)
 - **Architecture Overview:** [docs/architecture.md](docs/architecture.md)
+- **SOLID Design & Architecture:** [docs/solid_architecture.md](docs/solid_architecture.md)
 - **Compliance Report:** [docs/JSON_Lib_Compliance_Report.md](docs/JSON_Lib_Compliance_Report.md)
 - **Examples:** `examples/source/` — file conversion, schema validation, embedded API, custom serialization, streaming, and more.
 

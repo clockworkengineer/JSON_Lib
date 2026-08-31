@@ -37,18 +37,19 @@ All public types live in `namespace JSON_Lib`.
 
 | Constructor | Description |
 |---|---|
-| `JSON(std::unique_ptr<IStringify> = nullptr, std::unique_ptr<IParser> = nullptr)` | Default; accepts optional custom stringify/parser |
-| `JSON(Options options)` | Default; use an options object to configure parser/stringify backends |
+| `JSON(std::unique_ptr<IStringify> = nullptr, std::unique_ptr<IParser> = nullptr, std::unique_ptr<ITranslator> = nullptr)` | Default; accepts optional custom stringify, parser, and translator |
+| `JSON(Options options)` | Default; use an options object to configure parser, stringify, and translator backends |
 | `JSON(std::string_view jsonString)` | Construct and parse a JSON string immediately |
 | `JSON(ArrayInitializer)` | Construct a JSON array from an initializer list |
 | `JSON(ObjectInitializer)` | Construct a JSON object from an initializer list |
 
-`JSON::Options` is the preferred way to configure backend plugins, keeping parser and stringify construction separate from payload initialization.
+`JSON::Options` is the preferred way to configure backend plugins, keeping parser, stringify, and translator construction separate from payload initialization.
 
 ```cpp
 JSON::Options options;
 options.setStringify(JSON_Lib::makeStringify<JSON_Lib::XML_Stringify>());
 options.setParser(std::make_unique<MyCustomParser>());
+options.setTranslator(std::make_unique<JSON_Lib::Default_Translator>());
 JSON json(std::move(options));
 ```
 
@@ -416,22 +417,45 @@ if (!result.ok()) {
 
 ---
 
-## Traversal — IAction
+---
 
-Implement `IAction` to walk the JSON tree without materializing copies:
+## Traversal — IAction & INodeVisitor
+
+`JSON_Lib` supports tree traversal via fine-grained visitor interfaces defined in `INodeVisitor.hpp`:
+
+| Interface | Purpose | Overrides |
+|---|---|---|
+| `INodeVisitor` | Generic node visitation | `onNode(Node&)`, `onNode(const Node&)` |
+| `IValueVisitor` | Primitive value visitation | `onString`, `onNumber`, `onBoolean`, `onNull` |
+| `IContainerVisitor` | Structural container visitation | `onObject`, `onArray` |
+| `IAction` | Composite visitor (inherits all 3 above) | All 14 callbacks default to no-op |
+
+Implement `IAction` or a fine-grained visitor to walk the JSON tree:
 
 ```cpp
 struct MyAction : JSON_Lib::IAction {
-    void onString(const JSON_Lib::String &s) override { ... }
-    void onNumber(const JSON_Lib::Number &n) override { ... }
-    // onBoolean, onNull, onArray, onObject overrides as needed
+    void onNode(const JSON_Lib::Node &n) override { ... }
+    void onString(const JSON_Lib::Node &s) override { ... }
+    void onNumber(const JSON_Lib::Node &n) override { ... }
 };
 
 MyAction action;
 json.traverse(action);
 ```
 
-See `examples/include/JSON_Analyzer.hpp` and `JSON_Convert.hpp` for ready-made implementations.
+---
+
+## File I/O & Encodings (JSON_FileIO & IEncodingHandler)
+
+File operations in `JSON_Lib` are handled by the dedicated service class `JSON_FileIO` using strategy handlers implementing `IEncodingHandler`:
+
+| Class / Interface | Description |
+|---|---|
+| `JSON_FileIO::fromFile(fileName)` | Read JSON file, decode BOM encoding, and normalize CRLF to LF |
+| `JSON_FileIO::toFile(fileName, content, format)` | Write JSON file in target format (UTF-8, UTF-8 BOM, UTF-16 LE/BE) |
+| `JSON_FileIO::getFileFormat(fileName)` | Detect Byte Order Mark (BOM) format |
+| `IEncodingHandler` | Strategy interface for reading and writing file encodings |
+| `EncodingHandlerFactory` | Factory providing `IEncodingHandler` instances by `JSON::Format` |
 
 ---
 
