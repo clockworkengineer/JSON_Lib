@@ -32,21 +32,26 @@ else()
   message(WARNING "JSON_Lib has not been validated with compiler ${CMAKE_CXX_COMPILER_ID}; compatibility macros may be incomplete.")
 endif()
 
+option(JSON_WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
+
 # Compiler warnings and platform
 if(MSVC)
-  add_compile_options(/W4 /WX /MP)
+  add_compile_options(/W4 /MP)
+  if(JSON_WARNINGS_AS_ERRORS)
+    add_compile_options(/WX)
+  endif()
 
   if(JSON_LIB_OPTIMIZATION_LEVEL STREQUAL "O0")
     add_compile_options(/Od)
   elseif(JSON_LIB_OPTIMIZATION_LEVEL STREQUAL "O2" OR JSON_LIB_OPTIMIZATION_LEVEL STREQUAL "O3")
     add_compile_options($<$<NOT:$<CONFIG:Debug>>:/O2>)
   endif()
-
-  set(PLATFORM "windows")
 else()
-  add_compile_options(-Wall -Werror -pedantic)
+  add_compile_options(-Wall -pedantic)
   add_compile_options(-${JSON_LIB_OPTIMIZATION_LEVEL})
-  set(PLATFORM "linux")
+  if(JSON_WARNINGS_AS_ERRORS)
+    add_compile_options(-Werror)
+  endif()
 endif()
 
 # Export compile_commands.json for IDE tooling
@@ -403,11 +408,6 @@ install(FILES
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
-if(JSON_LIB_EXPORT_INTERFACE)
-  install(FILES ${JSON_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-else()
-  install(FILES ${JSON_INCLUDES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-endif()
 
 # Optional Doxygen documentation target
 find_package(Doxygen OPTIONAL_COMPONENTS dot)

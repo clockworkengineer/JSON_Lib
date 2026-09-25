@@ -24,35 +24,46 @@ jobs:
             os: ubuntu-24.04
             cc: gcc-14
             cxx: g++-14
-            cmake_flags: "-DBUILD_TESTING=ON -DJSON_LIB_DOWNLOAD_JSON_TEST_SUITE=ON"
+            packages: "gcc-14 g++-14"
+            build_type: Release
+            cmake_flags: "-DBUILD_TESTING=ON -DJSON_LIB_DOWNLOAD_JSON_TEST_SUITE=ON -DJSON_WARNINGS_AS_ERRORS=ON"
+
           - name: "Ubuntu GCC 13"
-            os: ubuntu-22.04
+            os: ubuntu-24.04
             cc: gcc-13
             cxx: g++-13
-            cmake_flags: "-DBUILD_TESTING=ON -DJSON_LIB_DOWNLOAD_JSON_TEST_SUITE=ON"
+            packages: "gcc-13 g++-13"
+            build_type: Release
+            cmake_flags: "-DBUILD_TESTING=ON -DJSON_LIB_DOWNLOAD_JSON_TEST_SUITE=ON -DJSON_WARNINGS_AS_ERRORS=ON"
 
           # Linux Clang
           - name: "Ubuntu Clang 18"
             os: ubuntu-24.04
             cc: clang-18
             cxx: clang++-18
-            cmake_flags: "-DBUILD_TESTING=ON -DJSON_LIB_DOWNLOAD_JSON_TEST_SUITE=ON"
+            packages: "clang-18"
+            build_type: Release
+            cmake_flags: "-DBUILD_TESTING=ON -DJSON_LIB_DOWNLOAD_JSON_TEST_SUITE=ON -DJSON_WARNINGS_AS_ERRORS=ON"
 
           # Linux Sanitizers (ASan + UBSan)
           - name: "Ubuntu ASan/UBSan"
             os: ubuntu-24.04
             cc: clang-18
             cxx: clang++-18
-            cmake_flags: "-DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Debug -DJSON_LIB_ENABLE_ASAN=ON -DJSON_LIB_ENABLE_UBSAN=ON"
+            packages: "clang-18"
+            build_type: Debug
+            cmake_flags: "-DBUILD_TESTING=ON -DJSON_LIB_ENABLE_ASAN=ON -DJSON_LIB_ENABLE_UBSAN=ON"
 
           # Windows MSVC
           - name: "Windows MSVC 2022"
             os: windows-latest
+            build_type: Release
             cmake_flags: "-DBUILD_TESTING=ON"
 
           # macOS Apple Clang
           - name: "macOS Apple Clang"
             os: macos-latest
+            build_type: Release
             cmake_flags: "-DBUILD_TESTING=ON"
 
           # Embedded & Constrained Profiles
@@ -60,21 +71,32 @@ jobs:
             os: ubuntu-24.04
             cc: gcc-14
             cxx: g++-14
+            packages: "gcc-14 g++-14"
+            build_type: Release
             cmake_flags: "-DJSON_LIB_EMBEDDED=ON"
+
           - name: "Profile - No Exceptions"
             os: ubuntu-24.04
             cc: gcc-14
             cxx: g++-14
+            packages: "gcc-14 g++-14"
+            build_type: Release
             cmake_flags: "-DJSON_LIB_NO_EXCEPTIONS=ON"
+
           - name: "Profile - No Stdio"
             os: ubuntu-24.04
             cc: gcc-14
             cxx: g++-14
+            packages: "gcc-14 g++-14"
+            build_type: Release
             cmake_flags: "-DJSON_LIB_NO_STDIO=ON"
+
           - name: "Profile - No Dynamic Memory"
             os: ubuntu-24.04
             cc: gcc-14
             cxx: g++-14
+            packages: "gcc-14 g++-14"
+            build_type: Release
             cmake_flags: "-DJSON_LIB_NO_DYNAMIC_MEMORY=ON"
 
     steps:
@@ -82,56 +104,37 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Compiler (Linux)
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' && matrix.packages != ''
         run: |
           sudo apt-get update
-          if [ -n "${{ matrix.cc }}" ]; then
-            sudo apt-get install -y ${{ matrix.cc }} ${{ matrix.cxx }}
-            echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
-            echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
-          fi
+          sudo apt-get install -y ${{ matrix.packages }}
+          echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+          echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
 
       - name: Configure CMake
         run: |
-          cmake -B build -DCMAKE_BUILD_TYPE=Release ${{ matrix.cmake_flags }}
+          cmake -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} ${{ matrix.cmake_flags }}
 
       - name: Build
         run: |
-          cmake --build build --config Release --parallel
+          cmake --build build --config ${{ matrix.build_type }} --parallel
 
       - name: Run Tests
         if: contains(matrix.cmake_flags, 'BUILD_TESTING=ON')
+        env:
+          ASAN_OPTIONS: detect_leaks=1:abort_on_error=1
+          UBSAN_OPTIONS: print_stacktrace=1:abort_on_error=1
         run: |
-          ctest --test-dir build -C Release --output-on-failure
+          ctest --test-dir build -C ${{ matrix.build_type }} --output-on-failure
 
-      - name: Verify Packaging & Consumer find_package
+      - name: Verify Packaging & Consumer Integration
         if: runner.os == 'Linux' && contains(matrix.cmake_flags, 'BUILD_TESTING=ON') && !contains(matrix.cmake_flags, 'ASAN')
         run: |
-          # Test installation
+          # Verify installation to staging directory
           cmake --install build --prefix /tmp/json_lib_install
-          # Create and build minimal consumer project
-          mkdir -p /tmp/consumer_test
-          cat << 'EOF' > /tmp/consumer_test/CMakeLists.txt
-          cmake_minimum_required(VERSION 3.20)
-          project(ConsumerTest CXX)
-          set(CMAKE_CXX_STANDARD 20)
-          find_package(JSON_Lib CONFIG REQUIRED PATHS /tmp/json_lib_install)
-          add_executable(consumer main.cpp)
-          target_link_libraries(consumer PRIVATE JSON_Lib::JSON_Lib)
-          EOF
-          cat << 'EOF' > /tmp/consumer_test/main.cpp
-          #include <JSON_Lib.hpp>
-          #include <iostream>
-          int main() {
-            JSON_Lib::JSON json;
-            json.parse(JSON_Lib::BufferSource{ R"({"status":"ok"})" });
-            JSON_Lib::BufferDestination dest;
-            json.stringify(dest);
-            return (dest.toString() == R"({"status":"ok"})") ? 0 : 1;
-          }
-          EOF
-          cmake -B /tmp/consumer_test/build -S /tmp/consumer_test -DCMAKE_PREFIX_PATH=/tmp/json_lib_install
-          cmake --build /tmp/consumer_test/build
-          /tmp/consumer_test/build/consumer
-          # Test CPack packaging
-          cd build && cpack
+          # Build and run standalone consumer verification project
+          cmake -B build-consumer -S tests/consumer -DCMAKE_PREFIX_PATH=/tmp/json_lib_install
+          cmake --build build-consumer --config Release
+          ./build-consumer/consumer_test
+          # Verify CPack archive package generation
+          cd build && cpack -C Release
