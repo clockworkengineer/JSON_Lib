@@ -1,6 +1,51 @@
 #pragma once
 
+#include <utility>
+
 namespace JSON_Lib {
+
+inline Node::Node() : jNodeVariant(std::monostate{}) {}
+inline Node::Node(std::unique_ptr<Object> value) : jNodeVariant(std::move(value)) {}
+inline Node::Node(std::unique_ptr<Array> value) : jNodeVariant(std::move(value)) {}
+inline Node::Node(Number value) : jNodeVariant(std::move(value)) {}
+inline Node::Node(String value) : jNodeVariant(std::move(value)) {}
+inline Node::Node(Boolean value) : jNodeVariant(std::move(value)) {}
+inline Node::Node(Null value) : jNodeVariant(std::move(value)) {}
+inline Node::Node(Hole value) : jNodeVariant(std::move(value)) {}
+
+inline Node::Node(Node &&other) noexcept : jNodeVariant(std::move(other.jNodeVariant))
+{
+  other.jNodeVariant = std::monostate{};
+}
+
+inline Node &Node::operator=(Node &&other) noexcept
+{
+  if (this != &other) {
+    jNodeVariant = std::move(other.jNodeVariant);
+    other.jNodeVariant = std::monostate{};
+  }
+  return *this;
+}
+
+inline Node::~Node() = default;
+
+template<typename T>
+inline Node &Node::operator=(T value)
+{
+  return *this = Node(value);
+}
+
+template<typename T, typename... Args>
+Node Node::make(Args &&...args)
+{
+  if constexpr (std::is_same_v<T, Object>) {
+    return Node{ std::make_unique<Object>(std::forward<Args>(args)...) };
+  } else if constexpr (std::is_same_v<T, Array>) {
+    return Node{ std::make_unique<Array>(std::forward<Args>(args)...) };
+  } else {
+    return Node{ T(std::forward<Args>(args)...) };
+  }
+}
 
 // Construct Node from raw values
 template<typename T, typename>
@@ -16,7 +61,8 @@ Node::Node(T value)
     *this = Node::make<String>(value);
   }
 }
-// Convert an initializer list type to JMode
+
+// Convert an initializer list type to Node
 inline Node typeToNode(const JSON::InitializerListTypes &type)
 {
   return std::visit(overloaded{
@@ -32,12 +78,14 @@ inline Node typeToNode(const JSON::InitializerListTypes &type)
     [](const Node &v)   -> Node { return std::move(*const_cast<Node *>(&v)); }
   }, type);
 }
+
 // Construct Node Array from initializer list
 inline Node::Node(const JSON::ArrayInitializer &array)
 {
   *this = make<Array>();
   for (const auto &entry : array) { NRef<Array>(*this).add(typeToNode(entry)); }
 }
+
 // Construct Node Object from initializer list
 inline Node::Node(const JSON::ObjectInitializer &object)
 {

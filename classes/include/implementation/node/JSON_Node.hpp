@@ -27,14 +27,14 @@ struct Node
     explicit Error(const std::string_view &message) : std::runtime_error(makeTaggedError("Node", message)) {}
   };
   // Constructors/Destructors
-  Node() = default;
-  explicit Node(std::unique_ptr<Object> value) : jNodeVariant(std::move(value)) {}
-  explicit Node(std::unique_ptr<Array> value) : jNodeVariant(std::move(value)) {}
-  explicit Node(Number value) : jNodeVariant(std::move(value)) {}
-  explicit Node(String value) : jNodeVariant(std::move(value)) {}
-  explicit Node(Boolean value) : jNodeVariant(std::move(value)) {}
-  explicit Node(Null value) : jNodeVariant(std::move(value)) {}
-  explicit Node(Hole value) : jNodeVariant(std::move(value)) {}
+  Node();
+  explicit Node(std::unique_ptr<Object> value);
+  explicit Node(std::unique_ptr<Array> value);
+  explicit Node(Number value);
+  explicit Node(String value);
+  explicit Node(Boolean value);
+  explicit Node(Null value);
+  explicit Node(Hole value);
   template<typename T, typename = std::enable_if_t<
       std::is_same_v<T, bool> ||
       std::is_arithmetic_v<T> ||
@@ -45,21 +45,11 @@ struct Node
   Node(const JSON::ObjectInitializer &object);
   Node(const Node &other) = delete;
   Node &operator=(const Node &other) = delete;
-  Node(Node &&other) noexcept : jNodeVariant(std::move(other.jNodeVariant))
-  {
-    other.jNodeVariant = std::monostate{};
-  }
-  Node &operator=(Node &&other) noexcept
-  {
-    if (this != &other) {
-      jNodeVariant = std::move(other.jNodeVariant);
-      other.jNodeVariant = std::monostate{};
-    }
-    return *this;
-  }
-  ~Node() = default;
+  Node(Node &&other) noexcept;
+  Node &operator=(Node &&other) noexcept;
+  ~Node();
   // Assignment operators
-  template<typename T> Node &operator=(T value) { return *this = Node(value); }
+  template<typename T> Node &operator=(T value);
   // Has the variant been created
   JSON_LIB_NODISCARD bool isEmpty() const { return std::holds_alternative<std::monostate>(jNodeVariant); }
   // Indexing operators
@@ -111,16 +101,7 @@ struct Node
     }, jNodeVariant);
   }
   // Make Node
-  template<typename T, typename... Args> static auto make(Args &&...args)
-  {
-    if constexpr (std::is_same_v<T, Object>) {
-      return Node{ std::make_unique<Object>(std::forward<Args>(args)...) };
-    } else if constexpr (std::is_same_v<T, Array>) {
-      return Node{ std::make_unique<Array>(std::forward<Args>(args)...) };
-    } else {
-      return Node{ T(std::forward<Args>(args)...) };
-    }
-  }
+  template<typename T, typename... Args> static Node make(Args &&...args);
 
 private:
   Storage jNodeVariant;
