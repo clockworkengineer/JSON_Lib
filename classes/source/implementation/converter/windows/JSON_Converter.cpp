@@ -43,7 +43,7 @@ std::string toUtf8(const std::u16string_view &utf16)
   if (utf16.find(u'\0') != std::string::npos) { JSON_THROW(Error("Tried to convert a null character.")); }
   const std::wstring wideString{ utf16.begin(), utf16.end() };
   std::string bytes(WideCharToBytes(&wideString[0], static_cast<int>(wideString.length())), 0);
-  WideCharToBytes(&wideString[0], -1, &bytes[0], static_cast<int>(bytes.length()));
+  WideCharToBytes(&wideString[0], static_cast<int>(wideString.length()), &bytes[0], static_cast<int>(bytes.length()));
   return bytes;
 }
 }// namespace JSON_Lib

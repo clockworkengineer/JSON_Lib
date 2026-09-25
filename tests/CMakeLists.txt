@@ -75,7 +75,48 @@ set(TEST_SOURCES
   source/misc/JSON_Lib_Tests_SOLID_Refactor.cpp
   source/traverse/JSON_Lib_Tests_Traverse.cpp)
 
+# Official JSONTestSuite integration (https://github.com/nst/JSONTestSuite.git)
+option(JSON_LIB_DOWNLOAD_JSON_TEST_SUITE "Download official JSONTestSuite for unit tests" OFF)
+set(JSON_TEST_SUITE_PATH "" CACHE PATH "Path to nst/JSONTestSuite directory or test_parsing directory")
+
+if(JSON_LIB_DOWNLOAD_JSON_TEST_SUITE AND NOT JSON_TEST_SUITE_PATH)
+  include(FetchContent)
+  message(STATUS "Fetching official JSONTestSuite from https://github.com/nst/JSONTestSuite.git ...")
+  FetchContent_Declare(
+    JSONTestSuite
+    GIT_REPOSITORY https://github.com/nst/JSONTestSuite.git
+    GIT_TAG master
+    GIT_SHALLOW TRUE
+  )
+  FetchContent_MakeAvailable(JSONTestSuite)
+  if(EXISTS "${jsontestsuite_SOURCE_DIR}/test_parsing")
+    set(JSON_TEST_SUITE_PATH "${jsontestsuite_SOURCE_DIR}/test_parsing" CACHE PATH "Path to nst/JSONTestSuite directory or test_parsing directory" FORCE)
+  endif()
+endif()
+
+if(NOT JSON_TEST_SUITE_PATH)
+  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/JSONTestSuite/test_parsing")
+    set(JSON_TEST_SUITE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/JSONTestSuite/test_parsing")
+  elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/files/JSONTestSuite/test_parsing")
+    set(JSON_TEST_SUITE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/files/JSONTestSuite/test_parsing")
+  elseif(EXISTS "${PROJECT_SOURCE_DIR}/JSONTestSuite/test_parsing")
+    set(JSON_TEST_SUITE_PATH "${PROJECT_SOURCE_DIR}/JSONTestSuite/test_parsing")
+  elseif(EXISTS "${CMAKE_BINARY_DIR}/_deps/jsontestsuite-src/test_parsing")
+    set(JSON_TEST_SUITE_PATH "${CMAKE_BINARY_DIR}/_deps/jsontestsuite-src/test_parsing")
+  endif()
+endif()
+
+if(JSON_TEST_SUITE_PATH AND EXISTS "${JSON_TEST_SUITE_PATH}")
+  message(STATUS "Official JSONTestSuite found at: ${JSON_TEST_SUITE_PATH}")
+  list(APPEND TEST_SOURCES source/parse/JSON_Lib_Tests_JSONTestSuite.cpp)
+else()
+  message(STATUS "Official JSONTestSuite not downloaded or found; JSONTestSuite tests will not be included.")
+endif()
+
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
+if(JSON_TEST_SUITE_PATH AND EXISTS "${JSON_TEST_SUITE_PATH}")
+  target_compile_definitions(${TEST_EXECUTABLE} PRIVATE JSON_LIB_JSON_TEST_SUITE_PATH="${JSON_TEST_SUITE_PATH}")
+endif()
 target_include_directories(${TEST_EXECUTABLE} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(${TEST_EXECUTABLE} PRIVATE ${JSON_IMPL_INCLUDE_DIRS})
 target_link_libraries(${TEST_EXECUTABLE} ${JSON_LIBRARY_NAME} Catch2::Catch2WithMain)

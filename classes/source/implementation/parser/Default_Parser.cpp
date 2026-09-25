@@ -157,6 +157,51 @@ bool endOfNumber(const ISource &source)
   return source.isWS() || source.current() == JSON_Lib::kComma || source.current() == JSON_Lib::kArrayEnd
          || source.current() == JSON_Lib::kObjectEnd;
 }
+
+static bool isValidJsonNumber(const std::string_view s) noexcept
+{
+  if (s.empty()) { return false; }
+  std::size_t i = 0;
+  if (s[i] == '-') {
+    i++;
+    if (i == s.size()) { return false; }
+  }
+  if (s[i] == '0') {
+    i++;
+    if (i < s.size() && s[i] >= '0' && s[i] <= '9') {
+      return false;
+    }
+  } else if (s[i] >= '1' && s[i] <= '9') {
+    while (i < s.size() && s[i] >= '0' && s[i] <= '9') {
+      i++;
+    }
+  } else {
+    return false;
+  }
+  if (i < s.size() && s[i] == '.') {
+    i++;
+    if (i == s.size() || s[i] < '0' || s[i] > '9') {
+      return false;
+    }
+    while (i < s.size() && s[i] >= '0' && s[i] <= '9') {
+      i++;
+    }
+  }
+  if (i < s.size() && (s[i] == 'e' || s[i] == 'E')) {
+    i++;
+    if (i < s.size() && (s[i] == '+' || s[i] == '-')) {
+      i++;
+    }
+    if (i == s.size() || s[i] < '0' || s[i] > '9') {
+      return false;
+    }
+    while (i < s.size() && s[i] >= '0' && s[i] <= '9') {
+      i++;
+    }
+  }
+  return i == s.size();
+}
+
 /// <summary>
 /// Parse an Object key/value pair from a JSON encoded source stream.
 /// </summary>
@@ -196,15 +241,18 @@ Node Default_Parser::parseString(ISource &source, unsigned long)
 /// <returns>Number Node.</returns>
 Node Default_Parser::parseNumber(ISource &source, unsigned long)
 {
-  static constexpr std::size_t kMaxNumberLength = 64;
+  static constexpr std::size_t kMaxNumberLength = 256;
   std::array<char, kMaxNumberLength> numberText{};
   std::size_t numberLength = 0;
   while (source.more() && !endOfNumber(source)) {
-    if (numberLength >= numberText.size()) JSON_LIB_UNLIKELY { JSON_THROW(SyntaxError("Number size exceeds maximum allowed length.")); }
+    if (numberLength >= numberText.size() - 1) JSON_LIB_UNLIKELY { JSON_THROW(SyntaxError("Number size exceeds maximum allowed length.")); }
     numberText[numberLength++] = source.current();
     source.next();
   }
   const std::string_view numberView(numberText.data(), numberLength);
+  if (!isValidJsonNumber(numberView)) {
+    JSON_THROW(SyntaxError(source.getPosition(), "Invalid numeric value."));
+  }
   Number number{ numberView };
   if (number.isValid()) {
     return Node::make<Number>(number);

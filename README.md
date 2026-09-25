@@ -15,7 +15,7 @@
 - Modular CMake build — library, tests, and examples are independent targets
 - Embedded-friendly build mode: no heap, no stdio, no exceptions, configurable resource limits
 - Pluggable stringify backends: compact JSON, pretty-print, Bencode, XML, YAML
-- Extensive examples and RFC 8259 / ECMA-404 compliance documentation
+- Extensive examples and [RFC 8259 / ECMA-404 Conformance Documentation](docs/conformance.md)
 
 ---
 
@@ -103,6 +103,7 @@ cmake --build .
 | `JSON_LIB_NO_STDIO` | `OFF` | Disable file / stdio support |
 | `JSON_LIB_MAX_PARSER_DEPTH` | `0` | Override max parse depth (0 = library default of 128) |
 | `JSON_LIB_MAX_STRING_LENGTH` | `0` | Override max string length in bytes (0 = library default of 16384) |
+| `JSON_LIB_DOWNLOAD_JSON_TEST_SUITE` | `OFF` | Download and run official JSONTestSuite (`https://github.com/nst/JSONTestSuite.git`) |
 
 > `JSON_LIB_ENABLE_LTO` is only applied when the build uses an optimization level other than `O0`. If `O0` is selected, CMake will disable LTO and keep the build faster for debug-style use.
 
@@ -125,6 +126,33 @@ cmake -DBUILD_TESTING=ON -DBUILD_EXAMPLES=OFF ..
 cmake --build . --target JSON_Lib_Unit_Tests
 ctest --output-on-failure
 ```
+
+### Running the Official JSONTestSuite
+
+The official [nst/JSONTestSuite](https://github.com/nst/JSONTestSuite.git) is integrated with the unit test suite.
+To keep the default build lightweight and offline-friendly, these tests are **not included if not downloaded**.
+
+To download and enable the test suite:
+
+```sh
+# Option 1: Automatic download via CMake FetchContent
+cmake -DBUILD_TESTING=ON -DJSON_LIB_DOWNLOAD_JSON_TEST_SUITE=ON ..
+cmake --build . --target JSON_Lib_Unit_Tests
+
+# Option 2: Pre-download via script into tests/JSONTestSuite
+./scripts/download_json_test_suite.sh
+cmake -DBUILD_TESTING=ON ..
+cmake --build . --target JSON_Lib_Unit_Tests
+
+# Option 3: Point to an existing JSONTestSuite directory
+cmake -DBUILD_TESTING=ON -DJSON_TEST_SUITE_PATH=/path/to/JSONTestSuite/test_parsing ..
+cmake --build . --target JSON_Lib_Unit_Tests
+```
+
+When included, each test file is evaluated:
+- `y_*`: Valid documents must be accepted; asserts on parsing failure.
+- `n_*`: Invalid documents must be rejected; asserts on erroneous acceptance.
+- `i_*`: Implementation-defined documents must complete without crashing.
 
 For embedded-like validation builds that exercise no-exceptions, no-stdio, and no-dynamic-memory policy coverage:
 

@@ -33,7 +33,12 @@ static constexpr std::array<std::pair<char, char>, 7> escapeSequences{{ {'\\', '
 /// <returns>UTF16 character for "\uxxxx".</returns>
 char16_t decodeUTF16(std::string_view::const_iterator &current, const ptrdiff_t numberOfCharacters)
 {
-  if (numberOfCharacters >= 4) {
+  if (numberOfCharacters >= 5) {
+    for (size_t i = 1; i <= 4; ++i) {
+      if (!std::isxdigit(static_cast<unsigned char>(current[i]))) {
+        JSON_THROW(Default_Translator::Error("Syntax error detected."));
+      }
+    }
     char16_t utf16value{};
     // Hex digits will be ascii so can throw away high order byte of char
     const std::array hexDigits{ (current[1]),
@@ -44,7 +49,7 @@ char16_t decodeUTF16(std::string_view::const_iterator &current, const ptrdiff_t 
     char *end;
     utf16value += static_cast<char16_t>(std::strtol(hexDigits.data(), &end, 16));
     if (*end == '\0') {
-      current += hexDigits.size();
+      current += 5;
       return utf16value;
     }
   }
@@ -97,10 +102,15 @@ bool isValidSurrogateLower(const char16_t utf16Char)
 bool unpairedSurrogatesInBuffer(const std::u16string &utf16Buffer)
 {
   int index = 0;
-  while (index <= static_cast<int>(utf16Buffer.size()) - 1) {
-    if (isValidSurrogateUpper(utf16Buffer[index]) && isValidSurrogateLower(utf16Buffer[index + 1])) {
-      index++;
-    } else if (isValidSurrogateUpper(utf16Buffer[index]) || isValidSurrogateLower(utf16Buffer[index + 1])) {
+  const int size = static_cast<int>(utf16Buffer.size());
+  while (index < size) {
+    if (isValidSurrogateUpper(utf16Buffer[index])) {
+      if (index + 1 < size && isValidSurrogateLower(utf16Buffer[index + 1])) {
+        index += 2;
+        continue;
+      }
+      return true;
+    } else if (isValidSurrogateLower(utf16Buffer[index])) {
       return true;
     }
     index++;
