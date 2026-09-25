@@ -106,6 +106,20 @@ if(JSON_LIB_NO_EXCEPTIONS AND NOT JSON_LIB_EMBEDDED)
   set(BUILD_EXAMPLES OFF CACHE BOOL "Build examples" FORCE)
 endif()
 
+# No-stdio build disables tests/examples (Catch2 and file test cases require stdio)
+if(JSON_LIB_NO_STDIO AND NOT JSON_LIB_EMBEDDED)
+  message(STATUS "Configuring JSON_Lib for no-stdio build (tests/examples disabled)")
+  set(BUILD_TESTING OFF CACHE BOOL "Build unit tests" FORCE)
+  set(BUILD_EXAMPLES OFF CACHE BOOL "Build examples" FORCE)
+endif()
+
+# No-dynamic-memory build disables tests/examples (Catch2 requires dynamic memory)
+if((JSON_LIB_NO_DYNAMIC_MEMORY OR JSON_LIB_NO_HEAP) AND NOT JSON_LIB_EMBEDDED)
+  message(STATUS "Configuring JSON_Lib for no-dynamic-memory build (tests/examples disabled)")
+  set(BUILD_TESTING OFF CACHE BOOL "Build unit tests" FORCE)
+  set(BUILD_EXAMPLES OFF CACHE BOOL "Build examples" FORCE)
+endif()
+
 # Enforce no-heap / no-dynamic-memory policy consistency
 if(JSON_LIB_NO_HEAP AND NOT JSON_LIB_NO_DYNAMIC_MEMORY)
   message(STATUS "JSON_LIB_NO_HEAP implies JSON_LIB_NO_DYNAMIC_MEMORY; enabling JSON_LIB_NO_DYNAMIC_MEMORY")
