@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.21)
 
 project("JSON_Lib" VERSION 1.2.0 DESCRIPTION "JSON C++ Library" LANGUAGES CXX)
 
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
 # Optimization level for JSON_Lib target
 set(JSON_LIB_OPTIMIZATION_LEVEL "O2" CACHE STRING "Optimization level for JSON_Lib target")
 set_property(CACHE JSON_LIB_OPTIMIZATION_LEVEL PROPERTY STRINGS O0 O1 O2 O3 Os Ofast)
@@ -147,7 +150,7 @@ set(JSON_CORE_SOURCES
   classes/source/implementation/file/JSON_File.cpp
   classes/source/implementation/file/JSON_FileIO.cpp
   classes/source/implementation/translator/Default_Translator.cpp
-  classes/source/implementation/converter/${PLATFORM}/JSON_Converter.cpp
+  classes/source/implementation/converter/JSON_Converter.cpp
 )
 
 set(JSON_PARSER_SOURCES
@@ -259,8 +262,6 @@ else()
   )
 endif()
 
-target_link_libraries(${JSON_LIBRARY_NAME} PRIVATE JSON_Lib_Stringify)
-
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9.0")
   target_link_libraries(${JSON_LIBRARY_NAME} PRIVATE stdc++fs)
 endif()
@@ -276,8 +277,10 @@ target_compile_definitions(${JSON_LIBRARY_NAME} PRIVATE
 
 target_include_directories(${JSON_LIBRARY_NAME} PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include>
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/classes/include/interface>
   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
-  $<INSTALL_INTERFACE:include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/JSON_Lib>
 )
 add_library(JSON_Lib::JSON_Lib ALIAS ${JSON_LIBRARY_NAME})
 
@@ -305,6 +308,7 @@ endif()
 set(JSON_PUBLIC_HEADERS
 
   # Stable public interface headers
+  ${PROJECT_BINARY_DIR}/JSON_Config.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/JSON_Lib.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/JSON.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/JSON_IO.hpp
@@ -312,10 +316,11 @@ set(JSON_PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/classes/include/JSON_Node_Core.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/JSON_Core.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/JSON_Parser_Core.hpp
-  ${PROJECT_SOURCE_DIR}/classes/include/JSON_Config.hpp
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_ErrorBase.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/JSON_Char_Constants.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/interface/JSON_Interfaces.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/interface/IAction.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/interface/INodeVisitor.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/interface/IEncodingHandler.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/interface/ISource.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/interface/IDestination.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/interface/ITranslator.hpp
@@ -323,11 +328,15 @@ set(JSON_PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/classes/include/interface/IStringify.hpp
 
   # Minimal implementation headers required to compile public headers
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/JSON_Impl.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/file/JSON_FileIO.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/io/encoding/EncodingHandlers.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_Error.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_ErrorBase.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_Attributes.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_Throw.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_StoragePolicy.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/common/JSON_StringUtils.hpp
-  ${PROJECT_SOURCE_DIR}/classes/include/JSON_Char_Constants.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/io/JSON_Sources.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/io/JSON_BufferSource.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/io/JSON_FixedBufferSource.hpp
@@ -343,28 +352,61 @@ set(JSON_PUBLIC_HEADERS
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants/JSON_Boolean.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants/JSON_Null.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/node/JSON_Node.hpp
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/node/JSON_Object.hpp
-  ${PROJECT_SOURCE_DIR}/classes/include/implementation/node/JSON_Array.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants/JSON_Object.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/variants/JSON_Array.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/node/JSON_Node_Fwd.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/node/JSON_Node_Reference.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/node/JSON_Node_Creation.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/node/JSON_Node_Index.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/converter/JSON_Converter.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/translator/Default_Translator.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/translator/XML_Translator.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/parser/Default_Parser.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify/Default_Stringify.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify/Bencode_Stringify.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify/XML_Stringify.hpp
+  ${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify/YAML_Stringify.hpp
   ${PROJECT_SOURCE_DIR}/classes/include/implementation/stringify/JSON_StringifierBase.hpp
 )
+
+install(FILES ${JSON_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(FILES ${JSON_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/JSON_Lib)
 install(TARGETS ${JSON_LIBRARY_NAME}
   EXPORT ${PROJECT_NAME}Targets
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(EXPORT ${PROJECT_NAME}Targets
+  FILE ${PROJECT_NAME}Targets.cmake
+  NAMESPACE ${PROJECT_NAME}::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+
+write_basic_package_version_file(
+  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY SameMajorVersion
+)
+
+configure_package_config_file(
+  "${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in"
+  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+)
+
+install(FILES
+  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+  "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 )
 
 if(JSON_LIB_EXPORT_INTERFACE)
-  install(FILES ${JSON_PUBLIC_HEADERS} DESTINATION include)
+  install(FILES ${JSON_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 else()
-  install(FILES ${JSON_INCLUDES} DESTINATION include)
+  install(FILES ${JSON_INCLUDES} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 endif()
 
 # Optional Doxygen documentation target
@@ -378,3 +420,14 @@ if(DOXYGEN_FOUND)
     VERBATIM
   )
 endif()
+
+# CPack Packaging
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+set(CPACK_PACKAGE_VENDOR "JSON_Lib")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Modern C++23 JSON Library")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/LICENSE.txt")
+set(CPACK_RESOURCE_FILE_README "${PROJECT_SOURCE_DIR}/README.md")
+set(CPACK_SOURCE_GENERATOR "TGZ;ZIP")
+set(CPACK_GENERATOR "TGZ;ZIP")
+include(CPack)

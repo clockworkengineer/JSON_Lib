@@ -56,8 +56,18 @@ cmake --build .
 - Public headers are deliberately designed to include only standard headers and stable public API headers
 - Build system: CMake 3.21+
 - Tests/benchmarks only: Catch2 (resolved via `find_package(Catch2 3)` or fetched via CMake `FetchContent`)
-- Documentation only: Doxygen is optional and not required for library runtime
 - Documentation only: Doxygen is optional for generating API docs
+
+### CMake Integration
+
+To consume installed `JSON_Lib` in your downstream CMake project:
+
+```cmake
+find_package(JSON_Lib CONFIG REQUIRED)
+target_link_libraries(my_app PRIVATE JSON_Lib::JSON_Lib)
+```
+
+See [docs/packaging.md](docs/packaging.md) for `FetchContent`, submodule, installation, and packaging instructions.
 
 ### Public headers
 
@@ -310,22 +320,19 @@ cmake -DJSON_LIB_NO_EXCEPTIONS=ON -DJSON_LIB_NO_STDIO=ON -DJSON_LIB_MAX_PARSER_D
 
 - **API Reference:** [docs/api.md](docs/api.md)
 - **User Guide:** [docs/guide.md](docs/guide.md)
+- **Integration & Packaging:** [docs/packaging.md](docs/packaging.md)
+- **Standards Conformance:** [docs/conformance.md](docs/conformance.md)
 - **Architecture Overview:** [docs/architecture.md](docs/architecture.md)
 - **SOLID Design & Architecture:** [docs/solid_architecture.md](docs/solid_architecture.md)
-- **Compliance Report:** [docs/JSON_Lib_Compliance_Report.md](docs/JSON_Lib_Compliance_Report.md)
+- **Changelog:** [CHANGELOG.md](CHANGELOG.md)
+- **Security Policy:** [SECURITY.md](SECURITY.md)
 - **Examples:** `examples/source/` — file conversion, schema validation, embedded API, custom serialization, streaming, and more.
 
 ---
 
-## Compliance & Deviations
+## Compliance & Standards
 
-JSON_Lib is largely compliant with RFC 8259/ECMA-404 with a few stricter behaviors:
-- Strict BOM/file format detection (errors on unrecognized BOMs)
-- CRLF normalized to LF during parsing
-- C++ native number types (behavior for very large integers may differ from the standard)
-- Strict Unicode error handling
-
-See the compliance report for full details.
+JSON_Lib complies with RFC 8259 and ECMA-404 and is tested against the official [nst/JSONTestSuite](https://github.com/nst/JSONTestSuite.git). For a detailed compliance matrix and description of safety-oriented dialect choices (e.g. duplicate key rejection), see [docs/conformance.md](docs/conformance.md).
 
 ---
 

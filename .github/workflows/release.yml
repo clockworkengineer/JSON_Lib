@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release-assets:
+    name: Build Release Asset (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            artifact_name: Linux
+          - os: windows-latest
+            artifact_name: Windows
+          - os: macos-latest
+            artifact_name: macOS
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF
+
+      - name: Build
+        run: |
+          cmake --build build --config Release --parallel
+
+      - name: Package with CPack
+        run: |
+          cd build
+          cpack -C Release
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JSON_Lib-${{ matrix.artifact_name }}
+          path: build/JSON_Lib-*.*
+
+  publish-release:
+    name: Publish GitHub Release
+    needs: [create-release-assets]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download all built artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release_assets
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release_assets/**/*
+          draft: false
+          prerelease: false
+          generate_release_notes: true

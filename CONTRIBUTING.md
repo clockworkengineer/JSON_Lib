@@ -20,7 +20,7 @@ Please be respectful and constructive in all interactions.
 
 - Public API is limited to the headers in `classes/include/` (see `README.md`).
 - Internal implementation details are not part of the public API and may change.
-- Use CMake options to enable/disable features and build profiles (see `docs/Package.md`).
+- Use CMake options to enable/disable features and build profiles (see [docs/packaging.md](docs/packaging.md)).
 - Run all tests before submitting (`ctest` or `cmake --build . --target test`).
 - For major changes, open an issue or discussion first.
 

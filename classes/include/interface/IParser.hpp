@@ -1,7 +1,11 @@
 #pragma once
 
 #include <memory>
+#if __has_include("JSON_Error.hpp")
+#include "JSON_Error.hpp"
+#else
 #include "implementation/common/JSON_Error.hpp"
+#endif
 
 namespace JSON_Lib {
 

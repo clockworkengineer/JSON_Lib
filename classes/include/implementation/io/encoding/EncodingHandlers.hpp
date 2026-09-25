@@ -4,8 +4,24 @@
 #include <unordered_map>
 #include "JSON.hpp"
 #include "JSON_Converter.hpp"
+
+#if __has_include("JSON_Error.hpp")
+#include "JSON_Error.hpp"
+#else
+#include "implementation/common/JSON_Error.hpp"
+#endif
+
+#if __has_include("JSON_Throw.hpp")
 #include "JSON_Throw.hpp"
+#else
+#include "implementation/common/JSON_Throw.hpp"
+#endif
+
+#if __has_include("IEncodingHandler.hpp")
+#include "IEncodingHandler.hpp"
+#else
 #include "interface/IEncodingHandler.hpp"
+#endif
 
 namespace JSON_Lib {
 
@@ -136,7 +152,9 @@ public:
       } else {
         JSON_THROW(UnsupportedEncodingError("Unsupported JSON file format (Byte Order Mark) encountered."));
       }
+      return nullptr;
     }
+    return nullptr;
   }
 };
 

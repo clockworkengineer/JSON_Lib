@@ -1,0 +1,38 @@
+name: Bug Report
+description: File a bug report to help us improve JSON_Lib
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report an issue!
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps / Code to Reproduce
+      description: Provide minimal C++ code reproducing the behavior.
+      render: cpp
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: A clear description of what you expected to happen.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Compiler version, CMake version, and build flags.
+      placeholder: e.g. Ubuntu 24.04, GCC 14.1, CMake 3.28, Release build
+    validations:
+      required: false

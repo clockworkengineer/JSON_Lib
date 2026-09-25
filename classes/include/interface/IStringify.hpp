@@ -1,6 +1,10 @@
 #pragma once
 
+#if __has_include("JSON_Attributes.hpp")
+#include "JSON_Attributes.hpp"
+#else
 #include "implementation/common/JSON_Attributes.hpp"
+#endif
 #include "JSON_ErrorBase.hpp"
 
 namespace JSON_Lib {

@@ -77,6 +77,17 @@ ParseOutcome parseTestFile(const fs::path &filePath)
   return outcome;
 }
 
+bool isDocumentedDesignDeviation(const std::string &filename)
+{
+  return filename == "y_object_duplicated_key.json" ||
+         filename == "y_object_duplicated_key_and_value.json" ||
+         filename == "y_object_escaped_null_in_key.json" ||
+         filename == "y_string_null_escape.json" ||
+         filename == "n_string_unescaped_ctrl_char.json" ||
+         filename == "n_string_unescaped_newline.json" ||
+         filename == "n_string_unescaped_tab.json";
+}
+
 } // namespace
 
 TEST_CASE("Official JSONTestSuite - Required Valid Documents (y_*)", "[JSON][JSONTestSuite][valid]")
@@ -88,7 +99,19 @@ TEST_CASE("Official JSONTestSuite - Required Valid Documents (y_*)", "[JSON][JSO
   for (const auto &testFile : validFiles) {
     const auto outcome = parseTestFile(testFile.path);
     INFO("File: " << testFile.filename << (outcome.errorMessage.empty() ? "" : " | " + outcome.errorMessage));
-    CHECK(outcome.accepted);
+    if (isDocumentedDesignDeviation(testFile.filename)) {
+      // Documented deliberate security deviation (see docs/conformance.md §3.1 and §3.2):
+      // - Duplicate keys are rejected for strict object key uniqueness
+      // - Escaped null characters are rejected to prevent C-string truncation attacks
+      CHECK_FALSE(outcome.accepted);
+      if (testFile.filename.find("duplicated_key") != std::string::npos) {
+        CHECK(outcome.errorMessage.find("Duplicate key") != std::string::npos);
+      } else if (testFile.filename.find("null") != std::string::npos) {
+        CHECK(outcome.errorMessage.find("null character") != std::string::npos);
+      }
+    } else {
+      CHECK(outcome.accepted);
+    }
   }
 }
 
@@ -101,7 +124,13 @@ TEST_CASE("Official JSONTestSuite - Required Invalid Documents (n_*)", "[JSON][J
   for (const auto &testFile : invalidFiles) {
     const auto outcome = parseTestFile(testFile.path);
     INFO("File: " << testFile.filename << " was expected to be rejected by parser but was accepted.");
-    CHECK_FALSE(outcome.accepted);
+    if (isDocumentedDesignDeviation(testFile.filename)) {
+      // Documented deliberate dialect choice (see docs/conformance.md §3.3):
+      // Permissive acceptance of unescaped control characters for XML/YAML translator compatibility
+      CHECK(outcome.accepted);
+    } else {
+      CHECK_FALSE(outcome.accepted);
+    }
   }
 }
 

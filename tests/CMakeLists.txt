@@ -73,6 +73,7 @@ set(TEST_SOURCES
   source/misc/JSON_Lib_Tests_DRY_Regression.cpp
   source/misc/JSON_Lib_Tests_Build_Policy_CompileChecks.cpp
   source/misc/JSON_Lib_Tests_SOLID_Refactor.cpp
+  source/misc/JSON_Lib_Tests_Converter.cpp
   source/traverse/JSON_Lib_Tests_Traverse.cpp)
 
 # Official JSONTestSuite integration (https://github.com/nst/JSONTestSuite.git)
@@ -141,3 +142,13 @@ json_lib_add_test_target(${BENCHMARK_EXECUTABLE} BENCHMARK_SOURCES)
 
 add_custom_command(TARGET ${TEST_EXECUTABLE} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/files files)
 add_custom_command(TARGET ${TEST_EXECUTABLE} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/files ${CMAKE_CURRENT_BINARY_DIR}/files)
+
+# Optional LLVM libFuzzer target
+option(JSON_LIB_BUILD_FUZZERS "Build LLVM libFuzzer targets" OFF)
+if(JSON_LIB_BUILD_FUZZERS)
+  add_executable(JSON_Lib_Fuzz_Parser fuzz/JSON_Lib_Fuzz_Parser.cpp)
+  target_include_directories(JSON_Lib_Fuzz_Parser PRIVATE ${JSON_IMPL_INCLUDE_DIRS})
+  target_compile_options(JSON_Lib_Fuzz_Parser PRIVATE -fsanitize=fuzzer,address,undefined)
+  target_link_options(JSON_Lib_Fuzz_Parser PRIVATE -fsanitize=fuzzer,address,undefined)
+  target_link_libraries(JSON_Lib_Fuzz_Parser PRIVATE ${JSON_LIBRARY_NAME})
+endif()

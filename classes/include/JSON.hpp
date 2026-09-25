@@ -8,11 +8,36 @@
 #include <variant>
 
 #include "JSON_Config.hpp"
+
+#if __has_include("JSON_Attributes.hpp")
+#include "JSON_Attributes.hpp"
+#else
 #include "implementation/common/JSON_Attributes.hpp"
+#endif
+
+#if __has_include("JSON_Error.hpp")
+#include "JSON_Error.hpp"
+#else
 #include "implementation/common/JSON_Error.hpp"
+#endif
+
+#if __has_include("IParser.hpp")
+#include "IParser.hpp"
+#else
 #include "interface/IParser.hpp"
+#endif
+
+#if __has_include("IStringify.hpp")
+#include "IStringify.hpp"
+#else
 #include "interface/IStringify.hpp"
+#endif
+
+#if __has_include("ITranslator.hpp")
+#include "ITranslator.hpp"
+#else
 #include "interface/ITranslator.hpp"
+#endif
 
 namespace JSON_Lib {
 
