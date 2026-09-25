@@ -1,5 +1,10 @@
 # JSON_Lib
 
+[![CI](https://github.com/clockworkengineer/JSON_Lib/actions/workflows/ci.yml/badge.svg)](https://github.com/clockworkengineer/JSON_Lib/actions/workflows/ci.yml)
+[![C++23](https://img.shields.io/badge/C%2B%2B-23-blue.svg)](https://en.cppreference.com/w/cpp/23)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.txt)
+[![Buy Me a Coffee](https://img.shields.io/badge/Donate-Buy%20Me%20A%20Coffee-orange.svg)](https://www.buymeacoffee.com/clockworkengineer)
+
 **JSON_Lib** is a modern, high-performance C++23 library for parsing, manipulating, and serializing JSON data. It provides a clean, intuitive API and is designed for efficiency, extensibility, standards compliance, and embedded-target support.
 
 ---
@@ -120,10 +125,6 @@ cmake --build .
 To run the benchmark suite:
 
 ```sh
-git clone <repository-url>
-cd JSON_Lib
-mkdir build && cd build
-cmake ..
 cmake --build . --target JSON_Lib_Benchmarks
 ./tests/JSON_Lib_Benchmarks
 ```
@@ -131,7 +132,6 @@ cmake --build . --target JSON_Lib_Benchmarks
 ### Running tests
 
 ```sh
-mkdir build && cd build
 cmake -DBUILD_TESTING=ON -DBUILD_EXAMPLES=OFF ..
 cmake --build . --target JSON_Lib_Unit_Tests
 ctest --output-on-failure
@@ -164,46 +164,34 @@ When included, each test file is evaluated:
 - `n_*`: Invalid documents must be rejected; asserts on erroneous acceptance.
 - `i_*`: Implementation-defined documents must complete without crashing.
 
-For embedded-like validation builds that exercise no-exceptions, no-stdio, and no-dynamic-memory policy coverage:
+### Embedded and Constrained Builds
+
+For constrained or exception-free policy builds:
 
 ```sh
 mkdir build-embedded && cd build-embedded
-cmake -DJSON_LIB_NO_EXCEPTIONS=ON -DJSON_LIB_NO_STDIO=ON -DJSON_LIB_NO_DYNAMIC_MEMORY=ON \
+cmake -DJSON_LIB_NO_EXCEPTIONS=ON \
+      -DJSON_LIB_NO_STDIO=ON \
+      -DJSON_LIB_NO_DYNAMIC_MEMORY=ON \
+      -DJSON_LIB_MAX_PARSER_DEPTH=5 \
+      -DJSON_LIB_MAX_STRING_LENGTH=2048 \
       -DBUILD_EXAMPLES=OFF ..
 cmake --build .
 ```
 
-> Note: `JSON_LIB_NO_EXCEPTIONS=ON` disables `BUILD_TESTING` and `BUILD_EXAMPLES` in non-embedded builds, so explicit unit test targets are not available in this mode.
+> Note: `JSON_LIB_NO_EXCEPTIONS=ON` disables `BUILD_TESTING` and `BUILD_EXAMPLES` in non-embedded builds, so unit test targets are not compiled in this mode.
 
-The `JSON_LIB_EMBEDDED` preset is intended for release or constrained deployment builds and, in the current CMake flow, disables unit testing by default. It also forces:
-
-- `BUILD_TESTING=OFF`
-- `BUILD_EXAMPLES=OFF`
-- `JSON_LIB_ENABLE_LTO=OFF`
-- `JSON_LIB_NO_STDIO=ON`
-
-If you need to validate embedded-like behavior in tests, use the explicit `NO_EXCEPTIONS`, `NO_STDIO`, and `NO_DYNAMIC_MEMORY` flags instead.
-
-Use CMake presets for constrained builds:
+Alternatively, use the `JSON_LIB_EMBEDDED` preset for deployment builds:
 
 ```sh
 cmake -DJSON_LIB_EMBEDDED=ON ..
 ```
 
-For a custom exception-free policy build:
-
-```sh
-cmake \
-  -DJSON_LIB_NO_EXCEPTIONS=ON \
-  -DJSON_LIB_NO_STDIO=ON \
-  -DJSON_LIB_NO_DYNAMIC_MEMORY=ON \
-  -DJSON_LIB_MAX_PARSER_DEPTH=5 \
-  -DJSON_LIB_MAX_STRING_LENGTH=2048 \
-  -DBUILD_EXAMPLES=OFF \
-  ..
-```
-
-> Note: In this mode, `JSON_LIB_NO_EXCEPTIONS=ON` will also disable unit tests.
+This preset automatically forces:
+- `BUILD_TESTING=OFF`
+- `BUILD_EXAMPLES=OFF`
+- `JSON_LIB_ENABLE_LTO=OFF`
+- `JSON_LIB_NO_STDIO=ON`
 
 ### Link in your project
 
@@ -363,12 +351,4 @@ Contributions are welcome. Please:
 
 MIT License — see [LICENSE.txt](LICENSE.txt).
 
----
 
-## Support / Buy Me A Coffee
-
-If you find `JSON_Lib` useful and would like to support its ongoing development, feel free to buy me a coffee!
-
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-orange.svg)](https://buymeacoffee.com/roberttizz1)
-
-[https://buymeacoffee.com/roberttizz1](https://buymeacoffee.com/roberttizz1)
