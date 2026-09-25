@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2026-09-25
+
+### Fixed
+- **Clang 18 Compatibility**: Deferred `Node` constructors, destructor, and move operations out of inline class definition to resolve `std::default_delete` instantiation with incomplete types under Clang and libstdc++ `<variant>`.
+
+### Changed
+- **Documentation**: Added official CI, C++23, license, and donation badges to `README.md` and streamlined build configuration sections.
+
+---
+
 ## [1.2.0] - 2026-09-25
 
 ### Added

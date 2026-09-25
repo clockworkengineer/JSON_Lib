@@ -1,7 +1,7 @@
 
 cmake_minimum_required(VERSION 3.21)
 
-project("JSON_Lib" VERSION 1.2.0 DESCRIPTION "JSON C++ Library" LANGUAGES CXX)
+project("JSON_Lib" VERSION 1.3.0 DESCRIPTION "JSON C++ Library" LANGUAGES CXX)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
